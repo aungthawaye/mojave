@@ -6,13 +6,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="core-pom" />
+        <module name="mod-component" />
+        <module name="mod-fspiop" />
+        <module name="mod-participant" />
+        <module name="mod-lookup" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="common-pom" options="-parameters" />
       <module name="core-pom" options="-parameters" />
+      <module name="mod-component" options="-parameters" />
+      <module name="mod-fspiop" options="-parameters" />
+      <module name="mod-lookup" options="-parameters" />
+      <module name="mod-participant" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
     </option>
