@@ -13,6 +13,7 @@
     <modules>
         <module>participant</module>
         <module>lookup</module>
+        <module>oracle</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

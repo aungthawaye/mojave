@@ -13,9 +13,9 @@
     <packaging>pom</packaging>
     <name>Mojaloop - Java Edition</name>
     <modules>
-        <module>operation</module>
-        <module>core</module>
         <module>common</module>
+        <module>core</module>
+        <module>operation</module>
     </modules>
     <properties>
         <java.version>21</java.version>
@@ -25,6 +25,21 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.mojaloop.common</groupId>
+                <artifactId>mod-central-cache</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.common</groupId>
+                <artifactId>mod-component</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.common</groupId>
+                <artifactId>mod-fspiop</artifactId>
+                <version>1.0.0</version>
+            </dependency>
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>logging-interceptor</artifactId>
@@ -46,11 +61,6 @@
                 <version>3.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>3.50.0</version>
-            </dependency>
-            <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-api</artifactId>
                 <version>0.12.6</version>
@@ -64,6 +74,11 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>0.12.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>3.50.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -106,6 +121,7 @@
         </dependency>
     </dependencies>
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -115,6 +131,26 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/java</source>
+                                <source>src/support/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.github.ekryd.sortpom</groupId>
                 <artifactId>sortpom-maven-plugin</artifactId>
@@ -181,69 +217,6 @@
                 <testResources>
                     <testResource>
                         <directory>src/test/resources/local</directory>
-                    </testResource>
-                    <testResource>
-                        <directory>src/test/resources/all</directory>
-                    </testResource>
-                </testResources>
-            </build>
-        </profile>
-        <profile>
-            <id>dev</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/dev</directory>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources/all</directory>
-                    </resource>
-                </resources>
-                <testResources>
-                    <testResource>
-                        <directory>src/test/resources/dev</directory>
-                    </testResource>
-                    <testResource>
-                        <directory>src/test/resources/all</directory>
-                    </testResource>
-                </testResources>
-            </build>
-        </profile>
-        <profile>
-            <id>sandbox</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/sandbox</directory>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources/all</directory>
-                    </resource>
-                </resources>
-                <testResources>
-                    <testResource>
-                        <directory>src/test/resources/sandbox</directory>
-                    </testResource>
-                    <testResource>
-                        <directory>src/test/resources/all</directory>
-                    </testResource>
-                </testResources>
-            </build>
-        </profile>
-        <profile>
-            <id>live</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/live</directory>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources/all</directory>
-                    </resource>
-                </resources>
-                <testResources>
-                    <testResource>
-                        <directory>src/test/resources/live</directory>
                     </testResource>
                     <testResource>
                         <directory>src/test/resources/all</directory>

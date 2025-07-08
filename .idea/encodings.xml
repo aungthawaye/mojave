@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/fspiop/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/fspiop/src/support/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/domain/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/infra/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/infra/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/service/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/generated" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/resources/all" charset="UTF-8" />
