@@ -145,7 +145,7 @@
                         <configuration>
                             <sources>
                                 <source>src/main/java</source>
-                                <source>src/support/java</source>
+                                <source>src/generated/java</source>
                             </sources>
                         </configuration>
                     </execution>

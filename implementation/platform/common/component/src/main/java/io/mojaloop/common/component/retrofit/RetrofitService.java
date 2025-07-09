@@ -5,6 +5,7 @@ import lombok.Getter;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
@@ -15,6 +16,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.HeaderMap;
+import retrofit2.http.Url;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
@@ -34,24 +38,46 @@ import java.util.Map;
 
 /**
  * A utility class for working with Retrofit services.
- * This class provides methods for building and invoking Retrofit services with various configurations.
+ * Provides methods for building, configuring, and invoking Retrofit service calls.
+ * Supports features like custom headers, SSL configuration, mTLS, and error handling.
  */
 public class RetrofitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetrofitService.class);
 
     /**
+     * Forwards an HTTP request through a ForwardingService.
+     *
+     * @param <RES> The type of the expected response
+     * @param <E> The type of the error decoder
+     * @param forwardingService The service to use for forwarding the request
+     * @param url The URL to forward the request to
+     * @param headers The HTTP headers to include in the request
+     * @param body The request body
+     * @param errorDecoder The decoder to use for error responses
+     * @return The response from the forwarded request
+     * @throws InvocationException If the request fails or returns an error response
+     */
+    public static <RES, E> Response<RES> forward(ForwardingService forwardingService,
+                                                 String url,
+                                                 Map<String, String> headers,
+                                                 RequestBody body,
+                                                 RetrofitService.ErrorDecoder<E> errorDecoder) throws InvocationException {
+
+        return RetrofitService.invoke(forwardingService.forward(url, headers, body), errorDecoder);
+    }
+
+    /**
      * Executes a Retrofit call and handles error responses.
      *
      * @param <RES> The type of the expected response
-     * @param <E> The type of the error response
+     * @param <E> The type of the error decoder
      * @param invocation The Retrofit call to execute
-     * @param errorDecoder The decoder to use for error responses, can be null
-     * @return The successful response
+     * @param errorDecoder The decoder to use for error responses (can be null)
+     * @return The successful response from the call
      * @throws InvocationException If the call fails or returns an error response
      */
-    public static <RES, E> Response<RES> invoke(Call<RES> invocation, ErrorDecoder<E> errorDecoder)
-        throws InvocationException {
+    public static <RES, E> Response<RES> invoke(Call<RES> invocation, ErrorDecoder<E> errorDecoder) throws InvocationException {
 
         try {
 
@@ -106,6 +132,26 @@ public class RetrofitService {
     }
 
     /**
+     * Interface for services that can forward HTTP requests.
+     * Used in conjunction with the {@link #forward} method.
+     */
+    public interface ForwardingService {
+
+        /**
+         * Forwards an HTTP request to the specified URL with the given headers and body.
+         *
+         * @param <RES> The type of the expected response
+         * @param <E> The type parameter for error handling
+         * @param url The URL to forward the request to
+         * @param headers The HTTP headers to include in the request
+         * @param body The request body
+         * @return A Retrofit Call object representing the forwarded request
+         */
+        <RES, E> Call<RES> forward(@Url String url, @HeaderMap Map<String, String> headers, @Body RequestBody body);
+
+    }
+
+    /**
      * Interface for decoding error responses from Retrofit calls.
      *
      * @param <E> The type of the decoded error
@@ -120,26 +166,6 @@ public class RetrofitService {
          * @return The decoded error
          */
         E decode(int status, ResponseBody errorResponseBody);
-
-    }
-
-    /**
-     * Interface for invoking a service method with a request.
-     *
-     * @param <SERVICE> The type of the service
-     * @param <I> The type of the request
-     * @param <O> The type of the response
-     */
-    public interface Invocation<SERVICE, I, O> {
-
-        /**
-         * Invokes a service method with a request.
-         *
-         * @param service The service instance
-         * @param request The request object
-         * @return A Call object for the response
-         */
-        Call<O> invoke(SERVICE service, I request);
 
     }
 

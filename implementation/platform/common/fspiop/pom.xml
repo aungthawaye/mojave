@@ -33,6 +33,10 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.mojaloop.common</groupId>
+            <artifactId>mod-component</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -61,7 +65,7 @@
                             <modelPackage>io.mojaloop.common.fspiop.core.model</modelPackage>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
-                                <sourceFolder>src/support/java</sourceFolder>
+                                <sourceFolder>src/generated/java</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <returnResponse>false</returnResponse>
@@ -90,7 +94,7 @@
                             <modelPackage>io.mojaloop.common.fspiop.settlement.model</modelPackage>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
-                                <sourceFolder>src/support/java</sourceFolder>
+                                <sourceFolder>src/generated/java</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <returnResponse>false</returnResponse>

@@ -1,3 +1,13 @@
 package io.mojaloop.core.lookup.domain.command;
 
-public interface LookUpInPayee { }
+import io.mojaloop.common.fspiop.support.Destination;
+
+public interface LookUpInPayee {
+
+    Output execute(Input input);
+
+    record Input(Destination destination, String partyIdType, String partyId, String partySubId) { }
+
+    record Output() { }
+
+}

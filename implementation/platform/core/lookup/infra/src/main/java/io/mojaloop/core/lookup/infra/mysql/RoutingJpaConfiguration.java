@@ -1,6 +1,6 @@
 package io.mojaloop.core.lookup.infra.mysql;
 
-import io.mojaloop.common.component.jpa.datasource.RoutingDataSource;
+import io.mojaloop.common.component.persistence.datasource.RoutingDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.dialect.MySQLDialect;
 import org.springframework.beans.factory.annotation.Qualifier;
