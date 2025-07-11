@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/implementation/platform/common/component/mod-component.iml" filepath="$PROJECT_DIR$/implementation/platform/common/component/mod-component.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/mojaloop-oss.iml" filepath="$PROJECT_DIR$/.idea/mojaloop-oss.iml" />
     </modules>
   </component>

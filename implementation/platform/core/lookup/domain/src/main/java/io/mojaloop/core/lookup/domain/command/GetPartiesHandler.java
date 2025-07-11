@@ -19,4 +19,4 @@
  */
 package io.mojaloop.core.lookup.domain.command;
 
-public interface RespondToPayer { }
+public class GetPartiesHandler { }

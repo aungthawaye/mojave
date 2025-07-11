@@ -17,9 +17,29 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.common.fspiop.component;
+package io.mojaloop.common.component.flyway;
 
-public class FspiopSignature {
+import org.flywaydb.core.Flyway;
 
+public class FlywayMigration {
+
+    public static void migrate(Settings settings) {
+
+        Flyway
+            .configure()
+            .dataSource(settings.url(), settings.username(), settings.password())
+            .locations(settings.locations())
+            .baselineOnMigrate(true)
+            .load()
+            .migrate();
+    }
+
+    public interface SettingsProvider {
+
+        Settings flywayMigrationSettings();
+
+    }
+
+    public record Settings(String url, String username, String password, String... locations) { }
 
 }

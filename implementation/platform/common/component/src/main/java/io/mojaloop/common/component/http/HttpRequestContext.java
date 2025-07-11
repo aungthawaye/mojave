@@ -17,6 +17,33 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.lookup.domain.command;
+package io.mojaloop.common.component.http;
 
-public class LookUpInPayeeHandler { }
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
+public class HttpRequestContext {
+
+    private static final ThreadLocal<ContentCachingRequestWrapper> REQUEST_WRAPPER = new ThreadLocal<>();
+
+    public static ContentCachingRequestWrapper getRequestWrapper() {
+
+        return REQUEST_WRAPPER.get();
+    }
+
+    public static void setRequestWrapper(HttpServletRequest request) {
+
+        if (request instanceof ContentCachingRequestWrapper wrapper) {
+
+            REQUEST_WRAPPER.set(wrapper);
+
+        } else {
+
+            var wrapper = new ContentCachingRequestWrapper(request);
+            wrapper.getParameterMap();
+            REQUEST_WRAPPER.set(wrapper);
+
+        }
+    }
+
+}

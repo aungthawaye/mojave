@@ -17,9 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.common.fspiop.component;
+package io.mojaloop.core.lookup.domain.command;
 
-public class FspiopSignature {
-
-
-}
+public interface PutPartiesError { }

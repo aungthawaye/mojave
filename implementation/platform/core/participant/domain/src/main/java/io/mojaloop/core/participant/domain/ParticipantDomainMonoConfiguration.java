@@ -17,9 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.common.fspiop.component;
+package io.mojaloop.core.participant.domain;
 
-public class FspiopSignature {
+import io.mojaloop.common.component.persistence.RoutingJpaConfiguration;
+import org.springframework.context.annotation.Import;
 
-
-}
+@Import(value = {RoutingJpaConfiguration.class})
+public class ParticipantDomainMonoConfiguration { }

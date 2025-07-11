@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("ServicesFXPSourceCurrencyTargetCurrencyPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-07-11T07:50:32.899106+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-07-11T21:01:08.672712+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class ServicesFXPSourceCurrencyTargetCurrencyPutResponse   {
   private @Valid List<@Size(min = 1, max = 32)String> providers = new ArrayList<>();
 

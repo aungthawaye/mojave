@@ -7,6 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-central-cache</artifactId>
+    <name>Mojaloop - Common - Central Cache</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
