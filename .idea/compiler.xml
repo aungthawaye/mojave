@@ -2,20 +2,22 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mod-fspiop" />
         <module name="mod-lookup-service" />
+        <module name="mod-participant-domain" />
         <module name="mod-central-cache" />
-        <module name="mod-lookup-infra" />
         <module name="mod-lookup-domain" />
         <module name="mod-component" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="mod-http-security" target="21" />
+      <module name="mod-lookup-infra" target="21" />
       <module name="mod-shared-security" target="21" />
       <module name="shared-pom" target="21" />
     </bytecodeTargetLevel>
@@ -32,6 +34,7 @@
       <module name="mod-lookup-domain" options="-parameters" />
       <module name="mod-lookup-infra" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
+      <module name="mod-participant-domain" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />

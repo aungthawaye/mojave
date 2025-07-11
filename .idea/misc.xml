@@ -10,6 +10,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/implementation/platform/common/http-security/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/lookup/infra/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/shared/pom.xml" />
       </set>
     </option>

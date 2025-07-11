@@ -11,6 +11,9 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>Mojaloop - Core - Participant</name>
+    <modules>
+        <module>domain</module>
+    </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

@@ -32,6 +32,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/domain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/java" charset="UTF-8" />
