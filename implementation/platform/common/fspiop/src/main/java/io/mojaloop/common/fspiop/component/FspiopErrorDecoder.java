@@ -2,7 +2,7 @@ package io.mojaloop.common.fspiop.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.common.component.retrofit.RetrofitService;
-import io.mojaloop.common.fspiop.core.model.ErrorInformationResponse;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationResponse;
 import okhttp3.ResponseBody;
 
 public class FspiopErrorDecoder implements RetrofitService.ErrorDecoder<ErrorInformationResponse> {

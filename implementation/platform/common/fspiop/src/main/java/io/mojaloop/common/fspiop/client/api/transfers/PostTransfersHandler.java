@@ -2,31 +2,31 @@ package io.mojaloop.common.fspiop.client.api.transfers;
 
 import io.mojaloop.common.component.retrofit.RetrofitService;
 import io.mojaloop.common.fspiop.component.FspiopHeaders;
-import io.mojaloop.common.fspiop.core.model.ErrorInformationResponse;
-import io.mojaloop.common.fspiop.core.model.TransfersPostRequest;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationResponse;
+import io.mojaloop.common.fspiop.model.core.TransfersPostRequest;
 import io.mojaloop.common.fspiop.service.TransferService;
 import io.mojaloop.common.fspiop.support.Destination;
-import io.mojaloop.common.fspiop.support.FspSettings;
+import io.mojaloop.common.fspiop.support.ParticipantSettings;
 import org.springframework.stereotype.Service;
 
 @Service
 class PostTransfersHandler implements PostTransfers {
 
-    private final FspSettings fspSettings;
+    private final ParticipantSettings participantSettings;
 
     private final TransferService transferService;
 
     private final RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder;
 
-    public PostTransfersHandler(FspSettings fspSettings,
-                             TransferService transferService,
-                             RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder) {
+    public PostTransfersHandler(ParticipantSettings participantSettings,
+                                TransferService transferService,
+                                RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder) {
 
-        assert fspSettings != null;
+        assert participantSettings != null;
         assert transferService != null;
         assert errorDecoder != null;
 
-        this.fspSettings = fspSettings;
+        this.participantSettings = participantSettings;
         this.transferService = transferService;
         this.errorDecoder = errorDecoder;
     }
@@ -36,7 +36,7 @@ class PostTransfersHandler implements PostTransfers {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(this.transferService.postTransfers(fspiopHeaders, transfersPostRequest), this.errorDecoder);
 

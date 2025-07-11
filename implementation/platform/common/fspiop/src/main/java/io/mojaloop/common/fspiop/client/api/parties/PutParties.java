@@ -1,7 +1,7 @@
 package io.mojaloop.common.fspiop.client.api.parties;
 
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.PartiesTypeIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.PartiesTypeIDPutResponse;
 import io.mojaloop.common.fspiop.support.Destination;
 
 public interface PutParties {

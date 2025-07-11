@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Import;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import java.util.Map;
+
 @Import(value = {ComponentConfiguration.class})
 public class FspiopClientConfiguration {
 
@@ -48,5 +50,17 @@ public class FspiopClientConfiguration {
                                            JacksonConverterFactory.create(objectMapper))
                    .build();
     }
+
+    public interface SettingsProvider {
+
+        Settings fspiopClientConfigurationSettings();
+
+    }
+
+    public record Settings(String fspId,
+                           String fspName,
+                           String ilpSecret,
+                           String base64PrivateKey,
+                           Map<String, String> base64FspPublicKeys) { }
 
 }

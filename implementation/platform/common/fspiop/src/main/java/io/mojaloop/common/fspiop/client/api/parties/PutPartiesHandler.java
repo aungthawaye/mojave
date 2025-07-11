@@ -2,32 +2,32 @@ package io.mojaloop.common.fspiop.client.api.parties;
 
 import io.mojaloop.common.component.retrofit.RetrofitService;
 import io.mojaloop.common.fspiop.component.FspiopHeaders;
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.ErrorInformationResponse;
-import io.mojaloop.common.fspiop.core.model.PartiesTypeIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationResponse;
+import io.mojaloop.common.fspiop.model.core.PartiesTypeIDPutResponse;
 import io.mojaloop.common.fspiop.service.AccountLookUpService;
 import io.mojaloop.common.fspiop.support.Destination;
-import io.mojaloop.common.fspiop.support.FspSettings;
+import io.mojaloop.common.fspiop.support.ParticipantSettings;
 import org.springframework.stereotype.Service;
 
 @Service
 class PutPartiesHandler implements PutParties {
 
-    private final FspSettings fspSettings;
+    private final ParticipantSettings participantSettings;
 
     private final AccountLookUpService accountLookUpService;
 
     private final RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder;
 
-    public PutPartiesHandler(FspSettings fspSettings,
+    public PutPartiesHandler(ParticipantSettings participantSettings,
                              AccountLookUpService accountLookUpService,
                              RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder) {
 
-        assert fspSettings != null;
+        assert participantSettings != null;
         assert accountLookUpService != null;
         assert errorDecoder != null;
 
-        this.fspSettings = fspSettings;
+        this.participantSettings = participantSettings;
         this.accountLookUpService = accountLookUpService;
         this.errorDecoder = errorDecoder;
     }
@@ -37,7 +37,7 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(this.accountLookUpService.putParty(fspiopHeaders, partyIdType, partyId, partiesTypeIDPutResponse),
                                    this.errorDecoder);
@@ -56,7 +56,7 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(this.accountLookUpService.putParty(fspiopHeaders, partyIdType, partyId, subId, partiesTypeIDPutResponse),
                                    this.errorDecoder);
@@ -74,7 +74,7 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(this.accountLookUpService.putPartyError(fspiopHeaders, partyIdType, partyId, errorInformationObject),
                                    this.errorDecoder);
@@ -93,7 +93,7 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(
                 this.accountLookUpService.putPartyError(fspiopHeaders, partyIdType, partyId, subId, errorInformationObject),

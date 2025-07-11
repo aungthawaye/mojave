@@ -6,14 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mod-lookup-domain" />
-        <module name="mod-component" />
         <module name="mod-fspiop" />
         <module name="mod-lookup-service" />
         <module name="mod-central-cache" />
         <module name="mod-lookup-infra" />
+        <module name="mod-lookup-domain" />
+        <module name="mod-component" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mod-http-security" target="21" />
+      <module name="mod-shared-security" target="21" />
+      <module name="shared-pom" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -23,13 +28,16 @@
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-component" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
+      <module name="mod-http-security" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />
       <module name="mod-lookup-infra" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
+      <module name="mod-shared-security" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
       <module name="participant-pom" options="-parameters" />
+      <module name="shared-pom" options="-parameters" />
     </option>
   </component>
 </project>

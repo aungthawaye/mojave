@@ -1,9 +1,9 @@
 package io.mojaloop.common.fspiop.service;
 
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.TransfersIDPatchResponse;
-import io.mojaloop.common.fspiop.core.model.TransfersIDPutResponse;
-import io.mojaloop.common.fspiop.core.model.TransfersPostRequest;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.TransfersIDPatchResponse;
+import io.mojaloop.common.fspiop.model.core.TransfersIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.TransfersPostRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

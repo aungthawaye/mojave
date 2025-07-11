@@ -1,7 +1,7 @@
 package io.mojaloop.common.fspiop.service;
 
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.PartiesTypeIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.PartiesTypeIDPutResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

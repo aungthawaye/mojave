@@ -1,8 +1,8 @@
 package io.mojaloop.common.fspiop.service;
 
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.QuotesIDPutResponse;
-import io.mojaloop.common.fspiop.core.model.QuotesPostRequest;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.QuotesIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.QuotesPostRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;

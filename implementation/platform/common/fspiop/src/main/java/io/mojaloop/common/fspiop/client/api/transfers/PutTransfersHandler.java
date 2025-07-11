@@ -2,32 +2,32 @@ package io.mojaloop.common.fspiop.client.api.transfers;
 
 import io.mojaloop.common.component.retrofit.RetrofitService;
 import io.mojaloop.common.fspiop.component.FspiopHeaders;
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.ErrorInformationResponse;
-import io.mojaloop.common.fspiop.core.model.TransfersIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationResponse;
+import io.mojaloop.common.fspiop.model.core.TransfersIDPutResponse;
 import io.mojaloop.common.fspiop.service.TransferService;
 import io.mojaloop.common.fspiop.support.Destination;
-import io.mojaloop.common.fspiop.support.FspSettings;
+import io.mojaloop.common.fspiop.support.ParticipantSettings;
 import org.springframework.stereotype.Service;
 
 @Service
 class PutTransfersHandler implements PutTransfers {
 
-    private final FspSettings fspSettings;
+    private final ParticipantSettings participantSettings;
 
     private final TransferService transferService;
 
     private final RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder;
 
-    public PutTransfersHandler(FspSettings fspSettings,
+    public PutTransfersHandler(ParticipantSettings participantSettings,
                                TransferService transferService,
                                RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder) {
 
-        assert fspSettings != null;
+        assert participantSettings != null;
         assert transferService != null;
         assert errorDecoder != null;
 
-        this.fspSettings = fspSettings;
+        this.participantSettings = participantSettings;
         this.transferService = transferService;
         this.errorDecoder = errorDecoder;
     }
@@ -37,7 +37,7 @@ class PutTransfersHandler implements PutTransfers {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forCallback(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forCallback(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(this.transferService.putTransfers(fspiopHeaders, transferId, transfersIDPutResponse), this.errorDecoder);
 
@@ -50,7 +50,7 @@ class PutTransfersHandler implements PutTransfers {
     public void putTransfersError(Destination destination, String transferId, ErrorInformationObject errorInformationObject) {
 
         try {
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forCallback(this.fspSettings.fspId(), destination.destinationFspId());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forCallback(this.participantSettings.fspId(), destination.destinationFspId());
 
             RetrofitService.invoke(this.transferService.putTransfersError(fspiopHeaders, transferId, errorInformationObject),
                                    this.errorDecoder);

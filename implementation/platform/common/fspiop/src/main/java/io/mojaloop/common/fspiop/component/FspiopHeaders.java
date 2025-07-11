@@ -47,7 +47,7 @@ public class FspiopHeaders {
 
                 headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -57,12 +57,12 @@ public class FspiopHeaders {
                 return headers;
             }
 
-            public static Map<String, String> forCallback(String source, String destination) {
+            public static Map<String, String> forCallback(String source, String destination, String signature) {
 
                 var headers = new HashMap<String, String>();
 
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -86,7 +86,7 @@ public class FspiopHeaders {
 
                 headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -101,7 +101,7 @@ public class FspiopHeaders {
                 var headers = new HashMap<String, String>();
 
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -124,7 +124,7 @@ public class FspiopHeaders {
 
                 headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -140,7 +140,7 @@ public class FspiopHeaders {
 
                 headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -163,7 +163,7 @@ public class FspiopHeaders {
 
                 headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {
@@ -179,7 +179,7 @@ public class FspiopHeaders {
 
                 headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
-                headers.put(Names.DATE, FspiopDate.forRequestHeader());
+                headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
 
                 if (destination != null) {

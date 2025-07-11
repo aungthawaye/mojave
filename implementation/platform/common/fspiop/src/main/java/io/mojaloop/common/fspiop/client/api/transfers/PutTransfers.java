@@ -1,7 +1,7 @@
 package io.mojaloop.common.fspiop.client.api.transfers;
 
-import io.mojaloop.common.fspiop.core.model.ErrorInformationObject;
-import io.mojaloop.common.fspiop.core.model.TransfersIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
+import io.mojaloop.common.fspiop.model.core.TransfersIDPutResponse;
 import io.mojaloop.common.fspiop.support.Destination;
 
 public interface PutTransfers {
