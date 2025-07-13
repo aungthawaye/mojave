@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/data-type/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/fspiop/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/fspiop/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/http-security/src/main/java" charset="UTF-8" />
@@ -26,19 +27,24 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/routes-admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/routes-admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/store/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/mod-shared-security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/src/main/proto" charset="UTF-8" />

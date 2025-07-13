@@ -7,18 +7,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mod-data-type" />
         <module name="mod-fspiop" />
         <module name="mod-lookup-service" />
         <module name="mod-participant-domain" />
-        <module name="mod-central-cache" />
         <module name="mod-lookup-domain" />
+        <module name="mod-participant-routes-admin" />
         <module name="mod-component" />
+        <module name="mod-participant-store" />
+        <module name="mod-participant-contract" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="mod-central-cache" target="21" />
       <module name="mod-http-security" target="21" />
       <module name="mod-lookup-infra" target="21" />
+      <module name="mod-oracle-domain" target="21" />
+      <module name="mod-oracle-routes-admin" target="21" />
       <module name="mod-shared-security" target="21" />
+      <module name="oracle-pom" target="21" />
       <module name="shared-pom" target="21" />
     </bytecodeTargetLevel>
   </component>
@@ -29,12 +36,18 @@
       <module name="lookup-pom" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-component" options="-parameters" />
+      <module name="mod-data-type" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
       <module name="mod-http-security" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />
       <module name="mod-lookup-infra" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
+      <module name="mod-oracle-domain" options="-parameters" />
+      <module name="mod-oracle-routes-admin" options="-parameters" />
+      <module name="mod-participant-contract" options="-parameters" />
       <module name="mod-participant-domain" options="-parameters" />
+      <module name="mod-participant-routes-admin" options="-parameters" />
+      <module name="mod-participant-store" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />

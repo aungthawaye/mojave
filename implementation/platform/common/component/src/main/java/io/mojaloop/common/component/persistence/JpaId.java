@@ -36,26 +36,26 @@ public abstract class JpaId<T> implements Serializable {
 
         if (obj instanceof JpaId<?> other) {
 
-            return this.getEntityId()
-                       .equals(other.getEntityId());
+            return this.getId()
+                       .equals(other.getId());
         }
 
         return false;
     }
 
-    public abstract T getEntityId();
+    public abstract T getId();
 
     @Override
     public int hashCode() {
 
-        return this.getEntityId()
+        return this.getId()
                    .hashCode();
     }
 
     @Override
     public String toString() {
 
-        return this.getEntityId()
+        return this.getId()
                    .toString();
     }
 

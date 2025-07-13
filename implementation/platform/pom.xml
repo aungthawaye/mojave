@@ -71,17 +71,42 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.common</groupId>
-                <artifactId>mod-central-cache</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>io.mojaloop.common</groupId>
                 <artifactId>mod-component</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.common</groupId>
+                <artifactId>mod-data-type</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.common</groupId>
                 <artifactId>mod-fspiop</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.core.lookup</groupId>
+                <artifactId>mod-lookup-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.core.participant</groupId>
+                <artifactId>mod-participant-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.core.participant</groupId>
+                <artifactId>mod-participant-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.core.participant</groupId>
+                <artifactId>mod-participant-routes-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.core.participant</groupId>
+                <artifactId>mod-participant-store</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

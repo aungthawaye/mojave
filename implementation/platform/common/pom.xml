@@ -12,8 +12,8 @@
     <name>Mojaloop - Common</name>
     <modules>
         <module>component</module>
+        <module>data-type</module>
         <module>fspiop</module>
-        <module>central-cache</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

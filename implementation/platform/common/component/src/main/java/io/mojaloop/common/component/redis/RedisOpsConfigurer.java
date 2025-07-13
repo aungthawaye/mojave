@@ -1,0 +1,81 @@
+package io.mojaloop.common.component.redis;
+
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.codec.Kryo5Codec;
+import org.redisson.codec.LZ4Codec;
+import org.redisson.codec.LZ4CodecV2;
+import org.redisson.config.Config;
+
+import java.util.concurrent.Executors;
+
+public class RedisOpsConfigurer {
+
+    public RedissonClient configure(SettingsProvider settingsProvider) {
+
+        var settings = settingsProvider.redisOpsConfigurerSettings();
+        var config = new Config();
+
+        switch (settings.codec()) {
+            case "kyro":
+                config.setCodec(new Kryo5Codec());
+                break;
+            case "lz4":
+                config.setCodec(new LZ4Codec(new Kryo5Codec()));
+                break;
+            case "lz4v2":
+                config.setCodec(new LZ4CodecV2(new Kryo5Codec()));
+            default:
+                config.setCodec(new Kryo5Codec());
+        }
+
+        config.setNettyThreads(Runtime.getRuntime().availableProcessors() * 2);
+        config.setExecutor(Executors.newFixedThreadPool(settings.executorCount()));
+
+        if (!settings.cluster()) {
+
+            config
+                .useSingleServer()
+                .setAddress(settings.hosts()[0])
+                .setConnectTimeout(5000)
+                .setTimeout(3000)
+                .setIdleConnectionTimeout(10000)
+                .setRetryAttempts(3)
+                .setConnectionPoolSize(settings.connectionPoolSize())
+                .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setPingConnectionInterval(10000);
+
+        } else {
+
+            config
+                .useClusterServers()
+                .addNodeAddress(settings.hosts())
+                .setScanInterval(2000)
+                .setConnectTimeout(5000)
+                .setTimeout(3000)
+                .setIdleConnectionTimeout(10000)
+                .setRetryAttempts(3)
+                .setMasterConnectionPoolSize(settings.connectionPoolSize())
+                .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setSlaveConnectionPoolSize(settings.connectionPoolSize() / 2)
+                .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setPingConnectionInterval(10000);
+        }
+
+        return Redisson.create(config);
+    }
+
+    public interface SettingsProvider {
+
+        Settings redisOpsConfigurerSettings();
+
+    }
+
+    public record Settings(String[] hosts,
+                           boolean cluster,
+                           String codec,
+                           int executorCount,
+                           int connectionPoolSize,
+                           int connectionMinimumIdleSize) { }
+
+}
