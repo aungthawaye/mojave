@@ -20,18 +20,13 @@
 
 package io.mojaloop.core.participant.store.cache;
 
+import io.mojaloop.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.participant.contract.data.FspData;
+
 public interface ParticipantStore {
 
-    class Keys {
+    FspData getFspData(FspId fspId);
 
-    }
 
-    class Names {
-
-        public static final String FSP_WITH_ID = "rd-fsp-with-id";
-
-        public static final String FSP_WITH_FSP_CODE = "rd-fsp-with-fsp-code";
-
-    }
 
 }

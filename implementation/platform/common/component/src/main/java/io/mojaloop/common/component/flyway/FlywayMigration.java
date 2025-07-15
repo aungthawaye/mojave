@@ -34,12 +34,6 @@ public class FlywayMigration {
             .migrate();
     }
 
-    public interface SettingsProvider {
-
-        Settings flywayMigrationSettings();
-
-    }
-
     public record Settings(String url, String username, String password, String... locations) { }
 
 }

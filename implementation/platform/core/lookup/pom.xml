@@ -12,7 +12,8 @@
     <name>Mojaloop - Core - Look Up</name>
     <modules>
         <module>domain</module>
-        <module>service</module>
+        <module>service-fspiop</module>
+        <module>routes-fspiop</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

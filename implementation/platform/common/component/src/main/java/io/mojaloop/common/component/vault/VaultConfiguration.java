@@ -25,15 +25,19 @@ import org.springframework.context.annotation.Bean;
 public class VaultConfiguration {
 
     @Bean
-    public VaultConfiguration.Settings settings() {
-
-        return Settings.withPropertyOrEnv();
-    }
-
-    @Bean
     public Vault vault(Settings settings) {
 
         return new Vault(settings.address, settings.token, settings.enginePath);
+    }
+
+    public static class EnvOrPropertyBasedVaultSettings {
+
+        @Bean
+        public VaultConfiguration.Settings settings() {
+
+            return Settings.withPropertyOrEnv();
+        }
+
     }
 
     public record Settings(String address, String token, String enginePath) {

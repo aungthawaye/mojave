@@ -26,5 +26,9 @@
             <groupId>io.mojaloop.common</groupId>
             <artifactId>mod-fspiop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.mojaloop.core.participant</groupId>
+            <artifactId>mod-participant-contract</artifactId>
+        </dependency>
     </dependencies>
 </project>

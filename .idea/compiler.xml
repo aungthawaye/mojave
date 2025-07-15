@@ -9,13 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="mod-data-type" />
         <module name="mod-fspiop" />
-        <module name="mod-lookup-service" />
         <module name="mod-participant-domain" />
         <module name="mod-lookup-domain" />
         <module name="mod-participant-routes-admin" />
+        <module name="mod-lookup-routes-fspiop" />
         <module name="mod-component" />
         <module name="mod-participant-store" />
         <module name="mod-participant-contract" />
+        <module name="mod-lookup-service-fspiop" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -41,7 +42,8 @@
       <module name="mod-http-security" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />
       <module name="mod-lookup-infra" options="-parameters" />
-      <module name="mod-lookup-service" options="-parameters" />
+      <module name="mod-lookup-routes-fspiop" options="-parameters" />
+      <module name="mod-lookup-service-fspiop" options="-parameters" />
       <module name="mod-oracle-domain" options="-parameters" />
       <module name="mod-oracle-routes-admin" options="-parameters" />
       <module name="mod-participant-contract" options="-parameters" />

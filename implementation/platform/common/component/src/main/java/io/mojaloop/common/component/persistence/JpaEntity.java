@@ -34,16 +34,16 @@ import java.time.Instant;
 public abstract class JpaEntity<ID extends JpaId<?>> {
 
     @Column(
-        name = "created_at",
+        name = "rec_created_at",
         updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "rec_updated_at")
     @Convert(converter = JpaInstantConverter.class)
     protected Instant updatedAt;
 
-    @Column(name = "version")
+    @Column(name = "rec_version")
     @Version
     protected Integer version;
 

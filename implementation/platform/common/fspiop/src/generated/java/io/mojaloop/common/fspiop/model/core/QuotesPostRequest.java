@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("QuotesPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-07-13T08:48:56.295420+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-07-14T09:48:06.608233+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class QuotesPostRequest   {
   private String quoteId;
   private String transactionId;

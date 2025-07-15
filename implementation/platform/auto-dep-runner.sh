@@ -1,0 +1,1 @@
+groovy ./auto-dep.groovy
