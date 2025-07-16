@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.participant.store;
 
-import io.mojaloop.common.component.redis.RedisOpsConfigurer;
+import io.mojaloop.common.component.redis.RedissonOpsClientConfigurer;
 import io.mojaloop.common.component.vault.Vault;
 import io.mojaloop.common.component.vault.VaultConfiguration;
 import io.mojaloop.core.participant.store.qualifier.Qualifiers;
@@ -34,9 +34,9 @@ public class ParticipantStoreMicroConfiguration {
 
     @Bean
     @Qualifier(Qualifiers.CENTRAL_CACHE_OPS)
-    public RedissonClient redissonOpsClient(@Qualifier(Qualifiers.CENTRAL_CACHE_OPS) RedisOpsConfigurer.SettingsProvider settingsProvider) {
+    public RedissonClient redissonOpsClient(@Qualifier(Qualifiers.CENTRAL_CACHE_OPS) RedissonOpsClientConfigurer.SettingsProvider settingsProvider) {
 
-        return new RedisOpsConfigurer().configure(settingsProvider);
+        return new RedissonOpsClientConfigurer().configure(settingsProvider);
     }
 
     @Import(value = {VaultConfiguration.class})
@@ -44,9 +44,9 @@ public class ParticipantStoreMicroConfiguration {
 
         @Bean
         @Qualifier(Qualifiers.CENTRAL_CACHE_OPS)
-        public RedisOpsConfigurer.SettingsProvider redisOpsConfigurationSettings(Vault vault) {
+        public RedissonOpsClientConfigurer.SettingsProvider redisOpsConfigurationSettings(Vault vault) {
 
-            return () -> vault.get("micro/core/participant/store/redis/ops/settings", RedisOpsConfigurer.Settings.class);
+            return () -> vault.get("micro/core/participant/store/redis/ops/settings", RedissonOpsClientConfigurer.Settings.class);
         }
 
     }

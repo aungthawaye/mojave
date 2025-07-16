@@ -24,10 +24,8 @@ import io.mojaloop.common.component.ComponentConfiguration;
 import io.mojaloop.common.component.persistence.routing.RoutingDataSource;
 import io.mojaloop.common.component.persistence.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.common.component.persistence.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.common.component.redis.RedisOpsClient;
-import io.mojaloop.common.component.redis.RedisOpsConfigurer;
-import io.mojaloop.common.component.vault.Vault;
-import io.mojaloop.common.component.vault.VaultConfiguration;
+import io.mojaloop.common.component.redis.RedissonOpsClient;
+import io.mojaloop.common.component.redis.RedissonOpsClientConfigurer;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,77 +46,28 @@ public class ParticipantDomainMicroConfiguration {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(RoutingDataSource routingDataSource,
-                                                                           RoutingEntityManagerConfigurer.SettingsProvider settingsProvider) {
+                                                                           RoutingEntityManagerConfigurer.Settings settings) {
 
-        return (new RoutingEntityManagerConfigurer()).configure(routingDataSource,
-                                                                settingsProvider,
-                                                                "io.mojaloop.core.participant.domain.model");
+        return RoutingEntityManagerConfigurer.configure(routingDataSource, settings, "io.mojaloop.core.participant.domain.model");
     }
 
     @Bean
-    public RedisOpsClient redisOpsClient(RedisOpsConfigurer.SettingsProvider settingsProvider) {
+    public RedissonOpsClient redissonOpsClient(RedissonOpsClientConfigurer.Settings settings) {
 
-        return new RedisOpsClient(settingsProvider);
+        return RedissonOpsClientConfigurer.configure(settings);
     }
 
     @Bean
-    public RoutingDataSource routingDataSource(RoutingDataSourceConfigurer.SettingsProvider settingsProvider) {
+    public RoutingDataSource routingDataSource(RoutingDataSourceConfigurer.ReadSettings readSettings,
+                                               RoutingDataSourceConfigurer.WriteSettings writeSettings) {
 
-        return (new RoutingDataSourceConfigurer()).configure(settingsProvider);
+        return RoutingDataSourceConfigurer.configure(readSettings, writeSettings);
     }
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 
         return new JpaTransactionManager(entityManagerFactory);
-    }
-
-    public static class VaultPaths {
-
-        public static final String FLYWAY_PATH = "micro/core/participant/domain/flyway/migration";
-
-        public static final String ROUTING_DATASOURCE_READ_SETTINGS_PATH = "micro/core/participant/domain/routing-datasource/read/settings";
-
-        public static final String ROUTING_DATASOURCE_WRITE_SETTINGS_PATH = "micro/core/participant/domain/routing-datasource/write/settings";
-
-        public static final String ENTITY_MANAGER_SETTINGS_PATH = "micro/core/participant/domain/entity-manager/settings";
-
-    }
-
-    @Import(value = {VaultConfiguration.class})
-    public static class VaultBasedSettings {
-
-        @Bean
-        public RedisOpsConfigurer.SettingsProvider redisOpsConfigurationSettings(Vault vault) {
-
-            return () -> vault.get("micro/core/participant/domain/redis/ops/settings", RedisOpsConfigurer.Settings.class);
-        }
-
-        @Bean
-        public RoutingDataSourceConfigurer.SettingsProvider routingDataSourceSettings(Vault vault) {
-
-            return new RoutingDataSourceConfigurer.SettingsProvider() {
-
-                @Override
-                public RoutingDataSourceConfigurer.ReadSettings routingDataSourceConfigurerReadSettings() {
-
-                    return vault.get(VaultPaths.ROUTING_DATASOURCE_READ_SETTINGS_PATH, RoutingDataSourceConfigurer.ReadSettings.class);
-                }
-
-                @Override
-                public RoutingDataSourceConfigurer.WriteSettings routingDataSourceConfigurerWriteSettings() {
-
-                    return vault.get(VaultPaths.ROUTING_DATASOURCE_WRITE_SETTINGS_PATH, RoutingDataSourceConfigurer.WriteSettings.class);
-                }
-            };
-        }
-
-        @Bean
-        public RoutingEntityManagerConfigurer.SettingsProvider routingEntityManagerSettings(Vault vault) {
-
-            return () -> vault.get(VaultPaths.ENTITY_MANAGER_SETTINGS_PATH, RoutingEntityManagerConfigurer.Settings.class);
-        }
-
     }
 
 }

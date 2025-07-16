@@ -1,40 +1,73 @@
-/*-
- * ================================================================================
- * Mojaloop OSS
- * --------------------------------------------------------------------------------
- * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ================================================================================
- */
 package io.mojaloop.core.participant.store.cache.redis;
 
+import io.mojaloop.common.component.redis.RedissonOpsClient;
+import io.mojaloop.common.datatype.identifier.participant.FspId;
+import io.mojaloop.common.datatype.identifier.participant.OracleId;
+import io.mojaloop.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.common.fspiop.model.core.PartyIdType;
+import io.mojaloop.core.participant.contract.cache.ParticipantCache;
+import io.mojaloop.core.participant.contract.data.FspData;
+import io.mojaloop.core.participant.contract.data.FxpData;
+import io.mojaloop.core.participant.contract.data.OracleData;
 import io.mojaloop.core.participant.store.cache.ParticipantStore;
-import io.mojaloop.core.participant.store.qualifier.Qualifiers;
-import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.redisson.api.RMap;
+import org.redisson.api.RSetMultimap;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ParticipantRedisStore implements ParticipantStore {
 
-    private final RedissonClient redissonClient;
+    private final RMap<Long, FspData> fspWithId;
 
-    public ParticipantRedisStore(@Qualifier(Qualifiers.CENTRAL_CACHE_OPS) RedissonClient redissonClient) {
+    private final RMap<String, FspData> fspWithFspCode;
 
-        assert redissonClient != null;
+    private final RMap<Long, OracleData> oracleWithId;
 
-        this.redissonClient = redissonClient;
+    private final RMap<String, OracleData> oracleWithPartyType;
+
+    private final RMap<Long, FxpData> fxpWithId;
+
+    private final RSetMultimap<String, FxpData> fxpWithCurrencyPair;
+
+    public ParticipantRedisStore(RedissonOpsClient redissonOpsClient) {
+
+        assert redissonOpsClient != null;
+
+        var redissonClient = redissonOpsClient.getRedissonClient();
+
+        this.fspWithId = redissonClient.getMap(ParticipantCache.Names.FSP_WITH_ID);
+        this.fspWithFspCode = redissonClient.getMap(ParticipantCache.Names.FSP_WITH_FSP_CODE);
+
+        this.oracleWithId = redissonClient.getMap(ParticipantCache.Names.ORACLE_WITH_ID);
+        this.oracleWithPartyType = redissonClient.getMap(ParticipantCache.Names.ORACLE_WITH_PARTY_TYPE);
+
+        this.fxpWithId = redissonClient.getMap(ParticipantCache.Names.FXP_WITH_ID);
+        this.fxpWithCurrencyPair = redissonClient.getSetMultimap(ParticipantCache.Names.FXP_WITH_CURRENCY_PAIR);
+
+    }
+
+    @Override
+    public FspData getFspData(FspId fspId) {
+
+        return null;
+    }
+
+    @Override
+    public FspData getFspData(FspCode fspCode) {
+
+        return null;
+    }
+
+    @Override
+    public OracleData getOracleData(OracleId oracleId) {
+
+        return null;
+    }
+
+    @Override
+    public OracleData getOracleData(PartyIdType partyIdType) {
+
+        return null;
     }
 
 }

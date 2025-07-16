@@ -27,11 +27,9 @@ import java.util.Properties;
 
 public class RoutingEntityManagerConfigurer {
 
-    public LocalContainerEntityManagerFactoryBean configure(RoutingDataSource routingDataSource,
-                                                            RoutingEntityManagerConfigurer.SettingsProvider settingsProvider,
+    public static LocalContainerEntityManagerFactoryBean configure(RoutingDataSource routingDataSource,
+                                                            RoutingEntityManagerConfigurer.Settings settings,
                                                             String... packagesToScan) {
-
-        var settings = settingsProvider.routingEntityManagerConfigurerSettings();
 
         var entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
@@ -51,12 +49,6 @@ public class RoutingEntityManagerConfigurer {
         entityManagerFactoryBean.setPersistenceUnitName(settings.persistenceUnit);
 
         return entityManagerFactoryBean;
-
-    }
-
-    public interface SettingsProvider {
-
-        RoutingEntityManagerConfigurer.Settings routingEntityManagerConfigurerSettings();
 
     }
 

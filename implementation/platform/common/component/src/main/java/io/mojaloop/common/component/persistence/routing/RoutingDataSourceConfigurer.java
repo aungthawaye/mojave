@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.common.component.persistence.routing;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -28,13 +29,10 @@ import java.util.Map;
 
 public class RoutingDataSourceConfigurer {
 
-    public RoutingDataSource configure(SettingsProvider settingsProvider) {
+    public static RoutingDataSource configure(ReadSettings readSettings, WriteSettings writeSettings) {
 
-        var readSettings = settingsProvider.routingDataSourceConfigurerReadSettings();
-        var readDataSource = this.readDataSource(readSettings);
-
-        var writeSettings = settingsProvider.routingDataSourceConfigurerWriteSettings();
-        var writeDataSource = this.writeDataSource(writeSettings);
+        var readDataSource = RoutingDataSourceConfigurer.readDataSource(readSettings);
+        var writeDataSource = RoutingDataSourceConfigurer.writeDataSource(writeSettings);
 
         var routingDataSource = new RoutingDataSource();
 
@@ -49,7 +47,7 @@ public class RoutingDataSourceConfigurer {
         return routingDataSource;
     }
 
-    private DataSource readDataSource(RoutingDataSourceConfigurer.ReadSettings readSettings) {
+    private static DataSource readDataSource(RoutingDataSourceConfigurer.ReadSettings readSettings) {
 
         var config = new HikariConfig();
 
@@ -76,7 +74,7 @@ public class RoutingDataSourceConfigurer {
         return new HikariDataSource(config);
     }
 
-    private DataSource writeDataSource(RoutingDataSourceConfigurer.WriteSettings writeSettings) {
+    private static DataSource writeDataSource(RoutingDataSourceConfigurer.WriteSettings writeSettings) {
 
         var config = new HikariConfig();
 
@@ -101,14 +99,6 @@ public class RoutingDataSourceConfigurer {
         config.setAutoCommit(writeSettings.connection().autoCommit());
 
         return new HikariDataSource(config);
-    }
-
-    public interface SettingsProvider {
-
-        RoutingDataSourceConfigurer.ReadSettings routingDataSourceConfigurerReadSettings();
-
-        RoutingDataSourceConfigurer.WriteSettings routingDataSourceConfigurerWriteSettings();
-
     }
 
     public record WriteSettings(RoutingDataSourceConfigurer.WriteSettings.Connection connection,

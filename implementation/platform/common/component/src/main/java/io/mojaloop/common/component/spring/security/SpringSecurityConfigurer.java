@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,25 +17,22 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.common.component.spring.security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity
-public class SpringWebSecurityConfiguration {
+public class SpringSecurityConfigurer {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   Settings settings,
-                                                   AuthenticationErrorWriter authenticationErrorWriter,
-                                                   Authenticator authenticator) throws Exception {
+    public static SecurityFilterChain configure(HttpSecurity http,
+                                                Settings settings,
+                                                AuthenticationErrorWriter authenticationErrorWriter,
+                                                Authenticator authenticator) throws Exception {
 
         //@@formatter:off
         http

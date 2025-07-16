@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.common.component.redis;
 
 import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
 import org.redisson.codec.Kryo5Codec;
 import org.redisson.codec.LZ4Codec;
 import org.redisson.codec.LZ4CodecV2;
@@ -28,11 +28,10 @@ import org.redisson.config.Config;
 
 import java.util.concurrent.Executors;
 
-public class RedisOpsConfigurer {
+public class RedissonPubSubClientConfigurer {
 
-    public RedissonClient configure(SettingsProvider settingsProvider) {
+    public static RedissonPubSubClient configure(RedissonPubSubClientConfigurer.Settings settings) {
 
-        var settings = settingsProvider.redisOpsConfigurerSettings();
         var config = new Config();
 
         switch (settings.codec()) {
@@ -60,8 +59,9 @@ public class RedisOpsConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setConnectionPoolSize(settings.connectionPoolSize())
-                .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize())
+                .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize())
+                .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
                 .setPingConnectionInterval(10000);
 
         } else {
@@ -74,27 +74,16 @@ public class RedisOpsConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setMasterConnectionPoolSize(settings.connectionPoolSize())
-                .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
-                .setSlaveConnectionPoolSize(settings.connectionPoolSize() / 2)
-                .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize())
+                .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize())
+                .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
                 .setPingConnectionInterval(10000);
         }
 
-        return Redisson.create(config);
+        return new RedissonPubSubClient(Redisson.create(config));
     }
 
-    public interface SettingsProvider {
-
-        Settings redisOpsConfigurerSettings();
-
-    }
-
-    public record Settings(String[] hosts,
-                           boolean cluster,
-                           String codec,
-                           int executorCount,
-                           int connectionPoolSize,
-                           int connectionMinimumIdleSize) { }
+    public record Settings(String[] hosts, boolean cluster, String codec, int executorCount, int subscriptionPoolSize,
+                           int subscriptionMinimumIdleSize, int subscriptionPerConnection) { }
 
 }

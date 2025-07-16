@@ -4,9 +4,13 @@ import io.mojaloop.common.datatype.identifier.participant.FspId;
 import io.mojaloop.common.datatype.identifier.participant.FxpId;
 import io.mojaloop.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.common.fspiop.model.core.Currency;
+import io.mojaloop.common.fspiop.model.core.PartyIdType;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.data.FxpData;
 import io.mojaloop.core.participant.contract.data.OracleData;
+
+import java.util.Set;
 
 public interface ParticipantCache {
 
@@ -20,9 +24,13 @@ public interface ParticipantCache {
 
     FspData getFspData(FspCode fspCode);
 
+    Set<FxpData> getFxRatePairData(Currency sourceCurrency, Currency targetCurrency);
+
     FxpData getFxpData(FxpId fxpId);
 
     OracleData getOracleData(OracleId oracleId);
+
+    OracleData getOracleData(PartyIdType partyIdType);
 
     void save(FspData fspData);
 
@@ -35,6 +43,15 @@ public interface ParticipantCache {
         public static final String REDIS = "redis";
 
         public static final String DEFAULT = REDIS;
+
+    }
+
+    class Keys {
+
+        public static String forFxRatePair(Currency sourceCurrency, Currency targetCurrency) {
+
+            return sourceCurrency.name() + "_" + targetCurrency.name();
+        }
 
     }
 

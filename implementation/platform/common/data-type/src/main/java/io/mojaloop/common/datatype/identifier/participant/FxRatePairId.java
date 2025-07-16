@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,17 +17,30 @@
  * limitations under the License.
  * ================================================================================
  */
+package io.mojaloop.common.datatype.identifier.participant;
 
-package io.mojaloop.common.component.vault;
+import io.mojaloop.common.component.persistence.JpaId;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.NoArgsConstructor;
 
-import org.springframework.context.annotation.Bean;
+@Embeddable
+@NoArgsConstructor
+public class FxRatePairId extends JpaId<Long> {
 
-public class VaultConfiguration {
+    @Column(name = "fx_rate_pair_id")
+    private Long id;
 
-    @Bean
-    public Vault vault(VaultConfigurer.Settings settings) {
+    public FxRatePairId(Long id) {
 
-        return VaultConfigurer.configure(settings);
+        this.id = id;
+    }
+
+    @Override
+    public Long getId() {
+
+        return id;
     }
 
 }
+

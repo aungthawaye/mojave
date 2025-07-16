@@ -1,20 +1,20 @@
 package io.mojaloop.core.participant.domain;
 
-import io.mojaloop.common.component.vault.VaultConfiguration;
+import io.mojaloop.common.component.vault.VaultConfigurer;
 import org.springframework.context.annotation.Bean;
 
 public class LocalVaultSettings {
 
-    public static final String VAULT_ADDR = "";
+    public static final String VAULT_ADDR = "http://localhost:8200";
 
-    public static final String VAULT_TOKEN = "";
+    public static final String VAULT_TOKEN = "hvs.GJBnvtehSoCzpvF8TFibWbUU";
 
-    public static final String ENGINE_PATH = "";
+    public static final String ENGINE_PATH = "Mojaloop";
 
     @Bean
-    public VaultConfiguration.Settings vaultSettings() {
+    public VaultConfigurer.Settings vaultSettings() {
 
-        return new VaultConfiguration.Settings(VAULT_ADDR, VAULT_TOKEN, ENGINE_PATH);
+        return new VaultConfigurer.Settings(VAULT_ADDR, VAULT_TOKEN, ENGINE_PATH);
     }
 
 }
