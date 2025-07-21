@@ -20,6 +20,8 @@
 
 package io.mojaloop.core.participant.domain.model;
 
+import io.mojaloop.common.component.constraint.StringSizeConstraints;
+import io.mojaloop.common.component.handy.Snowflake;
 import io.mojaloop.common.component.persistence.JpaEntity;
 import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.common.datatype.identifier.participant.EndpointId;
@@ -44,11 +46,11 @@ public class Endpoint extends JpaEntity<EndpointId> {
     @EmbeddedId
     protected EndpointId id;
 
-    @Column(name = "type")
+    @Column(name = "type", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
     protected EndpointType type;
 
-    @Column(name = "host")
+    @Column(name = "host", length = StringSizeConstraints.LEN_256)
     protected String host;
 
     @ManyToOne
@@ -61,4 +63,12 @@ public class Endpoint extends JpaEntity<EndpointId> {
         return this.id;
     }
 
+    Endpoint(Fsp fsp, EndpointType type, String host) {
+
+        assert fsp != null;
+        assert type != null;
+        assert host != null;
+
+        this.id = new EndpointId(Snowflake.get().nextId());
+    }
 }

@@ -404,10 +404,10 @@ public class RetrofitService {
          * @return This Builder instance for method chaining
          * @throws RuntimeException If there is an error configuring mTLS
          */
-        public Builder<S> withMtls(InputStream clientCertInputStream,
-                                   String clientCertPassword,
-                                   InputStream trustStoreInputStream,
-                                   String trustStorePassword) {
+        public Builder<S> withMutualTLS(InputStream clientCertInputStream,
+                                        String clientCertPassword,
+                                        InputStream trustStoreInputStream,
+                                        String trustStorePassword) {
 
             try {
                 // Load client certificate
@@ -418,7 +418,7 @@ public class RetrofitService {
                 kmf.init(keyStore, clientCertPassword.toCharArray());
 
                 // Load trust store
-                KeyStore trustStore = KeyStore.getInstance("JKS");
+                KeyStore trustStore = KeyStore.getInstance("PKCS12");
                 trustStore.load(trustStoreInputStream, trustStorePassword.toCharArray());
 
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());

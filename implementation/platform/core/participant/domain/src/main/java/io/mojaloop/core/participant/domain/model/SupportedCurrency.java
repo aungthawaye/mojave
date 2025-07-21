@@ -47,30 +47,30 @@ import java.time.Instant;
 @Entity
 @Table(name = "pcp_supported_currency")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
+public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
 
     @EmbeddedId
-    protected SupportedCurrencyId id;
+    private SupportedCurrencyId id;
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
-    protected Currency currency;
+    private Currency currency;
 
     @Column(name = "activation_status")
     @Enumerated(EnumType.STRING)
-    protected ActivationStatus activationStatus;
+    private ActivationStatus activationStatus;
 
     @Column(name = "termination_status")
     @Enumerated(EnumType.STRING)
-    protected TerminationStatus terminationStatus;
+    private TerminationStatus terminationStatus;
 
     @Column(name = "created_at")
     @Convert(converter = JpaInstantConverter.class)
-    protected Instant createdAt;
+    private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "fsp_id")
-    protected Fsp fsp;
+    private Fsp fsp;
 
     SupportedCurrency(Fsp fsp, Currency currency) {
 
@@ -83,20 +83,6 @@ public class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
         this.createdAt = Instant.now();
     }
 
-    public void activate() throws CannotActivateSupportedCurrencyException {
-
-        if (!this.fsp.isActive()) {
-            throw new CannotActivateSupportedCurrencyException(this.currency.name());
-        }
-
-        this.activationStatus = ActivationStatus.ACTIVE;
-    }
-
-    public void deactivate() {
-
-        this.activationStatus = ActivationStatus.INACTIVE;
-    }
-
     @Override
     public SupportedCurrencyId getId() {
 
@@ -106,6 +92,20 @@ public class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
     public boolean isActive() {
 
         return this.activationStatus == ActivationStatus.ACTIVE;
+    }
+
+    void activate() throws CannotActivateSupportedCurrencyException {
+
+        if (!this.fsp.isActive()) {
+            throw new CannotActivateSupportedCurrencyException(this.currency.name());
+        }
+
+        this.activationStatus = ActivationStatus.ACTIVE;
+    }
+
+    void deactivate() {
+
+        this.activationStatus = ActivationStatus.INACTIVE;
     }
 
 }

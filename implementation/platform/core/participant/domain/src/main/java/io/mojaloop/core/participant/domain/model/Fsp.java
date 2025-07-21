@@ -64,7 +64,7 @@ public class Fsp extends JpaEntity<FspId> {
     @Embedded
     protected FspCode fspCode;
 
-    @Column(name = "name")
+    @Column(name = "name", length = StringSizeConstraints.LEN_64)
     protected String name;
 
     @Getter(AccessLevel.NONE)
@@ -76,11 +76,11 @@ public class Fsp extends JpaEntity<FspId> {
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, mappedBy = "fsp", targetEntity = Endpoint.class, fetch = FetchType.EAGER)
     protected Set<Endpoint> endpoints = Set.of();
 
-    @Column(name = "activation_status")
+    @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus;
 
-    @Column(name = "termination_status")
+    @Column(name = "termination_status", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus;
 
@@ -156,7 +156,7 @@ public class Fsp extends JpaEntity<FspId> {
 
     public boolean hasSupportedCurrency(Currency currency) {
 
-        return this.supportedCurrencies.stream().anyMatch(sc -> sc.currency == currency);
+        return this.supportedCurrencies.stream().anyMatch(sc -> sc.getCurrency() == currency);
     }
 
     public boolean isActive() {
@@ -174,8 +174,8 @@ public class Fsp extends JpaEntity<FspId> {
             throw new BlankOrEmptyInputException("FSP Name");
         }
 
-        if (value.length() > StringSizeConstraints.SHORT_STRING) {
-            throw new TextTooLargeException("FSP Name", StringSizeConstraints.SHORT_STRING);
+        if (value.length() > StringSizeConstraints.LEN_64) {
+            throw new TextTooLargeException("FSP Name", StringSizeConstraints.LEN_64);
         }
 
         this.name = value;

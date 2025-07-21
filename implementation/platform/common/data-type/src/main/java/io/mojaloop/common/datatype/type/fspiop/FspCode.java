@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FspCode {
 
-    @Column(name = "fsp_code", length = StringSizeConstraints.SHORT_CODE)
+    @Column(name = "fsp_code", length = StringSizeConstraints.LEN_24)
     private String fspCode;
 
     public FspCode(String fspCode) {
@@ -47,8 +47,8 @@ public class FspCode {
             throw new BlankOrEmptyInputException("FSP Code");
         }
 
-        if (value.length() > StringSizeConstraints.SHORT_CODE) {
-            throw new TextTooLargeException("FSP Code", StringSizeConstraints.SHORT_CODE);
+        if (value.length() > StringSizeConstraints.LEN_24) {
+            throw new TextTooLargeException("FSP Code", StringSizeConstraints.LEN_24);
         }
 
         this.fspCode = fspCode;
