@@ -32,8 +32,13 @@ import io.mojaloop.common.fspiop.model.core.Currency;
 import java.util.Map;
 import java.util.Objects;
 
-public record FspData(FspId fspId, FspCode fspCode, String name, SupportedCurrencyData[] supportedCurrencies,
-                      Map<EndpointType, EndpointData> endpoints, ActivationStatus activationStatus, TerminationStatus terminationStatus) {
+public record FspData(FspId fspId,
+                      FspCode fspCode,
+                      String name,
+                      SupportedCurrencyData[] supportedCurrencies,
+                      Map<EndpointType, EndpointData> endpoints,
+                      ActivationStatus activationStatus,
+                      TerminationStatus terminationStatus) {
 
     @Override
     public boolean equals(Object o) {
@@ -50,8 +55,7 @@ public record FspData(FspId fspId, FspCode fspCode, String name, SupportedCurren
         return Objects.hashCode(fspId);
     }
 
-    public record SupportedCurrencyData(SupportedCurrencyId supportedCurrencyId, Currency currency, ActivationStatus activationStatus,
-                                        TerminationStatus terminationStatus) {
+    public record SupportedCurrencyData(SupportedCurrencyId supportedCurrencyId, Currency currency, ActivationStatus activationStatus) {
 
         @Override
         public boolean equals(Object o) {

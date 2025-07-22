@@ -21,11 +21,17 @@
 package io.mojaloop.core.participant.domain.model;
 
 import io.mojaloop.common.component.constraint.StringSizeConstraints;
+import io.mojaloop.common.component.exception.input.BlankOrEmptyInputException;
+import io.mojaloop.common.component.exception.input.TextTooLargeException;
 import io.mojaloop.common.component.handy.Snowflake;
 import io.mojaloop.common.component.persistence.JpaEntity;
+import io.mojaloop.common.component.persistence.JpaInstantConverter;
+import io.mojaloop.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.common.datatype.identifier.participant.EndpointId;
+import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,25 +43,66 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Getter
 @Entity
 @Table(name = "pcp_endpoint")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Endpoint extends JpaEntity<EndpointId> {
+public final class Endpoint extends JpaEntity<EndpointId> {
 
     @EmbeddedId
-    protected EndpointId id;
+    private EndpointId id;
 
     @Column(name = "type", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
-    protected EndpointType type;
+    private EndpointType type;
 
     @Column(name = "host", length = StringSizeConstraints.LEN_256)
-    protected String host;
+    private String host;
+
+    @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
+    @Enumerated(EnumType.STRING)
+    private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
+
+    @Column(name = "created_at")
+    @Convert(converter = JpaInstantConverter.class)
+    private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "fsp_id")
-    protected Fsp fsp;
+    private Fsp fsp;
+
+    Endpoint(Fsp fsp, EndpointType type, String host) {
+
+        assert fsp != null;
+        assert type != null;
+
+        this.id = new EndpointId(Snowflake.get().nextId());
+        this.fsp = fsp;
+        this.type = type;
+        this.host(host);
+        this.createdAt = Instant.now();
+    }
+
+    public Endpoint host(String host) {
+
+        assert host != null;
+
+        var value = host.trim();
+
+        if (value.isEmpty()) {
+            throw new BlankOrEmptyInputException("Host");
+        }
+
+        if (value.length() > StringSizeConstraints.LEN_64) {
+            throw new TextTooLargeException("Host", StringSizeConstraints.LEN_256);
+        }
+
+        this.host = value;
+
+        return this;
+    }
 
     @Override
     public EndpointId getId() {
@@ -63,12 +110,24 @@ public class Endpoint extends JpaEntity<EndpointId> {
         return this.id;
     }
 
-    Endpoint(Fsp fsp, EndpointType type, String host) {
+    public boolean isActive() {
 
-        assert fsp != null;
-        assert type != null;
-        assert host != null;
-
-        this.id = new EndpointId(Snowflake.get().nextId());
+        return this.activationStatus == ActivationStatus.ACTIVE;
     }
+
+    void activate() throws CannotActivateEndpointException {
+
+        if (!this.fsp.isActive()) {
+
+            throw new CannotActivateEndpointException(this.type.name());
+        }
+
+        this.activationStatus = ActivationStatus.ACTIVE;
+    }
+
+    void deactivate() {
+
+        this.activationStatus = ActivationStatus.INACTIVE;
+    }
+
 }

@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.domain.model;
 
+import io.mojaloop.common.component.constraint.StringSizeConstraints;
 import io.mojaloop.common.component.handy.Snowflake;
 import io.mojaloop.common.component.persistence.JpaEntity;
 import io.mojaloop.common.component.persistence.JpaInstantConverter;
 import io.mojaloop.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.common.datatype.enumeration.TerminationStatus;
 import io.mojaloop.common.datatype.identifier.participant.SupportedCurrencyId;
 import io.mojaloop.common.fspiop.model.core.Currency;
 import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
@@ -52,17 +52,13 @@ public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
     @EmbeddedId
     private SupportedCurrencyId id;
 
-    @Column(name = "currency")
+    @Column(name = "currency", length = StringSizeConstraints.LEN_3)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @Column(name = "activation_status")
+    @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
-    private ActivationStatus activationStatus;
-
-    @Column(name = "termination_status")
-    @Enumerated(EnumType.STRING)
-    private TerminationStatus terminationStatus;
+    private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
     @Column(name = "created_at")
     @Convert(converter = JpaInstantConverter.class)

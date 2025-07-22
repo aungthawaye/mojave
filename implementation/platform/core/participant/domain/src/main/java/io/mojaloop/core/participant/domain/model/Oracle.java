@@ -52,10 +52,18 @@ public class Oracle extends JpaEntity<OracleId> {
     @Column(name = "host")
     protected String host;
 
+    public Oracle(PartyIdType type, String name, String host) {
+
+        assert type != null;
+        assert name != null;
+        assert host != null;
+
+    }
+
     @Override
     public OracleId getId() {
 
-        return null;
+        return this.id;
     }
 
 }

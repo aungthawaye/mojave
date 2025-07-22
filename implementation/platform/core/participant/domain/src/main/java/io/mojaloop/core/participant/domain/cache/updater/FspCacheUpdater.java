@@ -43,8 +43,7 @@ public class FspCacheUpdater {
 
         Function<SupportedCurrency, FspData.SupportedCurrencyData> toSupportedCurrencyData = o -> new FspData.SupportedCurrencyData(o.getId(),
                                                                                                                                     o.getCurrency(),
-                                                                                                                                    o.getActivationStatus(),
-                                                                                                                                    o.getTerminationStatus());
+                                                                                                                                    o.getActivationStatus());
 
         Function<Endpoint, FspData.EndpointData> toEndpointData = o -> new FspData.EndpointData(o.getId(), o.getType(), o.getHost());
 

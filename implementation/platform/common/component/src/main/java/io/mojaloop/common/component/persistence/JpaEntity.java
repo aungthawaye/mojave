@@ -37,15 +37,15 @@ public abstract class JpaEntity<ID extends JpaId<?>> {
         name = "rec_created_at",
         updatable = false)
     @Convert(converter = JpaInstantConverter.class)
-    protected Instant createdAt;
+    private Instant recCreatedAt;
 
     @Column(name = "rec_updated_at")
     @Convert(converter = JpaInstantConverter.class)
-    protected Instant updatedAt;
+    private Instant recUpdatedAt;
 
     @Column(name = "rec_version")
     @Version
-    protected Integer version;
+    private Integer recVersion;
 
     protected JpaEntity() {
 
@@ -77,15 +77,15 @@ public abstract class JpaEntity<ID extends JpaId<?>> {
     @PrePersist
     public void prePersist() {
 
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
+        this.recCreatedAt = Instant.now();
+        this.recUpdatedAt = Instant.now();
 
     }
 
     @PreUpdate
     public void preUpdate() {
 
-        this.updatedAt = Instant.now();
+        this.recUpdatedAt = Instant.now();
 
     }
 

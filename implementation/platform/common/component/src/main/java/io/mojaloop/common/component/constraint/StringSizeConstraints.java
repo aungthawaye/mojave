@@ -24,6 +24,14 @@ import io.mojaloop.common.component.exception.ErrorMessage;
 
 public class StringSizeConstraints {
 
+    public static final int LEN_1 = 1;
+
+    public static final int LEN_2 = 2;
+
+    public static final int LEN_3 = 3;
+
+    public static final int LEN_4 = 4;
+
     public static final int LEN_16 = 16;
 
     public static final int LEN_24 = 24;

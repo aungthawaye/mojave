@@ -28,11 +28,14 @@ import io.mojaloop.common.component.persistence.JpaEntity;
 import io.mojaloop.common.component.persistence.JpaInstantConverter;
 import io.mojaloop.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.common.datatype.enumeration.TerminationStatus;
+import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.common.datatype.identifier.participant.FspId;
 import io.mojaloop.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.common.fspiop.model.core.Currency;
+import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
 import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -50,6 +53,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -70,19 +74,19 @@ public class Fsp extends JpaEntity<FspId> {
     @Getter(AccessLevel.NONE)
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, mappedBy = "fsp", targetEntity = SupportedCurrency.class,
                fetch = FetchType.EAGER)
-    protected Set<SupportedCurrency> supportedCurrencies = Set.of();
+    protected Set<SupportedCurrency> supportedCurrencies = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, mappedBy = "fsp", targetEntity = Endpoint.class, fetch = FetchType.EAGER)
-    protected Set<Endpoint> endpoints = Set.of();
+    protected Set<Endpoint> endpoints = new HashSet<>();
 
     @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
-    protected ActivationStatus activationStatus;
+    protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
     @Column(name = "termination_status", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
-    protected TerminationStatus terminationStatus;
+    protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
     @Column(name = "created_at")
     @Convert(converter = JpaInstantConverter.class)
@@ -108,9 +112,33 @@ public class Fsp extends JpaEntity<FspId> {
                 sc.activate();
             } catch (CannotActivateSupportedCurrencyException ignored) { }
         });
+
+        this.endpoints.forEach(e -> {
+            try {
+                e.activate();
+            } catch (CannotActivateEndpointException ignored) { }
+        });
+    }
+
+    public Endpoint addEndpoint(EndpointType type, String host) throws EndpointAlreadyConfiguredException {
+
+        assert type != null;
+        assert host != null;
+
+        if (this.hasEndpoint(type)) {
+            throw new EndpointAlreadyConfiguredException(type.name());
+        }
+
+        var endpoint = new Endpoint(this, type, host);
+
+        this.endpoints.add(endpoint);
+
+        return endpoint;
     }
 
     public SupportedCurrency addSupportedCurrency(Currency currency) throws CurrencyAlreadySupportedException {
+
+        assert currency != null;
 
         if (this.hasSupportedCurrency(currency)) {
             throw new CurrencyAlreadySupportedException(currency.name());
@@ -127,6 +155,7 @@ public class Fsp extends JpaEntity<FspId> {
 
         this.activationStatus = ActivationStatus.INACTIVE;
         this.supportedCurrencies.forEach(SupportedCurrency::deactivate);
+        this.endpoints.forEach(Endpoint::deactivate);
     }
 
     public Fsp fspCode(FspCode fspCode) {
@@ -154,7 +183,16 @@ public class Fsp extends JpaEntity<FspId> {
         return Collections.unmodifiableSet(this.supportedCurrencies);
     }
 
+    public boolean hasEndpoint(EndpointType type) {
+
+        assert type != null;
+
+        return this.endpoints.stream().anyMatch(endpoint -> endpoint.getType() == type);
+    }
+
     public boolean hasSupportedCurrency(Currency currency) {
+
+        assert currency != null;
 
         return this.supportedCurrencies.stream().anyMatch(sc -> sc.getCurrency() == currency);
     }

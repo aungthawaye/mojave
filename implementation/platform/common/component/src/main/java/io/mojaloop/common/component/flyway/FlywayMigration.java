@@ -29,6 +29,8 @@ public class FlywayMigration {
             .configure()
             .dataSource(settings.url(), settings.username(), settings.password())
             .locations(settings.locations())
+            .validateMigrationNaming(true)
+            .validateOnMigrate(true)
             .baselineOnMigrate(true)
             .load()
             .migrate();
