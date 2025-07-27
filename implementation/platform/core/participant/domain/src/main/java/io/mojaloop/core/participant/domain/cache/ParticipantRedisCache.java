@@ -11,6 +11,8 @@ import io.mojaloop.core.participant.contract.cache.ParticipantCache;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.data.FxpData;
 import io.mojaloop.core.participant.contract.data.OracleData;
+import io.mojaloop.core.participant.domain.model.repository.FspRepository;
+import jakarta.annotation.PostConstruct;
 import org.redisson.api.RMap;
 import org.redisson.api.RSetMultimap;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +24,8 @@ import java.util.Set;
 @Component
 @Qualifier(ParticipantCache.Qualifiers.REDIS)
 public class ParticipantRedisCache implements ParticipantCache {
+
+    private final FspRepository fspRepository;
 
     private final RMap<Long, FspData> fspWithId;
 
@@ -35,9 +39,12 @@ public class ParticipantRedisCache implements ParticipantCache {
 
     private final RSetMultimap<String, FxpData> fxpWithCurrencyPair;
 
-    public ParticipantRedisCache(RedissonOpsClient redissonOpsClient) {
+    public ParticipantRedisCache(FspRepository fspRepository, RedissonOpsClient redissonOpsClient) {
 
+        assert fspRepository != null;
         assert redissonOpsClient != null;
+
+        this.fspRepository = fspRepository;
 
         var redissonClient = redissonOpsClient.getRedissonClient();
 
@@ -62,7 +69,7 @@ public class ParticipantRedisCache implements ParticipantCache {
     public void delete(OracleId oracleId) {
 
         var deleted = this.oracleWithId.remove(oracleId.getId());
-        this.oracleWithPartyType.remove(deleted.type().name());
+        this.oracleWithPartyType.remove(deleted.type());
     }
 
     @Override
@@ -107,6 +114,17 @@ public class ParticipantRedisCache implements ParticipantCache {
     public OracleData getOracleData(PartyIdType partyIdType) {
 
         return this.oracleWithPartyType.get(partyIdType.name());
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+
+        var fsps = this.fspRepository.findAll();
+
+        for (var fsp : fsps) {
+
+            this.save(fsp.convert());
+        }
     }
 
     @Override

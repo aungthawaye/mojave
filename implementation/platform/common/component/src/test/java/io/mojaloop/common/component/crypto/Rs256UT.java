@@ -30,11 +30,15 @@ public class Rs256UT {
     @Test
     public void test() throws Exception {
 
-        var keyPair = RsaUtil.generateKeyPair(2048);
-        var publicKeyString = RsaUtil.writePublicKeyToString(keyPair.getPublic());
-        var privateKeyString = RsaUtil.writePrivateKeyToString(keyPair.getPrivate());
-        var publicKey = RsaUtil.readPublicKey(publicKeyString);
-        var privateKey = RsaUtil.readPrivateKey(privateKeyString);
+        var keyPair = Rs256.generateKeyPair(2048);
+
+        var publicKeyString = Rs256.publicKeyToBase64(keyPair.getPublic());
+        LOGGER.debug("Public Key: {}", publicKeyString);
+        var privateKeyString = Rs256.privateKeyToBase64(keyPair.getPrivate());
+        LOGGER.debug("Private Key: {}", privateKeyString);
+
+        var publicKey = Rs256.publicKeyFromBase64(publicKeyString);
+        var privateKey = Rs256.privateKeyFromBase64(privateKeyString);
 
         var message = "This is a test message";
 

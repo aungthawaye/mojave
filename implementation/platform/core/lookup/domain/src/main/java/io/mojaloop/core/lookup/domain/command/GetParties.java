@@ -21,13 +21,19 @@
 package io.mojaloop.core.lookup.domain.command;
 
 import io.mojaloop.common.fspiop.support.Destination;
+import io.mojaloop.common.fspiop.support.FspiopRequestContext;
 import io.mojaloop.common.fspiop.support.Source;
 
 public interface GetParties {
 
     Output execute(Input input);
 
-    record Input(Source source, Destination destination, String partyIdType, String partyId, String partySubId) { }
+    record Input(Source source,
+                 Destination destination,
+                 String partyIdType,
+                 String partyId,
+                 String partySubId,
+                 FspiopRequestContext fspiopRequestContext) { }
 
     record Output() { }
 

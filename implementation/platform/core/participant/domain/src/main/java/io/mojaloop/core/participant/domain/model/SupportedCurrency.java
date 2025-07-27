@@ -21,12 +21,14 @@
 package io.mojaloop.core.participant.domain.model;
 
 import io.mojaloop.common.component.constraint.StringSizeConstraints;
+import io.mojaloop.common.component.data.DataConversion;
 import io.mojaloop.common.component.handy.Snowflake;
 import io.mojaloop.common.component.persistence.JpaEntity;
 import io.mojaloop.common.component.persistence.JpaInstantConverter;
 import io.mojaloop.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.common.datatype.identifier.participant.SupportedCurrencyId;
 import io.mojaloop.common.fspiop.model.core.Currency;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -47,7 +49,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "pcp_supported_currency")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
+public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> implements DataConversion<FspData.SupportedCurrencyData> {
 
     @EmbeddedId
     private SupportedCurrencyId id;
@@ -77,6 +79,12 @@ public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> {
         this.fsp = fsp;
         this.currency = currency;
         this.createdAt = Instant.now();
+    }
+
+    @Override
+    public FspData.SupportedCurrencyData convert() {
+
+        return new FspData.SupportedCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus());
     }
 
     @Override

@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.lookup.domain.command;
 
+import io.mojaloop.common.component.http.CachedBodyHttpServletRequest;
 import io.mojaloop.common.fspiop.model.core.PartiesTypeIDPutResponse;
 import io.mojaloop.common.fspiop.support.Destination;
 import io.mojaloop.common.fspiop.support.Source;
@@ -31,6 +32,7 @@ public interface PutParties {
                  String partyIdType,
                  String partyId,
                  String partySubId,
-                 PartiesTypeIDPutResponse response) { }
+                 PartiesTypeIDPutResponse response,
+                 CachedBodyHttpServletRequest request) { }
 
 }

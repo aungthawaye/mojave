@@ -19,7 +19,9 @@
  */
 package io.mojaloop.common.fspiop.support;
 
-public record Destination(String destinationFspId) {
+import io.mojaloop.common.datatype.type.fspiop.FspCode;
+
+public record Destination(FspCode destinationFspCode) {
 
     public static Destination EMPTY() {
 

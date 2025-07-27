@@ -25,40 +25,44 @@ import io.mojaloop.common.fspiop.component.FspiopHeaders;
 import io.mojaloop.common.fspiop.model.core.ErrorInformationObject;
 import io.mojaloop.common.fspiop.model.core.ErrorInformationResponse;
 import io.mojaloop.common.fspiop.model.core.PartiesTypeIDPutResponse;
+import io.mojaloop.common.fspiop.model.core.PartyIdType;
 import io.mojaloop.common.fspiop.service.AccountLookUpService;
 import io.mojaloop.common.fspiop.support.Destination;
-import io.mojaloop.common.fspiop.support.ParticipantSettings;
+import io.mojaloop.common.fspiop.support.ParticipantDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 class PutPartiesHandler implements PutParties {
 
-    private final ParticipantSettings participantSettings;
+    private final ParticipantDetails participantDetails;
 
     private final AccountLookUpService accountLookUpService;
 
     private final RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder;
 
-    public PutPartiesHandler(ParticipantSettings participantSettings,
+    public PutPartiesHandler(ParticipantDetails participantDetails,
                              AccountLookUpService accountLookUpService,
                              RetrofitService.ErrorDecoder<ErrorInformationResponse> errorDecoder) {
 
-        assert participantSettings != null;
+        assert participantDetails != null;
         assert accountLookUpService != null;
         assert errorDecoder != null;
 
-        this.participantSettings = participantSettings;
+        this.participantDetails = participantDetails;
         this.accountLookUpService = accountLookUpService;
         this.errorDecoder = errorDecoder;
     }
 
     @Override
-    public void putParties(Destination destination, String partyIdType, String partyId, PartiesTypeIDPutResponse partiesTypeIDPutResponse) {
+    public void putParties(Destination destination,
+                           PartyIdType partyIdType,
+                           String partyId,
+                           PartiesTypeIDPutResponse partiesTypeIDPutResponse) {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId(),
-                                                                         "SIGNATURE");
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forPut(this.participantDetails.fspCode().getFspCode(),
+                                                                    destination.destinationFspCode().getFspCode());
 
             RetrofitService.invoke(this.accountLookUpService.putParty(fspiopHeaders, partyIdType, partyId, partiesTypeIDPutResponse),
                                    this.errorDecoder);
@@ -70,15 +74,15 @@ class PutPartiesHandler implements PutParties {
 
     @Override
     public void putParties(Destination destination,
-                           String partyIdType,
+                           PartyIdType partyIdType,
                            String partyId,
                            String subId,
                            PartiesTypeIDPutResponse partiesTypeIDPutResponse) {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId(),
-                                                                         "SIGNATURE");
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forPut(this.participantDetails.fspCode().getFspCode(),
+                                                                    destination.destinationFspCode().getFspCode());
 
             RetrofitService.invoke(this.accountLookUpService.putParty(fspiopHeaders, partyIdType, partyId, subId, partiesTypeIDPutResponse),
                                    this.errorDecoder);
@@ -90,14 +94,14 @@ class PutPartiesHandler implements PutParties {
 
     @Override
     public void putPartiesError(Destination destination,
-                                String partyIdType,
+                                PartyIdType partyIdType,
                                 String partyId,
                                 ErrorInformationObject errorInformationObject) {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId(),
-                                                                         "SIGNATURE");
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forPut(this.participantDetails.fspCode().getFspCode(),
+                                                                    destination.destinationFspCode().getFspCode());
 
             RetrofitService.invoke(this.accountLookUpService.putPartyError(fspiopHeaders, partyIdType, partyId, errorInformationObject),
                                    this.errorDecoder);
@@ -109,19 +113,21 @@ class PutPartiesHandler implements PutParties {
 
     @Override
     public void putPartiesError(Destination destination,
-                                String partyIdType,
+                                PartyIdType partyIdType,
                                 String partyId,
                                 String subId,
                                 ErrorInformationObject errorInformationObject) {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forCallback(this.participantSettings.fspId(), destination.destinationFspId(),
-                                                                         "SIGNATURE");
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forPut(this.participantDetails.fspCode().getFspCode(),
+                                                                    destination.destinationFspCode().getFspCode());
 
-            RetrofitService.invoke(
-                this.accountLookUpService.putPartyError(fspiopHeaders, partyIdType, partyId, subId, errorInformationObject),
-                this.errorDecoder);
+            RetrofitService.invoke(this.accountLookUpService.putPartyError(fspiopHeaders,
+                                                                           partyIdType,
+                                                                           partyId,
+                                                                           subId,
+                                                                           errorInformationObject), this.errorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
             throw new RuntimeException(e);

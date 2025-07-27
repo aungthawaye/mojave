@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.common.component.crypto;
 
 import javax.crypto.Cipher;
@@ -28,6 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -71,7 +73,7 @@ public class Rs256 {
         return keyGen.generateKeyPair();
     }
 
-    public static PrivateKey privateKeyFromBase64(String base64PrivateKey) throws Exception {
+    public static PrivateKey privateKeyFromBase64(String base64PrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         byte[] decodedKey = Base64.getDecoder().decode(base64PrivateKey);
 
@@ -87,7 +89,7 @@ public class Rs256 {
         return Base64.getEncoder().encodeToString(privateKey.getEncoded());
     }
 
-    public static PublicKey publicKeyFromBase64(String base64PublicKey) throws Exception {
+    public static PublicKey publicKeyFromBase64(String base64PublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         byte[] decodedKey = Base64.getDecoder().decode(base64PublicKey);
 
@@ -104,7 +106,7 @@ public class Rs256 {
     }
 
     // Sign data with a private key
-    public static String sign(String message, PrivateKey privateKey) throws Exception {
+    public static String sign(PrivateKey privateKey, String message) throws Exception {
 
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initSign(privateKey);
@@ -116,7 +118,7 @@ public class Rs256 {
     }
 
     // Verify the signature with a public key
-    public static boolean verify(String message, String sha256Signature, PublicKey publicKey) throws Exception {
+    public static boolean verify(PublicKey publicKey, String message, String sha256Signature) throws Exception {
 
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initVerify(publicKey);

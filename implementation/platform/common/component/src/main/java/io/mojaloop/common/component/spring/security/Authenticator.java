@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,20 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.common.component.spring.security;
 
+import io.mojaloop.common.component.http.CachedBodyHttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 public interface Authenticator {
 
-    UsernamePasswordAuthenticationToken authenticate(ContentCachingRequestWrapper requestWrapper) throws AuthenticationException;
+    UsernamePasswordAuthenticationToken authenticate(CachedBodyHttpServletRequest cachedBodyHttpServletRequest)
+        throws AuthenticatorException;
 
-    class AuthenticationException extends Exception {
+    class AuthenticatorException extends Exception {
 
-        public AuthenticationException(String message) {
+        public AuthenticatorException(String message) {
 
             super(message);
         }

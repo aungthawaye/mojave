@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.model;
 
 import io.mojaloop.common.component.constraint.StringSizeConstraints;
+import io.mojaloop.common.component.data.DataConversion;
 import io.mojaloop.common.component.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.common.component.exception.input.TextTooLargeException;
 import io.mojaloop.common.component.handy.Snowflake;
@@ -29,6 +30,7 @@ import io.mojaloop.common.component.persistence.JpaInstantConverter;
 import io.mojaloop.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.common.datatype.identifier.participant.EndpointId;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -49,7 +51,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "pcp_endpoint")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class Endpoint extends JpaEntity<EndpointId> {
+public final class Endpoint extends JpaEntity<EndpointId> implements DataConversion<FspData.EndpointData> {
 
     @EmbeddedId
     private EndpointId id;
@@ -85,6 +87,18 @@ public final class Endpoint extends JpaEntity<EndpointId> {
         this.createdAt = Instant.now();
     }
 
+    @Override
+    public FspData.EndpointData convert() {
+
+        return new FspData.EndpointData(this.getId(), this.getType(), this.getHost());
+    }
+
+    @Override
+    public EndpointId getId() {
+
+        return this.id;
+    }
+
     public Endpoint host(String host) {
 
         assert host != null;
@@ -102,12 +116,6 @@ public final class Endpoint extends JpaEntity<EndpointId> {
         this.host = value;
 
         return this;
-    }
-
-    @Override
-    public EndpointId getId() {
-
-        return this.id;
     }
 
     public boolean isActive() {

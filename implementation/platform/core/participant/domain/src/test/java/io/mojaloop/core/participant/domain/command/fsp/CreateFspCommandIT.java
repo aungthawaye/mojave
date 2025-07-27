@@ -11,7 +11,7 @@ import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfigured
 import io.mojaloop.core.participant.contract.exception.FspAlreadyExistsException;
 import io.mojaloop.core.participant.domain.LocalVaultSettings;
 import io.mojaloop.core.participant.domain.TestConfiguration;
-import io.mojaloop.core.participant.domain.settings.ParticipantVaultBasedSettings;
+import io.mojaloop.core.participant.domain.ParticipantDomainSettings;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ public class CreateFspCommandIT {
 
         var vault = new Vault(LocalVaultSettings.VAULT_ADDR, LocalVaultSettings.VAULT_TOKEN, LocalVaultSettings.ENGINE_PATH);
 
-        FlywayMigration.migrate(vault.get(ParticipantVaultBasedSettings.VaultPaths.FLYWAY_PATH, FlywayMigration.Settings.class));
+        FlywayMigration.migrate(vault.get(ParticipantDomainSettings.VaultPaths.FLYWAY_PATH, FlywayMigration.Settings.class));
     }
 
     @Test
@@ -39,8 +39,8 @@ public class CreateFspCommandIT {
 
         assert createFspCommand != null;
 
-        var input = new CreateFspCommand.Input(new FspCode("fsp1"),
-                                               "FSP 1",
+        var input = new CreateFspCommand.Input(new FspCode("fsp2"),
+                                               "FSP 2",
                                                new Currency[]{Currency.USD, Currency.MMK, Currency.MYR},
                                                new CreateFspCommand.Input.Endpoint[]{
                                                    new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "https://www.fspexample.com"),

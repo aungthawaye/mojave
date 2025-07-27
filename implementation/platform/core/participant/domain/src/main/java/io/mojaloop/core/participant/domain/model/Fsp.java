@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.model;
 
 import io.mojaloop.common.component.constraint.StringSizeConstraints;
+import io.mojaloop.common.component.data.DataConversion;
 import io.mojaloop.common.component.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.common.component.exception.input.TextTooLargeException;
 import io.mojaloop.common.component.handy.Snowflake;
@@ -32,16 +33,19 @@ import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.common.datatype.identifier.participant.FspId;
 import io.mojaloop.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.common.fspiop.model.core.Currency;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
 import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.domain.cache.updater.FspCacheUpdater;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -55,12 +59,15 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
+@EntityListeners(value = {FspCacheUpdater.class})
 @Table(name = "pcp_fsp")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Fsp extends JpaEntity<FspId> {
+public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     @EmbeddedId
     protected FspId id;
@@ -149,6 +156,28 @@ public class Fsp extends JpaEntity<FspId> {
         this.supportedCurrencies.add(supportedCurrency);
 
         return supportedCurrency;
+    }
+
+    @Override
+    public FspData convert() {
+
+        return new FspData(this.getId(),
+                           this.getFspCode(),
+                           this.getName(),
+                           this
+                               .getSupportedCurrencies()
+                               .stream()
+                               .map(SupportedCurrency::convert)
+                               .toArray(FspData.SupportedCurrencyData[]::new),
+                           this
+                               .getEndpoints()
+                               .stream()
+                               .map(Endpoint::convert)
+                               .collect(Collectors.toMap(FspData.EndpointData::type,
+                                                         Function.identity(),
+                                                         (existing, replacement) -> replacement)),
+                           this.activationStatus,
+                           this.terminationStatus);
     }
 
     public void deactivate() {

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Accounts")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-07-14T09:48:07.492996+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-07-27T21:55:35.545102+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class Accounts   {
   private Integer id;
   private String reason;

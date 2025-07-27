@@ -46,4 +46,6 @@ public class ComponentConfiguration {
         return new SpringContext();
     }
 
+    public interface RequiredSettings { }
+
 }

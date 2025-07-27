@@ -12,10 +12,9 @@
     <packaging>pom</packaging>
     <name>Mojaloop - Core - Participant</name>
     <modules>
+        <module>contract</module>
         <module>domain</module>
         <module>store</module>
-        <module>routes-admin</module>
-        <module>contract</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

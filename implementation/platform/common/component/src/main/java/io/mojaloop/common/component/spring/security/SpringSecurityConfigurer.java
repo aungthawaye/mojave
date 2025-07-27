@@ -31,26 +31,35 @@ public class SpringSecurityConfigurer {
 
     public static SecurityFilterChain configure(HttpSecurity http,
                                                 Settings settings,
-                                                AuthenticationErrorWriter authenticationErrorWriter,
-                                                Authenticator authenticator) throws Exception {
+                                                Authenticator authenticator,
+                                                AuthenticationErrorWriter authenticationErrorWriter) throws Exception {
 
         //@@formatter:off
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(Customizer.withDefaults())
-            .sessionManagement((sessionManagement) ->
-                                   sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(configure -> configure
-                                                    .requestMatchers(settings.publicEndpoints).permitAll()
-                                                    .requestMatchers("/secured/**").authenticated()
-                                                    .anyRequest().authenticated())
-            .addFilterBefore(new AuthenticationProcessFilter(authenticator), UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        if (settings.publicEndpointPrefix() != null && !settings.publicEndpointPrefix().isEmpty()) {
+
+            http.authorizeHttpRequests(authorize -> authorize.requestMatchers(settings.publicEndpointPrefix()).permitAll());
+        }
+
+        if (settings.securedEndpointPrefix() != null && !settings.securedEndpointPrefix().isEmpty()) {
+
+            http.authorizeHttpRequests(authorize -> authorize.requestMatchers(settings.securedEndpointPrefix()).authenticated());
+        }
+
+        http
+            .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+            .addFilterBefore(new AuthenticationProcessFilter(authenticator, settings), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new AuthenticationFailureFilter(authenticationErrorWriter), AuthenticationProcessFilter.class);
+
         //@@formatter:on
 
         return http.build();
     }
 
-    public record Settings(String[] publicEndpoints) { }
+    public record Settings(String publicEndpointPrefix, String securedEndpointPrefix) { }
 
 }

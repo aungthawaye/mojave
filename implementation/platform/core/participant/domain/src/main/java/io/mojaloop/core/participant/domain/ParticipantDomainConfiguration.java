@@ -24,14 +24,15 @@ import io.mojaloop.common.component.ComponentConfiguration;
 import io.mojaloop.common.component.persistence.routing.RoutingJpaConfiguration;
 import io.mojaloop.common.component.redis.RedissonOpsClientConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"io.mojaloop.core.participant.domain"})
-@Import(value = {ComponentConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class})
+@Import(value = {
+    ComponentConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class, ParticipantDomainSettings.class})
 public class ParticipantDomainConfiguration {
 
-    public interface RequiredSettings extends RoutingJpaConfiguration.RequiredSettings, RedissonOpsClientConfiguration.RequiredSettings { }
+    public interface RequiredSettings extends ComponentConfiguration.RequiredSettings,
+                                              RoutingJpaConfiguration.RequiredSettings,
+                                              RedissonOpsClientConfiguration.RequiredSettings { }
 
 }
