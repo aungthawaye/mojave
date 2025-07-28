@@ -20,13 +20,13 @@
 
 package io.mojaloop.core.participant.contract.command.fsp;
 
-import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
-import io.mojaloop.common.datatype.identifier.participant.FspId;
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.common.fspiop.model.core.Currency;
+import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspAlreadyExistsException;
+import io.mojaloop.fspiop.spec.core.Currency;
 
 public interface CreateFspCommand {
 

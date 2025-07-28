@@ -19,10 +19,11 @@
  */
 package io.mojaloop.core.participant.contract.data;
 
-import io.mojaloop.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.common.datatype.enumeration.TerminationStatus;
-import io.mojaloop.common.datatype.identifier.participant.OracleId;
-import io.mojaloop.common.fspiop.model.core.PartyIdType;
+
+import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
+import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 import java.util.Objects;
 

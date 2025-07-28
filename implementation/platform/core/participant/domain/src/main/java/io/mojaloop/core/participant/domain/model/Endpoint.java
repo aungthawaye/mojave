@@ -20,16 +20,16 @@
 
 package io.mojaloop.core.participant.domain.model;
 
-import io.mojaloop.common.component.constraint.StringSizeConstraints;
-import io.mojaloop.common.component.data.DataConversion;
-import io.mojaloop.common.component.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.common.component.exception.input.TextTooLargeException;
-import io.mojaloop.common.component.handy.Snowflake;
-import io.mojaloop.common.component.persistence.JpaEntity;
-import io.mojaloop.common.component.persistence.JpaInstantConverter;
-import io.mojaloop.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
-import io.mojaloop.common.datatype.identifier.participant.EndpointId;
+import io.mojaloop.component.jpa.JpaEntity;
+import io.mojaloop.component.jpa.JpaInstantConverter;
+import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
+import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
+import io.mojaloop.component.misc.exception.input.TextTooLargeException;
+import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.identifier.participant.EndpointId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
 import jakarta.persistence.Column;

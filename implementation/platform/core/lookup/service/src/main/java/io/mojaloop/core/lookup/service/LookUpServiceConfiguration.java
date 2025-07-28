@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,12 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.common.fspiop.component.security.FspiopSpringSecurityConfiguration;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
+import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
+import io.mojaloop.fspiop.service.component.security.FspiopSpringSecurityConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +33,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
 @Import(value = {
-    LookUpDomainConfiguration.class, FspiopSpringSecurityConfiguration.class, LookUpServiceSettings.class})
+    LookUpDomainConfiguration.class, FspiopServiceConfiguration.class, LookUpServiceSettings.class})
 public class LookUpServiceConfiguration implements FspiopSpringSecurityConfiguration.RequiredBeans {
 
     @Bean
@@ -40,7 +42,7 @@ public class LookUpServiceConfiguration implements FspiopSpringSecurityConfigura
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends FspiopSpringSecurityConfiguration.RequiredSettings {
+    public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings lookUpServiceTomcatSettings();
 

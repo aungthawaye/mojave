@@ -19,15 +19,15 @@
  */
 package io.mojaloop.core.participant.store.cache.redis;
 
-import io.mojaloop.common.component.redis.RedissonOpsClient;
-import io.mojaloop.common.datatype.identifier.participant.FspId;
-import io.mojaloop.common.datatype.identifier.participant.OracleId;
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.common.fspiop.model.core.PartyIdType;
+import io.mojaloop.component.redis.RedissonOpsClient;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.cache.ParticipantCache;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.data.OracleData;
 import io.mojaloop.core.participant.store.cache.ParticipantStore;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.redisson.api.RMap;
 import org.springframework.stereotype.Component;
 

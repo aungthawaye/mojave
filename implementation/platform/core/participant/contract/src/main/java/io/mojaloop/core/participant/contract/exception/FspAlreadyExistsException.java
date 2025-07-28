@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.participant.contract.exception;
 
-import io.mojaloop.common.component.exception.domain.ItemAlreadyExistsException;
+import io.mojaloop.component.misc.exception.domain.ItemAlreadyExistsException;
 
 public class FspAlreadyExistsException extends ItemAlreadyExistsException {
 

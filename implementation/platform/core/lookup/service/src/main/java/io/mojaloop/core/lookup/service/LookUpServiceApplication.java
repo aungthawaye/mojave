@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.common.component.vault.VaultConfigurer;
+import io.mojaloop.component.vault.VaultConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;

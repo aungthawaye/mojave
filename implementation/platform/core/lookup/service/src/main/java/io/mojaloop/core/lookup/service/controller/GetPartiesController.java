@@ -20,8 +20,8 @@
 
 package io.mojaloop.core.lookup.service.controller;
 
-import io.mojaloop.common.component.http.CachedBodyHttpServletRequest;
-import io.mojaloop.common.fspiop.model.core.PartyIdType;
+import io.mojaloop.component.http.request.CachedBodyHttpServletRequest;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

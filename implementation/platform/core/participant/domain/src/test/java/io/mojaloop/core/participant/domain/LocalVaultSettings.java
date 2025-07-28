@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.participant.domain;
 
-import io.mojaloop.common.component.vault.VaultConfigurer;
+import io.mojaloop.component.vault.VaultConfigurer;
 import org.springframework.context.annotation.Bean;
 
 public class LocalVaultSettings {

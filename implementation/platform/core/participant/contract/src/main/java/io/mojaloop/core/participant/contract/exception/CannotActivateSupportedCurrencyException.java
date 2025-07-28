@@ -19,8 +19,9 @@
  */
 package io.mojaloop.core.participant.contract.exception;
 
-import io.mojaloop.common.component.exception.DomainException;
-import io.mojaloop.common.component.exception.ErrorTemplate;
+
+import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
 
 import java.text.MessageFormat;
 

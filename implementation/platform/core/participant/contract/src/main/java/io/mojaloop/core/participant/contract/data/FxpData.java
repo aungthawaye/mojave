@@ -19,9 +19,10 @@
  */
 package io.mojaloop.core.participant.contract.data;
 
-import io.mojaloop.common.datatype.identifier.participant.FxRatePairId;
-import io.mojaloop.common.datatype.identifier.participant.FxpId;
-import io.mojaloop.common.fspiop.model.core.Currency;
+
+import io.mojaloop.core.common.datatype.identifier.participant.FxRatePairId;
+import io.mojaloop.core.common.datatype.identifier.participant.FxpId;
+import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.math.BigDecimal;
 import java.util.Map;

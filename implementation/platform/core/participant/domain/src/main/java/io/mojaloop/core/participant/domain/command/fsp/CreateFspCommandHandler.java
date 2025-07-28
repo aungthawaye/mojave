@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.common.component.persistence.routing.annotation.Write;
+import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;

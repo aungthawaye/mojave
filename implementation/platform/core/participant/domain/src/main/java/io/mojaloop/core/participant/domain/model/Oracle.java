@@ -20,9 +20,9 @@
 
 package io.mojaloop.core.participant.domain.model;
 
-import io.mojaloop.common.component.persistence.JpaEntity;
-import io.mojaloop.common.datatype.identifier.participant.OracleId;
-import io.mojaloop.common.fspiop.model.core.PartyIdType;
+import io.mojaloop.component.jpa.JpaEntity;
+import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

@@ -20,18 +20,19 @@
 
 package io.mojaloop.core.participant.domain;
 
-import io.mojaloop.common.component.ComponentConfiguration;
-import io.mojaloop.common.component.persistence.routing.RoutingJpaConfiguration;
-import io.mojaloop.common.component.redis.RedissonOpsClientConfiguration;
+import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
+import io.mojaloop.component.redis.RedissonOpsClientConfiguration;
+import io.mojaloop.component.spring.ComponentSpringConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.participant.domain"})
 @Import(value = {
-    ComponentConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class, ParticipantDomainSettings.class})
+    ComponentSpringConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class,
+    ParticipantDomainSettings.class})
 public class ParticipantDomainConfiguration {
 
-    public interface RequiredSettings extends ComponentConfiguration.RequiredSettings,
+    public interface RequiredSettings extends ComponentSpringConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings,
                                               RedissonOpsClientConfiguration.RequiredSettings { }
 

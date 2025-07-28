@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.participant.store.cache;
 
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.store.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

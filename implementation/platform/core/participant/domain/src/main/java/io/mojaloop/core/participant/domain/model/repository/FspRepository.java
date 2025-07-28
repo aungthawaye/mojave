@@ -20,8 +20,8 @@
 package io.mojaloop.core.participant.domain.model.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import io.mojaloop.common.datatype.identifier.participant.FspId;
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.domain.model.Fsp;
 import io.mojaloop.core.participant.domain.model.QFsp;
 import org.springframework.data.jpa.repository.JpaRepository;

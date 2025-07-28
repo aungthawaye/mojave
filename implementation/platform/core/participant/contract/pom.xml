@@ -15,12 +15,16 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.common</groupId>
-            <artifactId>mod-datatype</artifactId>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-misc</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.common</groupId>
-            <artifactId>mod-fspiop</artifactId>
+            <groupId>io.mojaloop.core.common</groupId>
+            <artifactId>mod-common-datatype</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
         </dependency>
     </dependencies>
 </project>

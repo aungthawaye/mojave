@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.participant.store;
 
-import io.mojaloop.common.component.redis.RedissonOpsClientConfiguration;
+import io.mojaloop.component.redis.RedissonOpsClientConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 

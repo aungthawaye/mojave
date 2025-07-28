@@ -19,7 +19,7 @@
  */
 package io.mojaloop.core.participant.contract.exception;
 
-import io.mojaloop.common.component.exception.domain.ItemNotFoundException;
+import io.mojaloop.component.misc.exception.domain.ItemNotFoundException;
 
 public class FspNotFoundException extends ItemNotFoundException {
 

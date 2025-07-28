@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.lookup.domain.command;
 
-import io.mojaloop.common.component.http.CachedBodyHttpServletRequest;
-import io.mojaloop.common.fspiop.model.core.PartiesTypeIDPutResponse;
-import io.mojaloop.common.fspiop.support.Destination;
-import io.mojaloop.common.fspiop.support.Source;
+import io.mojaloop.component.http.request.CachedBodyHttpServletRequest;
+import io.mojaloop.fspiop.common.support.Destination;
+import io.mojaloop.fspiop.common.support.Source;
+import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 
 public interface PutParties {
 

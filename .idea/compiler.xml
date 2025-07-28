@@ -7,18 +7,35 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mod-fspiop" />
-        <module name="mod-participant-domain" />
+        <module name="mod-component-tomcat" />
+        <module name="mod-component-flyway" />
+        <module name="mod-component-vault" />
         <module name="mod-lookup-domain" />
-        <module name="mod-datatype" />
-        <module name="mod-component" />
-        <module name="mod-participant-store" />
-        <module name="mod-participant-contract" />
+        <module name="mod-fspiop-service" />
+        <module name="mod-component-jpa" />
+        <module name="mod-fspiop-client" />
+        <module name="mod-component-retrofit" />
         <module name="mod-lookup-service-fspiop" />
+        <module name="mod-component-jackson" />
+        <module name="mod-component-spring" />
+        <module name="mod-participant-domain" />
+        <module name="mod-common-datatype" />
+        <module name="mod-component-http" />
+        <module name="mod-participant-store" />
+        <module name="mod-fspiop-spec" />
+        <module name="mod-component-misc" />
+        <module name="mod-fspiop-common" />
+        <module name="mod-component-redis" />
+        <module name="mod-participant-contract" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="common-pom" target="21" />
       <module name="mod-central-cache" target="21" />
+      <module name="mod-component" target="21" />
+      <module name="mod-datatype" target="21" />
+      <module name="mod-fspiop" target="21" />
+      <module name="mod-fspiop-contract" target="21" />
       <module name="mod-http-security" target="21" />
       <module name="mod-lookup-infra" target="21" />
       <module name="mod-lookup-routes-fspiop" target="21" />
@@ -34,12 +51,31 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common-pom" options="-parameters" />
+      <module name="common-pom (1) (io.mojaloop.core.common)" options="-parameters" />
+      <module name="component-pom" options="-parameters" />
       <module name="core-pom" options="-parameters" />
+      <module name="fspiop-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
+      <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-component" options="-parameters" />
+      <module name="mod-component-flyway" options="-parameters" />
+      <module name="mod-component-http" options="-parameters" />
+      <module name="mod-component-jackson" options="-parameters" />
+      <module name="mod-component-jpa" options="-parameters" />
+      <module name="mod-component-misc" options="-parameters" />
+      <module name="mod-component-redis" options="-parameters" />
+      <module name="mod-component-retrofit" options="-parameters" />
+      <module name="mod-component-spring" options="-parameters" />
+      <module name="mod-component-tomcat" options="-parameters" />
+      <module name="mod-component-vault" options="-parameters" />
       <module name="mod-datatype" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
+      <module name="mod-fspiop-client" options="-parameters" />
+      <module name="mod-fspiop-common" options="-parameters" />
+      <module name="mod-fspiop-contract" options="-parameters" />
+      <module name="mod-fspiop-service" options="-parameters" />
+      <module name="mod-fspiop-spec" options="-parameters" />
       <module name="mod-http-security" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />
       <module name="mod-lookup-infra" options="-parameters" />

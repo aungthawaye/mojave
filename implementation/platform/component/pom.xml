@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mojaloop</groupId>
+        <artifactId>platform-pom</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <groupId>io.mojaloop.component</groupId>
+    <artifactId>component-pom</artifactId>
+    <packaging>pom</packaging>
+    <name>Mojaloop - Component</name>
+    <modules>
+        <module>misc</module>
+        <module>http</module>
+        <module>tomcat</module>
+        <module>jackson</module>
+        <module>spring</module>
+        <module>vault</module>
+        <module>redis</module>
+        <module>retrofit</module>
+        <module>jpa</module>
+        <module>flyway</module>
+    </modules>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>

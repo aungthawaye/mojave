@@ -19,15 +19,15 @@
  */
 package io.mojaloop.core.participant.contract.cache;
 
-import io.mojaloop.common.datatype.identifier.participant.FspId;
-import io.mojaloop.common.datatype.identifier.participant.FxpId;
-import io.mojaloop.common.datatype.identifier.participant.OracleId;
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.common.fspiop.model.core.Currency;
-import io.mojaloop.common.fspiop.model.core.PartyIdType;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.identifier.participant.FxpId;
+import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.data.FxpData;
 import io.mojaloop.core.participant.contract.data.OracleData;
+import io.mojaloop.fspiop.spec.core.Currency;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 import java.util.Set;
 

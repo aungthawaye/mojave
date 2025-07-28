@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,21 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.common.component.flyway.FlywayMigration;
-import io.mojaloop.common.component.vault.Vault;
-import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.common.fspiop.model.core.Currency;
+import io.mojaloop.component.flyway.FlywayMigration;
+import io.mojaloop.component.vault.Vault;
+import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspAlreadyExistsException;
 import io.mojaloop.core.participant.domain.LocalVaultSettings;
-import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.core.participant.domain.ParticipantDomainSettings;
+import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

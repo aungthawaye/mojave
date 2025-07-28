@@ -20,14 +20,16 @@
 
 package io.mojaloop.core.participant.contract.data;
 
-import io.mojaloop.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.common.datatype.enumeration.TerminationStatus;
-import io.mojaloop.common.datatype.enumeration.fspiop.EndpointType;
-import io.mojaloop.common.datatype.identifier.participant.EndpointId;
-import io.mojaloop.common.datatype.identifier.participant.FspId;
-import io.mojaloop.common.datatype.identifier.participant.SupportedCurrencyId;
-import io.mojaloop.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.common.fspiop.model.core.Currency;
+
+
+import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
+import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.identifier.participant.EndpointId;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.identifier.participant.SupportedCurrencyId;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.util.Map;
 import java.util.Objects;

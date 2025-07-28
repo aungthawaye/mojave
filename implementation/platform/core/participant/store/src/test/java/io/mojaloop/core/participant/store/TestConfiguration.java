@@ -19,8 +19,7 @@
  */
 package io.mojaloop.core.participant.store;
 
-import io.mojaloop.core.participant.store.settings.ParticipantStoreVaultBasedSettings;
 import org.springframework.context.annotation.Import;
 
-@Import({LocalVaultSettings.class, ParticipantStoreConfiguration.class, ParticipantStoreVaultBasedSettings.class})
+@Import({LocalVaultSettings.class, ParticipantStoreConfiguration.class, ParticipantStoreSettings.class})
 public class TestConfiguration { }
