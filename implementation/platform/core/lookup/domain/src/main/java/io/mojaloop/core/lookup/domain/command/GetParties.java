@@ -21,7 +21,7 @@
 package io.mojaloop.core.lookup.domain.command;
 
 import io.mojaloop.common.fspiop.support.Destination;
-import io.mojaloop.common.fspiop.support.FspiopRequestContext;
+import io.mojaloop.common.fspiop.support.FspiopHttpRequest;
 import io.mojaloop.common.fspiop.support.Source;
 
 public interface GetParties {
@@ -33,7 +33,7 @@ public interface GetParties {
                  String partyIdType,
                  String partyId,
                  String partySubId,
-                 FspiopRequestContext fspiopRequestContext) { }
+                 FspiopHttpRequest fspiopHttpRequest) { }
 
     record Output() { }
 

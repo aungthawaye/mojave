@@ -5,7 +5,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/common/data-type/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/common/datatype/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/fspiop/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/fspiop/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/http-security/src/main/java" charset="UTF-8" />

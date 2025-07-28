@@ -6,7 +6,7 @@
         <artifactId>common-pom</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>mod-data-type</artifactId>
+    <artifactId>mod-datatype</artifactId>
     <name>Mojaloop - Common - Data Type</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

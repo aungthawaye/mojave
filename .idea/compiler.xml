@@ -7,10 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mod-data-type" />
         <module name="mod-fspiop" />
         <module name="mod-participant-domain" />
         <module name="mod-lookup-domain" />
+        <module name="mod-datatype" />
         <module name="mod-component" />
         <module name="mod-participant-store" />
         <module name="mod-participant-contract" />
@@ -38,7 +38,7 @@
       <module name="lookup-pom" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-component" options="-parameters" />
-      <module name="mod-data-type" options="-parameters" />
+      <module name="mod-datatype" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
       <module name="mod-http-security" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />

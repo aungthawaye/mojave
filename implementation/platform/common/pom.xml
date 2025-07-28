@@ -12,7 +12,7 @@
     <name>Mojaloop - Common</name>
     <modules>
         <module>component</module>
-        <module>data-type</module>
+        <module>datatype</module>
         <module>fspiop</module>
     </modules>
     <properties>

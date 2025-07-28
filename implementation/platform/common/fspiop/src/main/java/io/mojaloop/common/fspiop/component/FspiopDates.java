@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,12 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.common.fspiop.component;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -59,6 +62,16 @@ public class FspiopDates {
     public static String forRequestHeader(Date date) {
 
         return FOR_HEADER.get().format(date);
+    }
+
+    public static Instant fromRequestBody(String body) throws ParseException {
+
+        return FOR_BODY.get().parse(body).toInstant();
+    }
+
+    public static Instant fromRequestHeader(String header) throws ParseException {
+
+        return FOR_HEADER.get().parse(header).toInstant();
     }
 
 }
