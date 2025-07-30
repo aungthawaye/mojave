@@ -20,9 +20,12 @@
 
 package io.mojaloop.core.lookup.service;
 
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
+import io.mojaloop.core.participant.utility.store.ParticipantStore;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import io.mojaloop.fspiop.service.component.security.FspiopSpringSecurityConfiguration;
+import io.mojaloop.fspiop.service.component.FspiopSpringSecurityConfiguration;
+import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +36,24 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
 @Import(value = {
-    LookUpDomainConfiguration.class, FspiopServiceConfiguration.class, LookUpServiceSettings.class})
+    LookUpDomainConfiguration.class, FspiopServiceConfiguration.class})
 public class LookUpServiceConfiguration implements FspiopSpringSecurityConfiguration.RequiredBeans {
+
+    private final ParticipantStore participantStore;
+
+    public LookUpServiceConfiguration(ParticipantStore participantStore) {
+
+        assert participantStore != null;
+
+        this.participantStore = participantStore;
+    }
+
+    @Bean
+    @Override
+    public ParticipantVerifier participantVerifier() {
+
+        return fspCode -> this.participantStore.getFspData(new FspCode(fspCode)) != null;
+    }
 
     @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {

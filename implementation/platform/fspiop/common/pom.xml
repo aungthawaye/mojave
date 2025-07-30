@@ -15,20 +15,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-misc</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-http</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <groupId>io.mojaloop.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
         </dependency>
     </dependencies>
 </project>

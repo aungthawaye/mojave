@@ -21,14 +21,18 @@
 package io.mojaloop.core.lookup.domain;
 
 import io.mojaloop.component.jackson.ComponentJacksonConfiguration;
+import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.lookup.domain"})
-@Import(value = {ComponentJacksonConfiguration.class, FspiopCommonConfiguration.class, LookUpDomainSettings.class})
+@Import(value = {
+    ComponentJacksonConfiguration.class, FspiopCommonConfiguration.class, ParticipantUtilityConfiguration.class})
 public class LookUpDomainConfiguration {
 
-    public interface RequiredSettings extends ComponentJacksonConfiguration.RequiredSettings, FspiopCommonConfiguration.RequiredSettings { }
+    public interface RequiredSettings extends ParticipantUtilityConfiguration.RequiredSettings,
+                                              ComponentJacksonConfiguration.RequiredSettings,
+                                              FspiopCommonConfiguration.RequiredSettings { }
 
 }

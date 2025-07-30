@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.lookup.service.controller;
 
-import io.mojaloop.component.http.request.CachedBodyHttpServletRequest;
+import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class GetPartiesController {
 
         LOGGER.info("Received GET /parties/{}/{}", partyIdType, partyId);
 
-        var cachedBodyRequest = (CachedBodyHttpServletRequest) request;
+        var cachedBodyRequest = (CachedServletRequest) request;
 
         return ResponseEntity.accepted().build();
     }
@@ -55,7 +55,7 @@ public class GetPartiesController {
 
         LOGGER.info("Received GET /parties/{}/{}/{}", partyIdType, partyId, subId);
 
-        var cachedBodyRequest = new CachedBodyHttpServletRequest( request);
+        var cachedBodyRequest = new CachedServletRequest(request);
         cachedBodyRequest.getCachedBodyAsString();
 
         return ResponseEntity.accepted().build();

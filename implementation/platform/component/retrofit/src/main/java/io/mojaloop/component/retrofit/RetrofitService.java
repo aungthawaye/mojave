@@ -27,7 +27,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
 import javax.net.ssl.HostnameVerifier;
@@ -49,6 +49,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -65,28 +66,6 @@ import java.util.Map;
 public class RetrofitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetrofitService.class);
-
-    /**
-     * Forwards an HTTP request through a ForwardingService.
-     *
-     * @param <RES> The type of the expected response
-     * @param <E> The type of the error decoder
-     * @param forwardingService The service to use for forwarding the request
-     * @param url The URL to forward the request to
-     * @param headers The HTTP headers to include in the request
-     * @param body The request body
-     * @param errorDecoder The decoder to use for error responses
-     * @return The response from the forwarded request
-     * @throws InvocationException If the request fails or returns an error response
-     */
-    public static <RES, E> Response<RES> forward(ForwardingService forwardingService,
-                                                 String url,
-                                                 Map<String, String> headers,
-                                                 RequestBody body,
-                                                 ErrorDecoder<E> errorDecoder) throws InvocationException {
-
-        return RetrofitService.invoke(forwardingService.forward(url, headers, body), errorDecoder);
-    }
 
     /**
      * Executes a Retrofit call and handles error responses.
@@ -106,25 +85,32 @@ public class RetrofitService {
 
             if (!response.isSuccessful()) {
 
-                if (errorDecoder != null) {
+                try (var responseBody = response.errorBody()) {
 
-                    throw new InvocationException(errorDecoder.decode(response.code(), response.errorBody()));
+                    if (responseBody != null) {
 
-                } else {
+                        var errorResponseBody = responseBody.string();
 
-                    try (var responseBody = response.errorBody()) {
+                        if (errorDecoder != null) {
 
-                        if (responseBody != null) {
-                            LOGGER.error("Error response : {}", responseBody.string());
-                            throw new InvocationException(responseBody.string());
+                            E decodedError = errorDecoder.decode(response.code(), errorResponseBody);
+
+                            if (decodedError != null) {
+
+                                LOGGER.error("Decoded error response : {}", decodedError);
+                                throw new InvocationException(decodedError, responseBody.string());
+                            }
                         }
+
+                        LOGGER.error("Error response : {}", responseBody.string());
+                        throw new InvocationException(null, errorResponseBody);
                     }
                 }
             }
 
             return response;
 
-        } catch (Exception e) {
+        } catch (IOException e) {
 
             if (e instanceof InvocationException) {
 
@@ -154,21 +140,30 @@ public class RetrofitService {
 
     /**
      * Interface for services that can forward HTTP requests.
-     * Used in conjunction with the {@link #forward} method.
      */
     public interface ForwardingService {
 
-        /**
-         * Forwards an HTTP request to the specified URL with the given headers and body.
-         *
-         * @param <RES> The type of the expected response
-         * @param <E> The type parameter for error handling
-         * @param url The URL to forward the request to
-         * @param headers The HTTP headers to include in the request
-         * @param body The request body
-         * @return A Retrofit Call object representing the forwarded request
-         */
-        <RES, E> Call<RES> forward(@Url String url, @HeaderMap Map<String, String> headers, @Body RequestBody body);
+        <RES, E> Call<RES> delete(@Url String url,
+                                  @HeaderMap Map<String, String> headers,
+                                  @QueryMap Map<String, String> params,
+                                  @Body RequestBody body);
+
+        <RES, E> Call<RES> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
+
+        <RES, E> Call<RES> patch(@Url String url,
+                                 @HeaderMap Map<String, String> headers,
+                                 @QueryMap Map<String, String> params,
+                                 @Body RequestBody body);
+
+        <RES, E> Call<RES> post(@Url String url,
+                                @HeaderMap Map<String, String> headers,
+                                @QueryMap Map<String, String> params,
+                                @Body RequestBody body);
+
+        <RES, E> Call<RES> put(@Url String url,
+                               @HeaderMap Map<String, String> headers,
+                               @QueryMap Map<String, String> params,
+                               @Body RequestBody body);
 
     }
 
@@ -186,7 +181,7 @@ public class RetrofitService {
          * @param errorResponseBody The error response body
          * @return The decoded error
          */
-        E decode(int status, ResponseBody errorResponseBody);
+        E decode(int status, String errorResponseBody) throws IOException;
 
     }
 
@@ -473,20 +468,18 @@ public class RetrofitService {
      * Exception thrown when a Retrofit service invocation fails.
      */
     @Getter
-    public static class InvocationException extends Exception {
+    public static class InvocationException extends IOException {
 
-        private Object errorResponse;
+        private Object decodedErrorResponse = null;
 
-        /**
-         * Creates a new InvocationException with an error response.
-         *
-         * @param errorResponse The error response object
-         */
-        public InvocationException(Object errorResponse) {
+        private String originalErrorMessage = null;
+
+        public InvocationException(Object decodedErrorResponse, String originalErrorMessage) {
 
             super();
 
-            this.errorResponse = errorResponse;
+            this.decodedErrorResponse = decodedErrorResponse;
+            this.originalErrorMessage = originalErrorMessage;
 
         }
 

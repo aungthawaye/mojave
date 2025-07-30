@@ -17,18 +17,19 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.component.spring.security.SpringSecurityConfigurer;
+import io.mojaloop.component.redis.RedissonOpsClientConfigurer;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
-import io.mojaloop.core.lookup.domain.LookUpDomainSettings;
+import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-public class LookUpServiceSettings  implements LookUpServiceConfiguration.RequiredSettings {
+class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettings {
 
     private final Vault vault;
 
@@ -37,10 +38,11 @@ public class LookUpServiceSettings  implements LookUpServiceConfiguration.Requir
         this.vault = vault;
     }
 
+    @Bean
     @Override
     public FspiopCommonConfiguration.Settings fspiopCommonSettings() {
-        // LookUpDomainSettings already has configured this.
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.Settings.class);
     }
 
     @Bean
@@ -52,6 +54,13 @@ public class LookUpServiceSettings  implements LookUpServiceConfiguration.Requir
 
     @Bean
     @Override
+    public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
+
+        return this.vault.get(VaultPaths.REDIS_OPS_SETTINGS_PATH, RedissonOpsClientConfigurer.Settings.class);
+    }
+
+    @Bean
+    @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
         return this.vault.get(VaultPaths.SPRING_SECURITY_SETTINGS, SpringSecurityConfigurer.Settings.class);
@@ -59,7 +68,11 @@ public class LookUpServiceSettings  implements LookUpServiceConfiguration.Requir
 
     public static class VaultPaths {
 
+        public static final String FSPIOP_SETTINGS = "micro/core/lookup/service/fspiop/settings";
+
         public static final String TOMCAT_SETTINGS = "micro/core/lookup/service/tomcat/settings";
+
+        public static final String REDIS_OPS_SETTINGS_PATH = "micro/core/lookup/service/redis/ops/settings";
 
         public static final String SPRING_SECURITY_SETTINGS = "micro/core/lookup/service/spring-security/settings";
 

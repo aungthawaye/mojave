@@ -1,91 +1,90 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
 package io.mojaloop.fspiop.common.error;
 
 public class FspiopErrors {
 
     //@@formatter:off
-    public static class CommunicationErrors {
+    public static final ErrorDefinition COMMUNICATION_ERROR = new ErrorDefinition("1000", "Communication error", "Generic communication error.");
+    public static final ErrorDefinition DESTINATION_COMMUNICATION_ERROR = new ErrorDefinition("1001", "Destination communication error", "Destination of the request failed to be reached. This usually indicates that a Peer FSP failed to respond from an intermediate entity.");
 
-        public static final ErrorMessage E1000 = new ErrorMessage("1000", "Communication error", "Generic communication error.");
-        public static final ErrorMessage E1001 = new ErrorMessage("1001", "Destination communication error", "Destination of the request failed to be reached. This usually indicates that a Peer FSP failed to respond from an intermediate entity.");
+    public static final ErrorDefinition GENERIC_SERVER_ERROR = new ErrorDefinition("2000", "Generic server error", "Used to avoid disclosing private details.");
+    public static final ErrorDefinition INTERNAL_SERVER_ERROR = new ErrorDefinition("2001", "Internal server error", "Unexpected exception or bug.");
+    public static final ErrorDefinition NOT_IMPLEMENTED = new ErrorDefinition("2002", "Not implemented", "Service not supported by server.");
+    public static final ErrorDefinition SERVICE_CURRENTLY_UNAVAILABLE = new ErrorDefinition("2003", "Service currently unavailable", "Service temporarily unavailable (e.g. maintenance).");
+    public static final ErrorDefinition SERVER_TIMED_OUT = new ErrorDefinition("2004", "Server timed out", "Callback not received within timeout period.");
+    public static final ErrorDefinition SERVER_BUSY = new ErrorDefinition("2005", "Server busy", "Server rejecting requests due to overload.");
 
-    }
+    public static final ErrorDefinition GENERIC_CLIENT_ERROR = new ErrorDefinition("3000", "Generic client error", "Used to avoid disclosing private client errors.");
+    public static final ErrorDefinition UNACCEPTABLE_VERSION_REQUESTED = new ErrorDefinition("3001", "Unacceptable version requested", "Client requested unsupported API version.");
+    public static final ErrorDefinition UNKNOWN_URI = new ErrorDefinition("3002", "Unknown URI", "Provided URI not recognized by server.");
+    public static final ErrorDefinition ADD_PARTY_INFORMATION_ERROR = new ErrorDefinition("3003", "Add Party information error", "Error occurred while adding/updating party info.");
 
-    public static class ServerErrors {
+    public static final ErrorDefinition GENERIC_VALIDATION_ERROR = new ErrorDefinition("3100", "Generic validation error", "Generic format error.");
+    public static final ErrorDefinition MALFORMED_SYNTAX = new ErrorDefinition("3101", "Malformed syntax", "Invalid parameter format (e.g. amount '5.ABC').");
+    public static final ErrorDefinition MISSING_MANDATORY_ELEMENT = new ErrorDefinition("3102", "Missing mandatory element", "Required element in data model is missing.");
+    public static final ErrorDefinition TOO_MANY_ELEMENTS = new ErrorDefinition("3103", "Too many elements", "Array exceeds allowed maximum.");
+    public static final ErrorDefinition TOO_LARGE_PAYLOAD = new ErrorDefinition("3104", "Too large payload", "Request payload exceeds allowed size.");
+    public static final ErrorDefinition INVALID_SIGNATURE = new ErrorDefinition("3105", "Invalid signature", "Payload signature invalid or modified.");
+    public static final ErrorDefinition MODIFIED_REQUEST = new ErrorDefinition("3106", "Modified request", "Parameters differ from a previously processed request.");
+    public static final ErrorDefinition MISSING_EXTENSION_PARAMETER = new ErrorDefinition("3107", "Missing extension parameter", "Required extension parameter not provided.");
 
-        public static final ErrorMessage E2000 = new ErrorMessage("2000", "Generic server error", "Used to avoid disclosing private details.");
-        public static final ErrorMessage E2001 = new ErrorMessage("2001", "Internal server error", "Unexpected exception or bug.");
-        public static final ErrorMessage E2002 = new ErrorMessage("2002", "Not implemented", "Service not supported by server.");
-        public static final ErrorMessage E2003 = new ErrorMessage("2003", "Service currently unavailable", "Service temporarily unavailable (e.g. maintenance).");
-        public static final ErrorMessage E2004 = new ErrorMessage("2004", "Server timed out", "Callback not received within timeout period.");
-        public static final ErrorMessage E2005 = new ErrorMessage("2005", "Server busy", "Server rejecting requests due to overload.");
+    public static final ErrorDefinition GENERIC_ID_NOT_FOUND = new ErrorDefinition("3200", "Generic ID not found", "Generic identifier error.");
+    public static final ErrorDefinition DESTINATION_FSP_ERROR = new ErrorDefinition("3201", "Destination FSP Error", "Destination FSP cannot be found or doesn't exist.");
+    public static final ErrorDefinition PAYER_FSP_ID_NOT_FOUND = new ErrorDefinition("3202", "Payer FSP ID not found", "Payer FSP ID not recognized.");
+    public static final ErrorDefinition PAYEE_FSP_ID_NOT_FOUND = new ErrorDefinition("3203", "Payee FSP ID not found", "Payee FSP ID not recognized.");
+    public static final ErrorDefinition PARTY_NOT_FOUND = new ErrorDefinition("3204", "Party not found", "Provided party identifier not found.");
+    public static final ErrorDefinition QUOTE_ID_NOT_FOUND = new ErrorDefinition("3205", "Quote ID not found", "Quote ID not found on server.");
+    public static final ErrorDefinition TRANSACTION_REQUEST_ID_NOT_FOUND = new ErrorDefinition("3206", "Transaction request ID not found", "ID not found for transaction request.");
+    public static final ErrorDefinition TRANSACTION_ID_NOT_FOUND = new ErrorDefinition("3207", "Transaction ID not found", "Transaction ID not found.");
+    public static final ErrorDefinition TRANSFER_ID_NOT_FOUND = new ErrorDefinition("3208", "Transfer ID not found", "Transfer ID not found.");
+    public static final ErrorDefinition BULK_QUOTE_ID_NOT_FOUND = new ErrorDefinition("3209", "Bulk quote ID not found", "Bulk quote ID not found.");
+    public static final ErrorDefinition BULK_TRANSFER_ID_NOT_FOUND = new ErrorDefinition("3210", "Bulk transfer ID not found", "Bulk transfer ID not found.");
 
-    }
+    public static final ErrorDefinition GENERIC_EXPIRED_ERROR = new ErrorDefinition("3300", "Generic expired error", "Generic expired object error (non‑specific).");
+    public static final ErrorDefinition TRANSACTION_REQUEST_EXPIRED = new ErrorDefinition("3301", "Transaction request expired", "Transaction request has already expired.");
+    public static final ErrorDefinition QUOTE_EXPIRED = new ErrorDefinition("3302", "Quote expired", "The quote is no longer valid.");
+    public static final ErrorDefinition TRANSFER_EXPIRED = new ErrorDefinition("3303", "Transfer expired", "The transfer has already expired.");
 
-    public static class ClientErrors {
+    public static final ErrorDefinition GENERIC_PAYER_ERROR = new ErrorDefinition("4000", "Generic Payer error", "Used for private payer-related errors.");
+    public static final ErrorDefinition PAYER_FSP_INSUFFICIENT_LIQUIDITY = new ErrorDefinition("4001", "Payer FSP insufficient liquidity", "Payer’s FSP lacks funds.");
+    public static final ErrorDefinition GENERIC_PAYER_REJECTION = new ErrorDefinition("4100", "Generic Payer rejection", "Payer or payer FSP rejected the request.");
+    public static final ErrorDefinition PAYER_REJECTED_TRANSACTION_REQUEST = new ErrorDefinition("4101", "Payer rejected transaction request", "Payer rejected the transaction request.");
+    public static final ErrorDefinition PAYER_FSP_UNSUPPORTED_TRANSACTION_TYPE = new ErrorDefinition("4102", "Payer FSP unsupported transaction type", "Transaction type not supported by Payer FSP.");
+    public static final ErrorDefinition PAYER_UNSUPPORTED_CURRENCY = new ErrorDefinition("4103", "Payer unsupported currency", "Payer does not support requested currency.");
+    public static final ErrorDefinition PAYER_LIMIT_ERROR = new ErrorDefinition("4200", "Payer limit error", "Payment amount/frequency exceeds limits.");
+    public static final ErrorDefinition PAYER_PERMISSION_ERROR = new ErrorDefinition("4300", "Payer permission error", "Payer lacks permission to perform operation.");
+    public static final ErrorDefinition GENERIC_PAYER_BLOCKED_ERROR = new ErrorDefinition("4400", "Generic Payer blocked error", "Payer is blocked or failed regulatory screening.");
 
-        public static final ErrorMessage E3000 = new ErrorMessage("3000", "Generic client error", "Used to avoid disclosing private client errors.");
-        public static final ErrorMessage E3001 = new ErrorMessage("3001", "Unacceptable version requested", "Client requested unsupported API version.");
-        public static final ErrorMessage E3002 = new ErrorMessage("3002", "Unknown URI", "Provided URI not recognized by server.");
-        public static final ErrorMessage E3003 = new ErrorMessage("3003", "Add Party information error", "Error occurred while adding/updating party info.");
-
-        public static final ErrorMessage E3100 = new ErrorMessage("3100", "Generic validation error", "Generic format error.");
-        public static final ErrorMessage E3101 = new ErrorMessage("3101", "Malformed syntax", "Invalid parameter format (e.g. amount '5.ABC').");
-        public static final ErrorMessage E3102 = new ErrorMessage("3102", "Missing mandatory element", "Required element in data model is missing.");
-        public static final ErrorMessage E3103 = new ErrorMessage("3103", "Too many elements", "Array exceeds allowed maximum.");
-        public static final ErrorMessage E3104 = new ErrorMessage("3104", "Too large payload", "Request payload exceeds allowed size.");
-        public static final ErrorMessage E3105 = new ErrorMessage("3105", "Invalid signature", "Payload signature invalid or modified.");
-        public static final ErrorMessage E3106 = new ErrorMessage("3106", "Modified request", "Parameters differ from a previously processed request.");
-        public static final ErrorMessage E3107 = new ErrorMessage("3107", "Missing extension parameter", "Required extension parameter not provided.");
-
-        public static final ErrorMessage E3200 = new ErrorMessage("3200", "Generic ID not found", "Generic identifier error.");
-        public static final ErrorMessage E3201 = new ErrorMessage("3201", "Destination FSP Error", "Destination FSP cannot be found or doesn't exist.");
-        public static final ErrorMessage E3202 = new ErrorMessage("3202", "Payer FSP ID not found", "Payer FSP ID not recognized.");
-        public static final ErrorMessage E3203 = new ErrorMessage("3203", "Payee FSP ID not found", "Payee FSP ID not recognized.");
-        public static final ErrorMessage E3204 = new ErrorMessage("3204", "Party not found", "Provided party identifier not found.");
-        public static final ErrorMessage E3205 = new ErrorMessage("3205", "Quote ID not found", "Quote ID not found on server.");
-        public static final ErrorMessage E3206 = new ErrorMessage("3206", "Transaction request ID not found", "ID not found for transaction request.");
-        public static final ErrorMessage E3207 = new ErrorMessage("3207", "Transaction ID not found", "Transaction ID not found.");
-        public static final ErrorMessage E3208 = new ErrorMessage("3208", "Transfer ID not found", "Transfer ID not found.");
-        public static final ErrorMessage E3209 = new ErrorMessage("3209", "Bulk quote ID not found", "Bulk quote ID not found.");
-        public static final ErrorMessage E3210 = new ErrorMessage("3210", "Bulk transfer ID not found", "Bulk transfer ID not found.");
-
-        public static final ErrorMessage E3300 = new ErrorMessage("3300", "Generic expired error", "Generic expired object error (non‑specific).");
-        public static final ErrorMessage E3301 = new ErrorMessage("3301", "Transaction request expired", "Transaction request has already expired.");
-        public static final ErrorMessage E3302 = new ErrorMessage("3302", "Quote expired", "The quote is no longer valid.");
-        public static final ErrorMessage E3303 = new ErrorMessage("3303", "Transfer expired", "The transfer has already expired.");
-
-    }
-
-    public static class PayerErrors {
-
-        public static final ErrorMessage E4000 = new ErrorMessage("4000", "Generic Payer error", "Used for private payer-related errors.");
-        public static final ErrorMessage E4001 = new ErrorMessage("4001", "Payer FSP insufficient liquidity", "Payer’s FSP lacks funds.");
-        public static final ErrorMessage E4100 = new ErrorMessage("4100", "Generic Payer rejection", "Payer or payer FSP rejected the request.");
-        public static final ErrorMessage E4101 = new ErrorMessage("4101", "Payer rejected transaction request", "Payer rejected the transaction request.");
-        public static final ErrorMessage E4102 = new ErrorMessage("4102", "Payer FSP unsupported transaction type", "Transaction type not supported by Payer FSP.");
-        public static final ErrorMessage E4103 = new ErrorMessage("4103", "Payer unsupported currency", "Payer does not support requested currency.");
-        public static final ErrorMessage E4200 = new ErrorMessage("4200", "Payer limit error", "Payment amount/frequency exceeds limits.");
-        public static final ErrorMessage E4300 = new ErrorMessage("4300", "Payer permission error", "Payer lacks permission to perform operation.");
-        public static final ErrorMessage E4400 = new ErrorMessage("4400", "Generic Payer blocked error", "Payer is blocked or failed regulatory screening.");
-
-    }
-
-    public static class PayeeErrors {
-
-        public static final ErrorMessage E5000 = new ErrorMessage("5000", "Generic Payee error", "Generic error related to payee or payee FSP.");
-        public static final ErrorMessage E5001 = new ErrorMessage("5001", "Payee FSP insufficient liquidity", "Payee FSP lacks sufficient liquidity.");
-        public static final ErrorMessage E5100 = new ErrorMessage("5100", "Generic Payee rejection", "Payee or payee FSP rejected request.");
-        public static final ErrorMessage E5101 = new ErrorMessage("5101", "Payee rejected quote", "Payee unwilling to proceed after quote.");
-        public static final ErrorMessage E5102 = new ErrorMessage("5102", "Payee FSP unsupported transaction type", "Payee FSP rejects unsupported transaction type.");
-        public static final ErrorMessage E5103 = new ErrorMessage("5103", "Payee FSP rejected quote", "Payee FSP unwilling to continue after quote.");
-        public static final ErrorMessage E5104 = new ErrorMessage("5104", "Payee rejected transaction", "Payee rejected the transaction.");
-        public static final ErrorMessage E5105 = new ErrorMessage("5105", "Payee FSP rejected transaction", "Payee FSP rejected the transaction.");
-        public static final ErrorMessage E5106 = new ErrorMessage("5106", "Payee unsupported currency", "Payee does not support requested currency.");
-        public static final ErrorMessage E5200 = new ErrorMessage("5200", "Payee limit error", "Receiving amount/frequency exceeds allowed limits.");
-        public static final ErrorMessage E5300 = new ErrorMessage("5300", "Payee permission error", "Payee lacks permission to perform operation.");
-        public static final ErrorMessage E5400 = new ErrorMessage("5400", "Generic Payee blocked error", "Payee is blocked or failed regulatory screening.");
-
-    }
+    public static final ErrorDefinition GENERIC_PAYEE_ERROR = new ErrorDefinition("5000", "Generic Payee error", "Generic error related to payee or payee FSP.");
+    public static final ErrorDefinition PAYEE_FSP_INSUFFICIENT_LIQUIDITY = new ErrorDefinition("5001", "Payee FSP insufficient liquidity", "Payee FSP lacks sufficient liquidity.");
+    public static final ErrorDefinition GENERIC_PAYEE_REJECTION = new ErrorDefinition("5100", "Generic Payee rejection", "Payee or payee FSP rejected request.");
+    public static final ErrorDefinition PAYEE_REJECTED_QUOTE = new ErrorDefinition("5101", "Payee rejected quote", "Payee unwilling to proceed after quote.");
+    public static final ErrorDefinition PAYEE_FSP_UNSUPPORTED_TRANSACTION_TYPE = new ErrorDefinition("5102", "Payee FSP unsupported transaction type", "Payee FSP rejects unsupported transaction type.");
+    public static final ErrorDefinition PAYEE_FSP_REJECTED_QUOTE = new ErrorDefinition("5103", "Payee FSP rejected quote", "Payee FSP unwilling to continue after quote.");
+    public static final ErrorDefinition PAYEE_REJECTED_TRANSACTION = new ErrorDefinition("5104", "Payee rejected transaction", "Payee rejected the transaction.");
+    public static final ErrorDefinition PAYEE_FSP_REJECTED_TRANSACTION = new ErrorDefinition("5105", "Payee FSP rejected transaction", "Payee FSP rejected the transaction.");
+    public static final ErrorDefinition PAYEE_UNSUPPORTED_CURRENCY = new ErrorDefinition("5106", "Payee unsupported currency", "Payee does not support requested currency.");
+    public static final ErrorDefinition PAYEE_LIMIT_ERROR = new ErrorDefinition("5200", "Payee limit error", "Receiving amount/frequency exceeds allowed limits.");
+    public static final ErrorDefinition PAYEE_PERMISSION_ERROR = new ErrorDefinition("5300", "Payee permission error", "Payee lacks permission to perform operation.");
+    public static final ErrorDefinition GENERIC_PAYEE_BLOCKED_ERROR = new ErrorDefinition("5400", "Generic Payee blocked error", "Payee is blocked or failed regulatory screening.");
 
     //@@formatter:on
 }

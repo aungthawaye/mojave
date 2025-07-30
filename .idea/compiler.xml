@@ -7,42 +7,44 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mod-lookup-contract" />
+        <module name="mod-fspiop-component" />
         <module name="mod-component-tomcat" />
         <module name="mod-component-flyway" />
         <module name="mod-component-vault" />
+        <module name="mod-lookup-service" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-component-jpa" />
-        <module name="mod-fspiop-client" />
         <module name="mod-component-retrofit" />
-        <module name="mod-lookup-service-fspiop" />
+        <module name="mod-component-web" />
         <module name="mod-component-jackson" />
-        <module name="mod-component-spring" />
+        <module name="mod-participant-admin" />
         <module name="mod-participant-domain" />
         <module name="mod-common-datatype" />
-        <module name="mod-component-http" />
-        <module name="mod-participant-store" />
+        <module name="mod-fspiop-invoker" />
         <module name="mod-fspiop-spec" />
         <module name="mod-component-misc" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
+        <module name="mod-participant-util" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="common-pom" target="21" />
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
+      <module name="mod-component-http" target="21" />
       <module name="mod-datatype" target="21" />
       <module name="mod-fspiop" target="21" />
       <module name="mod-fspiop-contract" target="21" />
       <module name="mod-http-security" target="21" />
       <module name="mod-lookup-infra" target="21" />
       <module name="mod-lookup-routes-fspiop" target="21" />
-      <module name="mod-lookup-service" target="21" />
       <module name="mod-oracle-domain" target="21" />
       <module name="mod-oracle-routes-admin" target="21" />
       <module name="mod-participant-routes-admin" target="21" />
+      <module name="mod-participant-utility" target="21" />
       <module name="mod-shared-security" target="21" />
       <module name="oracle-pom" target="21" />
       <module name="shared-pom" target="21" />
@@ -51,7 +53,6 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common-pom" options="-parameters" />
-      <module name="common-pom (1) (io.mojaloop.core.common)" options="-parameters" />
       <module name="component-pom" options="-parameters" />
       <module name="core-pom" options="-parameters" />
       <module name="fspiop-pom" options="-parameters" />
@@ -66,28 +67,31 @@
       <module name="mod-component-misc" options="-parameters" />
       <module name="mod-component-redis" options="-parameters" />
       <module name="mod-component-retrofit" options="-parameters" />
-      <module name="mod-component-spring" options="-parameters" />
       <module name="mod-component-tomcat" options="-parameters" />
       <module name="mod-component-vault" options="-parameters" />
+      <module name="mod-component-web" options="-parameters" />
       <module name="mod-datatype" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
-      <module name="mod-fspiop-client" options="-parameters" />
       <module name="mod-fspiop-common" options="-parameters" />
+      <module name="mod-fspiop-component" options="-parameters" />
       <module name="mod-fspiop-contract" options="-parameters" />
+      <module name="mod-fspiop-invoker" options="-parameters" />
       <module name="mod-fspiop-service" options="-parameters" />
       <module name="mod-fspiop-spec" options="-parameters" />
       <module name="mod-http-security" options="-parameters" />
+      <module name="mod-lookup-contract" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />
       <module name="mod-lookup-infra" options="-parameters" />
       <module name="mod-lookup-routes-fspiop" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
-      <module name="mod-lookup-service-fspiop" options="-parameters" />
       <module name="mod-oracle-domain" options="-parameters" />
       <module name="mod-oracle-routes-admin" options="-parameters" />
+      <module name="mod-participant-admin" options="-parameters" />
       <module name="mod-participant-contract" options="-parameters" />
       <module name="mod-participant-domain" options="-parameters" />
       <module name="mod-participant-routes-admin" options="-parameters" />
-      <module name="mod-participant-store" options="-parameters" />
+      <module name="mod-participant-util" options="-parameters" />
+      <module name="mod-participant-utility" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />

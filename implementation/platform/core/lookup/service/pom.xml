@@ -6,7 +6,7 @@
         <artifactId>lookup-pom</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>mod-lookup-service-fspiop</artifactId>
+    <artifactId>mod-lookup-service</artifactId>
     <name>Mojaloop - Core - Look Up - Service</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -19,6 +19,12 @@
             <artifactId>mod-lookup-domain</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.mojaloop.fspiop</groupId>
+            <artifactId>mod-fspiop-service</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
@@ -27,12 +33,6 @@
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.fspiop</groupId>
-            <artifactId>mod-fspiop-service</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

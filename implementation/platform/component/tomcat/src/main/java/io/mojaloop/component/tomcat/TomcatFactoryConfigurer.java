@@ -60,25 +60,25 @@ public class TomcatFactoryConfigurer {
                         LOGGER.info("Created temp dir {} : {}", tempDir.getAbsolutePath(), created);
                     }
 
-                    for (var hostSettings : hostSettings) {
+                    for (var hostSetting : hostSettings) {
 
-                        var connectorDecorator = hostSettings.connectorDecorator();
+                        var connectorDecorator = hostSetting.connectorDecorator();
 
-                        var standardHost = TomcatFactoryConfigurer.createHost(hostSettings.host(), tempDir);
+                        var standardHost = TomcatFactoryConfigurer.createHost(hostSetting.host(), tempDir);
                         tomcat.getEngine().addChild(standardHost);
                         LOGGER.info("Created host: name [{}] appBase : [{}]", standardHost.getName(), standardHost.getAppBase());
 
-                        var connector = TomcatFactoryConfigurer.createConnector(connectorDecorator.getPort(), hostSettings.host());
+                        var connector = TomcatFactoryConfigurer.createConnector(connectorDecorator.getPort(), hostSetting.host());
                         tomcat.getService().addConnector(connector);
-                        LOGGER.info("Created connector: port [{}], host : [{}]", connectorDecorator.getPort(), hostSettings.host());
+                        LOGGER.info("Created connector: port [{}], host : [{}]", connectorDecorator.getPort(), hostSetting.host());
                         connectorDecorator.decorate(connector);
 
                         TomcatFactoryConfigurer.configureContext(parentContext,
                                                                  tomcat,
                                                                  standardHost,
                                                                  tempDir,
-                                                                 hostSettings.contextPath(),
-                                                                 hostSettings.configurations());
+                                                                 hostSetting.contextPath(),
+                                                                 hostSetting.configurations());
                     }
 
                     return super.getTomcatWebServer(tomcat);
@@ -153,19 +153,6 @@ public class TomcatFactoryConfigurer {
     }
 
     public record HostSettings(String host, String contextPath, ConnectorDecorator connectorDecorator, Class<?>... configurations) {
-
-        public HostSettings(String host, String contextPath, ConnectorDecorator connectorDecorator, Class<?>... configurations) {
-
-            assert host != null;
-            assert contextPath != null;
-            assert connectorDecorator != null;
-            assert configurations != null;
-
-            this.host = host;
-            this.contextPath = contextPath;
-            this.configurations = configurations;
-            this.connectorDecorator = null;
-        }
 
     }
 

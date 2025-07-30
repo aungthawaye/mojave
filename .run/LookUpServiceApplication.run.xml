@@ -5,7 +5,7 @@
       <env name="VAULT_ADDR" value="http://localhost:8200" />
       <env name="VAULT_SECRET_PATH" value="Mojaloop" />
     </envs>
-    <module name="mod-lookup-service-fspiop" />
+    <module name="mod-lookup-service" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.lookup.service.LookUpServiceApplication" />
     <extension name="coverage">
       <pattern>

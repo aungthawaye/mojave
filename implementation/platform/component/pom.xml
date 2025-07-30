@@ -12,10 +12,9 @@
     <name>Mojaloop - Component</name>
     <modules>
         <module>misc</module>
-        <module>http</module>
         <module>tomcat</module>
         <module>jackson</module>
-        <module>spring</module>
+        <module>web</module>
         <module>vault</module>
         <module>redis</module>
         <module>retrofit</module>

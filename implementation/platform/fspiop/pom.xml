@@ -12,9 +12,10 @@
     <name>Mojaloop - FSPIOP</name>
     <modules>
         <module>spec</module>
-        <module>client</module>
+        <module>invoker</module>
         <module>service</module>
         <module>common</module>
+        <module>component</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

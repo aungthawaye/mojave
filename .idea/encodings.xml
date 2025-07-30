@@ -22,18 +22,19 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/component/misc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/redis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/retrofit/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/spring/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/tomcat/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/component/vault/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/component/web/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/datatype/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/domain/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/domain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/lookup/infra/src/generated/java" charset="UTF-8" />
@@ -55,6 +56,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/domain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/routes-admin/src/main/java" charset="UTF-8" />
@@ -64,7 +66,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/store/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/utility/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/mod-shared-security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/src/main/proto" charset="UTF-8" />
@@ -76,8 +78,9 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/component/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/invoker/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/spec/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/java" charset="UTF-8" />

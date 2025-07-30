@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.lookup.domain;
 
+import io.mojaloop.component.redis.RedissonOpsClientConfigurer;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
@@ -27,7 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-public class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSettings {
+class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSettings {
 
     private final Vault vault;
 
@@ -45,9 +46,18 @@ public class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredS
         return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.Settings.class);
     }
 
+    @Bean
+    @Override
+    public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
+
+        return this.vault.get(VaultPaths.REDIS_OPS_SETTINGS_PATH, RedissonOpsClientConfigurer.Settings.class);
+    }
+
     public static class VaultPaths {
 
         public static final String FSPIOP_SETTINGS = "micro/core/lookup/domain/fspiop/settings";
+
+        public static final String REDIS_OPS_SETTINGS_PATH = "micro/core/lookup/domain/redis/ops/settings";
 
     }
 
