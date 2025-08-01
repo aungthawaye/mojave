@@ -20,7 +20,11 @@
 
 package io.mojaloop.core.lookup.service.controller;
 
+import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.core.lookup.contract.command.GetParties;
+import io.mojaloop.core.lookup.service.event.GetPartiesEvent;
+import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -37,12 +41,29 @@ public class GetPartiesController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetPartiesController.class);
 
+    private final EventPublisher eventPublisher;
+
+    public GetPartiesController(EventPublisher eventPublisher) {
+
+        assert eventPublisher != null;
+
+        this.eventPublisher = eventPublisher;
+    }
+
     @GetMapping("/parties/{partyIdType}/{partyId}")
-    public ResponseEntity<?> getParties(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, HttpServletRequest request) {
+    public ResponseEntity<?> getParties(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, HttpServletRequest request)
+        throws IOException {
 
         LOGGER.info("Received GET /parties/{}/{}", partyIdType, partyId);
 
         var cachedBodyRequest = (CachedServletRequest) request;
+        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
+
+        var event = new GetPartiesEvent(new GetParties.Input(fspiopHttpRequest, partyIdType, partyId));
+
+        LOGGER.info("Publishing GetPartiesEvent : [{}]", event);
+        this.eventPublisher.publish(event);
+        LOGGER.info("Published GetPartiesEvent : [{}]", event);
 
         return ResponseEntity.accepted().build();
     }

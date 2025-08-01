@@ -20,15 +20,26 @@
 
 package io.mojaloop.core.participant.utility;
 
-import io.mojaloop.component.redis.RedissonOpsClientConfiguration;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.jackson.ComponentJacksonConfiguration;
+import io.mojaloop.core.participant.utility.client.ParticipantClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = "io.mojaloop.core.participant.utility")
-@Import(value = {RedissonOpsClientConfiguration.class})
+@Import(value = {ComponentJacksonConfiguration.class})
 public class ParticipantUtilityConfiguration {
 
-    public interface RequiredSettings extends RedissonOpsClientConfiguration.RequiredSettings {
+    @Bean
+    public ParticipantClient participantClient(ParticipantClient.Settings settings, ObjectMapper objectMapper) {
+
+        return new ParticipantClient(settings, objectMapper);
+    }
+
+    public interface RequiredSettings extends ComponentJacksonConfiguration.RequiredSettings {
+
+        ParticipantClient.Settings participantClientSettings();
 
     }
 

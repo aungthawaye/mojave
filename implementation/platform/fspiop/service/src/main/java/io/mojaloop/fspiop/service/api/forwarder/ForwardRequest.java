@@ -19,10 +19,11 @@
  */
 package io.mojaloop.fspiop.service.api.forwarder;
 
+import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 
 public interface ForwardRequest {
 
-    void forward(FspiopHttpRequest request);
+    void forward(String baseUrl, FspiopHttpRequest request) throws FspiopException;
 
 }

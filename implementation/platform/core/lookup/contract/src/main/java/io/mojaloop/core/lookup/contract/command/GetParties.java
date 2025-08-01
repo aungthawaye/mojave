@@ -20,20 +20,14 @@
 
 package io.mojaloop.core.lookup.contract.command;
 
-import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
-import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 public interface GetParties {
 
-    Output execute(Input input) throws FspiopException;
+    Output execute(Input input);
 
-    record Input(Source source,
-                 Destination destination,
-                 String partyIdType,
-                 String partyId,
-                 FspiopHttpRequest fspiopHttpRequest) { }
+    record Input(FspiopHttpRequest fspiopHttpRequest, PartyIdType partyIdType, String partyId) { }
 
     record Output() { }
 

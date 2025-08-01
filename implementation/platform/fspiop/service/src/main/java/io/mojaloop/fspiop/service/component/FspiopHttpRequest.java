@@ -21,6 +21,9 @@
 package io.mojaloop.fspiop.service.component;
 
 import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.fspiop.common.handy.FspiopHeaders;
+import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Source;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +32,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public record FspiopHttpRequest(String uri, Map<String, String> headers, Map<String, String> params, String payload) {
+public record FspiopHttpRequest(Source source,
+                                Destination destination,
+                                String method,
+                                String uri,
+                                String contentType,
+                                Map<String, String> headers,
+                                Map<String, String> params,
+                                String payload) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopHttpRequest.class);
 
@@ -37,8 +47,22 @@ public record FspiopHttpRequest(String uri, Map<String, String> headers, Map<Str
 
         var cachedRequest = request instanceof CachedServletRequest cachedRequest1 ? cachedRequest1 : new CachedServletRequest(request);
 
+        var source = new Source(cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE));
+        LOGGER.debug("Source: [{}]", source);
+
+        var destinationHeader = cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
+        var destination = destinationHeader == null || destinationHeader.isEmpty() ? Destination.EMPTY() :
+                              new Destination(cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION));
+        LOGGER.debug("Destination: [{}]", destination);
+
+        var method = cachedRequest.getMethod();
+        LOGGER.debug("Method: [{}]", method);
+
         var uri = cachedRequest.getRequestURI();
         LOGGER.debug("URI: [{}]", uri);
+
+        var contentType = cachedRequest.getContentType();
+        LOGGER.debug("Content-Type: [{}]", contentType);
 
         var headers = new HashMap<String, String>();
         request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
@@ -46,25 +70,14 @@ public record FspiopHttpRequest(String uri, Map<String, String> headers, Map<Str
         });
         LOGGER.debug("Headers: [{}]", headers);
 
-        var paramMap = request.getParameterMap();
         var params = new HashMap<String, String>();
-
-        for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
-
-            String key = entry.getKey();
-            String[] values = entry.getValue();
-
-            if (values != null && values.length > 0) {
-                params.put(key, values[0]);
-            }
-        }
-
+        request.getParameterMap().forEach((k, v) -> params.put(k, v[0]));
         LOGGER.debug("Params: [{}]", params);
 
         var payload = cachedRequest.getCachedBodyAsString();
         LOGGER.debug("Payload: [{}]", payload);
 
-        return new FspiopHttpRequest(uri, headers, params, payload);
+        return new FspiopHttpRequest(source, destination, method, uri, contentType, headers, params, payload);
     }
 
     public boolean hasPayload() {

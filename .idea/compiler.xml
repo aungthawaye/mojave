@@ -22,6 +22,7 @@
         <module name="mod-participant-admin" />
         <module name="mod-participant-domain" />
         <module name="mod-common-datatype" />
+        <module name="mod-participant-intercom" />
         <module name="mod-fspiop-invoker" />
         <module name="mod-fspiop-spec" />
         <module name="mod-component-misc" />
@@ -89,6 +90,7 @@
       <module name="mod-participant-admin" options="-parameters" />
       <module name="mod-participant-contract" options="-parameters" />
       <module name="mod-participant-domain" options="-parameters" />
+      <module name="mod-participant-intercom" options="-parameters" />
       <module name="mod-participant-routes-admin" options="-parameters" />
       <module name="mod-participant-util" options="-parameters" />
       <module name="mod-participant-utility" options="-parameters" />

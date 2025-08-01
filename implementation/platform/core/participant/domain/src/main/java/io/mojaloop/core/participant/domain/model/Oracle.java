@@ -49,7 +49,7 @@ public class Oracle extends JpaEntity<OracleId> {
     @Column(name = "name")
     protected String name;
 
-    @Column(name = "host")
+    @Column(name = "baseUrl")
     protected String host;
 
     public Oracle(PartyIdType type, String name, String host) {

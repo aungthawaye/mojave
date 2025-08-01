@@ -55,6 +55,8 @@ public class RoutingJpaConfiguration {
         return new JpaTransactionManager(entityManagerFactory);
     }
 
+    public interface RequiredBeans {}
+
     public interface RequiredSettings {
 
         RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings();

@@ -60,8 +60,8 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
     @Enumerated(EnumType.STRING)
     private EndpointType type;
 
-    @Column(name = "host", length = StringSizeConstraints.LEN_256)
-    private String host;
+    @Column(name = "base_url", length = StringSizeConstraints.LEN_256)
+    private String baseUrl;
 
     @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
     @Enumerated(EnumType.STRING)
@@ -75,7 +75,7 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
     @JoinColumn(name = "fsp_id")
     private Fsp fsp;
 
-    Endpoint(Fsp fsp, EndpointType type, String host) {
+    Endpoint(Fsp fsp, EndpointType type, String baseUrl) {
 
         assert fsp != null;
         assert type != null;
@@ -83,14 +83,14 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
         this.id = new EndpointId(Snowflake.get().nextId());
         this.fsp = fsp;
         this.type = type;
-        this.host(host);
+        this.host(baseUrl);
         this.createdAt = Instant.now();
     }
 
     @Override
     public FspData.EndpointData convert() {
 
-        return new FspData.EndpointData(this.getId(), this.getType(), this.getHost());
+        return new FspData.EndpointData(this.getId(), this.getType(), this.getBaseUrl());
     }
 
     @Override
@@ -113,7 +113,7 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
             throw new TextTooLargeException("Host", StringSizeConstraints.LEN_256);
         }
 
-        this.host = value;
+        this.baseUrl = value;
 
         return this;
     }

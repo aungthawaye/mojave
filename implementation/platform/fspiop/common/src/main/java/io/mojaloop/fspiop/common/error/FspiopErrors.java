@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.fspiop.common.error;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FspiopErrors {
 
@@ -85,6 +89,80 @@ public class FspiopErrors {
     public static final ErrorDefinition PAYEE_LIMIT_ERROR = new ErrorDefinition("5200", "Payee limit error", "Receiving amount/frequency exceeds allowed limits.");
     public static final ErrorDefinition PAYEE_PERMISSION_ERROR = new ErrorDefinition("5300", "Payee permission error", "Payee lacks permission to perform operation.");
     public static final ErrorDefinition GENERIC_PAYEE_BLOCKED_ERROR = new ErrorDefinition("5400", "Generic Payee blocked error", "Payee is blocked or failed regulatory screening.");
-
     //@@formatter:on
+
+    private static final Map<String, ErrorDefinition> ERROR_MAP = new HashMap<>();
+
+    static {
+
+        ERROR_MAP.put(COMMUNICATION_ERROR.code(), COMMUNICATION_ERROR);
+        ERROR_MAP.put(DESTINATION_COMMUNICATION_ERROR.code(), DESTINATION_COMMUNICATION_ERROR);
+
+        ERROR_MAP.put(GENERIC_SERVER_ERROR.code(), GENERIC_SERVER_ERROR);
+        ERROR_MAP.put(INTERNAL_SERVER_ERROR.code(), INTERNAL_SERVER_ERROR);
+        ERROR_MAP.put(NOT_IMPLEMENTED.code(), NOT_IMPLEMENTED);
+        ERROR_MAP.put(SERVICE_CURRENTLY_UNAVAILABLE.code(), SERVICE_CURRENTLY_UNAVAILABLE);
+        ERROR_MAP.put(SERVER_TIMED_OUT.code(), SERVER_TIMED_OUT);
+        ERROR_MAP.put(SERVER_BUSY.code(), SERVER_BUSY);
+
+        ERROR_MAP.put(GENERIC_CLIENT_ERROR.code(), GENERIC_CLIENT_ERROR);
+        ERROR_MAP.put(UNACCEPTABLE_VERSION_REQUESTED.code(), UNACCEPTABLE_VERSION_REQUESTED);
+        ERROR_MAP.put(UNKNOWN_URI.code(), UNKNOWN_URI);
+        ERROR_MAP.put(ADD_PARTY_INFORMATION_ERROR.code(), ADD_PARTY_INFORMATION_ERROR);
+
+        ERROR_MAP.put(GENERIC_VALIDATION_ERROR.code(), GENERIC_VALIDATION_ERROR);
+        ERROR_MAP.put(MALFORMED_SYNTAX.code(), MALFORMED_SYNTAX);
+        ERROR_MAP.put(MISSING_MANDATORY_ELEMENT.code(), MISSING_MANDATORY_ELEMENT);
+        ERROR_MAP.put(TOO_MANY_ELEMENTS.code(), TOO_MANY_ELEMENTS);
+        ERROR_MAP.put(TOO_LARGE_PAYLOAD.code(), TOO_LARGE_PAYLOAD);
+        ERROR_MAP.put(INVALID_SIGNATURE.code(), INVALID_SIGNATURE);
+        ERROR_MAP.put(MODIFIED_REQUEST.code(), MODIFIED_REQUEST);
+        ERROR_MAP.put(MISSING_EXTENSION_PARAMETER.code(), MISSING_EXTENSION_PARAMETER);
+
+        ERROR_MAP.put(GENERIC_ID_NOT_FOUND.code(), GENERIC_ID_NOT_FOUND);
+        ERROR_MAP.put(DESTINATION_FSP_ERROR.code(), DESTINATION_FSP_ERROR);
+        ERROR_MAP.put(PAYER_FSP_ID_NOT_FOUND.code(), PAYER_FSP_ID_NOT_FOUND);
+        ERROR_MAP.put(PAYEE_FSP_ID_NOT_FOUND.code(), PAYEE_FSP_ID_NOT_FOUND);
+        ERROR_MAP.put(PARTY_NOT_FOUND.code(), PARTY_NOT_FOUND);
+        ERROR_MAP.put(QUOTE_ID_NOT_FOUND.code(), QUOTE_ID_NOT_FOUND);
+        ERROR_MAP.put(TRANSACTION_REQUEST_ID_NOT_FOUND.code(), TRANSACTION_REQUEST_ID_NOT_FOUND);
+        ERROR_MAP.put(TRANSACTION_ID_NOT_FOUND.code(), TRANSACTION_ID_NOT_FOUND);
+        ERROR_MAP.put(TRANSFER_ID_NOT_FOUND.code(), TRANSFER_ID_NOT_FOUND);
+        ERROR_MAP.put(BULK_QUOTE_ID_NOT_FOUND.code(), BULK_QUOTE_ID_NOT_FOUND);
+        ERROR_MAP.put(BULK_TRANSFER_ID_NOT_FOUND.code(), BULK_TRANSFER_ID_NOT_FOUND);
+
+        ERROR_MAP.put(GENERIC_EXPIRED_ERROR.code(), GENERIC_EXPIRED_ERROR);
+        ERROR_MAP.put(TRANSACTION_REQUEST_EXPIRED.code(), TRANSACTION_REQUEST_EXPIRED);
+        ERROR_MAP.put(QUOTE_EXPIRED.code(), QUOTE_EXPIRED);
+        ERROR_MAP.put(TRANSFER_EXPIRED.code(), TRANSFER_EXPIRED);
+
+        ERROR_MAP.put(GENERIC_PAYER_ERROR.code(), GENERIC_PAYER_ERROR);
+        ERROR_MAP.put(PAYER_FSP_INSUFFICIENT_LIQUIDITY.code(), PAYER_FSP_INSUFFICIENT_LIQUIDITY);
+        ERROR_MAP.put(GENERIC_PAYER_REJECTION.code(), GENERIC_PAYER_REJECTION);
+        ERROR_MAP.put(PAYER_REJECTED_TRANSACTION_REQUEST.code(), PAYER_REJECTED_TRANSACTION_REQUEST);
+        ERROR_MAP.put(PAYER_FSP_UNSUPPORTED_TRANSACTION_TYPE.code(), PAYER_FSP_UNSUPPORTED_TRANSACTION_TYPE);
+        ERROR_MAP.put(PAYER_UNSUPPORTED_CURRENCY.code(), PAYER_UNSUPPORTED_CURRENCY);
+        ERROR_MAP.put(PAYER_LIMIT_ERROR.code(), PAYER_LIMIT_ERROR);
+        ERROR_MAP.put(PAYER_PERMISSION_ERROR.code(), PAYER_PERMISSION_ERROR);
+        ERROR_MAP.put(GENERIC_PAYER_BLOCKED_ERROR.code(), GENERIC_PAYER_BLOCKED_ERROR);
+
+        ERROR_MAP.put(GENERIC_PAYEE_ERROR.code(), GENERIC_PAYEE_ERROR);
+        ERROR_MAP.put(PAYEE_FSP_INSUFFICIENT_LIQUIDITY.code(), PAYEE_FSP_INSUFFICIENT_LIQUIDITY);
+        ERROR_MAP.put(GENERIC_PAYEE_REJECTION.code(), GENERIC_PAYEE_REJECTION);
+        ERROR_MAP.put(PAYEE_REJECTED_QUOTE.code(), PAYEE_REJECTED_QUOTE);
+        ERROR_MAP.put(PAYEE_FSP_UNSUPPORTED_TRANSACTION_TYPE.code(), PAYEE_FSP_UNSUPPORTED_TRANSACTION_TYPE);
+        ERROR_MAP.put(PAYEE_FSP_REJECTED_QUOTE.code(), PAYEE_FSP_REJECTED_QUOTE);
+        ERROR_MAP.put(PAYEE_REJECTED_TRANSACTION.code(), PAYEE_REJECTED_TRANSACTION);
+        ERROR_MAP.put(PAYEE_FSP_REJECTED_TRANSACTION.code(), PAYEE_FSP_REJECTED_TRANSACTION);
+        ERROR_MAP.put(PAYEE_UNSUPPORTED_CURRENCY.code(), PAYEE_UNSUPPORTED_CURRENCY);
+        ERROR_MAP.put(PAYEE_LIMIT_ERROR.code(), PAYEE_LIMIT_ERROR);
+        ERROR_MAP.put(PAYEE_PERMISSION_ERROR.code(), PAYEE_PERMISSION_ERROR);
+        ERROR_MAP.put(GENERIC_PAYEE_BLOCKED_ERROR.code(), GENERIC_PAYEE_BLOCKED_ERROR);
+    }
+
+    public static ErrorDefinition find(String code) {
+
+        return ERROR_MAP.get(code);
+    }
+
 }

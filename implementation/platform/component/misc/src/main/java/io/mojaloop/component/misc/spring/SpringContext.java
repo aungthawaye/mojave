@@ -17,7 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.component.misc.handy;
+package io.mojaloop.component.misc.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

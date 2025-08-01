@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.lookup.service;
 
+import io.mojaloop.component.misc.ComponentMiscConfiguration;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
 import io.mojaloop.core.participant.utility.store.ParticipantStore;
@@ -31,13 +32,19 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 @EnableWebMvc
+@EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
 @Import(value = {
-    LookUpDomainConfiguration.class, FspiopServiceConfiguration.class})
-public class LookUpServiceConfiguration implements FspiopSpringSecurityConfiguration.RequiredBeans {
+    LookUpDomainConfiguration.class, ComponentMiscConfiguration.class, FspiopServiceConfiguration.class})
+public class LookUpServiceConfiguration
+    implements FspiopSpringSecurityConfiguration.RequiredBeans, ComponentMiscConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
@@ -56,12 +63,20 @@ public class LookUpServiceConfiguration implements FspiopSpringSecurityConfigura
     }
 
     @Bean
+    public Executor taskExecutor() {
+
+        return Executors.newCachedThreadPool();
+    }
+
+    @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings,
+                                              FspiopServiceConfiguration.RequiredSettings,
+                                              ComponentMiscConfiguration.RequiredSettings {
 
         TomcatSettings lookUpServiceTomcatSettings();
 

@@ -34,7 +34,7 @@ public interface CreateFspCommand {
 
     record Input(FspCode fspCode, String name, Currency[] supportedCurrencies, Endpoint[] endpoints) {
 
-        public record Endpoint(EndpointType type, String host) { }
+        public record Endpoint(EndpointType type, String baseUrl) { }
 
     }
 

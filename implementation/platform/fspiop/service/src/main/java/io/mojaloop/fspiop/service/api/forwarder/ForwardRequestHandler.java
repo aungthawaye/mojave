@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,17 +17,75 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.fspiop.service.api.forwarder;
 
+import io.mojaloop.component.retrofit.RetrofitService;
+import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ForwardRequestHandler implements ForwardRequest {
 
-    @Override
-    public void forward(FspiopHttpRequest request) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ForwardRequestHandler.class);
 
+    private final RetrofitService.ForwardingService forwardingService;
+
+    private final FspiopErrorDecoder fspiopErrorDecoder;
+
+    private final FspiopInvocationErrorHandler fspiopInvocationErrorHandler;
+
+    public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService,
+                                 FspiopErrorDecoder fspiopErrorDecoder,
+                                 FspiopInvocationErrorHandler fspiopInvocationErrorHandler) {
+
+        assert forwardingService != null;
+        assert fspiopErrorDecoder != null;
+        assert fspiopInvocationErrorHandler != null;
+
+        this.forwardingService = forwardingService;
+        this.fspiopErrorDecoder = fspiopErrorDecoder;
+        this.fspiopInvocationErrorHandler = fspiopInvocationErrorHandler;
+    }
+
+    @Override
+    public void forward(String baseUrl, FspiopHttpRequest request) throws FspiopException {
+
+        var method = request.method().toUpperCase();
+
+        try {
+            switch (method) {
+                case "GET":
+                    RetrofitService.invoke(this.forwardingService.get(baseUrl + "/" + request.uri(), request.headers(), request.params()),
+                                           this.fspiopErrorDecoder);
+                    break;
+                case "POST":
+                case "PUT":
+                case "PATCH":
+                case "DELETE":
+                    RetrofitService.invoke(this.forwardingService.post(baseUrl + "/" + request.uri(),
+                                                                       request.headers(),
+                                                                       request.params(),
+                                                                       RequestBody.create(request.payload(),
+                                                                                          MediaType.get(request.contentType()))),
+                                           this.fspiopErrorDecoder);
+                    break;
+                default:
+                    throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);
+            }
+        } catch (RetrofitService.InvocationException e) {
+
+            LOGGER.error("Error forwarding request to {}: {}", baseUrl, e.getMessage());
+            throw this.fspiopInvocationErrorHandler.handle(e);
+        }
     }
 
 }

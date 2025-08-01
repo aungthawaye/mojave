@@ -31,6 +31,8 @@ import org.springframework.context.annotation.Import;
     ComponentMiscConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class})
 public class ParticipantDomainConfiguration {
 
+    public interface RequiredBeans { }
+
     public interface RequiredSettings extends ComponentMiscConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings,
                                               RedissonOpsClientConfiguration.RequiredSettings { }

@@ -27,4 +27,9 @@ public record Destination(String destinationFspCode) {
         return new Destination(null);
     }
 
+    public boolean isEmpty() {
+
+        return this.destinationFspCode == null || this.destinationFspCode.isEmpty();
+    }
+
 }

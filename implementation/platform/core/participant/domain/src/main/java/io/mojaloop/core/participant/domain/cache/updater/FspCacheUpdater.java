@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.participant.domain.cache.updater;
 
-import io.mojaloop.component.misc.handy.SpringContext;
+import io.mojaloop.component.misc.spring.SpringContext;
 import io.mojaloop.core.participant.contract.cache.ParticipantCache;
 import io.mojaloop.core.participant.domain.model.Fsp;
 import jakarta.persistence.PostPersist;

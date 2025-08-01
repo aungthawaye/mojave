@@ -27,4 +27,9 @@ public record Source(String sourceFspCode) {
         return new Source(null);
     }
 
+    public boolean isEmpty() {
+
+        return this.sourceFspCode == null || this.sourceFspCode.isEmpty();
+    }
+
 }

@@ -20,8 +20,7 @@
 package io.mojaloop.core.participant.store;
 
 import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
-import io.mojaloop.core.participant.utility.ParticipantUtiliySettings;
 import org.springframework.context.annotation.Import;
 
-@Import({LocalVaultSettings.class, ParticipantUtilityConfiguration.class, ParticipantUtiliySettings.class})
+@Import({LocalVaultSettings.class, ParticipantUtilityConfiguration.class})
 public class TestConfiguration { }

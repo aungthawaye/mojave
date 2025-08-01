@@ -72,7 +72,7 @@ public class CreateFspCommandHandler implements CreateFspCommand {
         for (var endpoint : input.endpoints()) {
 
             LOGGER.info("Adding endpoint: {}", endpoint);
-            fsp.addEndpoint(endpoint.type(), endpoint.host());
+            fsp.addEndpoint(endpoint.type(), endpoint.baseUrl());
             LOGGER.info("Added endpoint: {}", endpoint);
         }
 

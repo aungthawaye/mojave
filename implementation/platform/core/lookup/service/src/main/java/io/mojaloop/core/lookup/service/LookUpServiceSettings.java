@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.component.redis.RedissonOpsClientConfigurer;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.core.participant.utility.client.ParticipantClient;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -54,9 +54,9 @@ class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettin
 
     @Bean
     @Override
-    public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
+    public ParticipantClient.Settings participantClientSettings() {
 
-        return this.vault.get(VaultPaths.REDIS_OPS_SETTINGS_PATH, RedissonOpsClientConfigurer.Settings.class);
+        return this.vault.get(VaultPaths.PARTICIPANT_CLIENT_SETTINGS, ParticipantClient.Settings.class);
     }
 
     @Bean
@@ -72,7 +72,7 @@ class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettin
 
         public static final String TOMCAT_SETTINGS = "micro/core/lookup/service/tomcat/settings";
 
-        public static final String REDIS_OPS_SETTINGS_PATH = "micro/core/lookup/service/redis/ops/settings";
+        public static final String PARTICIPANT_CLIENT_SETTINGS = "micro/core/lookup/service/participant-client/settings";
 
         public static final String SPRING_SECURITY_SETTINGS = "micro/core/lookup/service/spring-security/settings";
 

@@ -1,23 +1,3 @@
-/*-
- * ================================================================================
- * Mojaloop OSS
- * --------------------------------------------------------------------------------
- * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ================================================================================
- */
-
 package io.mojaloop.component.retrofit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,25 +38,10 @@ import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.util.Map;
 
-/**
- * A utility class for working with Retrofit services.
- * Provides methods for building, configuring, and invoking Retrofit service calls.
- * Supports features like custom headers, SSL configuration, mTLS, and error handling.
- */
 public class RetrofitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetrofitService.class);
 
-    /**
-     * Executes a Retrofit call and handles error responses.
-     *
-     * @param <RES> The type of the expected response
-     * @param <E> The type of the error decoder
-     * @param invocation The Retrofit call to execute
-     * @param errorDecoder The decoder to use for error responses (can be null)
-     * @return The successful response from the call
-     * @throws InvocationException If the call fails or returns an error response
-     */
     public static <RES, E> Response<RES> invoke(Call<RES> invocation, ErrorDecoder<E> errorDecoder) throws InvocationException {
 
         try {
@@ -93,18 +58,24 @@ public class RetrofitService {
 
                         if (errorDecoder != null) {
 
-                            E decodedError = errorDecoder.decode(response.code(), errorResponseBody);
+                            try {
 
-                            if (decodedError != null) {
-
+                                E decodedError = errorDecoder.decode(response.code(), errorResponseBody);
                                 LOGGER.error("Decoded error response : {}", decodedError);
-                                throw new InvocationException(decodedError, responseBody.string());
+                                throw new InvocationException(response.code(), decodedError, errorResponseBody);
+
+                            } catch (Exception ignored) {
+
+                                LOGGER.error("Error decoding error response : {}", errorResponseBody);
                             }
                         }
 
                         LOGGER.error("Error response : {}", responseBody.string());
-                        throw new InvocationException(null, errorResponseBody);
+                        throw new InvocationException(response.code(), null, errorResponseBody);
                     }
+
+                    LOGGER.error("Error response has no body.");
+                    throw new InvocationException(response.code(), null, null);
                 }
             }
 
@@ -122,74 +93,49 @@ public class RetrofitService {
 
             }
 
+        } catch (Exception e) {
+
+            throw new InvocationException(e);
         }
     }
 
-    /**
-     * Creates a new Builder for configuring a Retrofit service.
-     *
-     * @param <S> The type of the service interface
-     * @param service The service interface class
-     * @param baseUrl The base URL for the service
-     * @return A new Builder instance
-     */
     public static <S> Builder<S> newBuilder(Class<S> service, String baseUrl) {
 
         return new Builder<>(service, baseUrl);
     }
 
-    /**
-     * Interface for services that can forward HTTP requests.
-     */
     public interface ForwardingService {
 
-        <RES, E> Call<RES> delete(@Url String url,
-                                  @HeaderMap Map<String, String> headers,
-                                  @QueryMap Map<String, String> params,
-                                  @Body RequestBody body);
-
-        <RES, E> Call<RES> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
-
-        <RES, E> Call<RES> patch(@Url String url,
-                                 @HeaderMap Map<String, String> headers,
-                                 @QueryMap Map<String, String> params,
-                                 @Body RequestBody body);
-
-        <RES, E> Call<RES> post(@Url String url,
-                                @HeaderMap Map<String, String> headers,
-                                @QueryMap Map<String, String> params,
-                                @Body RequestBody body);
-
-        <RES, E> Call<RES> put(@Url String url,
+        <RES> Call<RES> delete(@Url String url,
                                @HeaderMap Map<String, String> headers,
                                @QueryMap Map<String, String> params,
                                @Body RequestBody body);
 
+        <RES> Call<RES> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
+
+        <RES> Call<RES> patch(@Url String url,
+                              @HeaderMap Map<String, String> headers,
+                              @QueryMap Map<String, String> params,
+                              @Body RequestBody body);
+
+        <RES> Call<RES> post(@Url String url,
+                             @HeaderMap Map<String, String> headers,
+                             @QueryMap Map<String, String> params,
+                             @Body RequestBody body);
+
+        <RES> Call<RES> put(@Url String url,
+                            @HeaderMap Map<String, String> headers,
+                            @QueryMap Map<String, String> params,
+                            @Body RequestBody body);
+
     }
 
-    /**
-     * Interface for decoding error responses from Retrofit calls.
-     *
-     * @param <E> The type of the decoded error
-     */
     public interface ErrorDecoder<E> {
 
-        /**
-         * Decodes an error response.
-         *
-         * @param status The HTTP status code
-         * @param errorResponseBody The error response body
-         * @return The decoded error
-         */
         E decode(int status, String errorResponseBody) throws IOException;
 
     }
 
-    /**
-     * Builder class for configuring and creating Retrofit service instances.
-     *
-     * @param <S> The type of the service interface
-     */
     public static class Builder<S> {
 
         private final Class<S> service;
@@ -200,27 +146,14 @@ public class RetrofitService {
 
         private HttpLoggingInterceptor loggingInterceptor = null;
 
-        /**
-         * Creates a new Builder with the specified service interface and base URL.
-         *
-         * @param service The service interface class
-         * @param baseUrl The base URL for the service
-         */
         private Builder(Class<S> service, String baseUrl) {
 
             this.service = service;
             this.retrofitBuilder.baseUrl(baseUrl);
         }
 
-        /**
-         * Builds and creates the service instance with the configured settings.
-         *
-         * @return The configured service instance
-         */
         public S build() {
 
-            // If HttpLoggingInterceptor is configured, it will override the headers generated by other Interceptors.
-            // Therefore, it is better to add as the last Interceptor.
             if (this.loggingInterceptor != null) {
                 this.httpClientBuilder.addInterceptor(this.loggingInterceptor);
             }
@@ -230,12 +163,6 @@ public class RetrofitService {
             return retrofit.create(this.service);
         }
 
-        /**
-         * Adds converter factories to the Retrofit builder.
-         *
-         * @param factories The converter factories to add
-         * @return This Builder instance for method chaining
-         */
         public Builder<S> withConverterFactories(Converter.Factory... factories) {
 
             if (factories != null) {
@@ -249,12 +176,6 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Adds custom headers to all requests made by this service.
-         *
-         * @param headers A map of header names to header values
-         * @return This Builder instance for method chaining
-         */
         public Builder<S> withCustomHeaders(Map<String, String> headers) {
 
             this.httpClientBuilder.addInterceptor(chain -> {
@@ -276,12 +197,6 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Adds default converter factories to the Retrofit builder.
-         * This includes NullOrEmptyConverterFactory, ScalarsConverterFactory, and JacksonConverterFactory.
-         *
-         * @return This Builder instance for method chaining
-         */
         public Builder<S> withDefaultFactories(ObjectMapper objectMapper) {
 
             this.retrofitBuilder.addConverterFactory(new NullOrEmptyConverterFactory());
@@ -291,16 +206,8 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Disables SSL certificate verification for this service.
-         * WARNING: This should only be used for testing purposes as it makes the connection insecure.
-         *
-         * @return This Builder instance for method chaining
-         * @throws RuntimeException If there is an error setting up the SSL context
-         */
         public Builder<S> withDisableSSLVerification() {
 
-            // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustManager = new TrustManager[]{
                 new X509TrustManager() {
 
@@ -325,7 +232,6 @@ public class RetrofitService {
 
                 }};
 
-            // Install the all-trusting trust manager
             final SSLContext sslContext;
 
             try {
@@ -356,13 +262,6 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Adds HTTP request/response logging to this service.
-         *
-         * @param level The level of logging detail
-         * @param info If true, logs at INFO level; otherwise, logs at DEBUG level
-         * @return This Builder instance for method chaining
-         */
         public Builder<S> withHttpLogging(HttpLoggingInterceptor.Level level, boolean info) {
 
             this.loggingInterceptor = new HttpLoggingInterceptor(message -> {
@@ -380,12 +279,6 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Adds custom interceptors to the HTTP client.
-         *
-         * @param interceptors The interceptors to add
-         * @return This Builder instance for method chaining
-         */
         public Builder<S> withInterceptors(Interceptor... interceptors) {
 
             if (interceptors != null) {
@@ -399,37 +292,23 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Configures mutual TLS (mTLS) authentication for this service.
-         *
-         * @param clientCertInputStream The input stream for the client certificate (PKCS12 format)
-         * @param clientCertPassword The password for the client certificate
-         * @param trustStoreInputStream The input stream for the trust store (JKS format)
-         * @param trustStorePassword The password for the trust store
-         * @return This Builder instance for method chaining
-         * @throws RuntimeException If there is an error configuring mTLS
-         */
         public Builder<S> withMutualTLS(InputStream clientCertInputStream,
                                         String clientCertPassword,
                                         InputStream trustStoreInputStream,
                                         String trustStorePassword) {
 
             try {
-                // Load client certificate
                 KeyStore keyStore = KeyStore.getInstance("PKCS12");
                 keyStore.load(clientCertInputStream, clientCertPassword.toCharArray());
 
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
                 kmf.init(keyStore, clientCertPassword.toCharArray());
 
-                // Load trust store
                 KeyStore trustStore = KeyStore.getInstance("PKCS12");
                 trustStore.load(trustStoreInputStream, trustStorePassword.toCharArray());
 
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                 tmf.init(trustStore);
-
-                // Setup SSL context
                 SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
@@ -445,14 +324,6 @@ public class RetrofitService {
             return this;
         }
 
-        /**
-         * Sets the timeouts for HTTP connections.
-         *
-         * @param connectTimeout The connection timeout in seconds (default 60 if <= 0)
-         * @param callTimeout The call timeout in seconds (default 60 if <= 0)
-         * @param readTimeout The read timeout in seconds (default 60 if <= 0)
-         * @return This Builder instance for method chaining
-         */
         public Builder<S> withTimeouts(int connectTimeout, int callTimeout, int readTimeout) {
 
             this.httpClientBuilder.connectTimeout(Duration.ofSeconds(connectTimeout <= 0 ? 60 : connectTimeout));
@@ -464,33 +335,32 @@ public class RetrofitService {
 
     }
 
-    /**
-     * Exception thrown when a Retrofit service invocation fails.
-     */
     @Getter
     public static class InvocationException extends IOException {
 
-        private Object decodedErrorResponse = null;
+        private final int responseStatusCode;
 
-        private String originalErrorMessage = null;
+        private final Object decodedErrorResponse;
 
-        public InvocationException(Object decodedErrorResponse, String originalErrorMessage) {
+        private final String originalErrorMessage;
+
+        public InvocationException(int responseStatusCode, Object decodedErrorResponse, String originalErrorMessage) {
 
             super();
 
+            this.responseStatusCode = responseStatusCode;
             this.decodedErrorResponse = decodedErrorResponse;
             this.originalErrorMessage = originalErrorMessage;
 
         }
 
-        /**
-         * Creates a new InvocationException with a cause.
-         *
-         * @param cause The cause of the exception
-         */
-        public InvocationException(Exception cause) {
+        public InvocationException(Throwable cause) {
 
             super(cause);
+
+            this.responseStatusCode = 0;
+            this.decodedErrorResponse = null;
+            this.originalErrorMessage = cause.getMessage();
 
         }
 

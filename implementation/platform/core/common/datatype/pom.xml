@@ -22,5 +22,9 @@
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-misc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
     </dependencies>
 </project>

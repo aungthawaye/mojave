@@ -76,7 +76,7 @@ public record FspData(FspId fspId,
 
     }
 
-    public record EndpointData(EndpointId endpointId, EndpointType type, String host) {
+    public record EndpointData(EndpointId endpointId, EndpointType type, String baseUrl) {
 
         @Override
         public boolean equals(Object o) {

@@ -20,12 +20,14 @@
 
 package io.mojaloop.core.lookup.domain.command;
 
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.contract.command.GetParties;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.utility.store.ParticipantStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.parties.RespondParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,24 +42,65 @@ public class GetPartiesHandler implements GetParties {
 
     private final RespondParties respondParties;
 
-    public GetPartiesHandler(ParticipantStore participantStore, RespondParties respondParties) {
+    private final ForwardRequest forwardRequest;
+
+    public GetPartiesHandler(ParticipantStore participantStore, RespondParties respondParties, ForwardRequest forwardRequest) {
 
         assert participantStore != null;
         assert respondParties != null;
+        assert forwardRequest != null;
 
         this.participantStore = participantStore;
         this.respondParties = respondParties;
+        this.forwardRequest = forwardRequest;
     }
 
     @Override
-    public Output execute(Input input) throws FspiopException {
+    public Output execute(Input input) {
 
-        LOGGER.info("Executing GetPartiesHandler with input: [{}]", input);
+        try {
 
-        var sourceFsp = this.participantStore.getFspData(new FspCode(input.source().sourceFspCode()));
-        LOGGER.info("Found source FSP: [{}]", sourceFsp);
+            LOGGER.info("Executing GetPartiesHandler with input: [{}]", input);
 
-        return null;
+            var sourceFspCode = new FspCode(input.fspiopHttpRequest().source().sourceFspCode());
+            var sourceFsp = this.participantStore.getFspData(sourceFspCode);
+            LOGGER.info("Found source FSP: [{}]", sourceFsp);
+
+            FspData destinationFsp = null;
+
+            if (input.fspiopHttpRequest().destination().isEmpty()) {
+
+                LOGGER.info("Destination FSP is empty. Use Oracle to find it.");
+
+            } else {
+
+                LOGGER.info("Destination FSP is not empty. Use it.");
+                var destinationFspCode = new FspCode(input.fspiopHttpRequest().destination().destinationFspCode());
+                destinationFsp = this.participantStore.getFspData(destinationFspCode);
+            }
+
+            if (destinationFsp == null) {
+
+                LOGGER.info("Destination FSP is not found in Hub.");
+                throw new FspiopException(FspiopErrors.PAYEE_FSP_ID_NOT_FOUND);
+            }
+
+            LOGGER.info("Found destination FSP: [{}]", destinationFsp);
+
+            var baseUrl = destinationFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+
+            LOGGER.info("Forwarding request to destination FSP: [{}]", destinationFsp);
+
+            this.forwardRequest.forward(baseUrl, input.fspiopHttpRequest());
+
+        } catch (FspiopException e) {
+
+            LOGGER.error("FspiopException occurred while executing GetPartiesHandler: [{}]", e.getMessage());
+            //this.respondParties.putPartiesError(input.fspiopHttpRequest().destination(),);
+
+        }
+
+        return new Output();
     }
 
 }
