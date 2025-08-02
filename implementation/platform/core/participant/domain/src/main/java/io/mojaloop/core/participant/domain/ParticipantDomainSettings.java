@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-class ParticipantDomainSettings implements ParticipantDomainConfiguration.RequiredSettings {
+public class ParticipantDomainSettings implements ParticipantDomainConfiguration.RequiredSettings {
 
     private final Vault vault;
 

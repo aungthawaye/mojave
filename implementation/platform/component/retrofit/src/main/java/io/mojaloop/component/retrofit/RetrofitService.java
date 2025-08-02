@@ -149,7 +149,7 @@ public class RetrofitService {
         private Builder(Class<S> service, String baseUrl) {
 
             this.service = service;
-            this.retrofitBuilder.baseUrl(baseUrl);
+            this.retrofitBuilder.baseUrl(baseUrl.endsWith("/") ? baseUrl : baseUrl + "/");
         }
 
         public S build() {

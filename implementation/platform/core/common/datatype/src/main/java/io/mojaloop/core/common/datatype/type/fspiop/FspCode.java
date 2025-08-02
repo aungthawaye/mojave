@@ -29,6 +29,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,6 +54,26 @@ public class FspCode {
         }
 
         this.fspCode = fspCode;
+    }
+
+    @Override
+    public String toString() {
+        return fspCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (!(o instanceof FspCode fspCode1)) {
+            return false;
+        }
+        return Objects.equals(fspCode, fspCode1.fspCode);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hashCode(fspCode);
     }
 
 }

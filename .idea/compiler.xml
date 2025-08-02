@@ -8,25 +8,29 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mod-lookup-contract" />
-        <module name="mod-fspiop-component" />
-        <module name="mod-component-tomcat" />
+        <module name="mod-account-domain" />
         <module name="mod-component-flyway" />
         <module name="mod-component-vault" />
-        <module name="mod-lookup-service" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
-        <module name="mod-component-jpa" />
-        <module name="mod-component-retrofit" />
         <module name="mod-component-web" />
         <module name="mod-component-jackson" />
         <module name="mod-participant-admin" />
-        <module name="mod-participant-domain" />
+        <module name="mod-account-contract" />
         <module name="mod-common-datatype" />
         <module name="mod-participant-intercom" />
-        <module name="mod-fspiop-invoker" />
         <module name="mod-fspiop-spec" />
         <module name="mod-component-misc" />
         <module name="mod-fspiop-common" />
+        <module name="mod-fspiop-component" />
+        <module name="mod-component-tomcat" />
+        <module name="mod-lookup-service" />
+        <module name="mod-account-intercom" />
+        <module name="mod-component-jpa" />
+        <module name="mod-component-retrofit" />
+        <module name="mod-participant-domain" />
+        <module name="mod-account-admin" />
+        <module name="mod-fspiop-invoker" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
         <module name="mod-participant-util" />
@@ -53,11 +57,16 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="account-pom" options="-parameters" />
       <module name="common-pom" options="-parameters" />
       <module name="component-pom" options="-parameters" />
       <module name="core-pom" options="-parameters" />
       <module name="fspiop-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
+      <module name="mod-account-admin" options="-parameters" />
+      <module name="mod-account-contract" options="-parameters" />
+      <module name="mod-account-domain" options="-parameters" />
+      <module name="mod-account-intercom" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-component" options="-parameters" />

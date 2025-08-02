@@ -23,6 +23,7 @@ package io.mojaloop.core.participant.utility;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
 import io.mojaloop.core.participant.utility.client.ParticipantClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
@@ -37,13 +38,23 @@ class ParticipantUtilitySettings implements ParticipantUtilityConfiguration.Requ
         this.vault = vault;
     }
 
+    @Bean
     @Override
     public ParticipantClient.Settings participantClientSettings() {
 
         return this.vault.get(VaultPaths.PARTICIPANT_CLIENT_SETTING, ParticipantClient.Settings.class);
     }
 
+    @Bean
+    @Override
+    public ParticipantUtilityConfiguration.Settings utilitySettings() {
+
+        return this.vault.get(VaultPaths.PARTICIPANT_UTILITY_SETTING, ParticipantUtilityConfiguration.Settings.class);
+    }
+
     public static class VaultPaths {
+
+        public static final String PARTICIPANT_UTILITY_SETTING = "micro/core/participant/utility/settings";
 
         public static final String PARTICIPANT_CLIENT_SETTING = "micro/core/participant/utility/participant-client/settings";
 

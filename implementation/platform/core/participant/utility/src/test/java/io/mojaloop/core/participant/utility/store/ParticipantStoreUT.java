@@ -17,11 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.participant.store.cache;
+package io.mojaloop.core.participant.utility.store;
 
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.core.participant.store.TestConfiguration;
-import io.mojaloop.core.participant.utility.store.ParticipantStore;
+import io.mojaloop.core.participant.utility.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -40,7 +39,7 @@ public class ParticipantStoreUT {
     private ParticipantStore participantStore;
 
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
 
         var fspData = this.participantStore.getFspData(new FspCode("fsp1"));
 
@@ -55,6 +54,8 @@ public class ParticipantStoreUT {
         for (var endpoint : fspData.endpoints().entrySet()) {
             LOGGER.info("Endpoint: {} - {}", endpoint.getKey(), endpoint.getValue());
         }
+
+        Thread.sleep(10000);
     }
 
 }

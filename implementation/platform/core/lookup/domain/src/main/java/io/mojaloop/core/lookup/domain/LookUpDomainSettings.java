@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSettings {
+public class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSettings {
 
     private final Vault vault;
 

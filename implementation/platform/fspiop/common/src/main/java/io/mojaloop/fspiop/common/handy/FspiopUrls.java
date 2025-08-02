@@ -27,32 +27,32 @@ public class FspiopUrls {
 
         public static String getParties(String baseUrl, PartyIdType partyIdType, String partyId) {
 
-            return baseUrl + "/parties/" + partyIdType + "/" + partyId;
+            return baseUrl.endsWith("/") ? "" : "/" + "parties/" + partyIdType + "/" + partyId;
         }
 
         public static String getParties(String baseUrl, PartyIdType partyIdType, String partyId, String subId) {
 
-            return baseUrl + "/parties/" + partyIdType + "/" + partyId + "/" + subId;
+            return baseUrl.endsWith("/") ? "" : "/" + "parties/" + partyIdType + "/" + partyId + "/" + subId;
         }
 
         public static String putParties(String baseUrl, PartyIdType partyIdType, String partyId) {
 
-            return baseUrl + "/parties/" + partyIdType + "/" + partyId;
+            return baseUrl.endsWith("/") ? "" : "/" + "parties/" + partyIdType + "/" + partyId;
         }
 
         public static String putParties(String baseUrl, PartyIdType partyIdType, String partyId, String subId) {
 
-            return baseUrl + "/parties/" + partyIdType + "/" + partyId + "/" + subId;
+            return baseUrl.endsWith("/") ? "" : "/" + "parties/" + partyIdType + "/" + partyId + "/" + subId;
         }
 
         public static String putPartiesError(String baseUrl, PartyIdType partyIdType, String partyId) {
 
-            return baseUrl + "/parties/" + partyIdType + "/" + partyId + "/error";
+            return baseUrl.endsWith("/") ? "" : "/" + "parties/" + partyIdType + "/" + partyId + "/error";
         }
 
         public static String putPartiesError(String baseUrl, PartyIdType partyIdType, String partyId, String subId) {
 
-            return baseUrl + "/parties/" + partyIdType + "/" + partyId + "/" + subId + "/error";
+            return baseUrl.endsWith("/") ? "" : "/" + "parties/" + partyIdType + "/" + partyId + "/" + subId + "/error";
         }
 
     }
@@ -61,22 +61,22 @@ public class FspiopUrls {
 
         public static String getQuotes(String baseUrl, String quoteId) {
 
-            return baseUrl + "/quotes/" + quoteId;
+            return baseUrl.endsWith("/") ? "" : "/" + "quotes/" + quoteId;
         }
 
         public static String postQuotes(String baseUrl) {
 
-            return baseUrl + "/quotes";
+            return baseUrl.endsWith("/") ? "" : "/" + "quotes";
         }
 
         public static String putQuotes(String baseUrl, String quoteId) {
 
-            return baseUrl + "/quotes/" + quoteId;
+            return baseUrl.endsWith("/") ? "" : "/" + "quotes/" + quoteId;
         }
 
         public static String putQuotesError(String baseUrl, String quoteId) {
 
-            return baseUrl + "/quotes/" + quoteId + "/error";
+            return baseUrl.endsWith("/") ? "" : "/" + "quotes/" + quoteId + "/error";
         }
 
     }
@@ -85,27 +85,27 @@ public class FspiopUrls {
 
         public static String getTransfers(String baseUrl, String transferId) {
 
-            return baseUrl + "/transfers/" + transferId;
+            return baseUrl.endsWith("/") ? "" : "/" + "transfers/" + transferId;
         }
 
         public static String patchTransfers(String baseUrl, String transferId) {
 
-            return baseUrl + "/transfers/" + transferId;
+            return baseUrl.endsWith("/") ? "" : "/" + "transfers/" + transferId;
         }
 
         public static String postTransfers(String baseUrl) {
 
-            return baseUrl + "/transfers";
+            return baseUrl.endsWith("/") ? "" : "/" + "transfers";
         }
 
         public static String putTransfers(String baseUrl, String transferId) {
 
-            return baseUrl + "/transfers/" + transferId;
+            return baseUrl.endsWith("/") ? "" : "/" + "transfers/" + transferId;
         }
 
         public static String putTransfersError(String baseUrl, String transferId) {
 
-            return baseUrl + "/transfers/" + transferId + "/error";
+            return baseUrl.endsWith("/") ? "" : "/" + "transfers/" + transferId + "/error";
         }
 
     }

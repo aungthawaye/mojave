@@ -23,26 +23,22 @@ package io.mojaloop.core.lookup.service;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.core.lookup.domain.LookUpDomainSettings;
+import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
 import io.mojaloop.core.participant.utility.client.ParticipantClient;
-import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettings {
+public class LookUpServiceSettings extends LookUpDomainSettings implements LookUpServiceConfiguration.RequiredSettings {
 
     private final Vault vault;
 
     public LookUpServiceSettings(Vault vault) {
 
+        super(vault);
+
         this.vault = vault;
-    }
-
-    @Bean
-    @Override
-    public FspiopCommonConfiguration.Settings fspiopCommonSettings() {
-
-        return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.Settings.class);
     }
 
     @Bean
@@ -66,11 +62,20 @@ class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettin
         return this.vault.get(VaultPaths.SPRING_SECURITY_SETTINGS, SpringSecurityConfigurer.Settings.class);
     }
 
+    @Bean
+    @Override
+    public ParticipantUtilityConfiguration.Settings utilitySettings() {
+
+        return this.vault.get(VaultPaths.PARTICIPANT_UTILITY_SETTINGS, ParticipantUtilityConfiguration.Settings.class);
+    }
+
     public static class VaultPaths {
 
         public static final String FSPIOP_SETTINGS = "micro/core/lookup/service/fspiop/settings";
 
         public static final String TOMCAT_SETTINGS = "micro/core/lookup/service/tomcat/settings";
+
+        public static final String PARTICIPANT_UTILITY_SETTINGS = "micro/core/lookup/service/participant-utility/settings";
 
         public static final String PARTICIPANT_CLIENT_SETTINGS = "micro/core/lookup/service/participant-client/settings";
 

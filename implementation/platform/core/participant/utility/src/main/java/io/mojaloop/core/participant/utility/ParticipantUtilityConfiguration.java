@@ -41,6 +41,10 @@ public class ParticipantUtilityConfiguration {
 
         ParticipantClient.Settings participantClientSettings();
 
+        ParticipantUtilityConfiguration.Settings utilitySettings();
+
     }
+
+    public record Settings(int refreshIntervalMs) { }
 
 }

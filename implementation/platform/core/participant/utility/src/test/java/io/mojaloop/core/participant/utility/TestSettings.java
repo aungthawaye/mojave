@@ -17,10 +17,23 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.participant.store;
+package io.mojaloop.core.participant.utility;
 
-import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
-import org.springframework.context.annotation.Import;
+import io.mojaloop.component.vault.VaultConfigurer;
+import org.springframework.context.annotation.Bean;
 
-@Import({LocalVaultSettings.class, ParticipantUtilityConfiguration.class})
-public class TestConfiguration { }
+public class TestSettings {
+
+    public static final String VAULT_ADDR = "http://localhost:8200";
+
+    public static final String VAULT_TOKEN = "hvs.GJBnvtehSoCzpvF8TFibWbUU";
+
+    public static final String ENGINE_PATH = "Mojaloop";
+
+    @Bean
+    public VaultConfigurer.Settings vaultSettings() {
+
+        return new VaultConfigurer.Settings(VAULT_ADDR, VAULT_TOKEN, ENGINE_PATH);
+    }
+
+}
