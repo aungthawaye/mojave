@@ -56,7 +56,7 @@ public class GetPartiesController {
 
         LOGGER.info("Received GET /parties/{}/{}", partyIdType, partyId);
 
-        var cachedBodyRequest = (CachedServletRequest) request;
+        var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
         var event = new GetPartiesEvent(new GetParties.Input(fspiopHttpRequest, partyIdType, partyId));

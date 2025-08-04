@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.core.lookup</groupId>
+        <groupId>io.mojaloop.platform.core.lookup</groupId>
         <artifactId>lookup-pom</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -23,15 +23,15 @@
             <artifactId>mod-component-vault</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.core.lookup</groupId>
+            <groupId>io.mojaloop.platform.core.lookup</groupId>
             <artifactId>mod-lookup-contract</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.core.participant</groupId>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
             <artifactId>mod-participant-util</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.fspiop</groupId>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
             <artifactId>mod-fspiop-common</artifactId>
         </dependency>
         <dependency>

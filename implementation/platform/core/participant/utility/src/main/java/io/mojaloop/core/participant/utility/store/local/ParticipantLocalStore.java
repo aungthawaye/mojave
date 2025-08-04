@@ -143,7 +143,7 @@ public class ParticipantLocalStore implements ParticipantStore {
             LOGGER.info("Refreshed Oracle data, count: {}", oracles.size());
 
         } catch (RetrofitService.InvocationException e) {
-            LOGGER.error("Error refreshing participant data", e);
+            LOGGER.error("Error refreshing participant data. Will try again later.", e);
         }
     }
 

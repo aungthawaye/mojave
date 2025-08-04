@@ -5,6 +5,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/implementation/platform/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/connector/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/operation/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -13,6 +16,7 @@
         <option value="$PROJECT_DIR$/implementation/platform/common/http-security/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/common/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/component/http/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/connector/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/lookup/infra/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/lookup/routes-fspiop/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/oracle/pom.xml" />

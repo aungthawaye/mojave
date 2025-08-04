@@ -2,20 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <groupId>io.mojaloop</groupId>
+        <artifactId>parent-pom</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>io.mojaloop</groupId>
+    <groupId>io.mojaloop.platform</groupId>
     <artifactId>platform-pom</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>Mojaloop - Java Edition</name>
+    <name>Mojaloop - Platform</name>
     <modules>
-        <module>component</module>
         <module>fspiop</module>
         <module>core</module>
-        <module>operation</module>
     </modules>
     <properties>
         <java.version>21</java.version>
@@ -129,57 +128,57 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.common</groupId>
+                <groupId>io.mojaloop.platform.core.common</groupId>
                 <artifactId>mod-common-datatype</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.lookup</groupId>
+                <groupId>io.mojaloop.platform.core.lookup</groupId>
                 <artifactId>mod-lookup-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.lookup</groupId>
+                <groupId>io.mojaloop.platform.core.lookup</groupId>
                 <artifactId>mod-lookup-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.participant</groupId>
+                <groupId>io.mojaloop.platform.core.participant</groupId>
                 <artifactId>mod-participant-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.participant</groupId>
+                <groupId>io.mojaloop.platform.core.participant</groupId>
                 <artifactId>mod-participant-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.participant</groupId>
+                <groupId>io.mojaloop.platform.core.participant</groupId>
                 <artifactId>mod-participant-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.core.participant</groupId>
+                <groupId>io.mojaloop.platform.core.participant</groupId>
                 <artifactId>mod-participant-util</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.fspiop</groupId>
+                <groupId>io.mojaloop.platform.fspiop</groupId>
                 <artifactId>mod-fspiop-common</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.fspiop</groupId>
+                <groupId>io.mojaloop.platform.fspiop</groupId>
                 <artifactId>mod-fspiop-component</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.fspiop</groupId>
+                <groupId>io.mojaloop.platform.fspiop</groupId>
                 <artifactId>mod-fspiop-invoker</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.fspiop</groupId>
+                <groupId>io.mojaloop.platform.fspiop</groupId>
                 <artifactId>mod-fspiop-spec</artifactId>
                 <version>1.0.0</version>
             </dependency>

@@ -23,22 +23,27 @@ package io.mojaloop.core.lookup.service;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
-import io.mojaloop.core.lookup.domain.LookUpDomainSettings;
 import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
 import io.mojaloop.core.participant.utility.client.ParticipantClient;
+import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-public class LookUpServiceSettings extends LookUpDomainSettings implements LookUpServiceConfiguration.RequiredSettings {
+final class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettings {
 
     private final Vault vault;
 
     public LookUpServiceSettings(Vault vault) {
 
-        super(vault);
-
         this.vault = vault;
+    }
+
+    @Bean
+    @Override
+    public FspiopCommonConfiguration.Settings fspiopCommonSettings() {
+
+        return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.Settings.class);
     }
 
     @Bean

@@ -22,13 +22,14 @@ package io.mojaloop.core.lookup.domain;
 
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
+import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
 import io.mojaloop.core.participant.utility.client.ParticipantClient;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {VaultConfiguration.class})
-public class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSettings {
+final class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSettings {
 
     private final Vault vault;
 
@@ -53,9 +54,18 @@ public class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredS
         return this.vault.get(VaultPaths.PARTICIPANT_CLIENT_SETTING, ParticipantClient.Settings.class);
     }
 
+    @Bean
+    @Override
+    public ParticipantUtilityConfiguration.Settings utilitySettings() {
+
+        return this.vault.get(VaultPaths.PARTICIPANT_UTILITY_SETTINGS, ParticipantUtilityConfiguration.Settings.class);
+    }
+
     public static class VaultPaths {
 
         public static final String FSPIOP_SETTINGS = "micro/core/lookup/domain/fspiop/settings";
+
+        public static final String PARTICIPANT_UTILITY_SETTINGS = "micro/core/lookup/domain/participant-utility/settings";
 
         public static final String PARTICIPANT_CLIENT_SETTING = "micro/core/lookup/domain/participant-client/settings";
 

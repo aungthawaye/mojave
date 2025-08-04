@@ -14,14 +14,16 @@
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-component-web" />
-        <module name="mod-component-jackson" />
         <module name="mod-participant-admin" />
+        <module name="mod-component-jackson" />
         <module name="mod-account-contract" />
         <module name="mod-common-datatype" />
         <module name="mod-participant-intercom" />
+        <module name="mod-connector-adapter" />
+        <module name="mod-connector-service" />
         <module name="mod-fspiop-spec" />
-        <module name="mod-component-misc" />
         <module name="mod-fspiop-common" />
+        <module name="mod-component-misc" />
         <module name="mod-fspiop-component" />
         <module name="mod-component-tomcat" />
         <module name="mod-lookup-service" />
@@ -30,6 +32,7 @@
         <module name="mod-component-retrofit" />
         <module name="mod-participant-domain" />
         <module name="mod-account-admin" />
+        <module name="mod-connector-core" />
         <module name="mod-fspiop-invoker" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
@@ -40,6 +43,7 @@
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
       <module name="mod-component-http" target="21" />
+      <module name="mod-connector-fspclient" target="21" />
       <module name="mod-datatype" target="21" />
       <module name="mod-fspiop" target="21" />
       <module name="mod-fspiop-contract" target="21" />
@@ -60,6 +64,7 @@
       <module name="account-pom" options="-parameters" />
       <module name="common-pom" options="-parameters" />
       <module name="component-pom" options="-parameters" />
+      <module name="connector-pom" options="-parameters" />
       <module name="core-pom" options="-parameters" />
       <module name="fspiop-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
@@ -80,6 +85,10 @@
       <module name="mod-component-tomcat" options="-parameters" />
       <module name="mod-component-vault" options="-parameters" />
       <module name="mod-component-web" options="-parameters" />
+      <module name="mod-connector-adapter" options="-parameters" />
+      <module name="mod-connector-core" options="-parameters" />
+      <module name="mod-connector-fspclient" options="-parameters" />
+      <module name="mod-connector-service" options="-parameters" />
       <module name="mod-datatype" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
       <module name="mod-fspiop-common" options="-parameters" />
@@ -108,6 +117,7 @@
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
       <module name="participant-pom" options="-parameters" />
+      <module name="platform-pom" options="-parameters" />
       <module name="shared-pom" options="-parameters" />
     </option>
   </component>

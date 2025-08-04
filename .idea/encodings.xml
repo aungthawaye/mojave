@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/implementation/component/flyway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/http/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/jackson/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/jpa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/misc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/redis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/retrofit/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/tomcat/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/vault/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/adapter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/connector/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/src/main/generated" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/generated/java" charset="UTF-8" />
@@ -15,20 +43,10 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/flyway/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/http/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/jackson/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/jpa/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/misc/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/redis/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/retrofit/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/proto" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/resources/all" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/tomcat/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/vault/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/component/web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/account/admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/account/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/account/domain/src/main/java" charset="UTF-8" />
@@ -96,18 +114,17 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/generated/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/generated" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/proto" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/resources/all" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/operation/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/src/generated/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/src/main/resources/local" charset="UTF-8" />
     <file url="file:///src/main/java" charset="UTF-8" />
     <file url="file:///src/main/resources" charset="UTF-8" />
   </component>

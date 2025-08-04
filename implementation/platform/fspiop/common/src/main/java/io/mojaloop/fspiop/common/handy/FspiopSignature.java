@@ -20,8 +20,6 @@
 
 package io.mojaloop.fspiop.common.handy;
 
-
-
 import io.mojaloop.component.misc.jwt.Rs256Jwt;
 
 import java.security.PrivateKey;
@@ -37,9 +35,9 @@ public class FspiopSignature {
         return new Header(token.signature(), token.header());
     }
 
-    public static boolean verify(PublicKey publicKey, String header, String payload, String signature) {
+    public static boolean verify(PublicKey publicKey, Rs256Jwt.Token token) {
 
-        return Rs256Jwt.verify(publicKey, header, payload, signature);
+        return Rs256Jwt.verify(publicKey, token);
     }
 
     public record Header(String signature, String protectedHeader) { }

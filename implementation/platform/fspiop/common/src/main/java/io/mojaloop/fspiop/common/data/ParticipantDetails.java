@@ -49,13 +49,13 @@ public record ParticipantDetails(String fspCode,
                                           String base64PrivateKey,
                                           Map<String, String> base64PublicKeys) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        var signingKey = Rs256.privateKeyFromBase64(base64PrivateKey);
+        var signingKey = Rs256.privateKeyFromPem(base64PrivateKey);
 
         var publicKeys = new HashMap<String, PublicKey>();
 
         for (var entry : base64PublicKeys.entrySet()) {
 
-            publicKeys.put(entry.getKey(), Rs256.publicKeyFromBase64(entry.getValue()));
+            publicKeys.put(entry.getKey(), Rs256.publicKeyFromPem(entry.getValue()));
             LOGGER.info("FspCode: [{}], PublicKey: [{}]", entry.getKey(), entry.getValue());
         }
 
