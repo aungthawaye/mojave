@@ -23,32 +23,31 @@ package io.mojaloop.fspiop.invoker.api.transfers;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
-import io.mojaloop.fspiop.spec.core.ErrorInformationResponse;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import org.springframework.stereotype.Service;
 
 @Service
 class GetTransfersHandler implements GetTransfers {
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final TransfersService transfersService;
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public GetTransfersHandler(ParticipantDetails participantDetails,
+    public GetTransfersHandler(ParticipantContext participantContext,
                                TransfersService transfersService,
                                FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantDetails != null;
+        assert participantContext != null;
         assert transfersService != null;
         assert fspiopErrorDecoder != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.transfersService = transfersService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
     }
@@ -58,7 +57,7 @@ class GetTransfersHandler implements GetTransfers {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantDetails.fspCode(),
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(),
                                                                           destination.destinationFspCode());
 
             RetrofitService.invoke(this.transfersService.getTransfers(fspiopHeaders, transferId), this.fspiopErrorDecoder);

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
@@ -42,9 +42,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class FspiopInvokerConfiguration {
 
     @Bean
-    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantDetails participantDetails, ObjectMapper objectMapper) {
+    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantContext participantContext, ObjectMapper objectMapper) {
 
-        return new FspiopSigningInterceptor(participantDetails, objectMapper);
+        return new FspiopSigningInterceptor(participantContext, objectMapper);
     }
 
     @Bean

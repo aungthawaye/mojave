@@ -20,10 +20,10 @@
 package io.mojaloop.fspiop.service.api.parties;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.service.api.PartiesResponseService;
@@ -34,21 +34,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class RespondPartiesHandler implements RespondParties {
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final PartiesResponseService partiesResponseService;
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public RespondPartiesHandler(ParticipantDetails participantDetails,
+    public RespondPartiesHandler(ParticipantContext participantContext,
                                  PartiesResponseService partiesResponseService,
                                  FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantDetails != null;
+        assert participantContext != null;
         assert partiesResponseService != null;
         assert fspiopErrorDecoder != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.partiesResponseService = partiesResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
     }
@@ -58,7 +58,7 @@ public class RespondPartiesHandler implements RespondParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantDetails.fspCode(), destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.partiesResponseService.putParties(url, fspiopHeaders, response), this.fspiopErrorDecoder);
 
@@ -73,7 +73,7 @@ public class RespondPartiesHandler implements RespondParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantDetails.fspCode(), destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.partiesResponseService.putPartiesError(url, fspiopHeaders, error), this.fspiopErrorDecoder);
 

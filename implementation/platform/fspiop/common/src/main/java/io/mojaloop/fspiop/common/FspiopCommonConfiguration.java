@@ -19,7 +19,7 @@
  */
 package io.mojaloop.fspiop.common;
 
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import org.springframework.context.annotation.Bean;
 
 import java.security.NoSuchAlgorithmException;
@@ -29,16 +29,16 @@ import java.util.Map;
 public class FspiopCommonConfiguration {
 
     @Bean
-    public ParticipantDetails participantSettings(FspiopCommonConfiguration.Settings settings)
+    public ParticipantContext participantSettings(FspiopCommonConfiguration.Settings settings)
         throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        return ParticipantDetails.with(settings.fspCode(),
+        return ParticipantContext.with(settings.fspCode(),
                                        settings.fspName(),
                                        settings.ilpSecret(),
                                        settings.signJws(),
                                        settings.verifyJws(),
-                                       settings.base64PrivateKey(),
-                                       settings.base64FspPublicKeys());
+                                       settings.privateKeyPem(),
+                                       settings.fspPublicKeyPem());
     }
 
     public interface RequiredSettings {
@@ -52,7 +52,7 @@ public class FspiopCommonConfiguration {
                            String ilpSecret,
                            boolean signJws,
                            boolean verifyJws,
-                           String base64PrivateKey,
-                           Map<String, String> base64FspPublicKeys) { }
+                           String privateKeyPem,
+                           Map<String, String> fspPublicKeyPem) { }
 
 }

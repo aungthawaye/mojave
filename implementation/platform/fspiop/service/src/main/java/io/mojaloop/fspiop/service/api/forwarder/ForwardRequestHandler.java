@@ -59,31 +59,58 @@ public class ForwardRequestHandler implements ForwardRequest {
     @Override
     public void forward(String baseUrl, FspiopHttpRequest request) throws FspiopException {
 
+        var requireSeparator = !baseUrl.endsWith("/") && !request.uri().startsWith("/");
+
         var method = request.method().toUpperCase();
+        var url = requireSeparator ? baseUrl + "/" + request.uri() : baseUrl + request.uri();
+        LOGGER.debug("Forwarding request to : {} {}", method, url);
 
         try {
             switch (method) {
                 case "GET":
-                    RetrofitService.invoke(this.forwardingService.get(baseUrl + "/" + request.uri(), request.headers(), request.params()),
-                                           this.fspiopErrorDecoder);
+                    RetrofitService.invoke(this.forwardingService.get(url, request.headers(), request.params()), this.fspiopErrorDecoder);
                     break;
                 case "POST":
-                case "PUT":
-                case "PATCH":
-                case "DELETE":
-                    RetrofitService.invoke(this.forwardingService.post(baseUrl + "/" + request.uri(),
+                    RetrofitService.invoke(this.forwardingService.post(url,
                                                                        request.headers(),
                                                                        request.params(),
                                                                        RequestBody.create(request.payload(),
                                                                                           MediaType.get(request.contentType()))),
                                            this.fspiopErrorDecoder);
                     break;
+                case "PUT":
+                    RetrofitService.invoke(this.forwardingService.put(url,
+                                                                      request.headers(),
+                                                                      request.params(),
+                                                                      RequestBody.create(request.payload(),
+                                                                                         MediaType.get(request.contentType()))),
+                                           this.fspiopErrorDecoder);
+                    break;
+                case "PATCH":
+                    RetrofitService.invoke(this.forwardingService.patch(url,
+                                                                        request.headers(),
+                                                                        request.params(),
+                                                                        RequestBody.create(request.payload(),
+                                                                                           MediaType.get(request.contentType()))),
+                                           this.fspiopErrorDecoder);
+                    break;
+                case "DELETE":
+                    RetrofitService.invoke(this.forwardingService.delete(url,
+                                                                         request.headers(),
+                                                                         request.params(),
+                                                                         RequestBody.create(request.payload(),
+                                                                                            MediaType.get(request.contentType()))),
+                                           this.fspiopErrorDecoder);
+                    break;
                 default:
                     throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);
             }
+
+            LOGGER.debug("Done forwarding request to : {} {}", method, url);
+
         } catch (RetrofitService.InvocationException e) {
 
-            LOGGER.error("Error forwarding request to {}: {}", baseUrl, e.getMessage());
+            LOGGER.error("Error forwarding request to : {} {} - error {}", method, baseUrl, e.getMessage());
             throw this.fspiopInvocationErrorHandler.handle(e);
         }
     }

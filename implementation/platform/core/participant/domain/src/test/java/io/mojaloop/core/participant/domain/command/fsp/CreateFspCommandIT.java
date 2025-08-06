@@ -46,8 +46,8 @@ public class CreateFspCommandIT {
 
         assert createFspCommand != null;
 
-        var input = new CreateFspCommand.Input(new FspCode("fsp1"),
-                                               "FSP 1",
+        var input = new CreateFspCommand.Input(new FspCode("fsp2"),
+                                               "FSP 2",
                                                new Currency[]{Currency.USD, Currency.MMK, Currency.MYR},
                                                new CreateFspCommand.Input.Endpoint[]{
                                                    new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "https://www.fspexample.com"),

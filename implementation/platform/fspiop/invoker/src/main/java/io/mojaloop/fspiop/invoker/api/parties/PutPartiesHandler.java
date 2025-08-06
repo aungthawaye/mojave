@@ -21,15 +21,14 @@
 package io.mojaloop.fspiop.invoker.api.parties;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.invoker.api.PartiesService;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
-import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
+import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import io.mojaloop.fspiop.spec.core.ErrorInformationResponse;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.springframework.stereotype.Service;
@@ -37,23 +36,28 @@ import org.springframework.stereotype.Service;
 @Service
 class PutPartiesHandler implements PutParties {
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final PartiesService partiesService;
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PutPartiesHandler(ParticipantDetails participantDetails,
-                             PartiesService partiesService,
-                             FspiopErrorDecoder fspiopErrorDecoder) {
+    private final FspiopInvocationErrorHandler fspiopInvocationErrorHandler;
 
-        assert participantDetails != null;
+    public PutPartiesHandler(ParticipantContext participantContext,
+                             PartiesService partiesService,
+                             FspiopErrorDecoder fspiopErrorDecoder,
+                             FspiopInvocationErrorHandler fspiopInvocationErrorHandler) {
+
+        assert participantContext != null;
         assert partiesService != null;
         assert fspiopErrorDecoder != null;
+        assert fspiopInvocationErrorHandler != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.partiesService = partiesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
+        this.fspiopInvocationErrorHandler = fspiopInvocationErrorHandler;
     }
 
     @Override
@@ -64,15 +68,14 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantDetails.fspCode(),
-                                                                       destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.partiesService.putParties(fspiopHeaders, partyIdType, partyId, partiesTypeIDPutResponse),
                                    this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationErrorHandler.handle(e);
         }
     }
 
@@ -85,15 +88,14 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantDetails.fspCode(),
-                                                                       destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.partiesService.putParties(fspiopHeaders, partyIdType, partyId, subId, partiesTypeIDPutResponse),
                                    this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationErrorHandler.handle(e);
         }
     }
 
@@ -105,15 +107,14 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantDetails.fspCode(),
-                                                                       destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.partiesService.putPartiesError(fspiopHeaders, partyIdType, partyId, errorInformationObject),
                                    this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationErrorHandler.handle(e);
         }
     }
 
@@ -126,15 +127,14 @@ class PutPartiesHandler implements PutParties {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantDetails.fspCode(),
-                                                                       destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.partiesService.putPartiesError(fspiopHeaders, partyIdType, partyId, subId, errorInformationObject),
                                    this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationErrorHandler.handle(e);
         }
     }
 

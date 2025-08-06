@@ -28,11 +28,11 @@ import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
-import io.mojaloop.fspiop.common.handy.FspiopSignature;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.handy.FspiopSignature;
 import io.mojaloop.fspiop.common.type.Source;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -47,22 +47,22 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopServiceGatekeeper.class);
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final ParticipantVerifier participantVerifier;
 
     private final ObjectMapper objectMapper;
 
     public FspiopServiceGatekeeper(SpringSecurityConfigurer.Settings settings,
-                                   ParticipantDetails participantDetails,
+                                   ParticipantContext participantContext,
                                    ParticipantVerifier participantVerifier,
                                    ObjectMapper objectMapper) {
 
-        assert participantDetails != null;
+        assert participantContext != null;
         assert participantVerifier != null;
         assert objectMapper != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.participantVerifier = participantVerifier;
         this.objectMapper = objectMapper;
     }
@@ -101,7 +101,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         var source = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
 
-        if (!this.participantDetails.verifyJws()) {
+        if (!this.participantContext.verifyJws()) {
 
             return new UsernamePasswordAuthenticationToken(source,
                                                            new FspiopSignature.Header(null, null),
@@ -122,7 +122,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
         var signature = this.objectMapper.readValue(signatureHeader, FspiopSignature.Header.class);
         LOGGER.debug("FSPIOP_SIGNATURE : [{}]", signature);
 
-        var publicKey = this.participantDetails.publicKeys().get(source);
+        var publicKey = this.participantContext.publicKeys().get(source);
 
         if (publicKey == null) {
 
@@ -172,7 +172,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
             LOGGER.error("The 'fspiop-source' header is missing.");
             throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST,
                                                  new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT,
-                                                                     "The 'fspiop-source' header is missing."));
+                                                                     "The 'fspiop-source' header or its value is missing."));
         }
 
         if (!this.participantVerifier.fspExists(source)) {

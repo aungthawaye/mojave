@@ -66,21 +66,9 @@ public class GetPartiesHandler implements GetParties {
             var sourceFsp = this.participantStore.getFspData(sourceFspCode);
             LOGGER.info("Found source FSP: [{}]", sourceFsp);
 
-            FspData destinationFsp = null;
-
-            if (input.fspiopHttpRequest().destination().isEmpty()) {
-
-                LOGGER.info("Destination FSP is empty. Use Oracle to find it.");
-
-            } else {
-
-                LOGGER.info("Destination FSP is not empty. Use it.");
-                var destinationFspCode = new FspCode(input.fspiopHttpRequest().destination().destinationFspCode());
-                destinationFsp = this.participantStore.getFspData(destinationFspCode);
-            }
+            var destinationFsp = this.findDestinationFsp(input);
 
             if (destinationFsp == null) {
-
                 LOGGER.info("Destination FSP is not found in Hub.");
                 throw new FspiopException(FspiopErrors.PAYEE_FSP_ID_NOT_FOUND);
             }
@@ -88,10 +76,10 @@ public class GetPartiesHandler implements GetParties {
             LOGGER.info("Found destination FSP: [{}]", destinationFsp);
 
             var baseUrl = destinationFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-
-            LOGGER.info("Forwarding request to destination FSP: [{}]", destinationFsp);
+            LOGGER.info("Forwarding request to destination FSP (Url): [{}]", destinationFsp);
 
             this.forwardRequest.forward(baseUrl, input.fspiopHttpRequest());
+            LOGGER.info("Done forwarding request to destination FSP (Url): [{}]", destinationFsp);
 
         } catch (FspiopException e) {
 
@@ -101,6 +89,24 @@ public class GetPartiesHandler implements GetParties {
         }
 
         return new Output();
+    }
+
+    private FspData findDestinationFsp(Input input) {
+
+        if (input.fspiopHttpRequest().destination().isEmpty()) {
+
+            LOGGER.info("Destination FSP is empty. Use Oracle to find it.");
+            var oracle = this.participantStore.getOracleData(input.partyIdType());
+
+            return null;
+
+        } else {
+
+            LOGGER.info("Destination FSP is not empty. Use it.");
+            var destinationFspCode = new FspCode(input.fspiopHttpRequest().destination().destinationFspCode());
+            return this.participantStore.getFspData(destinationFspCode);
+        }
+
     }
 
 }

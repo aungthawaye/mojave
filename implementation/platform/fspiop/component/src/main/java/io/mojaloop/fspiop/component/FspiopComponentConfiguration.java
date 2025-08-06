@@ -23,7 +23,7 @@ package io.mojaloop.fspiop.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.jackson.ComponentJacksonConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
@@ -34,9 +34,9 @@ import org.springframework.context.annotation.Import;
 public class FspiopComponentConfiguration {
 
     @Bean
-    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantDetails participantDetails, ObjectMapper objectMapper) {
+    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantContext participantContext, ObjectMapper objectMapper) {
 
-        return new FspiopSigningInterceptor(participantDetails, objectMapper);
+        return new FspiopSigningInterceptor(participantContext, objectMapper);
     }
 
     @Bean

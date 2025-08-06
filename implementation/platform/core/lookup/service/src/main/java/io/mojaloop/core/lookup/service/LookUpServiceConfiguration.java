@@ -25,7 +25,6 @@ import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
 import io.mojaloop.core.participant.utility.store.ParticipantStore;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import io.mojaloop.fspiop.service.component.FspiopSpringSecurityConfiguration;
 import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -43,8 +42,7 @@ import java.util.concurrent.Executors;
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
 @Import(value = {
     LookUpDomainConfiguration.class, ComponentMiscConfiguration.class, FspiopServiceConfiguration.class})
-public class LookUpServiceConfiguration
-    implements FspiopSpringSecurityConfiguration.RequiredBeans, ComponentMiscConfiguration.RequiredBeans {
+public class LookUpServiceConfiguration implements FspiopServiceConfiguration.RequiredBeans, ComponentMiscConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 

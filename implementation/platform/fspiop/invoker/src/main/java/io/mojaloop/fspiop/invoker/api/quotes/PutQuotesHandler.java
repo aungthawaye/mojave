@@ -23,34 +23,33 @@ package io.mojaloop.fspiop.invoker.api.quotes;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import io.mojaloop.fspiop.spec.core.ErrorInformationResponse;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 class PutQuotesHandler implements PutQuotes {
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final QuotesService quotesService;
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PutQuotesHandler(ParticipantDetails participantDetails,
+    public PutQuotesHandler(ParticipantContext participantContext,
                             QuotesService quotesService,
                             FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantDetails != null;
+        assert participantContext != null;
         assert quotesService != null;
         assert fspiopErrorDecoder != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.quotesService = quotesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
     }
@@ -60,7 +59,7 @@ class PutQuotesHandler implements PutQuotes {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantDetails.fspCode(),
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(),
                                                                       destination.destinationFspCode());
 
             RetrofitService.invoke(this.quotesService.putQuotes(fspiopHeaders, quoteId, quotesIDPutResponse), this.fspiopErrorDecoder);
@@ -77,7 +76,7 @@ class PutQuotesHandler implements PutQuotes {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantDetails.fspCode(),
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(),
                                                                       destination.destinationFspCode());
 
             RetrofitService.invoke(this.quotesService.putQuotesError(fspiopHeaders, quoteId, errorInformationObject), this.fspiopErrorDecoder);

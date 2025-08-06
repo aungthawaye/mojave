@@ -21,9 +21,9 @@
 package io.mojaloop.fspiop.component.retrofit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
-import io.mojaloop.fspiop.common.handy.FspiopSignature;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.handy.FspiopSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,23 +33,23 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(FspiopSigningInterceptor.class);
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final ObjectMapper objectMapper;
 
-    public FspiopSigningInterceptor(ParticipantDetails participantDetails, ObjectMapper objectMapper) {
+    public FspiopSigningInterceptor(ParticipantContext participantContext, ObjectMapper objectMapper) {
 
-        assert participantDetails != null;
+        assert participantContext != null;
         assert objectMapper != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public okhttp3.Response intercept(Chain chain) throws java.io.IOException {
 
-        if (!this.participantDetails.signJws()) {
+        if (!this.participantContext.signJws()) {
             return chain.proceed(chain.request());
         }
 
@@ -71,7 +71,7 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
             protectedHeaders.put(name, existingHeaders.get(name));
         }
 
-        var signature = this.objectMapper.writeValueAsString(FspiopSignature.sign(this.participantDetails.signingKey(),
+        var signature = this.objectMapper.writeValueAsString(FspiopSignature.sign(this.participantContext.signingKey(),
                                                                                   protectedHeaders,
                                                                                   body));
         LOGGER.debug("Fspiop signature: [{}]", signature);

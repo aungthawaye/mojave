@@ -21,10 +21,10 @@
 package io.mojaloop.fspiop.invoker.api.quotes;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.common.data.ParticipantDetails;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
@@ -34,19 +34,19 @@ import org.springframework.stereotype.Service;
 @Service
 class PostQuotesHandler implements PostQuotes {
 
-    private final ParticipantDetails participantDetails;
+    private final ParticipantContext participantContext;
 
     private final QuotesService quotesService;
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PostQuotesHandler(ParticipantDetails participantDetails, QuotesService quotesService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public PostQuotesHandler(ParticipantContext participantContext, QuotesService quotesService, FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantDetails != null;
+        assert participantContext != null;
         assert quotesService != null;
         assert fspiopErrorDecoder != null;
 
-        this.participantDetails = participantDetails;
+        this.participantContext = participantContext;
         this.quotesService = quotesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
     }
@@ -56,7 +56,7 @@ class PostQuotesHandler implements PostQuotes {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forRequest(this.participantDetails.fspCode(), destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forRequest(this.participantContext.fspCode(), destination.destinationFspCode());
 
             RetrofitService.invoke(this.quotesService.postQuotes(fspiopHeaders, quotesPostRequest), this.fspiopErrorDecoder);
 

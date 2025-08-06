@@ -22,7 +22,7 @@ package io.mojaloop.fspiop.client.api.quotes;
 
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.client.api.TestSettings;
-import io.mojaloop.fspiop.common.handy.FspiopDates;
+import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.invoker.api.quotes.PostQuotes;

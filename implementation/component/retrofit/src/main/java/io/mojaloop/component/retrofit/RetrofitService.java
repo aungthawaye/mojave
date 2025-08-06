@@ -17,7 +17,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.PATCH;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
@@ -106,27 +111,32 @@ public class RetrofitService {
 
     public interface ForwardingService {
 
-        <RES> Call<RES> delete(@Url String url,
-                               @HeaderMap Map<String, String> headers,
-                               @QueryMap Map<String, String> params,
-                               @Body RequestBody body);
+        @DELETE
+        Call<Void> delete(@Url String url,
+                          @HeaderMap Map<String, String> headers,
+                          @QueryMap Map<String, String> params,
+                          @Body RequestBody body);
 
-        <RES> Call<RES> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
+        @GET
+        Call<Void> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
 
-        <RES> Call<RES> patch(@Url String url,
-                              @HeaderMap Map<String, String> headers,
-                              @QueryMap Map<String, String> params,
-                              @Body RequestBody body);
+        @PATCH
+        Call<Void> patch(@Url String url,
+                         @HeaderMap Map<String, String> headers,
+                         @QueryMap Map<String, String> params,
+                         @Body RequestBody body);
 
-        <RES> Call<RES> post(@Url String url,
-                             @HeaderMap Map<String, String> headers,
-                             @QueryMap Map<String, String> params,
-                             @Body RequestBody body);
+        @POST
+        Call<Void> post(@Url String url,
+                        @HeaderMap Map<String, String> headers,
+                        @QueryMap Map<String, String> params,
+                        @Body RequestBody body);
 
-        <RES> Call<RES> put(@Url String url,
-                            @HeaderMap Map<String, String> headers,
-                            @QueryMap Map<String, String> params,
-                            @Body RequestBody body);
+        @PUT
+        Call<Void> put(@Url String url,
+                       @HeaderMap Map<String, String> headers,
+                       @QueryMap Map<String, String> params,
+                       @Body RequestBody body);
 
     }
 

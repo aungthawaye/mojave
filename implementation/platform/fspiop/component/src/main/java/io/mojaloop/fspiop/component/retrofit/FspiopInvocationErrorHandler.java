@@ -1,10 +1,10 @@
 package io.mojaloop.fspiop.component.retrofit;
 
 import io.mojaloop.component.retrofit.RetrofitService;
+import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -17,7 +17,8 @@ public class FspiopInvocationErrorHandler {
         var cause = exception.getCause();
 
         if (cause == null) {
-            // If the cause is null, there must be the error response.
+
+            // If the cause is null, there must be the response from server.
             var decodedErrorResponse = exception.getDecodedErrorResponse();
 
             if (decodedErrorResponse instanceof ErrorInformationObject errorInformationObject) {
@@ -27,37 +28,30 @@ public class FspiopInvocationErrorHandler {
 
                 if (errorDefinition != null) {
 
-                    return new FspiopException(errorDefinition);
+                    // We found the error definition. But we will use the error description returned by the server.
+                    return new FspiopException(new ErrorDefinition(errorDefinition.code(),
+                                                                   errorDefinition.name(),
+                                                                   errorInformation.getErrorDescription()));
                 }
 
+                // We cannot find the error definition. We have no idea what happened at the server.
                 return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, errorInformation.getErrorDescription());
 
             }
 
-            // If there is no error response, there must be an error response status code.
-            switch (exception.getResponseStatusCode()) {
-                case HttpServletResponse.SC_BAD_REQUEST:
-                    return new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT);
-                case HttpServletResponse.SC_NOT_FOUND:
-                    return new FspiopException(FspiopErrors.COMMUNICATION_ERROR);
-                case HttpServletResponse.SC_GATEWAY_TIMEOUT:
-                case HttpServletResponse.SC_SERVICE_UNAVAILABLE:
-                case HttpServletResponse.SC_BAD_GATEWAY:
-                    return new FspiopException(FspiopErrors.SERVER_BUSY);
-                default:
-                    return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);
-
-            }
+            // We cannot parse the error body into ErrorInformationObject.
+            // We don't know what had happened.
+            return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);
 
         }
 
         // Something went wrong while processing. Then the exception will have the cause.
         if (cause instanceof ConnectException || cause instanceof UnknownHostException || cause instanceof SocketTimeoutException) {
 
-            return new FspiopException(FspiopErrors.COMMUNICATION_ERROR);
+            return new FspiopException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR);
         }
 
-        return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, cause.getMessage());
+        return new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, cause.getMessage());
     }
 
 }

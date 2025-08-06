@@ -27,10 +27,5 @@
             <groupId>io.mojaloop.platform.fspiop</groupId>
             <artifactId>mod-fspiop-common</artifactId>
         </dependency>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 </project>

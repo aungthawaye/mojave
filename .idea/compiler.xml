@@ -32,7 +32,6 @@
         <module name="mod-component-retrofit" />
         <module name="mod-participant-domain" />
         <module name="mod-account-admin" />
-        <module name="mod-connector-core" />
         <module name="mod-fspiop-invoker" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
@@ -43,6 +42,7 @@
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
       <module name="mod-component-http" target="21" />
+      <module name="mod-connector-core" target="21" />
       <module name="mod-connector-fspclient" target="21" />
       <module name="mod-datatype" target="21" />
       <module name="mod-fspiop" target="21" />
