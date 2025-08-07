@@ -28,7 +28,6 @@ import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.PATCH;
 import retrofit2.http.PUT;
-import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 import java.util.Map;

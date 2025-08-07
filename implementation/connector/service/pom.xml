@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mojaloop.connector</groupId>
@@ -17,16 +16,24 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-invoker</artifactId>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-tomcat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-vault</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.connector</groupId>
             <artifactId>mod-connector-adapter</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-web</artifactId>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-invoker</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,14 +48,6 @@
                     <artifactId>spring-boot-starter-log4j2</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-tomcat</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-vault</artifactId>
         </dependency>
     </dependencies>
 </project>

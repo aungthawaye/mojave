@@ -51,6 +51,8 @@ public class FspiopComponentConfiguration {
         return new FspiopInvocationErrorHandler();
     }
 
+    public interface RequiredBeans { }
+
     public interface RequiredSettings extends FspiopCommonConfiguration.RequiredSettings, ComponentJacksonConfiguration.RequiredSettings { }
 
 }

@@ -83,7 +83,12 @@ public class RedissonPubSubClientConfigurer {
         return new RedissonPubSubClient(Redisson.create(config));
     }
 
-    public record Settings(String[] hosts, boolean cluster, String codec, int executorCount, int subscriptionPoolSize,
-                           int subscriptionMinimumIdleSize, int subscriptionPerConnection) { }
+    public record Settings(String[] hosts,
+                           boolean cluster,
+                           String codec,
+                           int executorCount,
+                           int subscriptionPoolSize,
+                           int subscriptionMinimumIdleSize,
+                           int subscriptionPerConnection) { }
 
 }

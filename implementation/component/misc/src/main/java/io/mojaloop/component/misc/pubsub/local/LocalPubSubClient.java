@@ -1,6 +1,7 @@
 package io.mojaloop.component.misc.pubsub.local;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import reactor.core.Disposable;
 
 public class LocalPubSubClient implements PubSubClient {
 
@@ -14,7 +15,7 @@ public class LocalPubSubClient implements PubSubClient {
     }
 
     @Override
-    public void close(String channel) {
+    public void closeChannel(String channel) {
 
         this.pubSub.closeChannel(channel);
     }
@@ -26,9 +27,17 @@ public class LocalPubSubClient implements PubSubClient {
     }
 
     @Override
-    public void subscribe(String channel, io.mojaloop.component.misc.pubsub.PubSubClient.MessageHandler handler) {
+    public Subscription subscribe(String channel, PubSubClient.MessageHandler handler, int timeout) {
 
-        this.pubSub.subscribe(channel, message -> handler.handle(channel, message));
+        var disposable = this.pubSub.subscribe(channel, message -> handler.handle(channel, message), timeout);
+
+        return new Subscription(channel, disposable);
+    }
+
+    @Override
+    public void unsubscribe(Subscription subscription) {
+
+        this.pubSub.unsubscribe(subscription.channel(), (Disposable) subscription.ref());
     }
 
 }

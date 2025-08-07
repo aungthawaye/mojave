@@ -14,52 +14,61 @@ import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 
-@SpringBootApplication
-class ConnectorServiceApplication implements ConnectorServiceConfiguration.RequiredBeans {
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@Import(value = {
+    ConnectorServiceConfiguration.class, ConnectorServiceApplication.VaultSettings.class, ConnectorServiceSettings.class,
+    ConnectorServiceApplication.RequiredDependencies.class})
+class ConnectorServiceApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(new Class[]{ConnectorServiceConfiguration.class, VaultSettings.class, ConnectorServiceSettings.class}, args);
+        SpringApplication.run(ConnectorServiceApplication.class, args);
     }
 
-    @Bean
-    @Override
-    public FspAdapter fspAdapter() {
+    public static class RequiredDependencies implements ConnectorServiceConfiguration.RequiredBeans {
 
-        return new FspAdapter() {
+        @Bean
+        @Override
+        public FspAdapter fspAdapter() {
 
-            @Override
-            public PartiesTypeIDPutResponse getParties(PartyIdType partyIdType, String partyId, String subId) {
+            return new FspAdapter() {
 
-                return null;
-            }
+                @Override
+                public PartiesTypeIDPutResponse getParties(PartyIdType partyIdType, String partyId, String subId) {
 
-            @Override
-            public TransfersIDPutResponse initiateTransfer(TransfersPostRequest request) {
+                    return null;
+                }
 
-                return null;
-            }
+                @Override
+                public TransfersIDPutResponse initiateTransfer(TransfersPostRequest request) {
 
-            @Override
-            public void notifyTransfer(TransfersIDPatchResponse response) {
+                    return null;
+                }
 
-            }
+                @Override
+                public void notifyTransfer(TransfersIDPatchResponse response) {
 
-            @Override
-            public QuotesIDPutResponse quote(QuotesPostRequest request) {
+                }
 
-                return null;
-            }
-        };
-    }
+                @Override
+                public QuotesIDPutResponse quote(QuotesPostRequest request) {
 
-    @Bean
-    @Override
-    public PubSubClient pubSubClient() {
+                    return null;
+                }
+            };
+        }
 
-        return new LocalPubSubClient(new LocalPubSub());
+        @Bean
+        @Override
+        public PubSubClient pubSubClient() {
+
+            return new LocalPubSubClient(new LocalPubSub());
+        }
+
     }
 
     public static class VaultSettings {

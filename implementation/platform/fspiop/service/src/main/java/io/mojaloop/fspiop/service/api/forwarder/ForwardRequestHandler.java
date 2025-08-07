@@ -23,6 +23,7 @@ package io.mojaloop.fspiop.service.api.forwarder;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
@@ -59,10 +60,9 @@ public class ForwardRequestHandler implements ForwardRequest {
     @Override
     public void forward(String baseUrl, FspiopHttpRequest request) throws FspiopException {
 
-        var requireSeparator = !baseUrl.endsWith("/") && !request.uri().startsWith("/");
-
         var method = request.method().toUpperCase();
-        var url = requireSeparator ? baseUrl + "/" + request.uri() : baseUrl + request.uri();
+        var url = FspiopUrls.newUrl(baseUrl, request.uri());
+
         LOGGER.debug("Forwarding request to : {} {}", method, url);
 
         try {

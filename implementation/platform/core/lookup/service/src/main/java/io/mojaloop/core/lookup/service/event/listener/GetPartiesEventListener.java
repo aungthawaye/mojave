@@ -1,6 +1,6 @@
 package io.mojaloop.core.lookup.service.event.listener;
 
-import io.mojaloop.core.lookup.contract.command.GetParties;
+import io.mojaloop.core.lookup.contract.command.GetPartiesCommand;
 import io.mojaloop.core.lookup.service.event.GetPartiesEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,17 +13,17 @@ public class GetPartiesEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetPartiesEventListener.class);
 
-    private final GetParties getParties;
+    private final GetPartiesCommand getParties;
 
-    public GetPartiesEventListener(GetParties getParties) {
+    public GetPartiesEventListener(GetPartiesCommand getParties) {
 
         assert getParties != null;
 
         this.getParties = getParties;
     }
 
-    @EventListener
     @Async
+    @EventListener
     public void onGetPartiesEvent(GetPartiesEvent event) {
 
         LOGGER.info("Start handling GetPartiesEvent : [{}]", event);

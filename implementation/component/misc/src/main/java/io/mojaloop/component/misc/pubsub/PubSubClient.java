@@ -2,11 +2,13 @@ package io.mojaloop.component.misc.pubsub;
 
 public interface PubSubClient {
 
-    void close(String channel);
+    void closeChannel(String channel);
 
     void publish(String channel, Object message);
 
-    void subscribe(String channel, MessageHandler handler);
+    Subscription subscribe(String channel, MessageHandler handler, int timeout);
+
+    void unsubscribe(Subscription subscription);
 
     interface MessageHandler {
 
@@ -15,5 +17,7 @@ public interface PubSubClient {
         Class<?> messageType();
 
     }
+
+    record Subscription(String channel, Object ref) { }
 
 }

@@ -28,12 +28,12 @@ import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
-import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.participant.ParticipantContext;
+import io.mojaloop.fspiop.common.type.Source;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.handy.FspiopSignature;
-import io.mojaloop.fspiop.common.type.Source;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -167,6 +167,9 @@ public class FspiopServiceGatekeeper implements Authenticator {
         var destination = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
         LOGGER.debug("FSPIOP_DESTINATION : [{}]", destination);
 
+        var uri = cachedServletRequest.getRequestURI();
+        LOGGER.debug("URI : [{}]", uri);
+
         if (source == null || source.isBlank()) {
 
             LOGGER.error("The 'fspiop-source' header is missing.");
@@ -182,6 +185,15 @@ public class FspiopServiceGatekeeper implements Authenticator {
                                                  new FspiopException(FspiopErrors.PAYER_FSP_ID_NOT_FOUND));
         }
 
+        if ((destination == null || destination.isBlank()) && !uri.startsWith("/parties/")) {
+
+            LOGGER.error("The 'fspiop-destination' header is missing.");
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST,
+                                                 new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT,
+                                                                     "The 'fspiop-destination' header or its value is missing. " +
+                                                                         "It is optional only for the /parties/ endpoint."));
+        }
+
         if (destination != null && !destination.isBlank() && !this.participantVerifier.fspExists(destination)) {
 
             LOGGER.error("The Destination FSP ({}) does not exist.", destination);
@@ -191,11 +203,11 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         if (source.equals(destination)) {
 
-            LOGGER.error("The Source FSP ({}) and the destination FSP ({}) are the same.", source, destination);
+            LOGGER.error("The Source FSP ({}) and the destination FSP ({}) must not be the same.", source, destination);
             throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE,
                                                  new FspiopException(FspiopErrors.DESTINATION_FSP_ERROR,
                                                                      "Source FSP (" + source + ") and Destination FSP (" + destination +
-                                                                         ") are the same."));
+                                                                         ") must not be the same."));
         }
     }
 

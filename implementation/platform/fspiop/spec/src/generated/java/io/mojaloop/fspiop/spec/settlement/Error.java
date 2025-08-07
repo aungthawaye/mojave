@@ -1,89 +1,93 @@
 package io.mojaloop.fspiop.spec.settlement;
 
-import io.mojaloop.fspiop.spec.settlement.ErrorErrorInformation;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("Error")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-08-04T08:01:35.765568+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
-public class Error   {
-  private ErrorErrorInformation errorInformation;
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              date = "2025-08-04T08:01:35.765568+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+public class Error {
 
-  public Error() {
-  }
+    private ErrorErrorInformation errorInformation;
 
-  @JsonCreator
-  public Error(
-    @JsonProperty(required = true, value = "errorInformation") ErrorErrorInformation errorInformation
-  ) {
-    this.errorInformation = errorInformation;
-  }
+    public Error() {
 
-  /**
-   **/
-  public Error errorInformation(ErrorErrorInformation errorInformation) {
-    this.errorInformation = errorInformation;
-    return this;
-  }
-
-  
-  @JsonProperty(required = true, value = "errorInformation")
-  @NotNull @Valid public ErrorErrorInformation getErrorInformation() {
-    return errorInformation;
-  }
-
-  @JsonProperty(required = true, value = "errorInformation")
-  public void setErrorInformation(ErrorErrorInformation errorInformation) {
-    this.errorInformation = errorInformation;
-  }
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    @JsonCreator
+    public Error(@JsonProperty(required = true, value = "errorInformation") ErrorErrorInformation errorInformation) {
+
+        this.errorInformation = errorInformation;
     }
-    Error error = (Error) o;
-    return Objects.equals(this.errorInformation, error.errorInformation);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(errorInformation);
-  }
+    @Override
+    public boolean equals(Object o) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Error {\n");
-    
-    sb.append("    errorInformation: ").append(toIndentedString(errorInformation)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Error error = (Error) o;
+        return Objects.equals(this.errorInformation, error.errorInformation);
     }
-    return o.toString().replace("\n", "\n    ");
-  }
 
+    /**
+     **/
+    public Error errorInformation(ErrorErrorInformation errorInformation) {
+
+        this.errorInformation = errorInformation;
+        return this;
+    }
+
+    @JsonProperty(required = true, value = "errorInformation")
+    @NotNull
+    @Valid
+    public ErrorErrorInformation getErrorInformation() {
+
+        return errorInformation;
+    }
+
+    @JsonProperty(required = true, value = "errorInformation")
+    public void setErrorInformation(ErrorErrorInformation errorInformation) {
+
+        this.errorInformation = errorInformation;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(errorInformation);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("class Error {\n");
+
+        sb.append("    errorInformation: ").append(toIndentedString(errorInformation)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(Object o) {
+
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 
 }
 

@@ -1,6 +1,6 @@
 package io.mojaloop.connector.service.inbound.event.listener;
 
-import io.mojaloop.connector.service.inbound.command.parties.HandlePartiesRequest;
+import io.mojaloop.connector.service.inbound.command.parties.HandlePartiesRequestCommand;
 import io.mojaloop.connector.service.inbound.event.GetPartiesEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +13,9 @@ public class GetPartiesEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetPartiesEventListener.class.getName());
 
-    private final HandlePartiesRequest handlePartiesRequest;
+    private final HandlePartiesRequestCommand handlePartiesRequest;
 
-    public GetPartiesEventListener(HandlePartiesRequest handlePartiesRequest) {
+    public GetPartiesEventListener(HandlePartiesRequestCommand handlePartiesRequest) {
 
         assert null != handlePartiesRequest;
 
@@ -34,10 +34,10 @@ public class GetPartiesEventListener {
 
         try {
 
-            this.handlePartiesRequest.execute(new HandlePartiesRequest.Input(payload.source(),
-                                                                             payload.partyIdType(),
-                                                                             payload.partyId(),
-                                                                             payload.subId()));
+            this.handlePartiesRequest.execute(new HandlePartiesRequestCommand.Input(payload.source(),
+                                                                                    payload.partyIdType(),
+                                                                                    payload.partyId(),
+                                                                                    payload.subId()));
 
             LOGGER.info("Done handling GetPartiesEvent : {}", event);
 

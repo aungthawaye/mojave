@@ -1,10 +1,13 @@
 #!/usr/bin/env groovy
 
+//@@formatter:off
+
 import groovy.xml.*
 import groovy.xml.XmlNodePrinter
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
+
 
 // Usage: groovy auto-dep.groovy /path/to/project/root
 File baseDir = args.length ? new File(args[0]) : new File('.')

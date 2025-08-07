@@ -21,13 +21,13 @@
 package io.mojaloop.fspiop.invoker.api.transfers;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.invoker.api.TransfersService;
-import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
+import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
+import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.invoker.api.TransfersService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import org.springframework.stereotype.Service;
@@ -63,7 +63,8 @@ class PutTransfersHandler implements PutTransfers {
             var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(),
                                                                          destination.destinationFspCode());
 
-            RetrofitService.invoke(this.transfersService.putTransfers(fspiopHeaders, transferId, transfersIDPutResponse), this.fspiopErrorDecoder);
+            RetrofitService.invoke(this.transfersService.putTransfers(fspiopHeaders, transferId, transfersIDPutResponse),
+                                   this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

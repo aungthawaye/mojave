@@ -20,8 +20,6 @@
 
 package io.mojaloop.core.participant.contract.data;
 
-
-
 import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
 import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;

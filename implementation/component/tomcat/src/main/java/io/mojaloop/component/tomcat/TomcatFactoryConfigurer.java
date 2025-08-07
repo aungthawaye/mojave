@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.component.tomcat;
 
-import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
+import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -84,7 +85,7 @@ public class TomcatFactoryConfigurer {
                     return super.getTomcatWebServer(tomcat);
 
                 } catch (Exception e) {
-                    throw new RuntimeException("Failed to configure dual web server", e);
+                    throw new RuntimeException("Failed to configure multi-host web server", e);
                 }
             }
         };
@@ -101,15 +102,6 @@ public class TomcatFactoryConfigurer {
 
             var hostName = host.getName();
 
-            // Create application context with the parent context
-            AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
-            appContext.setParent(parentContext);
-            appContext.register(configurations);
-            appContext.refresh();
-
-            // Create dispatcher servlet
-            var dispatcherServlet = new DispatcherServlet(appContext);
-
             // Create and configure Tomcat context
             File contextDir = new File(baseDir, hostName);
 
@@ -118,13 +110,38 @@ public class TomcatFactoryConfigurer {
                 LOGGER.info("Created context dir {} : {}", contextDir.getAbsolutePath(), created);
             }
 
-            Context context = tomcat.addContext(host, contextPath, contextDir.getAbsolutePath());
+            var context = new StandardContext();
+            context.setPath(contextPath);
+            context.setDocBase(contextDir.getAbsolutePath());
+            context.addLifecycleListener(new Tomcat.FixContextListener());
             context.setReloadable(false);
+
+            // Create application context with the parent context
+            AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
+            appContext.setParent(parentContext);
+            appContext.register(configurations);
+
+            // Create dispatcher servlet
+            var dispatcherServlet = new DispatcherServlet(appContext);
 
             // Add servlet to context
             var servletName = hostName + "-dispatcher";
-            Tomcat.addServlet(context, servletName, dispatcherServlet).setLoadOnStartup(1);
+            var wrapper = context.createWrapper();
+
+            wrapper.setName(servletName);
+            wrapper.setServlet(dispatcherServlet);
+            wrapper.setLoadOnStartup(1);
+
+            context.addChild(wrapper);
             context.addServletMappingDecoded("/*", servletName);
+
+            dispatcherServlet.setApplicationContext(appContext);
+
+//            // Set the ServletContext in the application context before refreshing
+//            appContext.setServletContext(context.getServletContext());
+//
+            // Now refresh the application context after ServletContext is set
+            //           appContext.refresh();
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to configure outbound context", e);

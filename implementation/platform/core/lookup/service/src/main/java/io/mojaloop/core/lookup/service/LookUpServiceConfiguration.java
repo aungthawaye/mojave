@@ -31,14 +31,9 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 @EnableWebMvc
-@EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
 @Import(value = {
     LookUpDomainConfiguration.class, ComponentMiscConfiguration.class, FspiopServiceConfiguration.class})
@@ -58,12 +53,6 @@ public class LookUpServiceConfiguration implements FspiopServiceConfiguration.Re
     public ParticipantVerifier participantVerifier() {
 
         return fspCode -> this.participantStore.getFspData(new FspCode(fspCode)) != null;
-    }
-
-    @Bean
-    public Executor taskExecutor() {
-
-        return Executors.newCachedThreadPool();
     }
 
     @Bean

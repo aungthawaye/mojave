@@ -20,8 +20,8 @@
 
 package io.mojaloop.fspiop.client.api;
 
-import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
+import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
 import io.mojaloop.fspiop.invoker.api.TransfersService;

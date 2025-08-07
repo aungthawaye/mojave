@@ -101,8 +101,7 @@ public class RoutingDataSourceConfigurer {
         return new HikariDataSource(config);
     }
 
-    public record WriteSettings(Connection connection,
-                                Pool pool) {
+    public record WriteSettings(Connection connection, Pool pool) {
 
         public record Connection(String url, String username, String password, boolean autoCommit) { }
 
@@ -110,8 +109,7 @@ public class RoutingDataSourceConfigurer {
 
     }
 
-    public record ReadSettings(WriteSettings.Connection connection,
-                               WriteSettings.Pool pool) {
+    public record ReadSettings(WriteSettings.Connection connection, WriteSettings.Pool pool) {
 
         public record Connection(String url, String username, String password, boolean autoCommit) { }
 

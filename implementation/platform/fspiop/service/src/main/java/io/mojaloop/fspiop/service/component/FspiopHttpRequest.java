@@ -21,9 +21,9 @@
 package io.mojaloop.fspiop.service.component;
 
 import io.mojaloop.component.web.request.CachedServletRequest;
-import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

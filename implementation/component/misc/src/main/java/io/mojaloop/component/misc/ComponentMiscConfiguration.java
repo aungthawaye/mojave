@@ -25,8 +25,23 @@ import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.component.misc.spring.event.publisher.SpringEventPublisher;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.ApplicationEventMulticaster;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+@EnableAsync
 public class ComponentMiscConfiguration {
+
+    @Bean(name = "applicationEventMulticaster")
+    public ApplicationEventMulticaster asyncEventMulticaster(TaskExecutor executor) {
+
+        SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
+        eventMulticaster.setTaskExecutor(executor);
+
+        return eventMulticaster;
+    }
 
     @Bean
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
@@ -38,6 +53,24 @@ public class ComponentMiscConfiguration {
     public SpringContext springContext() {
 
         return new SpringContext();
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+
+        var executor = new ThreadPoolTaskExecutor();
+
+        executor.setCorePoolSize(0);
+        executor.setMaxPoolSize(Integer.MAX_VALUE);
+        executor.setKeepAliveSeconds(60);
+        executor.setAllowCoreThreadTimeOut(true);
+        executor.setQueueCapacity(0); // No queue like cachedThreadPool
+        executor.setThreadNamePrefix("async-event-");
+        executor.initialize();
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(60);
+
+        return executor;
     }
 
     public interface RequiredBeans { }

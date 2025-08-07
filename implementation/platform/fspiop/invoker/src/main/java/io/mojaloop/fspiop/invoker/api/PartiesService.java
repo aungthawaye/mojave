@@ -62,14 +62,14 @@ public interface PartiesService {
     Call<String> putPartiesError(@HeaderMap Map<String, String> fspiopHeaders,
                                  @Path("partyIdType") PartyIdType partyIdType,
                                  @Path("partyId") String partyId,
-                                 ErrorInformationObject errorInformationObject);
+                                 @Body ErrorInformationObject errorInformationObject);
 
     @PUT("parties/{partyIdType}/{partyId}/{subId}/error")
     Call<String> putPartiesError(@HeaderMap Map<String, String> fspiopHeaders,
                                  @Path("partyIdType") PartyIdType partyIdType,
                                  @Path("partyId") String partyId,
                                  @Path("subId") String subId,
-                                 ErrorInformationObject errorInformationObject);
+                                 @Body ErrorInformationObject errorInformationObject);
 
     record Settings(String baseUrl) { }
 

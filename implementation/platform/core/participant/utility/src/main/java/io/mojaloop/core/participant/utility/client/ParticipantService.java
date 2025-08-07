@@ -9,10 +9,10 @@ import java.util.List;
 
 interface ParticipantService {
 
-
     @GET("/fsps")
     Call<List<FspData>> getFsps();
 
     @GET("/oracles")
     Call<List<OracleData>> getOracles();
+
 }

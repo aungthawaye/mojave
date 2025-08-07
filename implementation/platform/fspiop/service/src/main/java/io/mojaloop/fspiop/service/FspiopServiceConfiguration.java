@@ -29,13 +29,13 @@ import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
-import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import io.mojaloop.fspiop.service.api.PartiesResponseService;
 import io.mojaloop.fspiop.service.api.QuotesResponseService;
 import io.mojaloop.fspiop.service.api.TransfersResponseService;
 import io.mojaloop.fspiop.service.component.FspiopServiceErrorWriter;
 import io.mojaloop.fspiop.service.component.FspiopServiceGatekeeper;
+import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,7 +44,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @ComponentScan(basePackages = {"io.mojaloop.fspiop.service"})
-@Import(value = {FspiopComponentConfiguration.class})
+@Import(value = {FspiopComponentConfiguration.class, SpringSecurityConfiguration.class})
 public class FspiopServiceConfiguration implements SpringSecurityConfiguration.RequiredBeans {
 
     private final SpringSecurityConfigurer.Settings springSecuritySettings;

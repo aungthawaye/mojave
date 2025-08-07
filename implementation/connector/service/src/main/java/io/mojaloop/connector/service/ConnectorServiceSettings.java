@@ -1,6 +1,5 @@
 package io.mojaloop.connector.service;
 
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.connector.service.inbound.ConnectorInboundConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
@@ -59,13 +58,6 @@ public final class ConnectorServiceSettings implements ConnectorServiceConfigura
     public QuotesService.Settings quotesServiceSettings() {
 
         return new QuotesService.Settings(System.getenv("FSPIOP_QUOTES_URL"));
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings("/parties/**", "/quotes/**", "/transfers/**");
     }
 
     @Bean

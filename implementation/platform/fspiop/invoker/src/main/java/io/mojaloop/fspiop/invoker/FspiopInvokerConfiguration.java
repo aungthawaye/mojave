@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
-import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
@@ -37,15 +36,9 @@ import org.springframework.context.annotation.Import;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-@ComponentScan(basePackages = {"io.mojaloop.fspiop.client"})
+@ComponentScan(basePackages = {"io.mojaloop.fspiop.invoker"})
 @Import(value = {FspiopCommonConfiguration.class, FspiopComponentConfiguration.class})
-public class FspiopInvokerConfiguration {
-
-    @Bean
-    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantContext participantContext, ObjectMapper objectMapper) {
-
-        return new FspiopSigningInterceptor(participantContext, objectMapper);
-    }
+public class FspiopInvokerConfiguration implements FspiopCommonConfiguration.RequiredBeans, FspiopComponentConfiguration.RequiredBeans {
 
     @Bean
     public PartiesService partiesService(PartiesService.Settings settings,

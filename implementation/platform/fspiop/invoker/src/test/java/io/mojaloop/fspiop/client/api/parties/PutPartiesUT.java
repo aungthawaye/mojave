@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,13 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.fspiop.client.api.parties;
 
-import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.client.api.TestSettings;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.invoker.api.parties.PutParties;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
@@ -63,10 +64,7 @@ public class PutPartiesUT {
         partyIdInfo.partyIdentifier("0987654321");
         party.setPartyIdInfo(partyIdInfo);
 
-        this.putParties.putParties(new Destination("fsp2"),
-                                   PartyIdType.MSISDN,
-                                   "987654321",
-                                   new PartiesTypeIDPutResponse(party));
+        this.putParties.putParties(new Destination("fsp2"), PartyIdType.MSISDN, "987654321", new PartiesTypeIDPutResponse(party));
     }
 
 }

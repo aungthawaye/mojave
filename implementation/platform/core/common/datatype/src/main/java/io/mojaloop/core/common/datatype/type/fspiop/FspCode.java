@@ -57,11 +57,6 @@ public class FspCode {
     }
 
     @Override
-    public String toString() {
-        return fspCode;
-    }
-
-    @Override
     public boolean equals(Object o) {
 
         if (!(o instanceof FspCode fspCode1)) {
@@ -74,6 +69,12 @@ public class FspCode {
     public int hashCode() {
 
         return Objects.hashCode(fspCode);
+    }
+
+    @Override
+    public String toString() {
+
+        return fspCode;
     }
 
 }

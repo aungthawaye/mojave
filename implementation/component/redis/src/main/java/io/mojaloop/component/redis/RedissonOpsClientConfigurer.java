@@ -83,7 +83,11 @@ public class RedissonOpsClientConfigurer {
         return new RedissonOpsClient(Redisson.create(config));
     }
 
-    public record Settings(String[] hosts, boolean cluster, String codec, int executorCount, int connectionPoolSize,
+    public record Settings(String[] hosts,
+                           boolean cluster,
+                           String codec,
+                           int executorCount,
+                           int connectionPoolSize,
                            int connectionMinimumIdleSize) { }
 
 }

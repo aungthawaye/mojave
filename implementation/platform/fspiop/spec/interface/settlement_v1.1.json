@@ -220,7 +220,6 @@
             "description": "A valid currency to filter on.\n",
             "required": false
           }
-
         ],
         "tags": [
           "sampled",

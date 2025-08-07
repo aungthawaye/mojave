@@ -163,16 +163,17 @@ public class FspiopInboundGatekeeper implements Authenticator {
             LOGGER.error("The Destination FSP ({}) is not valid.", source);
             throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE,
                                                  new FspiopException(FspiopErrors.GENERIC_PAYEE_REJECTION,
-                                                                     "The received request does not pertain to this FSP and seems to have been misrouted."));
+                                                                     "The received request does not pertain to this FSP and " +
+                                                                         "seems to have been misrouted."));
         }
 
         if (source.equals(destination)) {
 
-            LOGGER.error("The Source FSP ({}) and the destination FSP ({}) are the same.", source, destination);
+            LOGGER.error("The Source FSP ({}) and the destination FSP ({}) must not be the same.", source, destination);
             throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE,
                                                  new FspiopException(FspiopErrors.DESTINATION_FSP_ERROR,
                                                                      "Source FSP (" + source + ") and Destination FSP (" + destination +
-                                                                         ") are the same."));
+                                                                         ") must not be the same."));
         }
     }
 

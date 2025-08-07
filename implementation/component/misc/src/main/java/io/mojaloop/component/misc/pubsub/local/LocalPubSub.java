@@ -2,65 +2,143 @@ package io.mojaloop.component.misc.pubsub.local;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class LocalPubSub {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalPubSub.class);
 
-    // Map to hold channel -> Sink
-    private final ConcurrentHashMap<String, Sinks.Many<Object>> channels = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Channel> channels = new ConcurrentHashMap<>();
 
     /**
-     * Unsubscribe all subscribers and remove the channel.
+     * Close the channel and unsubscribe all subscribers.
      */
-    public void closeChannel(String channel) {
+    public void closeChannel(String channelName) {
 
-        Sinks.Many<Object> sink = this.channels.remove(channel);
+        Channel channel = this.channels.remove(channelName);
 
-        if (sink != null) {
-            sink.tryEmitComplete();
+        if (channel != null) {
+            channel.subscriptions.forEach(Disposable::dispose);
+            channel.sink.tryEmitComplete();
+            LOGGER.debug("Closed channel {}", channelName);
         }
     }
 
     /**
      * Publish a message to a channel.
      */
-    public void publish(String channel, Object message) {
+    public void publish(String channelName, Object message) {
 
-        Sinks.Many<Object> sink = channels.computeIfAbsent(channel, ch -> Sinks.many().multicast().onBackpressureBuffer());
-
-        Sinks.EmitResult result = sink.tryEmitNext(message);
+        Channel channel = this.channels.computeIfAbsent(channelName, ch -> new Channel(Sinks.many().multicast().onBackpressureBuffer()));
+        Sinks.EmitResult result = channel.sink.tryEmitNext(message);
 
         if (result.isFailure()) {
-            LOGGER.error("Failed to publish message to channel {}", channel);
-        }else{
-            LOGGER.debug("Published message to channel {}", channel);
+            LOGGER.error("Failed to publish message to channel {}", channelName);
+        } else {
+            LOGGER.debug("Published message to channel {}", channelName);
         }
     }
 
     /**
-     * Clear all channels.
+     * Shutdown all channels and subscribers.
      */
     public void shutdown() {
 
-        channels.forEach((ch, sink) -> sink.tryEmitComplete());
-        channels.clear();
+        for (Map.Entry<String, Channel> entry : channels.entrySet()) {
+            entry.getValue().subscriptions.forEach(Disposable::dispose);
+            entry.getValue().sink.tryEmitComplete();
+        }
+
+        this.channels.clear();
+        LOGGER.info("All channels shut down");
     }
 
     /**
-     * Subscribe to a channel.
+     * Subscribe to a channel. Automatically cleans up if no more subscribers remain.
      */
-    public void subscribe(String channel, Consumer<Object> handler) {
+    public Disposable subscribe(String channelName, Consumer<Object> handler, long timeout) {
 
-        Sinks.Many<Object> sink = channels.computeIfAbsent(channel, ch -> Sinks.many().multicast().onBackpressureBuffer());
+        Channel channel = channels.computeIfAbsent(channelName, ch -> new Channel(Sinks.many().multicast().onBackpressureBuffer()));
 
-        Flux<Object> flux = sink.asFlux();
-        flux.subscribe(handler);
+        // Use take(timeout) to automatically unsubscribe after timeout
+        Flux<Object> flux = channel.sink.asFlux().take(timeout);
+
+        AtomicReference<Disposable> ref = new AtomicReference<>();
+
+        Disposable disposable = flux.subscribe(handler,
+                                               error -> LOGGER.error("Error in subscriber of channel {}", channelName, error),
+                                               () -> {
+
+                                                   LOGGER.debug("Subscriber timeout/completed on channel {}", channelName);
+
+                                                   Disposable removing = ref.get();
+
+                                                   channel.subscriptions.remove(removing);
+
+                                                   if (channel.subscriptions.isEmpty()) {
+
+                                                       LOGGER.debug("No more subscribers on channel {}, removing channel", channelName);
+
+                                                       channel.sink.tryEmitComplete();
+
+                                                       channels.remove(channelName);
+                                                   }
+                                               });
+
+        ref.set(disposable);
+
+        channel.subscriptions.add(disposable);
+
+        return disposable;
+    }
+
+    /**
+     * Unsubscribe a specific subscription from a channel.
+     */
+    public void unsubscribe(String channelName, Disposable subscription) {
+
+        Channel channel = this.channels.get(channelName);
+
+        if (channel != null && subscription != null) {
+
+            subscription.dispose();
+
+            channel.subscriptions.remove(subscription);
+
+            LOGGER.debug("Unsubscribed from channel {}", channelName);
+
+            // Clean up channel if no more subscribers
+            if (channel.subscriptions.isEmpty()) {
+
+                LOGGER.debug("No more subscribers on channel {}, removing channel", channelName);
+
+                channel.sink.tryEmitComplete();
+
+                this.channels.remove(channelName);
+            }
+        }
+    }
+
+    private static class Channel {
+
+        final Sinks.Many<Object> sink;
+
+        final Set<Disposable> subscriptions = new CopyOnWriteArraySet<>();
+
+        Channel(Sinks.Many<Object> sink) {
+
+            this.sink = sink;
+        }
+
     }
 
 }
