@@ -11,6 +11,8 @@ import io.mojaloop.connector.service.inbound.component.FspiopInboundErrorWriter;
 import io.mojaloop.connector.service.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +21,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAsync
+@EnableWebMvc
 @Import(value = {
     ComponentMiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class,
     SpringSecurityConfiguration.class})
@@ -57,9 +61,7 @@ public class ConnectorInboundConfiguration implements ComponentMiscConfiguration
     @Override
     public Authenticator authenticator() {
 
-        return new FspiopInboundGatekeeper(new SpringSecurityConfigurer.Settings("/parties/**", "/quotes/**", "/transfers/**"),
-                                           this.participantContext,
-                                           this.objectMapper);
+        return new FspiopInboundGatekeeper(this.participantContext, this.objectMapper);
     }
 
     @Bean
@@ -77,6 +79,40 @@ public class ConnectorInboundConfiguration implements ComponentMiscConfiguration
         return source;
 
     }
+
+    @Bean
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings("/parties/**", "/quotes/**", "/transfers/**");
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
+
+        return factory -> factory.setPort(inboundSettings.portNo());
+    }
+
+//    @Bean
+//    public TomcatServletWebServerFactory tomcatServletWebServerFactory(ConnectorInboundConfiguration.InboundSettings inboundSettings) {
+//
+//        return TomcatFactoryConfigurer.configure(this.applicationContext, this.inboundHostSettings(inboundSettings));
+//    }
+//
+//    @Bean
+//    HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+//
+//        return new HandlerMappingIntrospector();
+//    }
+//
+//    private TomcatFactoryConfigurer.HostSettings inboundHostSettings(ConnectorInboundConfiguration.InboundSettings inboundSettings) {
+//
+//        var inboundConnectorSettings = new SimpleHttpConnectorDecorator.Settings(inboundSettings.portNo(),
+//                                                                                 inboundSettings.maxThreads(),
+//                                                                                 inboundSettings.connectionTimeout());
+//        var inboundConnector = new SimpleHttpConnectorDecorator(inboundConnectorSettings);
+//
+//        return new TomcatFactoryConfigurer.HostSettings("inbound", "", inboundConnector, ConnectorInboundConfiguration.class);
+//    }
 
     public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans { }
 

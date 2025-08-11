@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HandlePartiesRequestCommandHandler implements HandlePartiesRequestCommand {
+class HandlePartiesRequestCommandHandler implements HandlePartiesRequestCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandlePartiesRequestCommandHandler.class.getName());
 

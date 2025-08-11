@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HandleTransfersRequestCommandHandler implements HandleTransfersRequestCommand {
+class HandleTransfersRequestCommandHandler implements HandleTransfersRequestCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersRequestCommandHandler.class.getName());
 

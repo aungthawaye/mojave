@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HandleQuotesResponseCommandHandler implements HandleQuotesResponseCommand {
+class HandleQuotesResponseCommandHandler implements HandleQuotesResponseCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleQuotesResponseCommandHandler.class.getName());
 

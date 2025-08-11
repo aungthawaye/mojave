@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HandleTransfersErrorCommandHandler implements HandleTransfersErrorCommand {
+class HandleTransfersErrorCommandHandler implements HandleTransfersErrorCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersErrorCommandHandler.class.getName());
 

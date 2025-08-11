@@ -1,6 +1,7 @@
 package io.mojaloop.connector.service.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.service.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class RequestPartiesCommandHandler implements RequestPartiesCommand {
+class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestPartiesCommandHandler.class.getName());
 
@@ -24,13 +25,19 @@ public class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
     private final PubSubClient pubSubClient;
 
-    public RequestPartiesCommandHandler(GetParties getParties, PubSubClient pubSubClient) {
+    private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
+
+    public RequestPartiesCommandHandler(GetParties getParties,
+                                        PubSubClient pubSubClient,
+                                        ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != getParties;
         assert null != pubSubClient;
+        assert null != outboundSettings;
 
         this.getParties = getParties;
         this.pubSubClient = pubSubClient;
+        this.outboundSettings = outboundSettings;
     }
 
     @Override
@@ -68,7 +75,7 @@ public class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
                 return PartiesTypeIDPutResponse.class;
             }
-        }, 60_000);
+        }, this.outboundSettings.pubSubTimeout());
 
         var errorSubscription = this.pubSubClient.subscribe(errorTopic, new PubSubClient.MessageHandler() {
 
@@ -87,7 +94,7 @@ public class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
                 return ErrorInformationObject.class;
             }
-        }, 60_000);
+        }, this.outboundSettings.pubSubTimeout());
 
         if (withSubId) {
             this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId(), input.subId());
@@ -97,7 +104,7 @@ public class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
         try {
 
-            var ok = blocker.await(30, TimeUnit.SECONDS);
+            var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 
             if (!ok) {
                 throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");

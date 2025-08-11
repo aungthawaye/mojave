@@ -1,6 +1,7 @@
 package io.mojaloop.connector.service.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.service.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class RequestQuotesCommandHandler implements RequestQuotesCommand {
+class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestQuotesCommandHandler.class.getName());
 
@@ -24,13 +25,19 @@ public class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
     private final PubSubClient pubSubClient;
 
-    public RequestQuotesCommandHandler(PostQuotes postQuotes, PubSubClient pubSubClient) {
+    private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
+
+    public RequestQuotesCommandHandler(PostQuotes postQuotes,
+                                       PubSubClient pubSubClient,
+                                       ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != postQuotes;
         assert null != pubSubClient;
+        assert null != outboundSettings;
 
         this.postQuotes = postQuotes;
         this.pubSubClient = pubSubClient;
+        this.outboundSettings = outboundSettings;
     }
 
     @Override
@@ -40,7 +47,7 @@ public class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
         assert input != null;
         assert input.request() != null;
-        
+
         var quoteId = input.request().getQuoteId();
         var resultTopic = "quotes:" + quoteId;
         var errorTopic = "quotes-error:" + quoteId;
@@ -68,7 +75,7 @@ public class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
                 return QuotesIDPutResponse.class;
             }
-        }, 60_000);
+        }, this.outboundSettings.pubSubTimeout());
 
         var errorSubscription = this.pubSubClient.subscribe(errorTopic, new PubSubClient.MessageHandler() {
 
@@ -93,7 +100,7 @@ public class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
         try {
 
-            var ok = blocker.await(30, TimeUnit.SECONDS);
+            var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 
             if (!ok) {
                 throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");

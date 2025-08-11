@@ -2,11 +2,8 @@
 
 //@@formatter:off
 
-import groovy.xml.*
+import groovy.xml.XmlParser
 import groovy.xml.XmlNodePrinter
-import java.io.File
-import java.io.FileWriter
-import java.io.PrintWriter
 
 
 // Usage: groovy auto-dep.groovy /path/to/project/root
@@ -30,7 +27,7 @@ def rootAid       = pomXml.artifactId?.text()?.trim() ?: ''
 def ownGid    = pomXml.groupId?.text()?.trim() ?: ''
 def parentGid = pomXml.parent?.groupId?.text()?.trim() ?: ''
 if (!(ownGid.startsWith('io.mojaloop') || parentGid.startsWith('io.mojaloop'))) {
-    println("Skipping: groupId not in io.mojaloop")
+    System.out.println("Skipping: groupId not in io.mojaloop")
     System.exit(0)
 }
 
@@ -60,7 +57,7 @@ if (rootPackaging != 'pom' && !rootAid.contains('-service')) {
     processModules = { xmlNode, dir ->
         xmlNode.modules?.module.each { modNode ->
             def name = modNode.text()?.trim()
-            println("Processing module: ${name}")
+            System.out.println("Processing module: ${name}")
             def mDir = new File(dir, name)
             def mPom = new File(mDir, 'pom.xml')
             if (!mPom.exists()) {
@@ -87,4 +84,4 @@ def printer = new XmlNodePrinter(new PrintWriter(fw))
 printer.setPreserveWhitespace(true)
 printer.print(pomXml)
 fw.close()
-println('Updated dependencyManagement in ' + rootPomFile)
+System.out.println('Updated dependencyManagement in ' + rootPomFile)

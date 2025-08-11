@@ -38,6 +38,17 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
 
     @Bean
     @Override
+    public ConnectorOutboundConfiguration.OutboundSettings outboundSettings() {
+
+        return new ConnectorOutboundConfiguration.OutboundSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")));
+    }
+
+    @Bean
+    @Override
     public PartiesService.Settings partiesServiceSettings() {
 
         return new PartiesService.Settings(System.getenv("FSPIOP_PARTIES_URL"));

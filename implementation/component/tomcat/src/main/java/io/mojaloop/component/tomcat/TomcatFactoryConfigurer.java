@@ -116,10 +116,19 @@ public class TomcatFactoryConfigurer {
             context.addLifecycleListener(new Tomcat.FixContextListener());
             context.setReloadable(false);
 
+            // Add context to host BEFORE creating the application context
+            host.addChild(context);
+
             // Create application context with the parent context
             AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
             appContext.setParent(parentContext);
             appContext.register(configurations);
+
+            // Set the ServletContext in the application context before refreshing
+            appContext.setServletContext(context.getServletContext());
+
+            // CRITICAL: Refresh the application context to process @ComponentScan and create beans
+            appContext.refresh();
 
             // Create dispatcher servlet
             var dispatcherServlet = new DispatcherServlet(appContext);
@@ -135,16 +144,12 @@ public class TomcatFactoryConfigurer {
             context.addChild(wrapper);
             context.addServletMappingDecoded("/*", servletName);
 
-            dispatcherServlet.setApplicationContext(appContext);
-
-//            // Set the ServletContext in the application context before refreshing
-//            appContext.setServletContext(context.getServletContext());
-//
-            // Now refresh the application context after ServletContext is set
-            //           appContext.refresh();
+            LOGGER.info("Configured context for host [{}] with {} configurations", hostName, configurations.length);
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to configure outbound context", e);
+            LOGGER.error("Failed to configure context for host [{}]", host.getName(), e);
+            throw new RuntimeException("Failed to configure context for host: " + host.getName(), e);
+
         }
     }
 

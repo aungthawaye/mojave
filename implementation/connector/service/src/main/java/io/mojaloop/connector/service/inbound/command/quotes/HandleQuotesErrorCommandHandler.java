@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HandleQuotesErrorCommandHandler implements HandleQuotesErrorCommand {
+class HandleQuotesErrorCommandHandler implements HandleQuotesErrorCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleQuotesErrorCommandHandler.class.getName());
 

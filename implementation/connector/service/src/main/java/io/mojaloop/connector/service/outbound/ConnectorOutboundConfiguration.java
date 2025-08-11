@@ -10,12 +10,14 @@ import io.mojaloop.connector.service.outbound.component.FspiopOutboundErrorWrite
 import io.mojaloop.connector.service.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import(value = {
     ComponentMiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.service.outbound"})
@@ -46,9 +48,19 @@ public class ConnectorOutboundConfiguration implements SpringSecurityConfigurati
     @Override
     public Authenticator authenticator() {
 
-        return new FspiopOutboundGatekeeper(new SpringSecurityConfigurer.Settings("/lookup", "/quote", "/transfer"),
-                                            this.participantContext,
-                                            this.objectMapper);
+        return new FspiopOutboundGatekeeper(this.participantContext, this.objectMapper);
+    }
+
+    @Bean
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings("/lookup", "/quote", "/transfer");
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(OutboundSettings outboundSettings) {
+
+        return factory -> factory.setPort(outboundSettings.portNo());
     }
 
     public interface RequiredSettings extends ComponentMiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
@@ -57,6 +69,6 @@ public class ConnectorOutboundConfiguration implements SpringSecurityConfigurati
 
     }
 
-    public record OutboundSettings(int portNo, int maxThreads, int connectionTimeout) { }
+    public record OutboundSettings(int portNo, int maxThreads, int connectionTimeout, int putResultTimeout, int pubSubTimeout) { }
 
 }

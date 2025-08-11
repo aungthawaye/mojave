@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+
 public class ConnectorServiceConfiguration implements FspiopInvokerConfiguration.RequiredBeans {
 
     private final ApplicationContext applicationContext;
@@ -21,21 +21,8 @@ public class ConnectorServiceConfiguration implements FspiopInvokerConfiguration
         this.applicationContext = applicationContext;
     }
 
-    @Bean
-    public TomcatServletWebServerFactory tomcatServletWebServerFactory(ConnectorInboundConfiguration.InboundSettings inboundSettings) {
 
-        return TomcatFactoryConfigurer.configure(this.applicationContext, this.inboundHostSettings(inboundSettings));
-    }
 
-    private TomcatFactoryConfigurer.HostSettings inboundHostSettings(ConnectorInboundConfiguration.InboundSettings inboundSettings) {
-
-        var inboundConnectorSettings = new SimpleHttpConnectorDecorator.Settings(inboundSettings.portNo(),
-                                                                                 inboundSettings.maxThreads(),
-                                                                                 inboundSettings.connectionTimeout());
-        var inboundConnector = new SimpleHttpConnectorDecorator(inboundConnectorSettings);
-
-        return new TomcatFactoryConfigurer.HostSettings("inbound", "", inboundConnector, ConnectorInboundConfiguration.class);
-    }
 
     public interface RequiredBeans extends ConnectorInboundConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans {
 

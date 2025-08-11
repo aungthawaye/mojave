@@ -1,15 +1,18 @@
 package io.mojaloop.connector.service;
 
 import io.mojaloop.connector.service.inbound.ConnectorInboundConfiguration;
+import io.mojaloop.connector.service.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 
-public final class ConnectorServiceSettings implements ConnectorServiceConfiguration.RequiredSettings {
+@Configuration
+public class ConnectorServiceSettings implements ConnectorServiceConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -44,6 +47,17 @@ public final class ConnectorServiceSettings implements ConnectorServiceConfigura
         return new ConnectorInboundConfiguration.InboundSettings(Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
                                                                  Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
                                                                  Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")));
+    }
+
+    @Bean
+    @Override
+    public ConnectorOutboundConfiguration.OutboundSettings outboundSettings() {
+
+        return new ConnectorOutboundConfiguration.OutboundSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")),
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")));
     }
 
     @Bean

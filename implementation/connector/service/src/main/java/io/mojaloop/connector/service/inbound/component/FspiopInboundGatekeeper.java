@@ -7,7 +7,6 @@ import io.mojaloop.component.misc.jwt.Rs256Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
 import io.mojaloop.component.web.security.spring.Authenticator;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
@@ -31,9 +30,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
     private final ObjectMapper objectMapper;
 
-    public FspiopInboundGatekeeper(SpringSecurityConfigurer.Settings settings,
-                                   ParticipantContext participantContext,
-                                   ObjectMapper objectMapper) {
+    public FspiopInboundGatekeeper(ParticipantContext participantContext, ObjectMapper objectMapper) {
 
         assert participantContext != null;
         assert objectMapper != null;
