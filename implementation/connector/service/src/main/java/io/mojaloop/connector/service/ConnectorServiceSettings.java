@@ -76,6 +76,13 @@ public class ConnectorServiceSettings implements ConnectorServiceConfiguration.R
 
     @Bean
     @Override
+    public ConnectorOutboundConfiguration.TransactionSettings transactionSettings() {
+
+        return new ConnectorOutboundConfiguration.TransactionSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
+    }
+
+    @Bean
+    @Override
     public TransfersService.Settings transfersServiceSettings() {
 
         return new TransfersService.Settings(System.getenv("FSPIOP_TRANSFERS_URL"));

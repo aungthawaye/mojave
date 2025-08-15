@@ -20,7 +20,10 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
         var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
         var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
         var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
-        var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
+        var fsps = System
+                       .getenv("FSPIOP_FSPS")
+                       .split(",",
+                              -1);
         var fspPublicKeyPem = new HashMap<String, String>();
 
         for (var fsp : fsps) {
@@ -29,11 +32,18 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
             var publicKeyPem = System.getenv(env);
 
             if (publicKeyPem != null) {
-                fspPublicKeyPem.put(fsp, publicKeyPem);
+                fspPublicKeyPem.put(fsp,
+                                    publicKeyPem);
             }
         }
 
-        return new FspiopCommonConfiguration.Settings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.Settings(fspCode,
+                                                      fspName,
+                                                      ilpSecret,
+                                                      signJws,
+                                                      verifyJws,
+                                                      privateKeyPem,
+                                                      fspPublicKeyPem);
     }
 
     @Bean
@@ -59,6 +69,13 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
     public QuotesService.Settings quotesServiceSettings() {
 
         return new QuotesService.Settings(System.getenv("FSPIOP_QUOTES_URL"));
+    }
+
+    @Bean
+    @Override
+    public ConnectorOutboundConfiguration.TransactionSettings transactionSettings() {
+
+        return new ConnectorOutboundConfiguration.TransactionSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
     }
 
     @Bean

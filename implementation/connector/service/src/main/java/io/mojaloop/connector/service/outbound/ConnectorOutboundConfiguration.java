@@ -67,8 +67,12 @@ public class ConnectorOutboundConfiguration implements SpringSecurityConfigurati
 
         OutboundSettings outboundSettings();
 
+        TransactionSettings transactionSettings();
+
     }
 
     public record OutboundSettings(int portNo, int maxThreads, int connectionTimeout, int putResultTimeout, int pubSubTimeout) { }
+
+    public record TransactionSettings(int expireAfterSeconds) { }
 
 }
