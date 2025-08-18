@@ -1,10 +1,8 @@
 package io.mojaloop.connector.service.inbound;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-@SpringBootConfiguration
-@EnableAutoConfiguration
+@SpringBootApplication(scanBasePackages = "io.mojaloop.connector.service.inbound")
 @Import(ConnectorInboundConfiguration.class)
 public class ConnectorInboundApplication { }

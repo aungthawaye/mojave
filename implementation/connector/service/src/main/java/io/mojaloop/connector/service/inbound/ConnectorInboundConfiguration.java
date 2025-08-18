@@ -2,6 +2,7 @@ package io.mojaloop.connector.service.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.ComponentMiscConfiguration;
+import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
@@ -11,6 +12,7 @@ import io.mojaloop.connector.service.inbound.component.FspiopInboundErrorWriter;
 import io.mojaloop.connector.service.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
+@EnableAutoConfiguration
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
 @EnableWebMvc
@@ -92,29 +95,10 @@ public class ConnectorInboundConfiguration implements ComponentMiscConfiguration
         return factory -> factory.setPort(inboundSettings.portNo());
     }
 
-//    @Bean
-//    public TomcatServletWebServerFactory tomcatServletWebServerFactory(ConnectorInboundConfiguration.InboundSettings inboundSettings) {
-//
-//        return TomcatFactoryConfigurer.configure(this.applicationContext, this.inboundHostSettings(inboundSettings));
-//    }
-//
-//    @Bean
-//    HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
-//
-//        return new HandlerMappingIntrospector();
-//    }
-//
-//    private TomcatFactoryConfigurer.HostSettings inboundHostSettings(ConnectorInboundConfiguration.InboundSettings inboundSettings) {
-//
-//        var inboundConnectorSettings = new SimpleHttpConnectorDecorator.Settings(inboundSettings.portNo(),
-//                                                                                 inboundSettings.maxThreads(),
-//                                                                                 inboundSettings.connectionTimeout());
-//        var inboundConnector = new SimpleHttpConnectorDecorator(inboundConnectorSettings);
-//
-//        return new TomcatFactoryConfigurer.HostSettings("inbound", "", inboundConnector, ConnectorInboundConfiguration.class);
-//    }
+    public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans {
 
-    public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans { }
+        PubSubClient pubSubClient();
+    }
 
     public interface RequiredSettings extends ComponentMiscConfiguration.RequiredSettings,
                                               ConnectorAdapterConfiguration.RequiredSettings,

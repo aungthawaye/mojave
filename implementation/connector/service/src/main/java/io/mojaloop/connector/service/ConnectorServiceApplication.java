@@ -30,26 +30,25 @@ class ConnectorServiceApplication {
 
         new SpringApplicationBuilder(ConnectorServiceApplication.class)
             .web(WebApplicationType.NONE)
+            .properties("spring.profiles.active=prod")
             .child(ConnectorInboundApplication.class)
-            .properties("spring.application.name=connector-inbound",
-                        "spring.jmx.enabled=true",
-                        "spring.jmx.unique-names=true",
-                        "spring.jmx.default-domain=connector-inbound",
-                        "spring.application.admin.enabled=true",
-                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=SpringApplication,context=connector-inbound")
+            .properties("spring.application.name=connector-inbound", "spring.jmx.enabled=true", "spring.jmx.unique-names=true",
+                        "spring.jmx.default-domain=connector-inbound", "spring.application.admin.enabled=true",
+                        "management.server.port=9080", "management.endpoints.web.base-path=/actuator",
+                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=Inbound,context=connector-inbound")
             .web(WebApplicationType.SERVLET)
             .sibling(ConnectorOutboundApplication.class)
-            .properties("spring.application.name=connector-outbound",
-                        "spring.jmx.enabled=true",
-                        "spring.jmx.unique-names=true",
-                        "spring.jmx.default-domain=connector-outbound",
-                        "spring.application.admin.enabled=true",
-                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=SpringApplication,context=connector-outbound")
+            .properties("spring.application.name=connector-outbound", "spring.jmx.enabled=true", "spring.jmx.unique-names=true",
+                        "spring.jmx.default-domain=connector-outbound", "spring.application.admin.enabled=true",
+                        "management.server.port=9081", "management.endpoints.web.base-path=/actuator",
+                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=Outbound,context=connector-outbound")
             .web(WebApplicationType.SERVLET)
             .run(args);
     }
 
     public static class RequiredDependencies implements ConnectorServiceConfiguration.RequiredBeans {
+
+        private final LocalPubSubClient localPubSubClient = new LocalPubSubClient(new LocalPubSub());
 
         @Bean
         @Override
@@ -86,7 +85,7 @@ class ConnectorServiceApplication {
         @Override
         public PubSubClient pubSubClient() {
 
-            return new LocalPubSubClient(new LocalPubSub());
+            return this.localPubSubClient;
         }
 
     }

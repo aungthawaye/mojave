@@ -2,6 +2,7 @@ package io.mojaloop.connector.service.outbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.ComponentMiscConfiguration;
+import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
@@ -10,6 +11,7 @@ import io.mojaloop.connector.service.outbound.component.FspiopOutboundErrorWrite
 import io.mojaloop.connector.service.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +19,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+@EnableAutoConfiguration
 @Configuration(proxyBeanMethods = false)
 @Import(value = {
     ComponentMiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.service.outbound"})
-public class ConnectorOutboundConfiguration implements SpringSecurityConfiguration.RequiredBeans {
+public class ConnectorOutboundConfiguration implements ComponentMiscConfiguration.RequiredBeans,
+                                                       FspiopInvokerConfiguration.RequiredBeans,
+                                                       SpringSecurityConfiguration.RequiredBeans {
 
     private final ParticipantContext participantContext;
 
@@ -61,6 +66,12 @@ public class ConnectorOutboundConfiguration implements SpringSecurityConfigurati
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(OutboundSettings outboundSettings) {
 
         return factory -> factory.setPort(outboundSettings.portNo());
+    }
+
+    public interface RequiredBeans {
+
+        PubSubClient pubSubClient();
+
     }
 
     public interface RequiredSettings extends ComponentMiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
