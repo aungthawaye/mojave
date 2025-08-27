@@ -20,4 +20,17 @@
 
 package io.mojaloop.core.participant.contract.command.fsp;
 
-public interface ActivateSupportedCurrencyCommand { }
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.fspiop.spec.core.Currency;
+
+public interface ActivateSupportedCurrencyCommand {
+
+    Output execute(Input input) throws CannotActivateSupportedCurrencyException, FspIdNotFoundException;
+
+    record Input(FspId fspId, Currency currency) { }
+
+    record Output(boolean activated) { }
+
+}

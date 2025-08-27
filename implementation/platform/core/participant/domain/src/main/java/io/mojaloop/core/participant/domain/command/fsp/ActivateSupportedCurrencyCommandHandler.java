@@ -21,7 +21,8 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCommand;
+import io.mojaloop.core.participant.contract.command.fsp.ActivateSupportedCurrencyCommand;
+import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.repository.FspRepository;
 import org.slf4j.Logger;
@@ -30,13 +31,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ActivateFspCommandHandler implements ActivateFspCommand {
+public class ActivateSupportedCurrencyCommandHandler implements ActivateSupportedCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateFspCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateSupportedCurrencyCommandHandler.class);
 
     private final FspRepository fspRepository;
 
-    public ActivateFspCommandHandler(FspRepository fspRepository) {
+    public ActivateSupportedCurrencyCommandHandler(FspRepository fspRepository) {
 
         assert fspRepository != null;
 
@@ -46,21 +47,21 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) throws CannotActivateSupportedCurrencyException, FspIdNotFoundException {
 
-        LOGGER.info("Executing ActivateFspCommand with input: {}", input);
+        LOGGER.info("Executing ActivateSupportedCurrencyCommand with input: {}", input);
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
                       .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        fsp.activate();
+        boolean activated = fsp.activateSupportedCurrency(input.currency());
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ActivateFspCommand with input: {}", input);
+        LOGGER.info("Completed ActivateSupportedCurrencyCommand with input: {} -> activated={} ", input, activated);
 
-        return new Output();
+        return new Output(activated);
     }
 
 }

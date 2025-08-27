@@ -21,7 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCommand;
+import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.repository.FspRepository;
 import org.slf4j.Logger;
@@ -30,13 +30,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ActivateFspCommandHandler implements ActivateFspCommand {
+public class DeactivateFspCommandHandler implements DeactivateFspCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateFspCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateFspCommandHandler.class);
 
     private final FspRepository fspRepository;
 
-    public ActivateFspCommandHandler(FspRepository fspRepository) {
+    public DeactivateFspCommandHandler(FspRepository fspRepository) {
 
         assert fspRepository != null;
 
@@ -48,17 +48,15 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
     @Write
     public Output execute(Input input) throws FspIdNotFoundException {
 
-        LOGGER.info("Executing ActivateFspCommand with input: {}", input);
+        LOGGER.info("Executing DeactivateFspCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        fsp.activate();
+        fsp.deactivate();
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ActivateFspCommand with input: {}", input);
+        LOGGER.info("Completed DeactivateFspCommand with input: {}", input);
 
         return new Output();
     }

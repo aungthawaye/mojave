@@ -21,7 +21,8 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCommand;
+import io.mojaloop.core.participant.contract.command.fsp.ConfigureEndpointCommand;
+import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.repository.FspRepository;
 import org.slf4j.Logger;
@@ -30,13 +31,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ActivateFspCommandHandler implements ActivateFspCommand {
+public class ConfigureEndpointCommandHandler implements ConfigureEndpointCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateFspCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigureEndpointCommandHandler.class);
 
     private final FspRepository fspRepository;
 
-    public ActivateFspCommandHandler(FspRepository fspRepository) {
+    public ConfigureEndpointCommandHandler(FspRepository fspRepository) {
 
         assert fspRepository != null;
 
@@ -46,19 +47,17 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) throws EndpointAlreadyConfiguredException, FspIdNotFoundException {
 
-        LOGGER.info("Executing ActivateFspCommand with input: {}", input);
+        LOGGER.info("Executing ConfigureEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        fsp.activate();
+        fsp.addEndpoint(input.endpointType(), input.baseUrl());
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ActivateFspCommand with input: {}", input);
+        LOGGER.info("Completed ConfigureEndpointCommand with input: {}", input);
 
         return new Output();
     }

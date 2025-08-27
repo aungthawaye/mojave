@@ -20,4 +20,18 @@
 
 package io.mojaloop.core.participant.contract.command.fsp;
 
-public interface AddSupportedCurrencyCommand { }
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.identifier.participant.SupportedCurrencyId;
+import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.fspiop.spec.core.Currency;
+
+public interface AddSupportedCurrencyCommand {
+
+    Output execute(Input input) throws FspIdNotFoundException, CurrencyAlreadySupportedException;
+
+    record Input(FspId fspId, Currency supportedCurrency) { }
+
+    record Output(SupportedCurrencyId supportedCurrencyId) { }
+
+}

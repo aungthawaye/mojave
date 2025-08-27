@@ -18,15 +18,17 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.participant.contract.exception;
+package io.mojaloop.core.participant.contract.command.fsp;
 
-import io.mojaloop.component.misc.exception.domain.ItemNotFoundException;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 
-public class FspNotFoundException extends ItemNotFoundException {
+public interface ChangeFspNameCommand {
 
-    public FspNotFoundException(String itemName, String itemValue) {
+    Output execute(Input input) throws FspIdNotFoundException;
 
-        super(itemName, itemValue);
-    }
+    record Input(FspId fspId, String name) { }
+
+    record Output() { }
 
 }

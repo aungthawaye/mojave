@@ -127,6 +127,40 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         });
     }
 
+    public boolean activateEndpoint(EndpointType type) throws CannotActivateEndpointException {
+
+        assert type != null;
+
+        var optEndpoint = this.endpoints.stream()
+                                        .filter(endpoint -> endpoint.getType() == type)
+                                        .findFirst();
+
+        if (optEndpoint.isEmpty()) {
+            return false;
+        }
+
+        optEndpoint.get().activate();
+
+        return true;
+    }
+
+    public boolean activateSupportedCurrency(Currency currency) throws CannotActivateSupportedCurrencyException {
+
+        assert currency != null;
+
+        var optSupportedCurrency = this.supportedCurrencies.stream()
+                                                           .filter(sc -> sc.getCurrency() == currency)
+                                                           .findFirst();
+
+        if (optSupportedCurrency.isEmpty()) {
+            return false;
+        }
+
+        optSupportedCurrency.get().activate();
+
+        return true;
+    }
+
     public Endpoint addEndpoint(EndpointType type, String host) throws EndpointAlreadyConfiguredException {
 
         assert type != null;
@@ -185,6 +219,40 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         this.activationStatus = ActivationStatus.INACTIVE;
         this.supportedCurrencies.forEach(SupportedCurrency::deactivate);
         this.endpoints.forEach(Endpoint::deactivate);
+    }
+
+    public boolean deactivateEndpoint(EndpointType type) {
+
+        assert type != null;
+
+        var optEndpoint = this.endpoints.stream()
+                                        .filter(endpoint -> endpoint.getType() == type)
+                                        .findFirst();
+
+        if (optEndpoint.isEmpty()) {
+            return false;
+        }
+
+        optEndpoint.get().deactivate();
+
+        return true;
+    }
+
+    public boolean deactivateSupportedCurrency(Currency currency) {
+
+        assert currency != null;
+
+        var optSupportedCurrency = this.supportedCurrencies.stream()
+                                                           .filter(sc -> sc.getCurrency() == currency)
+                                                           .findFirst();
+
+        if (optSupportedCurrency.isEmpty()) {
+            return false;
+        }
+
+        optSupportedCurrency.get().deactivate();
+
+        return true;
     }
 
     public Fsp fspCode(FspCode fspCode) {

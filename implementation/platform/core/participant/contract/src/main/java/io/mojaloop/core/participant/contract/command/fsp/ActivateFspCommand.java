@@ -20,4 +20,14 @@
 
 package io.mojaloop.core.participant.contract.command.fsp;
 
-public interface ActivateFspCommand { }
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+
+public interface ActivateFspCommand {
+
+    Output execute(Input input) throws FspIdNotFoundException;
+
+    record Input(FspId fspId){}
+
+    record Output(){}
+}
