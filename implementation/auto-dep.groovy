@@ -57,10 +57,14 @@ if (rootPackaging != 'pom' && !rootAid.contains('-service')) {
     processModules = { xmlNode, dir ->
         xmlNode.modules?.module.each { modNode ->
             def name = modNode.text()?.trim()
+
             System.out.println("Processing module: ${name}")
+
             def mDir = new File(dir, name)
             def mPom = new File(mDir, 'pom.xml')
+
             if (!mPom.exists()) {
+                System.out.println("\tPOM not found.")
                 return
             }
 

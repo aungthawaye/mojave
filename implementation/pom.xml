@@ -134,6 +134,16 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.connector</groupId>
+                <artifactId>mod-connector-gateway</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.connector</groupId>
+                <artifactId>mod-connector-sample</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>io.mojaloop.platform.core.account</groupId>
                 <artifactId>mod-account-admin</artifactId>
                 <version>1.0.0</version>

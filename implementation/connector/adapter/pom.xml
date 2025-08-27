@@ -23,5 +23,9 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-common</artifactId>
+        </dependency>
     </dependencies>
 </project>

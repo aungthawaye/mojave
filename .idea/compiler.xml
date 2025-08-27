@@ -14,13 +14,14 @@
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-component-web" />
+        <module name="mod-connector-gateway" />
         <module name="mod-participant-admin" />
         <module name="mod-component-jackson" />
         <module name="mod-account-contract" />
+        <module name="mod-connector-sample" />
         <module name="mod-common-datatype" />
         <module name="mod-participant-intercom" />
         <module name="mod-connector-adapter" />
-        <module name="mod-connector-service" />
         <module name="mod-fspiop-spec" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
@@ -88,7 +89,8 @@
       <module name="mod-connector-adapter" options="-parameters" />
       <module name="mod-connector-core" options="-parameters" />
       <module name="mod-connector-fspclient" options="-parameters" />
-      <module name="mod-connector-service" options="-parameters" />
+      <module name="mod-connector-gateway" options="-parameters" />
+      <module name="mod-connector-sample" options="-parameters" />
       <module name="mod-datatype" options="-parameters" />
       <module name="mod-fspiop" options="-parameters" />
       <module name="mod-fspiop-common" options="-parameters" />

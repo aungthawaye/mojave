@@ -41,9 +41,9 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.Settings fspiopCommonSettings() {
+    public FspiopCommonConfiguration.ParticipantSettings fspiopParticipantSettings() {
 
-        return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.Settings.class);
+        return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.ParticipantSettings.class);
     }
 
     @Bean

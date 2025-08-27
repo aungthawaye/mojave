@@ -37,8 +37,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @ComponentScan(basePackages = {"io.mojaloop.fspiop.invoker"})
-@Import(value = {FspiopCommonConfiguration.class, FspiopComponentConfiguration.class})
-public class FspiopInvokerConfiguration implements FspiopCommonConfiguration.RequiredBeans, FspiopComponentConfiguration.RequiredBeans {
+@Import(value = {FspiopComponentConfiguration.class})
+public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.RequiredBeans {
 
     @Bean
     public PartiesService partiesService(PartiesService.Settings settings,
@@ -88,7 +88,7 @@ public class FspiopInvokerConfiguration implements FspiopCommonConfiguration.Req
 
     public interface RequiredBeans { }
 
-    public interface RequiredSettings extends FspiopCommonConfiguration.RequiredSettings, FspiopComponentConfiguration.RequiredSettings {
+    public interface RequiredSettings extends FspiopComponentConfiguration.RequiredSettings {
 
         PartiesService.Settings partiesServiceSettings();
 

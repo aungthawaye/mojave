@@ -1,5 +1,6 @@
 package io.mojaloop.connector.adapter.fsp;
 
+import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
@@ -10,12 +11,12 @@ import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 
 public interface FspAdapter {
 
-    PartiesTypeIDPutResponse getParties(PartyIdType partyIdType, String partyId, String subId);
+    void confirmTransfer(TransfersIDPatchResponse response);
 
-    TransfersIDPutResponse initiateTransfer(TransfersPostRequest request);
+    PartiesTypeIDPutResponse getParties(PartyIdType partyIdType, String partyId, String subId) throws FspiopException;
 
-    void notifyTransfer(TransfersIDPatchResponse response);
+    TransfersIDPutResponse initiateTransfer(TransfersPostRequest request) throws FspiopException;
 
-    QuotesIDPutResponse quote(QuotesPostRequest request);
+    QuotesIDPutResponse quote(QuotesPostRequest request) throws FspiopException;
 
 }

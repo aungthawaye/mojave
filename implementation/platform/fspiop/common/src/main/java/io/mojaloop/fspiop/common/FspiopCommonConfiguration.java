@@ -30,32 +30,32 @@ import java.util.Map;
 public class FspiopCommonConfiguration {
 
     @Bean
-    public ParticipantContext participantSettings(FspiopCommonConfiguration.Settings settings)
+    public ParticipantContext participantSettings(ParticipantSettings participantSettings)
         throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        return ParticipantContext.with(settings.fspCode(),
-                                       settings.fspName(),
-                                       settings.ilpSecret(),
-                                       settings.signJws(),
-                                       settings.verifyJws(),
-                                       settings.privateKeyPem(),
-                                       settings.fspPublicKeyPem());
+        return ParticipantContext.with(participantSettings.fspCode(),
+                                       participantSettings.fspName(),
+                                       participantSettings.ilpSecret(),
+                                       participantSettings.signJws(),
+                                       participantSettings.verifyJws(),
+                                       participantSettings.privateKeyPem(),
+                                       participantSettings.fspPublicKeyPem());
     }
 
     public interface RequiredBeans { }
 
     public interface RequiredSettings {
 
-        FspiopCommonConfiguration.Settings fspiopCommonSettings();
+        ParticipantSettings fspiopParticipantSettings();
 
     }
 
-    public record Settings(String fspCode,
-                           String fspName,
-                           String ilpSecret,
-                           boolean signJws,
-                           boolean verifyJws,
-                           String privateKeyPem,
-                           Map<String, String> fspPublicKeyPem) { }
+    public record ParticipantSettings(String fspCode,
+                                      String fspName,
+                                      String ilpSecret,
+                                      boolean signJws,
+                                      boolean verifyJws,
+                                      String privateKeyPem,
+                                      Map<String, String> fspPublicKeyPem) { }
 
 }

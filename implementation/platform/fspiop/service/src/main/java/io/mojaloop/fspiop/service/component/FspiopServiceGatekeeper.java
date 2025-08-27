@@ -178,7 +178,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
                                                                      "The 'fspiop-source' header or its value is missing."));
         }
 
-        if (!this.participantVerifier.fspExists(source)) {
+        if (this.participantVerifier.fspExists(source)) {
 
             LOGGER.error("The Source FSP ({}) does not exist.", source);
             throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE,
@@ -194,7 +194,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
                                                                          "It is optional only for the /parties/ endpoint."));
         }
 
-        if (destination != null && !destination.isBlank() && !this.participantVerifier.fspExists(destination)) {
+        if (destination != null && !destination.isBlank() && this.participantVerifier.fspExists(destination)) {
 
             LOGGER.error("The Destination FSP ({}) does not exist.", destination);
             throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE,
