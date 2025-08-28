@@ -20,4 +20,13 @@
 
 package io.mojaloop.component.misc.exception;
 
-public record ErrorTemplate(String code, String template) { }
+import java.text.MessageFormat;
+
+public record ErrorTemplate(String code, String template) {
+
+    public String message(String... values) {
+
+        return MessageFormat.format(template, (Object[]) values);
+    }
+
+}

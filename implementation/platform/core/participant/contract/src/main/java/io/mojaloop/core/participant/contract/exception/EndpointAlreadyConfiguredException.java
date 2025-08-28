@@ -22,34 +22,16 @@ package io.mojaloop.core.participant.contract.exception;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-
-import java.text.MessageFormat;
+import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 
 public class EndpointAlreadyConfiguredException extends DomainException {
 
     private static final String TEMPLATE = "Endpoint type ({0}) is already configured.";
 
-    private final String endpointType;
+    public EndpointAlreadyConfiguredException(EndpointType endpointType) {
 
-    public EndpointAlreadyConfiguredException(String endpointType) {
+        super(new ErrorTemplate("ENDPOINT_ALREADY_CONFIGURED", TEMPLATE), endpointType.name());
 
-        super(MessageFormat.format(TEMPLATE, endpointType));
-
-        assert endpointType != null;
-
-        this.endpointType = endpointType;
-    }
-
-    @Override
-    public String[] getFillers() {
-
-        return new String[]{endpointType};
-    }
-
-    @Override
-    public ErrorTemplate getTemplate() {
-
-        return new ErrorTemplate("ENDPOINT_ALREADY_CONFIGURED", TEMPLATE);
     }
 
 }

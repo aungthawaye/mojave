@@ -56,14 +56,14 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
     @EmbeddedId
     private EndpointId id;
 
-    @Column(name = "type", length = StringSizeConstraints.LEN_24)
+    @Column(name = "type", length = StringSizeConstraints.MAX_ENDPOINT_TYPE_LEN)
     @Enumerated(EnumType.STRING)
     private EndpointType type;
 
-    @Column(name = "base_url", length = StringSizeConstraints.LEN_256)
+    @Column(name = "base_url", length = StringSizeConstraints.MAX_BASE_URL_LEN)
     private String baseUrl;
 
-    @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
+    @Column(name = "activation_status", length = StringSizeConstraints.MAX_COMMON_ENUM_LEN)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
@@ -83,7 +83,7 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
         this.id = new EndpointId(Snowflake.get().nextId());
         this.fsp = fsp;
         this.type = type;
-        this.host(baseUrl);
+        this.baseUrl(baseUrl);
         this.createdAt = Instant.now();
     }
 
@@ -99,18 +99,18 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
         return this.id;
     }
 
-    public Endpoint host(String host) {
+    public Endpoint baseUrl(String baseUrl) {
 
-        assert host != null;
+        assert baseUrl != null;
 
-        var value = host.trim();
+        var value = baseUrl.trim();
 
         if (value.isEmpty()) {
             throw new BlankOrEmptyInputException("Host");
         }
 
-        if (value.length() > StringSizeConstraints.LEN_64) {
-            throw new TextTooLargeException("Host", StringSizeConstraints.LEN_256);
+        if (value.length() > StringSizeConstraints.MAX_BASE_URL_LEN) {
+            throw new TextTooLargeException("Host", StringSizeConstraints.MAX_BASE_URL_LEN);
         }
 
         this.baseUrl = value;
@@ -127,7 +127,7 @@ public final class Endpoint extends JpaEntity<EndpointId> implements DataConvers
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateEndpointException(this.type.name());
+            throw new CannotActivateEndpointException(this.type);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;

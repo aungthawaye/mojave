@@ -22,34 +22,16 @@ package io.mojaloop.core.participant.contract.exception;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-
-import java.text.MessageFormat;
+import io.mojaloop.fspiop.spec.core.Currency;
 
 public class CurrencyAlreadySupportedException extends DomainException {
 
-    private static final String TEMPLATE = "Participant already has a supported currency with currency, {0}.";
+    private static final String TEMPLATE = "Currency, {0}, is already supported for the Participant.";
 
-    private final String currency;
+    public CurrencyAlreadySupportedException(Currency currency) {
 
-    public CurrencyAlreadySupportedException(String currency) {
+        super(new ErrorTemplate("CURRENCY_ALREADY_SUPPORTED", TEMPLATE), currency.name());
 
-        super(MessageFormat.format(TEMPLATE, currency));
-
-        assert currency != null;
-
-        this.currency = currency;
-    }
-
-    @Override
-    public String[] getFillers() {
-
-        return new String[]{currency};
-    }
-
-    @Override
-    public ErrorTemplate getTemplate() {
-
-        return new ErrorTemplate("CURRENCY_ALREADY_SUPPORTED", TEMPLATE);
     }
 
 }

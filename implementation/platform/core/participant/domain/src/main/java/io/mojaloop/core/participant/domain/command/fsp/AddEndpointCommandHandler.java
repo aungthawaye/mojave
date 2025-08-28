@@ -21,7 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.participant.contract.command.fsp.ConfigureEndpointCommand;
+import io.mojaloop.core.participant.contract.command.fsp.AddEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.repository.FspRepository;
@@ -31,13 +31,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ConfigureEndpointCommandHandler implements ConfigureEndpointCommand {
+public class AddEndpointCommandHandler implements AddEndpointCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigureEndpointCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddEndpointCommandHandler.class);
 
     private final FspRepository fspRepository;
 
-    public ConfigureEndpointCommandHandler(FspRepository fspRepository) {
+    public AddEndpointCommandHandler(FspRepository fspRepository) {
 
         assert fspRepository != null;
 
@@ -53,13 +53,13 @@ public class ConfigureEndpointCommandHandler implements ConfigureEndpointCommand
 
         var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        fsp.addEndpoint(input.endpointType(), input.baseUrl());
+        var endpoint = fsp.addEndpoint(input.endpointType(), input.baseUrl());
 
         this.fspRepository.save(fsp);
 
         LOGGER.info("Completed ConfigureEndpointCommand with input: {}", input);
 
-        return new Output();
+        return new Output(endpoint.getId());
     }
 
 }

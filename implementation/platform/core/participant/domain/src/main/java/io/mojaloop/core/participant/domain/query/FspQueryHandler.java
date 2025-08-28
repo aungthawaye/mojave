@@ -3,6 +3,8 @@ package io.mojaloop.core.participant.domain.query;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
+import io.mojaloop.core.participant.contract.exception.FspCodeNotFoundException;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import io.mojaloop.core.participant.domain.model.Fsp;
 import io.mojaloop.core.participant.domain.model.repository.FspRepository;
@@ -27,15 +29,18 @@ public class FspQueryHandler implements FspQuery {
     }
 
     @Override
-    public FspData get(FspId fspId) {
+    public FspData get(FspId fspId) throws FspIdNotFoundException {
 
-        return this.fspRepository.getReferenceById(fspId).convert();
+        return this.fspRepository.findById(fspId).orElseThrow(() -> new FspIdNotFoundException(fspId)).convert();
     }
 
     @Override
-    public FspData get(FspCode fspCode) {
+    public FspData get(FspCode fspCode) throws FspCodeNotFoundException {
 
-        return this.fspRepository.findOne(FspRepository.Filters.withFspCode(fspCode)).orElseThrow().convert();
+        return this.fspRepository
+                   .findOne(FspRepository.Filters.withFspCode(fspCode))
+                   .orElseThrow(() -> new FspCodeNotFoundException(fspCode))
+                   .convert();
     }
 
     @Override

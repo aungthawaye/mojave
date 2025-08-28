@@ -1,5 +1,5 @@
 /*-
- * ================================================================================
+ * ==============================================================================
  * Mojaloop OSS
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
@@ -15,17 +15,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ==============================================================================
  */
 
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
+import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
@@ -34,28 +36,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-public class CreateFspCommandIT {
+public class DeactivateFspCommandIT {
 
     @Autowired
     private CreateFspCommand createFspCommand;
 
+    @Autowired
+    private DeactivateFspCommand deactivateFspCommand;
+
     @Test
-    public void test() throws EndpointAlreadyConfiguredException, CurrencyAlreadySupportedException, FspCodeAlreadyExistsException {
+    public void deactivate_success_and_fspNotFound() throws Exception {
 
-        assert createFspCommand != null;
+        assertNotNull(createFspCommand);
+        assertNotNull(deactivateFspCommand);
 
-        var input = new CreateFspCommand.Input(new FspCode("fsp2"),
-                                               "FSP 2",
-                                               new Currency[]{Currency.USD, Currency.MMK, Currency.MYR},
-                                               new CreateFspCommand.Input.Endpoint[]{
-                                                   new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "https://www.fspexample.com"),
-                                                   new CreateFspCommand.Input.Endpoint(EndpointType.QUOTES, "https://www.fspexample.com"),
-                                                   new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS,
-                                                                                       "https://www.fspexample.com")});
+        var created = createSampleFsp("deact-fsp-1");
+        var fspId = created.fspId();
 
-        var output = this.createFspCommand.execute(input);
+        assertDoesNotThrow(() -> deactivateFspCommand.execute(new DeactivateFspCommand.Input(fspId)));
+
+        var nonExisting = new FspId(-9876L);
+        assertThrows(FspIdNotFoundException.class, () -> deactivateFspCommand.execute(new DeactivateFspCommand.Input(nonExisting)));
+    }
+
+    private CreateFspCommand.Output createSampleFsp(String code)
+        throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+
+        var input = new CreateFspCommand.Input(new FspCode(code),
+                                               "FSP-" + code,
+                                               new Currency[]{Currency.USD},
+                                               new CreateFspCommand.Input.Endpoint[]{});
+        return this.createFspCommand.execute(input);
     }
 
 }

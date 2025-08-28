@@ -18,44 +18,20 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.misc.exception.domain;
+package io.mojaloop.core.participant.contract.exception;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import lombok.Getter;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 
-import java.text.MessageFormat;
+public class FspCodeNotFoundException extends DomainException {
 
-@Getter
-public class ItemAlreadyExistsException extends DomainException {
+    private static final String TEMPLATE = "FSP Code ({0}) cannot be not found.";
 
-    private final static String TEMPLATE = "{0} ({1}) already exists.";
+    public FspCodeNotFoundException(FspCode fspCode) {
 
-    private final String itemName;
+        super(new ErrorTemplate("FSP_Code_NOT_FOUND", TEMPLATE), fspCode.getFspCode());
 
-    private final String itemValue;
-
-    public ItemAlreadyExistsException(String itemName, String itemValue) {
-
-        super(MessageFormat.format(TEMPLATE, itemName, itemValue));
-
-        assert itemName != null;
-        assert itemValue != null;
-
-        this.itemName = itemName;
-        this.itemValue = itemValue;
-    }
-
-    @Override
-    public String[] getFillers() {
-
-        return new String[]{itemName, itemValue};
-    }
-
-    @Override
-    public ErrorTemplate getTemplate() {
-
-        return new ErrorTemplate("ITEM_ALREADY_EXISTS", TEMPLATE);
     }
 
 }

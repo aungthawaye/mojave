@@ -22,34 +22,16 @@ package io.mojaloop.core.participant.contract.exception;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-
-import java.text.MessageFormat;
+import io.mojaloop.fspiop.spec.core.Currency;
 
 public class CannotActivateSupportedCurrencyException extends DomainException {
 
     private static final String TEMPLATE = "Cannot activate the supported currency, {0}. FSP is not active.";
 
-    private final String currency;
+    public CannotActivateSupportedCurrencyException(Currency currency) {
 
-    public CannotActivateSupportedCurrencyException(String currency) {
+        super(new ErrorTemplate("CANNOT_ACTIVATE_SUPPORTED_CURRENCY", TEMPLATE), currency.name());
 
-        super(MessageFormat.format(TEMPLATE, currency));
-
-        assert currency != null;
-
-        this.currency = currency;
-    }
-
-    @Override
-    public String[] getFillers() {
-
-        return new String[]{currency};
-    }
-
-    @Override
-    public ErrorTemplate getTemplate() {
-
-        return new ErrorTemplate("CANNOT_ACTIVATE_SUPPORTED_CURRENCY", TEMPLATE);
     }
 
 }

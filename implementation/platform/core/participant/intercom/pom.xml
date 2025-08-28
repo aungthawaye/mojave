@@ -16,10 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-contract</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.core.participant</groupId>
             <artifactId>mod-participant-domain</artifactId>
         </dependency>
         <dependency>

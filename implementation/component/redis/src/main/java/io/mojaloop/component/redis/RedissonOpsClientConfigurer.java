@@ -35,7 +35,7 @@ public class RedissonOpsClientConfigurer {
         var config = new Config();
 
         switch (settings.codec()) {
-            case "kyro":
+            case "kryo":
                 config.setCodec(new Kryo5Codec());
                 break;
             case "lz4":

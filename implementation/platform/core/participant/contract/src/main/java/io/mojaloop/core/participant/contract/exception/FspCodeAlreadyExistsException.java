@@ -20,13 +20,18 @@
 
 package io.mojaloop.core.participant.contract.exception;
 
-import io.mojaloop.component.misc.exception.domain.ItemAlreadyExistsException;
+import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 
-public class FspAlreadyExistsException extends ItemAlreadyExistsException {
+public class FspCodeAlreadyExistsException extends DomainException {
 
-    public FspAlreadyExistsException(String itemName, String itemValue) {
+    private static final String TEMPLATE = "FSP Code ({0}) already exists.";
 
-        super(itemName, itemValue);
+    public FspCodeAlreadyExistsException(FspCode fspCode) {
+
+        super(new ErrorTemplate("FSP_CODE_ALREADY_EXISTS", TEMPLATE), fspCode.getFspCode());
+
     }
 
 }

@@ -20,14 +20,18 @@
 
 package io.mojaloop.core.participant.contract.exception;
 
-import io.mojaloop.component.misc.exception.domain.ItemNotFoundException;
+import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 
-public class FspIdNotFoundException extends ItemNotFoundException {
+public class FspIdNotFoundException extends DomainException {
+
+    private static final String TEMPLATE = "FSP ID ({0}) cannot be not found.";
 
     public FspIdNotFoundException(FspId fspId) {
 
-        super("FSP ID", fspId.getId().toString());
+        super(new ErrorTemplate("FSP_ID_NOT_FOUND", TEMPLATE), fspId.getId().toString());
+
     }
 
 }

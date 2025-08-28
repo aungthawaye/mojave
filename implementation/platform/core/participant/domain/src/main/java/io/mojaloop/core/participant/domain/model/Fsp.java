@@ -75,7 +75,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     @Embedded
     protected FspCode fspCode;
 
-    @Column(name = "name", length = StringSizeConstraints.LEN_64)
+    @Column(name = "name", length = StringSizeConstraints.MAX_FSP_NAME_LENGTH)
     protected String name;
 
     @Getter(AccessLevel.NONE)
@@ -87,11 +87,11 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, mappedBy = "fsp", targetEntity = Endpoint.class, fetch = FetchType.EAGER)
     protected Set<Endpoint> endpoints = new HashSet<>();
 
-    @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
+    @Column(name = "activation_status", length = StringSizeConstraints.MAX_COMMON_ENUM_LEN)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status", length = StringSizeConstraints.LEN_24)
+    @Column(name = "termination_status", length = StringSizeConstraints.MAX_COMMON_ENUM_LEN)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
@@ -167,7 +167,8 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         assert host != null;
 
         if (this.hasEndpoint(type)) {
-            throw new EndpointAlreadyConfiguredException(type.name());
+
+            throw new EndpointAlreadyConfiguredException(type);
         }
 
         var endpoint = new Endpoint(this, type, host);
@@ -182,7 +183,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         assert currency != null;
 
         if (this.hasSupportedCurrency(currency)) {
-            throw new CurrencyAlreadySupportedException(currency.name());
+            throw new CurrencyAlreadySupportedException(currency);
         }
 
         var supportedCurrency = new SupportedCurrency(this, currency);
@@ -190,6 +191,26 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         this.supportedCurrencies.add(supportedCurrency);
 
         return supportedCurrency;
+    }
+
+    public boolean changeEndpoint(EndpointType type, String baseUrl) {
+
+        assert type != null;
+        assert baseUrl != null;
+
+        var optEndpoint = this.endpoints.stream()
+                                        .filter(endpoint -> endpoint.getType() == type)
+                                        .findFirst();
+
+        if (optEndpoint.isEmpty()) {
+            return false;
+        }
+
+        var endpoint = optEndpoint.get();
+
+        endpoint.baseUrl(baseUrl);
+
+        return true;
     }
 
     @Override
@@ -309,8 +330,8 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
             throw new BlankOrEmptyInputException("FSP Name");
         }
 
-        if (value.length() > StringSizeConstraints.LEN_64) {
-            throw new TextTooLargeException("FSP Name", StringSizeConstraints.LEN_64);
+        if (value.length() > StringSizeConstraints.MAX_FSP_NAME_LENGTH) {
+            throw new TextTooLargeException("FSP Name", StringSizeConstraints.MAX_FSP_NAME_LENGTH);
         }
 
         this.name = value;

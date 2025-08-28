@@ -54,11 +54,11 @@ public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> impl
     @EmbeddedId
     private SupportedCurrencyId id;
 
-    @Column(name = "currency", length = StringSizeConstraints.LEN_3)
+    @Column(name = "currency", length = StringSizeConstraints.MAX_CURRENCY_LEN)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @Column(name = "activation_status", length = StringSizeConstraints.LEN_24)
+    @Column(name = "activation_status", length = StringSizeConstraints.MAX_COMMON_ENUM_LEN)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
@@ -101,7 +101,8 @@ public final class SupportedCurrency extends JpaEntity<SupportedCurrencyId> impl
     void activate() throws CannotActivateSupportedCurrencyException {
 
         if (!this.fsp.isActive()) {
-            throw new CannotActivateSupportedCurrencyException(this.currency.name());
+
+            throw new CannotActivateSupportedCurrencyException(this.currency);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;
