@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ParticipantAdminApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+  <configuration default="false" name="participant-admin" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="participant">
     <envs>
       <env name="VAULT_TOKEN" value="hvs.GJBnvtehSoCzpvF8TFibWbUU" />
       <env name="VAULT_ADDR" value="http://localhost:8200" />

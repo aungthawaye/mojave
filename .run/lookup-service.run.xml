@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="lookup-service" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="lookup">
+    <envs>
+      <env name="VAULT_TOKEN" value="hvs.GJBnvtehSoCzpvF8TFibWbUU" />
+      <env name="VAULT_ADDR" value="http://localhost:8200" />
+      <env name="VAULT_SECRET_PATH" value="Mojaloop" />
+    </envs>
+    <module name="mod-lookup-service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.lookup.service.LookUpServiceApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.mojaloop.core.lookup.service.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

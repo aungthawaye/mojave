@@ -1,15 +1,15 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="LookUpServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+  <configuration default="false" name="participant-intercom" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="participant">
     <envs>
       <env name="VAULT_TOKEN" value="hvs.GJBnvtehSoCzpvF8TFibWbUU" />
       <env name="VAULT_ADDR" value="http://localhost:8200" />
       <env name="VAULT_SECRET_PATH" value="Mojaloop" />
     </envs>
-    <module name="mod-lookup-service" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.lookup.service.LookUpServiceApplication" />
+    <module name="mod-participant-intercom" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.participant.intercom.ParticipantIntercomApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.core.lookup.service.*" />
+        <option name="PATTERN" value="io.mojaloop.core.participant.admin.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
