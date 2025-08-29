@@ -1,0 +1,58 @@
+package io.mojaloop.core.participant.intercom.client.api;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.misc.error.RestErrorResponse;
+import io.mojaloop.component.retrofit.RetrofitService;
+import io.mojaloop.core.participant.contract.data.FspData;
+import io.mojaloop.core.participant.intercom.client.exception.ParticipantIntercomClientException;
+import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public class GetFsps {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetFsps.class);
+
+    private final ParticipantIntercomService participantIntercomService;
+
+    private final ObjectMapper objectMapper;
+
+    public GetFsps(ParticipantIntercomService participantIntercomService, ObjectMapper objectMapper) {
+
+        assert participantIntercomService != null;
+        assert objectMapper != null;
+
+        this.participantIntercomService = participantIntercomService;
+        this.objectMapper = objectMapper;
+    }
+
+    public List<FspData> execute() throws ParticipantIntercomClientException {
+
+        try {
+
+            return RetrofitService
+                       .invoke(this.participantIntercomService.getFsps(),
+                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)
+                              )
+                       .body();
+
+        } catch (RetrofitService.InvocationException e) {
+
+            LOGGER.error("Error invoking getFsps : {}", e.getMessage());
+
+            var decodedErrorResponse = e.getDecodedErrorResponse();
+
+            if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
+
+                throw new ParticipantIntercomClientException(code, message);
+            }
+
+            throw new ParticipantIntercomClientException("INTERNAL_SERVER_ERROR", e.getMessage());
+        }
+    }
+
+}

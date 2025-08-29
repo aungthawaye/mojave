@@ -33,7 +33,7 @@ public class TestSettings implements FspiopInvokerConfiguration.RequiredSettings
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopParticipantSettings() {
+    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         return new FspiopCommonConfiguration.ParticipantSettings("fsp1",
                                                                  "FSP 1",

@@ -17,10 +17,6 @@
     <dependencies>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-retrofit</artifactId>
         </dependency>
         <dependency>

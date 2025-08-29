@@ -49,11 +49,22 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
         assert settings != null;
 
         this.authenticator = authenticator;
-        this.pathPatterns = new PathPattern[settings.securedEndpoints().length];
 
-        for (int i = 0; i < settings.securedEndpoints().length; i++) {
-            var parser = new PathPatternParser();
-            this.pathPatterns[i] = parser.parse(settings.securedEndpoints()[i]);
+        if (settings.securedEndpoints() == null || settings.securedEndpoints().length == 0) {
+
+            this.pathPatterns = null;
+            LOGGER.info("No secured endpoints are defined.");
+
+        } else {
+
+            this.pathPatterns = new PathPattern[settings.securedEndpoints().length];
+
+            for (int i = 0; i < settings.securedEndpoints().length; i++) {
+                var parser = new PathPatternParser();
+                this.pathPatterns[i] = parser.parse(settings.securedEndpoints()[i]);
+            }
+
+            LOGGER.info("Secured endpoints are defined.");
         }
 
     }
@@ -67,11 +78,15 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
         var match = false;
 
-        for (var pathPattern : this.pathPatterns) {
-            if (pathPattern.matches(PathContainer.parsePath(uri))) {
-                match = true;
-                break;
+        if (this.pathPatterns != null) {
+
+            for (var pathPattern : this.pathPatterns) {
+                if (pathPattern.matches(PathContainer.parsePath(uri))) {
+                    match = true;
+                    break;
+                }
             }
+
         }
 
         if (match && SecurityContextHolder.getContext().getAuthentication() == null) {

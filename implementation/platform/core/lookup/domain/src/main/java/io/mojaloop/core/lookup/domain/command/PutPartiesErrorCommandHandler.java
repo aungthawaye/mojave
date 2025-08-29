@@ -23,7 +23,7 @@ package io.mojaloop.core.lookup.domain.command;
 import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.contract.command.PutPartiesErrorCommand;
-import io.mojaloop.core.participant.utility.store.ParticipantStore;
+import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;

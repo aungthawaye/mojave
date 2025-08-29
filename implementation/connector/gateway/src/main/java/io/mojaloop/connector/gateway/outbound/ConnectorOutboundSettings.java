@@ -1,9 +1,11 @@
 package io.mojaloop.connector.gateway.outbound;
 
+import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
@@ -12,7 +14,8 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopParticipantSettings() {
+    @ConditionalOnMissingBean(FspiopCommonConfiguration.ParticipantSettings.class)
+    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         var fspCode = System.getenv("FSPIOP_FSP_CODE");
         var fspName = System.getenv("FSPIOP_FSP_NAME");
@@ -20,10 +23,7 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
         var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
         var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
         var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
-        var fsps = System
-                       .getenv("FSPIOP_FSPS")
-                       .split(",",
-                              -1);
+        var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
         var fspPublicKeyPem = new HashMap<String, String>();
 
         for (var fsp : fsps) {
@@ -32,17 +32,11 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
             var publicKeyPem = System.getenv(env);
 
             if (publicKeyPem != null) {
-                fspPublicKeyPem.put(fsp,
-                                    publicKeyPem);
+                fspPublicKeyPem.put(fsp, publicKeyPem);
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode,
-                                                                 fspName,
-                                                                 ilpSecret,
-                                                                 signJws,
-                                                                 verifyJws,
-                                                                 privateKeyPem,
+        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem,
                                                                  fspPublicKeyPem);
     }
 
@@ -54,11 +48,13 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
                                                                    Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")),
                                                                    Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
                                                                    Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")),
-                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")));
+                                                                   Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")),
+                                                                   System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"));
     }
 
     @Bean
     @Override
+    @ConditionalOnMissingBean(PartiesService.Settings.class)
     public PartiesService.Settings partiesServiceSettings() {
 
         return new PartiesService.Settings(System.getenv("FSPIOP_PARTIES_URL"));
@@ -66,6 +62,7 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
 
     @Bean
     @Override
+    @ConditionalOnMissingBean(QuotesService.Settings.class)
     public QuotesService.Settings quotesServiceSettings() {
 
         return new QuotesService.Settings(System.getenv("FSPIOP_QUOTES_URL"));
@@ -73,13 +70,22 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
 
     @Bean
     @Override
-    public ConnectorOutboundConfiguration.TransactionSettings transactionSettings() {
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new ConnectorOutboundConfiguration.TransactionSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
+        return new SpringSecurityConfigurer.Settings(new String[]{"/lookup", "/quote", "/transfer"});
     }
 
     @Bean
     @Override
+    public ConnectorOutboundConfiguration.TransactionSettings transactionSettings() {
+
+        return new ConnectorOutboundConfiguration.TransactionSettings(
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
+    }
+
+    @Bean
+    @Override
+    @ConditionalOnMissingBean(TransfersService.Settings.class)
     public TransfersService.Settings transfersServiceSettings() {
 
         return new TransfersService.Settings(System.getenv("FSPIOP_TRANSFERS_URL"));

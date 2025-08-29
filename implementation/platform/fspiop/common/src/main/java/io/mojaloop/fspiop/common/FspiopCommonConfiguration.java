@@ -46,7 +46,7 @@ public class FspiopCommonConfiguration {
 
     public interface RequiredSettings {
 
-        ParticipantSettings fspiopParticipantSettings();
+        ParticipantSettings fspiopCommonParticipantSettings();
 
     }
 

@@ -50,7 +50,7 @@ def addDep = { gid, aid, version ->
     }
 }
 
-if (rootPackaging != 'pom' && !rootAid.contains('-service')) {
+if (rootPackaging != 'pom') {
     addDep(ownGid, rootAid, pomXml.version?.text()?.trim() ?: '')
 } else {
     def processModules
@@ -74,7 +74,7 @@ if (rootPackaging != 'pom' && !rootAid.contains('-service')) {
             def aid = cXml.artifactId?.text()?.trim()
             def ver = cXml.version?.text()?.trim() ?: pomXml.version?.text()?.trim() ?: ''
 
-            if (pkg != 'pom' && !aid.contains('-service') && gid.startsWith('io.mojaloop')) {
+            if (pkg != 'pom' && gid.startsWith('io.mojaloop')) {
                 addDep(gid, aid, ver)
             }
             processModules(cXml, mDir)

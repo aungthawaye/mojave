@@ -1,9 +1,11 @@
 package io.mojaloop.connector.gateway.inbound;
 
+import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
@@ -12,7 +14,8 @@ public class ConnectorInboundSettings implements ConnectorInboundConfiguration.R
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopParticipantSettings() {
+    @ConditionalOnMissingBean(FspiopCommonConfiguration.ParticipantSettings.class)
+    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         var fspCode = System.getenv("FSPIOP_FSP_CODE");
         var fspName = System.getenv("FSPIOP_FSP_NAME");
@@ -33,7 +36,8 @@ public class ConnectorInboundSettings implements ConnectorInboundConfiguration.R
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem,
+                                                                 fspPublicKeyPem);
     }
 
     @Bean
@@ -47,6 +51,7 @@ public class ConnectorInboundSettings implements ConnectorInboundConfiguration.R
 
     @Bean
     @Override
+    @ConditionalOnMissingBean(PartiesService.Settings.class)
     public PartiesService.Settings partiesServiceSettings() {
 
         return new PartiesService.Settings(System.getenv("FSPIOP_PARTIES_URL"));
@@ -54,6 +59,7 @@ public class ConnectorInboundSettings implements ConnectorInboundConfiguration.R
 
     @Bean
     @Override
+    @ConditionalOnMissingBean(QuotesService.Settings.class)
     public QuotesService.Settings quotesServiceSettings() {
 
         return new QuotesService.Settings(System.getenv("FSPIOP_QUOTES_URL"));
@@ -61,6 +67,14 @@ public class ConnectorInboundSettings implements ConnectorInboundConfiguration.R
 
     @Bean
     @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
+    }
+
+    @Bean
+    @Override
+    @ConditionalOnMissingBean(TransfersService.Settings.class)
     public TransfersService.Settings transfersServiceSettings() {
 
         return new TransfersService.Settings(System.getenv("FSPIOP_TRANSFERS_URL"));

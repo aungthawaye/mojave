@@ -13,10 +13,10 @@
         <module name="mod-component-vault" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
+        <module name="mod-participant-intercom-client" />
         <module name="mod-component-web" />
         <module name="mod-connector-gateway" />
         <module name="mod-participant-admin" />
-        <module name="mod-component-jackson" />
         <module name="mod-account-contract" />
         <module name="mod-connector-sample" />
         <module name="mod-common-datatype" />
@@ -34,15 +34,16 @@
         <module name="mod-participant-domain" />
         <module name="mod-account-admin" />
         <module name="mod-fspiop-invoker" />
+        <module name="mod-participant-store" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
-        <module name="mod-participant-util" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
       <module name="mod-component-http" target="21" />
+      <module name="mod-component-jackson" target="21" />
       <module name="mod-connector-core" target="21" />
       <module name="mod-connector-fspclient" target="21" />
       <module name="mod-datatype" target="21" />
@@ -54,6 +55,7 @@
       <module name="mod-oracle-domain" target="21" />
       <module name="mod-oracle-routes-admin" target="21" />
       <module name="mod-participant-routes-admin" target="21" />
+      <module name="mod-participant-util" target="21" />
       <module name="mod-participant-utility" target="21" />
       <module name="mod-shared-security" target="21" />
       <module name="oracle-pom" target="21" />
@@ -111,7 +113,9 @@
       <module name="mod-participant-contract" options="-parameters" />
       <module name="mod-participant-domain" options="-parameters" />
       <module name="mod-participant-intercom" options="-parameters" />
+      <module name="mod-participant-intercom-client" options="-parameters" />
       <module name="mod-participant-routes-admin" options="-parameters" />
+      <module name="mod-participant-store" options="-parameters" />
       <module name="mod-participant-util" options="-parameters" />
       <module name="mod-participant-utility" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />

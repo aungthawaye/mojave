@@ -21,7 +21,7 @@
 package io.mojaloop.fspiop.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.jackson.ComponentJacksonConfiguration;
+import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
@@ -30,7 +30,7 @@ import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-@Import(value = {FspiopCommonConfiguration.class, ComponentJacksonConfiguration.class})
+@Import(value = {FspiopCommonConfiguration.class, MiscConfiguration.class})
 public class FspiopComponentConfiguration {
 
     @Bean
@@ -51,8 +51,8 @@ public class FspiopComponentConfiguration {
         return new FspiopInvocationErrorHandler();
     }
 
-    public interface RequiredBeans extends FspiopCommonConfiguration.RequiredBeans, ComponentJacksonConfiguration.RequiredBeans { }
+    public interface RequiredBeans extends FspiopCommonConfiguration.RequiredBeans, MiscConfiguration.RequiredBeans { }
 
-    public interface RequiredSettings extends FspiopCommonConfiguration.RequiredSettings, ComponentJacksonConfiguration.RequiredSettings { }
+    public interface RequiredSettings extends FspiopCommonConfiguration.RequiredSettings, MiscConfiguration.RequiredSettings { }
 
 }

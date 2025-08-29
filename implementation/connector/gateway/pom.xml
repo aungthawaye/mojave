@@ -16,6 +16,14 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-tomcat</artifactId>
         </dependency>

@@ -20,19 +20,22 @@
 
 package io.mojaloop.core.lookup.domain;
 
-import io.mojaloop.component.jackson.ComponentJacksonConfiguration;
-import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
+import io.mojaloop.component.misc.MiscConfiguration;
+import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.lookup.domain"})
 @Import(value = {
-    ComponentJacksonConfiguration.class, FspiopCommonConfiguration.class, ParticipantUtilityConfiguration.class})
+    MiscConfiguration.class, FspiopCommonConfiguration.class, ParticipantStoreConfiguration.class})
 public class LookUpDomainConfiguration {
 
-    public interface RequiredSettings extends ParticipantUtilityConfiguration.RequiredSettings,
-                                              ComponentJacksonConfiguration.RequiredSettings,
+    public interface RequiredBeans
+        extends MiscConfiguration.RequiredBeans, FspiopCommonConfiguration.RequiredBeans, ParticipantStoreConfiguration.RequiredBeans { }
+
+    public interface RequiredSettings extends ParticipantStoreConfiguration.RequiredSettings,
+                                              MiscConfiguration.RequiredSettings,
                                               FspiopCommonConfiguration.RequiredSettings { }
 
 }

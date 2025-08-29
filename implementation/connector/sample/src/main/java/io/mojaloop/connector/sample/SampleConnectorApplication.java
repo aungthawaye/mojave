@@ -6,7 +6,7 @@ public class SampleConnectorApplication {
 
     public static void main(String[] args) {
 
-        ConnectorGatewayApplication.run(args, SampleConnectorConfiguration.class, SampleConnectorSettings.class);
+        ConnectorGatewayApplication.run(args, SampleConnectorConfiguration.class);
     }
 
 }

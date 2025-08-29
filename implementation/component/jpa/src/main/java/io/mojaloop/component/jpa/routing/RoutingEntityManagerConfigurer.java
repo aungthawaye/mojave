@@ -53,6 +53,6 @@ public class RoutingEntityManagerConfigurer {
 
     }
 
-    public record Settings(String persistenceUnit, String showSql, String formatSql) { }
+    public record Settings(String persistenceUnit, boolean showSql, boolean formatSql) { }
 
 }

@@ -1,15 +1,13 @@
 package io.mojaloop.connector.gateway.outbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.ComponentMiscConfiguration;
+import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundErrorWriter;
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
-import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
@@ -22,22 +20,24 @@ import org.springframework.context.annotation.Import;
 @EnableAutoConfiguration
 @Configuration(proxyBeanMethods = false)
 @Import(value = {
-    ComponentMiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
+    MiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.outbound"})
-public class ConnectorOutboundConfiguration implements ComponentMiscConfiguration.RequiredBeans,
-                                                       FspiopInvokerConfiguration.RequiredBeans,
-                                                       SpringSecurityConfiguration.RequiredBeans {
+public class ConnectorOutboundConfiguration
+    implements MiscConfiguration.RequiredBeans,
+               FspiopInvokerConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredBeans {
 
-    private final ParticipantContext participantContext;
+    private final OutboundSettings outboundSettings;
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorOutboundConfiguration(ParticipantContext participantContext, ObjectMapper objectMapper) {
+    public ConnectorOutboundConfiguration(OutboundSettings outboundSettings,
+                                          ObjectMapper objectMapper) {
 
-        assert participantContext != null;
+        assert outboundSettings != null;
         assert objectMapper != null;
 
-        this.participantContext = participantContext;
+        this.outboundSettings = outboundSettings;
         this.objectMapper = objectMapper;
 
     }
@@ -53,13 +53,7 @@ public class ConnectorOutboundConfiguration implements ComponentMiscConfiguratio
     @Override
     public Authenticator authenticator() {
 
-        return new FspiopOutboundGatekeeper(this.participantContext, this.objectMapper);
-    }
-
-    @Bean
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings("/lookup", "/quote", "/transfer");
+        return new FspiopOutboundGatekeeper(this.objectMapper, this.outboundSettings);
     }
 
     @Bean
@@ -74,7 +68,8 @@ public class ConnectorOutboundConfiguration implements ComponentMiscConfiguratio
 
     }
 
-    public interface RequiredSettings extends ComponentMiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings {
 
         OutboundSettings outboundSettings();
 
@@ -82,7 +77,12 @@ public class ConnectorOutboundConfiguration implements ComponentMiscConfiguratio
 
     }
 
-    public record OutboundSettings(int portNo, int maxThreads, int connectionTimeout, int putResultTimeout, int pubSubTimeout) { }
+    public record OutboundSettings(int portNo,
+                                   int maxThreads,
+                                   int connectionTimeout,
+                                   int putResultTimeout,
+                                   int pubSubTimeout,
+                                   String publicKeyPem) { }
 
     public record TransactionSettings(int expireAfterSeconds) { }
 

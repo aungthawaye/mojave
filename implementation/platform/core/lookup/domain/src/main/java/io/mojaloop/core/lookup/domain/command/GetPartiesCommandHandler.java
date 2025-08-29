@@ -24,7 +24,7 @@ import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.contract.command.GetPartiesCommand;
 import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.utility.store.ParticipantStore;
+import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;

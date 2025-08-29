@@ -23,8 +23,8 @@ package io.mojaloop.core.lookup.service;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
-import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
-import io.mojaloop.core.participant.utility.client.ParticipantClient;
+import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
+import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -41,7 +41,7 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopParticipantSettings() {
+    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.ParticipantSettings.class);
     }
@@ -50,41 +50,35 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     @Override
     public LookUpServiceConfiguration.TomcatSettings lookUpServiceTomcatSettings() {
 
-        return this.vault.get(VaultPaths.TOMCAT_SETTINGS, LookUpServiceConfiguration.TomcatSettings.class);
+        return new LookUpServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("LOOKUP_SERVICE_PORT", "4303")));
     }
 
     @Bean
     @Override
-    public ParticipantClient.Settings participantClientSettings() {
+    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return this.vault.get(VaultPaths.PARTICIPANT_CLIENT_SETTINGS, ParticipantClient.Settings.class);
+        return new ParticipantIntercomService.Settings(
+            System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4201"));
+    }
+
+    @Bean
+    @Override
+    public ParticipantStoreConfiguration.Settings participantStoreSettings() {
+
+        return new ParticipantStoreConfiguration.Settings(
+            Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "300000")));
     }
 
     @Bean
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return this.vault.get(VaultPaths.SPRING_SECURITY_SETTINGS, SpringSecurityConfigurer.Settings.class);
-    }
-
-    @Bean
-    @Override
-    public ParticipantUtilityConfiguration.Settings utilitySettings() {
-
-        return this.vault.get(VaultPaths.PARTICIPANT_UTILITY_SETTINGS, ParticipantUtilityConfiguration.Settings.class);
+        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**"});
     }
 
     public static class VaultPaths {
 
-        public static final String FSPIOP_SETTINGS = "micro/core/lookup/service/fspiop/settings";
-
-        public static final String TOMCAT_SETTINGS = "micro/core/lookup/service/tomcat/settings";
-
-        public static final String PARTICIPANT_UTILITY_SETTINGS = "micro/core/lookup/service/participant-utility/settings";
-
-        public static final String PARTICIPANT_CLIENT_SETTINGS = "micro/core/lookup/service/participant-client/settings";
-
-        public static final String SPRING_SECURITY_SETTINGS = "micro/core/lookup/service/spring-security/settings";
+        public static final String FSPIOP_SETTINGS = "micro/fspiop/common/participant/settings";
 
     }
 

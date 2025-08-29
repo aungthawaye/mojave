@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundErrorWriter;
-import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.ErrorInformation;
@@ -42,7 +41,7 @@ public class FspiopOutboundErrorWriter implements AuthenticationErrorWriter {
 
             writer = response.getWriter();
 
-            if (exception instanceof FspiopInboundGatekeeper.GatekeeperFailureException ge) {
+            if (exception instanceof FspiopOutboundGatekeeper.GatekeeperFailureException ge) {
 
                 var cause = (FspiopException) ge.getCause();
 

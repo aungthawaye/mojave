@@ -56,6 +56,6 @@ public class SpringSecurityConfigurer {
         return http.build();
     }
 
-    public record Settings(String... securedEndpoints) { }
+    public record Settings(String[] securedEndpoints) { }
 
 }

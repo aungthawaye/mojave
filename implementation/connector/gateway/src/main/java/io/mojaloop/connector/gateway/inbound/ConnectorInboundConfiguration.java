@@ -1,7 +1,7 @@
 package io.mojaloop.connector.gateway.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.ComponentMiscConfiguration;
+import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
@@ -32,10 +32,9 @@ import java.util.List;
 @EnableAsync
 @EnableWebMvc
 @Import(value = {
-    ComponentMiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class,
-    SpringSecurityConfiguration.class})
+    MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
-public class ConnectorInboundConfiguration implements ComponentMiscConfiguration.RequiredBeans,
+public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredBeans,
                                                       FspiopInvokerConfiguration.RequiredBeans,
                                                       SpringSecurityConfiguration.RequiredBeans {
 
@@ -43,7 +42,8 @@ public class ConnectorInboundConfiguration implements ComponentMiscConfiguration
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorInboundConfiguration(ParticipantContext participantContext, ObjectMapper objectMapper) {
+    public ConnectorInboundConfiguration(ParticipantContext participantContext,
+                                         ObjectMapper objectMapper) {
 
         assert participantContext != null;
         assert objectMapper != null;
@@ -83,11 +83,6 @@ public class ConnectorInboundConfiguration implements ComponentMiscConfiguration
 
     }
 
-    @Bean
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings("/parties/**", "/quotes/**", "/transfers/**");
-    }
 
     @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
@@ -98,11 +93,13 @@ public class ConnectorInboundConfiguration implements ComponentMiscConfiguration
     public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans {
 
         PubSubClient pubSubClient();
+
     }
 
-    public interface RequiredSettings extends ComponentMiscConfiguration.RequiredSettings,
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
                                               ConnectorAdapterConfiguration.RequiredSettings,
-                                              FspiopInvokerConfiguration.RequiredSettings {
+                                              FspiopInvokerConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings {
 
         InboundSettings inboundSettings();
 

@@ -38,7 +38,7 @@ public class FspiopException extends Exception {
     public FspiopException(ErrorDefinition errorDefinition, String message) {
 
         super(message);
-        this.errorDefinition = errorDefinition;
+        this.errorDefinition = new ErrorDefinition(errorDefinition.code(), errorDefinition.name(), message);
     }
 
     public FspiopException(ErrorDefinition errorDefinition, Throwable e) {

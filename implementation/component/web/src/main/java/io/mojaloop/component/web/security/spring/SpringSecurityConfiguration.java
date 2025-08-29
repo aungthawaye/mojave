@@ -29,7 +29,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
+    public SecurityFilterChain applicationSecurity(HttpSecurity httpSecurity,
                                                    SpringSecurityConfigurer.Settings settings,
                                                    Authenticator authenticator,
                                                    AuthenticationErrorWriter authenticationErrorWriter) throws Exception {

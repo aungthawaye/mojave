@@ -20,24 +20,30 @@
 
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.component.misc.ComponentMiscConfiguration;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
-import io.mojaloop.core.participant.utility.store.ParticipantStore;
+import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import io.mojaloop.fspiop.service.component.ParticipantVerifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@Configuration(proxyBeanMethods = false)
 @EnableWebMvc
+@EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
 @Import(value = {
-    LookUpDomainConfiguration.class, ComponentMiscConfiguration.class, FspiopServiceConfiguration.class})
-public class LookUpServiceConfiguration implements FspiopServiceConfiguration.RequiredBeans, ComponentMiscConfiguration.RequiredBeans {
+    LookUpDomainConfiguration.class, FspiopServiceConfiguration.class})
+public class LookUpServiceConfiguration implements LookUpDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
@@ -62,8 +68,7 @@ public class LookUpServiceConfiguration implements FspiopServiceConfiguration.Re
     }
 
     public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings,
-                                              FspiopServiceConfiguration.RequiredSettings,
-                                              ComponentMiscConfiguration.RequiredSettings {
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings lookUpServiceTomcatSettings();
 

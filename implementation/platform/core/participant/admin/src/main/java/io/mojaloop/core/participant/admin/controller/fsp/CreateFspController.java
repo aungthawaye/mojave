@@ -1,5 +1,6 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
@@ -42,17 +43,19 @@ public class CreateFspController {
 
         var output = this.createFspCommand.execute(input);
 
-        return ResponseEntity.ok(new Response(1L));
+        return ResponseEntity.ok(new Response(output.fspId().getId()));
     }
 
     public record Response(Long fspId) { }
 
-    public record Request(@NotNull @NotBlank @Max(StringSizeConstraints.MAX_FSP_CODE_LEN) String fspCode,
-                          @NotNull @NotBlank @Max(StringSizeConstraints.MAX_FSP_NAME_LENGTH) String name,
-                          Currency[] supportedCurrencies,
-                          CreateFspCommand.Input.Endpoint[] endpoints) {
+    public record Request(@NotNull @NotBlank @Max(StringSizeConstraints.MAX_FSP_CODE_LEN) @JsonProperty(required = true) String fspCode,
+                          @NotNull @NotBlank @Max(StringSizeConstraints.MAX_FSP_NAME_LENGTH) @JsonProperty(required = true) String name,
+                          @JsonProperty(required = true) Currency[] supportedCurrencies,
+                          @JsonProperty(required = true) CreateFspCommand.Input.Endpoint[] endpoints) {
 
-        public record Endpoint(EndpointType type, @NotNull @NotBlank @Max(StringSizeConstraints.MAX_BASE_URL_LEN) String baseUrl) { }
+        public record Endpoint(@JsonProperty(required = true) EndpointType type,
+                               @NotNull @NotBlank @Max(StringSizeConstraints.MAX_BASE_URL_LEN)
+                               @JsonProperty(required = true) String baseUrl) { }
 
     }
 

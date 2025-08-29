@@ -21,19 +21,26 @@
 package io.mojaloop.core.lookup.service;
 
 import io.mojaloop.component.vault.VaultConfigurer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(exclude = {FlywayAutoConfiguration.class, HibernateJpaAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@Configuration
+@Import(value = {LookUpServiceConfiguration.class, LookUpServiceApplication.VaultSettings.class, LookUpServiceSettings.class})
 public class LookUpServiceApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(new Class[]{LookUpServiceConfiguration.class, VaultSettings.class, LookUpServiceSettings.class}, args);
+        new SpringApplicationBuilder(LookUpServiceApplication.class)
+            .web(WebApplicationType.SERVLET)
+            .properties("spring.application.name=lookup-service", "spring.jmx.enabled=true", "spring.jmx.unique-names=true",
+                        "spring.jmx.default-domain=lookup-service", "spring.application.admin.enabled=true",
+                        "management.endpoints.web.base-path=/actuator",
+                        "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
+                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=LookUpServiceApplication,context=lookup-service")
+            .run(args);
     }
 
     public static class VaultSettings {

@@ -16,10 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-vault</artifactId>
         </dependency>
         <dependency>
@@ -28,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-util</artifactId>
+            <artifactId>mod-participant-store</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.fspiop</groupId>

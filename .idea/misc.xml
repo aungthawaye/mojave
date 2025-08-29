@@ -12,6 +12,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/implementation/component/jackson/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/connector/core/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/common/central-cache/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/common/http-security/pom.xml" />
@@ -22,6 +23,7 @@
         <option value="$PROJECT_DIR$/implementation/platform/core/lookup/routes-fspiop/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/oracle/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/participant/routes-admin/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/participant/utility/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/shared/pom.xml" />
       </set>
     </option>

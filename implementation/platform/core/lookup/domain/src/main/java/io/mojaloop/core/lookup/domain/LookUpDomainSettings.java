@@ -22,8 +22,8 @@ package io.mojaloop.core.lookup.domain;
 
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
-import io.mojaloop.core.participant.utility.ParticipantUtilityConfiguration;
-import io.mojaloop.core.participant.utility.client.ParticipantClient;
+import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
+import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -42,32 +42,32 @@ final class LookUpDomainSettings implements LookUpDomainConfiguration.RequiredSe
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopParticipantSettings() {
+    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.ParticipantSettings.class);
     }
 
     @Bean
     @Override
-    public ParticipantClient.Settings participantClientSettings() {
+    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return this.vault.get(VaultPaths.PARTICIPANT_CLIENT_SETTING, ParticipantClient.Settings.class);
+        return this.vault.get(VaultPaths.PARTICIPANT_INTERCOM_SERVICE_SETTINGS, ParticipantIntercomService.Settings.class);
     }
 
     @Bean
     @Override
-    public ParticipantUtilityConfiguration.Settings utilitySettings() {
+    public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return this.vault.get(VaultPaths.PARTICIPANT_UTILITY_SETTINGS, ParticipantUtilityConfiguration.Settings.class);
+        return this.vault.get(VaultPaths.PARTICIPANT_STORE_SETTINGS, ParticipantStoreConfiguration.Settings.class);
     }
 
     public static class VaultPaths {
 
         public static final String FSPIOP_SETTINGS = "micro/core/lookup/domain/fspiop/settings";
 
-        public static final String PARTICIPANT_UTILITY_SETTINGS = "micro/core/lookup/domain/participant-utility/settings";
+        public static final String PARTICIPANT_STORE_SETTINGS = "micro/core/lookup/domain/participant-store/settings";
 
-        public static final String PARTICIPANT_CLIENT_SETTING = "micro/core/lookup/domain/participant-client/settings";
+        public static final String PARTICIPANT_INTERCOM_SERVICE_SETTINGS = "micro/core/lookup/domain/participant-intercom-service/settings";
 
     }
 
