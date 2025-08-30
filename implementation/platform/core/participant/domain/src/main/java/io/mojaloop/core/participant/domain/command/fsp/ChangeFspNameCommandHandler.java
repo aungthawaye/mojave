@@ -50,8 +50,8 @@ public class ChangeFspNameCommandHandler implements ChangeFspNameCommand {
         LOGGER.info("Executing ChangeFspNameCommand with input: {}", input);
 
         var fsp = this.fspRepository
-            .findById(input.fspId())
-            .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         fsp.name(input.name());
 
@@ -61,4 +61,5 @@ public class ChangeFspNameCommandHandler implements ChangeFspNameCommand {
 
         return new Output();
     }
+
 }

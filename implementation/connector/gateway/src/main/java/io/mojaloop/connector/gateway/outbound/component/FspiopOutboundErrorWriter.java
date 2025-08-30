@@ -50,7 +50,7 @@ public class FspiopOutboundErrorWriter implements AuthenticationErrorWriter {
 
             } else {
 
-                var error = new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.code(),
+                var error = new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(),
                                                                                                FspiopErrors.GENERIC_CLIENT_ERROR.description()));
 
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -61,7 +61,7 @@ public class FspiopOutboundErrorWriter implements AuthenticationErrorWriter {
 
             assert writer != null;
 
-            String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.code();
+            String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.errorType().getCode();
             String errorDescription = FspiopErrors.GENERIC_SERVER_ERROR.description();
 
             var json = "{\"errorInformation\":{\"errorCode\": \"" + errorCode + "\",\"errorDescription\":\"" + errorDescription + "\"}}";

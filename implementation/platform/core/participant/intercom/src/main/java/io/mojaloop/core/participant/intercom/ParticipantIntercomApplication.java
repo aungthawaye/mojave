@@ -6,7 +6,6 @@ import io.mojaloop.component.vault.VaultConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,11 +32,23 @@ public class ParticipantIntercomApplication {
 
         new SpringApplicationBuilder(ParticipantIntercomApplication.class)
             .web(WebApplicationType.SERVLET)
-            .properties("spring.application.name=participant-intercom", "spring.jmx.enabled=true", "spring.jmx.unique-names=true",
-                        "spring.jmx.default-domain=participant-intercom", "spring.application.admin.enabled=true",
-                        "management.endpoints.web.base-path=/actuator",
-                        "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=ParticipantIntercomApplication,context=participant-intercom")
+            .properties(
+                "spring.application.name=participant-intercom",
+                "spring.jmx.enabled=true",
+                "spring.jmx.unique-names=true",
+                "spring.jmx.default-domain=participant-intercom",
+                "spring.application.admin.enabled=true",
+                "management.endpoints.web.base-path=/actuator",
+                "management.endpoint.health.show-details=always",
+                "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
+                "management.endpoint.health.group.liveness.include=db,diskSpace,process,throttling",
+                "management.endpoint.health.group.throttling.include=throttling",
+                "management.endpoint.throttling.enabled=true",
+                "management.endpoint.health.validate-group-membership=false",
+                "management.endpoint.health.probes.enabled=true",
+                "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
+                "management.endpoint.health.show-details=always",
+                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=ParticipantIntercomApplication,context=participant-intercom")
             .run(args);
     }
 

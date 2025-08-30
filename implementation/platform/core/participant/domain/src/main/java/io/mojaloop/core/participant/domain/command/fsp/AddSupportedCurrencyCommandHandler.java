@@ -50,9 +50,7 @@ public class AddSupportedCurrencyCommandHandler implements AddSupportedCurrencyC
 
         LOGGER.info("Executing AddSupportedCurrencyCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-            .findById(input.fspId())
-            .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var supportedCurrency = fsp.addSupportedCurrency(input.supportedCurrency());
 
@@ -62,4 +60,5 @@ public class AddSupportedCurrencyCommandHandler implements AddSupportedCurrencyC
 
         return new Output(supportedCurrency.getId());
     }
+
 }

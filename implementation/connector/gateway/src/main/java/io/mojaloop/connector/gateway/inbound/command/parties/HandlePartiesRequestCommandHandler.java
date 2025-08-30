@@ -35,7 +35,7 @@ class HandlePartiesRequestCommandHandler implements HandlePartiesRequestCommand 
         try {
 
             LOGGER.info("Calling FSP adapter to get parties for : {}", input);
-            var response = this.fspAdapter.getParties(input.partyIdType(), input.partyId(), input.subId());
+            var response = this.fspAdapter.getParties(input.source(), input.partyIdType(), input.partyId(), input.subId());
             LOGGER.info("FSP adapter returned parties : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);

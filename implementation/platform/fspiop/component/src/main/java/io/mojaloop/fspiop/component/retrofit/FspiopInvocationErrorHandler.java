@@ -29,8 +29,7 @@ public class FspiopInvocationErrorHandler {
                 if (errorDefinition != null) {
 
                     // We found the error definition. But we will use the error description returned by the server.
-                    return new FspiopException(new ErrorDefinition(errorDefinition.code(),
-                                                                   errorDefinition.name(),
+                    return new FspiopException(new ErrorDefinition(errorDefinition.errorType(),
                                                                    errorInformation.getErrorDescription()));
                 }
 

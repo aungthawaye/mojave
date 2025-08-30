@@ -34,7 +34,7 @@ class HandleQuotesRequestCommandHandler implements HandleQuotesRequestCommand {
         try {
 
             LOGGER.info("Calling FSP adapter to get quote for : {}", input);
-            var response = this.fspAdapter.quote(input.request());
+            var response = this.fspAdapter.quote(input.source(), input.request());
             LOGGER.info("FSP adapter returned quote : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);

@@ -122,9 +122,7 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         var error = errorRef.get();
         var errorDefinition = FspiopErrors.find(error.getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.code(),
-                                                      errorDefinition.name(),
-                                                      error.getErrorInformation().getErrorDescription()));
+        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.getErrorInformation().getErrorDescription()));
 
     }
 

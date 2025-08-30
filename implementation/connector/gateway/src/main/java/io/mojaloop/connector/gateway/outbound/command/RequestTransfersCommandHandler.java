@@ -118,8 +118,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         var error = errorRef.get();
         var errorDefinition = FspiopErrors.find(error.getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.code(),
-                                                      errorDefinition.name(),
+        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(),
                                                       error.getErrorInformation().getErrorDescription()));
 
     }

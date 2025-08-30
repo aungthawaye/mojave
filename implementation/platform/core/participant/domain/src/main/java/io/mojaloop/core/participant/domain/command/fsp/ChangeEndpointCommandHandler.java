@@ -22,6 +22,7 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ChangeEndpointCommand;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
     private final FspRepository fspRepository;
 
     public ChangeEndpointCommandHandler(FspRepository fspRepository) {
+
         assert fspRepository != null;
         this.fspRepository = fspRepository;
     }
@@ -43,17 +45,11 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) {
+    public Output execute(Input input) throws FspIdNotFoundException {
 
         LOGGER.info("Executing ChangeEndpointCommand with input: {}", input);
 
-        var optFsp = this.fspRepository.findById(input.fspId());
-        if (optFsp.isEmpty()) {
-            LOGGER.warn("FSP not found for id: {}. ChangeEndpointCommand will be a no-op.", input.fspId());
-            return new Output(false);
-        }
-
-        var fsp = optFsp.get();
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         boolean changed = fsp.changeEndpoint(input.endpointType(), input.baseUrl());
 
@@ -63,4 +59,5 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
 
         return new Output(changed);
     }
+
 }

@@ -23,10 +23,10 @@ package io.mojaloop.fspiop.common.error;
 import io.mojaloop.fspiop.spec.core.ErrorInformation;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 
-public record ErrorDefinition(String code, String name, String description) {
+public record ErrorDefinition(FspiopErrorType errorType, String description) {
 
     public ErrorInformationObject toErrorObject() {
 
-        return new ErrorInformationObject().errorInformation(new ErrorInformation(this.code(), this.description()));
+        return new ErrorInformationObject().errorInformation(new ErrorInformation(this.errorType.getCode(), this.description()));
     }
 }

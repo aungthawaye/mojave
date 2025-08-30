@@ -34,7 +34,7 @@ class HandleTransfersRequestCommandHandler implements HandleTransfersRequestComm
         try {
 
             LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            var response = this.fspAdapter.initiateTransfer(input.request());
+            var response = this.fspAdapter.initiateTransfer(input.source(), input.request());
             LOGGER.info("FSP adapter returned transfer response : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);

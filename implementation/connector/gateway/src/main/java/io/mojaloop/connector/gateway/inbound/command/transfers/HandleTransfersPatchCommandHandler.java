@@ -25,7 +25,7 @@ public class HandleTransfersPatchCommandHandler implements HandleTransfersPatchC
         try {
 
             LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            this.fspAdapter.confirmTransfer(input.response());
+            this.fspAdapter.confirmTransfer(input.source(), input.response());
             LOGGER.info("Done calling FSP adapter to initiate transfer for : {}", input);
 
         } catch (Exception e) {

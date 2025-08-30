@@ -1,9 +1,11 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.command.fsp.ChangeEndpointCommand;
+import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -30,7 +32,7 @@ public class ChangeEndpointController {
     }
 
     @PostMapping("/fsps/change-endpoint")
-    public ResponseEntity<?> execute(@Valid @RequestBody Request request) {
+    public ResponseEntity<?> execute(@Valid @RequestBody Request request) throws FspIdNotFoundException {
 
         var input = new ChangeEndpointCommand.Input(new FspId(request.fspId()), request.endpointType(), request.baseUrl());
 
@@ -39,9 +41,9 @@ public class ChangeEndpointController {
         return ResponseEntity.ok(new Response(output.changed()));
     }
 
-    public record Request(@NotNull Long fspId,
-                          @NotNull EndpointType endpointType,
-                          @NotNull @NotBlank @Max(StringSizeConstraints.MAX_BASE_URL_LEN) String baseUrl) { }
+    public record Request(@NotNull @JsonProperty(required = true) Long fspId,
+                          @NotNull @JsonProperty(required = true) EndpointType endpointType,
+                          @NotNull @JsonProperty(required = true) @NotBlank @Max(StringSizeConstraints.MAX_BASE_URL_LEN) String baseUrl) { }
 
     public record Response(boolean changed) { }
 
