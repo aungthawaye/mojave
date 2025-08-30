@@ -73,6 +73,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
         try {
 
             this.verifyFsps(cachedServletRequest);
+
             return this.authenticateUsingJws(cachedServletRequest);
 
         } catch (JsonProcessingException e) {

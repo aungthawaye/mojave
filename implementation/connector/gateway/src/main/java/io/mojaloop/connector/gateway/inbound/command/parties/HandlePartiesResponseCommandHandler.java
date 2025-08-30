@@ -26,8 +26,9 @@ class HandlePartiesResponseCommandHandler implements HandlePartiesResponseComman
         var channel = "parties:" + input.partyIdType().name() + "/" + input.partyId() + (input.subId() != null ? "/" + input.subId() : "");
         LOGGER.info("Publishing parties result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new PartiesResult(input.partyIdType(), input.partyId(), input.subId(), input.response()));
-        LOGGER.info("Published parties result to channel : {}", channel);
+        var result = new PartiesResult(input.partyIdType(), input.partyId(), input.subId(), input.response());
+        this.pubSubClient.publish(channel, result);
+        LOGGER.info("Published parties result to channel : {}, result : {}", channel, result);
 
         return new Output();
     }

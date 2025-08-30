@@ -54,11 +54,15 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
         }
 
         var original = chain.request();
-        var method = original.method();
-        var body = original.body() == null ? "{}" : original.body().toString();
+        String body = null;
 
-        if (method.equals("GET") || body.isBlank()) {
-            return chain.proceed(chain.request());
+        if (original.body() != null) {
+
+            var buffer = new okio.Buffer();
+
+            original.body().writeTo(buffer);
+
+            body = buffer.readUtf8();
         }
 
         var builder = original.newBuilder();
@@ -70,6 +74,12 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
 
             protectedHeaders.put(name, existingHeaders.get(name));
         }
+
+        if (body == null) {
+            body = "{\"date\":\"" + protectedHeaders.get(FspiopHeaders.Names.DATE) + "\"}";
+        }
+
+        LOGGER.info("Signing protected headers: [{}] and body: [{}]", protectedHeaders, body);
 
         var signature = this.objectMapper.writeValueAsString(FspiopSignature.sign(this.participantContext.signingKey(),
                                                                                   protectedHeaders,

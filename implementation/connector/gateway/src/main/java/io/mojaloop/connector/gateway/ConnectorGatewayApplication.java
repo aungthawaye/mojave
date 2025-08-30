@@ -5,21 +5,23 @@ import io.mojaloop.connector.gateway.outbound.ConnectorOutboundApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import(value = {ConnectorGatewayConfiguration.class, ConnectorGatewaySettings.class})
 public class ConnectorGatewayApplication {
 
-    public static void run(String[] args, Class<?>... configurations) {
+    public static void run(String[] args, Class<?>... extraConfigurations) {
 
-        var sources = new Class[configurations.length + 1];
+        var coreConfigurations = new Class[]{ConnectorGatewayApplication.class};
+        var fullConfigurations = new Class[extraConfigurations.length + coreConfigurations.length];
 
-        sources[0] = ConnectorGatewayApplication.class;
-
-        if (configurations.length > 0) {
-            System.arraycopy(configurations, 0, sources, 1, configurations.length);
+        if (extraConfigurations.length > 0) {
+            System.arraycopy(coreConfigurations, 0, fullConfigurations, 0, coreConfigurations.length);
+            System.arraycopy(extraConfigurations, 0, fullConfigurations, coreConfigurations.length, extraConfigurations.length);
         }
 
-        new SpringApplicationBuilder(sources)
+        new SpringApplicationBuilder(fullConfigurations)
             .web(WebApplicationType.NONE)
             .properties("spring.profiles.active=prod")
             .child(ConnectorInboundApplication.class)

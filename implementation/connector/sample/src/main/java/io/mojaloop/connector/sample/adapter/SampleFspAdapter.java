@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.UnsignedLong;
 import io.mojaloop.connector.adapter.fsp.FspAdapter;
 import io.mojaloop.fspiop.common.data.Agreement;
+import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Source;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
@@ -118,7 +120,7 @@ public class SampleFspAdapter implements FspAdapter {
     }
 
     @Override
-    public QuotesIDPutResponse quote(Source source, QuotesPostRequest request) {
+    public QuotesIDPutResponse quote(Source source, QuotesPostRequest request) throws FspiopException {
 
         try {
 
@@ -184,6 +186,7 @@ public class SampleFspAdapter implements FspAdapter {
         } catch (Exception e) {
 
             LOGGER.error("Error while quoting", e);
+            throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 

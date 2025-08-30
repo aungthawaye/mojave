@@ -30,7 +30,7 @@ import java.util.Map;
 public class FspiopCommonConfiguration {
 
     @Bean
-    public ParticipantContext participantSettings(ParticipantSettings participantSettings)
+    public ParticipantContext participantContext(ParticipantSettings participantSettings)
         throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         return ParticipantContext.with(participantSettings.fspCode(),

@@ -65,17 +65,17 @@ public class HandlePartiesController {
         return ResponseEntity.accepted().build();
     }
 
-    @PutMapping("/parties/{partyIdType}/{partyId}/{subId}")
+    @PutMapping("/parties/{partyIdType}/{partyId}")
     public ResponseEntity<?> putParties(@RequestHeader Map<String, String> headers,
                                         @PathVariable PartyIdType partyIdType,
                                         @PathVariable String partyId,
-                                        @PathVariable String subId,
                                         @Valid @RequestBody PartiesTypeIDPutResponse response) {
 
-        LOGGER.debug("Received PUT /parties/{}/{}/{}", partyIdType, partyId, subId);
+        LOGGER.debug("Received PUT /parties/{}/{}", partyIdType, partyId);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, subId, response)));
+        this.eventPublisher.publish(
+            new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, null, response)));
 
         return ResponseEntity.accepted().build();
     }
@@ -89,11 +89,8 @@ public class HandlePartiesController {
         LOGGER.debug("Received PUT /parties/{}/{}/error", partyIdType, partyId);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source,
-                                                                                                 partyIdType,
-                                                                                                 partyId,
-                                                                                                 null,
-                                                                                                 errorInformation)));
+        this.eventPublisher.publish(
+            new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, null, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }
@@ -108,11 +105,24 @@ public class HandlePartiesController {
         LOGGER.debug("Received PUT /parties/{}/{}/{}/error", partyIdType, partyId, subId);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source,
-                                                                                                 partyIdType,
-                                                                                                 partyId,
-                                                                                                 subId,
-                                                                                                 errorInformation)));
+        this.eventPublisher.publish(
+            new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, subId, errorInformation)));
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PutMapping("/parties/{partyIdType}/{partyId}/{subId}")
+    public ResponseEntity<?> putPartiesWithSubId(@RequestHeader Map<String, String> headers,
+                                                 @PathVariable PartyIdType partyIdType,
+                                                 @PathVariable String partyId,
+                                                 @PathVariable String subId,
+                                                 @Valid @RequestBody PartiesTypeIDPutResponse response) {
+
+        LOGGER.debug("Received (withSubId) PUT /parties/{}/{}/{}", partyIdType, partyId, subId);
+        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+
+        this.eventPublisher.publish(
+            new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, subId, response)));
 
         return ResponseEntity.accepted().build();
     }

@@ -1,16 +1,20 @@
-package io.mojaloop.connector.gateway.outbound;
+package io.mojaloop.connector.gateway;
 
 import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.connector.gateway.inbound.ConnectorInboundConfiguration;
+import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 
-public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration.RequiredSettings {
+@Configuration
+public class ConnectorGatewaySettings implements ConnectorGatewayConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -38,6 +42,15 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
 
         return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem,
                                                                  fspPublicKeyPem);
+    }
+
+    @Bean
+    @Override
+    public ConnectorInboundConfiguration.InboundSettings inboundSettings() {
+
+        return new ConnectorInboundConfiguration.InboundSettings(Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
+                                                                 Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
+                                                                 Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")));
     }
 
     @Bean
@@ -74,7 +87,7 @@ public class ConnectorOutboundSettings implements ConnectorOutboundConfiguration
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(new String[]{"/lookup", "/quote", "/transfer"});
+        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
     }
 
     @Bean

@@ -27,8 +27,9 @@ public class FspiopUrls {
     public static String newUrl(String baseUrl, String existingUri) {
 
         var requireSeparator = !baseUrl.endsWith("/") && !existingUri.startsWith("/");
+        var newUri = existingUri.startsWith("/") ? existingUri.substring(1) : existingUri;
 
-        return requireSeparator ? baseUrl + "/" + existingUri : baseUrl + existingUri;
+        return requireSeparator ? baseUrl + "/" + newUri : baseUrl + newUri;
     }
 
     public static class Parties {

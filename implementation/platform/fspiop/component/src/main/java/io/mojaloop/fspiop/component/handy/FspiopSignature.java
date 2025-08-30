@@ -21,6 +21,8 @@
 package io.mojaloop.fspiop.component.handy;
 
 import io.mojaloop.component.misc.jwt.Rs256Jwt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -28,9 +30,12 @@ import java.util.Map;
 
 public class FspiopSignature {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FspiopSignature.class);
+
     public static Header sign(PrivateKey privateKey, Map<String, String> headers, String payload) {
 
         var token = Rs256Jwt.sign(privateKey, headers, payload);
+        LOGGER.debug("Signed Token: [{}]", token);
 
         return new Header(token.signature(), token.header());
     }

@@ -1,6 +1,7 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.inbound.data.PartiesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -49,13 +50,13 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
         var subIdOrNot = withSubId ? "/" + input.subId() : "";
-        var resultTopic = "lookup:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
-        var errorTopic = "lookup-error:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
+        var resultTopic = "parties:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
+        var errorTopic = "parties-error:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
 
-        AtomicReference<PartiesTypeIDPutResponse> responseRef = new AtomicReference<>();
+        AtomicReference<PartiesResult> responseRef = new AtomicReference<>();
         AtomicReference<ErrorInformationObject> errorRef = new AtomicReference<>();
 
         var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
@@ -63,8 +64,10 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
             @Override
             public void handle(String channel, Object message) {
 
-                if (message instanceof PartiesTypeIDPutResponse response) {
-                    responseRef.set(response);
+                LOGGER.debug("Result message from channel : {}, message : {}", channel, message);
+
+                if (message instanceof PartiesResult result) {
+                    responseRef.set(result);
                 }
 
                 blocker.countDown();
@@ -81,6 +84,8 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
             @Override
             public void handle(String channel, Object message) {
+
+                LOGGER.debug("Error message from channel : {}, message : {}", channel, message);
 
                 if (message instanceof ErrorInformationObject response) {
                     errorRef.set(response);
@@ -110,13 +115,15 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
                 throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");
             }
 
-        } catch (InterruptedException ignored) { } finally {
+        } catch (InterruptedException ignored) {
+            // Do nothing.
+        } finally {
             this.pubSubClient.unsubscribe(resultSubscription);
             this.pubSubClient.unsubscribe(errorSubscription);
         }
 
         if (responseRef.get() != null) {
-            return new Output(responseRef.get());
+            return new Output(responseRef.get().response());
         }
 
         var error = errorRef.get();

@@ -23,7 +23,6 @@ package io.mojaloop.fspiop.invoker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
-import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import io.mojaloop.fspiop.invoker.api.PartiesService;

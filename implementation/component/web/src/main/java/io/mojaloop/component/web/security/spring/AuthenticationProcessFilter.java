@@ -89,11 +89,11 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
         }
 
+        var requestWrapper = this.getCachedBodyHttpServletRequest(request);
+
         if (match && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             LOGGER.info("Authentication is required for URI : [{}]", uri);
-
-            var requestWrapper = this.getCachedBodyHttpServletRequest(request);
 
             try {
 
@@ -110,7 +110,7 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(requestWrapper, response);
     }
 
     private CachedServletRequest getCachedBodyHttpServletRequest(HttpServletRequest request) {

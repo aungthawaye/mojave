@@ -53,7 +53,7 @@ public class ConnectorOutboundConfiguration
     @Override
     public Authenticator authenticator() {
 
-        return new FspiopOutboundGatekeeper(this.objectMapper, this.outboundSettings);
+        return new FspiopOutboundGatekeeper(this.outboundSettings);
     }
 
     @Bean
@@ -82,7 +82,8 @@ public class ConnectorOutboundConfiguration
                                    int connectionTimeout,
                                    int putResultTimeout,
                                    int pubSubTimeout,
-                                   String publicKeyPem) { }
+                                   String publicKeyPem,
+                                   boolean secured) { }
 
     public record TransactionSettings(int expireAfterSeconds) { }
 

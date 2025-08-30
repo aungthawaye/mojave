@@ -10,7 +10,9 @@ import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.connector.sample.adapter.SampleFspAdapter;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan(basePackages = {"io.mojaloop.connector.sample"})
 public class SampleConnectorConfiguration
     implements ConnectorInboundConfiguration.RequiredBeans, ConnectorOutboundConfiguration.RequiredBeans {
 

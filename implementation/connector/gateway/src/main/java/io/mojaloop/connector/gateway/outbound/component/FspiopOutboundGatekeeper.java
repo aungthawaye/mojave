@@ -1,6 +1,5 @@
 package io.mojaloop.connector.gateway.outbound.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.crypto.Rs256;
 import io.mojaloop.component.misc.jwt.JwtBase64Util;
 import io.mojaloop.component.misc.jwt.Rs256Jwt;
@@ -27,16 +26,15 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopOutboundGatekeeper.class);
 
-    private final ObjectMapper objectMapper;
+    private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
     private final PublicKey publicKey;
 
-    public FspiopOutboundGatekeeper(ObjectMapper objectMapper, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public FspiopOutboundGatekeeper(ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert outboundSettings != null;
-        assert objectMapper != null;
 
-        this.objectMapper = objectMapper;
+        this.outboundSettings = outboundSettings;
 
         try {
 
@@ -50,6 +48,11 @@ public class FspiopOutboundGatekeeper implements Authenticator {
     @Override
     public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
         throws AuthenticationFailureException {
+
+        if (!this.outboundSettings.secured()) {
+
+            return new UsernamePasswordAuthenticationToken("FSP", "skipped", new ArrayList<SimpleGrantedAuthority>() { });
+        }
 
         var authorization = cachedServletRequest.getHeader("Authorization");
 
