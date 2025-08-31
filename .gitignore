@@ -28,3 +28,6 @@ replay_pid*
 /.idea/
 /target/
 **/target/**
+# Node.js
+node_modules/
+dist/
