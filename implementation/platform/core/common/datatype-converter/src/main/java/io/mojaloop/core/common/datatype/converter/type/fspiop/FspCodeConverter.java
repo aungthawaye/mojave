@@ -1,4 +1,4 @@
-package io.mojaloop.core.participant.domain.component.converter.type;
+package io.mojaloop.core.common.datatype.converter.type.fspiop;
 
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import jakarta.persistence.AttributeConverter;

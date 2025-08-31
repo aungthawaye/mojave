@@ -29,7 +29,7 @@ import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.SupportedCurrencyId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
-import io.mojaloop.core.participant.domain.component.converter.identifier.SupportedCurrencyIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.SupportedCurrencyIdJavaType;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

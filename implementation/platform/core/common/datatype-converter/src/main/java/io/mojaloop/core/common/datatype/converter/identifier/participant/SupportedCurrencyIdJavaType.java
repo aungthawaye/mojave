@@ -1,6 +1,6 @@
-package io.mojaloop.core.participant.domain.component.converter.identifier;
+package io.mojaloop.core.common.datatype.converter.identifier.participant;
 
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.identifier.participant.SupportedCurrencyId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class FspIdJavaType extends AbstractClassJavaType<FspId> {
+public class SupportedCurrencyIdJavaType extends AbstractClassJavaType<SupportedCurrencyId> {
 
-    public static final FspIdJavaType INSTANCE = new FspIdJavaType();
+    public static final SupportedCurrencyIdJavaType INSTANCE = new SupportedCurrencyIdJavaType();
 
-    public FspIdJavaType() {
+    public SupportedCurrencyIdJavaType() {
 
-        super(FspId.class, ImmutableMutabilityPlan.instance());
+        super(SupportedCurrencyId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public FspId fromString(CharSequence string) {
+    public SupportedCurrencyId fromString(CharSequence string) {
 
-        return (string == null) ? null : new FspId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new SupportedCurrencyId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,18 +30,19 @@ public class FspIdJavaType extends AbstractClassJavaType<FspId> {
     }
 
     @Override
-    public String toString(FspId value) {
+    public String toString(SupportedCurrencyId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(FspId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(SupportedCurrencyId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
+
         Long primitive = value.getId();
 
         if (type.isAssignableFrom(Long.class)) {
@@ -56,18 +57,18 @@ public class FspIdJavaType extends AbstractClassJavaType<FspId> {
     }
 
     @Override
-    public FspId wrap(Object value, WrapperOptions options) {
+    public SupportedCurrencyId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof FspId fspId) {
-            return fspId;
+        if (value instanceof SupportedCurrencyId supportedCurrencyId) {
+            return supportedCurrencyId;
         }
 
         if (value instanceof Number n) {
-            return new FspId(n.longValue());
+            return new SupportedCurrencyId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());

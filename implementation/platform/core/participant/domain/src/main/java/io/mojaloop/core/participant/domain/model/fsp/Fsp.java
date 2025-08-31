@@ -38,8 +38,8 @@ import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCu
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.domain.cache.redis.updater.FspCacheUpdater;
-import io.mojaloop.core.participant.domain.component.converter.identifier.FspIdJavaType;
-import io.mojaloop.core.participant.domain.component.converter.type.FspCodeConverter;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.FspIdJavaType;
+import io.mojaloop.core.common.datatype.converter.type.fspiop.FspCodeConverter;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;

@@ -1,4 +1,4 @@
-package io.mojaloop.core.participant.domain.component.converter.identifier;
+package io.mojaloop.core.common.datatype.converter.identifier.participant;
 
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import jakarta.persistence.AttributeConverter;

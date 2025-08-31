@@ -32,7 +32,7 @@ import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.EndpointId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
-import io.mojaloop.core.participant.domain.component.converter.identifier.EndpointIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.EndpointIdJavaType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
-package io.mojaloop.core.participant.domain.component.converter.identifier;
+package io.mojaloop.core.common.datatype.converter.identifier.participant;
 
-import io.mojaloop.core.common.datatype.identifier.participant.EndpointId;
+import io.mojaloop.core.common.datatype.identifier.participant.FxRatePairId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class EndpointIdJavaType extends AbstractClassJavaType<EndpointId> {
+public class FxRatePairIdJavaType extends AbstractClassJavaType<FxRatePairId> {
 
-    public static final EndpointIdJavaType INSTANCE = new EndpointIdJavaType();
+    public static final FxRatePairIdJavaType INSTANCE = new FxRatePairIdJavaType();
 
-    public EndpointIdJavaType() {
+    public FxRatePairIdJavaType() {
 
-        super(EndpointId.class, ImmutableMutabilityPlan.instance());
+        super(FxRatePairId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public EndpointId fromString(CharSequence string) {
+    public FxRatePairId fromString(CharSequence string) {
 
-        return (string == null) ? null : new EndpointId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new FxRatePairId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,14 +30,14 @@ public class EndpointIdJavaType extends AbstractClassJavaType<EndpointId> {
     }
 
     @Override
-    public String toString(EndpointId value) {
+    public String toString(FxRatePairId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(EndpointId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(FxRatePairId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -57,18 +57,18 @@ public class EndpointIdJavaType extends AbstractClassJavaType<EndpointId> {
     }
 
     @Override
-    public EndpointId wrap(Object value, WrapperOptions options) {
+    public FxRatePairId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof EndpointId endpointId) {
-            return endpointId;
+        if (value instanceof FxRatePairId fxRatePairId) {
+            return fxRatePairId;
         }
 
         if (value instanceof Number n) {
-            return new EndpointId(n.longValue());
+            return new FxRatePairId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());

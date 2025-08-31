@@ -1,6 +1,6 @@
-package io.mojaloop.core.participant.domain.component.converter.identifier;
+package io.mojaloop.core.common.datatype.converter.identifier.participant;
 
-import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class OracleIdJavaType extends AbstractClassJavaType<OracleId> {
+public class FspIdJavaType extends AbstractClassJavaType<FspId> {
 
-    public static final OracleIdJavaType INSTANCE = new OracleIdJavaType();
+    public static final FspIdJavaType INSTANCE = new FspIdJavaType();
 
-    public OracleIdJavaType() {
+    public FspIdJavaType() {
 
-        super(OracleId.class, ImmutableMutabilityPlan.instance());
+        super(FspId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public OracleId fromString(CharSequence string) {
+    public FspId fromString(CharSequence string) {
 
-        return (string == null) ? null : new OracleId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new FspId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,19 +30,18 @@ public class OracleIdJavaType extends AbstractClassJavaType<OracleId> {
     }
 
     @Override
-    public String toString(OracleId value) {
+    public String toString(FspId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(OracleId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(FspId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
-
         Long primitive = value.getId();
 
         if (type.isAssignableFrom(Long.class)) {
@@ -57,18 +56,18 @@ public class OracleIdJavaType extends AbstractClassJavaType<OracleId> {
     }
 
     @Override
-    public OracleId wrap(Object value, WrapperOptions options) {
+    public FspId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof OracleId oracleId) {
-            return oracleId;
+        if (value instanceof FspId fspId) {
+            return fspId;
         }
 
         if (value instanceof Number n) {
-            return new OracleId(n.longValue());
+            return new FspId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());

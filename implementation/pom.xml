@@ -151,6 +151,11 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.platform.core.common</groupId>
+                <artifactId>mod-common-datatype-converter</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>io.mojaloop.platform.core.lookup</groupId>
                 <artifactId>mod-lookup-contract</artifactId>
                 <version>1.0.0</version>

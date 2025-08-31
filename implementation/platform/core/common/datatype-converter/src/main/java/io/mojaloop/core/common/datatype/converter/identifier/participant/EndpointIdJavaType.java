@@ -1,6 +1,6 @@
-package io.mojaloop.core.participant.domain.component.converter.identifier;
+package io.mojaloop.core.common.datatype.converter.identifier.participant;
 
-import io.mojaloop.core.common.datatype.identifier.participant.SupportedCurrencyId;
+import io.mojaloop.core.common.datatype.identifier.participant.EndpointId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class SupportedCurrencyIdJavaType extends AbstractClassJavaType<SupportedCurrencyId> {
+public class EndpointIdJavaType extends AbstractClassJavaType<EndpointId> {
 
-    public static final SupportedCurrencyIdJavaType INSTANCE = new SupportedCurrencyIdJavaType();
+    public static final EndpointIdJavaType INSTANCE = new EndpointIdJavaType();
 
-    public SupportedCurrencyIdJavaType() {
+    public EndpointIdJavaType() {
 
-        super(SupportedCurrencyId.class, ImmutableMutabilityPlan.instance());
+        super(EndpointId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public SupportedCurrencyId fromString(CharSequence string) {
+    public EndpointId fromString(CharSequence string) {
 
-        return (string == null) ? null : new SupportedCurrencyId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new EndpointId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,14 +30,14 @@ public class SupportedCurrencyIdJavaType extends AbstractClassJavaType<Supported
     }
 
     @Override
-    public String toString(SupportedCurrencyId value) {
+    public String toString(EndpointId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(SupportedCurrencyId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(EndpointId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -57,18 +57,18 @@ public class SupportedCurrencyIdJavaType extends AbstractClassJavaType<Supported
     }
 
     @Override
-    public SupportedCurrencyId wrap(Object value, WrapperOptions options) {
+    public EndpointId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof SupportedCurrencyId supportedCurrencyId) {
-            return supportedCurrencyId;
+        if (value instanceof EndpointId endpointId) {
+            return endpointId;
         }
 
         if (value instanceof Number n) {
-            return new SupportedCurrencyId(n.longValue());
+            return new EndpointId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());

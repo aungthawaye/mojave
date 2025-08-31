@@ -13,6 +13,7 @@
         <module name="mod-component-vault" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
+        <module name="mod-common-datatype-converter" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-quoting-domain" />
         <module name="mod-component-web" />
@@ -82,6 +83,7 @@
       <module name="mod-account-intercom" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
+      <module name="mod-common-datatype-converter" options="-parameters" />
       <module name="mod-component" options="-parameters" />
       <module name="mod-component-flyway" options="-parameters" />
       <module name="mod-component-http" options="-parameters" />

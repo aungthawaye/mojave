@@ -28,7 +28,7 @@ import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
-import io.mojaloop.core.participant.domain.component.converter.identifier.OracleIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.OracleIdJavaType;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

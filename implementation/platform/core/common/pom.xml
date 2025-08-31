@@ -12,6 +12,7 @@
     <name>Mojaloop - Platform - Core - Common</name>
     <modules>
         <module>datatype</module>
+        <module>datatype-converter</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
