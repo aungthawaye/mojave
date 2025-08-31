@@ -20,14 +20,16 @@
 
 package io.mojaloop.core.participant.contract.command.fsp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import jakarta.validation.constraints.NotNull;
 
 public interface DeactivateFspCommand {
 
     Output execute(Input input) throws FspIdNotFoundException;
 
-    record Input(FspId fspId) { }
+    record Input(@JsonProperty(required = true) @NotNull FspId fspId) { }
 
     record Output() { }
 

@@ -20,17 +20,20 @@
 
 package io.mojaloop.core.participant.contract.command.fsp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.identifier.participant.SupportedCurrencyId;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
+import jakarta.validation.constraints.NotNull;
 
 public interface AddSupportedCurrencyCommand {
 
     Output execute(Input input) throws FspIdNotFoundException, CurrencyAlreadySupportedException;
 
-    record Input(FspId fspId, Currency supportedCurrency) { }
+    record Input(@JsonProperty(required = true) @NotNull FspId fspId,
+                 @JsonProperty(required = true) @NotNull Currency supportedCurrency) { }
 
     record Output(SupportedCurrencyId supportedCurrencyId) { }
 

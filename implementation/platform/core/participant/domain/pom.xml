@@ -7,24 +7,13 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-participant-domain</artifactId>
-    <name>Mojaloop - Core - Participant - Domain</name>
+    <name>Mojaloop - Platform - Core - Participant - Domain</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <classifier>jakarta</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <classifier>jakarta</classifier>
-        </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-flyway</artifactId>
@@ -38,14 +27,6 @@
         <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-vault</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.participant</groupId>

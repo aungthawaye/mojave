@@ -26,8 +26,8 @@ import io.mojaloop.core.lookup.contract.command.GetPartiesCommand;
 import io.mojaloop.core.lookup.contract.command.PutPartiesCommand;
 import io.mojaloop.core.lookup.contract.command.PutPartiesErrorCommand;
 import io.mojaloop.core.lookup.service.event.GetPartiesEvent;
-import io.mojaloop.core.lookup.service.event.PutPartiesEvent;
 import io.mojaloop.core.lookup.service.event.PutPartiesErrorEvent;
+import io.mojaloop.core.lookup.service.event.PutPartiesEvent;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
@@ -116,32 +116,11 @@ public class PartiesController {
         return ResponseEntity.accepted().build();
     }
 
-    @PutMapping("/parties/{partyIdType}/{partyId}/{subId}")
-    public ResponseEntity<?> putPartiesWithSubId(@PathVariable PartyIdType partyIdType,
-                                                @PathVariable String partyId,
-                                                @PathVariable String subId,
-                                                @RequestBody PartiesTypeIDPutResponse response,
-                                                HttpServletRequest request) throws IOException {
-
-        LOGGER.info("Received PUT /parties/{}/{}/{}", partyIdType, partyId, subId);
-
-        var cachedBodyRequest = new CachedServletRequest(request);
-        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
-
-        var event = new PutPartiesEvent(new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId, response));
-
-        LOGGER.info("Publishing PutPartiesEvent : [{}]", event);
-        this.eventPublisher.publish(event);
-        LOGGER.info("Published PutPartiesEvent : [{}]", event);
-
-        return ResponseEntity.accepted().build();
-    }
-
     @PutMapping("/parties/{partyIdType}/{partyId}/error")
     public ResponseEntity<?> putPartiesError(@PathVariable PartyIdType partyIdType,
-                                            @PathVariable String partyId,
-                                            @RequestBody ErrorInformationObject error,
-                                            HttpServletRequest request) throws IOException {
+                                             @PathVariable String partyId,
+                                             @RequestBody ErrorInformationObject error,
+                                             HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /parties/{}/{}/error", partyIdType, partyId);
 
@@ -159,10 +138,10 @@ public class PartiesController {
 
     @PutMapping("/parties/{partyIdType}/{partyId}/{subId}/error")
     public ResponseEntity<?> putPartiesErrorWithSubId(@PathVariable PartyIdType partyIdType,
-                                                     @PathVariable String partyId,
-                                                     @PathVariable String subId,
-                                                     @RequestBody ErrorInformationObject error,
-                                                     HttpServletRequest request) throws IOException {
+                                                      @PathVariable String partyId,
+                                                      @PathVariable String subId,
+                                                      @RequestBody ErrorInformationObject error,
+                                                      HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /parties/{}/{}/{}/error", partyIdType, partyId, subId);
 
@@ -174,6 +153,27 @@ public class PartiesController {
         LOGGER.info("Publishing PutPartiesErrorEvent : [{}]", event);
         this.eventPublisher.publish(event);
         LOGGER.info("Published PutPartiesErrorEvent : [{}]", event);
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PutMapping("/parties/{partyIdType}/{partyId}/{subId}")
+    public ResponseEntity<?> putPartiesWithSubId(@PathVariable PartyIdType partyIdType,
+                                                 @PathVariable String partyId,
+                                                 @PathVariable String subId,
+                                                 @RequestBody PartiesTypeIDPutResponse response,
+                                                 HttpServletRequest request) throws IOException {
+
+        LOGGER.info("Received PUT /parties/{}/{}/{}", partyIdType, partyId, subId);
+
+        var cachedBodyRequest = new CachedServletRequest(request);
+        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
+
+        var event = new PutPartiesEvent(new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId, response));
+
+        LOGGER.info("Publishing PutPartiesEvent : [{}]", event);
+        this.eventPublisher.publish(event);
+        LOGGER.info("Published PutPartiesEvent : [{}]", event);
 
         return ResponseEntity.accepted().build();
     }

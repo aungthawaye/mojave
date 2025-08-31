@@ -71,19 +71,21 @@ public class DeactivateEndpointCommandIT {
 
         // Non-existent FSP -> FspIdNotFoundException
         var nonExisting = new FspId(-2222L);
-        assertThrows(FspIdNotFoundException.class,
-                     () -> deactivateEndpointCommand.execute(new DeactivateEndpointCommand.Input(nonExisting, EndpointType.TRANSFERS)));
+        assertThrows(
+            FspIdNotFoundException.class,
+            () -> deactivateEndpointCommand.execute(new DeactivateEndpointCommand.Input(nonExisting, EndpointType.TRANSFERS)));
     }
 
     private CreateFspCommand.Output createFspWithEndpoint(String code, EndpointType type, String baseUrl)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               new Currency[]{Currency.USD},
-                                               new CreateFspCommand.Input.Endpoint[]{
-                                                   new CreateFspCommand.Input.Endpoint(type, baseUrl)
-                                               });
+        var input = new CreateFspCommand.Input(
+            new FspCode(code),
+            "FSP-" + code,
+            new Currency[]{Currency.USD},
+            new CreateFspCommand.Input.Endpoint[]{
+                new CreateFspCommand.Input.Endpoint(type, baseUrl)
+            });
         return createFspCommand.execute(input);
     }
 

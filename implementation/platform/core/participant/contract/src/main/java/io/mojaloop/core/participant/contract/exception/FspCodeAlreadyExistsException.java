@@ -30,7 +30,7 @@ public class FspCodeAlreadyExistsException extends DomainException {
 
     public FspCodeAlreadyExistsException(FspCode fspCode) {
 
-        super(new ErrorTemplate("FSP_CODE_ALREADY_EXISTS", TEMPLATE), fspCode.getFspCode());
+        super(new ErrorTemplate("FSP_CODE_ALREADY_EXISTS", TEMPLATE), fspCode.value());
 
     }
 

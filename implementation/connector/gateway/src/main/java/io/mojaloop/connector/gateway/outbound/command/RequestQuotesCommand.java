@@ -9,7 +9,8 @@ public interface RequestQuotesCommand {
 
     Output execute(Input input) throws FspiopException;
 
-    record Input(Destination destination, QuotesPostRequest request) {}
+    record Input(Destination destination, QuotesPostRequest request) { }
 
-    record Output(QuotesIDPutResponse response) {}
+    record Output(QuotesIDPutResponse response) { }
+
 }

@@ -6,12 +6,12 @@ import io.mojaloop.component.vault.VaultConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(scanBasePackages = "io.mojaloop.core.participant.admin")
+@Configuration
 @Import(value = {ParticipantAdminConfiguration.class, ParticipantAdminApplication.VaultSettings.class, ParticipantAdminSettings.class})
 public class ParticipantAdminApplication {
 
@@ -19,7 +19,7 @@ public class ParticipantAdminApplication {
 
     public static void main(String[] args) {
 
-        LOGGER.info("Starting participant admin application");
+        LOGGER.info("Starting participant-admin application");
 
         var vaultSettings = VaultConfigurer.Settings.withPropertyOrEnv();
         var vault = new Vault(vaultSettings.address(), vaultSettings.token(), vaultSettings.enginePath());

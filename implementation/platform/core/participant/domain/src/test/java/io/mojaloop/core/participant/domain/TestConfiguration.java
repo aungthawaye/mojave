@@ -21,18 +21,18 @@
 package io.mojaloop.core.participant.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
-import io.mojaloop.component.vault.Vault;
-import io.mojaloop.component.vault.VaultConfiguration;
 import org.springframework.context.annotation.Import;
 
-@Import(value = {ParticipantDomainSettings.class, ParticipantDomainConfiguration.class, VaultConfiguration.class, TestSettings.class})
+@Import(value = {ParticipantDomainConfiguration.class, TestSettings.class})
 public class TestConfiguration {
 
     static {
 
-        var vault = new Vault(TestSettings.VAULT_ADDR, TestSettings.VAULT_TOKEN, TestSettings.ENGINE_PATH);
+        var flywaySettings = new FlywayMigration.Settings(
+            "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
+            "root", "password", "classpath:migration/participant");
 
-        FlywayMigration.migrate(vault.get(ParticipantDomainSettings.VaultPaths.FLYWAY_PATH, FlywayMigration.Settings.class));
+        FlywayMigration.migrate(flywaySettings);
     }
 
 }

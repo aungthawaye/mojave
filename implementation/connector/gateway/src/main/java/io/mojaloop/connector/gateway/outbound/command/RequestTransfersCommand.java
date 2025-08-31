@@ -9,7 +9,8 @@ public interface RequestTransfersCommand {
 
     Output execute(Input input) throws FspiopException;
 
-    record Input(Destination destination, TransfersPostRequest request) {}
+    record Input(Destination destination, TransfersPostRequest request) { }
 
-    record Output(TransfersIDPutResponse response) {}
+    record Output(TransfersIDPutResponse response) { }
+
 }

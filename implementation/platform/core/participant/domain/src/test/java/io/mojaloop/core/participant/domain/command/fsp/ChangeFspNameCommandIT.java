@@ -60,17 +60,13 @@ public class ChangeFspNameCommandIT {
         assertDoesNotThrow(() -> changeFspNameCommand.execute(new ChangeFspNameCommand.Input(fspId, "New Name")));
 
         var nonExisting = new FspId(-555L);
-        assertThrows(FspIdNotFoundException.class,
-                     () -> changeFspNameCommand.execute(new ChangeFspNameCommand.Input(nonExisting, "Whatever")));
+        assertThrows(FspIdNotFoundException.class, () -> changeFspNameCommand.execute(new ChangeFspNameCommand.Input(nonExisting, "Whatever")));
     }
 
     private CreateFspCommand.Output createSampleFsp(String code)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               new Currency[]{Currency.USD},
-                                               new CreateFspCommand.Input.Endpoint[]{});
+        var input = new CreateFspCommand.Input(new FspCode(code), "FSP-" + code, new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{});
         return this.createFspCommand.execute(input);
     }
 

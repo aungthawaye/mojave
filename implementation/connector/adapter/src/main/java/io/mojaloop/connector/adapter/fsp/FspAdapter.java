@@ -12,7 +12,7 @@ import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 
 public interface FspAdapter {
 
-    void confirmTransfer(Source source, TransfersIDPatchResponse response) ;
+    void confirmTransfer(Source source, TransfersIDPatchResponse response);
 
     PartiesTypeIDPutResponse getParties(Source source, PartyIdType partyIdType, String partyId, String subId) throws FspiopException;
 

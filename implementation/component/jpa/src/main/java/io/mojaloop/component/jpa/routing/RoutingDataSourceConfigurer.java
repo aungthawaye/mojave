@@ -109,7 +109,7 @@ public class RoutingDataSourceConfigurer {
 
     }
 
-    public record ReadSettings(WriteSettings.Connection connection, WriteSettings.Pool pool) {
+    public record ReadSettings(ReadSettings.Connection connection, ReadSettings.Pool pool) {
 
         public record Connection(String url, String username, String password, boolean autoCommit) { }
 

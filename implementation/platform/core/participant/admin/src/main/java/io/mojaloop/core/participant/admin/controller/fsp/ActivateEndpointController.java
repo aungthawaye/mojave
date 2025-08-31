@@ -1,17 +1,16 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,18 +28,12 @@ public class ActivateEndpointController {
     }
 
     @PostMapping("/fsps/activate-endpoint")
-    public ResponseEntity<?> execute(@Valid @RequestBody Request request)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ActivateEndpointCommand.Output execute(@Valid @RequestBody ActivateEndpointCommand.Input input)
         throws FspIdNotFoundException, CannotActivateEndpointException {
 
-        var input = new ActivateEndpointCommand.Input(new FspId(request.fspId()), request.endpointType());
-
-        var output = this.activateEndpointCommand.execute(input);
-
-        return ResponseEntity.ok(new Response(output.activated()));
+        return this.activateEndpointCommand.execute(input);
     }
-
-    public record Request(@NotNull Long fspId, @NotNull EndpointType endpointType) { }
-
-    public record Response(boolean activated) { }
 
 }

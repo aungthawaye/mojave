@@ -9,7 +9,8 @@ public interface RequestPartiesCommand {
 
     Output execute(Input input) throws FspiopException;
 
-    record Input(Destination destination, PartyIdType partyIdType, String partyId, String subId){}
+    record Input(Destination destination, PartyIdType partyIdType, String partyId, String subId) { }
 
-    record Output(PartiesTypeIDPutResponse response){}
+    record Output(PartiesTypeIDPutResponse response) { }
+
 }

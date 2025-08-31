@@ -19,19 +19,12 @@
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <classifier>jakarta</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <classifier>jakarta</classifier>
-        </dependency>
-        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-misc</artifactId>
         </dependency>
         <dependency>
             <groupId>jakarta.persistence</groupId>

@@ -5,10 +5,13 @@ import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import io.mojaloop.core.participant.contract.data.FspData;
 
 @RestController
 public class GetFspController {
@@ -25,9 +28,11 @@ public class GetFspController {
     }
 
     @GetMapping("/fsps/get-fsp")
-    public ResponseEntity<?> execute(@RequestParam Long fspId) throws FspIdNotFoundException {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public FspData execute(@RequestParam Long fspId) throws FspIdNotFoundException {
 
-        return ResponseEntity.ok(this.fspQuery.get(new FspId(fspId)));
+        return this.fspQuery.get(new FspId(fspId));
     }
 
 }

@@ -25,8 +25,8 @@ import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspCodeAlreadyExistsException;
-import io.mojaloop.core.participant.domain.model.Fsp;
-import io.mojaloop.core.participant.domain.model.repository.FspRepository;
+import io.mojaloop.core.participant.domain.model.fsp.Fsp;
+import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ public class CreateFspCommandHandler implements CreateFspCommand {
 
         if (this.fspRepository.findOne(FspRepository.Filters.withFspCode(input.fspCode())).isPresent()) {
 
-            LOGGER.info("FSP with FSP Code {} already exists", input.fspCode().getFspCode());
+            LOGGER.info("FSP with FSP Code {} already exists", input.fspCode().value());
             throw new FspCodeAlreadyExistsException(input.fspCode());
         }
 

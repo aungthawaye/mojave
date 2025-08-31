@@ -80,7 +80,7 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
             LOGGER.error("FspiopException occurred while executing PutPartiesErrorCommandHandler: [{}]", e.getMessage());
 
-            var sendBackTo = new Destination(sourceFspCode.getFspCode());
+            var sendBackTo = new Destination(sourceFspCode.value());
             var baseUrl = sourceFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 

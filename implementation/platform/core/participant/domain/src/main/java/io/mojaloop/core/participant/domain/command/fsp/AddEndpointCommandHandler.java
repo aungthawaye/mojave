@@ -24,7 +24,7 @@ import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.AddEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
-import io.mojaloop.core.participant.domain.model.repository.FspRepository;
+import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

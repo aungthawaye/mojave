@@ -20,61 +20,38 @@
 
 package io.mojaloop.core.common.datatype.type.fspiop;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
-@Getter
-@Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FspCode {
+public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank String value) {
 
-    @Column(name = "fsp_code", length = StringSizeConstraints.MAX_FSP_CODE_LEN)
-    private String fspCode;
+    public FspCode {
 
-    public FspCode(String fspCode) {
+        assert value != null;
 
-        assert fspCode != null;
-
-        var value = fspCode.trim();
-
-        if (fspCode.isBlank()) {
+        if (value.isBlank()) {
             throw new BlankOrEmptyInputException("FSP Code");
         }
 
-        if (value.length() > StringSizeConstraints.MAX_FSP_CODE_LEN) {
-            throw new TextTooLargeException("FSP Code", StringSizeConstraints.MAX_FSP_CODE_LEN);
+        if (value.length() > StringSizeConstraints.MAX_CODE_LENGTH) {
+            throw new TextTooLargeException("FSP Code", StringSizeConstraints.MAX_CODE_LENGTH);
         }
 
-        this.fspCode = fspCode;
     }
 
     @Override
     public boolean equals(Object o) {
 
-        if (!(o instanceof FspCode fspCode1)) {
+        if (!(o instanceof FspCode(String code))) {
             return false;
         }
-        return Objects.equals(fspCode, fspCode1.fspCode);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hashCode(fspCode);
-    }
-
-    @Override
-    public String toString() {
-
-        return fspCode;
+        return Objects.equals(this.value, code);
     }
 
 }

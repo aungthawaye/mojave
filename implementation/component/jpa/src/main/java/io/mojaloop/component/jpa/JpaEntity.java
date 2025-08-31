@@ -20,6 +20,7 @@
 
 package io.mojaloop.component.jpa;
 
+import io.mojaloop.component.misc.ddd.EntityId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
@@ -32,7 +33,7 @@ import java.time.Instant;
 
 @Getter
 @MappedSuperclass
-public abstract class JpaEntity<ID extends JpaId<?>> {
+public abstract class JpaEntity<ID extends EntityId<?>> {
 
     @Column(name = "rec_created_at", updatable = false)
     @Convert(converter = JpaInstantConverter.class)

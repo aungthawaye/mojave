@@ -7,7 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-common-datatype</artifactId>
-    <name>Mojaloop - Core - Common - Datatype</name>
+    <name>Mojaloop - Platform - Core - Common - Datatype</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -16,15 +16,11 @@
     <dependencies>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-misc</artifactId>
         </dependency>
         <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
     </dependencies>
 </project>

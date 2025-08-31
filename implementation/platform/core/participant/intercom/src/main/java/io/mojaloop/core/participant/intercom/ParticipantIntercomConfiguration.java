@@ -1,6 +1,6 @@
 package io.mojaloop.core.participant.intercom;
 
-import io.mojaloop.component.web.error.ApplicationErrorConfiguration;
+import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.participant.intercom")
-@Import(value = {ParticipantDomainConfiguration.class, ApplicationErrorConfiguration.class, SpringSecurityConfiguration.class})
+@Import(value = {ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantIntercomConfiguration implements ParticipantDomainConfiguration.RequiredBeans,
                                                          SpringSecurityConfiguration.RequiredBeans {
 

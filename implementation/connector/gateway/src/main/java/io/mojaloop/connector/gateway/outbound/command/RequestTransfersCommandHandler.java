@@ -47,7 +47,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
         assert input != null;
         assert input.request() != null;
-        
+
         var transferId = input.request().getTransferId();
         var resultTopic = "transfers:" + transferId;
         var errorTopic = "transfers-error:" + transferId;

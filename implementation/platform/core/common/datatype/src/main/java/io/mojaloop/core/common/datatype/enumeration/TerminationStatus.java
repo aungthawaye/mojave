@@ -23,5 +23,5 @@ package io.mojaloop.core.common.datatype.enumeration;
 public enum TerminationStatus {
 
     ALIVE,
-    DEAD
+    TERMINATED
 }

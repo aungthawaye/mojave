@@ -20,27 +20,15 @@
 
 package io.mojaloop.core.common.datatype.identifier.participant;
 
-import io.mojaloop.component.jpa.JpaId;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.mojaloop.component.misc.ddd.EntityId;
 
-@Embeddable
-@NoArgsConstructor
-public class FxRatePairId extends JpaId<Long> {
+public class FxRatePairId extends EntityId<Long> {
 
-    @Column(name = "fx_rate_pair_id")
-    private Long id;
-
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public FxRatePairId(Long id) {
 
-        this.id = id;
-    }
-
-    @Override
-    public Long getId() {
-
-        return id;
+        super(id);
     }
 
 }

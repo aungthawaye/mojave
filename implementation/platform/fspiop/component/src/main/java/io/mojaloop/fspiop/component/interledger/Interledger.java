@@ -70,7 +70,7 @@ public class Interledger {
         var createdCondition = createdPacket.base64Condition;
         var createdFulfillment = createdPacket.base64Fulfillment;
 
-        LOGGER.debug("createdFulfillment.preimage: {}", base64Decode(createdFulfillment) );
+        LOGGER.debug("createdFulfillment.preimage: {}", base64Decode(createdFulfillment));
 
         var unwrappedPacket = Interledger.unwrap(comparingBase64Packet);
         var unwrappedCondition = base64Encode(unwrappedPacket.getExecutionCondition().getHash(), false);

@@ -8,6 +8,7 @@ import lombok.Getter;
 public class PutPartiesEvent extends DomainEvent<PutPartiesCommand.Input> {
 
     public PutPartiesEvent(PutPartiesCommand.Input input) {
+
         super(input);
     }
 

@@ -83,6 +83,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/oracle/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/admin-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/domain/src/main/java" charset="UTF-8" />
@@ -97,6 +98,14 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/store/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/participant/utility/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/contract/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/quoting/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/settlement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/mod-shared-security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/shared/src/main/proto" charset="UTF-8" />

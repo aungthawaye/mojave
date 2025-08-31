@@ -22,17 +22,14 @@ package io.mojaloop.component.misc.constraint;
 
 public class StringSizeConstraints {
 
-    public static final int MAX_FSP_CODE_LEN = 24;
+    public static final int MAX_CODE_LENGTH = 32;
 
-    public static final int MAX_CURRENCY_LEN = 3;
+    public static final int MAX_CURRENCY_LENGTH = 3;
 
-    public static final int MAX_FSP_NAME_LENGTH = 64;
+    public static final int MAX_ENUM_LENGTH = 32;
 
-    public static final int MAX_ENDPOINT_TYPE_LEN = 12;
+    public static final int MAX_HTTP_URL_LENGTH = 256;
 
-    public static final int MAX_BASE_URL_LEN = 256;
-
-    public static final int MAX_COMMON_ENUM_LEN = 24;
-
+    public static final int MAX_NAME_TITLE_LENGTH = 64;
 
 }

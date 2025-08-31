@@ -92,7 +92,7 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
             LOGGER.error("FspiopException occurred while executing GetPartiesCommandHandler: [{}]", e.getMessage());
 
-            var sendBackTo = new Destination(sourceFspCode.getFspCode());
+            var sendBackTo = new Destination(sourceFspCode.value());
             var baseUrl = sourceFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 

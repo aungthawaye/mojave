@@ -7,7 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-participant-intercom</artifactId>
-    <name>Mojaloop - Core - Participant - Intercom</name>
+    <name>Mojaloop - Platform - Core - Participant - Intercom</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -25,6 +25,14 @@
         <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-flyway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-vault</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.participant</groupId>

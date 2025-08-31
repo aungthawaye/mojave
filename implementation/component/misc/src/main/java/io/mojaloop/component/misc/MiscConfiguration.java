@@ -36,19 +36,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class MiscConfiguration {
 
-    @Bean
-    public ObjectMapper objectMapper() {
-
-        var objectMapper = new ObjectMapper();
-
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-
-        objectMapper.findAndRegisterModules();
-
-        return objectMapper;
-    }
-
     @Bean(name = "applicationEventMulticaster")
     public ApplicationEventMulticaster asyncEventMulticaster(TaskExecutor executor) {
 
@@ -62,6 +49,19 @@ public class MiscConfiguration {
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 
         return new SpringEventPublisher(applicationEventPublisher);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+
+        var objectMapper = new ObjectMapper();
+
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+
+        objectMapper.findAndRegisterModules();
+
+        return objectMapper;
     }
 
     @Bean

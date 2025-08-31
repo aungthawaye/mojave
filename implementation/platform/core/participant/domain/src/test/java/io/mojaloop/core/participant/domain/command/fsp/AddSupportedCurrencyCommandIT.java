@@ -64,21 +64,18 @@ public class AddSupportedCurrencyCommandIT {
         SupportedCurrencyId scId = out1.supportedCurrencyId();
         assertNotNull(scId);
 
-        assertThrows(CurrencyAlreadySupportedException.class,
-                     () -> addSupportedCurrencyCommand.execute(new AddSupportedCurrencyCommand.Input(fspId, Currency.MMK)));
+        assertThrows(
+            CurrencyAlreadySupportedException.class,
+            () -> addSupportedCurrencyCommand.execute(new AddSupportedCurrencyCommand.Input(fspId, Currency.MMK)));
 
         var nonExisting = new FspId(-4321L);
-        assertThrows(FspIdNotFoundException.class,
-                     () -> addSupportedCurrencyCommand.execute(new AddSupportedCurrencyCommand.Input(nonExisting, Currency.MYR)));
+        assertThrows(FspIdNotFoundException.class, () -> addSupportedCurrencyCommand.execute(new AddSupportedCurrencyCommand.Input(nonExisting, Currency.MYR)));
     }
 
     private CreateFspCommand.Output createSampleFsp(String code)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               new Currency[]{Currency.USD},
-                                               new CreateFspCommand.Input.Endpoint[]{});
+        var input = new CreateFspCommand.Input(new FspCode(code), "FSP-" + code, new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{});
         return this.createFspCommand.execute(input);
     }
 

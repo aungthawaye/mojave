@@ -1,15 +1,15 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCommand;
 import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,18 +27,12 @@ public class ActivateFspController {
     }
 
     @PostMapping("/fsps/activate-fsp")
-    public ResponseEntity<?> execute(@Valid @RequestBody Request request)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ActivateFspCommand.Output execute(@Valid @RequestBody ActivateFspCommand.Input input)
         throws FspIdNotFoundException {
 
-        var input = new ActivateFspCommand.Input(new FspId(request.fspId()));
-
-        var output = this.activateFspCommand.execute(input);
-
-        return ResponseEntity.ok(new Response());
+        return this.activateFspCommand.execute(input);
     }
-
-    public record Request(@NotNull Long fspId) { }
-
-    public record Response() { }
 
 }

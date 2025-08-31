@@ -10,7 +10,7 @@
     <groupId>io.mojaloop.platform.core.account</groupId>
     <artifactId>account-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Core - Account</name>
+    <name>Mojaloop - Platform - Core - Account</name>
     <modules>
         <module>contract</module>
         <module>domain</module>

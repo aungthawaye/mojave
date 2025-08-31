@@ -6,7 +6,6 @@ import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.connector.adapter.ConnectorAdapterConfiguration;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundErrorWriter;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
@@ -82,7 +81,6 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
         return source;
 
     }
-
 
     @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {

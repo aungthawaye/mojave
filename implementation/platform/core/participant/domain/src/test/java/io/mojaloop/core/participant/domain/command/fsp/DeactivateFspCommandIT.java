@@ -66,10 +66,11 @@ public class DeactivateFspCommandIT {
     private CreateFspCommand.Output createSampleFsp(String code)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               new Currency[]{Currency.USD},
-                                               new CreateFspCommand.Input.Endpoint[]{});
+        var input = new CreateFspCommand.Input(
+            new FspCode(code),
+            "FSP-" + code,
+            new Currency[]{Currency.USD},
+            new CreateFspCommand.Input.Endpoint[]{});
         return this.createFspCommand.execute(input);
     }
 

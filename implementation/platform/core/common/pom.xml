@@ -9,7 +9,7 @@
     <groupId>io.mojaloop.platform.core.common</groupId>
     <artifactId>common-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Core - Common</name>
+    <name>Mojaloop - Platform - Core - Common</name>
     <modules>
         <module>datatype</module>
     </modules>
@@ -18,17 +18,4 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <classifier>jakarta</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <classifier>jakarta</classifier>
-        </dependency>
-    </dependencies>
 </project>

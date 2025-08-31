@@ -7,7 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-lookup-service</artifactId>
-    <name>Mojaloop - Core - Look Up - Service</name>
+    <name>Mojaloop - Platform - Core - Lookup - Service</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

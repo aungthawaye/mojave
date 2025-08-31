@@ -70,8 +70,9 @@ public class ActivateSupportedCurrencyCommandIT {
 
         // Non-existent FSP -> FspIdNotFoundException
         var nonExisting = new FspId(-654L);
-        assertThrows(FspIdNotFoundException.class,
-                     () -> activateSupportedCurrencyCommand.execute(new ActivateSupportedCurrencyCommand.Input(nonExisting, Currency.USD)));
+        assertThrows(
+            FspIdNotFoundException.class,
+            () -> activateSupportedCurrencyCommand.execute(new ActivateSupportedCurrencyCommand.Input(nonExisting, Currency.USD)));
     }
 
     @Test
@@ -81,17 +82,19 @@ public class ActivateSupportedCurrencyCommandIT {
         var created = createFspWithCurrencies("act-cur-2", Currency.USD);
         var fspId = created.fspId();
         deactivateFspCommand.execute(new io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand.Input(fspId));
-        assertThrows(CannotActivateSupportedCurrencyException.class,
-                     () -> activateSupportedCurrencyCommand.execute(new ActivateSupportedCurrencyCommand.Input(fspId, Currency.USD)));
+        assertThrows(
+            CannotActivateSupportedCurrencyException.class,
+            () -> activateSupportedCurrencyCommand.execute(new ActivateSupportedCurrencyCommand.Input(fspId, Currency.USD)));
     }
 
     private CreateFspCommand.Output createFspWithCurrencies(String code, Currency... currencies)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               currencies,
-                                               new CreateFspCommand.Input.Endpoint[]{});
+        var input = new CreateFspCommand.Input(
+            new FspCode(code),
+            "FSP-" + code,
+            currencies,
+            new CreateFspCommand.Input.Endpoint[]{});
         return createFspCommand.execute(input);
     }
 

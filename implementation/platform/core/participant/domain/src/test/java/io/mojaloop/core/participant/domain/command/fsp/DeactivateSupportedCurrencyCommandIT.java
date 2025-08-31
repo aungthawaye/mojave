@@ -64,17 +64,19 @@ public class DeactivateSupportedCurrencyCommandIT {
         assertFalse(out2.deactivated());
 
         var nonExisting = new FspId(-3333L);
-        assertThrows(FspIdNotFoundException.class, () -> deactivateSupportedCurrencyCommand.execute(
-            new DeactivateSupportedCurrencyCommand.Input(nonExisting, Currency.USD)));
+        assertThrows(
+            FspIdNotFoundException.class, () -> deactivateSupportedCurrencyCommand.execute(
+                new DeactivateSupportedCurrencyCommand.Input(nonExisting, Currency.USD)));
     }
 
     private CreateFspCommand.Output createFspWithCurrencies(String code, Currency... currencies)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               currencies,
-                                               new CreateFspCommand.Input.Endpoint[]{});
+        var input = new CreateFspCommand.Input(
+            new FspCode(code),
+            "FSP-" + code,
+            currencies,
+            new CreateFspCommand.Input.Endpoint[]{});
         return createFspCommand.execute(input);
     }
 

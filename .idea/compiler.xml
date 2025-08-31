@@ -14,6 +14,7 @@
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-participant-intercom-client" />
+        <module name="mod-quoting-domain" />
         <module name="mod-component-web" />
         <module name="mod-connector-gateway" />
         <module name="mod-participant-admin" />
@@ -22,6 +23,7 @@
         <module name="mod-common-datatype" />
         <module name="mod-participant-intercom" />
         <module name="mod-connector-adapter" />
+        <module name="mod-quoting-service" />
         <module name="mod-fspiop-spec" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
@@ -29,11 +31,14 @@
         <module name="mod-component-tomcat" />
         <module name="mod-lookup-service" />
         <module name="mod-account-intercom" />
+        <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
         <module name="mod-component-retrofit" />
+        <module name="mod-quoting-contract" />
         <module name="mod-participant-domain" />
         <module name="mod-account-admin" />
         <module name="mod-fspiop-invoker" />
+        <module name="settlement-pom" />
         <module name="mod-participant-store" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
@@ -110,6 +115,7 @@
       <module name="mod-oracle-domain" options="-parameters" />
       <module name="mod-oracle-routes-admin" options="-parameters" />
       <module name="mod-participant-admin" options="-parameters" />
+      <module name="mod-participant-admin-client" options="-parameters" />
       <module name="mod-participant-contract" options="-parameters" />
       <module name="mod-participant-domain" options="-parameters" />
       <module name="mod-participant-intercom" options="-parameters" />
@@ -118,12 +124,17 @@
       <module name="mod-participant-store" options="-parameters" />
       <module name="mod-participant-util" options="-parameters" />
       <module name="mod-participant-utility" options="-parameters" />
+      <module name="mod-quoting-contract" options="-parameters" />
+      <module name="mod-quoting-domain" options="-parameters" />
+      <module name="mod-quoting-service" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
       <module name="participant-pom" options="-parameters" />
       <module name="platform-pom" options="-parameters" />
+      <module name="quoting-pom" options="-parameters" />
+      <module name="settlement-pom" options="-parameters" />
       <module name="shared-pom" options="-parameters" />
     </option>
   </component>

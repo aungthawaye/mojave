@@ -30,7 +30,7 @@ public class FspCodeNotFoundException extends DomainException {
 
     public FspCodeNotFoundException(FspCode fspCode) {
 
-        super(new ErrorTemplate("FSP_Code_NOT_FOUND", TEMPLATE), fspCode.getFspCode());
+        super(new ErrorTemplate("FSP_Code_NOT_FOUND", TEMPLATE), fspCode.value());
 
     }
 

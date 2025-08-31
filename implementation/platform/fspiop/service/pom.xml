@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-fspiop-service</artifactId>
-    <name>Mojaloop - FSPIOP - Service</name>
+    <name>Mojaloop - Platform - FSPIOP - Service</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

@@ -9,7 +9,7 @@
     <groupId>io.mojaloop.platform.core.lookup</groupId>
     <artifactId>lookup-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Core - Look Up</name>
+    <name>Mojaloop - Platform - Core - Lookup</name>
     <modules>
         <module>domain</module>
         <module>service</module>

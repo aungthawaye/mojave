@@ -16,4 +16,5 @@ public interface ParticipantIntercomService {
     Call<List<OracleData>> getOracles();
 
     record Settings(String baseUrl) { }
+
 }

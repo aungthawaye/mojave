@@ -1,24 +1,30 @@
 package io.mojaloop.core.participant.admin;
 
-import io.mojaloop.component.web.error.ApplicationErrorConfiguration;
+import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
 import io.mojaloop.core.participant.admin.component.BlindGatekeeper;
 import io.mojaloop.core.participant.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableAutoConfiguration
+@Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.participant.admin")
-@Import(value = {ParticipantDomainConfiguration.class, ApplicationErrorConfiguration.class, SpringSecurityConfiguration.class})
+@Import(value = {ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantAdminConfiguration implements ParticipantDomainConfiguration.RequiredBeans,
                                                       SpringSecurityConfiguration.RequiredBeans {
 

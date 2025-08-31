@@ -10,7 +10,7 @@
     <groupId>io.mojaloop.platform.fspiop</groupId>
     <artifactId>fspiop-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - FSPIOP</name>
+    <name>Mojaloop - Platform - FSPIOP</name>
     <modules>
         <module>spec</module>
         <module>invoker</module>

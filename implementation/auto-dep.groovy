@@ -1,9 +1,10 @@
 #!/usr/bin/env groovy
 
+
 //@@formatter:off
 
-import groovy.xml.XmlParser
 import groovy.xml.XmlNodePrinter
+import groovy.xml.XmlParser
 
 
 // Usage: groovy auto-dep.groovy /path/to/project/root

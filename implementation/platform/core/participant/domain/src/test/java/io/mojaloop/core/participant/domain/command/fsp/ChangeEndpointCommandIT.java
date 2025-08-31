@@ -72,12 +72,13 @@ public class ChangeEndpointCommandIT {
     private CreateFspCommand.Output createFspWithEndpoint(String code, EndpointType type, String baseUrl)
         throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
-        var input = new CreateFspCommand.Input(new FspCode(code),
-                                               "FSP-" + code,
-                                               new Currency[]{Currency.USD},
-                                               new CreateFspCommand.Input.Endpoint[]{
-                                                   new CreateFspCommand.Input.Endpoint(type, baseUrl)
-                                               });
+        var input = new CreateFspCommand.Input(
+            new FspCode(code),
+            "FSP-" + code,
+            new Currency[]{Currency.USD},
+            new CreateFspCommand.Input.Endpoint[]{
+                new CreateFspCommand.Input.Endpoint(type, baseUrl)
+            });
         return createFspCommand.execute(input);
     }
 
