@@ -26,10 +26,11 @@ import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank String value) {
+public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
 
     public FspCode {
 
@@ -51,6 +52,7 @@ public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank String v
         if (!(o instanceof FspCode(String code))) {
             return false;
         }
+
         return Objects.equals(this.value, code);
     }
 
