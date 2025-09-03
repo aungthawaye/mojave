@@ -2,7 +2,10 @@ package io.mojaloop.component.retrofit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
+import io.mojaloop.component.retrofit.debug.DnsDebug;
+import io.mojaloop.component.retrofit.interceptor.HandshakeLoggingInterceptor;
 import lombok.Getter;
+import okhttp3.Dns;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,21 +29,17 @@ import retrofit2.http.PUT;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyManagementException;
+import java.net.InetAddress;
 import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class RetrofitService {
@@ -112,31 +111,19 @@ public class RetrofitService {
     public interface ForwardingService {
 
         @DELETE
-        Call<Void> delete(@Url String url,
-                          @HeaderMap Map<String, String> headers,
-                          @QueryMap Map<String, String> params,
-                          @Body RequestBody body);
+        Call<Void> delete(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
 
         @GET
         Call<Void> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
 
         @PATCH
-        Call<Void> patch(@Url String url,
-                         @HeaderMap Map<String, String> headers,
-                         @QueryMap Map<String, String> params,
-                         @Body RequestBody body);
+        Call<Void> patch(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
 
         @POST
-        Call<Void> post(@Url String url,
-                        @HeaderMap Map<String, String> headers,
-                        @QueryMap Map<String, String> params,
-                        @Body RequestBody body);
+        Call<Void> post(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
 
         @PUT
-        Call<Void> put(@Url String url,
-                       @HeaderMap Map<String, String> headers,
-                       @QueryMap Map<String, String> params,
-                       @Body RequestBody body);
+        Call<Void> put(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
 
     }
 
@@ -156,6 +143,8 @@ public class RetrofitService {
 
         private HttpLoggingInterceptor loggingInterceptor = null;
 
+        private HandshakeLoggingInterceptor handshakeLoggingInterceptor = null;
+
         private Builder(Class<S> service, String baseUrl) {
 
             this.service = service;
@@ -164,8 +153,17 @@ public class RetrofitService {
 
         public S build() {
 
+            // They will be very problematic if you have other interceptors that modify the request.
+            // So if we want to use them, add last.
+
             if (this.loggingInterceptor != null) {
                 this.httpClientBuilder.addInterceptor(this.loggingInterceptor);
+                LOGGER.debug("Built withHttpLogging.");
+            }
+
+            if( this.handshakeLoggingInterceptor != null ) {
+                this.httpClientBuilder.addNetworkInterceptor(this.handshakeLoggingInterceptor);
+                LOGGER.debug("Built withHandshakeLogging.");
             }
 
             Retrofit retrofit = this.retrofitBuilder.client(this.httpClientBuilder.build()).build();
@@ -174,6 +172,8 @@ public class RetrofitService {
         }
 
         public Builder<S> withConverterFactories(Converter.Factory... factories) {
+
+            LOGGER.debug("Configured withConverterFactories.");
 
             if (factories != null) {
 
@@ -187,6 +187,8 @@ public class RetrofitService {
         }
 
         public Builder<S> withCustomHeaders(Map<String, String> headers) {
+
+            LOGGER.debug("Configured withCustomHeaders.");
 
             this.httpClientBuilder.addInterceptor(chain -> {
 
@@ -209,6 +211,8 @@ public class RetrofitService {
 
         public Builder<S> withDefaultFactories(ObjectMapper objectMapper) {
 
+            LOGGER.debug("Configured withDefaultFactories.");
+
             this.retrofitBuilder.addConverterFactory(new NullOrEmptyConverterFactory());
             this.retrofitBuilder.addConverterFactory(ScalarsConverterFactory.create());
             this.retrofitBuilder.addConverterFactory(JacksonConverterFactory.create(objectMapper));
@@ -216,63 +220,38 @@ public class RetrofitService {
             return this;
         }
 
-        public Builder<S> withDisableSSLVerification() {
+        public Builder<S> withDnsDebug() {
 
-            final TrustManager[] trustManager = new TrustManager[]{
-                new X509TrustManager() {
+            LOGGER.debug("Configured withDnsDebug.");
 
-                    @Override
-                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                        throws CertificateException {
+            Dns current = this.httpClientBuilder.build().dns();
 
-                    }
+            this.httpClientBuilder.dns(new DnsDebug(current));
 
-                    @Override
-                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                        throws CertificateException {
+            return this;
+        }
 
-                    }
+        public Builder<S> withDnsToIpConversion(String dns, String ip) {
 
-                    @Override
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+            LOGGER.debug("Configured withDnsToIpConversion.");
 
-                        return new java.security.cert.X509Certificate[]{};
+            this.httpClientBuilder.dns(host -> {
 
-                    }
+                if (dns.equals(host)) {
 
-                }};
+                    return Collections.singletonList(InetAddress.getByName(ip));
+                }
 
-            final SSLContext sslContext;
+                return okhttp3.Dns.SYSTEM.lookup(host);
 
-            try {
-
-                sslContext = SSLContext.getInstance("SSL");
-                sslContext.init(null, trustManager, new java.security.SecureRandom());
-
-                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-                this.httpClientBuilder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManager[0]);
-                this.httpClientBuilder.hostnameVerifier(new HostnameVerifier() {
-
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-
-                        return true;
-
-                    }
-
-                });
-
-            } catch (KeyManagementException | NoSuchAlgorithmException e) {
-
-                throw new RuntimeException(e);
-
-            }
+            });
 
             return this;
         }
 
         public Builder<S> withHttpLogging(HttpLoggingInterceptor.Level level, boolean info) {
+
+            LOGGER.debug("Configured withHttpLogging.");
 
             this.loggingInterceptor = new HttpLoggingInterceptor(message -> {
 
@@ -291,6 +270,8 @@ public class RetrofitService {
 
         public Builder<S> withInterceptors(Interceptor... interceptors) {
 
+            LOGGER.debug("Configured withInterceptors.");
+
             if (interceptors != null) {
 
                 for (Interceptor interceptor : interceptors) {
@@ -305,9 +286,13 @@ public class RetrofitService {
         public Builder<S> withMutualTLS(InputStream clientCertInputStream,
                                         String clientCertPassword,
                                         InputStream trustStoreInputStream,
-                                        String trustStorePassword) {
+                                        String trustStorePassword,
+                                        boolean ignoreHostnameVerification) {
+
+            LOGGER.debug("Configured withMutualTLS.");
 
             try {
+
                 KeyStore keyStore = KeyStore.getInstance("PKCS12");
                 keyStore.load(clientCertInputStream, clientCertPassword.toCharArray());
 
@@ -319,13 +304,20 @@ public class RetrofitService {
 
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                 tmf.init(trustStore);
+
                 SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
-                SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-                X509TrustManager trustManager = (X509TrustManager) tmf.getTrustManagers()[0];
+                X509TrustManager tm = (X509TrustManager) tmf.getTrustManagers()[0];
 
-                this.httpClientBuilder.sslSocketFactory(sslSocketFactory, trustManager);
+                this.httpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), tm);
+
+                okhttp3.ConnectionSpec spec = new okhttp3.ConnectionSpec.Builder(okhttp3.ConnectionSpec.MODERN_TLS)
+                                                  .tlsVersions(okhttp3.TlsVersion.TLS_1_2)
+                                                  .build();
+
+                this.httpClientBuilder.connectionSpecs(List.of(spec));
+                this.httpClientBuilder.hostnameVerifier((hostname, session) -> ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to configure mTLS", e);
@@ -336,9 +328,20 @@ public class RetrofitService {
 
         public Builder<S> withTimeouts(int connectTimeout, int callTimeout, int readTimeout) {
 
+            LOGGER.debug("Configured withTimeouts.");
+
             this.httpClientBuilder.connectTimeout(Duration.ofSeconds(connectTimeout <= 0 ? 60 : connectTimeout));
             this.httpClientBuilder.callTimeout(Duration.ofSeconds(callTimeout <= 0 ? 60 : callTimeout));
             this.httpClientBuilder.readTimeout(Duration.ofSeconds(readTimeout <= 0 ? 60 : readTimeout));
+
+            return this;
+        }
+
+        public Builder<S> withHandshakeLogging() {
+
+            LOGGER.debug("Configured withTlsDebug.");
+
+            this.handshakeLoggingInterceptor = new HandshakeLoggingInterceptor();
 
             return this;
         }
