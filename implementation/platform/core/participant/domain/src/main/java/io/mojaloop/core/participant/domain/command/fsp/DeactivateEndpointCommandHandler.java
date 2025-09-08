@@ -54,13 +54,13 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
                       .findById(input.fspId())
                       .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        boolean deactivated = fsp.deactivateEndpoint(input.endpointType());
+        fsp.deactivateEndpoint(input.endpointType());
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed DeactivateEndpointCommand with input: {} -> deactivated={}", input, deactivated);
+        LOGGER.info("Completed DeactivateEndpointCommand with input: {}", input);
 
-        return new Output(deactivated);
+        return new Output();
     }
 
 }

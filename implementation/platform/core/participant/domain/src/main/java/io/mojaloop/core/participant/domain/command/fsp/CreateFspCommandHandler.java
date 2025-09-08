@@ -66,7 +66,7 @@ public class CreateFspCommandHandler implements CreateFspCommand {
         for (var currency : input.supportedCurrencies()) {
 
             LOGGER.info("Adding supported currency: {}", currency);
-            fsp.addSupportedCurrency(currency);
+            fsp.addCurrency(currency);
             LOGGER.info("Added supported currency: {}", currency);
         }
 

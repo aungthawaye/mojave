@@ -5,7 +5,7 @@ import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
 import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
-import io.mojaloop.core.participant.contract.command.fsp.ActivateSupportedCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
@@ -32,6 +32,6 @@ public class ActivateSupportedCurrencyIT {
                                            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")
                                        }));
 
-        this.activateSupportedCurrency.execute(new ActivateSupportedCurrencyCommand.Input(new FspId(output.fspId().getId()), Currency.USD));
+        this.activateSupportedCurrency.execute(new ActivateFspCurrencyCommand.Input(new FspId(output.fspId().getId()), Currency.USD));
     }
 }

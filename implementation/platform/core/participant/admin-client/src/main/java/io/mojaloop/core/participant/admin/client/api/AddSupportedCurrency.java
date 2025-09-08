@@ -5,7 +5,7 @@ import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
 import io.mojaloop.core.participant.admin.client.service.ParticipantAdminService;
-import io.mojaloop.core.participant.contract.command.fsp.AddSupportedCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.fsp.AddFspCurrencyCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class AddSupportedCurrency {
         this.objectMapper = objectMapper;
     }
 
-    public AddSupportedCurrencyCommand.Output execute(AddSupportedCurrencyCommand.Input input) throws ParticipantCommandClientException {
+    public AddFspCurrencyCommand.Output execute(AddFspCurrencyCommand.Input input) throws ParticipantCommandClientException {
 
         try {
 

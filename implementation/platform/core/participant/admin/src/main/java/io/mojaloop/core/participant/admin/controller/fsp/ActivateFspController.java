@@ -27,12 +27,11 @@ public class ActivateFspController {
     }
 
     @PostMapping("/fsps/activate-fsp")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ActivateFspCommand.Output execute(@Valid @RequestBody ActivateFspCommand.Input input)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void execute(@Valid @RequestBody ActivateFspCommand.Input input)
         throws FspIdNotFoundException {
 
-        return this.activateFspCommand.execute(input);
+        this.activateFspCommand.execute(input);
     }
 
 }

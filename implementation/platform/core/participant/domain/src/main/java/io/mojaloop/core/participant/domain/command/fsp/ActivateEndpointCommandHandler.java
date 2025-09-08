@@ -55,13 +55,13 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
                       .findById(input.fspId())
                       .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        boolean activated = fsp.activateEndpoint(input.endpointType());
+        fsp.activateEndpoint(input.endpointType());
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ActivateEndpointCommand with input: {} -> activated={}", input, activated);
+        LOGGER.info("Completed ActivateEndpointCommand with input: {}", input);
 
-        return new Output(activated);
+        return new Output();
     }
 
 }

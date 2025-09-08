@@ -1,0 +1,217 @@
+@startuml
+' Mojaloop Transfers Sequence Diagram
+skinparam defaultFontName "Monospaced"
+skinparam defaultFontSize 10
+
+skinparam sequence {
+    ParticipantFontSize 11
+    MessageFontSize 10
+    TitleFontSize 20
+    NoteFontSize 10
+
+    ArrowColor #2b6cb0
+    LifeLineBorderColor #2d3748
+    LifeLineBackgroundColor #e2e8f0
+
+    ParticipantBorderColor #2d3748
+    ParticipantBackgroundColor #edf2f7
+    ParticipantFontColor #1a202c
+
+    ActivationBarColor #805ad5
+    GroupBorderColor #4a5568          ' for alt/opt/loop frames
+    GroupBackgroundColor #edf2f7
+    GroupFontColor #1a202c
+
+    TitleFontColor #1a202c
+    DividerBorderColor #718096
+    DividerBackgroundColor #e2e8f0
+    ReferenceBorderColor #4a5568       ' "ref over" blocks
+    ReferenceBackgroundColor #f7fafc
+    ReferenceFontColor #2d3748
+
+    NoteBorderColor #a0aec0
+    NoteBackgroundColor #ffffcc
+    NoteFontColor #1a202c
+
+}
+
+autonumber
+
+participant "FSP 1" as FSP1
+participant "Transfer" as Transfer
+participant "Account" as Account
+participant "FSP 2" as FSP2
+
+== Transfer (Prepare) ==
+
+FSP1 -> Transfer : POST /transfers
+
+FSP1 <-- Transfer : **202** Accepted
+
+group #f7f7ff PrepareFundCommand
+
+    Transfer -> Transfer : Do the required validations
+
+    Transfer -> Transfer : Load **TransferPolicy** based on \n FSP, currency, transaction date/time and amount.
+    note over Transfer
+    **TransferPolicy** is composed of **SettlementModel**,
+    **TransferStage** and **PostingFlow**.
+
+    //Hub Administrator// configures **TransferPolicy**.
+    end note
+
+    Transfer -> Transfer : Initiate **TransferTransaction** \n with **TransferPolicyId**, __STAGE (PREPARE)__ \n and __STATUS (DRAFT)__. \n
+
+    Transfer -> Transfer : Get **PostingFlow** from \n **TransferPolicy**
+
+    Transfer -> Transfer : Get **PostingFlow** for the transfer preparation.
+
+    Transfer -> Account : [Reserve for **FSP1**]Request to do the posting and send \n **PostingRequest** with **FSP1(POSITION)** : Debit then **FSP1(PAYABLE)** : Credit
+
+    Account -> Account : Verify the **PostingRequest**
+
+    Account -> Account : Create **JournalEntry** with __STATUS (DRAFT)__ and do the postings.
+
+    Account -> Account : Execute the ledger service to \n **FSP1(POSITION)** : Debit then **FSP1(PAYABLE)** : Credit
+
+    Account -> Account : Mark **JournalEntry** as __STATUS (POSTED)__
+
+    Transfer <-- Account  : Return **PostingResponse** OR **Error**
+
+    alt #ffe4e6 **PostingResponse** is **Failure**
+
+        Transfer --> Transfer : Update **TransferTransaction** \n with __STAGE (PREPARE)__ and __STATUS (FAILED)__
+
+        FSP1 <-- Transfer : **PUT** /transfers/{transferId}/error
+        note over FSP1
+        (Transfer ABORTED)
+        end note
+
+    else #f0fff4 **PostingResponse** is **Success**
+
+        Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (PREPARE)__ and __STATUS (COMPLETED)__
+        note over Transfer
+        After __STAGE (PREPARED)__, the transfer amount is already
+        reserved in FSP1's account according to **PostingFlow**
+        end note
+
+        Transfer -> FSP2 : Forward **POST** /transfers request \n to **FSP 2**
+
+        Transfer <-- FSP2  : **202** Accepted
+
+    end
+
+    FSP2 -> FSP2 : Do its internal process. \n It could be reserving.
+
+end group
+
+== Transfer (Commit) ==
+
+FSP2 -> Transfer : Send **PUT** /transfers/{transferId}
+
+Transfer --> FSP2 : **202** Accepted
+
+group #f7f7ff ReleaseFundCommand
+
+    Transfer -> Transfer : Fetch **TransferTransaction** \n using __transferId__
+
+    Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (RELEASE)__ and __STATUS (DRAFT)__
+
+    Transfer -> Transfer : Load **TransferPolicy** using \n **TransferTransaction**'s **TransferPolicyId**
+
+    Transfer -> Transfer : Get **PostingFlow** from \n **TransferPolicy** for the **FSP1** transfer commit.
+
+    Transfer -> Account : [Release from **FSP1** to **FSP2**] \n Request to do the posting and send **PostingRequest** with \n **FSP1(PAYABLE)** : Debit then **FSP2(RECEIVABLE)** : Credit
+
+    Account -> Account : Verify the **PostingRequest**
+
+    Account -> Account : Create **JournalEntry** with __STATUS (DRAFT)__ and do the postings.
+
+    Account -> Account : Execute the ledger service to \n **FSP1(PAYABLE)** : Debit then **FSP2(RECEIVABLE)** : Credit
+
+    Account -> Account : Mark **JournalEntry** as __STATUS (POSTED)__
+    note over Account
+    (This posting surely will have NO error.)
+    end note
+
+    Transfer <-- Account : Return **PostingResponse** OR **Error**
+
+    alt #ffe4e6 **PostingResponse** is **Failure**
+
+    Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (RELEASE)__ and __STATUS (FAILED)__
+
+    FSP1 <-- Transfer : **PUT** /transfers/{transferId}/error
+
+    note over FSP1
+    (Transfer ABORTED)
+    end note
+
+    else #f0fff4 **PostingResponse** is **Success**
+
+    Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (RELEASE)__ and __STATUS (COMPLETED)__
+
+    end
+
+end group
+
+note over Transfer
+(Below will be continued only if the above is successful)
+end note
+
+group #f7f7ff ReceiveFundCommand
+
+    Transfer -> Transfer : Fetch **TransferTransaction** \n using __transferId__
+
+    Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (RECEIVE)__ and __STATUS (DRAFT)__
+
+    Transfer -> Transfer : Load **TransferPolicy** using \n **TransferTransaction**'s **TransferPolicyId**
+
+    Transfer -> Transfer : Get **PostingFlow** from \n **TransferPolicy** for the **FSP2** to receive the fund.
+
+    Transfer -> Account : [Receive fund at **FSP2**] \n Request to do the posting and send **PostingRequest** with \n **FSP2(RECEIVABLE)** : Debit then **FSP2(POSITION)** : Credit
+
+    Account -> Account : Verify the **PostingRequest**
+
+    Account -> Account : Create **JournalEntry** with __STATUS (DRAFT)__ and do the postings.
+
+    Account -> Account : Execute the ledger service to \n **FSP2(RECEIVABLE)** : Debit then **FSP2(POSITION)** : Credit
+
+    Account -> Account : Mark **JournalEntry** as __STATUS (POSTED)__
+    note over Account
+    (This posting surely will have NO error.)
+    end note
+
+    Transfer <-- Account : Return **PostingResponse** OR **Error**
+
+    alt #ffe4e6 **PostingResponse** is **Failure**
+
+    Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (RECEIVE)__ and __STATUS (FAILED)__
+
+    FSP1 <-- Transfer : **PUT** /transfers/{transferId}/error
+
+    note over FSP1
+    (Transfer ABORTED)
+    end note
+
+    else #f0fff4 **PostingResponse** is **Success**
+
+    Transfer -> Transfer : Update **TransferTransaction** \n with __STAGE (RECEIVE)__ and __STATUS (COMPLETED)__
+
+    end
+
+end group
+
+FSP1 <-- Transfer : Send **PUT** /transfers/{transferId}
+note over FSP1
+(Transfer COMMITED)
+end note
+
+Transfer -> FSP2 : Send **PATCH** /transfer/{transferId}
+
+Transfer <-- FSP2 : **202** Accepted
+
+Transfer -> Settlement : Send **POST** /settlements
+
+Settlement --> Transfer : **202** Accepted
+
+@enduml

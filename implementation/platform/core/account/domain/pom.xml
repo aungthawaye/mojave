@@ -13,4 +13,26 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-flyway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.account</groupId>
+            <artifactId>mod-account-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.common</groupId>
+            <artifactId>mod-common-datatype-converter</artifactId>
+        </dependency>
+    </dependencies>
 </project>

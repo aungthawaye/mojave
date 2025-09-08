@@ -16,6 +16,11 @@ public interface OracleRepository extends JpaRepository<Oracle, OracleId>, JpaSp
             return (root, query, cb) -> cb.equal(root.get("type"), type);
         }
 
+        public static Specification<Oracle> withId(OracleId id) {
+
+            return (root, query, cb) -> cb.equal(root.get("id"), id);
+        }
+
     }
 
 }

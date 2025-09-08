@@ -27,11 +27,10 @@ public class DeactivateFspController {
     }
 
     @PostMapping("/fsps/deactivate-fsp")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public DeactivateFspCommand.Output execute(@Valid @RequestBody DeactivateFspCommand.Input input) throws FspIdNotFoundException {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void execute(@Valid @RequestBody DeactivateFspCommand.Input input) throws FspIdNotFoundException {
 
-        return this.deactivateFspCommand.execute(input);
+        this.deactivateFspCommand.execute(input);
     }
 
 }

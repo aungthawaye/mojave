@@ -68,7 +68,7 @@ public class CreateFspCommandIT {
         var saved1 = fspRepository.findById(output1.fspId());
         assertTrue(saved1.isPresent());
         assertEquals("FSP 1", saved1.get().convert().name());
-        assertEquals(3, saved1.get().getSupportedCurrencies().size());
+        assertEquals(3, saved1.get().getCurrencies().size());
         assertEquals(3, saved1.get().getEndpoints().size());
 
         // Second FSP
