@@ -11,7 +11,19 @@ import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.command.fsp.DeactivateEndpointCommand;
 import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand;
 import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.hub.ChangeHubNameCommand;
+import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
+import io.mojaloop.core.participant.contract.command.hub.DeactivateHubCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.oracle.ActivateOracleCommand;
+import io.mojaloop.core.participant.contract.command.oracle.ChangeOracleNameCommand;
+import io.mojaloop.core.participant.contract.command.oracle.ChangeOracleTypeCommand;
+import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
+import io.mojaloop.core.participant.contract.command.oracle.DeactivateOracleCommand;
 import io.mojaloop.core.participant.contract.data.FspData;
+import io.mojaloop.core.participant.contract.data.HubData;
+import io.mojaloop.core.participant.contract.data.OracleData;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -24,14 +36,23 @@ public interface ParticipantAdminService {
 
     interface FspCommands {
 
+        @POST("fsps/activate-endpoint")
+        Call<ActivateEndpointCommand.Output> activateEndpoint(@Body ActivateEndpointCommand.Input input);
+
         @POST("fsps/activate-fsp")
         Call<ActivateFspCommand.Output> activateFsp(@Body ActivateFspCommand.Input input);
 
         @POST("fsps/activate-supported-currency")
         Call<ActivateFspCurrencyCommand.Output> activateSupportedCurrency(@Body ActivateFspCurrencyCommand.Input input);
 
+        @POST("fsps/add-endpoint")
+        Call<AddEndpointCommand.Output> addEndpoint(@Body AddEndpointCommand.Input input);
+
         @POST("fsps/add-supported-currency")
         Call<AddFspCurrencyCommand.Output> addSupportedCurrency(@Body AddFspCurrencyCommand.Input input);
+
+        @POST("fsps/change-endpoint")
+        Call<ChangeEndpointCommand.Output> changeEndpoint(@Body ChangeEndpointCommand.Input input);
 
         @POST("fsps/change-fsp-name")
         Call<ChangeFspNameCommand.Output> changeFspName(@Body ChangeFspNameCommand.Input input);
@@ -39,23 +60,14 @@ public interface ParticipantAdminService {
         @POST("fsps/create-fsp")
         Call<CreateFspCommand.Output> createFsp(@Body CreateFspCommand.Input input);
 
+        @POST("fsps/deactivate-endpoint")
+        Call<DeactivateEndpointCommand.Output> deactivateEndpoint(@Body DeactivateEndpointCommand.Input input);
+
         @POST("fsps/deactivate-fsp")
         Call<DeactivateFspCommand.Output> deactivateFsp(@Body DeactivateFspCommand.Input input);
 
         @POST("fsps/deactivate-supported-currency")
         Call<DeactivateFspCurrencyCommand.Output> deactivateSupportedCurrency(@Body DeactivateFspCurrencyCommand.Input input);
-
-        @POST("fsps/add-endpoint")
-        Call<AddEndpointCommand.Output> addEndpoint(@Body AddEndpointCommand.Input input);
-
-        @POST("fsps/activate-endpoint")
-        Call<ActivateEndpointCommand.Output> activateEndpoint(@Body ActivateEndpointCommand.Input input);
-
-        @POST("fsps/change-endpoint")
-        Call<ChangeEndpointCommand.Output> changeEndpoint(@Body ChangeEndpointCommand.Input input);
-
-        @POST("fsps/deactivate-endpoint")
-        Call<DeactivateEndpointCommand.Output> deactivateEndpoint(@Body DeactivateEndpointCommand.Input input);
 
         @GET("fsps/get-all-fsps")
         Call<List<FspData>> getAllFsps();
@@ -63,6 +75,54 @@ public interface ParticipantAdminService {
         @GET("fsps/get-fsp")
         Call<FspData> getFsp(@Query("fspId") Long fspId);
 
+    }
+
+    interface OracleCommands {
+
+        @POST("oracles/activate-oracle")
+        Call<ActivateOracleCommand.Output> activateOracle(@Body ActivateOracleCommand.Input input);
+
+        @POST("oracles/deactivate-oracle")
+        Call<DeactivateOracleCommand.Output> deactivateOracle(@Body DeactivateOracleCommand.Input input);
+
+        @POST("oracles/change-name")
+        Call<ChangeOracleNameCommand.Output> changeName(@Body ChangeOracleNameCommand.Input input);
+
+        @POST("oracles/change-type")
+        Call<ChangeOracleTypeCommand.Output> changeType(@Body ChangeOracleTypeCommand.Input input);
+
+        @POST("oracles/create-oracle")
+        Call<CreateOracleCommand.Output> createOracle(@Body CreateOracleCommand.Input input);
+
+        @GET("oracles/get-all-oracles")
+        Call<List<OracleData>> getAllOracles();
+
+        @GET("oracles/get-oracle")
+        Call<OracleData> getOracle(@Query("oracleId") Long oracleId);
+    }
+
+    interface HubCommands {
+
+        @POST("hubs/create-hub")
+        Call<CreateHubCommand.Output> createHub(@Body CreateHubCommand.Input input);
+
+        @POST("hubs/change-name")
+        Call<ChangeHubNameCommand.Output> changeName(@Body ChangeHubNameCommand.Input input);
+
+        @POST("hubs/add-currency")
+        Call<AddHubCurrencyCommand.Output> addCurrency(@Body AddHubCurrencyCommand.Input input);
+
+        @POST("hubs/activate-currency")
+        Call<ActivateHubCurrencyCommand.Output> activateCurrency(@Body ActivateHubCurrencyCommand.Input input);
+
+        @POST("hubs/deactivate-currency")
+        Call<DeactivateHubCurrencyCommand.Output> deactivateCurrency(@Body DeactivateHubCurrencyCommand.Input input);
+
+        @GET("hubs/get-all-hubs")
+        Call<List<HubData>> getAllHubs();
+
+        @GET("hubs/get-hub")
+        Call<HubData> getHub(@Query("hubId") Long hubId);
     }
 
     record Settings(String baseUrl) { }

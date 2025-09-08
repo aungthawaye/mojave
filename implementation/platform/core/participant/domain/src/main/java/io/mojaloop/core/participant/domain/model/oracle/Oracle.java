@@ -21,34 +21,41 @@
 package io.mojaloop.core.participant.domain.model.oracle;
 
 import io.mojaloop.component.jpa.JpaEntity;
+import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.OracleIdJavaType;
 import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
-import io.mojaloop.core.common.datatype.converter.identifier.participant.OracleIdJavaType;
+import io.mojaloop.core.participant.contract.data.OracleData;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 
+import java.time.Instant;
+
 import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_oracle")
+@Table(name = "pcp_oracle", uniqueConstraints = {@UniqueConstraint(name = "uk_oracle", columnNames = {"type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Oracle extends JpaEntity<OracleId> {
+public class Oracle extends JpaEntity<OracleId> implements DataConversion<OracleData> {
 
     @Id
     @JavaType(OracleIdJavaType.class)
@@ -56,14 +63,14 @@ public class Oracle extends JpaEntity<OracleId> {
     @Column(name = "oracle_id", nullable = false, updatable = false)
     protected OracleId id;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected PartyIdType type;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "baseUrl")
+    @Column(name = "baseUrl", nullable = false, length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
     protected String baseUrl;
 
     @Column(name = "activation_status", length = StringSizeConstraints.MAX_ENUM_LENGTH)
@@ -73,6 +80,10 @@ public class Oracle extends JpaEntity<OracleId> {
     @Column(name = "termination_status", length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
+
+    @Column(name = "created_at", nullable = false)
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant createdAt;
 
     public Oracle(PartyIdType type, String name, String host) {
 
@@ -84,6 +95,7 @@ public class Oracle extends JpaEntity<OracleId> {
         this.type(type).name(name).baseUrl(host);
         this.activationStatus = ActivationStatus.ACTIVE;
         this.terminationStatus = TerminationStatus.ALIVE;
+        this.createdAt = Instant.now();
     }
 
     public void activate() {
@@ -108,6 +120,12 @@ public class Oracle extends JpaEntity<OracleId> {
         this.baseUrl = value;
 
         return this;
+    }
+
+    @Override
+    public OracleData convert() {
+
+        return new OracleData(this.id, this.type, this.name, this.baseUrl, this.activationStatus, this.terminationStatus);
     }
 
     public void deactivate() {

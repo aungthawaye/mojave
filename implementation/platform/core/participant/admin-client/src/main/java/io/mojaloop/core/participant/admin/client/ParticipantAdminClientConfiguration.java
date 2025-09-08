@@ -20,6 +20,20 @@ public class ParticipantAdminClientConfiguration {
                               .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true).withDefaultFactories(objectMapper).build();
     }
 
+    @Bean
+    public ParticipantAdminService.OracleCommands oracleCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(ParticipantAdminService.OracleCommands.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true).withDefaultFactories(objectMapper).build();
+    }
+
+    @Bean
+    public ParticipantAdminService.HubCommands hubCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(ParticipantAdminService.HubCommands.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true).withDefaultFactories(objectMapper).build();
+    }
+
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {

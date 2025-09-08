@@ -25,11 +25,11 @@ import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.FspCurrencyIdJavaType;
 import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
-import io.mojaloop.core.common.datatype.converter.identifier.participant.FspCurrencyIdJavaType;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -40,6 +40,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,7 +53,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_currency")
+@Table(name = "pcp_fsp_currency", uniqueConstraints = {@UniqueConstraint(name = "uk_fsp_currency", columnNames = {"fsp_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataConversion<FspData.FspCurrencyData> {
 
@@ -62,11 +63,11 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     @Column(name = "fsp_currency_id")
     private FspCurrencyId id;
 
-    @Column(name = "currency", length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @Column(name = "activation_status", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 

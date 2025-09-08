@@ -65,7 +65,7 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
     @Column(name = "hub_id", nullable = false, updatable = false)
     protected HubId id;
 
-    @Column(name = "name", length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
     @Getter(AccessLevel.NONE)

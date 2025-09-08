@@ -27,12 +27,12 @@ import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.common.datatype.converter.identifier.participant.FspEndpointIdJavaType;
 import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
 import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspEndpointId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
-import io.mojaloop.core.common.datatype.converter.identifier.participant.FspEndpointIdJavaType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -42,6 +42,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,7 +55,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_endpoint")
+@Table(name = "pcp_fsp_endpoint", uniqueConstraints = {@UniqueConstraint(name = "uk_fsp_endpoint", columnNames = {"fsp_endpoint_id", "type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataConversion<FspData.EndpointData> {
 
@@ -62,17 +63,17 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
 
     @JavaType(FspEndpointIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "endpoint_id", nullable = false, updatable = false)
+    @Column(name = "fsp_endpoint_id", nullable = false, updatable = false)
     private FspEndpointId id;
 
-    @Column(name = "type", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private EndpointType type;
 
-    @Column(name = "base_url", length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
+    @Column(name = "base_url", nullable = false, length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
     private String baseUrl;
 
-    @Column(name = "activation_status", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
