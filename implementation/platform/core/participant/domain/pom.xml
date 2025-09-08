@@ -27,12 +27,12 @@
             <artifactId>mod-component-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-contract</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.mojaloop.platform.core.common</groupId>
             <artifactId>mod-common-datatype-converter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-contract</artifactId>
         </dependency>
     </dependencies>
 </project>

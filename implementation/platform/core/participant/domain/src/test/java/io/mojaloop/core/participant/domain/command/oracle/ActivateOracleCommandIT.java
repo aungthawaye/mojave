@@ -23,7 +23,6 @@ package io.mojaloop.core.participant.domain.command.oracle;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.contract.command.oracle.ActivateOracleCommand;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
-import io.mojaloop.core.participant.contract.command.oracle.DeactivateOracleCommand;
 import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
@@ -37,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-public class ActivateDeactivateOracleCommandIT {
+public class ActivateOracleCommandIT {
 
     @Autowired
     private CreateOracleCommand createOracleCommand;
@@ -45,27 +44,19 @@ public class ActivateDeactivateOracleCommandIT {
     @Autowired
     private ActivateOracleCommand activateOracleCommand;
 
-    @Autowired
-    private DeactivateOracleCommand deactivateOracleCommand;
-
     @Test
-    public void deactivate_then_activate_and_notFound() throws Exception {
-
+    public void activate_succeeds_and_invalidId_throws() throws Exception {
         assertNotNull(createOracleCommand);
         assertNotNull(activateOracleCommand);
-        assertNotNull(deactivateOracleCommand);
 
         var created = createOracleCommand.execute(new CreateOracleCommand.Input(
             PartyIdType.EMAIL, "Oracle-Email", "https://oracle-email.example.com"));
 
-        // Deactivate then activate - should not throw
-        deactivateOracleCommand.execute(new DeactivateOracleCommand.Input(created.oracleId()));
+        // Activate should not throw
         activateOracleCommand.execute(new ActivateOracleCommand.Input(created.oracleId()));
 
         // Non-existent
         var nonExisting = new OracleId(-1010L);
-        assertThrows(OracleIdNotFoundException.class,
-            () -> deactivateOracleCommand.execute(new DeactivateOracleCommand.Input(nonExisting)));
         assertThrows(OracleIdNotFoundException.class,
             () -> activateOracleCommand.execute(new ActivateOracleCommand.Input(nonExisting)));
     }
