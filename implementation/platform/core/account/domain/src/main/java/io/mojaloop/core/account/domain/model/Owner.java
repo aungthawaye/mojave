@@ -1,12 +1,19 @@
 package io.mojaloop.core.account.domain.model;
 
+import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdConverter;
 import io.mojaloop.core.common.datatype.enumeration.account.OwnerType;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.identifier.participant.FxpId;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Embeddable;
 
-public record Owner(OwnerType ownerType, OwnerId ownerId) {
+@Embeddable
+public record Owner(@Column(name = "owner_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH) OwnerType ownerType,
+                    @Column(name = "owner_id", nullable = false) @Convert(converter = OwnerIdConverter.class) OwnerId ownerId) {
 
     public Owner {
 
@@ -28,4 +35,5 @@ public record Owner(OwnerType ownerType, OwnerId ownerId) {
 
         return new Owner(OwnerType.HUB, new OwnerId(hubId.getId()));
     }
+
 }

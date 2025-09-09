@@ -1,6 +1,6 @@
 package io.mojaloop.core.common.datatype.converter.identifier.account;
 
-import io.mojaloop.core.common.datatype.identifier.account.ChartEntryDefinitionId;
+import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class ChartEntryDefinitionIdJavaType extends AbstractClassJavaType<ChartEntryDefinitionId> {
+public class OwnerIdJavaType extends AbstractClassJavaType<OwnerId> {
 
-    public static final ChartEntryDefinitionIdJavaType INSTANCE = new ChartEntryDefinitionIdJavaType();
+    public static final OwnerIdJavaType INSTANCE = new OwnerIdJavaType();
 
-    public ChartEntryDefinitionIdJavaType() {
+    public OwnerIdJavaType() {
 
-        super(ChartEntryDefinitionId.class, ImmutableMutabilityPlan.instance());
+        super(OwnerId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public ChartEntryDefinitionId fromString(CharSequence string) {
+    public OwnerId fromString(CharSequence string) {
 
-        return (string == null) ? null : new ChartEntryDefinitionId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new OwnerId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,14 +30,14 @@ public class ChartEntryDefinitionIdJavaType extends AbstractClassJavaType<ChartE
     }
 
     @Override
-    public String toString(ChartEntryDefinitionId value) {
+    public String toString(OwnerId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(ChartEntryDefinitionId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(OwnerId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -57,20 +57,21 @@ public class ChartEntryDefinitionIdJavaType extends AbstractClassJavaType<ChartE
     }
 
     @Override
-    public ChartEntryDefinitionId wrap(Object value, WrapperOptions options) {
+    public OwnerId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof ChartEntryDefinitionId id) {
-            return id;
+        if (value instanceof OwnerId ownerId) {
+            return ownerId;
         }
 
         if (value instanceof Number n) {
-            return new ChartEntryDefinitionId(n.longValue());
+            return new OwnerId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

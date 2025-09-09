@@ -20,10 +20,11 @@ public abstract class EntityId<T> {
     @Override
     public boolean equals(Object o) {
 
-        if (!(o instanceof EntityId<?> entityId)) {
+        if (!(o instanceof EntityId<?> that)) {
             return false;
         }
-        return Objects.equals(id, entityId.id);
+
+        return Objects.equals(this.id, that.id);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.mojaloop.core.common.datatype.converter.identifier.account;
 
-import io.mojaloop.core.common.datatype.identifier.account.BalanceHistoryId;
+import io.mojaloop.core.common.datatype.identifier.account.LedgerMovementId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHistoryId> {
+public class LedgerMovementIdJavaType extends AbstractClassJavaType<LedgerMovementId> {
 
-    public static final BalanceHistoryIdJavaType INSTANCE = new BalanceHistoryIdJavaType();
+    public static final LedgerMovementIdJavaType INSTANCE = new LedgerMovementIdJavaType();
 
-    public BalanceHistoryIdJavaType() {
+    public LedgerMovementIdJavaType() {
 
-        super(BalanceHistoryId.class, ImmutableMutabilityPlan.instance());
+        super(LedgerMovementId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public BalanceHistoryId fromString(CharSequence string) {
+    public LedgerMovementId fromString(CharSequence string) {
 
-        return (string == null) ? null : new BalanceHistoryId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new LedgerMovementId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,14 +30,14 @@ public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHisto
     }
 
     @Override
-    public String toString(BalanceHistoryId value) {
+    public String toString(LedgerMovementId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(BalanceHistoryId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(LedgerMovementId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -57,18 +57,18 @@ public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHisto
     }
 
     @Override
-    public BalanceHistoryId wrap(Object value, WrapperOptions options) {
+    public LedgerMovementId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof BalanceHistoryId id) {
+        if (value instanceof LedgerMovementId id) {
             return id;
         }
 
         if (value instanceof Number n) {
-            return new BalanceHistoryId(n.longValue());
+            return new LedgerMovementId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());

@@ -73,4 +73,5 @@ public class JournalEntryIdJavaType extends AbstractClassJavaType<JournalEntryId
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

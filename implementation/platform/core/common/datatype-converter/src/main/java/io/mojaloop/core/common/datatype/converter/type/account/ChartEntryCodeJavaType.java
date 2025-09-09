@@ -1,6 +1,6 @@
 package io.mojaloop.core.common.datatype.converter.type.account;
 
-import io.mojaloop.core.common.datatype.type.account.AccountCode;
+import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 
-public class AccountCodeJavaType extends AbstractClassJavaType<AccountCode> {
+public class ChartEntryCodeJavaType extends AbstractClassJavaType<ChartEntryCode> {
 
-    public static final AccountCodeJavaType INSTANCE = new AccountCodeJavaType();
+    public static final ChartEntryCodeJavaType INSTANCE = new ChartEntryCodeJavaType();
 
-    public AccountCodeJavaType() {
+    public ChartEntryCodeJavaType() {
 
-        super(AccountCode.class, ImmutableMutabilityPlan.instance());
+        super(ChartEntryCode.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public AccountCode fromString(CharSequence string) {
+    public ChartEntryCode fromString(CharSequence string) {
 
-        return (string == null) ? null : new AccountCode(string.toString());
+        return (string == null) ? null : new ChartEntryCode(string.toString());
     }
 
     @Override
@@ -30,14 +30,14 @@ public class AccountCodeJavaType extends AbstractClassJavaType<AccountCode> {
     }
 
     @Override
-    public String toString(AccountCode value) {
+    public String toString(ChartEntryCode value) {
 
         return value == null ? null : value.value();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(AccountCode value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(ChartEntryCode value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -53,12 +53,12 @@ public class AccountCodeJavaType extends AbstractClassJavaType<AccountCode> {
     }
 
     @Override
-    public AccountCode wrap(Object value, WrapperOptions options) {
+    public ChartEntryCode wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case AccountCode code -> code;
-            case String s -> new AccountCode(s);
+            case ChartEntryCode code -> code;
+            case String s -> new ChartEntryCode(s);
             default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 

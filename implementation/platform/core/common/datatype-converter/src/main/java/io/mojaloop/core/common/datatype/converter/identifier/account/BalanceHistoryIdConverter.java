@@ -18,4 +18,5 @@ public class BalanceHistoryIdConverter implements AttributeConverter<BalanceHist
 
         return dbData == null ? null : new BalanceHistoryId(dbData);
     }
+
 }

@@ -18,4 +18,5 @@ public class ChartIdConverter implements AttributeConverter<ChartId, Long> {
 
         return dbData == null ? null : new ChartId(dbData);
     }
+
 }

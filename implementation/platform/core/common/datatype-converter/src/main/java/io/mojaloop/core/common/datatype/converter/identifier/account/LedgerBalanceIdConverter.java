@@ -18,4 +18,5 @@ public class LedgerBalanceIdConverter implements AttributeConverter<LedgerBalanc
 
         return dbData == null ? null : new LedgerBalanceId(dbData);
     }
+
 }

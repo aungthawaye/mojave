@@ -18,4 +18,5 @@ public class JournalEntryIdConverter implements AttributeConverter<JournalEntryI
 
         return dbData == null ? null : new JournalEntryId(dbData);
     }
+
 }

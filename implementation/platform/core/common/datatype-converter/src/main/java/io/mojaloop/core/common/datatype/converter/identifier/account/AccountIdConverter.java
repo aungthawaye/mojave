@@ -9,11 +9,14 @@ public class AccountIdConverter implements AttributeConverter<AccountId, Long> {
 
     @Override
     public Long convertToDatabaseColumn(AccountId attribute) {
+
         return attribute == null ? null : attribute.getId();
     }
 
     @Override
     public AccountId convertToEntityAttribute(Long dbData) {
+
         return dbData == null ? null : new AccountId(dbData);
     }
+
 }

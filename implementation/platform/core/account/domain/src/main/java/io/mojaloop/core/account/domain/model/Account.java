@@ -1,13 +1,33 @@
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
+import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
+import io.mojaloop.component.misc.exception.input.TextTooLargeException;
+import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
+import io.mojaloop.core.common.datatype.converter.type.account.AccountCodeConverter;
+import io.mojaloop.core.common.datatype.enumeration.account.OverflowType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
+import io.mojaloop.core.common.datatype.type.account.AccountCode;
+import io.mojaloop.fspiop.spec.core.Currency;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 
@@ -16,18 +36,124 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "acc_account")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends JpaEntity<AccountId> {
 
     @Id
     @JavaType(AccountIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(name = "account_id", nullable = false, updatable = false)
-    protected AccountId accountId;
+    protected AccountId id;
+
+    @Embedded
+    protected Owner owner;
+
+    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected Currency currency;
+
+    @Basic
+    @Column(name = "code", nullable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Convert(converter = AccountCodeConverter.class)
+    protected AccountCode code;
+
+    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    protected String name;
+
+    @Column(name = "description", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    protected String description;
+
+    @Column(name = "overflow_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected OverflowType overflowType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "chart_entry_id", nullable = false)
+    protected ChartEntry chartEntry;
+
+    @OneToOne(mappedBy = "account", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "ledger_balance_id", nullable = false)
+    protected LedgerBalance ledgerBalance;
+
+    public Account(ChartEntry chartEntry, Owner owner, Currency currency, AccountCode code, String name, String description, OverflowType overflowType) {
+
+        assert chartEntry != null;
+        assert owner != null;
+        assert currency != null;
+        assert code != null;
+        assert name != null;
+        assert description != null;
+        assert overflowType != null;
+
+        this.id = new AccountId(Snowflake.get().nextId());
+        this.chartEntry = chartEntry;
+        this.owner = owner;
+        this.currency(currency).code(code).name(name).description(description);
+        this.overflowType = overflowType;
+    }
+
+    public Account code(AccountCode code) {
+
+        assert code != null;
+
+        this.code = code;
+
+        return this;
+
+    }
+
+    public Account currency(Currency currency) {
+
+        assert currency != null;
+
+        this.currency = currency;
+
+        return this;
+
+    }
+
+    public Account description(String description) {
+
+        assert description != null;
+
+        var value = description.trim();
+
+        if (value.isEmpty()) {
+            throw new BlankOrEmptyInputException("Chart Entry Description");
+        }
+
+        if (value.length() > StringSizeConstraints.MAX_DESCRIPTION_LENGTH) {
+            throw new TextTooLargeException("Chart Entry Description", StringSizeConstraints.MAX_DESCRIPTION_LENGTH);
+        }
+
+        this.description = description;
+
+        return this;
+    }
 
     @Override
     public AccountId getId() {
 
-        return this.accountId;
+        return this.id;
+    }
+
+    public Account name(String name) {
+
+        assert name != null;
+
+        var value = name.trim();
+
+        if (value.isEmpty()) {
+            throw new BlankOrEmptyInputException("Chart Entry Name");
+        }
+
+        if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
+            throw new TextTooLargeException("Chart Entry Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+        }
+
+        this.name = name;
+
+        return this;
     }
 
 }

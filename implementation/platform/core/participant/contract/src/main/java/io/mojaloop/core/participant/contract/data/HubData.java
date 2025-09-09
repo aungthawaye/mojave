@@ -54,13 +54,14 @@ public record HubData(HubId hubId,
             if (!(o instanceof HubCurrencyData that)) {
                 return false;
             }
-            return Objects.equals(hubCurrencyId, that.hubCurrencyId);
+
+            return Objects.equals(this.hubCurrencyId, that.hubCurrencyId);
         }
 
         @Override
         public int hashCode() {
 
-            return Objects.hashCode(hubCurrencyId);
+            return Objects.hashCode(this.hubCurrencyId);
         }
 
     }

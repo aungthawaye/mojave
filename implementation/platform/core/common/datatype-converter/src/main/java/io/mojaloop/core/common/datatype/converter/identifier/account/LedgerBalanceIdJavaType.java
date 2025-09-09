@@ -73,4 +73,5 @@ public class LedgerBalanceIdJavaType extends AbstractClassJavaType<LedgerBalance
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

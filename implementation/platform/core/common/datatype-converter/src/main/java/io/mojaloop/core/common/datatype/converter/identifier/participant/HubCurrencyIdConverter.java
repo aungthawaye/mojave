@@ -18,4 +18,5 @@ public class HubCurrencyIdConverter implements AttributeConverter<HubCurrencyId,
 
         return dbData == null ? null : new HubCurrencyId(dbData);
     }
+
 }

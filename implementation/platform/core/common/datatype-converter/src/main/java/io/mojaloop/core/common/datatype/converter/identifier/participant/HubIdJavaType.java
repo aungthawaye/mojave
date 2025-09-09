@@ -13,27 +13,32 @@ public class HubIdJavaType extends AbstractClassJavaType<HubId> {
     public static final HubIdJavaType INSTANCE = new HubIdJavaType();
 
     public HubIdJavaType() {
+
         super(HubId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
     public HubId fromString(CharSequence string) {
+
         return (string == null) ? null : new HubId(Long.valueOf(string.toString()));
     }
 
     @Override
     public JdbcType getRecommendedJdbcType(JdbcTypeIndicators context) {
+
         return BigIntJdbcType.INSTANCE;
     }
 
     @Override
     public String toString(HubId value) {
+
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <X> X unwrap(HubId value, Class<X> type, WrapperOptions options) {
+
         if (value == null) {
             return null;
         }
@@ -49,6 +54,7 @@ public class HubIdJavaType extends AbstractClassJavaType<HubId> {
 
     @Override
     public HubId wrap(Object value, WrapperOptions options) {
+
         if (value == null) {
             return null;
         }
@@ -60,4 +66,5 @@ public class HubIdJavaType extends AbstractClassJavaType<HubId> {
         }
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

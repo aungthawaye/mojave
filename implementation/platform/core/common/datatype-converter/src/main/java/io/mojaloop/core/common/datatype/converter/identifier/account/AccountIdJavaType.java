@@ -73,4 +73,5 @@ public class AccountIdJavaType extends AbstractClassJavaType<AccountId> {
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

@@ -73,4 +73,5 @@ public class ChartIdJavaType extends AbstractClassJavaType<ChartId> {
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

@@ -18,4 +18,5 @@ public class HubIdConverter implements AttributeConverter<HubId, Long> {
 
         return dbData == null ? null : new HubId(dbData);
     }
+
 }

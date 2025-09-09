@@ -82,6 +82,7 @@ public record FspData(FspId fspId,
             if (!(o instanceof EndpointData that)) {
                 return false;
             }
+
             return Objects.equals(fspEndpointId, that.fspEndpointId);
         }
 

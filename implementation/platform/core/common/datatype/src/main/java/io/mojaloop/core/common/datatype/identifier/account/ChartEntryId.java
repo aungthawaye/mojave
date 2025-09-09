@@ -18,20 +18,18 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.misc.constraint;
+package io.mojaloop.core.common.datatype.identifier.account;
 
-public class StringSizeConstraints {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.mojaloop.component.misc.ddd.EntityId;
 
-    public static final int MAX_CODE_LENGTH = 32;
+public class ChartEntryId extends EntityId<Long> {
 
-    public static final int MAX_CURRENCY_LENGTH = 3;
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public ChartEntryId(Long id) {
 
-    public static final int MAX_DESCRIPTION_LENGTH = 256;
-
-    public static final int MAX_ENUM_LENGTH = 32;
-
-    public static final int MAX_HTTP_URL_LENGTH = 256;
-
-    public static final int MAX_NAME_TITLE_LENGTH = 64;
+        super(id);
+    }
 
 }
+

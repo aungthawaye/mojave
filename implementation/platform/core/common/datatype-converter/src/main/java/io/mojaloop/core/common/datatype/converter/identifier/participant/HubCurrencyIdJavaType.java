@@ -13,27 +13,32 @@ public class HubCurrencyIdJavaType extends AbstractClassJavaType<HubCurrencyId> 
     public static final HubCurrencyIdJavaType INSTANCE = new HubCurrencyIdJavaType();
 
     public HubCurrencyIdJavaType() {
+
         super(HubCurrencyId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
     public HubCurrencyId fromString(CharSequence string) {
+
         return (string == null) ? null : new HubCurrencyId(Long.valueOf(string.toString()));
     }
 
     @Override
     public JdbcType getRecommendedJdbcType(JdbcTypeIndicators context) {
+
         return BigIntJdbcType.INSTANCE;
     }
 
     @Override
     public String toString(HubCurrencyId value) {
+
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <X> X unwrap(HubCurrencyId value, Class<X> type, WrapperOptions options) {
+
         if (value == null) {
             return null;
         }
@@ -49,6 +54,7 @@ public class HubCurrencyIdJavaType extends AbstractClassJavaType<HubCurrencyId> 
 
     @Override
     public HubCurrencyId wrap(Object value, WrapperOptions options) {
+
         if (value == null) {
             return null;
         }
@@ -60,4 +66,5 @@ public class HubCurrencyIdJavaType extends AbstractClassJavaType<HubCurrencyId> 
         }
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
+
 }

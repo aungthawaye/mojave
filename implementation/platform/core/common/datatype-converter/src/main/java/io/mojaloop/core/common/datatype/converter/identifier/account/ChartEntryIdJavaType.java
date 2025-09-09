@@ -1,6 +1,6 @@
 package io.mojaloop.core.common.datatype.converter.identifier.account;
 
-import io.mojaloop.core.common.datatype.identifier.account.BalanceHistoryId;
+import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -8,19 +8,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHistoryId> {
+public class ChartEntryIdJavaType extends AbstractClassJavaType<ChartEntryId> {
 
-    public static final BalanceHistoryIdJavaType INSTANCE = new BalanceHistoryIdJavaType();
+    public static final ChartEntryIdJavaType INSTANCE = new ChartEntryIdJavaType();
 
-    public BalanceHistoryIdJavaType() {
+    public ChartEntryIdJavaType() {
 
-        super(BalanceHistoryId.class, ImmutableMutabilityPlan.instance());
+        super(ChartEntryId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public BalanceHistoryId fromString(CharSequence string) {
+    public ChartEntryId fromString(CharSequence string) {
 
-        return (string == null) ? null : new BalanceHistoryId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new ChartEntryId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -30,14 +30,14 @@ public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHisto
     }
 
     @Override
-    public String toString(BalanceHistoryId value) {
+    public String toString(ChartEntryId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(BalanceHistoryId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(ChartEntryId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -57,18 +57,18 @@ public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHisto
     }
 
     @Override
-    public BalanceHistoryId wrap(Object value, WrapperOptions options) {
+    public ChartEntryId wrap(Object value, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        if (value instanceof BalanceHistoryId id) {
+        if (value instanceof ChartEntryId id) {
             return id;
         }
 
         if (value instanceof Number n) {
-            return new BalanceHistoryId(n.longValue());
+            return new ChartEntryId(n.longValue());
         }
 
         throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
