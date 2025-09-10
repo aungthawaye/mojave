@@ -59,14 +59,15 @@ public class Interledger {
                                   UnsignedLong amount,
                                   String data,
                                   String comparingBase64Condition,
-                                  String comparingBase64Packet) {
+                                  String comparingBase64Packet,
+                                  int lifetimeSeconds) {
 
         assert ilpSecret != null;
         assert peer != null;
         assert amount != null;
         assert comparingBase64Packet != null;
 
-        var createdPacket = Interledger.prepare(ilpSecret, peer, amount, data, 30);
+        var createdPacket = Interledger.prepare(ilpSecret, peer, amount, data, lifetimeSeconds);
         var createdCondition = createdPacket.base64Condition;
         var createdFulfillment = createdPacket.base64Fulfillment;
 

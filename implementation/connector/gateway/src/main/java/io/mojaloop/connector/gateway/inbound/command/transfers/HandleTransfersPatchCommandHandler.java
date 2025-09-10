@@ -1,6 +1,6 @@
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
-import io.mojaloop.connector.adapter.fsp.FspAdapter;
+import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,13 +10,13 @@ public class HandleTransfersPatchCommandHandler implements HandleTransfersPatchC
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersPatchCommandHandler.class.getName());
 
-    private final FspAdapter fspAdapter;
+    private final FspCoreAdapter fspCoreAdapter;
 
-    public HandleTransfersPatchCommandHandler(FspAdapter fspAdapter) {
+    public HandleTransfersPatchCommandHandler(FspCoreAdapter fspCoreAdapter) {
 
-        assert null != fspAdapter;
+        assert null != fspCoreAdapter;
 
-        this.fspAdapter = fspAdapter;
+        this.fspCoreAdapter = fspCoreAdapter;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class HandleTransfersPatchCommandHandler implements HandleTransfersPatchC
         try {
 
             LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            this.fspAdapter.confirmTransfer(input.source(), input.response());
+            this.fspCoreAdapter.patchTransfers(input.source(), input.transferId(), input.response());
             LOGGER.info("Done calling FSP adapter to initiate transfer for : {}", input);
 
         } catch (Exception e) {

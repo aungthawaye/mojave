@@ -1,6 +1,6 @@
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
-import io.mojaloop.connector.adapter.fsp.FspAdapter;
+import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.invoker.api.transfers.PutTransfers;
@@ -13,16 +13,16 @@ class HandleTransfersRequestCommandHandler implements HandleTransfersRequestComm
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersRequestCommandHandler.class.getName());
 
-    private final FspAdapter fspAdapter;
+    private final FspCoreAdapter fspCoreAdapter;
 
     private final PutTransfers putTransfers;
 
-    public HandleTransfersRequestCommandHandler(FspAdapter fspAdapter, PutTransfers putTransfers) {
+    public HandleTransfersRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutTransfers putTransfers) {
 
-        assert null != fspAdapter;
-        assert null != putTransfers;
+        assert fspCoreAdapter != null;
+        assert putTransfers != null;
 
-        this.fspAdapter = fspAdapter;
+        this.fspCoreAdapter = fspCoreAdapter;
         this.putTransfers = putTransfers;
     }
 
@@ -34,7 +34,7 @@ class HandleTransfersRequestCommandHandler implements HandleTransfersRequestComm
         try {
 
             LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            var response = this.fspAdapter.initiateTransfer(input.source(), input.request());
+            var response = this.fspCoreAdapter.postTransfers(input.source(), input.request());
             LOGGER.info("FSP adapter returned transfer response : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);

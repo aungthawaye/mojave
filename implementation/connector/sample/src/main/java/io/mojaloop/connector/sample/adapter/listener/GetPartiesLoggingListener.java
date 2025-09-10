@@ -1,4 +1,4 @@
-package io.mojaloop.connector.sample.event.listener;
+package io.mojaloop.connector.sample.adapter.listener;
 
 import io.mojaloop.connector.gateway.inbound.event.GetPartiesEvent;
 import org.slf4j.Logger;

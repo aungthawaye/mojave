@@ -1,6 +1,6 @@
 package io.mojaloop.connector.gateway.inbound.command.quotes;
 
-import io.mojaloop.connector.adapter.fsp.FspAdapter;
+import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.invoker.api.quotes.PutQuotes;
@@ -13,16 +13,16 @@ class HandleQuotesRequestCommandHandler implements HandleQuotesRequestCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleQuotesRequestCommandHandler.class.getName());
 
-    private final FspAdapter fspAdapter;
+    private final FspCoreAdapter fspCoreAdapter;
 
     private final PutQuotes putQuotes;
 
-    public HandleQuotesRequestCommandHandler(FspAdapter fspAdapter, PutQuotes putQuotes) {
+    public HandleQuotesRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutQuotes putQuotes) {
 
-        assert null != fspAdapter;
-        assert null != putQuotes;
+        assert fspCoreAdapter != null;
+        assert putQuotes != null;
 
-        this.fspAdapter = fspAdapter;
+        this.fspCoreAdapter = fspCoreAdapter;
         this.putQuotes = putQuotes;
     }
 
@@ -34,7 +34,7 @@ class HandleQuotesRequestCommandHandler implements HandleQuotesRequestCommand {
         try {
 
             LOGGER.info("Calling FSP adapter to get quote for : {}", input);
-            var response = this.fspAdapter.quote(input.source(), input.request());
+            var response = this.fspCoreAdapter.postQuotes(input.source(), input.request());
             LOGGER.info("FSP adapter returned quote : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);

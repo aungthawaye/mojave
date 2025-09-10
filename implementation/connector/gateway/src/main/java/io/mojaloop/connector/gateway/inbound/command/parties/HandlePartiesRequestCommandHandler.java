@@ -1,6 +1,6 @@
 package io.mojaloop.connector.gateway.inbound.command.parties;
 
-import io.mojaloop.connector.adapter.fsp.FspAdapter;
+import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.invoker.api.parties.PutParties;
@@ -13,16 +13,16 @@ class HandlePartiesRequestCommandHandler implements HandlePartiesRequestCommand 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandlePartiesRequestCommandHandler.class.getName());
 
-    private final FspAdapter fspAdapter;
+    private final FspCoreAdapter fspCoreAdapter;
 
     private final PutParties putParties;
 
-    public HandlePartiesRequestCommandHandler(FspAdapter fspAdapter, PutParties putParties) {
+    public HandlePartiesRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutParties putParties) {
 
-        assert null != fspAdapter;
-        assert null != putParties;
+        assert fspCoreAdapter != null;
+        assert putParties != null;
 
-        this.fspAdapter = fspAdapter;
+        this.fspCoreAdapter = fspCoreAdapter;
         this.putParties = putParties;
     }
 
@@ -35,7 +35,7 @@ class HandlePartiesRequestCommandHandler implements HandlePartiesRequestCommand 
         try {
 
             LOGGER.info("Calling FSP adapter to get parties for : {}", input);
-            var response = this.fspAdapter.getParties(input.source(), input.partyIdType(), input.partyId(), input.subId());
+            var response = this.fspCoreAdapter.getParties(input.source(), input.partyIdType(), input.partyId(), input.subId());
             LOGGER.info("FSP adapter returned parties : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);
