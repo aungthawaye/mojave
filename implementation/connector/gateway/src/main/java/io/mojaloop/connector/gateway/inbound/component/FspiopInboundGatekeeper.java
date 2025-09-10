@@ -45,6 +45,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         try {
 
             this.verifyFsps(cachedServletRequest);
+
             return this.authenticateUsingJws(cachedServletRequest);
 
         } catch (JsonProcessingException e) {

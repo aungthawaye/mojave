@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PutTransfersErrorEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersErrorEventListener.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersErrorEventListener.class);
 
     private final HandleTransfersErrorCommand handleTransfersError;
 

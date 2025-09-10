@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GetPartiesEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetPartiesEventListener.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetPartiesEventListener.class);
 
     private final HandlePartiesRequestCommand handlePartiesRequest;
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostTransfersEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostTransfersEventListener.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostTransfersEventListener.class);
 
     private final HandleTransfersRequestCommand handleTransfersRequest;
 

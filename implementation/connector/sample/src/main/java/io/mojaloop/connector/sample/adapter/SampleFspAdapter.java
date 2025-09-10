@@ -116,7 +116,7 @@ public class SampleFspAdapter implements FspAdapter {
             .completedTimestamp(FspiopDates.forRequestBody())
             .extensionList(extensionList);
 
-        return null;
+        return transfer;
     }
 
     @Override

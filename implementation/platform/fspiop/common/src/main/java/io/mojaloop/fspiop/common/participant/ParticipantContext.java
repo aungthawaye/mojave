@@ -41,6 +41,29 @@ public record ParticipantContext(String fspCode,
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantContext.class);
 
+    public ParticipantContext {
+
+        if (fspCode == null || fspCode.isEmpty()) {
+            throw new IllegalArgumentException("FSP Code is required");
+        }
+
+        if (fspName == null || fspName.isEmpty()) {
+            throw new IllegalArgumentException("FSP Name is required");
+        }
+
+        if (ilpSecret == null || ilpSecret.isEmpty()) {
+            throw new IllegalArgumentException("ILP Secret is required");
+        }
+
+        if (signJws && (signingKey == null)) {
+            throw new IllegalArgumentException("Signing Key (Private Key) is required when signing JWS");
+        }
+
+        if (verifyJws && (publicKeys == null || publicKeys.isEmpty())) {
+            throw new IllegalArgumentException("Verification Key (Public Key) of FSPs are required when verifying JWS");
+        }
+    }
+
     public static ParticipantContext with(String fspCode,
                                           String fspName,
                                           String ilpSecret,
@@ -48,6 +71,26 @@ public record ParticipantContext(String fspCode,
                                           boolean verifyJws,
                                           String base64PrivateKey,
                                           Map<String, String> base64PublicKeys) throws NoSuchAlgorithmException, InvalidKeySpecException {
+
+        if (fspCode == null || fspCode.isEmpty()) {
+            throw new IllegalArgumentException("FSP Code is required");
+        }
+
+        if (fspName == null || fspName.isEmpty()) {
+            throw new IllegalArgumentException("FSP Name is required");
+        }
+
+        if (ilpSecret == null || ilpSecret.isEmpty()) {
+            throw new IllegalArgumentException("ILP Secret is required");
+        }
+
+        if (signJws && (base64PrivateKey == null || base64PrivateKey.isEmpty())) {
+            throw new IllegalArgumentException("Signing Key (Private Key) is required when signing JWS");
+        }
+
+        if (verifyJws && (base64PublicKeys == null || base64PublicKeys.isEmpty())) {
+            throw new IllegalArgumentException("Verification Key (Public Key) of FSPs are required when verifying JWS");
+        }
 
         var signingKey = Rs256.privateKeyFromPem(base64PrivateKey);
 

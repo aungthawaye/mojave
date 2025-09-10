@@ -7,14 +7,11 @@ import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.account.OwnerType;
 import io.mojaloop.core.common.datatype.identifier.account.ChartId;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -38,15 +35,13 @@ import static java.sql.Types.BIGINT;
  * A chart of accounts is a structured list of an organization's financial accounts used to categorize
  * financial transactions and track financial activities.
  *
- * <p>Each chart is identified by a unique {@link ChartId} and has a human‑readable {@code name} and an
- * {@link OwnerType owner type} indicating which entity (e.g., FSP, HUB) the chart belongs to.</p>
+ * <p>Each chart is identified by a unique {@link ChartId} and has a human‑readable {@code name}.</p>
  *
  * <p>This class implements {@link JpaEntity} for JPA persistence and maintains a collection of
  * {@link ChartEntry} objects that define the structure of accounts within this chart.</p>
  *
  * <p>Instances are mutable and use fluent, builder‑style mutator methods that return {@code this} for chaining.</p>
  *
- * @see OwnerType
  * @see ChartId
  * @see ChartEntry
  */
@@ -75,16 +70,6 @@ public class Chart extends JpaEntity<ChartId> {
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    /**
-     * The owner type of this chart, indicating which kind of entity (e.g., FSP, HUB) owns it.
-     *
-     * <p>Persisted as a string in the {@code owner_type} column.</p>
-     *
-     * @see OwnerType
-     */
-    @Column(name = "owner_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected OwnerType ownerType;
 
     /**
      * The timestamp when this chart was created.
@@ -106,24 +91,21 @@ public class Chart extends JpaEntity<ChartId> {
     protected Set<ChartEntry> entries = new HashSet<>();
 
     /**
-     * Creates a new Chart with the given name and owner type.
+     * Creates a new Chart.
      *
      * <p>A new {@link ChartId} is generated and {@code createdAt} is initialized to the current time.
-     * Name validation rules are applied via {@link #name(String)}.</p>
+     * Name validation rules are applied via {@link #name(String)} if you choose to set the name after construction.</p>
      *
      * @param name the chart name; must be non-blank and within the allowed size constraints
-     * @param ownerType the owner type (e.g., FSP, HUB); must not be null
      * @throws BlankOrEmptyInputException if {@code name} is blank
      * @throws TextTooLargeException if {@code name} exceeds {@link StringSizeConstraints#MAX_NAME_TITLE_LENGTH}
-     * @throws AssertionError if assertions are enabled and any argument is null
+     * @throws AssertionError if assertions are enabled and {@code name} is null
      */
-    public Chart(String name, OwnerType ownerType) {
+    public Chart(String name) {
 
-        assert name != null : "Name cannot be null";
-        assert ownerType != null : "Owner Type cannot be null";
+        assert name != null;
 
         this.chartId = new ChartId(Snowflake.get().nextId());
-        this.name(name).ownerType(ownerType);
         this.createdAt = Instant.now();
     }
 
@@ -155,7 +137,7 @@ public class Chart extends JpaEntity<ChartId> {
      * @return this chart instance for method chaining
      * @throws BlankOrEmptyInputException if the name is empty or contains only whitespace
      * @throws TextTooLargeException if the name exceeds the maximum allowed length
-     * @throws IllegalArgumentException if the name is null
+     * @implNote Null is guarded by an assertion; enable JVM assertions to enforce at runtime.
      */
     public Chart name(String name) {
 
@@ -176,22 +158,5 @@ public class Chart extends JpaEntity<ChartId> {
         return this;
     }
 
-    /**
-     * Sets the owner type of this chart.
-     *
-     * <p>Defines which kind of entity (e.g., FSP, HUB) owns the chart. This value is persisted in the
-     * {@code owner_type} column.</p>
-     *
-     * @param ownerType the owner type (must not be null)
-     * @return this chart instance for fluent chaining
-     * @throws AssertionError if assertions are enabled and {@code ownerType} is null
-     */
-    public Chart ownerType(OwnerType ownerType) {
-
-        assert ownerType != null : "Owner Type cannot be null";
-        this.ownerType = ownerType;
-
-        return this;
-    }
 
 }

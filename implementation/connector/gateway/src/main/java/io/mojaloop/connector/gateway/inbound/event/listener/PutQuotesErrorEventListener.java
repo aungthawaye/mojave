@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PutQuotesErrorEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutQuotesErrorEventListener.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(PutQuotesErrorEventListener.class);
 
     private final HandleQuotesErrorCommand handleQuotesError;
 

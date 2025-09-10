@@ -20,24 +20,19 @@
 
 package io.mojaloop.component.tomcat.connector;
 
+import io.mojaloop.component.misc.handy.P12Reader;
 import io.mojaloop.component.tomcat.ConnectorDecorator;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.net.SSLHostConfig;
 import org.apache.tomcat.util.net.SSLHostConfigCertificate;
 import org.apache.tomcat.util.security.KeyStoreUtil;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.Base64;
 
 public class MutualTLSConnectorDecorator implements ConnectorDecorator {
 
@@ -100,7 +95,7 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
 
     private void addKeyStore(SSLHostConfig sslHostConfig, Settings.KeyStoreSettings keyStoreSettings) {
 
-        try (var in = this.openKeyStoreStream(keyStoreSettings.contentType(), keyStoreSettings.contentValue())) {
+        try (var in = P12Reader.read(keyStoreSettings.contentType(), keyStoreSettings.contentValue())) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, keyStoreSettings.storePassword().toCharArray());
@@ -108,8 +103,11 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
             var certificate = new SSLHostConfigCertificate(sslHostConfig, SSLHostConfigCertificate.Type.RSA);
 
             certificate.setCertificateKeystore(keyStore);
-            certificate.setCertificateKeyAlias(keyStoreSettings.keyAlias());
-            certificate.setCertificateKeyPassword(keyStoreSettings.keyPassword());
+
+            if (keyStoreSettings.keyAlias() != null && !keyStoreSettings.keyAlias().isBlank()) {
+
+                certificate.setCertificateKeyAlias(keyStoreSettings.keyAlias());
+            }
 
             sslHostConfig.addCertificate(certificate);
 
@@ -118,18 +116,9 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
         }
     }
 
-    private InputStream openKeyStoreStream(Settings.ContentType contentType, String contentValue) throws IOException {
-
-        return switch (contentType) {
-            case P12_FILE_CLASS_PATH -> new ClassPathResource(contentValue).getInputStream();
-            case P12_FILE_ABSOLUTE_PATH -> Files.newInputStream(Paths.get(contentValue));
-            case P12_CONTENT_IN_BASE64 -> new ByteArrayInputStream(Base64.getMimeDecoder().decode(contentValue.getBytes()));
-        };
-    }
-
     private void setTrustStore(SSLHostConfig sslHostConfig, Settings.TrustStoreSettings trustStoreSettings) {
 
-        try (var in = this.openKeyStoreStream(trustStoreSettings.contentType(), trustStoreSettings.contentValue())) {
+        try (var in = P12Reader.read(trustStoreSettings.contentType(), trustStoreSettings.contentValue())) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, trustStoreSettings.storePassword().toCharArray());
@@ -141,27 +130,13 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
         }
     }
 
-    public record Settings(int port,
-                           int maxThreads,
-                           int connectionTimeout,
-                           TrustStoreSettings trustStoreSettings,
-                           KeyStoreSettings... keyStoreSettings) {
+    public record Settings(int port, int maxThreads, int connectionTimeout, TrustStoreSettings trustStoreSettings, KeyStoreSettings... keyStoreSettings) {
 
-        public enum ContentType {
-            P12_FILE_CLASS_PATH,
-            P12_FILE_ABSOLUTE_PATH,
-            P12_CONTENT_IN_BASE64
-        }
-
-        public record KeyStoreSettings(ContentType contentType,
-                                       String contentValue,
-                                       String storePassword,
-                                       String keyPassword,
-                                       String keyAlias) {
+        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String storePassword, String keyAlias) {
 
         }
 
-        public record TrustStoreSettings(ContentType contentType, String contentValue, String storePassword) { }
+        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String storePassword) { }
 
     }
 

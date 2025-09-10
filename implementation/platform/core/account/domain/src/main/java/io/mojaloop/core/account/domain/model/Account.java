@@ -6,9 +6,11 @@ import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.account.AccountCodeConverter;
 import io.mojaloop.core.common.datatype.enumeration.account.OverflowType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
+import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
@@ -45,10 +47,12 @@ public class Account extends JpaEntity<AccountId> {
     @Column(name = "account_id", nullable = false, updatable = false)
     protected AccountId id;
 
-    @Embedded
-    protected Owner owner;
+    @Basic
+    @JavaType(OwnerIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    protected OwnerId ownerId;
 
-    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(name = "currency", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
@@ -75,10 +79,10 @@ public class Account extends JpaEntity<AccountId> {
     @JoinColumn(name = "ledger_balance_id", nullable = false)
     protected LedgerBalance ledgerBalance;
 
-    public Account(ChartEntry chartEntry, Owner owner, Currency currency, AccountCode code, String name, String description, OverflowType overflowType) {
+    public Account(ChartEntry chartEntry, OwnerId ownerId, Currency currency, AccountCode code, String name, String description, OverflowType overflowType) {
 
         assert chartEntry != null;
-        assert owner != null;
+        assert ownerId != null;
         assert currency != null;
         assert code != null;
         assert name != null;
@@ -87,8 +91,9 @@ public class Account extends JpaEntity<AccountId> {
 
         this.id = new AccountId(Snowflake.get().nextId());
         this.chartEntry = chartEntry;
-        this.owner = owner;
-        this.currency(currency).code(code).name(name).description(description);
+        this.ownerId = ownerId;
+        this.currency = currency;
+        this.code(code).name(name).description(description);
         this.overflowType = overflowType;
     }
 
@@ -97,16 +102,6 @@ public class Account extends JpaEntity<AccountId> {
         assert code != null;
 
         this.code = code;
-
-        return this;
-
-    }
-
-    public Account currency(Currency currency) {
-
-        assert currency != null;
-
-        this.currency = currency;
 
         return this;
 

@@ -2,7 +2,9 @@ package io.mojaloop.connector.gateway.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
+import io.mojaloop.component.misc.handy.P12Reader;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.component.tomcat.connector.MutualTLSConnectorDecorator;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
@@ -11,8 +13,9 @@ import io.mojaloop.connector.gateway.inbound.component.FspiopInboundErrorWriter;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
+import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,19 +33,16 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
 @EnableWebMvc
-@Import(value = {
-    MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
+@Import(value = {MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
-public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredBeans,
-                                                      FspiopInvokerConfiguration.RequiredBeans,
-                                                      SpringSecurityConfiguration.RequiredBeans {
+public class ConnectorInboundConfiguration
+    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans {
 
     private final ParticipantContext participantContext;
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorInboundConfiguration(ParticipantContext participantContext,
-                                         ObjectMapper objectMapper) {
+    public ConnectorInboundConfiguration(ParticipantContext participantContext, ObjectMapper objectMapper) {
 
         assert participantContext != null;
         assert objectMapper != null;
@@ -83,9 +83,51 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
 
-        return factory -> factory.setPort(inboundSettings.portNo());
+        return factory -> {
+            // existing port configuration
+            factory.setPort(inboundSettings.portNo());
+
+            factory.addConnectorCustomizers(connector -> {
+
+                var protocolHandler = connector.getProtocolHandler();
+
+                if (protocolHandler instanceof Http11NioProtocol protocol) {
+
+                    protocol.setConnectionTimeout(inboundSettings.connectionTimeout());
+                    protocol.setMaxThreads(inboundSettings.maxThreads());
+
+                    if (inboundSettings.useMutualTls()) {
+
+                        try {
+
+                            var keystoreSettings = inboundSettings.keyStoreSettings();
+                            var truststoreSettings = inboundSettings.trustStoreSettings();
+                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
+                                                                                             inboundSettings.connectionTimeout(),
+                                                                                             new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
+                                                                                                 truststoreSettings.contentType(),
+                                                                                                 truststoreSettings.contentValue(),
+                                                                                                 truststoreSettings.password),
+                                                                                             new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
+                                                                                                 keystoreSettings.contentType(),
+                                                                                                 keystoreSettings.contentValue(),
+                                                                                                 keystoreSettings.password, keystoreSettings.keyAlias()
+                                                                                             ));
+
+                            var decorator = new MutualTLSConnectorDecorator(connectorSettings);
+
+                        } catch (Exception e) {
+
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }
+
+            });
+        };
     }
 
     public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans {
@@ -103,6 +145,17 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
 
     }
 
-    public record InboundSettings(int portNo, int maxThreads, int connectionTimeout) { }
+    public record InboundSettings(int portNo,
+                                  int maxThreads,
+                                  int connectionTimeout,
+                                  boolean useMutualTls,
+                                  KeyStoreSettings keyStoreSettings,
+                                  TrustStoreSettings trustStoreSettings) {
+
+        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password, String keyAlias) { }
+
+        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
+
+    }
 
 }

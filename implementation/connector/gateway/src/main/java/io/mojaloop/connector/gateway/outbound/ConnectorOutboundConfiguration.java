@@ -10,7 +10,7 @@ import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundErrorWrite
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,9 +57,18 @@ public class ConnectorOutboundConfiguration
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(OutboundSettings outboundSettings) {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(OutboundSettings outboundSettings) {
 
-        return factory -> factory.setPort(outboundSettings.portNo());
+        return factory -> {
+
+            factory.setPort(outboundSettings.portNo());
+
+            factory.addConnectorCustomizers(connector -> {
+                var protocol = (org.apache.coyote.http11.AbstractHttp11Protocol<?>) connector.getProtocolHandler();
+                protocol.setConnectionTimeout(outboundSettings.connectionTimeout());
+                protocol.setMaxThreads(outboundSettings.maxThreads());
+            });
+        };
     }
 
     public interface RequiredBeans {
