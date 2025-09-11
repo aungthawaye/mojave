@@ -14,6 +14,7 @@ import io.mojaloop.fspiop.spec.core.PartyPersonalInfo;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -23,8 +24,10 @@ public class SampleFspClient implements FspClient {
     @Override
     public Parties.Get.Response getParties(Source source, Parties.Get.Request request) throws FspiopException {
 
+        var dob = LocalDate.of(1990, 1, 1);
+
         return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko",
-                                        new PartyPersonalInfo().dateOfBirth("01/01/1990").kycInformation("12/TaMaNa(N)123456"));
+                                        new PartyPersonalInfo().dateOfBirth("1990-01-01").kycInformation("12/TaMaNa(N)123456"));
     }
 
     @Override

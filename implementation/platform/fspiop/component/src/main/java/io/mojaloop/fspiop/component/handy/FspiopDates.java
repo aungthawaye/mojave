@@ -29,20 +29,27 @@ import java.util.TimeZone;
 public class FspiopDates {
 
     private static final ThreadLocal<SimpleDateFormat> FOR_HEADER = ThreadLocal.withInitial(() -> {
-
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
         return sdf;
     });
 
     private static final ThreadLocal<SimpleDateFormat> FOR_BODY = ThreadLocal.withInitial(() -> {
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
         return sdf;
     });
+
+    private static final ThreadLocal<SimpleDateFormat> FOR_DATE_OF_BIRTH = ThreadLocal.withInitial(() -> {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf;
+    });
+
+    public static String forDateOfBirth(Date date) {
+
+        return FOR_DATE_OF_BIRTH.get().format(date);
+    }
 
     public static String forRequestBody() {
 
