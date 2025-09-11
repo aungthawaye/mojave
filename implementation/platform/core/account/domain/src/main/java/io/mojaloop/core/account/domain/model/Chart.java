@@ -4,10 +4,14 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
+import io.mojaloop.component.misc.exception.input.SameDataExistsException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartIdJavaType;
+import io.mojaloop.core.common.datatype.enumeration.account.AccountType;
+import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartId;
+import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -60,7 +64,7 @@ public class Chart extends JpaEntity<ChartId> {
     @JavaType(ChartIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(name = "chart_id", nullable = false, updatable = false)
-    protected ChartId chartId;
+    protected ChartId id;
 
     /**
      * The name of the chart. 
@@ -69,7 +73,6 @@ public class Chart extends JpaEntity<ChartId> {
      */
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
-
 
     /**
      * The timestamp when this chart was created.
@@ -103,10 +106,45 @@ public class Chart extends JpaEntity<ChartId> {
      */
     public Chart(String name) {
 
-        assert name != null;
-
-        this.chartId = new ChartId(Snowflake.get().nextId());
+        this.id = new ChartId(Snowflake.get().nextId());
+        this.name(name);
         this.createdAt = Instant.now();
+    }
+
+    /**
+     * Adds a new entry to this chart.
+     *
+     * <p>Creates a new {@link ChartEntry} with the specified parameters and adds it to this chart.
+     * The entry code and name must be unique within the chart.</p>
+     *
+     * @param code the unique code for the chart entry
+     * @param name the name of the chart entry; must be unique within the chart
+     * @param description the description of the chart entry
+     * @param accountType the type of account this entry represents
+     * @return the newly created and added chart entry
+     * @throws SameDataExistsException if an entry with the same code or name already exists in this chart
+     * @see ChartEntry
+     * @see AccountType
+     */
+    public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType) {
+
+        ChartEntry entry = new ChartEntry(this, code, name, description, accountType);
+
+        this.entries.stream().findFirst().ifPresent(existingEntry -> {
+            if (existingEntry.getCode().equals(code)) {
+                throw new SameDataExistsException("Chart Entry Code", "Chart");
+            }
+        });
+
+        this.entries.stream().findFirst().ifPresent(existingEntry -> {
+            if (existingEntry.getName().equalsIgnoreCase(name)) {
+                throw new SameDataExistsException("Chart Entry Name", "Chart");
+            }
+        });
+
+        this.entries.add(entry);
+
+        return entry;
     }
 
     /**
@@ -127,7 +165,7 @@ public class Chart extends JpaEntity<ChartId> {
     @Override
     public ChartId getId() {
 
-        return chartId;
+        return this.id;
     }
 
     /**
@@ -158,5 +196,18 @@ public class Chart extends JpaEntity<ChartId> {
         return this;
     }
 
+    /**
+     * Removes an entry from this chart by its identifier.
+     *
+     * <p>Searches for an entry with the specified ID and removes it from the chart if found.</p>
+     *
+     * @param chartEntryId the unique identifier of the chart entry to remove
+     * @return {@code true} if an entry was found and removed, {@code false} otherwise
+     * @see ChartEntryId
+     */
+    public boolean removeEntry(ChartEntryId chartEntryId) {
+
+        return this.entries.removeIf(entry -> entry.getId().equals(chartEntryId));
+    }
 
 }
