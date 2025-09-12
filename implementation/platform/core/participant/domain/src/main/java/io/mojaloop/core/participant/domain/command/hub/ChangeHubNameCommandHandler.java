@@ -61,4 +61,5 @@ public class ChangeHubNameCommandHandler implements ChangeHubNameCommand {
 
         return new Output();
     }
+
 }

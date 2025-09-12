@@ -62,4 +62,5 @@ public class ActivateHubCurrencyCommandHandler implements ActivateHubCurrencyCom
 
         return new Output(activated);
     }
+
 }

@@ -62,4 +62,5 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
 
         return new Output(deactivated);
     }
+
 }

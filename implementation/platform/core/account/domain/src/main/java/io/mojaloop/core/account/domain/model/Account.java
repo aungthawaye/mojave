@@ -1,6 +1,7 @@
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
+import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
 import io.mojaloop.component.misc.exception.input.TextTooLargeException;
@@ -8,6 +9,7 @@ import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.account.AccountCodeConverter;
+import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
 import io.mojaloop.core.common.datatype.enumeration.account.OverflowType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
@@ -17,7 +19,6 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,6 +33,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+
+import java.time.Instant;
 
 import static java.sql.Types.BIGINT;
 
@@ -71,6 +74,14 @@ public class Account extends JpaEntity<AccountId> {
     @Enumerated(EnumType.STRING)
     protected OverflowType overflowType;
 
+    @Column(name = "created_at", nullable = false)
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant createdAt;
+
+    @Column(name = "termination_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chart_entry_id", nullable = false)
     protected ChartEntry chartEntry;
@@ -95,6 +106,7 @@ public class Account extends JpaEntity<AccountId> {
         this.currency = currency;
         this.code(code).name(name).description(description);
         this.overflowType = overflowType;
+        this.createdAt = Instant.now();
     }
 
     public Account code(AccountCode code) {

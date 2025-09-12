@@ -60,4 +60,5 @@ public class AddHubCurrencyCommandHandler implements AddHubCurrencyCommand {
 
         return new Output(supportedCurrency.getId());
     }
+
 }

@@ -170,10 +170,6 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
 
     public void terminate() {
 
-        if (this.terminationStatus == TerminationStatus.TERMINATED) {
-            return;
-        }
-
         this.terminationStatus = TerminationStatus.TERMINATED;
         this.activationStatus = ActivationStatus.INACTIVE;
     }

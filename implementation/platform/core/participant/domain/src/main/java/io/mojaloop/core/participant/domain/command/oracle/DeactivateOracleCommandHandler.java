@@ -37,6 +37,7 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
     private final OracleRepository oracleRepository;
 
     public DeactivateOracleCommandHandler(OracleRepository oracleRepository) {
+
         assert oracleRepository != null;
         this.oracleRepository = oracleRepository;
     }
@@ -45,11 +46,12 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
     @Transactional
     @Write
     public Output execute(Input input) throws OracleIdNotFoundException {
+
         LOGGER.info("Executing DeactivateOracleCommand with input: {}", input);
 
         var oracle = this.oracleRepository
-                .findById(input.oracleId())
-                .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+                         .findById(input.oracleId())
+                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.deactivate();
         this.oracleRepository.save(oracle);
@@ -57,4 +59,5 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
         LOGGER.info("Completed DeactivateOracleCommand with input: {}", input);
         return new Output();
     }
+
 }

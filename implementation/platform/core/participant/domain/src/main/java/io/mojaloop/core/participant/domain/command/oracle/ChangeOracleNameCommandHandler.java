@@ -37,6 +37,7 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
     private final OracleRepository oracleRepository;
 
     public ChangeOracleNameCommandHandler(OracleRepository oracleRepository) {
+
         assert oracleRepository != null;
         this.oracleRepository = oracleRepository;
     }
@@ -45,11 +46,12 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
     @Transactional
     @Write
     public Output execute(Input input) throws OracleIdNotFoundException {
+
         LOGGER.info("Executing ChangeOracleNameCommand with input: {}", input);
 
         var oracle = this.oracleRepository
-                .findById(input.oracleId())
-                .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+                         .findById(input.oracleId())
+                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.name(input.name());
         this.oracleRepository.save(oracle);
@@ -57,4 +59,5 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
         LOGGER.info("Completed ChangeOracleNameCommand with input: {}", input);
         return new Output();
     }
+
 }

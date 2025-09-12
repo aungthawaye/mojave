@@ -21,10 +21,10 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.HubLimitReachedException;
-import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
@@ -76,4 +76,5 @@ public class CreateHubCommandHandler implements CreateHubCommand {
 
         return new Output(hub.getId());
     }
+
 }

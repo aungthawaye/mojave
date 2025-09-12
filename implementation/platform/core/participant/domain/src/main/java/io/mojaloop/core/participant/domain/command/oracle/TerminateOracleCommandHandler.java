@@ -21,7 +21,7 @@
 package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.participant.contract.command.oracle.ActivateOracleCommand;
+import io.mojaloop.core.participant.contract.command.oracle.TerminateOracleCommand;
 import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import org.slf4j.Logger;
@@ -30,13 +30,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ActivateOracleCommandHandler implements ActivateOracleCommand {
+public class TerminateOracleCommandHandler implements TerminateOracleCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateOracleCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TerminateOracleCommandHandler.class);
 
     private final OracleRepository oracleRepository;
 
-    public ActivateOracleCommandHandler(OracleRepository oracleRepository) {
+    public TerminateOracleCommandHandler(OracleRepository oracleRepository) {
 
         assert oracleRepository != null;
         this.oracleRepository = oracleRepository;
@@ -47,16 +47,16 @@ public class ActivateOracleCommandHandler implements ActivateOracleCommand {
     @Write
     public Output execute(Input input) throws OracleIdNotFoundException {
 
-        LOGGER.info("Executing ActivateOracleCommand with input: {}", input);
+        LOGGER.info("Executing TerminateOracleCommand with input: {}", input);
 
         var oracle = this.oracleRepository
                          .findById(input.oracleId())
                          .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
-        oracle.activate();
+        oracle.terminate();
         this.oracleRepository.save(oracle);
 
-        LOGGER.info("Completed ActivateOracleCommand with input: {}", input);
+        LOGGER.info("Completed TerminateOracleCommand with input: {}", input);
         return new Output();
     }
 
