@@ -23,7 +23,7 @@ public class SampleFspClient implements FspClient {
     @Override
     public Parties.Get.Response getParties(Source source, Parties.Get.Request request) throws FspiopException {
 
-        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko",
+        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko" + request.partyId(),
                                         new PartyPersonalInfo().dateOfBirth("01/01/1990").kycInformation("12/TaMaNa(N)123456"));
     }
 
