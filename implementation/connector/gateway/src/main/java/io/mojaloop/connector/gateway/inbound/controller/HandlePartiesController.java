@@ -69,9 +69,9 @@ public class HandlePartiesController {
     public ResponseEntity<?> putParties(@RequestHeader Map<String, String> headers,
                                         @PathVariable PartyIdType partyIdType,
                                         @PathVariable String partyId,
-                                        @Valid @RequestBody PartiesTypeIDPutResponse response) {
+                                        @RequestBody PartiesTypeIDPutResponse response) {
 
-        LOGGER.debug("Received PUT /parties/{}/{}", partyIdType, partyId);
+        LOGGER.debug("Received PUT /parties/{}/{} : response : {}", partyIdType, partyId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(
@@ -84,9 +84,9 @@ public class HandlePartiesController {
     public ResponseEntity<?> putPartiesError(@RequestHeader Map<String, String> headers,
                                              @PathVariable PartyIdType partyIdType,
                                              @PathVariable String partyId,
-                                             @Valid @RequestBody ErrorInformationObject errorInformation) {
+                                             @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug("Received PUT /parties/{}/{}/error", partyIdType, partyId);
+        LOGGER.debug("Received PUT /parties/{}/{}/error : response {}", partyIdType, partyId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(
@@ -100,9 +100,9 @@ public class HandlePartiesController {
                                              @PathVariable PartyIdType partyIdType,
                                              @PathVariable String partyId,
                                              @PathVariable String subId,
-                                             @Valid @RequestBody ErrorInformationObject errorInformation) {
+                                             @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug("Received PUT /parties/{}/{}/{}/error", partyIdType, partyId, subId);
+        LOGGER.debug("Received PUT /parties/{}/{}/{}/error : {}", partyIdType, partyId, subId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(
@@ -116,9 +116,9 @@ public class HandlePartiesController {
                                                  @PathVariable PartyIdType partyIdType,
                                                  @PathVariable String partyId,
                                                  @PathVariable String subId,
-                                                 @Valid @RequestBody PartiesTypeIDPutResponse response) {
+                                                 @RequestBody PartiesTypeIDPutResponse response) {
 
-        LOGGER.debug("Received (withSubId) PUT /parties/{}/{}/{}", partyIdType, partyId, subId);
+        LOGGER.debug("Received (withSubId) PUT /parties/{}/{}/{} : response : {}", partyIdType, partyId, subId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(

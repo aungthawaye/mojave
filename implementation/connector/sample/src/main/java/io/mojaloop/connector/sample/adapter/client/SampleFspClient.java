@@ -4,12 +4,14 @@ import io.mojaloop.connector.adapter.fsp.client.FspClient;
 import io.mojaloop.connector.adapter.fsp.payload.Parties;
 import io.mojaloop.connector.adapter.fsp.payload.Quotes;
 import io.mojaloop.connector.adapter.fsp.payload.Transfers;
+import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Source;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.Money;
+import io.mojaloop.fspiop.spec.core.PartyComplexName;
 import io.mojaloop.fspiop.spec.core.PartyPersonalInfo;
 
 import java.math.BigDecimal;
@@ -23,8 +25,14 @@ public class SampleFspClient implements FspClient {
     @Override
     public Parties.Get.Response getParties(Source source, Parties.Get.Request request) throws FspiopException {
 
-        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko" + request.partyId(),
-                                        new PartyPersonalInfo().dateOfBirth("01/01/1990").kycInformation("12/TaMaNa(N)123456"));
+        var partyId = request.partyId();
+
+        if (Long.parseLong(partyId) % 2 == 0) {
+            throw new FspiopException(FspiopErrors.PARTY_NOT_FOUND, request.partyIdType().name() + " with Party ID (" + partyId + ") not found.");
+        }
+
+        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko Kamado",
+                                        new PartyPersonalInfo().complexName(new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
     }
 
     @Override

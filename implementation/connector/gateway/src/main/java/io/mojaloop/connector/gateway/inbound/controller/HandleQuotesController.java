@@ -41,7 +41,7 @@ public class HandleQuotesController {
     @PostMapping("/quotes")
     public ResponseEntity<?> postQuotes(@RequestHeader Map<String, String> headers, @Valid @RequestBody QuotesPostRequest request) {
 
-        LOGGER.debug("Received POST /quotes");
+        LOGGER.debug("Received POST /quotes : request : {}", request);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PostQuotesEvent(new HandleQuotesRequestCommand.Input(source, request.getQuoteId(), request)));
@@ -54,7 +54,7 @@ public class HandleQuotesController {
                                        @PathVariable String quoteId,
                                        @Valid @RequestBody QuotesIDPutResponse response) {
 
-        LOGGER.debug("Received PUT /quotes/{}", quoteId);
+        LOGGER.debug("Received PUT /quotes/{} : response : {}", quoteId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutQuotesEvent(new HandleQuotesResponseCommand.Input(source, quoteId, response)));
@@ -67,7 +67,7 @@ public class HandleQuotesController {
                                             @PathVariable String quoteId,
                                             @Valid @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug("Received PUT /quotes/{}/error", quoteId);
+        LOGGER.debug("Received PUT /quotes/{}/error : errorInformation : {}", quoteId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutQuotesErrorEvent(new HandleQuotesErrorCommand.Input(source, quoteId, errorInformation)));

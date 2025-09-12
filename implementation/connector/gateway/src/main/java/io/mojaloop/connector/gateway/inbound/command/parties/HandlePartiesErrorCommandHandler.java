@@ -24,15 +24,10 @@ class HandlePartiesErrorCommandHandler implements HandlePartiesErrorCommand {
     public Output execute(Input input) {
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
-        var channel =
-            "parties-error:" + input.partyIdType().name() + "/" + input.partyId() + (withSubId ? "/" + input.subId() : "") + "/error";
+        var channel = "parties-error:" + input.partyIdType().name() + "/" + input.partyId() + (withSubId ? "/" + input.subId() : "");
         LOGGER.info("Publishing parties error result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel,
-                                  new PartiesErrorResult(input.partyIdType(),
-                                                         input.partyId(),
-                                                         input.subId(),
-                                                         input.errorInformationObject()));
+        this.pubSubClient.publish(channel, new PartiesErrorResult(input.partyIdType(), input.partyId(), input.subId(), input.errorInformationObject()));
         LOGGER.info("Published parties error result to channel : {}", channel);
 
         return new Output();

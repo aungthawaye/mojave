@@ -1,14 +1,19 @@
 package io.mojaloop.connector.gateway.outbound.component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.crypto.Rs256;
 import io.mojaloop.component.misc.jwt.JwtBase64Util;
 import io.mojaloop.component.misc.jwt.Rs256Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.spec.core.ErrorInformation;
+import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -17,6 +22,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -46,8 +53,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
     }
 
     @Override
-    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
-        throws AuthenticationFailureException {
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest) throws AuthenticationFailureException {
 
         if (!this.outboundSettings.secured()) {
 
@@ -75,8 +81,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
             LOGGER.error("Signature verification failed when using FSP's public key.");
             throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
-                                                                          new FspiopException(FspiopErrors.INVALID_SIGNATURE,
-                                                                                              "Invalid signature."));
+                                                                          new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Invalid signature."));
         }
 
         LOGGER.debug("Signature verification successful");
@@ -93,6 +98,69 @@ public class FspiopOutboundGatekeeper implements Authenticator {
             super(cause.getMessage(), cause);
 
             this.statusCode = statusCode;
+        }
+
+    }
+
+    public static class ErrorWriter implements AuthenticationErrorWriter {
+
+        private static final Logger LOGGER = LoggerFactory.getLogger(ErrorWriter.class);
+
+        private final ObjectMapper objectMapper;
+
+        public ErrorWriter(ObjectMapper objectMapper) {
+
+            assert objectMapper != null;
+
+            this.objectMapper = objectMapper;
+        }
+
+        @Override
+        public void write(HttpServletResponse response, AuthenticationFailureException exception) {
+
+            PrintWriter writer = null;
+
+            try {
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                writer = response.getWriter();
+
+                if (exception instanceof FspiopOutboundGatekeeper.GatekeeperFailureException ge) {
+
+                    var cause = (FspiopException) ge.getCause();
+
+                    response.setStatus(ge.getStatusCode());
+                    writer.write(this.objectMapper.writeValueAsString(cause.toErrorObject()));
+
+                } else {
+
+                    var error = new ErrorInformationObject().errorInformation(
+                        new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(), FspiopErrors.GENERIC_CLIENT_ERROR.description()));
+
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    writer.write(this.objectMapper.writeValueAsString(error));
+                }
+
+            } catch (JsonProcessingException e) {
+
+                assert writer != null;
+
+                String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.errorType().getCode();
+                String errorDescription = FspiopErrors.GENERIC_SERVER_ERROR.description();
+
+                var json = "{\"errorInformation\":{\"errorCode\": \"" + errorCode + "\",\"errorDescription\":\"" + errorDescription + "\"}}";
+
+                LOGGER.error("Problem occurred :", e);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                writer.write(json);
+
+            } catch (IOException e) {
+
+                LOGGER.error("Problem occurred :", e);
+                throw new RuntimeException(e);
+            }
         }
 
     }

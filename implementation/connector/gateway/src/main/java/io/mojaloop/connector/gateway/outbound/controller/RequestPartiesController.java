@@ -45,6 +45,8 @@ public class RequestPartiesController {
             return ResponseEntity.ok(output.response());
 
         } catch (FspiopException e) {
+
+            LOGGER.error("Error handling lookup request", e);
             throw new RuntimeException(e);
         }
 
