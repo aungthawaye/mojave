@@ -7,7 +7,7 @@ public class SampleConnectorApplication {
 
     public static void main(String[] args) {
 
-        SpringLauncher.launch((s) -> ConnectorGatewayApplication.run(s, SampleConnectorConfiguration.class), args);
+        SpringLauncher.launch((s) -> ConnectorGatewayApplication.run(s, SampleConnectorConfiguration.class, SampleConnectorSettings.class), args);
     }
 
 }

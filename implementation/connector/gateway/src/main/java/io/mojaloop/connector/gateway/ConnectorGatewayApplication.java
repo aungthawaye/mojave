@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(value = {ConnectorGatewayConfiguration.class, ConnectorGatewaySettings.class})
+@Import(value = {ConnectorGatewayConfiguration.class})
 public class ConnectorGatewayApplication {
 
     public static ConfigurableApplicationContext run(String[] args, Class<?>... extraConfigurations) {
