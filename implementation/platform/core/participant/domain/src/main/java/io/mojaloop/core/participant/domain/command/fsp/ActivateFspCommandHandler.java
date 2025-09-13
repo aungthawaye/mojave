@@ -50,9 +50,7 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
 
         LOGGER.info("Executing ActivateFspCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         fsp.activate();
 

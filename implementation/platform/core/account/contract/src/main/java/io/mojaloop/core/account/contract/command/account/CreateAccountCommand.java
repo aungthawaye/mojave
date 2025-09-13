@@ -7,9 +7,12 @@ import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
+import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.math.BigDecimal;
 
 public interface CreateAccountCommand {
 
@@ -21,14 +24,16 @@ public interface CreateAccountCommand {
      * representations to keep the contract decoupled from domain models, as requested.
      */
     record Input(
-            @JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
-            @JsonProperty(required = true) @NotNull OwnerId ownerId,
-            @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_CURRENCY_LENGTH) String currency,
-            @JsonProperty(required = true) @NotNull AccountCode code,
-            @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-            @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
-            @JsonProperty(required = true) @NotNull OverdraftMode overdraftMode
+        @JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
+        @JsonProperty(required = true) @NotNull OwnerId ownerId,
+        @JsonProperty(required = true) @NotNull @NotBlank Currency currency,
+        @JsonProperty(required = true) @NotNull AccountCode code,
+        @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
+        @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
+        @JsonProperty(required = true) @NotNull OverdraftMode overdraftMode,
+        @JsonProperty(required = true) @NotNull BigDecimal overdraftLimit
     ) { }
 
     record Output(AccountId accountId) { }
+
 }

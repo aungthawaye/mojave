@@ -11,6 +11,7 @@ import io.mojaloop.core.account.contract.exception.account.AccountNameTooLongExc
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.account.AccountCodeConverter;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
@@ -79,6 +80,10 @@ public class Account extends JpaEntity<AccountId> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
+    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
+
     @Column(name = "termination_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
@@ -119,6 +124,11 @@ public class Account extends JpaEntity<AccountId> {
         this.ledgerBalance = new LedgerBalance(this, this.chartEntry.getAccountType().getNormalSide(), overdraftMode, overdraftLimit);
     }
 
+    public void activate() {
+
+        this.activationStatus = ActivationStatus.ACTIVE;
+    }
+
     public Account code(AccountCode code) {
 
         if (code == null) {
@@ -130,6 +140,11 @@ public class Account extends JpaEntity<AccountId> {
 
         return this;
 
+    }
+
+    public void deactivate() {
+
+        this.activationStatus = ActivationStatus.INACTIVE;
     }
 
     public Account description(String description) {
@@ -170,6 +185,11 @@ public class Account extends JpaEntity<AccountId> {
         this.name = name;
 
         return this;
+    }
+
+    public void terminate() {
+
+        this.terminationStatus = TerminationStatus.TERMINATED;
     }
 
 }

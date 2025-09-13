@@ -5,16 +5,11 @@ import io.mojaloop.core.account.contract.exception.account.AccountIdNotFoundExce
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import jakarta.validation.constraints.NotNull;
 
-public interface ActivateAccountCommand {
+public interface TerminateAccountCommand {
 
     Output execute(Input input) throws AccountIdNotFoundException;
 
-    /**
-     * Input for activating an Account.
-     */
-    record Input(
-        @JsonProperty(required = true) @NotNull AccountId accountId
-    ) { }
+    record Input(@JsonProperty(required = true) @NotNull AccountId accountId) { }
 
     record Output(AccountId accountId) { }
 
