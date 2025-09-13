@@ -22,8 +22,9 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.ChangeHubNameCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
-import io.mojaloop.core.participant.contract.exception.HubLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -49,7 +50,7 @@ public class ChangeHubNameCommandIT {
     private HubRepository hubRepository;
 
     @Test
-    public void changeName_success_persists() throws HubLimitReachedException, HubIdNotFoundException, io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException {
+    public void changeName_success_persists() throws HubCountLimitReachedException, HubIdNotFoundException, FspCurrencyAlreadySupportedException {
         var created = createHubCommand.execute(new CreateHubCommand.Input("Old Name", new Currency[]{Currency.USD}));
         var hubId = created.hubId();
 

@@ -22,9 +22,9 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
-import io.mojaloop.core.participant.contract.exception.HubLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
@@ -46,14 +46,14 @@ public class AddHubCurrencyCommandIT {
     private AddHubCurrencyCommand addHubCurrencyCommand;
 
     @Test
-    public void addCurrency_success_and_duplicate_throws() throws HubLimitReachedException, CurrencyAlreadySupportedException, HubIdNotFoundException {
+    public void addCurrency_success_and_duplicate_throws() throws HubCountLimitReachedException, FspCurrencyAlreadySupportedException, HubIdNotFoundException {
         var created = createHubCommand.execute(new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD}));
 
         var addOut = addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
         assertNotNull(addOut.hubCurrencyId());
 
         // duplicate add
-        assertThrows(CurrencyAlreadySupportedException.class, () -> addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK)));
+        assertThrows(FspCurrencyAlreadySupportedException.class, () -> addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK)));
     }
 
     @Test

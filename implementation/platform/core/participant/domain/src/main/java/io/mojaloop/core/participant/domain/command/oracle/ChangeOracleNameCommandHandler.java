@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.oracle.ChangeOracleNameCommand;
-import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

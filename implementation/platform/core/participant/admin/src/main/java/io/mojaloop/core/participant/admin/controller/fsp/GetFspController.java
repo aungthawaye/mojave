@@ -1,7 +1,7 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

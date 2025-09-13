@@ -22,9 +22,9 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
 import io.mojaloop.core.participant.domain.model.fsp.Fsp;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class CreateFspCommandHandler implements CreateFspCommand {
     @Transactional
     @Write
     public CreateFspCommand.Output execute(CreateFspCommand.Input input)
-        throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+        throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
         LOGGER.info("Executing CreateFspCommand with input: {}", input);
 

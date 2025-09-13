@@ -19,6 +19,10 @@
             <artifactId>mod-fspiop-spec</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-component</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-flyway</artifactId>
         </dependency>

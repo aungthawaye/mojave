@@ -22,8 +22,8 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateEndpointCommand;
-import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws CannotActivateEndpointException, FspIdNotFoundException {
+    public Output execute(Input input) throws CannotActivateFspEndpointException, FspIdNotFoundException {
 
         LOGGER.info("Executing ActivateEndpointCommand with input: {}", input);
 

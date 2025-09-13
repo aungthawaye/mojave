@@ -20,14 +20,11 @@
 
 package io.mojaloop.core.participant.contract.data;
 
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
-import io.mojaloop.core.common.datatype.identifier.participant.FspEndpointId;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.TerminationStatus;
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
-import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
-import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +33,7 @@ public record FspData(FspId fspId,
                       FspCode fspCode,
                       String name,
                       FspCurrencyData[] currencies,
-                      Map<EndpointType, EndpointData> endpoints,
+                      Map<EndpointType, FspEndpointData> endpoints,
                       ActivationStatus activationStatus,
                       TerminationStatus terminationStatus) {
 
@@ -55,43 +52,5 @@ public record FspData(FspId fspId,
         return Objects.hashCode(fspId);
     }
 
-    public record FspCurrencyData(FspCurrencyId fspCurrencyId, Currency currency, ActivationStatus activationStatus) {
-
-        @Override
-        public boolean equals(Object o) {
-
-            if (!(o instanceof FspCurrencyData that)) {
-                return false;
-            }
-            return Objects.equals(fspCurrencyId, that.fspCurrencyId);
-        }
-
-        @Override
-        public int hashCode() {
-
-            return Objects.hashCode(fspCurrencyId);
-        }
-
-    }
-
-    public record EndpointData(FspEndpointId fspEndpointId, EndpointType type, String baseUrl) {
-
-        @Override
-        public boolean equals(Object o) {
-
-            if (!(o instanceof EndpointData that)) {
-                return false;
-            }
-
-            return Objects.equals(fspEndpointId, that.fspEndpointId);
-        }
-
-        @Override
-        public int hashCode() {
-
-            return Objects.hashCode(fspEndpointId);
-        }
-
-    }
 
 }

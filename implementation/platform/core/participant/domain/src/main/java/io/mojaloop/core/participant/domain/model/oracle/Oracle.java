@@ -24,14 +24,16 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.OracleIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.TerminationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.contract.data.OracleData;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleBaseUrlRequiredException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleBaseUrlTooLongException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleNameRequiredException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleNameTooLongException;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -105,16 +107,14 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
 
     public Oracle baseUrl(String baseUrl) {
 
-        assert baseUrl != null;
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new OracleBaseUrlRequiredException();
+        }
 
         var value = baseUrl.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Oracle Base URL");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_HTTP_URL_LENGTH) {
-            throw new TextTooLargeException("Oracle Base URL", StringSizeConstraints.MAX_HTTP_URL_LENGTH);
+            throw new OracleBaseUrlTooLongException();
         }
 
         this.baseUrl = value;
@@ -151,16 +151,13 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
 
     public Oracle name(String name) {
 
-        assert name != null;
-
+        if (name == null || name.isBlank()) {
+            throw new OracleNameRequiredException();
+        }
         var value = name.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Oracle Name");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
-            throw new TextTooLargeException("Oracle Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+            throw new OracleNameTooLongException();
         }
 
         this.name = value;

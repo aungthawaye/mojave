@@ -26,7 +26,7 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.HubCurrencyIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.HubCurrencyId;
 import io.mojaloop.core.participant.contract.data.HubData;
 import io.mojaloop.fspiop.spec.core.Currency;

@@ -21,8 +21,8 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.HubLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -45,7 +45,7 @@ public class CreateHubCommandIT {
     private HubRepository hubRepository;
 
     @Test
-    public void createHub_success_persistsAndReturnsId() throws CurrencyAlreadySupportedException, HubLimitReachedException {
+    public void createHub_success_persistsAndReturnsId() throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
         assertNotNull(createHubCommand);
 
         CreateHubCommand.Input input = new CreateHubCommand.Input("The Hub", new Currency[]{Currency.USD, Currency.MMK});
@@ -63,14 +63,14 @@ public class CreateHubCommandIT {
     @Test
     public void duplicateCurrencyInInput_throwsCurrencyAlreadySupportedException() {
         CreateHubCommand.Input bad = new CreateHubCommand.Input("Dup currency", new Currency[]{Currency.USD, Currency.USD});
-        assertThrows(CurrencyAlreadySupportedException.class, () -> this.createHubCommand.execute(bad));
+        assertThrows(FspCurrencyAlreadySupportedException.class, () -> this.createHubCommand.execute(bad));
     }
 
     @Test
-    public void creatingSecondHub_throwsHubLimitReachedException() throws CurrencyAlreadySupportedException, HubLimitReachedException {
+    public void creatingSecondHub_throwsHubLimitReachedException() throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
         // create first hub
         this.createHubCommand.execute(new CreateHubCommand.Input("Hub A", new Currency[]{Currency.USD}));
         // attempt second
-        assertThrows(HubLimitReachedException.class, () -> this.createHubCommand.execute(new CreateHubCommand.Input("Hub B", new Currency[]{Currency.MMK})));
+        assertThrows(HubCountLimitReachedException.class, () -> this.createHubCommand.execute(new CreateHubCommand.Input("Hub B", new Currency[]{Currency.MMK})));
     }
 }

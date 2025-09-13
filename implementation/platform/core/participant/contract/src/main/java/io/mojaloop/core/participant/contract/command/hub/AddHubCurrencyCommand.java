@@ -23,14 +23,14 @@ package io.mojaloop.core.participant.contract.command.hub;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.participant.HubCurrencyId;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotNull;
 
 public interface AddHubCurrencyCommand {
 
-    Output execute(Input input) throws HubIdNotFoundException, CurrencyAlreadySupportedException;
+    Output execute(Input input) throws HubIdNotFoundException, FspCurrencyAlreadySupportedException;
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,
                  @JsonProperty(required = true) @NotNull Currency supportedCurrency) { }

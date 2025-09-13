@@ -2,7 +2,7 @@ package io.mojaloop.core.account.contract.command.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.core.common.datatype.enumeration.account.OverflowType;
+import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
@@ -27,7 +27,7 @@ public interface CreateAccountCommand {
             @JsonProperty(required = true) @NotNull AccountCode code,
             @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
             @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
-            @JsonProperty(required = true) @NotNull OverflowType overflowType
+            @JsonProperty(required = true) @NotNull OverdraftMode overdraftMode
     ) { }
 
     record Output(AccountId accountId) { }

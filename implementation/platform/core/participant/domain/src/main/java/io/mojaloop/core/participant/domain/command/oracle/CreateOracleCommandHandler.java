@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
-import io.mojaloop.core.participant.contract.exception.OracleAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleAlreadyExistsException;
 import io.mojaloop.core.participant.domain.model.oracle.Oracle;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import org.slf4j.Logger;

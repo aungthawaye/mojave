@@ -1,9 +1,9 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class CreateFspController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CreateFspCommand.Output execute(@Valid @RequestBody CreateFspCommand.Input input)
-        throws FspCodeAlreadyExistsException, EndpointAlreadyConfiguredException, CurrencyAlreadySupportedException {
+        throws FspCodeAlreadyExistsException, FspEndpointAlreadyConfiguredException, FspCurrencyAlreadySupportedException {
 
         return this.createFspCommand.execute(input);
     }

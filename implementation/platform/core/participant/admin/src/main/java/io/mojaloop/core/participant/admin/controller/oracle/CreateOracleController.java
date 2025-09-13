@@ -1,7 +1,7 @@
 package io.mojaloop.core.participant.admin.controller.oracle;
 
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
-import io.mojaloop.core.participant.contract.exception.OracleAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleAlreadyExistsException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

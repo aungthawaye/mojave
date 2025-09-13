@@ -3,12 +3,13 @@ package io.mojaloop.core.account.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.SameDataExistsException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.account.contract.exception.chart.ChartNameRequiredException;
+import io.mojaloop.core.account.contract.exception.chart.ChartNameTooLongException;
+import io.mojaloop.core.account.contract.exception.chart.SameChartEntryCodeExistsException;
+import io.mojaloop.core.account.contract.exception.chart.SameChartEntryNameExistsException;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.account.AccountType;
+import io.mojaloop.core.common.datatype.enums.account.AccountType;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartId;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
@@ -93,17 +94,6 @@ public class Chart extends JpaEntity<ChartId> {
     @OneToMany(mappedBy = "chart", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Set<ChartEntry> entries = new HashSet<>();
 
-    /**
-     * Creates a new Chart.
-     *
-     * <p>A new {@link ChartId} is generated and {@code createdAt} is initialized to the current time.
-     * Name validation rules are applied via {@link #name(String)} if you choose to set the name after construction.</p>
-     *
-     * @param name the chart name; must be non-blank and within the allowed size constraints
-     * @throws BlankOrEmptyInputException if {@code name} is blank
-     * @throws TextTooLargeException if {@code name} exceeds {@link StringSizeConstraints#MAX_NAME_TITLE_LENGTH}
-     * @throws AssertionError if assertions are enabled and {@code name} is null
-     */
     public Chart(String name) {
 
         this.id = new ChartId(Snowflake.get().nextId());
@@ -111,34 +101,19 @@ public class Chart extends JpaEntity<ChartId> {
         this.createdAt = Instant.now();
     }
 
-    /**
-     * Adds a new entry to this chart.
-     *
-     * <p>Creates a new {@link ChartEntry} with the specified parameters and adds it to this chart.
-     * The entry code and name must be unique within the chart.</p>
-     *
-     * @param code the unique code for the chart entry
-     * @param name the name of the chart entry; must be unique within the chart
-     * @param description the description of the chart entry
-     * @param accountType the type of account this entry represents
-     * @return the newly created and added chart entry
-     * @throws SameDataExistsException if an entry with the same code or name already exists in this chart
-     * @see ChartEntry
-     * @see AccountType
-     */
     public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType) {
 
         ChartEntry entry = new ChartEntry(this, code, name, description, accountType);
 
         this.entries.stream().findFirst().ifPresent(existingEntry -> {
             if (existingEntry.getCode().equals(code)) {
-                throw new SameDataExistsException("Chart Entry Code", "Chart");
+                throw new SameChartEntryCodeExistsException();
             }
         });
 
         this.entries.stream().findFirst().ifPresent(existingEntry -> {
             if (existingEntry.getName().equalsIgnoreCase(name)) {
-                throw new SameDataExistsException("Chart Entry Name", "Chart");
+                throw new SameChartEntryNameExistsException();
             }
         });
 
@@ -168,27 +143,16 @@ public class Chart extends JpaEntity<ChartId> {
         return this.id;
     }
 
-    /**
-     * Sets the name of this chart.
-     *
-     * @param name the new name for the chart (must not be null, empty, or exceed maximum length)
-     * @return this chart instance for method chaining
-     * @throws BlankOrEmptyInputException if the name is empty or contains only whitespace
-     * @throws TextTooLargeException if the name exceeds the maximum allowed length
-     * @implNote Null is guarded by an assertion; enable JVM assertions to enforce at runtime.
-     */
     public Chart name(String name) {
 
-        assert name != null : "Name cannot be null";
+        if (name == null || name.isBlank()) {
+            throw new ChartNameRequiredException();
+        }
 
         var value = name.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Chart Name");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
-            throw new TextTooLargeException("Chart Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+            throw new ChartNameTooLongException();
         }
 
         this.name = value;

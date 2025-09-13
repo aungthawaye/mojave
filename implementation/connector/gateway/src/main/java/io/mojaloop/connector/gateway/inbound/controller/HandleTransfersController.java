@@ -39,7 +39,7 @@ public class HandleTransfersController {
     }
 
     @PostMapping("/transfers")
-    public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers, @Valid @RequestBody TransfersPostRequest request) {
+    public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers, @RequestBody TransfersPostRequest request) {
 
         LOGGER.debug("Received POST /transfers : request : {}", request);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
@@ -52,7 +52,7 @@ public class HandleTransfersController {
     @PutMapping("/transfers/{transferId}")
     public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers,
                                           @PathVariable String transferId,
-                                          @Valid @RequestBody TransfersIDPutResponse response) {
+                                          @RequestBody TransfersIDPutResponse response) {
 
         LOGGER.debug("Received PUT /transfers/{} : response : {}", transferId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
@@ -65,7 +65,7 @@ public class HandleTransfersController {
     @PutMapping("/transfers/{transferId}/error")
     public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers,
                                                @PathVariable String transferId,
-                                               @Valid @RequestBody ErrorInformationObject errorInformation) {
+                                               @RequestBody ErrorInformationObject errorInformation) {
 
         LOGGER.debug("Received PUT /transfers/{}/error : errorInformation : {}", transferId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));

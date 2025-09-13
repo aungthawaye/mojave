@@ -3,12 +3,13 @@ package io.mojaloop.core.account.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.account.contract.exception.chart.ChartEntryDescriptionTooLongException;
+import io.mojaloop.core.account.contract.exception.chart.ChartEntryNameRequiredException;
+import io.mojaloop.core.account.contract.exception.chart.ChartEntryNameTooLongException;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartEntryIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.account.ChartEntryCodeConverter;
-import io.mojaloop.core.common.datatype.enumeration.account.AccountType;
+import io.mojaloop.core.common.datatype.enums.account.AccountType;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import jakarta.persistence.Column;
@@ -84,7 +85,6 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
         this.createdAt = Instant.now();
     }
 
-
     public ChartEntry code(ChartEntryCode code) {
 
         assert code != null;
@@ -96,16 +96,14 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
 
     public ChartEntry description(String description) {
 
-        assert description != null;
+        if (description == null) {
+            return this;
+        }
 
         var value = description.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Chart Entry Description");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_DESCRIPTION_LENGTH) {
-            throw new TextTooLargeException("Chart Entry Description", StringSizeConstraints.MAX_DESCRIPTION_LENGTH);
+            throw new ChartEntryDescriptionTooLongException();
         }
 
         this.description = description;
@@ -121,16 +119,14 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
 
     public ChartEntry name(String name) {
 
-        assert name != null;
+        if (name == null || name.isBlank()) {
+            throw new ChartEntryNameRequiredException();
+        }
 
         var value = name.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Chart Entry Name");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
-            throw new TextTooLargeException("Chart Entry Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+            throw new ChartEntryNameTooLongException();
         }
 
         this.name = name;

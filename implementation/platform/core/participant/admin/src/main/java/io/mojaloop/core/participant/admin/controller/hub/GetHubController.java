@@ -2,7 +2,7 @@ package io.mojaloop.core.participant.admin.controller.hub;
 
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.data.HubData;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.HubQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

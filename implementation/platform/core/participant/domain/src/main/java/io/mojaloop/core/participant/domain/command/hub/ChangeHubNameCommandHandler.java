@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.ChangeHubNameCommand;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

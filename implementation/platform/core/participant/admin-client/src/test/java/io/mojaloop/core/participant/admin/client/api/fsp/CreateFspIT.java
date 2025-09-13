@@ -1,6 +1,6 @@
 package io.mojaloop.core.participant.admin.client.api.fsp;
 
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
 import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;

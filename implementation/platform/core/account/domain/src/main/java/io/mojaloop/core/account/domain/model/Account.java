@@ -3,14 +3,16 @@ package io.mojaloop.core.account.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.account.contract.exception.account.AccountCodeRequiredException;
+import io.mojaloop.core.account.contract.exception.account.AccountDescriptionTooLongException;
+import io.mojaloop.core.account.contract.exception.account.AccountNameRequiredException;
+import io.mojaloop.core.account.contract.exception.account.AccountNameTooLongException;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.account.AccountCodeConverter;
-import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
-import io.mojaloop.core.common.datatype.enumeration.account.OverflowType;
+import io.mojaloop.core.common.datatype.enums.TerminationStatus;
+import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
@@ -28,19 +30,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "acc_account")
+@Table(name = "acc_account",
+       uniqueConstraints = @UniqueConstraint(name = "uk_owner_id_currency_chart_entry_id", columnNames = {"owner_id", "currency", "chart_entry_id"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends JpaEntity<AccountId> {
 
@@ -67,12 +72,8 @@ public class Account extends JpaEntity<AccountId> {
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "description", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
-
-    @Column(name = "overflow_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected OverflowType overflowType;
 
     @Column(name = "created_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
@@ -90,7 +91,14 @@ public class Account extends JpaEntity<AccountId> {
     @JoinColumn(name = "ledger_balance_id", nullable = false)
     protected LedgerBalance ledgerBalance;
 
-    public Account(ChartEntry chartEntry, OwnerId ownerId, Currency currency, AccountCode code, String name, String description, OverflowType overflowType) {
+    public Account(ChartEntry chartEntry,
+                   OwnerId ownerId,
+                   Currency currency,
+                   AccountCode code,
+                   String name,
+                   String description,
+                   OverdraftMode overdraftMode,
+                   BigDecimal overdraftLimit) {
 
         assert chartEntry != null;
         assert ownerId != null;
@@ -98,20 +106,25 @@ public class Account extends JpaEntity<AccountId> {
         assert code != null;
         assert name != null;
         assert description != null;
-        assert overflowType != null;
+        assert overdraftMode != null;
+        assert overdraftMode != OverdraftMode.LIMIT || overdraftLimit != null;
 
         this.id = new AccountId(Snowflake.get().nextId());
         this.chartEntry = chartEntry;
         this.ownerId = ownerId;
         this.currency = currency;
         this.code(code).name(name).description(description);
-        this.overflowType = overflowType;
         this.createdAt = Instant.now();
+
+        this.ledgerBalance = new LedgerBalance(this, this.chartEntry.getAccountType().getNormalSide(), overdraftMode, overdraftLimit);
     }
 
     public Account code(AccountCode code) {
 
-        assert code != null;
+        if (code == null) {
+
+            throw new AccountCodeRequiredException();
+        }
 
         this.code = code;
 
@@ -121,16 +134,14 @@ public class Account extends JpaEntity<AccountId> {
 
     public Account description(String description) {
 
-        assert description != null;
+        if (description == null) {
+            return this;
+        }
 
         var value = description.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Chart Entry Description");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_DESCRIPTION_LENGTH) {
-            throw new TextTooLargeException("Chart Entry Description", StringSizeConstraints.MAX_DESCRIPTION_LENGTH);
+            throw new AccountDescriptionTooLongException();
         }
 
         this.description = description;
@@ -146,16 +157,14 @@ public class Account extends JpaEntity<AccountId> {
 
     public Account name(String name) {
 
-        assert name != null;
+        if (name == null || name.isBlank()) {
+            throw new AccountNameRequiredException();
+        }
 
         var value = name.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Chart Entry Name");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
-            throw new TextTooLargeException("Chart Entry Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+            throw new AccountNameTooLongException();
         }
 
         this.name = name;

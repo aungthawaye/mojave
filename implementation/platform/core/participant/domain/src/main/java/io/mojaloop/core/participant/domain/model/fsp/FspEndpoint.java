@@ -24,15 +24,15 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.FspEndpointIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspEndpointId;
-import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
+import io.mojaloop.core.participant.contract.data.FspEndpointData;
+import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointBaseUrlRequiredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointBaseUrlTooLongException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -57,7 +57,7 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(name = "pcp_fsp_endpoint", uniqueConstraints = {@UniqueConstraint(name = "uk_fsp_endpoint", columnNames = {"fsp_endpoint_id", "type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataConversion<FspData.EndpointData> {
+public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataConversion<FspEndpointData> {
 
     @Id
 
@@ -99,16 +99,15 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
 
     public FspEndpoint baseUrl(String baseUrl) {
 
-        assert baseUrl != null;
+        if (baseUrl == null || baseUrl.isBlank()) {
+
+            throw new FspEndpointBaseUrlRequiredException();
+        }
 
         var value = baseUrl.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Endpoint Base URL");
-        }
-
         if (value.length() > StringSizeConstraints.MAX_HTTP_URL_LENGTH) {
-            throw new TextTooLargeException("Endpoint Base URL", StringSizeConstraints.MAX_HTTP_URL_LENGTH);
+            throw new FspEndpointBaseUrlTooLongException();
         }
 
         this.baseUrl = value;
@@ -117,9 +116,9 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
     }
 
     @Override
-    public FspData.EndpointData convert() {
+    public FspEndpointData convert() {
 
-        return new FspData.EndpointData(this.getId(), this.getType(), this.getBaseUrl());
+        return new FspEndpointData(this.getId(), this.getType(), this.getBaseUrl());
     }
 
     @Override
@@ -133,11 +132,11 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
         return this.activationStatus == ActivationStatus.ACTIVE;
     }
 
-    void activate() throws CannotActivateEndpointException {
+    void activate() throws CannotActivateFspEndpointException {
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateEndpointException(this.type);
+            throw new CannotActivateFspEndpointException(this.type);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;

@@ -4,7 +4,7 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.account.LedgerBalanceIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.account.LedgerMovementIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.account.NormalSide;
+import io.mojaloop.core.common.datatype.enums.account.NormalSide;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.LedgerBalanceId;
 import io.mojaloop.core.common.datatype.identifier.account.LedgerMovementId;

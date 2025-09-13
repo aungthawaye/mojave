@@ -39,7 +39,7 @@ public class HandleQuotesController {
     }
 
     @PostMapping("/quotes")
-    public ResponseEntity<?> postQuotes(@RequestHeader Map<String, String> headers, @Valid @RequestBody QuotesPostRequest request) {
+    public ResponseEntity<?> postQuotes(@RequestHeader Map<String, String> headers, @RequestBody QuotesPostRequest request) {
 
         LOGGER.debug("Received POST /quotes : request : {}", request);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
@@ -52,7 +52,7 @@ public class HandleQuotesController {
     @PutMapping("/quotes/{quoteId}")
     public ResponseEntity<?> putQuotes(@RequestHeader Map<String, String> headers,
                                        @PathVariable String quoteId,
-                                       @Valid @RequestBody QuotesIDPutResponse response) {
+                                       @RequestBody QuotesIDPutResponse response) {
 
         LOGGER.debug("Received PUT /quotes/{} : response : {}", quoteId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
@@ -65,7 +65,7 @@ public class HandleQuotesController {
     @PutMapping("/quotes/{quoteId}/error")
     public ResponseEntity<?> putQuotesError(@RequestHeader Map<String, String> headers,
                                             @PathVariable String quoteId,
-                                            @Valid @RequestBody ErrorInformationObject errorInformation) {
+                                            @RequestBody ErrorInformationObject errorInformation) {
 
         LOGGER.debug("Received PUT /quotes/{}/error : errorInformation : {}", quoteId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));

@@ -24,21 +24,24 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.FspIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.fspiop.FspCodeConverter;
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
-import io.mojaloop.core.common.datatype.enumeration.TerminationStatus;
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.TerminationStatus;
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.core.participant.contract.data.FspCurrencyData;
 import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.contract.exception.CannotActivateEndpointException;
-import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.data.FspEndpointData;
+import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
+import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCodeRequiredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspNameRequiredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspNameTooLongException;
 import io.mojaloop.core.participant.domain.cache.redis.updater.FspCacheUpdater;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
@@ -71,11 +74,11 @@ import static java.sql.Types.BIGINT;
 
 /**
  * Financial Service Provider (FSP) entity representing a participant in the Mojaloop network.
- * 
+ *
  * <p>An FSP can support multiple currencies and endpoints for different types of operations.
  * The FSP has activation and termination statuses that control its operational state within
  * the Mojaloop ecosystem.</p>
- * 
+ *
  * @author Mojaloop OSS
  * @since 1.0
  */
@@ -122,7 +125,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Creates a new FSP with the specified code and name.
-     * 
+     *
      * @param fspCode the unique FSP code identifier
      * @param name the human-readable name of the FSP
      * @throws AssertionError if fspCode or name is null
@@ -140,7 +143,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Activates this FSP and attempts to activate all its currencies and endpoints.
-     * 
+     *
      * <p>This method sets the FSP's activation status to ACTIVE and tries to activate
      * all associated currencies and endpoints. If individual currencies or endpoints
      * cannot be activated, those exceptions are silently ignored.</p>
@@ -152,24 +155,24 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         this.currencies.forEach(sc -> {
             try {
                 sc.activate();
-            } catch (CannotActivateSupportedCurrencyException ignored) { }
+            } catch (CannotActivateFspCurrencyException ignored) { }
         });
 
         this.endpoints.forEach(e -> {
             try {
                 e.activate();
-            } catch (CannotActivateEndpointException ignored) { }
+            } catch (CannotActivateFspEndpointException ignored) { }
         });
     }
 
     /**
      * Activates support for a specific currency.
-     * 
+     *
      * @param currency the currency to activate
-     * @throws CannotActivateSupportedCurrencyException if the currency cannot be activated
+     * @throws CannotActivateFspCurrencyException if the currency cannot be activated
      * @throws AssertionError if currency is null
      */
-    public void activateCurrency(Currency currency) throws CannotActivateSupportedCurrencyException {
+    public void activateCurrency(Currency currency) throws CannotActivateFspCurrencyException {
 
         assert currency != null;
 
@@ -184,12 +187,12 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Activates an endpoint of the specified type.
-     * 
+     *
      * @param type the type of endpoint to activate
-     * @throws CannotActivateEndpointException if the endpoint cannot be activated
+     * @throws CannotActivateFspEndpointException if the endpoint cannot be activated
      * @throws AssertionError if type is null
      */
-    public void activateEndpoint(EndpointType type) throws CannotActivateEndpointException {
+    public void activateEndpoint(EndpointType type) throws CannotActivateFspEndpointException {
 
         assert type != null;
 
@@ -204,18 +207,18 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Adds support for a new currency to this FSP.
-     * 
+     *
      * @param currency the currency to add support for
      * @return the newly created FspCurrency instance
-     * @throws CurrencyAlreadySupportedException if the currency is already supported
+     * @throws FspCurrencyAlreadySupportedException if the currency is already supported
      * @throws AssertionError if currency is null
      */
-    public FspCurrency addCurrency(Currency currency) throws CurrencyAlreadySupportedException {
+    public FspCurrency addCurrency(Currency currency) throws FspCurrencyAlreadySupportedException {
 
         assert currency != null;
 
         if (this.isCurrencySupported(currency)) {
-            throw new CurrencyAlreadySupportedException(currency);
+            throw new FspCurrencyAlreadySupportedException(currency);
         }
 
         var supportedCurrency = new FspCurrency(this, currency);
@@ -227,21 +230,21 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Adds a new endpoint configuration to this FSP.
-     * 
+     *
      * @param type the type of endpoint to add
      * @param host the host URL for the endpoint
      * @return the newly created FspEndpoint instance
-     * @throws EndpointAlreadyConfiguredException if an endpoint of this type already exists
+     * @throws FspEndpointAlreadyConfiguredException if an endpoint of this type already exists
      * @throws AssertionError if type or host is null
      */
-    public FspEndpoint addEndpoint(EndpointType type, String host) throws EndpointAlreadyConfiguredException {
+    public FspEndpoint addEndpoint(EndpointType type, String host) throws FspEndpointAlreadyConfiguredException {
 
         assert type != null;
         assert host != null;
 
         if (this.hasEndpoint(type)) {
 
-            throw new EndpointAlreadyConfiguredException(type);
+            throw new FspEndpointAlreadyConfiguredException(type);
         }
 
         var endpoint = new FspEndpoint(this, type, host);
@@ -253,7 +256,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Changes the base URL of an existing endpoint.
-     * 
+     *
      * @param type the type of endpoint to modify
      * @param baseUrl the new base URL for the endpoint
      * @return true if the endpoint was found and updated, false otherwise
@@ -281,15 +284,15 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     public FspData convert() {
 
         return new FspData(this.getId(), this.getFspCode(), this.getName(),
-                           this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspData.FspCurrencyData[]::new),
+                           this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
                            this.getEndpoints().stream().map(FspEndpoint::convert)
-                               .collect(Collectors.toMap(FspData.EndpointData::type, Function.identity(), (existing, replacement) -> replacement)),
+                               .collect(Collectors.toMap(FspEndpointData::type, Function.identity(), (existing, replacement) -> replacement)),
                            this.activationStatus, this.terminationStatus);
     }
 
     /**
      * Deactivates this FSP and all its currencies and endpoints.
-     * 
+     *
      * <p>This method sets the FSP's activation status to INACTIVE and deactivates
      * all associated currencies and endpoints.</p>
      */
@@ -302,7 +305,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Deactivates support for a specific currency.
-     * 
+     *
      * @param currency the currency to deactivate
      * @throws AssertionError if currency is null
      */
@@ -321,7 +324,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Deactivates an endpoint of the specified type.
-     * 
+     *
      * @param type the type of endpoint to deactivate
      * @throws AssertionError if type is null
      */
@@ -340,14 +343,17 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Sets the FSP code for this FSP.
-     * 
+     *
      * @param fspCode the FSP code to set
      * @return this FSP instance for method chaining
      * @throws AssertionError if fspCode is null
      */
     public Fsp fspCode(FspCode fspCode) {
 
-        assert fspCode != null;
+        if (fspCode == null) {
+
+            throw new FspCodeRequiredException();
+        }
 
         this.fspCode = fspCode;
 
@@ -356,7 +362,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Returns an unmodifiable set of currencies supported by this FSP.
-     * 
+     *
      * @return an unmodifiable set of FspCurrency instances
      */
     public Set<FspCurrency> getCurrencies() {
@@ -366,7 +372,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Returns an unmodifiable set of endpoints configured for this FSP.
-     * 
+     *
      * @return an unmodifiable set of FspEndpoint instances
      */
     public Set<FspEndpoint> getEndpoints() {
@@ -382,7 +388,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Checks if this FSP has an endpoint of the specified type.
-     * 
+     *
      * @param type the endpoint type to check for
      * @return true if an endpoint of the specified type exists, false otherwise
      * @throws AssertionError if type is null
@@ -396,7 +402,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Checks if this FSP is currently active.
-     * 
+     *
      * @return true if the FSP's activation status is ACTIVE, false otherwise
      */
     public boolean isActive() {
@@ -406,7 +412,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Checks if this FSP supports the specified currency.
-     * 
+     *
      * @param currency the currency to check for support
      * @return true if the currency is supported, false otherwise
      * @throws AssertionError if currency is null
@@ -418,27 +424,16 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         return this.currencies.stream().anyMatch(sc -> sc.getCurrency() == currency);
     }
 
-    /**
-     * Sets the name for this FSP with validation.
-     * 
-     * @param name the name to set (will be trimmed)
-     * @return this FSP instance for method chaining
-     * @throws BlankOrEmptyInputException if the name is blank or empty after trimming
-     * @throws TextTooLargeException if the name exceeds the maximum allowed length
-     * @throws AssertionError if name is null
-     */
     public Fsp name(String name) {
 
-        assert name != null;
+        if (name == null || name.isBlank()) {
+            throw new FspNameRequiredException();
+        }
 
         var value = name.trim();
 
-        if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("FSP Name");
-        }
-
-        if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
-            throw new TextTooLargeException("FSP Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+        if (name.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
+            throw new FspNameTooLongException();
         }
 
         this.name = value;
@@ -448,10 +443,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     /**
      * Terminates this FSP by setting its activation status to INACTIVE.
-     * 
+     *
      * <p>This method deactivates the FSP but does not affect the individual
      * currencies and endpoints, unlike the {@link #deactivate()} method.</p>
-     * 
+     *
      * @see #deactivate()
      */
     public void terminate() {
