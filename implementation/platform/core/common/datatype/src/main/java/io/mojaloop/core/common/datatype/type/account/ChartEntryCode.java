@@ -2,7 +2,7 @@ package io.mojaloop.core.common.datatype.type.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.core.common.datatype.exception.account.ChartEntryCodeEmptyValueException;
+import io.mojaloop.core.common.datatype.exception.account.ChartEntryCodeValueRequiredException;
 import io.mojaloop.core.common.datatype.exception.account.ChartEntryCodeValueTooLargeException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ public record ChartEntryCode(@JsonProperty(required = true) @NotNull @NotBlank @
     public ChartEntryCode {
 
         if (value == null || value.isBlank()) {
-            throw new ChartEntryCodeEmptyValueException();
+            throw new ChartEntryCodeValueRequiredException();
         }
 
         if (value.length() > StringSizeConstraints.MAX_CODE_LENGTH) {

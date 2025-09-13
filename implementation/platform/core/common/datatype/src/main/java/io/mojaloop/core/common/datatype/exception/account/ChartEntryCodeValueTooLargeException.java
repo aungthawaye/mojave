@@ -6,7 +6,7 @@ import io.mojaloop.component.misc.exception.InputException;
 
 public class ChartEntryCodeValueTooLargeException extends InputException {
 
-    private static final String TEMPLATE = "The value of Chart Entry code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
+    private static final String TEMPLATE = "Chart Entry Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
 
     public ChartEntryCodeValueTooLargeException() {
 
