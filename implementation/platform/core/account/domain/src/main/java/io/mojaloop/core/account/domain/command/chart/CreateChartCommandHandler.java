@@ -29,7 +29,7 @@ public class CreateChartCommandHandler implements CreateChartCommand {
 
         LOGGER.info("Executing CreateChartCommand with input: {}", input);
 
-        var chart = new Chart(input.name());
+        var chart = new Chart(input.name(), input.type());
         LOGGER.info("Created Chart: {}", chart);
 
         chart = this.chartRepository.save(chart);
@@ -39,4 +39,5 @@ public class CreateChartCommandHandler implements CreateChartCommand {
 
         return new Output(chart.getId());
     }
+
 }

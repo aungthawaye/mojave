@@ -52,7 +52,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_hub_currency", uniqueConstraints = {@UniqueConstraint(name = "uk_hub_currency", columnNames = {"hub_currency_id", "currency"})})
+@Table(name = "pcp_hub_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_hub_currency_hub_currency_id_currency_UK", columnNames = {"hub_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataConversion<io.mojaloop.core.participant.contract.data.HubData.HubCurrencyData> {
 

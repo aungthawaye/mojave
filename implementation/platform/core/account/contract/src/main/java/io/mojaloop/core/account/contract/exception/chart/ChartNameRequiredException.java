@@ -28,6 +28,8 @@ public class ChartNameRequiredException extends InputException {
     private static final String TEMPLATE = "Chart Name is required.";
 
     public ChartNameRequiredException() {
+
         super(new ErrorTemplate("CHART_NAME_REQUIRED", TEMPLATE));
     }
+
 }

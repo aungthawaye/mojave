@@ -29,6 +29,8 @@ public class ChartEntryNameTooLongException extends InputException {
     private static final String TEMPLATE = "Chart Entry Name is too long. Must not exceed " + StringSizeConstraints.MAX_NAME_TITLE_LENGTH + " characters.";
 
     public ChartEntryNameTooLongException() {
+
         super(new ErrorTemplate("CHART_ENTRY_NAME_TOO_LONG", TEMPLATE));
     }
+
 }

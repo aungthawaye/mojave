@@ -53,7 +53,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_currency", uniqueConstraints = {@UniqueConstraint(name = "uk_fsp_currency", columnNames = {"fsp_currency_id", "currency"})})
+@Table(name = "pcp_fsp_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_currency_fsp_currency_id_currency_UK", columnNames = {"fsp_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataConversion<FspCurrencyData> {
 
@@ -93,7 +93,7 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     @Override
     public FspCurrencyData convert() {
 
-        return new FspCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus());
+        return new FspCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus(), this.createdAt, this.fsp.getId());
     }
 
     public boolean isActive() {

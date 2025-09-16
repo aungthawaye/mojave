@@ -8,6 +8,7 @@ import io.mojaloop.core.account.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.account.domain.repository.ChartRepository;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,20 +35,20 @@ public class CreateChartEntryCommandIT {
 
     @Test
     public void createChartEntry_success_persistsAndReturnsId() throws ChartIdNotFoundException {
-        // Arrange: create a chart first
-        var chartOut = createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
+
+        var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart", io.mojaloop.core.common.datatype.enums.account.ChartType.HUB));
         var chartId = chartOut.chartId();
-        assertTrue(chartRepository.findById(chartId).isPresent());
 
-        // Act
-        var entryOut = createChartEntryCommand.execute(
-                new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("1000"), "Cash",
-                        "Cash and cash equivalents", AccountType.ASSET));
+        assertTrue(this.chartRepository.findById(chartId).isPresent());
 
-        // Assert
+        var entryOut = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("1000"), "Cash", "Cash and cash equivalents", AccountType.ASSET));
+
         assertNotNull(entryOut);
         assertNotNull(entryOut.chartEntryId());
-        var saved = chartEntryRepository.findById(entryOut.chartEntryId());
+
+        var saved = this.chartEntryRepository.findById(entryOut.chartEntryId());
+
         assertTrue(saved.isPresent());
         assertEquals("Cash", saved.get().getName());
         assertEquals("1000", saved.get().getCode().value());
@@ -55,4 +56,12 @@ public class CreateChartEntryCommandIT {
         assertNotNull(saved.get().getCreatedAt());
         assertEquals(chartId, saved.get().getChart().getId());
     }
+
+    @BeforeEach
+    void cleanDatabase() {
+
+        this.chartRepository.deleteAll();
+        this.chartEntryRepository.deleteAll();
+    }
+
 }

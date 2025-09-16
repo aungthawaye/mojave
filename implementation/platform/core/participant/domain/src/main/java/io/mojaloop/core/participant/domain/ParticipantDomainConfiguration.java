@@ -27,14 +27,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.participant.domain"})
-@Import(value = {
-    MiscConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class})
-public class ParticipantDomainConfiguration {
+@Import(value = {MiscConfiguration.class, RedissonOpsClientConfiguration.class, RoutingJpaConfiguration.class})
+public class ParticipantDomainConfiguration
+    implements MiscConfiguration.RequiredBeans, RedissonOpsClientConfiguration.RequiredBeans, RoutingJpaConfiguration.RequiredBeans {
 
-    public interface RequiredBeans { }
+    public interface RequiredBeans extends RoutingJpaConfiguration.RequiredBeans { }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              RoutingJpaConfiguration.RequiredSettings,
-                                              RedissonOpsClientConfiguration.RequiredSettings { }
+    public interface RequiredSettings
+        extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings, RedissonOpsClientConfiguration.RequiredSettings { }
 
 }

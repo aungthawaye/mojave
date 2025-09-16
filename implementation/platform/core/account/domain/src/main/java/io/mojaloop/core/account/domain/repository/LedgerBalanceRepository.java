@@ -13,12 +13,16 @@ public interface LedgerBalanceRepository extends JpaRepository<LedgerBalance, Le
 
     class Filters {
 
+        public static Specification<LedgerBalance> withAccountId(AccountId accountId) {
+
+            return (root, query, cb) -> cb.equal(root.get("account").get("id"), accountId);
+        }
+
         public static Specification<LedgerBalance> withId(LedgerBalanceId id) {
+
             return (root, query, cb) -> cb.equal(root.get("id"), id);
         }
 
-        public static Specification<LedgerBalance> withAccountId(AccountId accountId) {
-            return (root, query, cb) -> cb.equal(root.get("account").get("id"), accountId);
-        }
     }
+
 }

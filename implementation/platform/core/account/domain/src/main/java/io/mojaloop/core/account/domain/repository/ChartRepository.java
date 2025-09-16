@@ -13,11 +13,15 @@ public interface ChartRepository extends JpaRepository<Chart, ChartId>, JpaSpeci
     class Filters {
 
         public static Specification<Chart> withId(ChartId id) {
+
             return (root, query, cb) -> cb.equal(root.get("id"), id);
         }
 
         public static Specification<Chart> withNameContains(String name) {
+
             return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
         }
+
     }
+
 }

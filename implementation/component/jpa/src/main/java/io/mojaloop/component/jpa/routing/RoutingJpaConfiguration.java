@@ -22,6 +22,7 @@ package io.mojaloop.component.jpa.routing;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -30,9 +31,10 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @EnableJpaRepositories(basePackages = {"io.mojaloop"}, considerNestedRepositories = true)
 @EnableTransactionManagement
+@ComponentScan(basePackages = {"io.mojaloop.component.jpa.routing"})
 public class RoutingJpaConfiguration {
 
     @Primary

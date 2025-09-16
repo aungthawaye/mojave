@@ -31,7 +31,7 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
         LOGGER.info("Executing CreateChartEntryCommand with input: {}", input);
 
         var chart = this.chartRepository.findById(input.chartId())
-                                       .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
+                                        .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
         LOGGER.info("Found Chart with id: {}", input.chartId());
 
         var entry = chart.addEntry(input.code(), input.name(), input.description(), input.accountType());
@@ -44,4 +44,5 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
 
         return new Output(entry.getId());
     }
+
 }

@@ -5,16 +5,16 @@ import lombok.Getter;
 @Getter
 public enum AccountType {
 
-    ASSET(NormalSide.DEBIT),
-    LIABILITY(NormalSide.CREDIT),
-    EQUITY(NormalSide.CREDIT),
-    REVENUE(NormalSide.CREDIT),
-    EXPENSE(NormalSide.DEBIT);
+    ASSET(Side.DEBIT),
+    LIABILITY(Side.CREDIT),
+    EQUITY(Side.CREDIT),
+    REVENUE(Side.CREDIT),
+    EXPENSE(Side.DEBIT);
 
-    private final NormalSide normalSide;
+    private final Side side;
 
-    AccountType(NormalSide normalSide) {
+    AccountType(Side side) {
 
-        this.normalSide = normalSide;
+        this.side = side;
     }
 }

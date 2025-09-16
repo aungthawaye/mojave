@@ -1,6 +1,6 @@
 package io.mojaloop.core.common.datatype.enums.account;
 
-public enum NormalSide {
+public enum Side {
     DEBIT,
     CREDIT
 }

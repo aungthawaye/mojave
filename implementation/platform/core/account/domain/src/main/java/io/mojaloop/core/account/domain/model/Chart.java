@@ -3,13 +3,17 @@ package io.mojaloop.core.account.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.account.contract.data.ChartData;
+import io.mojaloop.core.account.contract.data.ChartEntryData;
 import io.mojaloop.core.account.contract.exception.chart.ChartNameRequiredException;
 import io.mojaloop.core.account.contract.exception.chart.ChartNameTooLongException;
 import io.mojaloop.core.account.contract.exception.chart.SameChartEntryCodeExistsException;
 import io.mojaloop.core.account.contract.exception.chart.SameChartEntryNameExistsException;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartIdJavaType;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
+import io.mojaloop.core.common.datatype.enums.account.ChartType;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartId;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
@@ -17,6 +21,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -52,10 +58,9 @@ import static java.sql.Types.BIGINT;
  */
 @Getter
 @Entity
-@Table(name = "acc_chart", uniqueConstraints = {@UniqueConstraint(name = "uk_chart_name", columnNames = {"name"}),
-                                                @UniqueConstraint(name = "uk_chart_owner_id", columnNames = {"owner_id"})})
+@Table(name = "acc_chart", uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Chart extends JpaEntity<ChartId> {
+public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartData> {
 
     /**
      * The unique identifier for this chart.
@@ -74,6 +79,10 @@ public class Chart extends JpaEntity<ChartId> {
      */
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
+
+    @Column(name = "type", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected ChartType type;
 
     /**
      * The timestamp when this chart was created.
@@ -94,10 +103,11 @@ public class Chart extends JpaEntity<ChartId> {
     @OneToMany(mappedBy = "chart", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Set<ChartEntry> entries = new HashSet<>();
 
-    public Chart(String name) {
+    public Chart(String name, ChartType type) {
 
         this.id = new ChartId(Snowflake.get().nextId());
         this.name(name);
+        this.type = type;
         this.createdAt = Instant.now();
     }
 
@@ -120,6 +130,16 @@ public class Chart extends JpaEntity<ChartId> {
         this.entries.add(entry);
 
         return entry;
+    }
+
+    @Override
+    public ChartData convert() {
+
+        var entriesData = this.getEntries().stream()
+                              .map(ChartEntry::convert)
+                              .toArray(ChartEntryData[]::new);
+
+        return new ChartData(this.getId(), this.getName(), this.createdAt, entriesData);
     }
 
     /**

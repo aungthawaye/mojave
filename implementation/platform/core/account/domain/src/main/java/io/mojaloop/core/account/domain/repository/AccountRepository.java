@@ -16,24 +16,31 @@ public interface AccountRepository extends JpaRepository<Account, AccountId>, Jp
 
     class Filters {
 
-        public static Specification<Account> withId(AccountId id) {
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+        public static Specification<Account> withChartEntryId(ChartEntryId chartEntryId) {
+
+            return (root, query, cb) -> cb.equal(root.get("chartEntryId"), chartEntryId);
         }
 
         public static Specification<Account> withCode(AccountCode code) {
+
             return (root, query, cb) -> cb.equal(root.get("code"), code);
         }
 
-        public static Specification<Account> withOwnerId(OwnerId ownerId) {
-            return (root, query, cb) -> cb.equal(root.get("ownerId"), ownerId);
-        }
-
         public static Specification<Account> withCurrency(Currency currency) {
+
             return (root, query, cb) -> cb.equal(root.get("currency"), currency);
         }
 
-        public static Specification<Account> withChartEntryId(ChartEntryId chartEntryId) {
-            return (root, query, cb) -> cb.equal(root.get("chartEntry").get("id"), chartEntryId);
+        public static Specification<Account> withId(AccountId id) {
+
+            return (root, query, cb) -> cb.equal(root.get("id"), id);
         }
+
+        public static Specification<Account> withOwnerId(OwnerId ownerId) {
+
+            return (root, query, cb) -> cb.equal(root.get("ownerId"), ownerId);
+        }
+
     }
+
 }

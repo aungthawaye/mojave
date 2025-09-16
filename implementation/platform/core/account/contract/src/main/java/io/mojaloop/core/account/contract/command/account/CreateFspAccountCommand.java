@@ -5,7 +5,8 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
-public interface CreateAccountCommand {
+public interface CreateFspAccountCommand {
 
     Output execute(Input input);
 
@@ -25,7 +26,7 @@ public interface CreateAccountCommand {
      */
     record Input(
         @JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
-        @JsonProperty(required = true) @NotNull OwnerId ownerId,
+        @JsonProperty(required = true) @NotNull FspId fspId,
         @JsonProperty(required = true) @NotNull @NotBlank Currency currency,
         @JsonProperty(required = true) @NotNull AccountCode code,
         @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,

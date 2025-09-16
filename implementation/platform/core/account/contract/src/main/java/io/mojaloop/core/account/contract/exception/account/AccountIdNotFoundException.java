@@ -32,4 +32,5 @@ public class AccountIdNotFoundException extends DomainException {
 
         super(new ErrorTemplate("ACCOUNT_ID_NOT_FOUND", TEMPLATE), accountId.getId().toString());
     }
+
 }

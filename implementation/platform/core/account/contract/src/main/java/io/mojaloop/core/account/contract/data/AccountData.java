@@ -20,32 +20,29 @@
 
 package io.mojaloop.core.account.contract.data;
 
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
-import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.account.ChartId;
-import io.mojaloop.core.common.datatype.identifier.account.LedgerBalanceId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
-import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
 public record AccountData(AccountId accountId,
                           OwnerId ownerId,
+                          AccountType type,
                           Currency currency,
                           AccountCode code,
                           String name,
                           String description,
-                          OverdraftMode overdraftMode,
                           Instant createdAt,
+                          ActivationStatus activationStatus,
                           TerminationStatus terminationStatus,
-                          ChartEntryData chartEntry,
+                          ChartEntryId chartEntryId,
                           LedgerBalanceData ledgerBalance) {
 
     @Override
@@ -61,69 +58,6 @@ public record AccountData(AccountId accountId,
     public int hashCode() {
 
         return Objects.hashCode(accountId);
-    }
-
-    public record ChartEntryData(ChartEntryId chartEntryId,
-                                 ChartEntryCode code,
-                                 String name,
-                                 String description,
-                                 AccountType accountType,
-                                 Instant createdAt,
-                                 ChartData chart) {
-
-        @Override
-        public boolean equals(Object o) {
-
-            if (!(o instanceof ChartEntryData that)) {
-                return false;
-            }
-            return Objects.equals(chartEntryId, that.chartEntryId);
-        }
-
-        @Override
-        public int hashCode() {
-
-            return Objects.hashCode(chartEntryId);
-        }
-
-        public record ChartData(ChartId chartId, String name, Instant createdAt) {
-
-            @Override
-            public boolean equals(Object o) {
-
-                if (!(o instanceof ChartData that)) {
-                    return false;
-                }
-                return Objects.equals(chartId, that.chartId);
-            }
-
-            @Override
-            public int hashCode() {
-
-                return Objects.hashCode(chartId);
-            }
-
-        }
-
-    }
-
-    public record LedgerBalanceData(LedgerBalanceId ledgerBalanceId, BigDecimal postedDebits, BigDecimal postedCredits) {
-
-        @Override
-        public boolean equals(Object o) {
-
-            if (!(o instanceof LedgerBalanceData that)) {
-                return false;
-            }
-            return Objects.equals(ledgerBalanceId, that.ledgerBalanceId);
-        }
-
-        @Override
-        public int hashCode() {
-
-            return Objects.hashCode(ledgerBalanceId);
-        }
-
     }
 
 }

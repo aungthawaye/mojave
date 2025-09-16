@@ -3,7 +3,6 @@ package io.mojaloop.core.account.domain.command.account;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.account.contract.command.account.TerminateAccountCommand;
 import io.mojaloop.core.account.contract.exception.account.AccountIdNotFoundException;
-import io.mojaloop.core.account.domain.model.Account;
 import io.mojaloop.core.account.domain.repository.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -23,10 +23,12 @@ package io.mojaloop.core.participant.contract.data;
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
 import io.mojaloop.fspiop.spec.core.Currency;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 
+import java.time.Instant;
 import java.util.Objects;
 
-public record FspCurrencyData(FspCurrencyId fspCurrencyId, Currency currency, ActivationStatus activationStatus) {
+public record FspCurrencyData(FspCurrencyId fspCurrencyId, Currency currency, ActivationStatus activationStatus, Instant createdAt, FspId fspId) {
 
     @Override
     public boolean equals(Object o) {

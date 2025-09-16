@@ -3,7 +3,9 @@ package io.mojaloop.core.account.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.account.contract.data.ChartEntryData;
 import io.mojaloop.core.account.contract.exception.chart.ChartEntryDescriptionTooLongException;
 import io.mojaloop.core.account.contract.exception.chart.ChartEntryNameRequiredException;
 import io.mojaloop.core.account.contract.exception.chart.ChartEntryNameTooLongException;
@@ -15,11 +17,11 @@ import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -29,16 +31,14 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import static java.sql.Types.BIGINT;
 
 @Getter
-@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "uk_chart_entry_code", columnNames = {"chart_entry_code"}))
+@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChartEntry extends JpaEntity<ChartEntryId> {
+public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 
     @Id
     @JavaType(ChartEntryIdJavaType.class)
@@ -57,6 +57,7 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
     protected String description;
 
     @Column(name = "account_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH, updatable = false)
+    @Enumerated(EnumType.STRING)
     protected AccountType accountType;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -66,9 +67,6 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
     @ManyToOne
     @JoinColumn(name = "chart_id", nullable = false)
     protected Chart chart;
-
-    @OneToMany(mappedBy = "chartEntry", orphanRemoval = true, fetch = FetchType.EAGER)
-    protected Set<Account> accounts = new HashSet<>();
 
     public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType) {
 
@@ -92,6 +90,12 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
         this.code = code;
 
         return this;
+    }
+
+    @Override
+    public ChartEntryData convert() {
+
+        return new ChartEntryData(this.getId(), this.code, this.name, this.description, this.accountType, this.createdAt, this.chart.getId());
     }
 
     public ChartEntry description(String description) {
@@ -129,7 +133,7 @@ public class ChartEntry extends JpaEntity<ChartEntryId> {
             throw new ChartEntryNameTooLongException();
         }
 
-        this.name = name;
+        this.name = value;
 
         return this;
     }

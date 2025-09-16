@@ -32,4 +32,5 @@ public class ChartIdNotFoundException extends DomainException {
 
         super(new ErrorTemplate("CHART_ID_NOT_FOUND", TEMPLATE), chartId.getId().toString());
     }
+
 }

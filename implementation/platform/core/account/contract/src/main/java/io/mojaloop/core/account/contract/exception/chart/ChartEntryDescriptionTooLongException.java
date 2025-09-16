@@ -26,9 +26,12 @@ import io.mojaloop.component.misc.exception.InputException;
 
 public class ChartEntryDescriptionTooLongException extends InputException {
 
-    private static final String TEMPLATE = "Chart Entry Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
+    private static final String TEMPLATE =
+        "Chart Entry Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
 
     public ChartEntryDescriptionTooLongException() {
+
         super(new ErrorTemplate("CHART_ENTRY_DESCRIPTION_TOO_LONG", TEMPLATE));
     }
+
 }

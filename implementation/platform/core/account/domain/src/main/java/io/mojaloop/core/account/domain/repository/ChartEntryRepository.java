@@ -15,24 +15,31 @@ public interface ChartEntryRepository extends JpaRepository<ChartEntry, ChartEnt
 
     class Filters {
 
-        public static Specification<ChartEntry> withId(ChartEntryId id) {
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
-        }
+        public static Specification<ChartEntry> withAccountType(AccountType type) {
 
-        public static Specification<ChartEntry> withCode(ChartEntryCode code) {
-            return (root, query, cb) -> cb.equal(root.get("code"), code);
-        }
-
-        public static Specification<ChartEntry> withNameContains(String name) {
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+            return (root, query, cb) -> cb.equal(root.get("accountType"), type);
         }
 
         public static Specification<ChartEntry> withChartId(ChartId chartId) {
+
             return (root, query, cb) -> cb.equal(root.get("chart").get("id"), chartId);
         }
 
-        public static Specification<ChartEntry> withAccountType(AccountType type) {
-            return (root, query, cb) -> cb.equal(root.get("accountType"), type);
+        public static Specification<ChartEntry> withCode(ChartEntryCode code) {
+
+            return (root, query, cb) -> cb.equal(root.get("code"), code);
         }
+
+        public static Specification<ChartEntry> withId(ChartEntryId id) {
+
+            return (root, query, cb) -> cb.equal(root.get("id"), id);
+        }
+
+        public static Specification<ChartEntry> withNameContains(String name) {
+
+            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+        }
+
     }
+
 }

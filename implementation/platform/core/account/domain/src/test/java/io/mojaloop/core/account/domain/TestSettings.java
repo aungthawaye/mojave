@@ -4,9 +4,19 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.redis.RedisDefaults;
 import io.mojaloop.component.redis.RedissonOpsClientConfigurer;
+import io.mojaloop.core.account.domain.component.ledger.strategy.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 
 public class TestSettings implements AccountDomainConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
+
+        return new MySqlLedger.LedgerDbSettings(new MySqlLedger.LedgerDbSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_account?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
+            "password", false), new MySqlLedger.LedgerDbSettings.Pool("account-ledger", 2, 10));
+    }
 
     @Bean
     @Override
@@ -31,7 +41,7 @@ public class TestSettings implements AccountDomainConfiguration.RequiredSettings
 
         return new RoutingDataSourceConfigurer.WriteSettings(new RoutingDataSourceConfigurer.WriteSettings.Connection(
             "jdbc:mysql://localhost:3306/ml_account?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
-            "password", false), new RoutingDataSourceConfigurer.WriteSettings.Pool("account-read", 2, 4));
+            "password", false), new RoutingDataSourceConfigurer.WriteSettings.Pool("account-write", 2, 4));
     }
 
     @Bean
