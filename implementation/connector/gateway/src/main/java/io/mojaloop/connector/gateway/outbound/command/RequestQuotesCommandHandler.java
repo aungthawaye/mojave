@@ -2,6 +2,7 @@ package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.inbound.data.QuotesErrorResult;
+import io.mojaloop.connector.gateway.inbound.data.QuotesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -56,7 +57,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
 
-        AtomicReference<QuotesIDPutResponse> responseRef = new AtomicReference<>();
+        AtomicReference<QuotesResult> responseRef = new AtomicReference<>();
         AtomicReference<QuotesErrorResult> errorRef = new AtomicReference<>();
 
         var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
@@ -64,17 +65,17 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             @Override
             public void handle(String channel, Object message) {
 
-                if (message instanceof QuotesIDPutResponse response) {
-                    responseRef.set(response);
+                if (message instanceof QuotesResult result) {
+                    responseRef.set(result);
                 }
 
                 blocker.countDown();
             }
 
             @Override
-            public Class<QuotesIDPutResponse> messageType() {
+            public Class<QuotesResult> messageType() {
 
-                return QuotesIDPutResponse.class;
+                return QuotesResult.class;
             }
         }, this.outboundSettings.pubSubTimeout());
 
@@ -113,7 +114,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         }
 
         if (responseRef.get() != null) {
-            return new Output(responseRef.get());
+            return new Output(responseRef.get().response());
         }
 
         var error = errorRef.get();

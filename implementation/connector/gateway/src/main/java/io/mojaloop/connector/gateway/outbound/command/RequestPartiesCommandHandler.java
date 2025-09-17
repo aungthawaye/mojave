@@ -75,9 +75,9 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
             }
 
             @Override
-            public Class<PartiesTypeIDPutResponse> messageType() {
+            public Class<PartiesResult> messageType() {
 
-                return PartiesTypeIDPutResponse.class;
+                return PartiesResult.class;
             }
         }, this.outboundSettings.pubSubTimeout());
 
