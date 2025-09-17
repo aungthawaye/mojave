@@ -114,7 +114,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         }
 
         if (responseRef.get() != null) {
-            return new Output(responseRef.get().response());
+            return new Output(responseRef.get());
         }
 
         var error = errorRef.get();

@@ -42,9 +42,12 @@ public class RequestQuotesController {
         LOGGER.debug("Quote request: {}", request);
 
         try {
+
+            var id = UUID.randomUUID().toString();
+
             var quotesPostRequest = new QuotesPostRequest()
-                                        .quoteId(UUID.randomUUID().toString())
-                                        .transactionId(UUID.randomUUID().toString())
+                                        .quoteId(id)
+                                        .transactionId(id)
                                         .payee(new Party().partyIdInfo(request.payee()))
                                         .payer(new Party().partyIdInfo(request.payer()))
                                         .amountType(request.amountType())
@@ -58,7 +61,7 @@ public class RequestQuotesController {
             var output = this.requestQuotesCommand.execute(new RequestQuotesCommand.Input(new Destination(request.destination()),
                                                                                           quotesPostRequest));
 
-            return ResponseEntity.ok(output.response());
+            return ResponseEntity.ok(output.result());
 
         } catch (FspiopException e) {
             throw new RuntimeException(e);

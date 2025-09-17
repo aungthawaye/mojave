@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.UUID;
 
 @RestController
 public class RequestTransfersController {
@@ -56,7 +55,6 @@ public class RequestTransfersController {
         LOGGER.debug("Transfer request: {}", request);
 
         try {
-            var transferId = UUID.randomUUID().toString();
 
             var transfersPostRequest = new TransfersPostRequest();
             var extensionList = new ExtensionList();
@@ -70,23 +68,15 @@ public class RequestTransfersController {
             extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
             extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
-            var expireAfterSeconds = new Date(
-                Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
+            var expireAfterSeconds = new Date(Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
 
-            transfersPostRequest
-                .transferId(transferId)
-                .payerFsp(this.participantContext.fspCode())
-                .payeeFsp(request.destination)
-                .amount(request.amount)
-                .ilpPacket(request.ilpPacket)
-                .condition(request.condition)
-                .expiration(FspiopDates.forRequestBody(expireAfterSeconds))
-                .extensionList(extensionList);
+            transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination)
+                                .amount(request.amount).ilpPacket(request.ilpPacket).condition(request.condition)
+                                .expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
 
-            var output = this.requestTransfersCommand.execute(
-                new RequestTransfersCommand.Input(new Destination(request.destination()), transfersPostRequest));
+            var output = this.requestTransfersCommand.execute(new RequestTransfersCommand.Input(new Destination(request.destination()), transfersPostRequest));
 
-            return ResponseEntity.ok(output.response());
+            return ResponseEntity.ok(output.result());
 
         } catch (FspiopException e) {
             throw new RuntimeException(e);
@@ -94,6 +84,7 @@ public class RequestTransfersController {
     }
 
     public record Request(String destination,
+                          String transferId,
                           AmountType amountType,
                           Money amount,
                           PartyIdInfo payer,
