@@ -6,6 +6,7 @@ import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
+import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,13 +16,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
+@EnableAsync
+@EnableWebMvc
 @Import(value = {MiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.outbound"})
 public class ConnectorOutboundConfiguration
-    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans {
+    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     private final OutboundSettings outboundSettings;
 
@@ -35,6 +39,13 @@ public class ConnectorOutboundConfiguration
         this.outboundSettings = outboundSettings;
         this.objectMapper = objectMapper;
 
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(new String[]{"/lookup", "/quote", "/transfer"});
     }
 
     @Bean
@@ -73,7 +84,7 @@ public class ConnectorOutboundConfiguration
     }
 
     public interface RequiredSettings
-        extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings, SpringSecurityConfiguration.RequiredSettings {
+        extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
 
         OutboundSettings outboundSettings();
 
