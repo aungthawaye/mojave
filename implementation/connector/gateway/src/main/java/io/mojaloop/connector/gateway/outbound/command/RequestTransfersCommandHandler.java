@@ -2,6 +2,7 @@ package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.inbound.data.TransfersErrorResult;
+import io.mojaloop.connector.gateway.inbound.data.TransfersResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -56,7 +57,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
 
-        AtomicReference<TransfersIDPutResponse> responseRef = new AtomicReference<>();
+        AtomicReference<TransfersResult> responseRef = new AtomicReference<>();
         AtomicReference<TransfersErrorResult> errorRef = new AtomicReference<>();
 
         var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
@@ -64,7 +65,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
             @Override
             public void handle(String channel, Object message) {
 
-                if (message instanceof TransfersIDPutResponse response) {
+                if (message instanceof TransfersResult response) {
                     responseRef.set(response);
                 }
 
@@ -72,9 +73,9 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
             }
 
             @Override
-            public Class<TransfersIDPutResponse> messageType() {
+            public Class<TransfersResult> messageType() {
 
-                return TransfersIDPutResponse.class;
+                return TransfersResult.class;
             }
         }, this.outboundSettings.pubSubTimeout());
 
@@ -113,7 +114,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         }
 
         if (responseRef.get() != null) {
-            return new Output(responseRef.get());
+            return new Output(responseRef.get().response());
         }
 
         var error = errorRef.get();

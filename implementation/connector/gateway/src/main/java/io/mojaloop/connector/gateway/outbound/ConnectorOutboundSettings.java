@@ -94,12 +94,7 @@ class ConnectorOutboundSettings implements ConnectorOutboundConfiguration.Requir
         return new QuotesService.Settings(System.getenv("FSPIOP_QUOTES_URL"));
     }
 
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(new String[]{"/lookup", "/quote", "/transfer"});
-    }
 
     @Bean
     @Override

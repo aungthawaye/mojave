@@ -121,12 +121,6 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
         return new QuotesService.Settings(System.getenv("FSPIOP_QUOTES_URL"));
     }
 
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
-    }
 
     @Bean
     @Override

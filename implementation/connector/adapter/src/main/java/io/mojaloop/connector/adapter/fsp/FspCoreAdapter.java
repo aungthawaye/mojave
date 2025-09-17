@@ -68,8 +68,8 @@ public class FspCoreAdapter {
             LOGGER.info("Got parties from FSP Core: {}", result);
 
             var party = new Party().name(result.name()).personalInfo(result.personalInfo())
-                                   .partyIdInfo(new PartyIdInfo().partyIdType(partyIdType).partyIdentifier(partyId).partySubIdOrType(subId))
-                                   .supportedCurrencies(result.supportedCurrencies());
+                    .partyIdInfo(new PartyIdInfo().partyIdType(partyIdType).partyIdentifier(partyId).partySubIdOrType(subId))
+                    .supportedCurrencies(result.supportedCurrencies());
 
             var response = new PartiesTypeIDPutResponse(party);
 
@@ -94,7 +94,7 @@ public class FspCoreAdapter {
 
             LOGGER.info("Confirming transfer: {}", response);
             this.fspClient.patchTransfers(source, new Transfers.Patch.Request(transferId, response.getTransferState(), response.getCompletedTimestamp(),
-                                                                              response.getExtensionList()));
+                    response.getExtensionList()));
             LOGGER.info("Confirmed transfer: {}", response);
 
         } catch (FspiopException e) {
@@ -119,19 +119,23 @@ public class FspCoreAdapter {
             var quoteId = request.getQuoteId();
 
             var expiration = request.getExpiration();
-            var expiredAt = FspiopDates.fromRequestBody(expiration);
 
-            if (expiredAt.isBefore(Instant.now())) {
+            if (expiration != null) {
 
-                LOGGER.error("Quote request has expired.");
-                throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "Quote request (" + quoteId + ") has expired.");
+                var expiredAt = FspiopDates.fromRequestBody(expiration);
+
+                if (expiredAt.isBefore(Instant.now())) {
+
+                    LOGGER.error("Quote request has expired.");
+                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "Quote request (" + quoteId + ") has expired.");
+                }
             }
 
             var currency = request.getAmount().getCurrency();
 
             LOGGER.info("Getting quotes from FSP Core: {}", quoteId);
             var result = fspClient.postQuotes(source, new Quotes.Post.Request(quoteId, request.getPayer(), request.getPayee(), request.getAmountType(),
-                                                                              request.getAmount(), request.getExpiration()));
+                    request.getAmount(), request.getExpiration()));
             LOGGER.info("Got quotes from FSP Core: {}", result);
 
             var originalAmount = new BigDecimal(result.originalAmount().getAmount());
@@ -141,13 +145,13 @@ public class FspCoreAdapter {
             var transferAmount = new BigDecimal(result.transferAmount().getAmount());
 
             var agreement = new Agreement(quoteId, request.getPayer().getPartyIdInfo(), request.getPayee().getPartyIdInfo(), request.getAmountType(),
-                                          new Money(currency, originalAmount.toPlainString()), new Money(currency, payeeFspFee.toPlainString()),
-                                          new Money(currency, payeeFspCommission.toPlainString()), new Money(currency, payeeReceiveAmount.toPlainString()),
-                                          new Money(currency, transferAmount.toPlainString()), result.expiration());
+                    new Money(currency, originalAmount.toPlainString()), new Money(currency, payeeFspFee.toPlainString()),
+                    new Money(currency, payeeFspCommission.toPlainString()), new Money(currency, payeeReceiveAmount.toPlainString()),
+                    new Money(currency, transferAmount.toPlainString()), result.expiration());
 
             var payload = this.objectMapper.writeValueAsString(agreement);
             var preparePacket = Interledger.prepare(this.participantContext.ilpSecret(), Interledger.address(source.sourceFspCode()),
-                                                    UnsignedLong.valueOf(transferAmount.toPlainString()), payload, 900);
+                    UnsignedLong.valueOf(transferAmount.toPlainString()), payload, 900);
 
             var extensionList = new ExtensionList();
             // Payer related
@@ -161,10 +165,10 @@ public class FspCoreAdapter {
             extensionList.addExtensionItem(new Extension("payeePartyId", request.getPayee().getPartyIdInfo().getPartyIdentifier()));
 
             var response = new QuotesIDPutResponse().condition(preparePacket.base64Condition()).ilpPacket(preparePacket.base64PreparePacket())
-                                                    .expiration(result.expiration()).payeeFspCommission(new Money(currency, payeeFspCommission.toPlainString()))
-                                                    .payeeFspFee(new Money(currency, payeeFspFee.toPlainString()))
-                                                    .payeeReceiveAmount(new Money(currency, payeeReceiveAmount.toPlainString()))
-                                                    .transferAmount(new Money(currency, transferAmount.toPlainString())).extensionList(extensionList);
+                    .expiration(result.expiration()).payeeFspCommission(new Money(currency, payeeFspCommission.toPlainString()))
+                    .payeeFspFee(new Money(currency, payeeFspFee.toPlainString()))
+                    .payeeReceiveAmount(new Money(currency, payeeReceiveAmount.toPlainString()))
+                    .transferAmount(new Money(currency, transferAmount.toPlainString())).extensionList(extensionList);
 
             LOGGER.debug("Returning quotes: {}", response);
 
@@ -191,12 +195,16 @@ public class FspCoreAdapter {
             var transferId = request.getTransferId();
 
             var expiration = request.getExpiration();
-            var expiredAt = FspiopDates.fromRequestBody(expiration);
 
-            if (expiredAt.isBefore(Instant.now())) {
+            if(expiration != null) {
 
-                LOGGER.error("Transfer request has expired.");
-                throw new FspiopException(FspiopErrors.TRANSFER_EXPIRED, "Transfer request (" + transferId + ") has expired.");
+                var expiredAt = FspiopDates.fromRequestBody(expiration);
+
+                if (expiredAt.isBefore(Instant.now())) {
+
+                    LOGGER.error("Transfer request has expired.");
+                    throw new FspiopException(FspiopErrors.TRANSFER_EXPIRED, "Transfer request (" + transferId + ") has expired.");
+                }
             }
 
             var ilpConditionFromRequest = request.getCondition();
@@ -210,8 +218,8 @@ public class FspCoreAdapter {
             LOGGER.debug("ILP Packet Data : [{}]", locallyRebuiltIlpPacketData);
 
             var fulfillment = Interledger.fulfill(this.participantContext.ilpSecret(), Interledger.address(source.sourceFspCode()),
-                                                  UnsignedLong.valueOf(request.getAmount().getAmount()), locallyRebuiltIlpPacketData, ilpConditionFromRequest,
-                                                  ilpPacketFromRequest, 900);
+                    UnsignedLong.valueOf(request.getAmount().getAmount()), locallyRebuiltIlpPacketData, ilpConditionFromRequest,
+                    ilpPacketFromRequest, 900);
             LOGGER.debug("Fulfillment : [{}]", fulfillment);
 
             if (!fulfillment.valid()) {
@@ -222,24 +230,27 @@ public class FspCoreAdapter {
 
             var agreement = this.objectMapper.readValue(locallyRebuiltIlpPacketData, Agreement.class);
 
-            var quoteExpiredAt = FspiopDates.fromRequestBody(agreement.expiration());
+            if(agreement.expiration() != null) {
 
-            if (quoteExpiredAt.isBefore(Instant.now())) {
+                var quoteExpiredAt = FspiopDates.fromRequestBody(agreement.expiration());
 
-                LOGGER.error("Quote has expired.");
-                throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "Quote has already expired. Transfer (" + transferId + ") cannot be performed.");
+                if (quoteExpiredAt.isBefore(Instant.now())) {
+
+                    LOGGER.error("Quote has expired.");
+                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "Quote has already expired. Transfer (" + transferId + ") cannot be performed.");
+                }
             }
 
             LOGGER.info("Posting transfers to FSP Core: {}", agreement);
             var result = this.fspClient.postTransfers(source, new Transfers.Post.Request(request.getTransferId(), agreement.quoteId(), agreement.payer(),
-                                                                                         agreement.payee(), request.getAmount(), request.getExtensionList()));
+                    agreement.payee(), request.getAmount(), request.getExtensionList()));
             LOGGER.info("Got transfers from FSP Core: {}", result);
 
             var response = new TransfersIDPutResponse();
 
             response.fulfilment(fulfillment.base64Fulfillment()).transferState(TransferState.RESERVED).completedTimestamp(FspiopDates.forRequestBody())
                     .extensionList(new ExtensionList().addExtensionItem(new Extension("homeTransactionId", UUID.randomUUID().toString()))
-                                                      .addExtensionItem(new Extension("transferId", transferId)));
+                            .addExtensionItem(new Extension("transferId", transferId)));
 
             LOGGER.debug("Returning transfers: {}", response);
 

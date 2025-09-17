@@ -7,7 +7,7 @@ import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration
+
 @Import(value = {MiscConfiguration.class, FspiopCommonConfiguration.class})
 public class ConnectorGatewayConfiguration {
 
