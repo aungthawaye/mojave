@@ -2,8 +2,8 @@ package io.mojaloop.core.participant.domain.query;
 
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.contract.data.OracleData;
-import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
-import io.mojaloop.core.participant.contract.exception.OracleTypeNotFoundException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleTypeNotFoundException;
 import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.domain.model.oracle.Oracle;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;

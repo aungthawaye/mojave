@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.contract.command.hub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotNull;
 

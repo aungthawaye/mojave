@@ -1,6 +1,7 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.inbound.data.PartiesErrorResult;
 import io.mojaloop.connector.gateway.inbound.data.PartiesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
@@ -57,7 +58,7 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         var blocker = new CountDownLatch(1);
 
         AtomicReference<PartiesResult> responseRef = new AtomicReference<>();
-        AtomicReference<ErrorInformationObject> errorRef = new AtomicReference<>();
+        AtomicReference<PartiesErrorResult> errorRef = new AtomicReference<>();
 
         var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
 
@@ -87,7 +88,7 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
                 LOGGER.debug("Error message from channel : {}, message : {}", channel, message);
 
-                if (message instanceof ErrorInformationObject response) {
+                if (message instanceof PartiesErrorResult response) {
                     errorRef.set(response);
                 }
 
@@ -127,9 +128,9 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         }
 
         var error = errorRef.get();
-        var errorDefinition = FspiopErrors.find(error.getErrorInformation().getErrorCode());
+        var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.getErrorInformation().getErrorDescription()));
+        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

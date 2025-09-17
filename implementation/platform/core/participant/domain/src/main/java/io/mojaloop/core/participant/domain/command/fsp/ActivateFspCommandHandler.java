@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCommand;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,9 +50,7 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
 
         LOGGER.info("Executing ActivateFspCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         fsp.activate();
 

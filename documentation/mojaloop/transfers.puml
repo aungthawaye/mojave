@@ -66,13 +66,13 @@ group #f7f7ff PrepareFundCommand
 
     Transfer -> Transfer : Get **PostingFlow** for the transfer preparation.
 
-    Transfer -> Account : [Reserve for **FSP1**]Request to do the posting and send \n **PostingRequest** with **FSP1(POSITION)** : Debit then **FSP1(PAYABLE)** : Credit
+    Transfer -> Account : [Reserve for **FSP1**]Request to do the posting and send \n **PostingRequest** with **Debit FSP1(POSITION)** then **Credit FSP1(PAYABLE)**
 
     Account -> Account : Verify the **PostingRequest**
 
     Account -> Account : Create **JournalEntry** with __STATUS (DRAFT)__ and do the postings.
 
-    Account -> Account : Execute the ledger service to \n **FSP1(POSITION)** : Debit then **FSP1(PAYABLE)** : Credit
+    Account -> Account : Execute the ledger service to \n **Debit FSP1(POSITION)** then **Credit FSP1(PAYABLE)**
 
     Account -> Account : Mark **JournalEntry** as __STATUS (POSTED)__
 

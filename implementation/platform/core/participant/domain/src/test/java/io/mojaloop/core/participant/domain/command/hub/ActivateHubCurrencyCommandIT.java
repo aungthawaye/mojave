@@ -20,14 +20,14 @@
 
 package io.mojaloop.core.participant.domain.command.hub;
 
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.data.HubData;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
-import io.mojaloop.core.participant.contract.exception.HubLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import io.mojaloop.core.participant.contract.query.HubQuery;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -53,7 +53,7 @@ public class ActivateHubCurrencyCommandIT {
     private HubQuery hubQuery;
 
     @Test
-    public void activate_flow_succeeds() throws HubLimitReachedException, CurrencyAlreadySupportedException, HubIdNotFoundException {
+    public void activate_flow_succeeds() throws HubCountLimitReachedException, FspCurrencyAlreadySupportedException, HubIdNotFoundException {
         var created = createHubCommand.execute(new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD}));
         addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
 

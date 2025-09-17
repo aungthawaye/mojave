@@ -20,14 +20,14 @@
 
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.ChangeEndpointCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ public class ChangeFspEndpointCommandIT {
     }
 
     private CreateFspCommand.Output createFspWithEndpoint(String code, EndpointType type, String baseUrl)
-        throws CurrencyAlreadySupportedException, EndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+        throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
 
         var input = new CreateFspCommand.Input(
             new FspCode(code),

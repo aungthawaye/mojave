@@ -1,8 +1,8 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
 import io.mojaloop.core.participant.contract.command.fsp.AddEndpointCommand;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class AddEndpointController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddEndpointCommand.Output execute(@Valid @RequestBody AddEndpointCommand.Input input)
-        throws FspIdNotFoundException, EndpointAlreadyConfiguredException {
+        throws FspIdNotFoundException, FspEndpointAlreadyConfiguredException {
 
         return this.addEndpointCommand.execute(input);
 

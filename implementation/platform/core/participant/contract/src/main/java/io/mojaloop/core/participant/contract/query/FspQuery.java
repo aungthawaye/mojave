@@ -23,8 +23,8 @@ package io.mojaloop.core.participant.contract.query;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.contract.exception.FspCodeNotFoundException;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCodeNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 
 import java.util.List;
 

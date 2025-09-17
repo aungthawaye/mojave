@@ -22,16 +22,13 @@ package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
-import io.mojaloop.core.participant.contract.exception.OracleAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleAlreadyExistsException;
 import io.mojaloop.core.participant.domain.model.oracle.Oracle;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static io.mojaloop.core.participant.domain.repository.OracleRepository.Filters.withType;
 
 @Service
 public class CreateOracleCommandHandler implements CreateOracleCommand {
@@ -41,6 +38,7 @@ public class CreateOracleCommandHandler implements CreateOracleCommand {
     private final OracleRepository oracleRepository;
 
     public CreateOracleCommandHandler(OracleRepository oracleRepository) {
+
         assert oracleRepository != null;
         this.oracleRepository = oracleRepository;
     }
@@ -49,6 +47,7 @@ public class CreateOracleCommandHandler implements CreateOracleCommand {
     @Transactional
     @Write
     public Output execute(Input input) throws OracleAlreadyExistsException {
+
         LOGGER.info("Executing CreateOracleCommand with input: {}", input);
 
         // Check if an Oracle already exists for the given PartyIdType
@@ -64,4 +63,5 @@ public class CreateOracleCommandHandler implements CreateOracleCommand {
         LOGGER.info("Completed CreateOracleCommand with input: {}", input);
         return new Output(oracle.getId());
     }
+
 }

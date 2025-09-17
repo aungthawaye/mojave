@@ -23,7 +23,7 @@ package io.mojaloop.core.participant.domain.command.oracle;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.contract.command.oracle.ActivateOracleCommand;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
-import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.junit.jupiter.api.Test;

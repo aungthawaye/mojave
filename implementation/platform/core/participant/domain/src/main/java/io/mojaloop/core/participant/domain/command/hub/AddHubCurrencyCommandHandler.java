@@ -22,8 +22,8 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class AddHubCurrencyCommandHandler implements AddHubCurrencyCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws HubIdNotFoundException, CurrencyAlreadySupportedException {
+    public Output execute(Input input) throws HubIdNotFoundException, FspCurrencyAlreadySupportedException {
 
         LOGGER.info("Executing AddHubCurrencyCommand with input: {}", input);
 
@@ -60,4 +60,5 @@ public class AddHubCurrencyCommandHandler implements AddHubCurrencyCommand {
 
         return new Output(supportedCurrency.getId());
     }
+
 }

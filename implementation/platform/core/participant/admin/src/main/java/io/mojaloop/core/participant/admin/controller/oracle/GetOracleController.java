@@ -2,7 +2,7 @@ package io.mojaloop.core.participant.admin.controller.oracle;
 
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.contract.data.OracleData;
-import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.OracleQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -26,10 +26,10 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.FspCurrencyIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
-import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.contract.exception.CannotActivateSupportedCurrencyException;
+import io.mojaloop.core.participant.contract.data.FspCurrencyData;
+import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -53,9 +53,9 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_currency", uniqueConstraints = {@UniqueConstraint(name = "uk_fsp_currency", columnNames = {"fsp_currency_id", "currency"})})
+@Table(name = "pcp_fsp_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_currency_fsp_currency_id_currency_UK", columnNames = {"fsp_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataConversion<FspData.FspCurrencyData> {
+public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataConversion<FspCurrencyData> {
 
     @Id
     @JavaType(FspCurrencyIdJavaType.class)
@@ -91,9 +91,9 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     }
 
     @Override
-    public FspData.FspCurrencyData convert() {
+    public FspCurrencyData convert() {
 
-        return new FspData.FspCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus());
+        return new FspCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus(), this.createdAt, this.fsp.getId());
     }
 
     public boolean isActive() {
@@ -101,11 +101,11 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
         return this.activationStatus == ActivationStatus.ACTIVE;
     }
 
-    void activate() throws CannotActivateSupportedCurrencyException {
+    void activate() throws CannotActivateFspCurrencyException {
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateSupportedCurrencyException(this.currency);
+            throw new CannotActivateFspCurrencyException(this.currency);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;

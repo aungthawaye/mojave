@@ -20,12 +20,12 @@
 
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.core.common.datatype.enumeration.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -49,7 +49,7 @@ public class CreateFspCommandIT {
 
     @Test
     public void createTwoFsps_success_persistsAndReturnsIds()
-        throws EndpointAlreadyConfiguredException, CurrencyAlreadySupportedException, FspCodeAlreadyExistsException {
+        throws FspEndpointAlreadyConfiguredException, FspCurrencyAlreadySupportedException, FspCodeAlreadyExistsException {
         // Arrange
         assertNotNull(createFspCommand);
 
@@ -93,7 +93,7 @@ public class CreateFspCommandIT {
                                                                     new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://h1")});
 
         // Assert
-        assertThrows(CurrencyAlreadySupportedException.class, () -> this.createFspCommand.execute(bad));
+        assertThrows(FspCurrencyAlreadySupportedException.class, () -> this.createFspCommand.execute(bad));
     }
 
     @Test
@@ -105,12 +105,12 @@ public class CreateFspCommandIT {
                                                                     new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://h2")});
 
         // Assert
-        assertThrows(EndpointAlreadyConfiguredException.class, () -> this.createFspCommand.execute(bad));
+        assertThrows(FspEndpointAlreadyConfiguredException.class, () -> this.createFspCommand.execute(bad));
     }
 
     @Test
     public void duplicateFspCode_throwsFspCodeAlreadyExistsException()
-        throws EndpointAlreadyConfiguredException, CurrencyAlreadySupportedException, FspCodeAlreadyExistsException {
+        throws FspEndpointAlreadyConfiguredException, FspCurrencyAlreadySupportedException, FspCodeAlreadyExistsException {
         // Arrange
         CreateFspCommand.Input first = new CreateFspCommand.Input(new FspCode("dupFsp"), "First", new Currency[]{Currency.USD},
                                                                   new CreateFspCommand.Input.Endpoint[]{

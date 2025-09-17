@@ -2,9 +2,8 @@ package io.mojaloop.core.common.datatype.type.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
-import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
+import io.mojaloop.core.common.datatype.exception.account.AccountCodeValueRequiredException;
+import io.mojaloop.core.common.datatype.exception.account.AccountCodeValueTooLargeException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,14 +14,12 @@ public record AccountCode(@JsonProperty(required = true) @NotNull @NotBlank @Siz
 
     public AccountCode {
 
-        assert value != null;
-
-        if (value.isBlank()) {
-            throw new BlankOrEmptyInputException("Account Code");
+        if (value == null || value.isBlank()) {
+            throw new AccountCodeValueRequiredException();
         }
 
         if (value.length() > StringSizeConstraints.MAX_CODE_LENGTH) {
-            throw new TextTooLargeException("Account Code", StringSizeConstraints.MAX_CODE_LENGTH);
+            throw new AccountCodeValueTooLargeException();
         }
 
     }

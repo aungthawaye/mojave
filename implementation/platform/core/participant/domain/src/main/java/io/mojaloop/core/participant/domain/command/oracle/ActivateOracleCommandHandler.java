@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.oracle.ActivateOracleCommand;
-import io.mojaloop.core.participant.contract.exception.OracleIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +37,7 @@ public class ActivateOracleCommandHandler implements ActivateOracleCommand {
     private final OracleRepository oracleRepository;
 
     public ActivateOracleCommandHandler(OracleRepository oracleRepository) {
+
         assert oracleRepository != null;
         this.oracleRepository = oracleRepository;
     }
@@ -45,11 +46,12 @@ public class ActivateOracleCommandHandler implements ActivateOracleCommand {
     @Transactional
     @Write
     public Output execute(Input input) throws OracleIdNotFoundException {
+
         LOGGER.info("Executing ActivateOracleCommand with input: {}", input);
 
         var oracle = this.oracleRepository
-                .findById(input.oracleId())
-                .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+                         .findById(input.oracleId())
+                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.activate();
         this.oracleRepository.save(oracle);
@@ -57,4 +59,5 @@ public class ActivateOracleCommandHandler implements ActivateOracleCommand {
         LOGGER.info("Completed ActivateOracleCommand with input: {}", input);
         return new Output();
     }
+
 }

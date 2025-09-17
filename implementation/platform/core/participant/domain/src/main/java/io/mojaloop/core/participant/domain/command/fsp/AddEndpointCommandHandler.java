@@ -22,8 +22,8 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.AddEndpointCommand;
-import io.mojaloop.core.participant.contract.exception.EndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class AddEndpointCommandHandler implements AddEndpointCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws EndpointAlreadyConfiguredException, FspIdNotFoundException {
+    public Output execute(Input input) throws FspEndpointAlreadyConfiguredException, FspIdNotFoundException {
 
         LOGGER.info("Executing ConfigureEndpointCommand with input: {}", input);
 

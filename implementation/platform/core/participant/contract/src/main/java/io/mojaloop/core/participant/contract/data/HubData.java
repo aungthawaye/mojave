@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.participant.contract.data;
 
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.HubCurrencyId;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.fspiop.spec.core.Currency;

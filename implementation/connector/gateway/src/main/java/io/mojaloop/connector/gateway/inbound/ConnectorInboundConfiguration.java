@@ -9,7 +9,6 @@ import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
 import io.mojaloop.connector.adapter.ConnectorAdapterConfiguration;
-import io.mojaloop.connector.gateway.inbound.component.FspiopInboundErrorWriter;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
@@ -56,7 +55,7 @@ public class ConnectorInboundConfiguration
     @Override
     public AuthenticationErrorWriter authenticationErrorWriter() {
 
-        return new FspiopInboundErrorWriter(this.objectMapper);
+        return new FspiopInboundGatekeeper.ErrorWriter(this.objectMapper);
     }
 
     @Bean
@@ -112,9 +111,8 @@ public class ConnectorInboundConfiguration
                                                                                                  truststoreSettings.password),
                                                                                              new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
                                                                                                  keystoreSettings.contentType(),
-                                                                                                 keystoreSettings.contentValue(),
-                                                                                                 keystoreSettings.password, keystoreSettings.keyAlias()
-                                                                                             ));
+                                                                                                 keystoreSettings.contentValue(), keystoreSettings.password,
+                                                                                                 keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
 

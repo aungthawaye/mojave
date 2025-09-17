@@ -2,7 +2,7 @@ package io.mojaloop.core.participant.intercom.controller;
 
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.contract.exception.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

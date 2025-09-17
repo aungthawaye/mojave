@@ -6,7 +6,6 @@ import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
-import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundErrorWriter;
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,20 +18,16 @@ import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration
 @Configuration(proxyBeanMethods = false)
-@Import(value = {
-    MiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
+@Import(value = {MiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.outbound"})
 public class ConnectorOutboundConfiguration
-    implements MiscConfiguration.RequiredBeans,
-               FspiopInvokerConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredBeans {
+    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans {
 
     private final OutboundSettings outboundSettings;
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorOutboundConfiguration(OutboundSettings outboundSettings,
-                                          ObjectMapper objectMapper) {
+    public ConnectorOutboundConfiguration(OutboundSettings outboundSettings, ObjectMapper objectMapper) {
 
         assert outboundSettings != null;
         assert objectMapper != null;
@@ -46,7 +41,7 @@ public class ConnectorOutboundConfiguration
     @Override
     public AuthenticationErrorWriter authenticationErrorWriter() {
 
-        return new FspiopOutboundErrorWriter(this.objectMapper);
+        return new FspiopOutboundGatekeeper.ErrorWriter(this.objectMapper);
     }
 
     @Bean
@@ -77,8 +72,8 @@ public class ConnectorOutboundConfiguration
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings,
-                                              SpringSecurityConfiguration.RequiredSettings {
+    public interface RequiredSettings
+        extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings, SpringSecurityConfiguration.RequiredSettings {
 
         OutboundSettings outboundSettings();
 

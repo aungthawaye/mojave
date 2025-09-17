@@ -1,8 +1,8 @@
 package io.mojaloop.core.participant.admin.controller.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class AddHubCurrencyController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddHubCurrencyCommand.Output execute(@Valid @RequestBody AddHubCurrencyCommand.Input input)
-        throws HubIdNotFoundException, CurrencyAlreadySupportedException {
+        throws HubIdNotFoundException, FspCurrencyAlreadySupportedException {
 
         return this.addHubCurrencyCommand.execute(input);
     }

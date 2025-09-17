@@ -1,6 +1,7 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.inbound.data.QuotesErrorResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -56,7 +57,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         var blocker = new CountDownLatch(1);
 
         AtomicReference<QuotesIDPutResponse> responseRef = new AtomicReference<>();
-        AtomicReference<ErrorInformationObject> errorRef = new AtomicReference<>();
+        AtomicReference<QuotesErrorResult> errorRef = new AtomicReference<>();
 
         var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
 
@@ -82,7 +83,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             @Override
             public void handle(String channel, Object message) {
 
-                if (message instanceof ErrorInformationObject response) {
+                if (message instanceof QuotesErrorResult response) {
                     errorRef.set(response);
                 }
 
@@ -116,10 +117,10 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         }
 
         var error = errorRef.get();
-        var errorDefinition = FspiopErrors.find(error.getErrorInformation().getErrorCode());
+        var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
         throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(),
-                                                      error.getErrorInformation().getErrorDescription()));
+                                                      error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

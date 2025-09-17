@@ -26,7 +26,7 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.HubCurrencyIdJavaType;
-import io.mojaloop.core.common.datatype.enumeration.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.HubCurrencyId;
 import io.mojaloop.core.participant.contract.data.HubData;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -52,7 +52,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_hub_currency", uniqueConstraints = {@UniqueConstraint(name = "uk_hub_currency", columnNames = {"hub_currency_id", "currency"})})
+@Table(name = "pcp_hub_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_hub_currency_hub_currency_id_currency_UK", columnNames = {"hub_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataConversion<io.mojaloop.core.participant.contract.data.HubData.HubCurrencyData> {
 

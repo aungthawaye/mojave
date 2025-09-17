@@ -1,7 +1,8 @@
 package io.mojaloop.core.participant.admin.controller.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class CreateHubController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CreateHubCommand.Output execute(@Valid @RequestBody CreateHubCommand.Input input)
-        throws CurrencyAlreadySupportedException, io.mojaloop.core.participant.contract.exception.HubLimitReachedException {
+        throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
 
         return this.createHubCommand.execute(input);
     }

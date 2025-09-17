@@ -24,13 +24,13 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
-import io.mojaloop.component.misc.exception.input.BlankOrEmptyInputException;
-import io.mojaloop.component.misc.exception.input.TextTooLargeException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNameRequiredException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNameTooLongException;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.HubIdJavaType;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.data.HubData;
-import io.mojaloop.core.participant.contract.exception.CurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -72,7 +72,7 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
     @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, mappedBy = "hub", targetEntity = HubCurrency.class, fetch = FetchType.EAGER)
     protected Set<HubCurrency> currencies = new HashSet<>();
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
@@ -100,13 +100,13 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
         return true;
     }
 
-    public HubCurrency addCurrency(Currency currency) throws CurrencyAlreadySupportedException {
+    public HubCurrency addCurrency(Currency currency) throws FspCurrencyAlreadySupportedException {
 
         assert currency != null;
 
         if (this.isCurrencySupported(currency)) {
 
-            throw new CurrencyAlreadySupportedException(currency);
+            throw new FspCurrencyAlreadySupportedException(currency);
         }
 
         var supportedCurrency = new HubCurrency(this, currency);
@@ -157,11 +157,11 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
         var value = name.trim();
 
         if (value.isEmpty()) {
-            throw new BlankOrEmptyInputException("Hub Name");
+            throw new HubNameRequiredException();
         }
 
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
-            throw new TextTooLargeException("Hub Name", StringSizeConstraints.MAX_NAME_TITLE_LENGTH);
+            throw new HubNameTooLongException();
         }
 
         this.name = value;

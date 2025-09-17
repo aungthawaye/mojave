@@ -23,7 +23,7 @@ package io.mojaloop.core.participant.contract.command.hub;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
-import io.mojaloop.core.participant.contract.exception.HubIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
