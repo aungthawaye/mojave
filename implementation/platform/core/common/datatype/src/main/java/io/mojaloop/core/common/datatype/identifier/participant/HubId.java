@@ -26,9 +26,9 @@ import io.mojaloop.component.misc.ddd.EntityId;
 public class HubId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public HubId(Long id) {
+    public HubId() {
 
-        super(id);
+        super(1L);
     }
 
 }

@@ -4,7 +4,6 @@ CREATE TABLE `acc_chart`
 (
     `chart_id`      bigint      NOT NULL,
     `name`          varchar(64) NOT NULL,
-    `type`          varchar(32) NOT NULL,
     `created_at`    bigint      NOT NULL,
     `rec_created_at` bigint DEFAULT NULL,
     `rec_updated_at` bigint DEFAULT NULL,
@@ -62,7 +61,7 @@ CREATE TABLE `acc_account`
     KEY `acc_account_owner_id_IDX` (`owner_id`),
     KEY `acc_account_currency_IDX` (`currency`),
     KEY `acc_account_acc_chart_entry_FK` (`chart_entry_id`),
-    CONSTRAINT `acc_account_acc_chart_entry_FK` FOREIGN KEY (`chart_entry_id`) REFERENCES `acc_chart_entry` (`chart_entry_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `acc_account_acc_chart_entry_FK` FOREIGN KEY (`chart_entry_id`) REFERENCES `acc_chart_entry` (`chart_entry_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -111,7 +110,12 @@ CREATE TABLE `acc_ledger_movement`
     `rec_updated_at`    bigint DEFAULT NULL,
     `rec_version`       int    DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `acc_ledger_movement_acc_account_FK` (`account_id`),
+    UNIQUE KEY `acc_account_account_id_side_transaction_id_UK` (`account_id`, `side`, `transaction_id`),
+    KEY `acc_account_transaction_id_IDX` (`transaction_id`),
+    KEY `acc_account_transaction_at_IDX` (`transaction_at`),
+    KEY `acc_account_account_id_transaction_at_IDX` (`account_id`, `transaction_at`),
+    KEY `acc_account_account_id` (`account_id`),
+    KEY `acc_account_created_at` (`created_at`),
     CONSTRAINT `acc_ledger_movement_acc_account_FK` FOREIGN KEY (`account_id`) REFERENCES `acc_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

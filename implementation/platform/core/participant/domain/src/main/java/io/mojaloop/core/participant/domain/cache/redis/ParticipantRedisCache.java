@@ -41,8 +41,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
-@Qualifier(ParticipantCache.Qualifiers.REDIS)
 public class ParticipantRedisCache implements ParticipantCache {
 
     private final FspRepository fspRepository;

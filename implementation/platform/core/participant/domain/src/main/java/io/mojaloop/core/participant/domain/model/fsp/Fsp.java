@@ -84,7 +84,6 @@ import static java.sql.Types.BIGINT;
  */
 @Getter
 @Entity
-@EntityListeners(value = {FspCacheUpdater.class})
 @Table(name = "pcp_fsp", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_fsp_code_UK", columnNames = {"fsp_code"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {

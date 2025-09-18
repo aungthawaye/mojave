@@ -1,6 +1,27 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
 package io.mojaloop.connector.gateway.outbound.controller;
 
+import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestQuotesCommand;
+import io.mojaloop.connector.gateway.outbound.event.RequestQuotesEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.spec.core.AmountType;
@@ -28,11 +49,14 @@ public class RequestQuotesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestQuotesController.class.getName());
 
     private final RequestQuotesCommand requestQuotesCommand;
+    private final EventPublisher eventPublisher;
 
-    public RequestQuotesController(RequestQuotesCommand requestQuotesCommand) {
+    public RequestQuotesController(RequestQuotesCommand requestQuotesCommand, EventPublisher eventPublisher) {
 
         assert requestQuotesCommand != null;
+        assert eventPublisher != null;
         this.requestQuotesCommand = requestQuotesCommand;
+        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping("/quote")
@@ -58,8 +82,10 @@ public class RequestQuotesController {
                                                              .initiatorType(TransactionInitiatorType.CONSUMER)
                                                         );
 
-            var output = this.requestQuotesCommand.execute(new RequestQuotesCommand.Input(new Destination(request.destination()),
-                                                                                          quotesPostRequest));
+            var input = new RequestQuotesCommand.Input(new Destination(request.destination()), quotesPostRequest);
+            var output = this.requestQuotesCommand.execute(input);
+
+            this.eventPublisher.publish(new RequestQuotesEvent(input));
 
             return ResponseEntity.ok(output.result());
 

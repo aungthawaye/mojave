@@ -10,7 +10,7 @@
     <artifactId>parent-pom</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>Mojaloop - Java Edition</name>
+    <name>Mojaloop - Java Edition (MOJAVE)</name>
     <modules>
         <module>component</module>
         <module>platform</module>
@@ -223,6 +223,16 @@
             <dependency>
                 <groupId>io.mojaloop.platform.core.settlement</groupId>
                 <artifactId>settlement-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transaction</groupId>
+                <artifactId>transaction-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transfer</groupId>
+                <artifactId>transfer-pom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

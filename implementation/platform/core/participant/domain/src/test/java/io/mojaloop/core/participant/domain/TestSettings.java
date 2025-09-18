@@ -22,20 +22,9 @@ package io.mojaloop.core.participant.domain;
 
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.component.redis.RedisDefaults;
-import io.mojaloop.component.redis.RedissonOpsClientConfigurer;
 import org.springframework.context.annotation.Bean;
 
 public class TestSettings implements ParticipantDomainConfiguration.RequiredSettings {
-
-    @Bean
-    @Override
-    public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
-
-        return new RedissonOpsClientConfigurer.Settings(new String[]{"redis://localhost:6379"}, false, RedisDefaults.CODEC,
-                                                        RedisDefaults.EXECUTOR_COUNT, RedisDefaults.CONNECTION_POOL_SIZE,
-                                                        RedisDefaults.CONNECTION_POOL_MIN_IDLE);
-    }
 
     @Bean
     @Override

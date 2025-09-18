@@ -21,13 +21,13 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
-import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
+import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.data.HubData;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.contract.query.HubQuery;
 import io.mojaloop.core.participant.domain.TestConfiguration;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -37,7 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
@@ -45,29 +46,28 @@ public class ActivateHubCurrencyCommandIT {
 
     @Autowired
     private CreateHubCommand createHubCommand;
+
     @Autowired
     private AddHubCurrencyCommand addHubCurrencyCommand;
+
     @Autowired
     private ActivateHubCurrencyCommand activateHubCurrencyCommand;
+
     @Autowired
     private HubQuery hubQuery;
 
     @Test
-    public void activate_flow_succeeds() throws HubCountLimitReachedException, FspCurrencyAlreadySupportedException, HubIdNotFoundException {
+    public void activate_flow_succeeds() throws HubCountLimitReachedException, FspCurrencyAlreadySupportedException, HubNotFoundException {
+
         var created = createHubCommand.execute(new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD}));
         addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
 
         var actOut = activateHubCurrencyCommand.execute(new ActivateHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
         assertTrue(actOut.activated());
 
-        HubData hubData = hubQuery.get(created.hubId());
+        HubData hubData = hubQuery.get();
         var mmk = java.util.Arrays.stream(hubData.currencies()).filter(c -> c.currency() == Currency.MMK).findFirst().orElseThrow();
         assertEquals(ActivationStatus.ACTIVE, mmk.activationStatus());
     }
 
-    @Test
-    public void invalidHubId_activation_throwsHubIdNotFoundException() {
-        var badHubId = new io.mojaloop.core.common.datatype.identifier.participant.HubId(-123L);
-        assertThrows(HubIdNotFoundException.class, () -> activateHubCurrencyCommand.execute(new ActivateHubCurrencyCommand.Input(badHubId, Currency.USD)));
-    }
 }

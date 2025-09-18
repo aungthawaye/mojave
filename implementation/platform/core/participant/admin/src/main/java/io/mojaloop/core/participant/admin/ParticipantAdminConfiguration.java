@@ -1,15 +1,34 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.core.participant.admin;
 
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
-import io.mojaloop.core.participant.admin.component.BlindGatekeeper;
+import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.core.participant.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.participant.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.participant.admin")
 @Import(value = {ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantAdminConfiguration implements ParticipantDomainConfiguration.RequiredBeans,
-                                                      SpringSecurityConfiguration.RequiredBeans {
+                                                      SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -39,7 +58,14 @@ public class ParticipantAdminConfiguration implements ParticipantDomainConfigura
     @Override
     public Authenticator authenticator() {
 
-        return new BlindGatekeeper();
+        return new EmptyGatekeeper();
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean
@@ -48,8 +74,7 @@ public class ParticipantAdminConfiguration implements ParticipantDomainConfigura
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
-                                              SpringSecurityConfiguration.RequiredSettings {
+    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

@@ -18,6 +18,8 @@
         <module>lookup</module>
         <module>quoting</module>
         <module>settlement</module>
+        <module>transaction</module>
+        <module>transfer</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

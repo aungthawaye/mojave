@@ -11,6 +11,7 @@
         <module name="mod-account-domain" />
         <module name="mod-component-flyway" />
         <module name="mod-component-vault" />
+        <module name="transfer-pom" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-common-datatype-converter" />
@@ -34,6 +35,7 @@
         <module name="mod-account-intercom" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
+        <module name="transaction-pom" />
         <module name="mod-component-retrofit" />
         <module name="mod-quoting-contract" />
         <module name="mod-participant-domain" />
@@ -138,6 +140,8 @@
       <module name="quoting-pom" options="-parameters" />
       <module name="settlement-pom" options="-parameters" />
       <module name="shared-pom" options="-parameters" />
+      <module name="transaction-pom" options="-parameters" />
+      <module name="transfer-pom" options="-parameters" />
     </option>
   </component>
 </project>

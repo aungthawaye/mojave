@@ -100,8 +100,13 @@ BEGIN
                 BEGIN
                     /* Any SQL problem → mark and bail */
                     ROLLBACK;
-                    SET v_error = 1;
-                    SET v_status_code = 'SQL_ERROR';
+                    SELECT 'ERROR'          AS status,
+                           v_status_code    AS code,
+                           v_err_account_id AS account_id,
+                           v_err_side       AS side,
+                           v_err_amount     AS amount,
+                           v_err_debits     AS debits,
+                           v_err_credits    AS credits;
                 END;
 
             START TRANSACTION;
@@ -189,6 +194,8 @@ BEGIN
             DECLARE r_debits DECIMAL(34, 4);
             DECLARE r_credits DECIMAL(34, 4);
 
+            DECLARE r_lock INT DEFAULT 0;
+
             DECLARE cur_rev CURSOR FOR
                 SELECT account_id, side, amount, old_debits, old_credits FROM tmp_movements;
             DECLARE CONTINUE HANDLER FOR NOT FOUND SET r_done = 1;
@@ -215,8 +222,6 @@ BEGIN
                             ROLLBACK;
                         END;
                     START TRANSACTION;
-                    -- Lock and restore the exact snapshot
-                    SELECT 1 FROM acc_ledger_balance WHERE ledger_balance_id = r_account_id FOR UPDATE;
                     -- Previously we increased the debits or credits based on the side.
                     -- Now we decrease it to restore.
                     IF r_side = 'DEBIT' THEN
@@ -229,7 +234,6 @@ BEGIN
                         WHERE ledger_balance_id = r_account_id;
                     END IF;
                     COMMIT;
-
                 END;
             END LOOP rev_loop;
             CLOSE cur_rev;

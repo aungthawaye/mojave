@@ -1,3 +1,23 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.core.account.domain.component.ledger;
 
 import io.mojaloop.core.common.datatype.enums.account.Side;
@@ -55,7 +75,8 @@ public interface Ledger {
 
         public InsufficientBalanceException(AccountId accountId, Side side, BigDecimal amount, Ledger.DrCr drCr) {
 
-            super("Insufficient balance in Account (" + accountId + ") : posted debits: " + drCr.debits + ", posted credits: " + drCr.credits);
+            super("Insufficient balance in Account (" + accountId.getId() + ") : side : " + side + " | posted debits: " + drCr.debits + "| posted credits: " +
+                      drCr.credits + " | requested amount: " + amount);
 
             this.accountId = accountId;
             this.side = side;

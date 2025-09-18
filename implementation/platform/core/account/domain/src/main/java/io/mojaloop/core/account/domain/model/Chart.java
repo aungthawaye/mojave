@@ -1,3 +1,22 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -13,7 +32,6 @@ import io.mojaloop.core.account.contract.exception.chart.SameChartEntryCodeExist
 import io.mojaloop.core.account.contract.exception.chart.SameChartEntryNameExistsException;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartIdJavaType;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
-import io.mojaloop.core.common.datatype.enums.account.ChartType;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartId;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
@@ -21,8 +39,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -41,73 +57,32 @@ import java.util.Set;
 
 import static java.sql.Types.BIGINT;
 
-/**
- * Domain model for a Chart of Accounts.
- * A chart of accounts is a structured list of an organization's financial accounts used to categorize
- * financial transactions and track financial activities.
- *
- * <p>Each chart is identified by a unique {@link ChartId} and has a human‑readable {@code name}.</p>
- *
- * <p>This class implements {@link JpaEntity} for JPA persistence and maintains a collection of
- * {@link ChartEntry} objects that define the structure of accounts within this chart.</p>
- *
- * <p>Instances are mutable and use fluent, builder‑style mutator methods that return {@code this} for chaining.</p>
- *
- * @see ChartId
- * @see ChartEntry
- */
 @Getter
 @Entity
 @Table(name = "acc_chart", uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartData> {
 
-    /**
-     * The unique identifier for this chart.
-     * This is the primary key in the database and is automatically generated.
-     */
     @Id
     @JavaType(ChartIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(name = "chart_id", nullable = false, updatable = false)
     protected ChartId id;
 
-    /**
-     * The name of the chart. 
-     * Must be non-empty, non-null, and not exceed the maximum length defined by 
-     * {@link StringSizeConstraints#MAX_NAME_TITLE_LENGTH}.
-     */
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "type", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected ChartType type;
-
-    /**
-     * The timestamp when this chart was created.
-     * This is automatically set to the current time when the chart is first created.
-     */
     @Column(name = "created_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    /**
-     * The collection of entry definitions that make up this chart.
-     * This is a one-to-many relationship where each entry definition belongs to exactly one chart.
-     * The collection is eagerly fetched and modifications are cascaded to the database.
-     *
-     * @see ChartEntry
-     */
-
     @OneToMany(mappedBy = "chart", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Set<ChartEntry> entries = new HashSet<>();
 
-    public Chart(String name, ChartType type) {
+    public Chart(String name) {
 
         this.id = new ChartId(Snowflake.get().nextId());
         this.name(name);
-        this.type = type;
         this.createdAt = Instant.now();
     }
 
@@ -142,21 +117,11 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
         return new ChartData(this.getId(), this.getName(), this.createdAt, entriesData);
     }
 
-    /**
-     * Gets an unmodifiable view of the entry definitions in this chart.
-     *
-     * @return an unmodifiable set of entry definitions
-     */
     public Set<ChartEntry> getEntries() {
 
         return Collections.unmodifiableSet(entries);
     }
 
-    /**
-     * Gets the unique identifier of this chart.
-     *
-     * @return the chart's unique identifier
-     */
     @Override
     public ChartId getId() {
 
@@ -180,15 +145,6 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
         return this;
     }
 
-    /**
-     * Removes an entry from this chart by its identifier.
-     *
-     * <p>Searches for an entry with the specified ID and removes it from the chart if found.</p>
-     *
-     * @param chartEntryId the unique identifier of the chart entry to remove
-     * @return {@code true} if an entry was found and removed, {@code false} otherwise
-     * @see ChartEntryId
-     */
     public boolean removeEntry(ChartEntryId chartEntryId) {
 
         return this.entries.removeIf(entry -> entry.getId().equals(chartEntryId));

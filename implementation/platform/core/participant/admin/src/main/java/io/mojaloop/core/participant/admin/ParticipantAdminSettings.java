@@ -1,11 +1,29 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.core.participant.admin;
 
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.component.redis.RedissonOpsClientConfigurer;
 import io.mojaloop.component.vault.Vault;
 import io.mojaloop.component.vault.VaultConfiguration;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
@@ -17,13 +35,6 @@ public class ParticipantAdminSettings implements ParticipantAdminConfiguration.R
     public ParticipantAdminSettings(Vault vault) {
 
         this.vault = vault;
-    }
-
-    @Bean
-    @Override
-    public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
-
-        return this.vault.get(VaultPaths.REDIS_OPS_SETTINGS_PATH, RedissonOpsClientConfigurer.Settings.class);
     }
 
     @Bean
@@ -49,13 +60,6 @@ public class ParticipantAdminSettings implements ParticipantAdminConfiguration.R
 
     @Bean
     @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(null);
-    }
-
-    @Bean
-    @Override
     public ParticipantAdminConfiguration.TomcatSettings tomcatSettings() {
 
         return new ParticipantAdminConfiguration.TomcatSettings(
@@ -69,8 +73,6 @@ public class ParticipantAdminSettings implements ParticipantAdminConfiguration.R
         public static final String ROUTING_DATASOURCE_READ_SETTINGS_PATH = "micro/core/participant/admin/routing-datasource/read/settings";
 
         public static final String ROUTING_DATASOURCE_WRITE_SETTINGS_PATH = "micro/core/participant/admin/routing-datasource/write/settings";
-
-        public static final String REDIS_OPS_SETTINGS_PATH = "micro/core/participant/admin/redis/ops/settings";
 
     }
 

@@ -1,3 +1,22 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -10,9 +29,6 @@ import io.mojaloop.core.account.contract.exception.account.AccountCodeRequiredEx
 import io.mojaloop.core.account.contract.exception.account.AccountDescriptionTooLongException;
 import io.mojaloop.core.account.contract.exception.account.AccountNameRequiredException;
 import io.mojaloop.core.account.contract.exception.account.AccountNameTooLongException;
-import io.mojaloop.core.account.contract.exception.account.RequireFspChartTypeException;
-import io.mojaloop.core.account.contract.exception.account.RequireFxpChartTypeException;
-import io.mojaloop.core.account.contract.exception.account.RequireHubChartTypeException;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartEntryIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdJavaType;
@@ -20,14 +36,10 @@ import io.mojaloop.core.common.datatype.converter.type.account.AccountCodeConver
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
-import io.mojaloop.core.common.datatype.enums.account.ChartType;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
-import io.mojaloop.core.common.datatype.identifier.participant.FxpId;
-import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
@@ -113,54 +125,6 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     protected LedgerBalance ledgerBalance;
 
     public Account(ChartEntry chartEntry,
-                   FspId fspId,
-                   Currency currency,
-                   AccountCode code,
-                   String name,
-                   String description,
-                   OverdraftMode overdraftMode,
-                   BigDecimal overdraftLimit) {
-
-        this(chartEntry, new OwnerId(fspId.getId()), currency, code, name, description, overdraftMode, overdraftLimit);
-
-        if (chartEntry.chart.type != ChartType.FSP) {
-            throw new RequireFspChartTypeException(chartEntry.chart.type);
-        }
-    }
-
-    public Account(ChartEntry chartEntry,
-                   FxpId fxpId,
-                   Currency currency,
-                   AccountCode code,
-                   String name,
-                   String description,
-                   OverdraftMode overdraftMode,
-                   BigDecimal overdraftLimit) {
-
-        this(chartEntry, new OwnerId(fxpId.getId()), currency, code, name, description, overdraftMode, overdraftLimit);
-
-        if (chartEntry.chart.type != ChartType.FXP) {
-            throw new RequireFxpChartTypeException(chartEntry.chart.type);
-        }
-    }
-
-    public Account(ChartEntry chartEntry,
-                   HubId hubId,
-                   Currency currency,
-                   AccountCode code,
-                   String name,
-                   String description,
-                   OverdraftMode overdraftMode,
-                   BigDecimal overdraftLimit) {
-
-        this(chartEntry, new OwnerId(hubId.getId()), currency, code, name, description, overdraftMode, overdraftLimit);
-
-        if (chartEntry.chart.type != ChartType.HUB) {
-            throw new RequireHubChartTypeException(chartEntry.chart.type);
-        }
-    }
-
-    private Account(ChartEntry chartEntry,
                     OwnerId ownerId,
                     Currency currency,
                     AccountCode code,
