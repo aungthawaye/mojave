@@ -21,7 +21,7 @@ package io.mojaloop.core.participant.admin.client.api.oracle;
 
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.oracle.ChangeOracleNameCommand;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
@@ -42,7 +42,7 @@ public class ChangeOracleNameIT {
     private ChangeOracleName changeOracleName;
 
     @Test
-    public void test_successfully_change_oracle_name() throws ParticipantCommandClientException {
+    public void test_successfully_change_oracle_name() throws ParticipantAdminClientException {
         var created = this.createOracle.execute(new CreateOracleCommand.Input(PartyIdType.MSISDN, "Oracle ChangeName", "http://localhost:7090"));
         this.changeOracleName.execute(new ChangeOracleNameCommand.Input(new OracleId(created.oracleId().getId()), "Updated Name"));
     }

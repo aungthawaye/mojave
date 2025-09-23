@@ -21,7 +21,7 @@ package io.mojaloop.core.participant.admin.client.api.oracle;
 
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
 import io.mojaloop.core.participant.contract.command.oracle.DeactivateOracleCommand;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
@@ -42,7 +42,7 @@ public class DeactivateOracleIT {
     private DeactivateOracle deactivateOracle;
 
     @Test
-    public void test_successfully_deactivate_oracle() throws ParticipantCommandClientException {
+    public void test_successfully_deactivate_oracle() throws ParticipantAdminClientException {
         var created = this.createOracle.execute(new CreateOracleCommand.Input(PartyIdType.ACCOUNT_ID, "Oracle Deactivate", "http://localhost:7090"));
         this.deactivateOracle.execute(new DeactivateOracleCommand.Input(new OracleId(created.oracleId().getId())));
     }

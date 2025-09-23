@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="mod-lookup-contract" />
         <module name="mod-account-domain" />
+        <module name="mod-account-admin-client" />
         <module name="mod-component-flyway" />
         <module name="mod-component-vault" />
         <module name="transfer-pom" />
@@ -80,6 +81,7 @@
       <module name="fspiop-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
       <module name="mod-account-admin" options="-parameters" />
+      <module name="mod-account-admin-client" options="-parameters" />
       <module name="mod-account-contract" options="-parameters" />
       <module name="mod-account-domain" options="-parameters" />
       <module name="mod-account-intercom" options="-parameters" />

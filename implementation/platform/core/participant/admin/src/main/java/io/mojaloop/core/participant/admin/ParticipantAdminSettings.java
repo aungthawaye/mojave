@@ -22,33 +22,50 @@ package io.mojaloop.core.participant.admin;
 
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.component.vault.Vault;
-import io.mojaloop.component.vault.VaultConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
-@Import(value = {VaultConfiguration.class})
 public class ParticipantAdminSettings implements ParticipantAdminConfiguration.RequiredSettings {
-
-    private final Vault vault;
-
-    public ParticipantAdminSettings(Vault vault) {
-
-        this.vault = vault;
-    }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        return this.vault.get(VaultPaths.ROUTING_DATASOURCE_READ_SETTINGS_PATH, RoutingDataSourceConfigurer.ReadSettings.class);
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv()
+                  .getOrDefault(
+                      "PCP_READ_DB_URL",
+                      "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true"),
+            System.getenv().getOrDefault("PCP_READ_DB_USER", "root"),
+            System.getenv().getOrDefault("PCP_READ_DB_PASSWORD", "password"),
+            false);
+
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "participant-admin-read",
+            Integer.parseInt(System.getenv().getOrDefault("PCP_READ_DB_MIN_POOL_SIZE", "2")),
+            Integer.parseInt(System.getenv().getOrDefault("PCP_READ_DB_MAX_POOL_SIZE", "10")));
+
+        return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        return this.vault.get(VaultPaths.ROUTING_DATASOURCE_WRITE_SETTINGS_PATH, RoutingDataSourceConfigurer.WriteSettings.class);
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv()
+                  .getOrDefault(
+                      "PCP_WRITE_DB_URL",
+                      "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true"),
+            System.getenv().getOrDefault("PCP_WRITE_DB_USER", "root"),
+            System.getenv().getOrDefault("PCP_WRITE_DB_PASSWORD", "password"),
+            false);
+
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "participant-admin-write",
+            Integer.parseInt(System.getenv().getOrDefault("PCP_WRITE_DB_MIN_POOL_SIZE", "2")),
+            Integer.parseInt(System.getenv().getOrDefault("PCP_WRITE_DB_MAX_POOL_SIZE", "10")));
+
+        return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
 
     @Bean
@@ -64,16 +81,6 @@ public class ParticipantAdminSettings implements ParticipantAdminConfiguration.R
 
         return new ParticipantAdminConfiguration.TomcatSettings(
             Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_ADMIN_PORT", "4101")));
-    }
-
-    public static class VaultPaths {
-
-        public static final String FLYWAY_PATH = "micro/core/participant/admin/flyway/migration/settings";
-
-        public static final String ROUTING_DATASOURCE_READ_SETTINGS_PATH = "micro/core/participant/admin/routing-datasource/read/settings";
-
-        public static final String ROUTING_DATASOURCE_WRITE_SETTINGS_PATH = "micro/core/participant/admin/routing-datasource/write/settings";
-
     }
 
 }

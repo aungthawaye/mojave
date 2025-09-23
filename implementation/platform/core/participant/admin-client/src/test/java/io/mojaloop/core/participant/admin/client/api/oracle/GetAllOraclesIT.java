@@ -20,7 +20,7 @@
 package io.mojaloop.core.participant.admin.client.api.oracle;
 
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class GetAllOraclesIT {
     private GetAllOracles getAllOracles;
 
     @Test
-    public void test_successfully_get_all_oracles() throws ParticipantCommandClientException {
+    public void test_successfully_get_all_oracles() throws ParticipantAdminClientException {
         this.createOracle.execute(new CreateOracleCommand.Input(PartyIdType.ACCOUNT_ID, "Oracle List 1", "http://localhost:7090"));
         this.createOracle.execute(new CreateOracleCommand.Input(PartyIdType.EMAIL, "Oracle List 2", "http://localhost:7090"));
         this.getAllOracles.execute();

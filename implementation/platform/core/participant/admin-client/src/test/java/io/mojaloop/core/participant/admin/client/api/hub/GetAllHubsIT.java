@@ -20,7 +20,7 @@
 package io.mojaloop.core.participant.admin.client.api.hub;
 
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class GetAllHubsIT {
     private GetAllHubs getAllHubs;
 
     @Test
-    public void test_successfully_get_all_hubs() throws ParticipantCommandClientException {
+    public void test_successfully_get_all_hubs() throws ParticipantAdminClientException {
         this.createHub.execute(new CreateHubCommand.Input("Hub List 1", new Currency[]{Currency.USD}));
         this.createHub.execute(new CreateHubCommand.Input("Hub List 2", new Currency[]{Currency.USD}));
         this.getAllHubs.execute();

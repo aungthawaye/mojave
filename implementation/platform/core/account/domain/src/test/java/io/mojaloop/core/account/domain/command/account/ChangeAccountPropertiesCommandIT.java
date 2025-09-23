@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.account.domain.command.account;
 
 import io.mojaloop.core.account.contract.command.account.ChangeAccountPropertiesCommand;
@@ -83,7 +84,7 @@ public class ChangeAccountPropertiesCommandIT {
 
         // Act
         var out = this.changeAccountPropertiesCommand.execute(
-            new ChangeAccountPropertiesCommand.Input(createOut.accountId(), new AccountCode("AST2"), "Assets Updated", "Updated description"));
+            new ChangeAccountPropertiesCommand.Input(createOut.accountId(), "Assets Updated", "Updated description"));
 
         // Assert
         assertNotNull(out);
@@ -98,8 +99,8 @@ public class ChangeAccountPropertiesCommandIT {
     @Test
     public void changeProperties_withNonExistingId_throwsAccountIdNotFoundException() {
 
-        assertThrows(AccountIdNotFoundException.class, () -> this.changeAccountPropertiesCommand.execute(
-            new ChangeAccountPropertiesCommand.Input(new AccountId(444444444L), new AccountCode("X"), "N", "D")));
+        assertThrows(AccountIdNotFoundException.class,
+                     () -> this.changeAccountPropertiesCommand.execute(new ChangeAccountPropertiesCommand.Input(new AccountId(444444444L), "N", "D")));
     }
 
 }

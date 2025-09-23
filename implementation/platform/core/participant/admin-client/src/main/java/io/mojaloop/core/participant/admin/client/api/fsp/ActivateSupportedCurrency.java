@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.admin.client.api.fsp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.admin.client.service.ParticipantAdminService;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class ActivateSupportedCurrency {
         this.objectMapper = objectMapper;
     }
 
-    public ActivateFspCurrencyCommand.Output execute(ActivateFspCurrencyCommand.Input input) throws ParticipantCommandClientException {
+    public ActivateFspCurrencyCommand.Output execute(ActivateFspCurrencyCommand.Input input) throws ParticipantAdminClientException {
 
         try {
 
@@ -63,10 +63,10 @@ public class ActivateSupportedCurrency {
 
             if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
 
-                throw new ParticipantCommandClientException(code, message);
+                throw new ParticipantAdminClientException(code, message);
             }
 
-            throw new ParticipantCommandClientException("INTERNAL_SERVER_ERROR", e.getMessage());
+            throw new ParticipantAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
 }

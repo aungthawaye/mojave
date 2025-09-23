@@ -23,7 +23,7 @@ import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -44,7 +44,7 @@ public class ActivateSupportedCurrencyIT {
     private ActivateSupportedCurrency activateSupportedCurrency;
 
     @Test
-    public void test_successfully_activate_supported_currency() throws ParticipantCommandClientException {
+    public void test_successfully_activate_supported_currency() throws ParticipantAdminClientException {
         var output = this.createFsp.execute(
             new CreateFspCommand.Input(new FspCode("fsp-activate-currency"), "FSP Activate Currency", new Currency[]{Currency.USD},
                                        new CreateFspCommand.Input.Endpoint[]{

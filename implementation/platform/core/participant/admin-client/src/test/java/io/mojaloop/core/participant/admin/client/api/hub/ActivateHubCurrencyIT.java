@@ -21,7 +21,7 @@ package io.mojaloop.core.participant.admin.client.api.hub;
 
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
@@ -46,7 +46,7 @@ public class ActivateHubCurrencyIT {
     private ActivateHubCurrency activateHubCurrency;
 
     @Test
-    public void test_successfully_activate_currency() throws ParticipantCommandClientException {
+    public void test_successfully_activate_currency() throws ParticipantAdminClientException {
 
         var created = this.createHub.execute(new CreateHubCommand.Input("Hub ActiveCurrency", new Currency[]{Currency.USD}));
         this.addHubCurrency.execute(new AddHubCurrencyCommand.Input(new HubId(), Currency.EUR));

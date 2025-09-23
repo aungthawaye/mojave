@@ -20,7 +20,7 @@
 package io.mojaloop.core.participant.admin.client.api.fsp;
 
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class GetAllFspsIT {
     private GetAllFsps getAllFsps;
 
     @Test
-    public void test_successfully_get_all() throws ParticipantCommandClientException {
+    public void test_successfully_get_all() throws ParticipantAdminClientException {
         this.getAllFsps.execute();
     }
 }

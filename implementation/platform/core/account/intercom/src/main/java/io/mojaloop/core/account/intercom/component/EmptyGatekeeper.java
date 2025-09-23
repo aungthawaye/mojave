@@ -17,19 +17,22 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.participant.admin.client.exception;
+package io.mojaloop.core.account.intercom.component;
 
-import lombok.Getter;
+import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
+import io.mojaloop.component.web.security.spring.Authenticator;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class ParticipantCommandClientException extends Exception {
+import java.util.ArrayList;
 
-    @Getter
-    private final String code;
+public class EmptyGatekeeper implements Authenticator {
 
-    public ParticipantCommandClientException(String code, String message) {
+    @Override
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
+        throws AuthenticationFailureException {
 
-        super(message);
-        this.code = code;
+        return new UsernamePasswordAuthenticationToken("user", "password", new ArrayList<>());
     }
 
 }

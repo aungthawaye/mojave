@@ -20,7 +20,7 @@
 package io.mojaloop.core.participant.admin.client.api.oracle;
 
 import io.mojaloop.core.participant.admin.client.TestConfiguration;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ public class CreateOracleIT {
     private CreateOracle createOracle;
 
     @Test
-    public void test_successfully_create_oracle() throws ParticipantCommandClientException {
+    public void test_successfully_create_oracle() throws ParticipantAdminClientException {
         this.createOracle.execute(new CreateOracleCommand.Input(PartyIdType.MSISDN, "Oracle Name", "http://localhost:7090"));
     }
 }

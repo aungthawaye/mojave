@@ -52,11 +52,6 @@ public class ChangeAccountPropertiesCommandHandler implements ChangeAccountPrope
                                             .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
-        if (input.code() != null) {
-            LOGGER.info("Updating code for Account id: {}", account.getId());
-            account.code(input.code());
-        }
-
         if (input.name() != null) {
             LOGGER.info("Updating name for Account id: {}", account.getId());
             account.name(input.name());
@@ -68,6 +63,7 @@ public class ChangeAccountPropertiesCommandHandler implements ChangeAccountPrope
         }
 
         this.accountRepository.save(account);
+
         LOGGER.info("Saved Account with id: {}", account.getId());
 
         LOGGER.info("Completed ChangeAccountPropertiesCommand with input: {}", input);

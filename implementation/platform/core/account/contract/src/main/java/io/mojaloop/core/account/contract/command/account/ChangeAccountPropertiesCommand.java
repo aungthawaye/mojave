@@ -36,7 +36,6 @@ public interface ChangeAccountPropertiesCommand {
      */
     record Input(
         @JsonProperty(required = true) @NotNull AccountId accountId,
-        @JsonProperty(required = false) AccountCode code,
         @JsonProperty(required = false) @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
         @JsonProperty(required = false) @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description
     ) { }

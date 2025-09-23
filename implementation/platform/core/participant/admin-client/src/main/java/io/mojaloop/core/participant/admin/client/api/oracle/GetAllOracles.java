@@ -22,7 +22,7 @@ package io.mojaloop.core.participant.admin.client.api.oracle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.participant.admin.client.exception.ParticipantCommandClientException;
+import io.mojaloop.core.participant.admin.client.exception.ParticipantAdminClientException;
 import io.mojaloop.core.participant.admin.client.service.ParticipantAdminService;
 import io.mojaloop.core.participant.contract.data.OracleData;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class GetAllOracles {
         this.objectMapper = objectMapper;
     }
 
-    public List<OracleData> execute() throws ParticipantCommandClientException {
+    public List<OracleData> execute() throws ParticipantAdminClientException {
 
         try {
 
@@ -65,10 +65,10 @@ public class GetAllOracles {
 
             if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
 
-                throw new ParticipantCommandClientException(code, message);
+                throw new ParticipantAdminClientException(code, message);
             }
 
-            throw new ParticipantCommandClientException("INTERNAL_SERVER_ERROR", e.getMessage());
+            throw new ParticipantAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
 }

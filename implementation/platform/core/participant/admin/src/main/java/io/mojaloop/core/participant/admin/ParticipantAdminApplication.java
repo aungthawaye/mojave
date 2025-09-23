@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,21 +17,19 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.admin;
 
 import io.mojaloop.component.flyway.FlywayMigration;
-import io.mojaloop.component.vault.Vault;
-import io.mojaloop.component.vault.VaultConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(value = {ParticipantAdminConfiguration.class, ParticipantAdminApplication.VaultSettings.class, ParticipantAdminSettings.class})
+@Import(value = {ParticipantAdminConfiguration.class, ParticipantAdminSettings.class})
 public class ParticipantAdminApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantAdminApplication.class.getName());
@@ -40,9 +38,12 @@ public class ParticipantAdminApplication {
 
         LOGGER.info("Starting participant-admin application");
 
-        var vaultSettings = VaultConfigurer.Settings.withPropertyOrEnv();
-        var vault = new Vault(vaultSettings.address(), vaultSettings.token(), vaultSettings.enginePath());
-        var flywaySettings = vault.get(ParticipantAdminSettings.VaultPaths.FLYWAY_PATH, FlywayMigration.Settings.class);
+        var flywaySettings = new FlywayMigration.Settings(
+            System.getenv().getOrDefault(
+                "PCP_FLYWAY_DB_URL",
+                "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
+            System.getenv().getOrDefault("PCP_FLYWAY_DB_USER", "root"),
+            System.getenv().getOrDefault("PCP_FLYWAY_DB_PASSWORD", "password"));
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
         FlywayMigration.migrate(flywaySettings);
@@ -68,16 +69,6 @@ public class ParticipantAdminApplication {
                 "management.endpoint.health.show-details=always",
                 "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=ParticipantAdminApplication,context=participant-admin")
             .run(args);
-    }
-
-    public static class VaultSettings {
-
-        @Bean
-        public VaultConfigurer.Settings vaultSettings() {
-
-            return VaultConfigurer.Settings.withPropertyOrEnv();
-        }
-
     }
 
 }
