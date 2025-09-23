@@ -17,15 +17,17 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.intercom;
 
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
 import io.mojaloop.component.web.security.spring.Authenticator;
 import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
+import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
-import io.mojaloop.core.participant.intercom.component.EmptyGatekeeper;
 import io.mojaloop.core.participant.intercom.component.EmptyErrorWriter;
+import io.mojaloop.core.participant.intercom.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -43,7 +45,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.participant.intercom")
 @Import(value = {ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantIntercomConfiguration implements ParticipantDomainConfiguration.RequiredBeans,
-                                                         SpringSecurityConfiguration.RequiredBeans {
+                                                         SpringSecurityConfiguration.RequiredBeans,
+                                                         SpringSecurityConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -60,13 +63,19 @@ public class ParticipantIntercomConfiguration implements ParticipantDomainConfig
     }
 
     @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
+    }
+
+    @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
-                                              SpringSecurityConfiguration.RequiredSettings {
+    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

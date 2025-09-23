@@ -17,22 +17,19 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.intercom;
 
 import io.mojaloop.component.flyway.FlywayMigration;
-import io.mojaloop.component.vault.Vault;
-import io.mojaloop.component.vault.VaultConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(
-    value = {ParticipantIntercomConfiguration.class, ParticipantIntercomApplication.VaultSettings.class, ParticipantIntercomSettings.class})
+@Import(value = {ParticipantIntercomConfiguration.class, ParticipantIntercomSettings.class})
 public class ParticipantIntercomApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantIntercomApplication.class.getName());
@@ -41,9 +38,12 @@ public class ParticipantIntercomApplication {
 
         LOGGER.info("Starting participant intercom application");
 
-        var vaultSettings = VaultConfigurer.Settings.withPropertyOrEnv();
-        var vault = new Vault(vaultSettings.address(), vaultSettings.token(), vaultSettings.enginePath());
-        var flywaySettings = vault.get(ParticipantIntercomSettings.VaultPaths.FLYWAY_PATH, FlywayMigration.Settings.class);
+        var flywaySettings = new FlywayMigration.Settings(
+            System.getenv().getOrDefault(
+                "PCP_FLYWAY_DB_URL",
+                "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
+            System.getenv().getOrDefault("PCP_FLYWAY_DB_USER", "root"),
+            System.getenv().getOrDefault("PCP_FLYWAY_DB_PASSWORD", "password"));
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
         FlywayMigration.migrate(flywaySettings);
@@ -69,16 +69,6 @@ public class ParticipantIntercomApplication {
                 "management.endpoint.health.show-details=always",
                 "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=ParticipantIntercomApplication,context=participant-intercom")
             .run(args);
-    }
-
-    public static class VaultSettings {
-
-        @Bean
-        public VaultConfigurer.Settings vaultSettings() {
-
-            return VaultConfigurer.Settings.withPropertyOrEnv();
-        }
-
     }
 
 }

@@ -28,10 +28,6 @@
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-vault</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
