@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -29,6 +30,7 @@ import io.mojaloop.core.account.contract.exception.account.AccountCodeRequiredEx
 import io.mojaloop.core.account.contract.exception.account.AccountDescriptionTooLongException;
 import io.mojaloop.core.account.contract.exception.account.AccountNameRequiredException;
 import io.mojaloop.core.account.contract.exception.account.AccountNameTooLongException;
+import io.mojaloop.core.account.domain.cache.redis.updater.AccountCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.account.ChartEntryIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.account.OwnerIdJavaType;
@@ -47,6 +49,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -68,9 +71,13 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "acc_account", uniqueConstraints = {
-    @UniqueConstraint(name = "acc_account_owner_id_currency_chart_entry_id_UK", columnNames = {"owner_id", "currency", "chart_entry_id"})},
-       indexes = {@Index(name = "acc_account_owner_id_IDX", columnList = "owner_id"), @Index(name = "acc_account_currency_IDX", columnList = "currency")})
+@EntityListeners(value = {AccountCacheUpdater.class})
+@Table(name = "acc_account",
+       uniqueConstraints = {
+           @UniqueConstraint(name = "acc_account_owner_id_currency_chart_entry_id_UK",
+                             columnNames = {"owner_id", "currency", "chart_entry_id"})},
+       indexes = {@Index(name = "acc_account_owner_id_IDX", columnList = "owner_id"),
+                  @Index(name = "acc_account_currency_IDX", columnList = "currency")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends JpaEntity<AccountId> implements DataConversion<AccountData> {
 
@@ -121,17 +128,18 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Convert(converter = ChartEntryIdConverter.class)
     protected ChartEntryId chartEntryId;
 
-    @OneToOne(mappedBy = "account", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @OneToOne(mappedBy = "account", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER,
+              optional = false)
     protected LedgerBalance ledgerBalance;
 
     public Account(ChartEntry chartEntry,
-                    OwnerId ownerId,
-                    Currency currency,
-                    AccountCode code,
-                    String name,
-                    String description,
-                    OverdraftMode overdraftMode,
-                    BigDecimal overdraftLimit) {
+                   OwnerId ownerId,
+                   Currency currency,
+                   AccountCode code,
+                   String name,
+                   String description,
+                   OverdraftMode overdraftMode,
+                   BigDecimal overdraftLimit) {
 
         assert chartEntry != null;
         assert ownerId != null;
@@ -174,8 +182,19 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Override
     public AccountData convert() {
 
-        return new AccountData(this.getId(), this.ownerId, this.type, this.currency, this.code, this.name, this.description, this.createdAt,
-                               this.activationStatus, this.terminationStatus, this.chartEntryId, this.ledgerBalance.convert());
+        return new AccountData(
+            this.getId(),
+            this.ownerId,
+            this.type,
+            this.currency,
+            this.code,
+            this.name,
+            this.description,
+            this.createdAt,
+            this.activationStatus,
+            this.terminationStatus,
+            this.chartEntryId,
+            this.ledgerBalance.convert());
     }
 
     public void deactivate() {

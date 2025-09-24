@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,8 +35,6 @@ import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.annotation.PostConstruct;
 import org.redisson.api.RMap;
 import org.redisson.api.RSetMultimap;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -80,6 +78,11 @@ public class ParticipantRedisCache implements ParticipantCache {
     public void delete(FspId fspId) {
 
         var deleted = this.fspWithId.remove(fspId.getId());
+
+        if (deleted == null) {
+            return;
+        }
+
         this.fspWithFspCode.remove(deleted.fspCode().value());
     }
 
@@ -87,7 +90,12 @@ public class ParticipantRedisCache implements ParticipantCache {
     public void delete(OracleId oracleId) {
 
         var deleted = this.oracleWithId.remove(oracleId.getId());
-        this.oracleWithPartyType.remove(deleted.type());
+
+        if (deleted == null) {
+            return;
+        }
+
+        this.oracleWithPartyType.remove(deleted.type().name());
     }
 
     @Override
@@ -95,7 +103,22 @@ public class ParticipantRedisCache implements ParticipantCache {
 
         var deleted = this.fxpWithId.remove(fxpId.getId());
 
-        deleted.fxRatePairs().forEach((currencyPair, fxRatePairData) -> this.fxpWithCurrencyPair.remove(currencyPair, deleted));
+        if (deleted == null) {
+            return;
+        }
+
+        deleted.fxRatePairs().forEach((currencyPair, __) -> {
+
+            var set = this.fxpWithCurrencyPair.get(currencyPair);
+
+            if (set == null || set.isEmpty()) {
+                return;
+            }
+
+            set.stream()
+               .filter(fxp -> fxp.fxpId().equals(fxpId))
+               .forEach(fxp -> this.fxpWithCurrencyPair.remove(currencyPair, fxp));
+        });
     }
 
     @Override
@@ -157,7 +180,7 @@ public class ParticipantRedisCache implements ParticipantCache {
 
         this.fxpWithId.put(fxpData.fxpId().getId(), fxpData);
 
-        fxpData.fxRatePairs().forEach((currencyPair, fxRatePairData) -> this.fxpWithCurrencyPair.put(currencyPair, fxpData));
+        fxpData.fxRatePairs().forEach((currencyPair, __) -> this.fxpWithCurrencyPair.put(currencyPair, fxpData));
     }
 
     @Override

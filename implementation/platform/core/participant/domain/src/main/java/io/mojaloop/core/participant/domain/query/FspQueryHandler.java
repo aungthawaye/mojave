@@ -19,6 +19,7 @@
  */
 package io.mojaloop.core.participant.domain.query;
 
+import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
@@ -30,6 +31,7 @@ import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -47,12 +49,16 @@ public class FspQueryHandler implements FspQuery {
         this.fspRepository = fspRepository;
     }
 
+    @Transactional(readOnly = true)
+    @Read
     @Override
     public FspData get(FspId fspId) throws FspIdNotFoundException {
 
         return this.fspRepository.findById(fspId).orElseThrow(() -> new FspIdNotFoundException(fspId)).convert();
     }
 
+    @Transactional(readOnly = true)
+    @Read
     @Override
     public FspData get(FspCode fspCode) throws FspCodeNotFoundException {
 
@@ -62,6 +68,8 @@ public class FspQueryHandler implements FspQuery {
                    .convert();
     }
 
+    @Transactional(readOnly = true)
+    @Read
     @Override
     public List<FspData> getAll() {
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -29,6 +30,7 @@ import io.mojaloop.core.account.domain.component.ledger.Ledger;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.enums.account.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -99,7 +101,8 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "ledger_balance_id", nullable = false, foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
+    @JoinColumn(name = "ledger_balance_id", nullable = false,
+                foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
     protected Account account;
 
     public LedgerBalance(Account account, Side nature, OverdraftMode overdraftMode, BigDecimal overdraftLimit) {
@@ -121,7 +124,11 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
         this.account = account;
     }
 
-    public LedgerMovement apply(Side side, BigDecimal amount, TransactionId transactionId, Instant transactionAt)
+    public LedgerMovement apply(Side side,
+                                BigDecimal amount,
+                                TransactionId transactionId,
+                                Instant transactionAt,
+                                TransactionType transactionType)
         throws Ledger.InsufficientBalanceException, Ledger.NegativeAmountException {
 
         var amt = this.norm(amount);
@@ -141,14 +148,16 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
 
         if (nb.signum() < 0) {
 
-            throw new Ledger.InsufficientBalanceException(this.getId(), side, amount, new Ledger.DrCr(this.postedDebits, this.postedCredits));
+            throw new Ledger.InsufficientBalanceException(
+                this.getId(), side, amount, new Ledger.DrCr(this.postedDebits, this.postedCredits));
         }
 
         this.postedDebits = nd;
         this.postedCredits = nc;
 
-        return new LedgerMovement(new LedgerMovementId(Snowflake.get().nextId()), this.getId(), side, amt, oldDrCr,
-                                  new DrCr(this.postedDebits, this.postedCredits), transactionId, transactionAt);
+        return new LedgerMovement(
+            new LedgerMovementId(Snowflake.get().nextId()), this.getId(), side, amt, oldDrCr,
+            new DrCr(this.postedDebits, this.postedCredits), transactionId, transactionAt, transactionType);
 
     }
 
@@ -163,8 +172,10 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     @Override
     public LedgerBalanceData convert() {
 
-        return new LedgerBalanceData(this.getId(), this.currency, this.scale, this.nature, this.postedDebits, this.postedCredits, this.overdraftMode,
-                                     this.overdraftLimit, this.createdAt);
+        return new LedgerBalanceData(
+            this.getId(), this.currency, this.scale, this.nature, this.postedDebits, this.postedCredits,
+            this.overdraftMode,
+            this.overdraftLimit, this.createdAt);
     }
 
     public DrCr getDrCr() {

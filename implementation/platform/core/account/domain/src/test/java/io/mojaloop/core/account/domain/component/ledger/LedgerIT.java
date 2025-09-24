@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.account.domain.component.ledger;
 
 import io.mojaloop.component.misc.handy.Snowflake;
@@ -28,6 +29,7 @@ import io.mojaloop.core.account.domain.TestConfiguration;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.enums.account.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.account.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
@@ -70,29 +72,30 @@ public class LedgerIT {
     private Ledger ledger;
 
     @Test
-    public void test_postings() throws ChartIdNotFoundException, Ledger.InsufficientBalanceException, InterruptedException {
+    public void test_postings()
+        throws ChartIdNotFoundException, Ledger.InsufficientBalanceException, InterruptedException {
 
         var chart = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
 
-        var hubLiquidity = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chart.chartId(), new ChartEntryCode("1000"), "Hub Liquidity", "Hub Liquidity (Central Bank Trust AC)",
-                                              AccountType.ASSET));
+        var hubLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
+            chart.chartId(), new ChartEntryCode("1000"), "Hub Liquidity", "Hub Liquidity (Central Bank Trust AC)",
+            AccountType.ASSET));
 
-        var fspLiquidity = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chart.chartId(), new ChartEntryCode("2000"), "FSP Liability – Liquidity",
-                                              "FSP Liability – Liquidity from Hub PoV", AccountType.LIABILITY));
+        var fspLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
+            chart.chartId(), new ChartEntryCode("2000"), "FSP Liability – Liquidity",
+            "FSP Liability – Liquidity from Hub PoV", AccountType.LIABILITY));
 
-        var hubLiquidityAcc = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(hubLiquidity.chartEntryId(), new OwnerId(new HubId().getId()), Currency.USD, new AccountCode("10001"),
-                                           "Hub Liquidity", "Hub Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
+        var hubLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(
+            hubLiquidity.chartEntryId(), new OwnerId(new HubId().getId()), Currency.USD, new AccountCode("10001"),
+            "Hub Liquidity", "Hub Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        var fsp1LiquidityAcc = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(fspLiquidity.chartEntryId(), new OwnerId(2L), Currency.USD, new AccountCode("20001"), "FSP1 Liquidity",
-                                           "FSP1 Liability - Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
+        var fsp1LiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(
+            fspLiquidity.chartEntryId(), new OwnerId(2L), Currency.USD, new AccountCode("20001"), "FSP1 Liquidity",
+            "FSP1 Liability - Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        var fsp2LiquidityAcc = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(fspLiquidity.chartEntryId(), new OwnerId(3L), Currency.USD, new AccountCode("20002"), "FSP2 Liquidity",
-                                           "FSP2 Liability - Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
+        var fsp2LiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(
+            fspLiquidity.chartEntryId(), new OwnerId(3L), Currency.USD, new AccountCode("20002"), "FSP2 Liquidity",
+            "FSP2 Liability - Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
 
         try (var executor = Executors.newFixedThreadPool(100)) {
 
@@ -105,33 +108,48 @@ public class LedgerIT {
 
             for (int i = 0; i < count; i++) {
 
-                executor.submit(() -> {
+                //executor.submit(() -> {
 
                     var requests = new ArrayList<Ledger.Request>();
 
-                    requests.add(
-                        new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(1L)));
-                    requests.add(
-                        new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.CREDIT, new BigDecimal(1L)));
-                    requests.add(
-                        new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(1L)));
-                    requests.add(
-                        new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.CREDIT, new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(
+                        new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT,
+                        new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(
+                        new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.CREDIT,
+                        new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(
+                        new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.DEBIT,
+                        new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(
+                        new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.CREDIT,
+                        new BigDecimal(1L)));
 
                     try {
 
                         var threadStartAt = System.nanoTime();
-                        this.ledger.post(requests, new TransactionId(Snowflake.get().nextId()), Instant.now());
+
+                        this.ledger.post(
+                            requests, new TransactionId(Snowflake.get().nextId()), Instant.now(),
+                            TransactionType.FUND_IN);
+
                         var threadEndAt = System.nanoTime();
+
+                        LOGGER.info("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
+
                         totalExecutionTime.addAndGet(threadEndAt - threadStartAt);
                         completedThreads.incrementAndGet();
 
-                    } catch (Ledger.InsufficientBalanceException e) {
+                        latch.countDown();
+
+                    } catch (Ledger.InsufficientBalanceException | Ledger.OverdraftExceededException |
+                             Ledger.RestoreFailedException e) {
+
                         throw new RuntimeException(e);
+
                     }
 
-                    latch.countDown();
-                });
+                //});
             }
 
             latch.await();
@@ -139,7 +157,9 @@ public class LedgerIT {
             var duration = (endAt - startAt);
 
             LOGGER.info("Took: {}ns | {}ms", duration, duration / 1_000_000);
-            LOGGER.info("Average execution time for posting: {}ms", (totalExecutionTime.get() / completedThreads.get()) / 1_000_000);
+            LOGGER.info(
+                "Average execution time for posting: {}ms",
+                (totalExecutionTime.get() / count) / 1_000_000);
         }
 
     }

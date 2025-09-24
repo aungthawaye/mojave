@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.admin.controller.oracle;
 
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class GetOracleController {
 
@@ -40,6 +43,7 @@ public class GetOracleController {
     private final OracleQuery oracleQuery;
 
     public GetOracleController(OracleQuery oracleQuery) {
+
         assert oracleQuery != null;
         this.oracleQuery = oracleQuery;
     }
@@ -47,7 +51,17 @@ public class GetOracleController {
     @GetMapping("/oracles/get-oracle")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public OracleData execute(@RequestParam Long oracleId) throws OracleIdNotFoundException {
+    public OracleData byOracleId(@RequestParam Long oracleId) throws OracleIdNotFoundException {
+
         return this.oracleQuery.get(new OracleId(oracleId));
     }
+
+    @GetMapping("/oracles/get-all-oracles")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<OracleData> allOracles() {
+
+        return this.oracleQuery.getAll();
+    }
+
 }

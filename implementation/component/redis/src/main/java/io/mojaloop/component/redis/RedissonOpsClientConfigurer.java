@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,17 +34,24 @@ public class RedissonOpsClientConfigurer {
 
         var config = new Config();
 
-        switch (settings.codec()) {
-            case "kryo":
-                config.setCodec(new Kryo5Codec());
-                break;
-            case "lz4":
-                config.setCodec(new LZ4Codec(new Kryo5Codec()));
-                break;
-            case "lz4v2":
-                config.setCodec(new LZ4CodecV2(new Kryo5Codec()));
-            default:
-                config.setCodec(new Kryo5Codec());
+        if (settings.codec() == null) {
+
+            config.setCodec(new Kryo5Codec());
+
+        } else {
+
+            switch (settings.codec()) {
+                case Codec.KRYO:
+                    config.setCodec(new Kryo5Codec());
+                    break;
+                case Codec.LZ4:
+                    config.setCodec(new LZ4Codec(new Kryo5Codec()));
+                    break;
+                case Codec.LZ4V2:
+                    config.setCodec(new LZ4CodecV2(new Kryo5Codec()));
+                default:
+                    config.setCodec(new Kryo5Codec());
+            }
         }
 
         config.setNettyThreads(Runtime.getRuntime().availableProcessors() * 2);
@@ -81,6 +88,16 @@ public class RedissonOpsClientConfigurer {
         }
 
         return new RedissonOpsClient(Redisson.create(config));
+    }
+
+    public static class Codec {
+
+        public static final String KRYO = "kryo";
+
+        public static final String LZ4 = "lz4";
+
+        public static final String LZ4V2 = "lz4v2";
+
     }
 
     public record Settings(String[] hosts,
