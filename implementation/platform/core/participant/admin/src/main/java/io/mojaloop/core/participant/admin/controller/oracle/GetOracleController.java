@@ -48,20 +48,20 @@ public class GetOracleController {
         this.oracleQuery = oracleQuery;
     }
 
-    @GetMapping("/oracles/get-oracle")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public OracleData byOracleId(@RequestParam Long oracleId) throws OracleIdNotFoundException {
-
-        return this.oracleQuery.get(new OracleId(oracleId));
-    }
-
     @GetMapping("/oracles/get-all-oracles")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<OracleData> allOracles() {
 
         return this.oracleQuery.getAll();
+    }
+
+    @GetMapping("/oracles/get-oracle")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public OracleData byOracleId(@RequestParam Long oracleId) throws OracleIdNotFoundException {
+
+        return this.oracleQuery.get(new OracleId(oracleId));
     }
 
 }

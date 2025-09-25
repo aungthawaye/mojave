@@ -32,17 +32,16 @@ public class AccountAdminSettings implements AccountAdminConfiguration.RequiredS
     @Override
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
-        var connection = new MySqlLedger.LedgerDbSettings.Connection(
-            System.getenv()
-                  .getOrDefault(
-                      "ACC_LEDGER_DB_URL",
-                      "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("ACC_LEDGER_DB_USER", "root"),
-            System.getenv().getOrDefault("ACC_LEDGER_DB_PASSWORD", "password"), false);
+        var connection = new MySqlLedger.LedgerDbSettings.Connection(System.getenv()
+                                                                           .getOrDefault("ACC_LEDGER_DB_URL",
+                                                                                         "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true"),
+                                                                     System.getenv().getOrDefault("ACC_LEDGER_DB_USER", "root"),
+                                                                     System.getenv().getOrDefault("ACC_LEDGER_DB_PASSWORD", "password"),
+                                                                     false);
 
-        var pool = new MySqlLedger.LedgerDbSettings.Pool(
-            "account-admin-ledger", Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MAX_POOL_SIZE", "10")));
+        var pool = new MySqlLedger.LedgerDbSettings.Pool("account-admin-ledger",
+                                                         Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MIN_POOL_SIZE", "2")),
+                                                         Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MAX_POOL_SIZE", "10")));
 
         return new MySqlLedger.LedgerDbSettings(connection, pool);
     }
@@ -59,29 +58,25 @@ public class AccountAdminSettings implements AccountAdminConfiguration.RequiredS
 
         var connectionPoolSize = Integer.parseInt(System.getenv().getOrDefault("ACC_REDIS_CONNECTION_POOL_SIZE", "10"));
 
-        var connectionMinimumIdleSize = Integer.parseInt(
-            System.getenv().getOrDefault("ACC_REDIS_CONNECTION_MINIMUM_IDLE_SIZE", "10"));
+        var connectionMinimumIdleSize = Integer.parseInt(System.getenv().getOrDefault("ACC_REDIS_CONNECTION_MINIMUM_IDLE_SIZE", "10"));
 
-        return new RedissonOpsClientConfigurer.Settings(
-            hosts.split(",", -1), cluster, null, executorCount,
-            connectionPoolSize, connectionMinimumIdleSize);
+        return new RedissonOpsClientConfigurer.Settings(hosts.split(",", -1), cluster, null, executorCount, connectionPoolSize, connectionMinimumIdleSize);
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv()
-                  .getOrDefault(
-                      "ACC_READ_DB_URL",
-                      "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("ACC_READ_DB_USER", "root"),
-            System.getenv().getOrDefault("ACC_READ_DB_PASSWORD", "password"), false);
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv()
+                                                                                       .getOrDefault("ACC_READ_DB_URL",
+                                                                                                     "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true"),
+                                                                                 System.getenv().getOrDefault("ACC_READ_DB_USER", "root"),
+                                                                                 System.getenv().getOrDefault("ACC_READ_DB_PASSWORD", "password"),
+                                                                                 false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "account-admin-read", Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("account-admin-read",
+                                                                     Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MIN_POOL_SIZE", "2")),
+                                                                     Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -90,17 +85,16 @@ public class AccountAdminSettings implements AccountAdminConfiguration.RequiredS
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv()
-                  .getOrDefault(
-                      "ACC_WRITE_DB_URL",
-                      "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("ACC_WRITE_DB_USER", "root"),
-            System.getenv().getOrDefault("ACC_WRITE_DB_PASSWORD", "password"), false);
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv()
+                                                                                        .getOrDefault("ACC_WRITE_DB_URL",
+                                                                                                      "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true"),
+                                                                                  System.getenv().getOrDefault("ACC_WRITE_DB_USER", "root"),
+                                                                                  System.getenv().getOrDefault("ACC_WRITE_DB_PASSWORD", "password"),
+                                                                                  false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "account-admin-write", Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("account-admin-write",
+                                                                      Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MIN_POOL_SIZE", "2")),
+                                                                      Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -116,8 +110,7 @@ public class AccountAdminSettings implements AccountAdminConfiguration.RequiredS
     @Override
     public AccountAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new AccountAdminConfiguration.TomcatSettings(
-            Integer.parseInt(System.getenv().getOrDefault("ACCOUNT_ADMIN_PORT", "4201")));
+        return new AccountAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("ACCOUNT_ADMIN_PORT", "4201")));
     }
 
 }

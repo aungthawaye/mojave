@@ -65,13 +65,13 @@ CREATE TABLE `pcp_fsp_currency`
 
 CREATE TABLE `pcp_oracle`
 (
-    `oracle_id`          bigint        NOT NULL,
-    `type`               varchar(32)   NOT NULL,
-    `name`               varchar(64)   NOT NULL,
-    `baseUrl`            varchar(256)  NOT NULL,
-    `activation_status`  varchar(32)   NOT NULL,
-    `termination_status` varchar(32)   NOT NULL,
-    `created_at`         bigint        NOT NULL,
+    `oracle_id`          bigint       NOT NULL,
+    `type`               varchar(32)  NOT NULL,
+    `name`               varchar(64)  NOT NULL,
+    `baseUrl`            varchar(256) NOT NULL,
+    `activation_status`  varchar(32)  NOT NULL,
+    `termination_status` varchar(32)  NOT NULL,
+    `created_at`         bigint       NOT NULL,
     `rec_created_at`     bigint DEFAULT NULL,
     `rec_updated_at`     bigint DEFAULT NULL,
     `rec_version`        int    DEFAULT NULL,

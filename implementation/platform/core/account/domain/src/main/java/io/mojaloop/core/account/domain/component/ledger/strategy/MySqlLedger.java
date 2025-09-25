@@ -106,7 +106,7 @@ public class MySqlLedger implements Ledger {
 
                 while (hasResults) {
 
-                    try (var rs = stm.getResultSet();) {
+                    try (var rs = stm.getResultSet()) {
 
                         if (rs != null && rs.next()) {
 

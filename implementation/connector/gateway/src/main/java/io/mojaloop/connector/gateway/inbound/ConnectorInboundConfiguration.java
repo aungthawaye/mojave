@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.connector.gateway.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +54,7 @@ import java.util.List;
 @Import(value = {MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
 public class ConnectorInboundConfiguration
-        implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     private final ParticipantContext participantContext;
 
@@ -67,13 +68,6 @@ public class ConnectorInboundConfiguration
         this.participantContext = participantContext;
         this.objectMapper = objectMapper;
 
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
     }
 
     @Bean
@@ -107,6 +101,13 @@ public class ConnectorInboundConfiguration
     }
 
     @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
+    }
+
+    @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
 
         return factory -> {
@@ -129,15 +130,15 @@ public class ConnectorInboundConfiguration
                             var keystoreSettings = inboundSettings.keyStoreSettings();
                             var truststoreSettings = inboundSettings.trustStoreSettings();
                             var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
-                                    inboundSettings.connectionTimeout(),
-                                    new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
-                                            truststoreSettings.contentType(),
-                                            truststoreSettings.contentValue(),
-                                            truststoreSettings.password),
-                                    new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
-                                            keystoreSettings.contentType(),
-                                            keystoreSettings.contentValue(), keystoreSettings.password,
-                                            keystoreSettings.keyAlias()));
+                                                                                             inboundSettings.connectionTimeout(),
+                                                                                             new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
+                                                                                                 truststoreSettings.contentType(),
+                                                                                                 truststoreSettings.contentValue(),
+                                                                                                 truststoreSettings.password),
+                                                                                             new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
+                                                                                                 keystoreSettings.contentType(),
+                                                                                                 keystoreSettings.contentValue(), keystoreSettings.password,
+                                                                                                 keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
 
@@ -160,8 +161,8 @@ public class ConnectorInboundConfiguration
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-            ConnectorAdapterConfiguration.RequiredSettings,
-            FspiopInvokerConfiguration.RequiredSettings {
+                                              ConnectorAdapterConfiguration.RequiredSettings,
+                                              FspiopInvokerConfiguration.RequiredSettings {
 
         InboundSettings inboundSettings();
 

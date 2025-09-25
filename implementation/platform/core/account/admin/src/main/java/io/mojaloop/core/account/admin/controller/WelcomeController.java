@@ -14,4 +14,5 @@ public class WelcomeController {
     }
 
     public record Response(String version, String message) { }
+
 }

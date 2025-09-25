@@ -43,10 +43,25 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/fsps/create-fsp", "host": ["{{baseUrl}}"], "path": ["fsps", "create-fsp"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/fsps/create-fsp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "create-fsp"
+              ]
+            }
           },
           "response": []
         },
@@ -54,9 +69,26 @@
           "name": "Activate FSP",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/fsps/activate-fsp", "host": ["{{baseUrl}}"], "path": ["fsps", "activate-fsp"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/fsps/activate-fsp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "activate-fsp"
+              ]
+            }
           },
           "response": []
         },
@@ -64,9 +96,26 @@
           "name": "Deactivate FSP",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/fsps/deactivate-fsp", "host": ["{{baseUrl}}"], "path": ["fsps", "deactivate-fsp"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/fsps/deactivate-fsp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "deactivate-fsp"
+              ]
+            }
           },
           "response": []
         },
@@ -74,15 +123,45 @@
           "name": "Change FSP name",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/fsps/change-name", "host": ["{{baseUrl}}"], "path": ["fsps", "change-name"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/fsps/change-name",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "change-name"
+              ]
+            }
           },
           "response": []
         },
         {
           "name": "Get all FSPs",
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/fsps/get-all-fsps", "host": ["{{baseUrl}}"], "path": ["fsps", "get-all-fsps"] } },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/fsps/get-all-fsps",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "get-all-fsps"
+              ]
+            }
+          },
           "response": []
         },
         {
@@ -92,9 +171,19 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/fsps/get-by-fsp-code?fspCode=DFSP1",
-              "host": ["{{baseUrl}}"],
-              "path": ["fsps", "get-by-fsp-code"],
-              "query": [ { "key": "fspCode", "value": "DFSP1" } ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "get-by-fsp-code"
+              ],
+              "query": [
+                {
+                  "key": "fspCode",
+                  "value": "DFSP1"
+                }
+              ]
             }
           },
           "response": []
@@ -106,9 +195,19 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/fsps/get-by-fsp-id?fspId=1",
-              "host": ["{{baseUrl}}"],
-              "path": ["fsps", "get-by-fsp-id"],
-              "query": [ { "key": "fspId", "value": "1" } ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "fsps",
+                "get-by-fsp-id"
+              ],
+              "query": [
+                {
+                  "key": "fspId",
+                  "value": "1"
+                }
+              ]
             }
           },
           "response": []
@@ -120,9 +219,26 @@
               "name": "Add FSP currency",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/add-currency", "host": ["{{baseUrl}}"], "path": ["fsps", "add-currency"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/add-currency",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "add-currency"
+                  ]
+                }
               },
               "response": []
             },
@@ -130,9 +246,26 @@
               "name": "Activate FSP currency",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/activate-currency", "host": ["{{baseUrl}}"], "path": ["fsps", "activate-currency"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/activate-currency",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "activate-currency"
+                  ]
+                }
               },
               "response": []
             },
@@ -140,9 +273,26 @@
               "name": "Deactivate FSP currency",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/deactivate-currency", "host": ["{{baseUrl}}"], "path": ["fsps", "deactivate-currency"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/deactivate-currency",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "deactivate-currency"
+                  ]
+                }
               },
               "response": []
             }
@@ -155,9 +305,26 @@
               "name": "Add endpoint",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/add-endpoint", "host": ["{{baseUrl}}"], "path": ["fsps", "add-endpoint"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/add-endpoint",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "add-endpoint"
+                  ]
+                }
               },
               "response": []
             },
@@ -165,9 +332,26 @@
               "name": "Change endpoint",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/change-endpoint", "host": ["{{baseUrl}}"], "path": ["fsps", "change-endpoint"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/change-endpoint",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "change-endpoint"
+                  ]
+                }
               },
               "response": []
             },
@@ -175,9 +359,26 @@
               "name": "Activate endpoint",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/activate-endpoint", "host": ["{{baseUrl}}"], "path": ["fsps", "activate-endpoint"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/activate-endpoint",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "activate-endpoint"
+                  ]
+                }
               },
               "response": []
             },
@@ -185,9 +386,26 @@
               "name": "Deactivate endpoint",
               "request": {
                 "method": "POST",
-                "header": [ { "key": "Content-Type", "value": "application/json" } ],
-                "body": { "mode": "raw", "raw": "{}" },
-                "url": { "raw": "{{baseUrl}}/fsps/deactivate-endpoint", "host": ["{{baseUrl}}"], "path": ["fsps", "deactivate-endpoint"] }
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/fsps/deactivate-endpoint",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "fsps",
+                    "deactivate-endpoint"
+                  ]
+                }
               },
               "response": []
             }
@@ -202,9 +420,26 @@
           "name": "Create hub",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/hubs/create-hub", "host": ["{{baseUrl}}"], "path": ["hubs", "create-hub"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hubs/create-hub",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hubs",
+                "create-hub"
+              ]
+            }
           },
           "response": []
         },
@@ -212,9 +447,26 @@
           "name": "Add hub currency",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/hubs/add-currency", "host": ["{{baseUrl}}"], "path": ["hubs", "add-currency"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hubs/add-currency",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hubs",
+                "add-currency"
+              ]
+            }
           },
           "response": []
         },
@@ -222,15 +474,45 @@
           "name": "Activate hub currency",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/hubs/activate-currency", "host": ["{{baseUrl}}"], "path": ["hubs", "activate-currency"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hubs/activate-currency",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hubs",
+                "activate-currency"
+              ]
+            }
           },
           "response": []
         },
         {
           "name": "Get hub",
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/hubs/get-hub", "host": ["{{baseUrl}}"], "path": ["hubs", "get-hub"] } },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hubs/get-hub",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hubs",
+                "get-hub"
+              ]
+            }
+          },
           "response": []
         }
       ]
@@ -242,9 +524,26 @@
           "name": "Create oracle",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/oracles/create-oracle", "host": ["{{baseUrl}}"], "path": ["oracles", "create-oracle"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/oracles/create-oracle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "create-oracle"
+              ]
+            }
           },
           "response": []
         },
@@ -252,9 +551,26 @@
           "name": "Activate oracle",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/oracles/activate-oracle", "host": ["{{baseUrl}}"], "path": ["oracles", "activate-oracle"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/oracles/activate-oracle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "activate-oracle"
+              ]
+            }
           },
           "response": []
         },
@@ -262,9 +578,26 @@
           "name": "Deactivate oracle",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/oracles/deactivate-oracle", "host": ["{{baseUrl}}"], "path": ["oracles", "deactivate-oracle"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/oracles/deactivate-oracle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "deactivate-oracle"
+              ]
+            }
           },
           "response": []
         },
@@ -272,9 +605,26 @@
           "name": "Change oracle name",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/oracles/change-name", "host": ["{{baseUrl}}"], "path": ["oracles", "change-name"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/oracles/change-name",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "change-name"
+              ]
+            }
           },
           "response": []
         },
@@ -282,9 +632,26 @@
           "name": "Change oracle type",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}" },
-            "url": { "raw": "{{baseUrl}}/oracles/change-type", "host": ["{{baseUrl}}"], "path": ["oracles", "change-type"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/oracles/change-type",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "change-type"
+              ]
+            }
           },
           "response": []
         },
@@ -295,16 +662,39 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/oracles/get-oracle?oracleId=1",
-              "host": ["{{baseUrl}}"],
-              "path": ["oracles", "get-oracle"],
-              "query": [ { "key": "oracleId", "value": "1" } ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "get-oracle"
+              ],
+              "query": [
+                {
+                  "key": "oracleId",
+                  "value": "1"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "Get all oracles",
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/oracles/get-all-oracles", "host": ["{{baseUrl}}"], "path": ["oracles", "get-all-oracles"] } },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/oracles/get-all-oracles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oracles",
+                "get-all-oracles"
+              ]
+            }
+          },
           "response": []
         }
       ]

@@ -81,4 +81,5 @@ public record ChartEntryCode(@JsonValue @JsonProperty(required = true) @NotNull 
         }
 
     }
+
 }

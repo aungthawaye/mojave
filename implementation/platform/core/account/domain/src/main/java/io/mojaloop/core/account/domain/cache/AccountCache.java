@@ -21,7 +21,6 @@
 package io.mojaloop.core.account.domain.cache;
 
 import io.mojaloop.core.account.contract.data.AccountData;
-import io.mojaloop.core.account.domain.model.Account;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;

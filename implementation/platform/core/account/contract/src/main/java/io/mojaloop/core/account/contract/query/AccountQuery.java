@@ -33,7 +33,6 @@ import io.mojaloop.core.common.datatype.type.account.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.util.List;
-import java.util.Set;
 
 public interface AccountQuery {
 

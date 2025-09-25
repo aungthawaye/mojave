@@ -58,6 +58,24 @@ public class MiscConfiguration {
     }
 
     @Bean
+    public TaskExecutor aysncTaskExecutor() {
+
+        var executor = new ThreadPoolTaskExecutor();
+
+        executor.setCorePoolSize(0);
+        executor.setMaxPoolSize(Integer.MAX_VALUE);
+        executor.setKeepAliveSeconds(60);
+        executor.setAllowCoreThreadTimeOut(true);
+        executor.setQueueCapacity(0); // No queue like cachedThreadPool
+        executor.setThreadNamePrefix("async-event-");
+        executor.initialize();
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(60);
+
+        return executor;
+    }
+
+    @Bean
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 
         return new SpringEventPublisher(applicationEventPublisher);
@@ -101,24 +119,6 @@ public class MiscConfiguration {
     public SpringContext springContext() {
 
         return new SpringContext();
-    }
-
-    @Bean
-    public TaskExecutor aysncTaskExecutor() {
-
-        var executor = new ThreadPoolTaskExecutor();
-
-        executor.setCorePoolSize(0);
-        executor.setMaxPoolSize(Integer.MAX_VALUE);
-        executor.setKeepAliveSeconds(60);
-        executor.setAllowCoreThreadTimeOut(true);
-        executor.setQueueCapacity(0); // No queue like cachedThreadPool
-        executor.setThreadNamePrefix("async-event-");
-        executor.initialize();
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(60);
-
-        return executor;
     }
 
     public interface RequiredBeans { }

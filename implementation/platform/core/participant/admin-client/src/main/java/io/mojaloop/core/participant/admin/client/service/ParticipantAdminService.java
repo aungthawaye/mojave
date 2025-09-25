@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.admin.client.service;
 
 import io.mojaloop.core.participant.contract.command.fsp.ActivateEndpointCommand;
@@ -101,9 +102,6 @@ public interface ParticipantAdminService {
         @POST("oracles/activate-oracle")
         Call<ActivateOracleCommand.Output> activateOracle(@Body ActivateOracleCommand.Input input);
 
-        @POST("oracles/deactivate-oracle")
-        Call<DeactivateOracleCommand.Output> deactivateOracle(@Body DeactivateOracleCommand.Input input);
-
         @POST("oracles/change-name")
         Call<ChangeOracleNameCommand.Output> changeName(@Body ChangeOracleNameCommand.Input input);
 
@@ -113,26 +111,30 @@ public interface ParticipantAdminService {
         @POST("oracles/create-oracle")
         Call<CreateOracleCommand.Output> createOracle(@Body CreateOracleCommand.Input input);
 
+        @POST("oracles/deactivate-oracle")
+        Call<DeactivateOracleCommand.Output> deactivateOracle(@Body DeactivateOracleCommand.Input input);
+
         @GET("oracles/get-all-oracles")
         Call<List<OracleData>> getAllOracles();
 
         @GET("oracles/get-oracle")
         Call<OracleData> getOracle(@Query("oracleId") Long oracleId);
+
     }
 
     interface HubCommands {
 
-        @POST("hubs/create-hub")
-        Call<CreateHubCommand.Output> createHub(@Body CreateHubCommand.Input input);
-
-        @POST("hubs/change-name")
-        Call<ChangeHubNameCommand.Output> changeName(@Body ChangeHubNameCommand.Input input);
+        @POST("hubs/activate-currency")
+        Call<ActivateHubCurrencyCommand.Output> activateCurrency(@Body ActivateHubCurrencyCommand.Input input);
 
         @POST("hubs/add-currency")
         Call<AddHubCurrencyCommand.Output> addCurrency(@Body AddHubCurrencyCommand.Input input);
 
-        @POST("hubs/activate-currency")
-        Call<ActivateHubCurrencyCommand.Output> activateCurrency(@Body ActivateHubCurrencyCommand.Input input);
+        @POST("hubs/change-name")
+        Call<ChangeHubNameCommand.Output> changeName(@Body ChangeHubNameCommand.Input input);
+
+        @POST("hubs/create-hub")
+        Call<CreateHubCommand.Output> createHub(@Body CreateHubCommand.Input input);
 
         @POST("hubs/deactivate-currency")
         Call<DeactivateHubCurrencyCommand.Output> deactivateCurrency(@Body DeactivateHubCurrencyCommand.Input input);
@@ -142,6 +144,7 @@ public interface ParticipantAdminService {
 
         @GET("hubs/get-hub")
         Call<HubData> getHub(@Query("hubId") Long hubId);
+
     }
 
     record Settings(String baseUrl) { }

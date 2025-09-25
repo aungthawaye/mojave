@@ -93,7 +93,7 @@ public class AccountQueryHandler implements AccountQuery {
 
         return new PagedResult<>(
             resultPage.getNumber() + 1, resultPage.getSize(), resultPage.getTotalPages(),
-                                 (int) resultPage.getTotalElements(), data);
+            (int) resultPage.getTotalElements(), data);
     }
 
     @Transactional(readOnly = true)

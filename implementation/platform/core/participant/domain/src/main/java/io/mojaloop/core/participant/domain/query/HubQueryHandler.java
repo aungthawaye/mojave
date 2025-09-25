@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.domain.query;
 
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
@@ -46,6 +47,12 @@ public class HubQueryHandler implements HubQuery {
     }
 
     @Override
+    public long count() {
+
+        return this.hubRepository.count();
+    }
+
+    @Override
     public HubData get() throws HubNotFoundException {
 
         return this.hubRepository.findById(new HubId()).orElseThrow(HubNotFoundException::new).convert();
@@ -57,9 +64,4 @@ public class HubQueryHandler implements HubQuery {
         return this.hubRepository.findAll().stream().map(Hub::convert).toList();
     }
 
-    @Override
-    public long count() {
-
-        return this.hubRepository.count();
-    }
 }

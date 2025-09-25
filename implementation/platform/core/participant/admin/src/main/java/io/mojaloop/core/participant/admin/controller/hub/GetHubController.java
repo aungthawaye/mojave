@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class GetHubController {
 
@@ -54,6 +52,5 @@ public class GetHubController {
 
         return this.hubQuery.get();
     }
-
 
 }

@@ -43,7 +43,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -51,8 +54,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
             }
           },
           "response": []
@@ -62,7 +69,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -70,8 +80,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/activate",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "activate"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "activate"
+              ]
             }
           },
           "response": []
@@ -81,7 +96,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -89,8 +107,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/deactivate",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "deactivate"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "deactivate"
+              ]
             }
           },
           "response": []
@@ -100,7 +123,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -108,8 +134,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/terminate",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "terminate"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "terminate"
+              ]
             }
           },
           "response": []
@@ -119,7 +150,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -127,8 +161,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/change-properties",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "change-properties"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "change-properties"
+              ]
             }
           },
           "response": []
@@ -140,8 +179,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/get-all-accounts",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "get-all-accounts"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-all-accounts"
+              ]
             }
           },
           "response": []
@@ -153,10 +197,18 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/get-by-account-code?accountCode=ACC-001",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "get-by-account-code"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-by-account-code"
+              ],
               "query": [
-                { "key": "accountCode", "value": "ACC-001" }
+                {
+                  "key": "accountCode",
+                  "value": "ACC-001"
+                }
               ]
             }
           },
@@ -169,10 +221,18 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/get-by-account-id?accountId=1",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "get-by-account-id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-by-account-id"
+              ],
               "query": [
-                { "key": "accountId", "value": "1" }
+                {
+                  "key": "accountId",
+                  "value": "1"
+                }
               ]
             }
           },
@@ -185,10 +245,18 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/get-by-owner-id?ownerId=1",
-              "host": ["{{baseUrl}}"],
-              "path": ["accounts", "get-by-owner-id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-by-owner-id"
+              ],
               "query": [
-                { "key": "ownerId", "value": "1" }
+                {
+                  "key": "ownerId",
+                  "value": "1"
+                }
               ]
             }
           },
@@ -204,7 +272,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -212,8 +283,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/charts",
-              "host": ["{{baseUrl}}"],
-              "path": ["charts"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts"
+              ]
             }
           },
           "response": []
@@ -223,7 +298,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -231,8 +309,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/charts/entries",
-              "host": ["{{baseUrl}}"],
-              "path": ["charts", "entries"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries"
+              ]
             }
           },
           "response": []
@@ -242,7 +325,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -250,8 +336,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/charts/change-name",
-              "host": ["{{baseUrl}}"],
-              "path": ["charts", "change-name"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "change-name"
+              ]
             }
           },
           "response": []
@@ -261,7 +352,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -269,8 +363,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/charts/entries/change-properties",
-              "host": ["{{baseUrl}}"],
-              "path": ["charts", "entries", "change-properties"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries",
+                "change-properties"
+              ]
             }
           },
           "response": []

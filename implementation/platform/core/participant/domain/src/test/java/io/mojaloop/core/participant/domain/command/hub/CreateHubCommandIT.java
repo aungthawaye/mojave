@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,6 +46,7 @@ public class CreateHubCommandIT {
 
     @Test
     public void createHub_success_persistsAndReturnsId() throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
+
         assertNotNull(createHubCommand);
 
         CreateHubCommand.Input input = new CreateHubCommand.Input("The Hub", new Currency[]{Currency.USD, Currency.MMK});
@@ -61,16 +62,18 @@ public class CreateHubCommandIT {
     }
 
     @Test
-    public void duplicateCurrencyInInput_throwsCurrencyAlreadySupportedException() {
-        CreateHubCommand.Input bad = new CreateHubCommand.Input("Dup currency", new Currency[]{Currency.USD, Currency.USD});
-        assertThrows(FspCurrencyAlreadySupportedException.class, () -> this.createHubCommand.execute(bad));
-    }
-
-    @Test
     public void creatingSecondHub_throwsHubLimitReachedException() throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
         // create first hub
         this.createHubCommand.execute(new CreateHubCommand.Input("Hub A", new Currency[]{Currency.USD}));
         // attempt second
         assertThrows(HubCountLimitReachedException.class, () -> this.createHubCommand.execute(new CreateHubCommand.Input("Hub B", new Currency[]{Currency.MMK})));
     }
+
+    @Test
+    public void duplicateCurrencyInInput_throwsCurrencyAlreadySupportedException() {
+
+        CreateHubCommand.Input bad = new CreateHubCommand.Input("Dup currency", new Currency[]{Currency.USD, Currency.USD});
+        assertThrows(FspCurrencyAlreadySupportedException.class, () -> this.createHubCommand.execute(bad));
+    }
+
 }

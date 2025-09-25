@@ -110,44 +110,44 @@ public class LedgerIT {
 
                 //executor.submit(() -> {
 
-                    var requests = new ArrayList<Ledger.Request>();
+                var requests = new ArrayList<Ledger.Request>();
 
-                    requests.add(new Ledger.Request(
-                        new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT,
-                        new BigDecimal(1L)));
-                    requests.add(new Ledger.Request(
-                        new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.CREDIT,
-                        new BigDecimal(1L)));
-                    requests.add(new Ledger.Request(
-                        new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.DEBIT,
-                        new BigDecimal(1L)));
-                    requests.add(new Ledger.Request(
-                        new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.CREDIT,
-                        new BigDecimal(1L)));
+                requests.add(new Ledger.Request(
+                    new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT,
+                    new BigDecimal(1L)));
+                requests.add(new Ledger.Request(
+                    new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.CREDIT,
+                    new BigDecimal(1L)));
+                requests.add(new Ledger.Request(
+                    new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.DEBIT,
+                    new BigDecimal(1L)));
+                requests.add(new Ledger.Request(
+                    new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.CREDIT,
+                    new BigDecimal(1L)));
 
-                    try {
+                try {
 
-                        var threadStartAt = System.nanoTime();
+                    var threadStartAt = System.nanoTime();
 
-                        this.ledger.post(
-                            requests, new TransactionId(Snowflake.get().nextId()), Instant.now(),
-                            TransactionType.FUND_IN);
+                    this.ledger.post(
+                        requests, new TransactionId(Snowflake.get().nextId()), Instant.now(),
+                        TransactionType.FUND_IN);
 
-                        var threadEndAt = System.nanoTime();
+                    var threadEndAt = System.nanoTime();
 
-                        LOGGER.info("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
+                    LOGGER.info("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
 
-                        totalExecutionTime.addAndGet(threadEndAt - threadStartAt);
-                        completedThreads.incrementAndGet();
+                    totalExecutionTime.addAndGet(threadEndAt - threadStartAt);
+                    completedThreads.incrementAndGet();
 
-                        latch.countDown();
+                    latch.countDown();
 
-                    } catch (Ledger.InsufficientBalanceException | Ledger.OverdraftExceededException |
-                             Ledger.RestoreFailedException e) {
+                } catch (Ledger.InsufficientBalanceException | Ledger.OverdraftExceededException |
+                         Ledger.RestoreFailedException e) {
 
-                        throw new RuntimeException(e);
+                    throw new RuntimeException(e);
 
-                    }
+                }
 
                 //});
             }

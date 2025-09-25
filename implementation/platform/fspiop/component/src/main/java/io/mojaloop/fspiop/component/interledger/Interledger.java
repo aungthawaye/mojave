@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.fspiop.component.interledger;
 
 import com.google.common.primitives.UnsignedLong;
@@ -64,7 +65,7 @@ public class Interledger {
 
     private static <T> T deserialize(String base64Packet, Class<T> clazz) {
 
-        try (var bin = new ByteArrayInputStream(Base64.getUrlDecoder().decode(base64Packet));) {
+        try (var bin = new ByteArrayInputStream(Base64.getUrlDecoder().decode(base64Packet))) {
 
             return CODEC_CONTEXT.read(clazz, bin);
 
@@ -142,7 +143,7 @@ public class Interledger {
 
     private static <T> byte[] serialize(T any) {
 
-        try (var bout = new ByteArrayOutputStream();) {
+        try (var bout = new ByteArrayOutputStream()) {
 
             CODEC_CONTEXT.write(any, bout);
 
