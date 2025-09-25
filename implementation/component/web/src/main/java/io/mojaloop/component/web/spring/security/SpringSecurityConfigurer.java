@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.web.security.spring;
+package io.mojaloop.component.web.spring.security;
 
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -20,8 +20,8 @@
 package io.mojaloop.core.account.admin.component;
 
 import io.mojaloop.component.web.request.CachedServletRequest;
-import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
-import io.mojaloop.component.web.security.spring.Authenticator;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.Authenticator;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.util.ArrayList;

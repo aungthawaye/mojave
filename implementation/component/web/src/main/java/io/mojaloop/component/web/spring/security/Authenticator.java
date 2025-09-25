@@ -18,20 +18,13 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.web.security.spring;
+package io.mojaloop.component.web.spring.security;
 
-import org.springframework.security.core.AuthenticationException;
+import io.mojaloop.component.web.request.CachedServletRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class AuthenticationFailureException extends AuthenticationException {
+public interface Authenticator {
 
-    public AuthenticationFailureException(String message) {
-
-        super(message);
-    }
-
-    public AuthenticationFailureException(String message, Throwable cause) {
-
-        super(message, cause);
-    }
+    UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest) throws AuthenticationFailureException;
 
 }

@@ -53,16 +53,20 @@ public class AccountQueryHandler implements AccountQuery {
         if (accountCode != null) {
             spec = spec.and(AccountRepository.Filters.withCode(accountCode));
         }
+
         if (name != null && !name.isBlank()) {
             final var like = "%" + name.trim() + "%";
             spec = spec.and((root, query, cb) -> cb.like(root.get("name"), like));
         }
+
         if (ownerId != null) {
             spec = spec.and(AccountRepository.Filters.withOwnerId(ownerId));
         }
+
         if (chartEntryId != null) {
             spec = spec.and(AccountRepository.Filters.withChartEntryId(chartEntryId));
         }
+
         if (currency != null) {
             spec = spec.and(AccountRepository.Filters.withCurrency(currency));
         }
@@ -81,7 +85,7 @@ public class AccountQueryHandler implements AccountQuery {
         final var sort = Sort.by(direction, sortProperty);
 
         final var page = PageRequest.of(
-            Math.max(0, pagedRequest.page() - 1), Math.max(1, pagedRequest.pageSize()), sort);
+            Math.max(0, pagedRequest.pageNo() - 1), Math.max(1, pagedRequest.pageSize()), sort);
 
         final var resultPage = this.accountRepository.findAll(spec, page);
 
@@ -89,7 +93,7 @@ public class AccountQueryHandler implements AccountQuery {
 
         return new PagedResult<>(
             resultPage.getNumber() + 1, resultPage.getSize(), resultPage.getTotalPages(),
-            (int) resultPage.getTotalElements(), data);
+                                 (int) resultPage.getTotalElements(), data);
     }
 
     @Transactional(readOnly = true)
@@ -97,9 +101,8 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public AccountData get(AccountCode accountCode) throws AccountCodeNotFoundException {
 
-        return this.accountRepository.findOne(AccountRepository.Filters.withCode(accountCode))
-                                     .orElseThrow(() -> new AccountCodeNotFoundException(accountCode))
-                                     .convert();
+        return this.accountRepository.findOne(AccountRepository.Filters.withCode(accountCode)).orElseThrow(
+            () -> new AccountCodeNotFoundException(accountCode)).convert();
     }
 
     @Transactional(readOnly = true)
@@ -107,8 +110,8 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public List<AccountData> get(OwnerId ownerId) {
 
-        return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId))
-                                     .stream().map(Account::convert).collect(Collectors.toList());
+        return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId)).stream().map(
+            Account::convert).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

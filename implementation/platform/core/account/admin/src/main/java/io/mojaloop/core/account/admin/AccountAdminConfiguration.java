@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +20,13 @@
 
 package io.mojaloop.core.account.admin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
-import io.mojaloop.component.web.security.spring.Authenticator;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.Authenticator;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.account.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.account.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.account.domain.AccountDomainConfiguration;
@@ -43,10 +45,16 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.account.admin")
-@Import(value = {AccountDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-public class AccountAdminConfiguration implements AccountDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredSettings {
+@Import(value = {AccountDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
+public class AccountAdminConfiguration extends JacksonWebMvcExtension
+    implements AccountDomainConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredSettings {
+
+    public AccountAdminConfiguration(ObjectMapper objectMapper) {
+
+        super(objectMapper);
+    }
 
     @Bean
     @Override

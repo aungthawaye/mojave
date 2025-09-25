@@ -1,10 +1,10 @@
 package io.mojaloop.component.misc.query;
 
-public record PagedRequest(int page, int pageSize) {
+public record PagedRequest(int pageNo, int pageSize) {
 
     int offset() {
 
-        return (page - 1) * pageSize;
+        return (pageNo - 1) * pageSize;
     }
 
 }

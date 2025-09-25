@@ -1,0 +1,281 @@
+{
+  "info": {
+    "_postman_id": "f5f0c5a0-2d7c-4b03-9b77-7a9aa1c3d001",
+    "name": "Account Admin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for io.mojaloop.core.account.admin.controller endpoints."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Welcome",
+      "item": [
+        {
+          "name": "Welcome - catch-all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Create account",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate account",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "activate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate account",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "deactivate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Terminate account",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/terminate",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "terminate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change account properties",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/change-properties",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "change-properties"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-all-accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "get-all-accounts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by account code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-by-account-code?accountCode=ACC-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "get-by-account-code"],
+              "query": [
+                { "key": "accountCode", "value": "ACC-001" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by account id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-by-account-id?accountId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "get-by-account-id"],
+              "query": [
+                { "key": "accountId", "value": "1" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by owner id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-by-owner-id?ownerId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "get-by-owner-id"],
+              "query": [
+                { "key": "ownerId", "value": "1" }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Charts",
+      "item": [
+        {
+          "name": "Create chart",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts",
+              "host": ["{{baseUrl}}"],
+              "path": ["charts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create chart entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries",
+              "host": ["{{baseUrl}}"],
+              "path": ["charts", "entries"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change chart name",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts/change-name",
+              "host": ["{{baseUrl}}"],
+              "path": ["charts", "change-name"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change chart entry properties",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries/change-properties",
+              "host": ["{{baseUrl}}"],
+              "path": ["charts", "entries", "change-properties"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

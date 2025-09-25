@@ -20,7 +20,6 @@
 package io.mojaloop.connector.gateway.outbound;
 
 import io.mojaloop.component.misc.handy.P12Reader;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.invoker.api.PartiesService;

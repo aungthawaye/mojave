@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,18 +41,24 @@ package io.mojaloop.core.account.contract.exception.account;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.core.common.datatype.enums.account.Side;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
 
 import java.math.BigDecimal;
 
 public class InsufficientBalanceInAccountException extends DomainException {
 
-    private static final String TEMPLATE = "Account ({0}) does not have sufficient funds to perform the requested operation. Current Dr : {1}, Current Cr : {2}";
+    private static final String TEMPLATE = "Account ({0}) does not have sufficient funds to perform ({1}) operation for amount {2}. Current Dr : {3}, Current Cr : {4}";
 
-    public InsufficientBalanceInAccountException(AccountCode accountCode, BigDecimal postedDebits, BigDecimal postedCredits) {
+    public InsufficientBalanceInAccountException(AccountCode accountCode,
+                                                 Side side,
+                                                 BigDecimal amount,
+                                                 BigDecimal postedDebits,
+                                                 BigDecimal postedCredits) {
 
-        super(new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE), accountCode.toString(), postedDebits.toPlainString(),
-              postedCredits.toPlainString());
+        super(
+            new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE), accountCode.toString(), side.name(),
+            amount.toPlainString(), postedDebits.toPlainString(), postedCredits.toPlainString());
     }
 
 }

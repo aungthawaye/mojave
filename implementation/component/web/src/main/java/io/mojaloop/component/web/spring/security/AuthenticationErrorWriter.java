@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.web.security.spring;
+package io.mojaloop.component.web.spring.security;
 
 import jakarta.servlet.http.HttpServletResponse;
 

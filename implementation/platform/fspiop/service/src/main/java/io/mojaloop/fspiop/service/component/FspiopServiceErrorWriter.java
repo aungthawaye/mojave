@@ -22,8 +22,8 @@ package io.mojaloop.fspiop.service.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
-import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.ErrorInformation;

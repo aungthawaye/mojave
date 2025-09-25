@@ -20,7 +20,6 @@
 package io.mojaloop.connector.sample;
 
 import io.mojaloop.component.misc.handy.P12Reader;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
 import io.mojaloop.connector.gateway.ConnectorGatewayConfiguration;
 import io.mojaloop.connector.gateway.inbound.ConnectorInboundConfiguration;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;

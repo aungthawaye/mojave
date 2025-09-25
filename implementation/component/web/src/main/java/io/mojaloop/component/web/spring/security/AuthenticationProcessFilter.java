@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.web.security.spring;
+package io.mojaloop.component.web.spring.security;
 
 import io.mojaloop.component.web.request.CachedServletRequest;
 import jakarta.servlet.FilterChain;

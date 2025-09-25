@@ -21,14 +21,44 @@
 package io.mojaloop.core.common.datatype.identifier.account;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
 
+import java.io.IOException;
+
+@JsonDeserialize(using = ChartEntryId.Deserializer.class)
 public class ChartEntryId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public ChartEntryId(Long id) {
 
         super(id);
+    }
+
+    public static class Deserializer extends JsonDeserializer<ChartEntryId> {
+
+        @Override
+        public ChartEntryId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+
+            var field = p.currentName();
+            var text = p.getValueAsString();
+
+            if (text == null || text.isBlank()) {
+                return null;
+            }
+
+            try {
+                return new ChartEntryId(Long.parseLong(text));
+            } catch (NumberFormatException e) {
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
+            }
+        }
+
     }
 
 }

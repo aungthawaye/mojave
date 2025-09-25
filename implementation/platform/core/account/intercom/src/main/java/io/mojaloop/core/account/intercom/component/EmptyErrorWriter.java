@@ -19,8 +19,8 @@
  */
 package io.mojaloop.core.account.intercom.component;
 
-import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
-import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class EmptyErrorWriter implements AuthenticationErrorWriter {
