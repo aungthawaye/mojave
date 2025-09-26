@@ -1,3 +1,23 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.core.account.domain.component.ledger.strategy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,6 +26,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.mojaloop.core.account.domain.component.ledger.Ledger;
 import io.mojaloop.core.common.datatype.enums.account.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -58,13 +79,18 @@ public class MySqlLedger implements Ledger {
     }
 
     @Override
-    public List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt) throws InsufficientBalanceException {
+    public List<Movement> post(List<Request> requests,
+                               TransactionId transactionId,
+                               Instant transactionAt,
+                               TransactionType transactionType)
+        throws InsufficientBalanceException, OverdraftExceededException, RestoreFailedException {
 
         try {
 
-            var posting = requests.stream().map(
-                request -> new Posting(request.ledgerMovementId().getId(), request.accountId().getId(), request.side().name(), request.amount().toPlainString(),
-                                       transactionId.getId(), transactionAt.getEpochSecond())).toList();
+            var posting = requests.stream().map(request -> new Posting(
+                request.ledgerMovementId().getId(), request.accountId().getId(), request.side().name(),
+                request.amount().toPlainString(), transactionId.getId(), transactionAt.getEpochSecond(),
+                transactionType.name())).toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
             LOGGER.debug("Posting to ledger: {}", postingJson);
@@ -80,7 +106,7 @@ public class MySqlLedger implements Ledger {
 
                 while (hasResults) {
 
-                    try (var rs = stm.getResultSet();) {
+                    try (var rs = stm.getResultSet()) {
 
                         if (rs != null && rs.next()) {
 
@@ -102,9 +128,9 @@ public class MySqlLedger implements Ledger {
                                         var debits = rs.getBigDecimal("debits");
                                         var credits = rs.getBigDecimal("credits");
 
-                                        throw new RuntimeException(
-                                            new InsufficientBalanceException(new AccountId(accountId), Side.valueOf(side), amount,
-                                                                             new Ledger.DrCr(debits, credits)));
+                                        throw new RuntimeException(new InsufficientBalanceException(
+                                            new AccountId(accountId), Side.valueOf(side), amount,
+                                            new Ledger.DrCr(debits, credits)));
                                     }
 
                                     case "OVERDRAFT_EXCEEDED": {
@@ -115,8 +141,9 @@ public class MySqlLedger implements Ledger {
                                         var debits = rs.getBigDecimal("debits");
                                         var credits = rs.getBigDecimal("credits");
 
-                                        throw new RuntimeException(new OverdraftExceededException(new AccountId(accountId), Side.valueOf(side), amount,
-                                                                                                  new Ledger.DrCr(debits, credits)));
+                                        throw new RuntimeException(new OverdraftExceededException(
+                                            new AccountId(accountId), Side.valueOf(side), amount,
+                                            new Ledger.DrCr(debits, credits)));
                                     }
 
                                     case "RESTORE_FAILED": {
@@ -127,8 +154,9 @@ public class MySqlLedger implements Ledger {
                                         var debits = rs.getBigDecimal("debits");
                                         var credits = rs.getBigDecimal("credits");
 
-                                        throw new RuntimeException(new RestoreFailedException(new AccountId(accountId), Side.valueOf(side), amount,
-                                                                                              new Ledger.DrCr(debits, credits)));
+                                        throw new RuntimeException(new RestoreFailedException(
+                                            new AccountId(accountId), Side.valueOf(side), amount,
+                                            new Ledger.DrCr(debits, credits)));
                                     }
 
                                     default:
@@ -147,9 +175,10 @@ public class MySqlLedger implements Ledger {
                                     var newDebits = rs.getBigDecimal("new_debits");
                                     var newCredits = rs.getBigDecimal("new_credits");
 
-                                    var movement = new Movement(new LedgerMovementId(ledgerMovementId), new AccountId(accountId), Side.valueOf(side), amount,
-                                                                new DrCr(oldDebits, oldCredits), new DrCr(newDebits, newCredits), transactionId,
-                                                                transactionAt);
+                                    var movement = new Movement(
+                                        new LedgerMovementId(ledgerMovementId), new AccountId(accountId),
+                                        Side.valueOf(side), amount, new DrCr(oldDebits, oldCredits),
+                                        new DrCr(newDebits, newCredits), transactionId, transactionAt, transactionType);
 
                                     LOGGER.debug("Ledger movement: {}", movement);
 
@@ -175,6 +204,34 @@ public class MySqlLedger implements Ledger {
 
             });
 
+        } catch (RuntimeException e) {
+
+            if (e.getCause() instanceof NegativeAmountException e1) {
+                throw e1;
+            }
+
+            if (e.getCause() instanceof SqlErrorOccurredException e1) {
+                throw e1;
+            }
+
+            if (e.getCause() instanceof NoMovementResultException e1) {
+                throw e1;
+            }
+
+            if (e.getCause() instanceof InsufficientBalanceException e1) {
+                throw e1;
+            }
+
+            if (e.getCause() instanceof OverdraftExceededException e1) {
+                throw e1;
+            }
+
+            if (e.getCause() instanceof RestoreFailedException e1) {
+                throw e1;
+            }
+
+            throw e;
+
         } catch (JsonProcessingException e) {
 
             LOGGER.error("Unable to serialize ledger movement request", e);
@@ -190,6 +247,12 @@ public class MySqlLedger implements Ledger {
 
     }
 
-    private record Posting(long ledgerMovementId, long accountId, String side, String amount, long transactionId, long transactionAt) { }
+    private record Posting(long ledgerMovementId,
+                           long accountId,
+                           String side,
+                           String amount,
+                           long transactionId,
+                           long transactionAt,
+                           String transactionType) { }
 
 }

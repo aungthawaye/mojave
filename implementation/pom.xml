@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.5</version>
+        <version>3.5.6</version>
     </parent>
     <groupId>io.mojaloop</groupId>
     <artifactId>parent-pom</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>Mojaloop - Java Edition</name>
+    <name>Mojaloop - Java Edition (MOJAVE)</name>
     <modules>
         <module>component</module>
         <module>platform</module>
@@ -132,6 +133,11 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.account</groupId>
+                <artifactId>mod-account-admin-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.account</groupId>
                 <artifactId>mod-account-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -223,6 +229,16 @@
             <dependency>
                 <groupId>io.mojaloop.platform.core.settlement</groupId>
                 <artifactId>settlement-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transaction</groupId>
+                <artifactId>transaction-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transfer</groupId>
+                <artifactId>transfer-pom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -332,6 +348,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -417,13 +439,16 @@
                 <configuration>
                     <addSvnKeyWords>false</addSvnKeyWords>
                     <organizationName>Open Source</organizationName>
-                    <projectName>Mojaloop OSS</projectName>
+                    <projectName>Mojave</projectName>
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
                     <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-                    <processStartTag>================================================================================</processStartTag>
-                    <sectionDelimiter>--------------------------------------------------------------------------------</sectionDelimiter>
-                    <processEndTag>================================================================================</processEndTag>
+                    <processStartTag>================================================================================
+                    </processStartTag>
+                    <sectionDelimiter>--------------------------------------------------------------------------------
+                    </sectionDelimiter>
+                    <processEndTag>================================================================================
+                    </processEndTag>
                     <includes>
                         <include>**/*.java</include>
                     </includes>

@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -33,6 +34,6 @@ public interface DeactivateFspCurrencyCommand {
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
                  @JsonProperty(required = true) @NotNull Currency currency) { }
 
-    record Output() { }
+    record Output(FspCurrencyId fspCurrencyId, boolean changed) { }
 
 }

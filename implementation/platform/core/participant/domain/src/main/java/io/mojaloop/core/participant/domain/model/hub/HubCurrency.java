@@ -1,4 +1,23 @@
 /*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+/*-
  * ==============================================================================
  * Mojaloop OSS
  * --------------------------------------------------------------------------------
@@ -35,6 +54,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -54,7 +74,7 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(name = "pcp_hub_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_hub_currency_hub_currency_id_currency_UK", columnNames = {"hub_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataConversion<io.mojaloop.core.participant.contract.data.HubData.HubCurrencyData> {
+public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataConversion<HubData.HubCurrencyData> {
 
     @Id
     @JavaType(HubCurrencyIdJavaType.class)
@@ -75,7 +95,7 @@ public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataC
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "hub_id")
+    @JoinColumn(name = "hub_id", nullable = false, foreignKey = @ForeignKey(name = "hub_currency_hub_FK"))
     private Hub hub;
 
     HubCurrency(Hub hub, Currency currency) {
@@ -94,6 +114,7 @@ public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataC
         return new HubData.HubCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus());
     }
 
+    @Override
     public HubCurrencyId getId() {
 
         return this.id;

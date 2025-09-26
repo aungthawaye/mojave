@@ -23,6 +23,7 @@ package io.mojaloop.core.participant.domain.command.fsp;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.AddFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
@@ -40,19 +41,20 @@ public class AddFspCurrencyCommandHandler implements AddFspCurrencyCommand {
     public AddFspCurrencyCommandHandler(FspRepository fspRepository) {
 
         assert fspRepository != null;
+
         this.fspRepository = fspRepository;
     }
 
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException, FspCurrencyAlreadySupportedException {
+    public Output execute(Input input) throws FspIdNotFoundException, FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException {
 
         LOGGER.info("Executing AddSupportedCurrencyCommand with input: {}", input);
 
         var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        var supportedCurrency = fsp.addCurrency(input.supportedCurrency());
+        var supportedCurrency = fsp.addCurrency(input.currency());
 
         this.fspRepository.save(fsp);
 

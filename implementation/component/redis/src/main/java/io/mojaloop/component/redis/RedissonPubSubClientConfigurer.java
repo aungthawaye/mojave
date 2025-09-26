@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -34,17 +34,24 @@ public class RedissonPubSubClientConfigurer {
 
         var config = new Config();
 
-        switch (settings.codec()) {
-            case "kyro":
-                config.setCodec(new Kryo5Codec());
-                break;
-            case "lz4":
-                config.setCodec(new LZ4Codec(new Kryo5Codec()));
-                break;
-            case "lz4v2":
-                config.setCodec(new LZ4CodecV2(new Kryo5Codec()));
-            default:
-                config.setCodec(new Kryo5Codec());
+        if (settings.codec() == null) {
+
+            config.setCodec(new Kryo5Codec());
+
+        } else {
+
+            switch (settings.codec()) {
+                case RedissonOpsClientConfigurer.Codec.KRYO:
+                    config.setCodec(new Kryo5Codec());
+                    break;
+                case RedissonOpsClientConfigurer.Codec.LZ4:
+                    config.setCodec(new LZ4Codec(new Kryo5Codec()));
+                    break;
+                case RedissonOpsClientConfigurer.Codec.LZ4V2:
+                    config.setCodec(new LZ4CodecV2(new Kryo5Codec()));
+                default:
+                    config.setCodec(new Kryo5Codec());
+            }
         }
 
         config.setNettyThreads(Runtime.getRuntime().availableProcessors() * 2);
@@ -81,6 +88,16 @@ public class RedissonPubSubClientConfigurer {
         }
 
         return new RedissonPubSubClient(Redisson.create(config));
+    }
+
+    public static class Codec {
+
+        public static final String KRYO = "kryo";
+
+        public static final String LZ4 = "lz4";
+
+        public static final String LZ4V2 = "lz4v2";
+
     }
 
     public record Settings(String[] hosts,

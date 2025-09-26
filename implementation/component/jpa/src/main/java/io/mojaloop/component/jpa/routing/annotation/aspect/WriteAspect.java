@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -20,14 +20,13 @@
 
 package io.mojaloop.component.jpa.routing.annotation.aspect;
 
+import io.mojaloop.component.jpa.routing.RoutingDataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import io.mojaloop.component.jpa.routing.RoutingDataSource;
 
 @Aspect
 @Component
@@ -40,7 +39,7 @@ public class WriteAspect {
 
         try {
 
-            RoutingDataSource.setDataSourceKey("write");
+            RoutingDataSource.setDataSourceKey(RoutingDataSource.Keys.WRITE);
             LOGGER.debug("WriteAspect : RoutingDataSource -> write");
             return joinPoint.proceed();
 

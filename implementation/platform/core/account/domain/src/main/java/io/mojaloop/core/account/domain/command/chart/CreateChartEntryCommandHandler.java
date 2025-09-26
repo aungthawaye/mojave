@@ -1,8 +1,30 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.core.account.domain.command.chart;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.account.contract.command.chart.CreateChartEntryCommand;
+import io.mojaloop.core.account.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
 import io.mojaloop.core.account.contract.exception.chart.ChartIdNotFoundException;
+import io.mojaloop.core.account.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.account.domain.repository.ChartRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,23 +38,34 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
 
     private final ChartRepository chartRepository;
 
-    public CreateChartEntryCommandHandler(ChartRepository chartRepository) {
+    private final ChartEntryRepository chartEntryRepository;
+
+    public CreateChartEntryCommandHandler(ChartRepository chartRepository, ChartEntryRepository chartEntryRepository) {
 
         assert chartRepository != null;
+        assert chartEntryRepository != null;
 
         this.chartRepository = chartRepository;
+        this.chartEntryRepository = chartEntryRepository;
     }
 
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws ChartIdNotFoundException {
+    public Output execute(Input input) throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException {
 
         LOGGER.info("Executing CreateChartEntryCommand with input: {}", input);
 
         var chart = this.chartRepository.findById(input.chartId())
                                         .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
         LOGGER.info("Found Chart with id: {}", input.chartId());
+
+        var optExisting = this.chartEntryRepository.findOne(ChartEntryRepository.Filters.withCode(input.code()));
+
+        if (optExisting.isPresent()) {
+
+            throw new ChartEntryCodeAlreadyExistsException(input.code());
+        }
 
         var entry = chart.addEntry(input.code(), input.name(), input.description(), input.accountType());
         LOGGER.info("Created ChartEntry: {}", entry);

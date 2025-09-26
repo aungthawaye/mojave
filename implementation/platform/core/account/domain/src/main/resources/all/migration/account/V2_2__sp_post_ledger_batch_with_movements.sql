@@ -14,6 +14,7 @@ BEGIN
     DECLARE v_amount DECIMAL(34, 4);
     DECLARE v_txn_id BIGINT;
     DECLARE v_txn_at BIGINT;
+    DECLARE v_txn_type VARCHAR(32);
     DECLARE done INT DEFAULT 0;
 
     -- Locked balance snapshot
@@ -45,7 +46,8 @@ BEGIN
                UPPER(jt.side) AS side,
                jt.amount,
                jt.transactionId,
-               jt.transactionAt
+               jt.transactionAt,
+               jt.transactionType
         FROM JSON_TABLE(p_lines_json, '$[*]'
                         COLUMNS (
                             idx FOR ORDINALITY,
@@ -54,7 +56,8 @@ BEGIN
                             side VARCHAR(32) PATH '$.side',
                             amount DECIMAL(34, 4) PATH '$.amount',
                             transactionId BIGINT PATH '$.transactionId',
-                            transactionAt BIGINT PATH '$.transactionAt'
+                            transactionAt BIGINT PATH '$.transactionAt',
+                            transactionType VARCHAR(32) PATH '$.transactionType'
                             )
              ) AS jt;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
@@ -76,8 +79,9 @@ BEGIN
         old_credits        DECIMAL(34, 4) NOT NULL,
         new_debits         DECIMAL(34, 4) NOT NULL,
         new_credits        DECIMAL(34, 4) NOT NULL,
-        transaction_id     BIGINT,
-        transaction_at     BIGINT,
+        transaction_id     BIGINT         NOT NULL,
+        transaction_at     BIGINT         NOT NULL,
+        transaction_type   VARCHAR(32)    NOT NULL,
         created_at         BIGINT         NOT NULL
     ) ENGINE = MEMORY;
 
@@ -89,7 +93,7 @@ BEGIN
 
     post_loop:
     LOOP
-        FETCH c_lines INTO v_idx, v_ledger_movement_id, v_account_id, v_side, v_amount, v_txn_id, v_txn_at;
+        FETCH c_lines INTO v_idx, v_ledger_movement_id, v_account_id, v_side, v_amount, v_txn_id, v_txn_at, v_txn_type;
         IF done = 1 THEN
             LEAVE post_loop;
         END IF;
@@ -100,8 +104,13 @@ BEGIN
                 BEGIN
                     /* Any SQL problem → mark and bail */
                     ROLLBACK;
-                    SET v_error = 1;
-                    SET v_status_code = 'SQL_ERROR';
+                    SELECT 'ERROR'          AS status,
+                           v_status_code    AS code,
+                           v_err_account_id AS account_id,
+                           v_err_side       AS side,
+                           v_err_amount     AS amount,
+                           v_err_debits     AS debits,
+                           v_err_credits    AS credits;
                 END;
 
             START TRANSACTION;
@@ -168,11 +177,11 @@ BEGIN
             -- Stage movement row
             INSERT INTO tmp_movements (ledger_movement_id, account_id, side, amount,
                                        old_debits, old_credits, new_debits, new_credits,
-                                       transaction_id, transaction_at, created_at)
+                                       transaction_id, transaction_at, transaction_type, created_at)
             VALUES (v_ledger_movement_id, v_account_id, v_side, v_amount,
                     v_dr_curr, v_cr_curr,
                     v_dr_new, v_cr_new,
-                    v_txn_id, v_txn_at, UNIX_TIMESTAMP());
+                    v_txn_id, v_txn_at, v_txn_type, UNIX_TIMESTAMP());
         END;
     END LOOP post_loop;
     CLOSE c_lines;
@@ -188,6 +197,8 @@ BEGIN
             DECLARE r_amount DECIMAL(34, 4);
             DECLARE r_debits DECIMAL(34, 4);
             DECLARE r_credits DECIMAL(34, 4);
+
+            DECLARE r_lock INT DEFAULT 0;
 
             DECLARE cur_rev CURSOR FOR
                 SELECT account_id, side, amount, old_debits, old_credits FROM tmp_movements;
@@ -215,8 +226,6 @@ BEGIN
                             ROLLBACK;
                         END;
                     START TRANSACTION;
-                    -- Lock and restore the exact snapshot
-                    SELECT 1 FROM acc_ledger_balance WHERE ledger_balance_id = r_account_id FOR UPDATE;
                     -- Previously we increased the debits or credits based on the side.
                     -- Now we decrease it to restore.
                     IF r_side = 'DEBIT' THEN
@@ -229,7 +238,6 @@ BEGIN
                         WHERE ledger_balance_id = r_account_id;
                     END IF;
                     COMMIT;
-
                 END;
             END LOOP rev_loop;
             CLOSE cur_rev;
@@ -250,7 +258,7 @@ BEGIN
 
         INSERT INTO acc_ledger_movement (id, account_id, side, amount,
                                          old_debits, old_credits, new_debits, new_credits,
-                                         transaction_id, transaction_at, created_at)
+                                         transaction_id, transaction_at, transaction_type, created_at)
         SELECT ledger_movement_id,
                account_id,
                side,
@@ -261,6 +269,7 @@ BEGIN
                new_credits,
                transaction_id,
                transaction_at,
+               transaction_type,
                created_at
         FROM tmp_movements;
         COMMIT; -- end T2
@@ -276,6 +285,7 @@ BEGIN
                new_credits,
                transaction_id,
                transaction_at,
+               transaction_type,
                created_at
         FROM tmp_movements;
     END IF;

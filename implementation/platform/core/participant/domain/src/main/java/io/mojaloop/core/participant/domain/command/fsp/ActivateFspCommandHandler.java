@@ -22,6 +22,7 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCommand;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) throws FspIdNotFoundException, FspCurrencyNotSupportedByHubException {
 
         LOGGER.info("Executing ActivateFspCommand with input: {}", input);
 

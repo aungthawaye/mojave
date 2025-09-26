@@ -52,5 +52,4 @@ public record FspData(FspId fspId,
         return Objects.hashCode(fspId);
     }
 
-
 }

@@ -1,5 +1,5 @@
 /*-
- * ==============================================================================
+ * ================================================================================
  * Mojaloop OSS
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
@@ -15,59 +15,66 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
+ * ================================================================================
  */
 
 package io.mojaloop.core.participant.domain.command.fsp;
 
+import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.ChangeFspNameCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class ChangeFspNameCommandIT {
+class ChangeFspNameCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateFspCommand createFspCommand;
+    private CreateHubCommand createHub;
 
     @Autowired
-    private ChangeFspNameCommand changeFspNameCommand;
+    private CreateFspCommand createFsp;
+
+    @Autowired
+    private ChangeFspNameCommand changeFspName;
 
     @Test
-    public void changeName_success_and_fspNotFound() throws Exception {
+    void should_change_fsp_name() throws Exception {
 
-        assertNotNull(createFspCommand);
-        assertNotNull(changeFspNameCommand);
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
 
-        var created = createSampleFsp("chg-name-1");
-        var fspId = created.fspId();
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{
+            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
+        };
 
-        assertDoesNotThrow(() -> changeFspNameCommand.execute(new ChangeFspNameCommand.Input(fspId, "New Name")));
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP100"), "Old Name",
+            new Currency[]{Currency.USD}, endpoints);
+        var created = this.createFsp.execute(createFspInput);
 
-        var nonExisting = new FspId(-555L);
-        assertThrows(FspIdNotFoundException.class, () -> changeFspNameCommand.execute(new ChangeFspNameCommand.Input(nonExisting, "Whatever")));
+        var input = new ChangeFspNameCommand.Input(created.fspId(), "New Name");
+
+        // Act
+        var output = this.changeFspName.execute(input);
+
+        // Assert
+        Assertions.assertNotNull(output);
     }
 
-    private CreateFspCommand.Output createSampleFsp(String code)
-        throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+    @Test
+    void should_throw_when_fsp_not_found() {
 
-        var input = new CreateFspCommand.Input(new FspCode(code), "FSP-" + code, new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{});
-        return this.createFspCommand.execute(input);
+        // Arrange
+        var input = new ChangeFspNameCommand.Input(new FspId(999_999L), "Whatever");
+
+        // Act & Assert
+        Assertions.assertThrows(FspIdNotFoundException.class, () -> this.changeFspName.execute(input));
     }
-
 }

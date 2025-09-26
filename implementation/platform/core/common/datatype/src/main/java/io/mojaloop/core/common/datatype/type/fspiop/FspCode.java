@@ -20,7 +20,13 @@
 
 package io.mojaloop.core.common.datatype.type.fspiop;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.exception.fspiop.FspCodeValueRequiredException;
 import io.mojaloop.core.common.datatype.exception.fspiop.FspCodeValueTooLargeException;
@@ -28,11 +34,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.io.IOException;
 import java.util.Objects;
 
-public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
+@JsonDeserialize(using = FspCode.Deserializer.class)
+public record FspCode(@JsonValue @JsonProperty(required = true) @NotNull @NotBlank @Size(
+    max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
 
-    public FspCode {
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public FspCode(String value) {
 
         if (value == null || value.isBlank()) {
             throw new FspCodeValueRequiredException();
@@ -41,6 +51,8 @@ public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank @Size(ma
         if (value.length() > StringSizeConstraints.MAX_CODE_LENGTH) {
             throw new FspCodeValueTooLargeException();
         }
+
+        this.value = value;
 
     }
 
@@ -52,6 +64,22 @@ public record FspCode(@JsonProperty(required = true) @NotNull @NotBlank @Size(ma
         }
 
         return Objects.equals(this.value, code);
+    }
+
+    public static class Deserializer extends JsonDeserializer<FspCode> {
+
+        @Override
+        public FspCode deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+
+            var text = p.getValueAsString();
+
+            if (text == null || text.isBlank()) {
+                return null;
+            }
+
+            return new FspCode(text);
+        }
+
     }
 
 }

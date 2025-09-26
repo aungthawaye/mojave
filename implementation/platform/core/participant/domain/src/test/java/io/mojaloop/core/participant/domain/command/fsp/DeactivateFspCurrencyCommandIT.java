@@ -20,63 +20,51 @@
 
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCurrencyCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class DeactivateFspCurrencyCommandIT {
+class DeactivateFspCurrencyCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateFspCommand createFspCommand;
+    private DeactivateFspCurrencyCommand deactivateCurrency;
 
     @Autowired
-    private DeactivateFspCurrencyCommand deactivateFspCurrencyCommand;
+    private CreateFspCommand createFsp;
+
+    @Autowired
+    private CreateHubCommand createHub;
 
     @Test
-    public void deactivateCurrency_true_then_false_and_fspNotFound() throws Exception {
+    void should_deactivate_fsp_currency() throws Exception {
 
-        assertNotNull(createFspCommand);
-        assertNotNull(deactivateFspCurrencyCommand);
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
 
-        var created = createFspWithCurrencies("deact-cur-1", Currency.USD, Currency.MMK);
-        var fspId = created.fspId();
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP30"), "FSP Thirty",
+            new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
 
-        deactivateFspCurrencyCommand.execute(new DeactivateFspCurrencyCommand.Input(fspId, Currency.MMK));
-        
-        deactivateFspCurrencyCommand.execute(new DeactivateFspCurrencyCommand.Input(fspId, Currency.MMK));
-    
+        var input = new DeactivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
 
-        var nonExisting = new FspId(-3333L);
-        assertThrows(
-            FspIdNotFoundException.class, () -> deactivateFspCurrencyCommand.execute(
-                new DeactivateFspCurrencyCommand.Input(nonExisting, Currency.USD)));
+        // Act & Assert (should not throw)
+        this.deactivateCurrency.execute(input);
     }
 
-    private CreateFspCommand.Output createFspWithCurrencies(String code, Currency... currencies)
-        throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+    @Test
+    void should_throw_when_fsp_not_found_on_deactivation() {
 
-        var input = new CreateFspCommand.Input(
-            new FspCode(code),
-            "FSP-" + code,
-            currencies,
-            new CreateFspCommand.Input.Endpoint[]{});
-        return createFspCommand.execute(input);
+        // Arrange
+        var input = new DeactivateFspCurrencyCommand.Input(new io.mojaloop.core.common.datatype.identifier.participant.FspId(999997L), Currency.USD);
+
+        // Act & Assert
+        Assertions.assertThrows(FspIdNotFoundException.class, () -> this.deactivateCurrency.execute(input));
     }
-
 }

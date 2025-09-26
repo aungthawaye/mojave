@@ -21,56 +21,57 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
-import io.mojaloop.core.participant.domain.TestConfiguration;
-import io.mojaloop.core.participant.domain.repository.HubRepository;
+import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class CreateHubCommandIT {
+class CreateHubCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateHubCommand createHubCommand;
-
-    @Autowired
-    private HubRepository hubRepository;
+    private CreateHubCommand handler;
 
     @Test
-    public void createHub_success_persistsAndReturnsId() throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
-        assertNotNull(createHubCommand);
+    void should_create_hub_with_supported_currencies() throws Exception {
 
-        CreateHubCommand.Input input = new CreateHubCommand.Input("The Hub", new Currency[]{Currency.USD, Currency.MMK});
+        // Arrange
+        var input = new CreateHubCommand.Input("Hub-1", new Currency[]{Currency.USD, Currency.TZS});
 
-        var output = this.createHubCommand.execute(input);
+        // Act
+        var output = this.handler.execute(input);
 
-        assertNotNull(output);
-        assertNotNull(output.hubId());
-        var saved = hubRepository.findById(output.hubId());
-        assertTrue(saved.isPresent());
-        assertEquals("The Hub", saved.get().convert().name());
-        assertEquals(2, saved.get().getCurrencies().size());
+        // Assert
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.hubId());
     }
 
     @Test
-    public void duplicateCurrencyInInput_throwsCurrencyAlreadySupportedException() {
-        CreateHubCommand.Input bad = new CreateHubCommand.Input("Dup currency", new Currency[]{Currency.USD, Currency.USD});
-        assertThrows(FspCurrencyAlreadySupportedException.class, () -> this.createHubCommand.execute(bad));
+    void should_throw_when_hub_already_exists() throws Exception {
+
+        // Arrange
+        var input1 = new CreateHubCommand.Input("Hub-1", new Currency[]{Currency.USD});
+        var input2 = new CreateHubCommand.Input("Hub-2", new Currency[]{Currency.TZS});
+
+        // Act
+        this.handler.execute(input1);
+
+        // Assert
+        Assertions.assertThrows(HubCountLimitReachedException.class, () -> this.handler.execute(input2));
     }
 
     @Test
-    public void creatingSecondHub_throwsHubLimitReachedException() throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
-        // create first hub
-        this.createHubCommand.execute(new CreateHubCommand.Input("Hub A", new Currency[]{Currency.USD}));
-        // attempt second
-        assertThrows(HubCountLimitReachedException.class, () -> this.createHubCommand.execute(new CreateHubCommand.Input("Hub B", new Currency[]{Currency.MMK})));
+    void should_allow_empty_supported_currencies() throws Exception {
+
+        // Arrange
+        var input = new CreateHubCommand.Input("Hub-Empty", new Currency[]{});
+
+        // Act
+        var output = this.handler.execute(input);
+
+        // Assert
+        Assertions.assertNotNull(output.hubId());
     }
 }

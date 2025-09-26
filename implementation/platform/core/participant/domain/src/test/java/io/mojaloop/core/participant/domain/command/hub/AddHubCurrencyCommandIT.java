@@ -20,45 +20,61 @@
 
 package io.mojaloop.core.participant.domain.command.hub;
 
+import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubIdNotFoundException;
-import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
-import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class AddHubCurrencyCommandIT {
+class AddHubCurrencyCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateHubCommand createHubCommand;
+    private CreateHubCommand createHub;
 
     @Autowired
-    private AddHubCurrencyCommand addHubCurrencyCommand;
+    private AddHubCurrencyCommand addCurrency;
 
     @Test
-    public void addCurrency_success_and_duplicate_throws() throws HubCountLimitReachedException, FspCurrencyAlreadySupportedException, HubIdNotFoundException {
-        var created = createHubCommand.execute(new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD}));
+    void should_add_currency_to_existing_hub() throws Exception {
 
-        var addOut = addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
-        assertNotNull(addOut.hubCurrencyId());
+        // Arrange
+        var created = this.createHub.execute(new CreateHubCommand.Input("Hub-1", new Currency[]{}));
+        var input = new AddHubCurrencyCommand.Input(created.hubId(), Currency.TZS);
 
-        // duplicate add
-        assertThrows(FspCurrencyAlreadySupportedException.class, () -> addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK)));
+        // Act
+        var output = this.addCurrency.execute(input);
+
+        // Assert
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.hubCurrencyId());
     }
 
     @Test
-    public void invalidHubId_add_throwsHubIdNotFoundException() {
-        var badHubId = new io.mojaloop.core.common.datatype.identifier.participant.HubId(-123L);
-        assertThrows(HubIdNotFoundException.class, () -> addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(badHubId, Currency.USD)));
+    void should_throw_when_hub_not_found() {
+
+        // Arrange
+        var input = new AddHubCurrencyCommand.Input(new HubId(), Currency.TZS);
+
+        // Act & Assert
+        Assertions.assertThrows(HubNotFoundException.class, () -> this.addCurrency.execute(input));
+    }
+
+    @Test
+    void should_throw_when_currency_already_supported() throws Exception {
+
+        // Arrange
+        var created = this.createHub.execute(new CreateHubCommand.Input("Hub-1", new Currency[]{Currency.USD}));
+        var input = new AddHubCurrencyCommand.Input(created.hubId(), Currency.USD);
+
+        // Act
+        this.addCurrency.execute(input);
+
+        // Assert
+        Assertions.assertThrows(HubCurrencyAlreadySupportedException.class, () -> this.addCurrency.execute(input));
     }
 }

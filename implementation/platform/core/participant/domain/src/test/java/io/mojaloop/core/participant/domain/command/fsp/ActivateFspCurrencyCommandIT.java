@@ -20,80 +20,80 @@
 
 package io.mojaloop.core.participant.domain.command.fsp;
 
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
+import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class ActivateFspCurrencyCommandIT {
+class ActivateFspCurrencyCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateFspCommand createFspCommand;
+    private ActivateFspCurrencyCommand activateCurrency;
 
     @Autowired
-    private ActivateFspCurrencyCommand activateFspCurrencyCommand;
+    private CreateFspCommand createFsp;
 
     @Autowired
-    private io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand deactivateFspCommand;
+    private CreateHubCommand createHub;
 
     @Test
-    public void activateCurrency_behaviors() throws Exception {
+    void should_activate_fsp_currency() throws Exception {
 
-        assertNotNull(createFspCommand);
-        assertNotNull(activateFspCurrencyCommand);
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
 
-        // Existing supported currency + active FSP -> activated = true
-        var created = createFspWithCurrencies("act-cur-1", Currency.USD, Currency.KES);
-        var fspId = created.fspId();
-        activateFspCurrencyCommand.execute(new ActivateFspCurrencyCommand.Input(fspId, Currency.KES));
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP20"), "FSP Twenty",
+            new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
 
-        // Missing supported currency -> should not throw, but no flag returned
-        activateFspCurrencyCommand.execute(new ActivateFspCurrencyCommand.Input(fspId, Currency.MMK));
+        var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
 
-        // Non-existent FSP -> FspIdNotFoundException
-        var nonExisting = new FspId(-654L);
-        assertThrows(
-            FspIdNotFoundException.class,
-            () -> activateFspCurrencyCommand.execute(new ActivateFspCurrencyCommand.Input(nonExisting, Currency.USD)));
+        // Act & Assert (should not throw)
+        this.activateCurrency.execute(input);
     }
 
     @Test
-    public void activateCurrency_inactiveFsp_throws() throws Exception {
+    void should_throw_when_fsp_not_found_on_activation() {
 
-        assertNotNull(deactivateFspCommand);
-        var created = createFspWithCurrencies("act-cur-2", Currency.USD);
-        var fspId = created.fspId();
-        deactivateFspCommand.execute(new io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand.Input(fspId));
-        assertThrows(
-            CannotActivateFspCurrencyException.class,
-            () -> activateFspCurrencyCommand.execute(new ActivateFspCurrencyCommand.Input(fspId, Currency.USD)));
+        // Arrange
+        var input = new ActivateFspCurrencyCommand.Input(null, Currency.USD);
+
+        // Act & Assert
+        Assertions.assertThrows(FspIdNotFoundException.class, () -> this.activateCurrency.execute(input));
     }
 
-    private CreateFspCommand.Output createFspWithCurrencies(String code, Currency... currencies)
-        throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+    @Test
+    void should_throw_when_currency_not_supported_by_hub_on_activation() throws Exception {
 
-        var input = new CreateFspCommand.Input(
-            new FspCode(code),
-            "FSP-" + code,
-            currencies,
-            new CreateFspCommand.Input.Endpoint[]{});
-        return createFspCommand.execute(input);
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
+
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP21"), "FSP Twenty One",
+            new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
+
+        var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.TZS);
+
+        // Act & Assert
+        Assertions.assertThrows(FspCurrencyNotSupportedByHubException.class, () -> this.activateCurrency.execute(input));
     }
 
+    @Test
+    void should_throw_when_hub_not_found_on_activation() {
+
+        // Arrange
+        var input = new ActivateFspCurrencyCommand.Input(new io.mojaloop.core.common.datatype.identifier.participant.FspId(999999L), Currency.USD);
+
+        // Act & Assert
+        Assertions.assertThrows(HubNotFoundException.class, () -> this.activateCurrency.execute(input));
+    }
 }

@@ -1,3 +1,23 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.connector.gateway.inbound.controller;
 
 import io.mojaloop.component.misc.spring.event.EventPublisher;
@@ -12,7 +32,6 @@ import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +58,7 @@ public class HandlePartiesController {
     }
 
     @GetMapping("/parties/{partyIdType}/{partyId}")
-    public ResponseEntity<?> getParties(@RequestHeader Map<String, String> headers,
-                                        @PathVariable PartyIdType partyIdType,
-                                        @PathVariable String partyId) {
+    public ResponseEntity<?> getParties(@RequestHeader Map<String, String> headers, @PathVariable PartyIdType partyIdType, @PathVariable String partyId) {
 
         LOGGER.debug("Received GET /parties/{}/{}", partyIdType, partyId);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
@@ -74,8 +91,7 @@ public class HandlePartiesController {
         LOGGER.debug("Received PUT /parties/{}/{} : response : {}", partyIdType, partyId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(
-            new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, null, response)));
+        this.eventPublisher.publish(new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, null, response)));
 
         return ResponseEntity.accepted().build();
     }
@@ -89,8 +105,7 @@ public class HandlePartiesController {
         LOGGER.debug("Received PUT /parties/{}/{}/error : response {}", partyIdType, partyId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(
-            new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, null, errorInformation)));
+        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, null, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }
@@ -105,8 +120,7 @@ public class HandlePartiesController {
         LOGGER.debug("Received PUT /parties/{}/{}/{}/error : {}", partyIdType, partyId, subId, errorInformation);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(
-            new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, subId, errorInformation)));
+        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, subId, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }
@@ -121,8 +135,7 @@ public class HandlePartiesController {
         LOGGER.debug("Received (withSubId) PUT /parties/{}/{}/{} : response : {}", partyIdType, partyId, subId, response);
         var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(
-            new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, subId, response)));
+        this.eventPublisher.publish(new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, subId, response)));
 
         return ResponseEntity.accepted().build();
     }

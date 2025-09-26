@@ -1,3 +1,23 @@
+/*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.core.account.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -7,6 +27,7 @@ import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdCo
 import io.mojaloop.core.common.datatype.converter.identifier.account.LedgerMovementIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
 import io.mojaloop.core.common.datatype.enums.account.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
 import io.mojaloop.core.common.datatype.identifier.account.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -35,11 +56,12 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Table(name = "acc_ledger_movement",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_account_account_id_side_transaction_id_UK", columnNames = {"account_id", "side", "transaction_id"}),},
+       uniqueConstraints = {@UniqueConstraint(name = "acc_account_account_id_side_transaction_id_UK",
+                                              columnNames = {"account_id", "side", "transaction_id"}),},
        indexes = {@Index(name = "acc_account_transaction_id_IDX", columnList = "transaction_id"),
                   @Index(name = "acc_account_transaction_at_IDX", columnList = "transaction_at"),
                   @Index(name = "acc_account_account_id_transaction_at_IDX", columnList = "account_id, transaction_at"),
-                  @Index(name = "acc_account_account_id", columnList = "account_id"), @Index(name = "acc_account_created_at", columnList = "created_at")})
+                  @Index(name = "acc_account_account_id", columnList = "account_id")})
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LedgerMovement extends JpaEntity<LedgerMovementId> {
@@ -61,13 +83,15 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     protected BigDecimal amount;
 
     @Embedded
-    @AttributeOverrides({@AttributeOverride(name = "debits", column = @Column(name = "old_debits", precision = 34, scale = 4)),
-                         @AttributeOverride(name = "credits", column = @Column(name = "old_credits", precision = 34, scale = 4))})
+    @AttributeOverrides(
+        {@AttributeOverride(name = "debits", column = @Column(name = "old_debits", precision = 34, scale = 4)),
+         @AttributeOverride(name = "credits", column = @Column(name = "old_credits", precision = 34, scale = 4))})
     protected DrCr oldDrCr;
 
     @Embedded
-    @AttributeOverrides({@AttributeOverride(name = "debits", column = @Column(name = "new_debits", precision = 34, scale = 4)),
-                         @AttributeOverride(name = "credits", column = @Column(name = "new_credits", precision = 34, scale = 4))})
+    @AttributeOverrides(
+        {@AttributeOverride(name = "debits", column = @Column(name = "new_debits", precision = 34, scale = 4)),
+         @AttributeOverride(name = "credits", column = @Column(name = "new_credits", precision = 34, scale = 4))})
     protected DrCr newDrCr;
 
     @Column(name = "transaction_id", nullable = false, updatable = false)
@@ -77,6 +101,10 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Column(name = "transaction_at", nullable = false, updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant transactionAt;
+
+    @Column(name = "transaction_type", nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    protected TransactionType transactionType;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Convert(converter = JpaInstantConverter.class)
@@ -89,7 +117,8 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
                           DrCr oldDrCr,
                           DrCr newDrCr,
                           TransactionId transactionId,
-                          Instant transactionAt) {
+                          Instant transactionAt,
+                          TransactionType transactionType) {
 
         assert id != null;
         assert accountId != null;
@@ -99,6 +128,7 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
         assert newDrCr != null;
         assert transactionId != null;
         assert transactionAt != null;
+        assert transactionType != null;
 
         this.id = id;
         this.accountId = accountId;
@@ -108,6 +138,7 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
         this.newDrCr = newDrCr;
         this.transactionId = transactionId;
         this.transactionAt = transactionAt;
+        this.transactionType = transactionType;
         this.createdAt = Instant.now();
 
     }

@@ -24,6 +24,7 @@ import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
+import io.mojaloop.core.participant.domain.model.fsp.FspEndpoint;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,17 +52,19 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
 
         LOGGER.info("Executing ActivateEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        fsp.activateEndpoint(input.endpointType());
+        var optFspEndpoint = fsp.activate(input.endpointType());
 
         this.fspRepository.save(fsp);
 
         LOGGER.info("Completed ActivateEndpointCommand with input: {}", input);
 
-        return new Output();
+        if (optFspEndpoint.isPresent()) {
+            return new Output(optFspEndpoint.map(FspEndpoint::getId).orElse(null), optFspEndpoint.get().isActive());
+        }
+
+        return new Output(null, false);
     }
 
 }

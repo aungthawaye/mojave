@@ -1,4 +1,23 @@
 /*-
+ * ================================================================================
+ * Mojaloop OSS
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+/*-
  * ==============================================================================
  * Mojaloop OSS
  * --------------------------------------------------------------------------------
@@ -21,10 +40,9 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
@@ -49,7 +67,7 @@ public class CreateHubCommandHandler implements CreateHubCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
+    public Output execute(Input input) throws HubCountLimitReachedException, HubCurrencyAlreadySupportedException {
 
         LOGGER.info("Executing CreateHubCommand with input: {}", input);
 
@@ -58,7 +76,7 @@ public class CreateHubCommandHandler implements CreateHubCommand {
         if (existing >= 1) {
 
             LOGGER.info("Hub limit reached. existing={} -> throwing HubLimitReachedException", existing);
-            throw new HubCountLimitReachedException(new HubId(0L));
+            throw new HubCountLimitReachedException();
         }
 
         var hub = new Hub(input.name());

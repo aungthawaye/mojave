@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource implements Infr
         return CONTEXT_HOLDER.get();
     }
 
-    public static class Qualifiers {
+    public static class Keys {
 
         public static final String READ = "read";
 

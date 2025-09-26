@@ -20,37 +20,48 @@
 
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.component.vault.Vault;
-import io.mojaloop.component.vault.VaultConfiguration;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
-@Import(value = {VaultConfiguration.class})
+import java.util.HashMap;
+
 final class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettings {
-
-    private final Vault vault;
-
-    public LookUpServiceSettings(Vault vault) {
-
-        this.vault = vault;
-    }
 
     @Bean
     @Override
     public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
-        return this.vault.get(VaultPaths.FSPIOP_SETTINGS, FspiopCommonConfiguration.ParticipantSettings.class);
+        var fspCode = System.getenv("FSPIOP_FSP_CODE");
+        var fspName = System.getenv("FSPIOP_FSP_NAME");
+        var ilpSecret = System.getenv("FSPIOP_ILP_SECRET");
+        var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
+        var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
+        var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
+        var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
+        var fspPublicKeyPem = new HashMap<String, String>();
+
+        for (var fsp : fsps) {
+
+            var env = "FSPIOP_PUBLIC_KEY_PEM_OF_" + fsp.toUpperCase();
+            var publicKeyPem = System.getenv(env);
+
+            if (publicKeyPem != null) {
+                fspPublicKeyPem.put(fsp, publicKeyPem);
+            }
+        }
+
+        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+
     }
 
     @Bean
     @Override
     public LookUpServiceConfiguration.TomcatSettings lookUpServiceTomcatSettings() {
 
-        return new LookUpServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("LOOKUP_SERVICE_PORT", "4303")));
+        return new LookUpServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("LOOKUP_SERVICE_PORT", "4503")));
     }
 
     @Bean
@@ -58,7 +69,7 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
         return new ParticipantIntercomService.Settings(
-            System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4201"));
+            System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4202"));
     }
 
     @Bean
@@ -74,12 +85,6 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
         return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**"});
-    }
-
-    public static class VaultPaths {
-
-        public static final String FSPIOP_SETTINGS = "micro/fspiop/common/participant/settings";
-
     }
 
 }

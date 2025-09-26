@@ -21,14 +21,49 @@
 package io.mojaloop.core.common.datatype.identifier.participant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
 
+import java.io.IOException;
+
+@JsonDeserialize(using = HubId.Deserializer.class)
 public class HubId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public HubId(Long id) {
+    public HubId() {
 
-        super(id);
+        super(1L);
+    }
+
+    public static class Deserializer extends JsonDeserializer<HubId> {
+
+        @Override
+        public HubId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+
+            var field = p.currentName();
+            var text = p.getValueAsString();
+
+            if (text == null || text.isBlank()) {
+                return null;
+            }
+
+            try {
+                var value = Long.parseLong(text);
+                if (value != 1L) {
+                    throw InvalidFormatException.from(
+                        p, "'" + field + "' has invalid value. Only '1' is accepted.", null);
+                }
+                return new HubId();
+            } catch (NumberFormatException e) {
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number '1'.", e);
+            }
+        }
+
     }
 
 }

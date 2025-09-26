@@ -1,3 +1,23 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.connector.gateway.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -5,10 +25,10 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.misc.handy.P12Reader;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.tomcat.connector.MutualTLSConnectorDecorator;
-import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
-import io.mojaloop.component.web.security.spring.Authenticator;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfiguration;
-import io.mojaloop.component.web.security.spring.SpringSecurityConfigurer;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.Authenticator;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.connector.adapter.ConnectorAdapterConfiguration;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
@@ -19,7 +39,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfiguration;
@@ -35,7 +54,7 @@ import java.util.List;
 @Import(value = {MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
 public class ConnectorInboundConfiguration
-        implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     private final ParticipantContext participantContext;
 
@@ -49,13 +68,6 @@ public class ConnectorInboundConfiguration
         this.participantContext = participantContext;
         this.objectMapper = objectMapper;
 
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
     }
 
     @Bean
@@ -89,6 +101,13 @@ public class ConnectorInboundConfiguration
     }
 
     @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
+    }
+
+    @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
 
         return factory -> {
@@ -111,15 +130,15 @@ public class ConnectorInboundConfiguration
                             var keystoreSettings = inboundSettings.keyStoreSettings();
                             var truststoreSettings = inboundSettings.trustStoreSettings();
                             var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
-                                    inboundSettings.connectionTimeout(),
-                                    new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
-                                            truststoreSettings.contentType(),
-                                            truststoreSettings.contentValue(),
-                                            truststoreSettings.password),
-                                    new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
-                                            keystoreSettings.contentType(),
-                                            keystoreSettings.contentValue(), keystoreSettings.password,
-                                            keystoreSettings.keyAlias()));
+                                                                                             inboundSettings.connectionTimeout(),
+                                                                                             new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
+                                                                                                 truststoreSettings.contentType(),
+                                                                                                 truststoreSettings.contentValue(),
+                                                                                                 truststoreSettings.password),
+                                                                                             new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
+                                                                                                 keystoreSettings.contentType(),
+                                                                                                 keystoreSettings.contentValue(), keystoreSettings.password,
+                                                                                                 keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
 
@@ -142,8 +161,8 @@ public class ConnectorInboundConfiguration
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-            ConnectorAdapterConfiguration.RequiredSettings,
-            FspiopInvokerConfiguration.RequiredSettings {
+                                              ConnectorAdapterConfiguration.RequiredSettings,
+                                              FspiopInvokerConfiguration.RequiredSettings {
 
         InboundSettings inboundSettings();
 

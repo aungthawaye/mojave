@@ -31,6 +31,7 @@ import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspEndpointId;
 import io.mojaloop.core.participant.contract.data.FspEndpointData;
 import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointBaseUrlRequiredException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointBaseUrlTooLongException;
 import jakarta.persistence.Column;
@@ -38,6 +39,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -83,10 +85,10 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "fsp_id")
+    @JoinColumn(name = "fsp_id", nullable = false, foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
     private Fsp fsp;
 
-    FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) {
+    public FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) throws FspEndpointAlreadyConfiguredException {
 
         assert fsp != null;
         assert type != null;
@@ -96,6 +98,11 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
         this.type = type;
         this.baseUrl(baseUrl);
         this.createdAt = Instant.now();
+
+        if (this.fsp.hasEndpoint(type)) {
+
+            throw new FspEndpointAlreadyConfiguredException(type);
+        }
     }
 
     public FspEndpoint baseUrl(String baseUrl) {

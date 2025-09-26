@@ -21,62 +21,96 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
-import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.command.fsp.AddFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
+import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class AddFspCurrencyCommandIT {
+class AddFspCurrencyCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateFspCommand createFspCommand;
+    private AddFspCurrencyCommand addCurrency;
 
     @Autowired
-    private AddFspCurrencyCommand addFspCurrencyCommand;
+    private CreateFspCommand createFsp;
+
+    @Autowired
+    private CreateHubCommand createHub;
 
     @Test
-    public void addCurrency_success_duplicate_and_fspNotFound() throws Exception {
+    void should_add_currency_to_fsp() throws Exception {
 
-        assertNotNull(createFspCommand);
-        assertNotNull(addFspCurrencyCommand);
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD, Currency.TZS});
+        this.createHub.execute(hubInput);
 
-        var created = createSampleFsp("add-cur-1");
-        var fspId = created.fspId();
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP10"), "FSP Ten",
+                                                                          new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
 
-        var out1 = addFspCurrencyCommand.execute(new AddFspCurrencyCommand.Input(fspId, Currency.MMK));
-        assertNotNull(out1);
-        FspCurrencyId scId = out1.fspCurrencyId();
-        assertNotNull(scId);
+        var input = new AddFspCurrencyCommand.Input(fspOutput.fspId(), Currency.TZS);
 
-        assertThrows(
-            FspCurrencyAlreadySupportedException.class,
-            () -> addFspCurrencyCommand.execute(new AddFspCurrencyCommand.Input(fspId, Currency.MMK)));
+        // Act
+        var output = this.addCurrency.execute(input);
 
-        var nonExisting = new FspId(-4321L);
-        assertThrows(FspIdNotFoundException.class, () -> addFspCurrencyCommand.execute(new AddFspCurrencyCommand.Input(nonExisting, Currency.MYR)));
+        // Assert
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.fspCurrencyId());
     }
 
-    private CreateFspCommand.Output createSampleFsp(String code)
-        throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException {
+    @Test
+    void should_throw_when_currency_already_supported() throws Exception {
 
-        var input = new CreateFspCommand.Input(new FspCode(code), "FSP-" + code, new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{});
-        return this.createFspCommand.execute(input);
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
+
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP12"), "FSP Twelve",
+                                                                          new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
+
+        var input = new AddFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
+
+        // Act
+        this.addCurrency.execute(input);
+
+        // Assert
+        Assertions.assertThrows(FspCurrencyAlreadySupportedException.class, () -> this.addCurrency.execute(input));
+    }
+
+    @Test
+    void should_throw_when_currency_not_supported_by_hub() throws Exception {
+
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
+
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP11"), "FSP Eleven",
+                                                                          new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
+
+        var input = new AddFspCurrencyCommand.Input(fspOutput.fspId(), Currency.TZS);
+
+        // Act & Assert
+        Assertions.assertThrows(FspCurrencyNotSupportedByHubException.class, () -> this.addCurrency.execute(input));
+    }
+
+    @Test
+    void should_throw_when_fsp_not_found() throws Exception {
+
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
+
+        var input = new AddFspCurrencyCommand.Input(new FspId(999998L), Currency.USD);
+
+        // Act & Assert
+        Assertions.assertThrows(FspIdNotFoundException.class, () -> this.addCurrency.execute(input));
     }
 
 }

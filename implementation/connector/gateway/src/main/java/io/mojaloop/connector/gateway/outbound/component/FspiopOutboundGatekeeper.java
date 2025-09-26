@@ -1,3 +1,23 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.connector.gateway.outbound.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,9 +26,9 @@ import io.mojaloop.component.misc.crypto.Rs256;
 import io.mojaloop.component.misc.jwt.JwtBase64Util;
 import io.mojaloop.component.misc.jwt.Rs256Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;
-import io.mojaloop.component.web.security.spring.AuthenticationErrorWriter;
-import io.mojaloop.component.web.security.spring.AuthenticationFailureException;
-import io.mojaloop.component.web.security.spring.Authenticator;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;

@@ -1,7 +1,29 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.connector.gateway.outbound.controller;
 
+import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.connector.gateway.outbound.command.RequestTransfersCommand;
+import io.mojaloop.connector.gateway.outbound.event.RequestTransfersEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Destination;
@@ -23,7 +45,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.UUID;
 
 @RestController
 public class RequestTransfersController {
@@ -36,17 +57,22 @@ public class RequestTransfersController {
 
     private final RequestTransfersCommand requestTransfersCommand;
 
+    private final EventPublisher eventPublisher;
+
     public RequestTransfersController(ParticipantContext participantContext,
                                       ConnectorOutboundConfiguration.TransactionSettings transactionSettings,
-                                      RequestTransfersCommand requestTransfersCommand) {
+                                      RequestTransfersCommand requestTransfersCommand,
+                                      EventPublisher eventPublisher) {
 
         assert participantContext != null;
         assert transactionSettings != null;
         assert requestTransfersCommand != null;
+        assert eventPublisher != null;
 
         this.participantContext = participantContext;
         this.transactionSettings = transactionSettings;
         this.requestTransfersCommand = requestTransfersCommand;
+        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping("/transfer")
@@ -56,7 +82,6 @@ public class RequestTransfersController {
         LOGGER.debug("Transfer request: {}", request);
 
         try {
-            var transferId = UUID.randomUUID().toString();
 
             var transfersPostRequest = new TransfersPostRequest();
             var extensionList = new ExtensionList();
@@ -70,23 +95,18 @@ public class RequestTransfersController {
             extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
             extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
-            var expireAfterSeconds = new Date(
-                Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
+            var expireAfterSeconds = new Date(Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
 
-            transfersPostRequest
-                .transferId(transferId)
-                .payerFsp(this.participantContext.fspCode())
-                .payeeFsp(request.destination)
-                .amount(request.amount)
-                .ilpPacket(request.ilpPacket)
-                .condition(request.condition)
-                .expiration(FspiopDates.forRequestBody(expireAfterSeconds))
-                .extensionList(extensionList);
+            transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination)
+                                .amount(request.amount).ilpPacket(request.ilpPacket).condition(request.condition)
+                                .expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
 
-            var output = this.requestTransfersCommand.execute(
-                new RequestTransfersCommand.Input(new Destination(request.destination()), transfersPostRequest));
+            var input = new RequestTransfersCommand.Input(new Destination(request.destination()), transfersPostRequest);
+            var output = this.requestTransfersCommand.execute(input);
 
-            return ResponseEntity.ok(output.response());
+            this.eventPublisher.publish(new RequestTransfersEvent(input));
+
+            return ResponseEntity.ok(output.result());
 
         } catch (FspiopException e) {
             throw new RuntimeException(e);
@@ -94,6 +114,7 @@ public class RequestTransfersController {
     }
 
     public record Request(String destination,
+                          String transferId,
                           AmountType amountType,
                           Money amount,
                           PartyIdInfo payer,

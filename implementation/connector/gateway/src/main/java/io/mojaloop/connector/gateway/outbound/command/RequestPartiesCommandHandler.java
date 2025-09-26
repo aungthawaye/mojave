@@ -1,15 +1,35 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
+
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.PartiesErrorResult;
-import io.mojaloop.connector.gateway.inbound.data.PartiesResult;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
+import io.mojaloop.connector.gateway.data.PartiesErrorResult;
+import io.mojaloop.connector.gateway.data.PartiesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.invoker.api.parties.GetParties;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,9 +70,8 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         assert input != null;
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
-        var subIdOrNot = withSubId ? "/" + input.subId() : "";
-        var resultTopic = "parties:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
-        var errorTopic = "parties-error:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
+        var resultTopic = PubSubKeys.forParties(input.destination().destinationFspCode(), input.partyIdType(), input.partyId(), input.subId());
+        var errorTopic = PubSubKeys.forPartiesError(input.destination().destinationFspCode(), input.partyIdType(), input.partyId(), input.subId());
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);

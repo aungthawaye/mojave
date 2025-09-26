@@ -21,7 +21,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="payerFsp" elementType="Argument">
               <stringProp name="Argument.name">payerFsp</stringProp>
@@ -36,7 +36,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payer msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payer msisdn" enabled="true">
           <stringProp name="CounterConfig.start">9000000001</stringProp>
           <stringProp name="CounterConfig.end">9999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -45,7 +45,7 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payee msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payee msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8000000001</stringProp>
           <stringProp name="CounterConfig.end">8999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -190,15 +190,21 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="quoteId - JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">quoteId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.quoteId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
           <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="ilpPacket - JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">ilpPacket</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">$.ilpPacket</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.response.ilpPacket</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
           </JSONPostProcessor>
           <hashTree/>
           <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="condition - JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">condition</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">$.condition</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.response.condition</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
           </JSONPostProcessor>
           <hashTree/>
@@ -329,6 +335,7 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
     &quot;destination&quot;: &quot;${payeeFsp}&quot;,&#xd;
+    &quot;transferId&quot;: &quot;${quoteId}&quot;,&#xd;
     &quot;amountType&quot;: &quot;RECEIVE&quot;,&#xd;
     &quot;amount&quot;: {&#xd;
         &quot;currency&quot;: &quot;USD&quot;,&#xd;
@@ -412,7 +419,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -449,7 +456,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -486,7 +493,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table">
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

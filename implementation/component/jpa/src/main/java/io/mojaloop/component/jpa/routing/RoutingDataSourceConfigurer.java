@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -38,8 +38,8 @@ public class RoutingDataSourceConfigurer {
 
         Map<Object, Object> dataSources = new HashMap<>();
 
-        dataSources.put(RoutingDataSource.Qualifiers.READ, readDataSource);
-        dataSources.put(RoutingDataSource.Qualifiers.WRITE, writeDataSource);
+        dataSources.put(RoutingDataSource.Keys.READ, readDataSource);
+        dataSources.put(RoutingDataSource.Keys.WRITE, writeDataSource);
 
         routingDataSource.setTargetDataSources(dataSources);
         routingDataSource.setDefaultTargetDataSource(writeDataSource);

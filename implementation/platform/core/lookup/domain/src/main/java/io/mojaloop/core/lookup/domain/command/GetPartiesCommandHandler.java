@@ -118,6 +118,7 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
             LOGGER.info("Destination FSP is empty. Use Oracle to find it.");
             var oracle = this.participantStore.getOracleData(input.partyIdType());
+            LOGGER.debug("Found oracle: [{}]", oracle);
 
             return null;
 
