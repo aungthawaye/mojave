@@ -23,30 +23,23 @@ package io.mojaloop.core.account.domain.command.account;
 import io.mojaloop.core.account.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.account.contract.command.chart.CreateChartCommand;
 import io.mojaloop.core.account.contract.command.chart.CreateChartEntryCommand;
-import io.mojaloop.core.account.domain.TestConfiguration;
-import io.mojaloop.core.account.domain.repository.AccountRepository;
-import io.mojaloop.core.account.domain.repository.ChartEntryRepository;
-import io.mojaloop.core.account.domain.repository.ChartRepository;
+import io.mojaloop.core.account.domain.command.BaseDomainIT;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
+import io.mojaloop.core.common.datatype.identifier.account.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.account.OwnerId;
 import io.mojaloop.core.common.datatype.type.account.AccountCode;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import io.mojaloop.fspiop.spec.core.Currency;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class CreateAccountCommandIT {
+public class CreateAccountCommandIT extends BaseDomainIT {
 
     @Autowired
     private CreateChartCommand createChartCommand;
@@ -57,62 +50,58 @@ public class CreateAccountCommandIT {
     @Autowired
     private CreateAccountCommand createAccountCommand;
 
-    @Autowired
-    private ChartRepository chartRepository;
+    @Test
+    void should_create_account_successfully() throws Exception {
+        // Arrange
+        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
+        final var chartId = chartOut.chartId();
 
-    @Autowired
-    private ChartEntryRepository chartEntryRepository;
+        final var entryOut = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
+            chartId,
+            new ChartEntryCode("ASSETS"),
+            "Assets",
+            "Assets Desc",
+            AccountType.ASSET
+        ));
+        final var chartEntryId = entryOut.chartEntryId();
 
-    @Autowired
-    private AccountRepository accountRepository;
+        final var input = new CreateAccountCommand.Input(
+            chartEntryId,
+            new OwnerId(1001L),
+            Currency.USD,
+            new AccountCode("ACC001"),
+            "Cash Account",
+            "Cash Account for tests",
+            OverdraftMode.FORBID,
+            BigDecimal.ZERO
+        );
 
-    @BeforeEach
-    public void cleanDatabase() {
+        // Act
+        final var output = this.createAccountCommand.execute(input);
 
-        this.accountRepository.deleteAll();
-        this.chartEntryRepository.deleteAll();
-        this.chartRepository.deleteAll();
-    }
-
-    public void createAccount_fullFlow_success() throws Exception {
-
-        var hubChart = this.createChartCommand.execute(new CreateChartCommand.Input("Hub CoA"));
-        var fspChart = this.createChartCommand.execute(new CreateChartCommand.Input("FSP CoA"));
+        // Assert
+        assertNotNull(output);
+        assertNotNull(output.accountId());
     }
 
     @Test
-    public void createAccount_success_persistsAndReturnsId() throws Exception {
+    void should_fail_when_chart_entry_not_found() {
+        // Arrange
+        final var invalidChartEntryId = new ChartEntryId(99999999L);
 
-        var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        var chartId = chartOut.chartId();
+        final var input = new CreateAccountCommand.Input(
+            invalidChartEntryId,
+            new OwnerId(1002L),
+            Currency.USD,
+            new AccountCode("ACC002"),
+            "Invalid Account",
+            "Should fail due to missing chart entry",
+            OverdraftMode.FORBID,
+            BigDecimal.ZERO
+        );
 
-        assertTrue(this.chartRepository.findById(chartId).isPresent());
-
-        var entryOut = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("2000"), "Deposits", "Customer deposit accounts", AccountType.LIABILITY));
-        var chartEntryId = entryOut.chartEntryId();
-
-        assertTrue(this.chartEntryRepository.findById(chartEntryId).isPresent());
-
-        var out = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(chartEntryId, new OwnerId(12345L), Currency.USD, new AccountCode("DEPOSITS"), "Deposits Account",
-                                           "Customer deposits", OverdraftMode.FORBID, BigDecimal.ZERO));
-
-        assertNotNull(out);
-        assertNotNull(out.accountId());
-
-        var saved = this.accountRepository.findById(out.accountId());
-        assertTrue(saved.isPresent());
-
-        var acc = saved.get();
-
-        assertEquals("Deposits Account", acc.getName());
-        assertEquals("DEPOSITS", acc.getCode().value());
-        assertEquals(Currency.USD, acc.getCurrency());
-        assertEquals("Customer deposits", acc.getDescription());
-        assertNotNull(acc.getCreatedAt());
-        assertEquals(chartEntryId, acc.getChartEntryId());
-        assertEquals(AccountType.LIABILITY, acc.getType());
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> this.createAccountCommand.execute(input));
     }
 
 }

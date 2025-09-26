@@ -21,7 +21,8 @@
 package io.mojaloop.connector.gateway.inbound.command.quotes;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.QuotesResult;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
+import io.mojaloop.connector.gateway.data.QuotesResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ class HandleQuotesResponseCommandHandler implements HandleQuotesResponseCommand 
     @Override
     public Output execute(Input input) {
 
-        var channel = "quotes:" + input.quoteId();
+        var channel = PubSubKeys.forQuotes(input.source().sourceFspCode(), input.quoteId());
         LOGGER.info("Publishing quotes result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new QuotesResult(input.quoteId(), input.response()));

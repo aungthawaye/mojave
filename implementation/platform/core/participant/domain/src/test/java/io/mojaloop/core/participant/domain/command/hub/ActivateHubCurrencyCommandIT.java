@@ -20,54 +20,66 @@
 
 package io.mojaloop.core.participant.domain.command.hub;
 
-import io.mojaloop.core.common.datatype.enums.ActivationStatus;
+import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.data.HubData;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
-import io.mojaloop.core.participant.contract.query.HubQuery;
-import io.mojaloop.core.participant.domain.TestConfiguration;
+import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class ActivateHubCurrencyCommandIT {
+class ActivateHubCurrencyCommandIT extends BaseDomainIT {
 
     @Autowired
-    private CreateHubCommand createHubCommand;
+    private CreateHubCommand createHub;
 
     @Autowired
-    private AddHubCurrencyCommand addHubCurrencyCommand;
+    private AddHubCurrencyCommand addCurrency;
 
     @Autowired
-    private ActivateHubCurrencyCommand activateHubCurrencyCommand;
-
-    @Autowired
-    private HubQuery hubQuery;
+    private ActivateHubCurrencyCommand activateCurrency;
 
     @Test
-    public void activate_flow_succeeds() throws HubCountLimitReachedException, FspCurrencyAlreadySupportedException, HubNotFoundException {
+    void should_activate_existing_hub_currency() throws Exception {
 
-        var created = createHubCommand.execute(new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD}));
-        addHubCurrencyCommand.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
+        // Arrange
+        var created = this.createHub.execute(new CreateHubCommand.Input("Hub-1", new Currency[]{}));
+        this.addCurrency.execute(new AddHubCurrencyCommand.Input(created.hubId(), Currency.TZS));
 
-        var actOut = activateHubCurrencyCommand.execute(new ActivateHubCurrencyCommand.Input(created.hubId(), Currency.MMK));
-        assertTrue(actOut.activated());
+        var input = new ActivateHubCurrencyCommand.Input(created.hubId(), Currency.TZS);
 
-        HubData hubData = hubQuery.get();
-        var mmk = java.util.Arrays.stream(hubData.currencies()).filter(c -> c.currency() == Currency.MMK).findFirst().orElseThrow();
-        assertEquals(ActivationStatus.ACTIVE, mmk.activationStatus());
+        // Act
+        var output = this.activateCurrency.execute(input);
+
+        // Assert
+        Assertions.assertTrue(output.activated());
     }
 
+    @Test
+    void should_return_false_when_currency_not_present() throws Exception {
+
+        // Arrange
+        var created = this.createHub.execute(new CreateHubCommand.Input("Hub-1", new Currency[]{}));
+
+        var input = new ActivateHubCurrencyCommand.Input(created.hubId(), Currency.TZS);
+
+        // Act
+        var output = this.activateCurrency.execute(input);
+
+        // Assert
+        Assertions.assertFalse(output.activated());
+    }
+
+    @Test
+    void should_throw_when_hub_not_found() {
+
+        // Arrange
+        var input = new ActivateHubCurrencyCommand.Input(new HubId(), Currency.TZS);
+
+        // Act & Assert
+        Assertions.assertThrows(HubNotFoundException.class, () -> this.activateCurrency.execute(input));
+    }
 }

@@ -18,8 +18,9 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.data;
+package io.mojaloop.connector.gateway.data;
 
-import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
+import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 
-public record TransfersResult(String transferId, TransfersIDPutResponse response) { }
+public record PartiesResult(PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse response) { }

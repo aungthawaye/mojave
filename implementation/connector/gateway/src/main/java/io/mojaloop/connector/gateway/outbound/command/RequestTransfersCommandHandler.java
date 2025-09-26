@@ -21,8 +21,8 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.TransfersErrorResult;
-import io.mojaloop.connector.gateway.inbound.data.TransfersResult;
+import io.mojaloop.connector.gateway.data.TransfersErrorResult;
+import io.mojaloop.connector.gateway.data.TransfersResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;

@@ -30,12 +30,15 @@ import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.identifier.participant.FspCurrencyId;
 import io.mojaloop.core.participant.contract.data.FspCurrencyData;
 import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -76,10 +79,10 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "fsp_id")
+    @JoinColumn(name = "fsp_id", nullable = false, foreignKey = @ForeignKey(name = "fsp_currency_fsp_FK"))
     private Fsp fsp;
 
-    FspCurrency(Fsp fsp, Currency currency) {
+    public FspCurrency(Fsp fsp, Currency currency) throws FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException {
 
         assert fsp != null;
         assert currency != null;
@@ -88,6 +91,16 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
         this.fsp = fsp;
         this.currency = currency;
         this.createdAt = Instant.now();
+
+        if (this.fsp.isCurrencySupported(currency)) {
+
+            throw new FspCurrencyAlreadySupportedException(currency);
+        }
+
+        if(!this.fsp.getHub().isCurrencySupported(currency)) {
+
+            throw new FspCurrencyNotSupportedByHubException(currency);
+        }
     }
 
     @Override
@@ -101,11 +114,16 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
         return this.activationStatus == ActivationStatus.ACTIVE;
     }
 
-    void activate() throws CannotActivateFspCurrencyException {
+    void activate() throws CannotActivateFspCurrencyException, FspCurrencyNotSupportedByHubException {
 
         if (!this.fsp.isActive()) {
 
             throw new CannotActivateFspCurrencyException(this.currency);
+        }
+
+        if (!this.fsp.getHub().isCurrencySupported(this.currency)) {
+
+            throw new FspCurrencyNotSupportedByHubException(this.currency);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;

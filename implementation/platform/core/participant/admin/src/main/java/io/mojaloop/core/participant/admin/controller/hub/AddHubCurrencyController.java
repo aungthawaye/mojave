@@ -22,6 +22,7 @@ package io.mojaloop.core.participant.admin.controller.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public class AddHubCurrencyController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddHubCurrencyCommand.Output execute(@Valid @RequestBody AddHubCurrencyCommand.Input input)
-        throws HubNotFoundException, FspCurrencyAlreadySupportedException {
+        throws HubNotFoundException, FspCurrencyAlreadySupportedException, HubCurrencyAlreadySupportedException {
 
         return this.addHubCurrencyCommand.execute(input);
     }

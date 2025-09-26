@@ -18,8 +18,8 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.data;
+package io.mojaloop.connector.gateway.data;
 
-import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
+import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 
-public record QuotesResult(String quoteId, QuotesIDPutResponse response) { }
+public record TransfersResult(String transferId, TransfersIDPutResponse response) { }

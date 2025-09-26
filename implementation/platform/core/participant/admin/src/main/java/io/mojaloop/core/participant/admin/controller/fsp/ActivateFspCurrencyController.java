@@ -22,7 +22,9 @@ package io.mojaloop.core.participant.admin.controller.fsp;
 
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +51,7 @@ public class ActivateFspCurrencyController {
     @PostMapping("/fsps/activate-currency")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void execute(@Valid @RequestBody ActivateFspCurrencyCommand.Input input)
-        throws FspIdNotFoundException, CannotActivateFspCurrencyException {
+        throws FspIdNotFoundException, CannotActivateFspCurrencyException, FspCurrencyNotSupportedByHubException, HubNotFoundException {
 
         this.activateFspCurrencyCommand.execute(input);
     }

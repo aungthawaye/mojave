@@ -21,8 +21,9 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.PartiesErrorResult;
-import io.mojaloop.connector.gateway.inbound.data.PartiesResult;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
+import io.mojaloop.connector.gateway.data.PartiesErrorResult;
+import io.mojaloop.connector.gateway.data.PartiesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -69,9 +70,8 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         assert input != null;
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
-        var subIdOrNot = withSubId ? "/" + input.subId() : "";
-        var resultTopic = "parties:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
-        var errorTopic = "parties-error:" + input.partyIdType() + "/" + input.partyId() + subIdOrNot;
+        var resultTopic = PubSubKeys.forParties(input.destination().destinationFspCode(), input.partyIdType(), input.partyId(), input.subId());
+        var errorTopic = PubSubKeys.forPartiesError(input.destination().destinationFspCode(), input.partyIdType(), input.partyId(), input.subId());
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);

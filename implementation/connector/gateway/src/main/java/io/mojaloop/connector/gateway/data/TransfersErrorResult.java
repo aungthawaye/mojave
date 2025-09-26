@@ -18,8 +18,8 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.data;
+package io.mojaloop.connector.gateway.data;
 
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 
-public record QuotesErrorResult(String quoteId, ErrorInformationObject errorInformation) { }
+public record TransfersErrorResult(String transferId, ErrorInformationObject errorInformation) { }

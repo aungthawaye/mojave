@@ -88,9 +88,10 @@ public class RetrofitService {
                                 LOGGER.error("Decoded error response : {}", decodedError);
                                 throw new InvocationException(response.code(), decodedError, errorResponseBody);
 
-                            } catch (Exception ignored) {
+                            } catch (Exception unknown) {
 
-                                LOGGER.error("Error decoding error response : {}", errorResponseBody);
+                                LOGGER.error("Error decoding error response : {}", unknown.getMessage(), unknown);
+                                throw new InvocationException(response.code(), null, unknown.getMessage());
                             }
                         }
 

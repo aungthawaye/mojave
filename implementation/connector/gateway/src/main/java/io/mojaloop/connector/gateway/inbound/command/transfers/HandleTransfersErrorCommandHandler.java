@@ -21,7 +21,7 @@
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.TransfersErrorResult;
+import io.mojaloop.connector.gateway.data.TransfersErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

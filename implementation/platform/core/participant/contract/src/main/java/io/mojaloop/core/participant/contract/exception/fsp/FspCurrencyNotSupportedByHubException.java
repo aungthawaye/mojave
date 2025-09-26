@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojave
+ * Mojaloop OSS
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -18,8 +18,20 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.data;
+package io.mojaloop.core.participant.contract.exception.fsp;
 
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
+import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.fspiop.spec.core.Currency;
 
-public record TransfersErrorResult(String transferId, ErrorInformationObject errorInformation) { }
+public class FspCurrencyNotSupportedByHubException extends DomainException {
+
+    private static final String TEMPLATE = "Currency, {0}, being added by FSP, is not supported by Hub.";
+
+    public FspCurrencyNotSupportedByHubException(Currency currency) {
+
+        super(new ErrorTemplate("FSP_CURRENCY_NOT_SUPPORTED_BY_HUB", TEMPLATE), currency.name());
+
+    }
+
+}

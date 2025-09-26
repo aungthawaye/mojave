@@ -41,8 +41,8 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class CreateHubCommandHandler implements CreateHubCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException {
+    public Output execute(Input input) throws HubCountLimitReachedException, HubCurrencyAlreadySupportedException {
 
         LOGGER.info("Executing CreateHubCommand with input: {}", input);
 

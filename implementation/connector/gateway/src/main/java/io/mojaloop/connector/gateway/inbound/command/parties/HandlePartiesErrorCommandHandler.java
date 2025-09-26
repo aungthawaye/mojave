@@ -21,7 +21,8 @@
 package io.mojaloop.connector.gateway.inbound.command.parties;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.PartiesErrorResult;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
+import io.mojaloop.connector.gateway.data.PartiesErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,7 @@ class HandlePartiesErrorCommandHandler implements HandlePartiesErrorCommand {
     @Override
     public Output execute(Input input) {
 
-        var withSubId = input.subId() != null && !input.subId().isBlank();
-        var channel = "parties-error:" + input.partyIdType().name() + "/" + input.partyId() + (withSubId ? "/" + input.subId() : "");
+        var channel = PubSubKeys.forPartiesError(input.source().sourceFspCode(), input.partyIdType(), input.partyId(), input.subId());
         LOGGER.info("Publishing parties error result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new PartiesErrorResult(input.partyIdType(), input.partyId(), input.subId(), input.errorInformationObject()));

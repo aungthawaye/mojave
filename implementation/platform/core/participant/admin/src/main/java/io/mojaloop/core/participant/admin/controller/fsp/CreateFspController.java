@@ -23,7 +23,9 @@ package io.mojaloop.core.participant.admin.controller.fsp;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +53,12 @@ public class CreateFspController {
     @PostMapping("/fsps/create-fsp")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFspCommand.Output execute(@Valid @RequestBody CreateFspCommand.Input input)
-        throws FspCodeAlreadyExistsException, FspEndpointAlreadyConfiguredException, FspCurrencyAlreadySupportedException {
+    public CreateFspCommand.Output execute(@Valid @RequestBody CreateFspCommand.Input input) throws
+                                                                                             FspCodeAlreadyExistsException,
+                                                                                             FspEndpointAlreadyConfiguredException,
+                                                                                             FspCurrencyAlreadySupportedException,
+                                                                                             FspCurrencyNotSupportedByHubException,
+                                                                                             HubNotFoundException {
 
         return this.createFspCommand.execute(input);
     }

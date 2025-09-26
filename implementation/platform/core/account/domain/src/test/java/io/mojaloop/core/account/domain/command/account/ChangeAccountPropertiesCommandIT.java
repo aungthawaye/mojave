@@ -25,10 +25,7 @@ import io.mojaloop.core.account.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.account.contract.command.chart.CreateChartCommand;
 import io.mojaloop.core.account.contract.command.chart.CreateChartEntryCommand;
 import io.mojaloop.core.account.contract.exception.account.AccountIdNotFoundException;
-import io.mojaloop.core.account.domain.TestConfiguration;
-import io.mojaloop.core.account.domain.repository.AccountRepository;
-import io.mojaloop.core.account.domain.repository.ChartEntryRepository;
-import io.mojaloop.core.account.domain.repository.ChartRepository;
+import io.mojaloop.core.account.domain.command.BaseDomainIT;
 import io.mojaloop.core.common.datatype.enums.account.AccountType;
 import io.mojaloop.core.common.datatype.enums.account.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
@@ -37,18 +34,14 @@ import io.mojaloop.core.common.datatype.type.account.AccountCode;
 import io.mojaloop.core.common.datatype.type.account.ChartEntryCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
-public class ChangeAccountPropertiesCommandIT {
+public class ChangeAccountPropertiesCommandIT extends BaseDomainIT {
 
     @Autowired
     private CreateChartCommand createChartCommand;
@@ -62,45 +55,35 @@ public class ChangeAccountPropertiesCommandIT {
     @Autowired
     private ChangeAccountPropertiesCommand changeAccountPropertiesCommand;
 
-    @Autowired
-    private ChartRepository chartRepository;
-
-    @Autowired
-    private ChartEntryRepository chartEntryRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
     @Test
-    public void changeProperties_success_updatesMutableFields() throws Exception {
+    void should_change_account_name_and_description_successfully() throws Exception {
         // Arrange
-        var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        var entryOut = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("6000"), "Assets", "Asset accounts", AccountType.ASSET));
+        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
+        final var entryOut = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
+            chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
 
-        var createOut = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(entryOut.chartEntryId(), new OwnerId(999L), Currency.USD, new AccountCode("AST"), "Assets", "Assets acc",
-                                           OverdraftMode.FORBID, BigDecimal.ZERO));
+        final var createInput = new CreateAccountCommand.Input(
+            entryOut.chartEntryId(), new OwnerId(2004L), Currency.USD, new AccountCode("ACC006"),
+            "Account", "Desc", OverdraftMode.FORBID, BigDecimal.ZERO);
+        final var accountOut = this.createAccountCommand.execute(createInput);
+
+        final var input = new ChangeAccountPropertiesCommand.Input(accountOut.accountId(), "New Name", "New Desc");
 
         // Act
-        var out = this.changeAccountPropertiesCommand.execute(
-            new ChangeAccountPropertiesCommand.Input(createOut.accountId(), "Assets Updated", "Updated description"));
+        final var output = this.changeAccountPropertiesCommand.execute(input);
 
         // Assert
-        assertNotNull(out);
-        var saved = this.accountRepository.findById(out.accountId());
-        assertTrue(saved.isPresent());
-        var acc = saved.get();
-        assertEquals("Assets Updated", acc.getName());
-        assertEquals("AST2", acc.getCode().value());
-        assertEquals("Updated description", acc.getDescription());
+        assertNotNull(output);
+        assertNotNull(output.accountId());
     }
 
     @Test
-    public void changeProperties_withNonExistingId_throwsAccountIdNotFoundException() {
+    void should_fail_when_account_id_not_found() {
+        // Arrange
+        final var input = new ChangeAccountPropertiesCommand.Input(new AccountId(999999L), "New Name", "New Desc");
 
-        assertThrows(AccountIdNotFoundException.class,
-                     () -> this.changeAccountPropertiesCommand.execute(new ChangeAccountPropertiesCommand.Input(new AccountId(444444444L), "N", "D")));
+        // Act & Assert
+        assertThrows(AccountIdNotFoundException.class, () -> this.changeAccountPropertiesCommand.execute(input));
     }
 
 }

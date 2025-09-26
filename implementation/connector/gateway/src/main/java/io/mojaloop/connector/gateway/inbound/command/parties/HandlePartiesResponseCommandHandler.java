@@ -21,7 +21,8 @@
 package io.mojaloop.connector.gateway.inbound.command.parties;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.connector.gateway.inbound.data.PartiesResult;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
+import io.mojaloop.connector.gateway.data.PartiesResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ class HandlePartiesResponseCommandHandler implements HandlePartiesResponseComman
     @Override
     public Output execute(Input input) {
 
-        var channel = "parties:" + input.partyIdType().name() + "/" + input.partyId() + (input.subId() != null ? "/" + input.subId() : "");
+        var channel = PubSubKeys.forParties(input.source().sourceFspCode(), input.partyIdType(), input.partyId(), input.subId());
         LOGGER.info("Publishing parties result to channel : {}", channel);
 
         var result = new PartiesResult(input.partyIdType(), input.partyId(), input.subId(), input.response());

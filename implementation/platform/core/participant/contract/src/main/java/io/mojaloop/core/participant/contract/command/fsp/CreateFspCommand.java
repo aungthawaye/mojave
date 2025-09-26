@@ -27,7 +27,9 @@ import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.fspiop.FspCode;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +37,12 @@ import jakarta.validation.constraints.Size;
 
 public interface CreateFspCommand {
 
-    Output execute(Input input) throws FspCurrencyAlreadySupportedException, FspEndpointAlreadyConfiguredException, FspCodeAlreadyExistsException;
+    Output execute(Input input) throws
+                                FspCurrencyAlreadySupportedException,
+                                FspEndpointAlreadyConfiguredException,
+                                FspCodeAlreadyExistsException,
+                                HubNotFoundException,
+                                FspCurrencyNotSupportedByHubException;
 
     record Input(@JsonProperty(required = true) @NotNull FspCode fspCode,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,

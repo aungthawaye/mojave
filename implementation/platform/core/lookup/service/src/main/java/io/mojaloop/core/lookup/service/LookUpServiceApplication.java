@@ -20,15 +20,17 @@
 
 package io.mojaloop.core.lookup.service;
 
-import io.mojaloop.component.vault.VaultConfigurer;
 import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(value = {LookUpServiceConfiguration.class, LookUpServiceApplication.VaultSettings.class, LookUpServiceSettings.class})
+@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
+@Import(value = {LookUpServiceConfiguration.class, LookUpServiceSettings.class})
 public class LookUpServiceApplication {
 
     public static void main(String[] args) {
@@ -53,16 +55,6 @@ public class LookUpServiceApplication {
                 "management.endpoint.health.show-details=always",
                 "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=LookUpServiceApplication,context=lookup-service")
             .run(args);
-    }
-
-    public static class VaultSettings {
-
-        @Bean
-        public VaultConfigurer.Settings vaultSettings() {
-
-            return VaultConfigurer.Settings.withPropertyOrEnv();
-        }
-
     }
 
 }

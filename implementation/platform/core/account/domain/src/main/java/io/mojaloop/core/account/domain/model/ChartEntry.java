@@ -39,6 +39,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -85,7 +86,7 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     protected Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "chart_id", nullable = false)
+    @JoinColumn(name = "chart_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
     protected Chart chart;
 
     public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType) {

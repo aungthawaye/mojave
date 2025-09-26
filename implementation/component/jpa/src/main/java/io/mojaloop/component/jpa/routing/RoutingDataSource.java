@@ -62,7 +62,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource implements Infr
         return CONTEXT_HOLDER.get();
     }
 
-    public static class Qualifiers {
+    public static class Keys {
 
         public static final String READ = "read";
 

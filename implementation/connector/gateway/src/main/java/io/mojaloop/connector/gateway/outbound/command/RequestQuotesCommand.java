@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.outbound.command;
 
-import io.mojaloop.connector.gateway.inbound.data.QuotesResult;
+import io.mojaloop.connector.gateway.data.QuotesResult;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Destination;
 import io.mojaloop.fspiop.spec.core.QuotesPostRequest;

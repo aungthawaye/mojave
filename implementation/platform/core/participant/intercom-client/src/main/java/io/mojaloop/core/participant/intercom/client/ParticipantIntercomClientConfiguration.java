@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -35,7 +36,10 @@ public class ParticipantIntercomClientConfiguration implements MiscConfiguration
     @Bean
     public ParticipantIntercomService participantIntercomService(ParticipantIntercomService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantIntercomService.class, settings.baseUrl()).withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(ParticipantIntercomService.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans {

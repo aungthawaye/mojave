@@ -46,9 +46,10 @@ import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.HubIdJavaType;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.data.HubData;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubNameRequiredException;
 import io.mojaloop.core.participant.contract.exception.hub.HubNameTooLongException;
+import io.mojaloop.core.participant.domain.model.fsp.Fsp;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -67,6 +68,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.sql.Types.BIGINT;
@@ -86,13 +88,17 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Getter(AccessLevel.NONE)
-    @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, mappedBy = "hub", targetEntity = HubCurrency.class, fetch = FetchType.EAGER)
-    protected Set<HubCurrency> currencies = new HashSet<>();
-
     @Column(name = "created_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
+
+    @Getter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "hub", cascade = {CascadeType.ALL}, orphanRemoval = true, targetEntity = HubCurrency.class, fetch = FetchType.EAGER)
+    protected Set<HubCurrency> currencies = new HashSet<>();
+
+    @Getter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "hub", cascade = {CascadeType.ALL}, orphanRemoval = true, targetEntity = Fsp.class, fetch = FetchType.EAGER)
+    protected Set<Fsp> fsps = new HashSet<>();
 
     public Hub(String name) {
 
@@ -118,13 +124,13 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
         return true;
     }
 
-    public HubCurrency addCurrency(Currency currency) throws FspCurrencyAlreadySupportedException {
+    public HubCurrency addCurrency(Currency currency) throws HubCurrencyAlreadySupportedException {
 
         assert currency != null;
 
         if (this.isCurrencySupported(currency)) {
 
-            throw new FspCurrencyAlreadySupportedException(currency);
+            throw new HubCurrencyAlreadySupportedException(currency);
         }
 
         var supportedCurrency = new HubCurrency(this, currency);
@@ -137,23 +143,24 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
     @Override
     public HubData convert() {
 
-        return new HubData(this.getId(), this.getName(), this.getCurrencies().stream().map(HubCurrency::convert)
-                                                             .toArray(io.mojaloop.core.participant.contract.data.HubData.HubCurrencyData[]::new));
+        return new HubData(this.getId(), this.getName(), this.getCurrencies().stream().map(HubCurrency::convert).toArray(HubData.HubCurrencyData[]::new));
     }
 
-    public boolean deactivateCurrency(Currency currency) {
+    public Optional<HubCurrency> deactivate(Currency currency) {
 
         assert currency != null;
 
         var optSupportedCurrency = this.currencies.stream().filter(sc -> sc.getCurrency() == currency).findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
-            return false;
+            return Optional.empty() ;
         }
 
         optSupportedCurrency.get().deactivate();
 
-        return true;
+        this.fsps.forEach((fsp) -> fsp.deactivate(currency));
+
+        return optSupportedCurrency;
     }
 
     public Set<HubCurrency> getCurrencies() {
@@ -165,7 +172,7 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
 
         assert currency != null;
 
-        return this.currencies.stream().anyMatch(sc -> sc.getCurrency() == currency);
+        return this.currencies.stream().anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
     }
 
     public Hub name(String name) {

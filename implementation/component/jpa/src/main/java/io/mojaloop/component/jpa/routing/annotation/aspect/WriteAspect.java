@@ -39,7 +39,7 @@ public class WriteAspect {
 
         try {
 
-            RoutingDataSource.setDataSourceKey("write");
+            RoutingDataSource.setDataSourceKey(RoutingDataSource.Keys.WRITE);
             LOGGER.debug("WriteAspect : RoutingDataSource -> write");
             return joinPoint.proceed();
 

@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.contract.command.hub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.core.common.datatype.identifier.participant.HubCurrencyId;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -52,6 +53,6 @@ public interface DeactivateHubCurrencyCommand {
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,
                  @JsonProperty(required = true) @NotNull Currency currency) { }
 
-    record Output(boolean deactivated) { }
+    record Output(HubCurrencyId hubCurrencyId, boolean deactivated) { }
 
 }

@@ -44,7 +44,7 @@ import io.mojaloop.component.misc.exception.ErrorTemplate;
 
 public class HubNotFoundException extends DomainException {
 
-    private static final String TEMPLATE = "Hub cannot be not found.";
+    private static final String TEMPLATE = "Hub cannot be not found. Need to configure Hub first.";
 
     public HubNotFoundException() {
 

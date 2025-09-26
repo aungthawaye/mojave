@@ -42,6 +42,8 @@ package io.mojaloop.core.participant.domain.command.hub;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.DeactivateHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
+import io.mojaloop.core.participant.domain.model.hub.HubCurrency;
+import io.mojaloop.core.participant.domain.repository.FspRepository;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,11 +57,15 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
 
     private final HubRepository hubRepository;
 
-    public DeactivateHubCurrencyCommandHandler(HubRepository hubRepository) {
+    private final FspRepository fspRepository;
+
+    public DeactivateHubCurrencyCommandHandler(HubRepository hubRepository, FspRepository fspRepository) {
 
         assert hubRepository != null;
+        assert fspRepository != null;
 
         this.hubRepository = hubRepository;
+        this.fspRepository = fspRepository;
     }
 
     @Override
@@ -73,13 +79,28 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
                       .findById(input.hubId())
                       .orElseThrow(HubNotFoundException::new);
 
-        boolean deactivated = hub.deactivateCurrency(input.currency());
+        var optHubCurrency = hub.deactivate(input.currency());
+
+        var fsps = this.fspRepository.findAll();
+
+        for (var fsp : fsps) {
+
+            LOGGER.info("Deactivating currency of FSP: fspId : [{}], currency : [{}]", fsp.getId(), input.currency());
+
+            fsp.deactivate(input.currency());
+
+            this.fspRepository.save(fsp);
+        }
 
         this.hubRepository.save(hub);
 
-        LOGGER.info("Completed DeactivateHubCurrencyCommand with input: {} -> deactivated={} ", input, deactivated);
+        LOGGER.info("Completed DeactivateHubCurrencyCommand with input: {} -> deactivated={} ", input, optHubCurrency);
 
-        return new Output(deactivated);
+        if (optHubCurrency.isPresent()) {
+            return new Output(optHubCurrency.map(HubCurrency::getId).orElse(null), optHubCurrency.get().isActive());
+        }
+
+        return new Output(null, false);
     }
 
 }

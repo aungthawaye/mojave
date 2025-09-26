@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojave
+ * Mojaloop OSS
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -18,9 +18,20 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.data;
+package io.mojaloop.core.participant.contract.exception.hub;
 
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import io.mojaloop.fspiop.spec.core.PartyIdType;
+import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.fspiop.spec.core.Currency;
 
-public record PartiesErrorResult(PartyIdType partyIdType, String partyId, String subId, ErrorInformationObject errorInformation) { }
+public class HubCurrencyAlreadySupportedException extends DomainException {
+
+    private static final String TEMPLATE = "Currency, {0}, is already supported for Hub.";
+
+    public HubCurrencyAlreadySupportedException(Currency currency) {
+
+        super(new ErrorTemplate("HUB_CURRENCY_ALREADY_SUPPORTED", TEMPLATE), currency.name());
+
+    }
+
+}
