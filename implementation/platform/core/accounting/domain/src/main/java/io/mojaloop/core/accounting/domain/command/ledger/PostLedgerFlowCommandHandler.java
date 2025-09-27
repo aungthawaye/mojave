@@ -42,6 +42,10 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
         try {
 
+            if (input.postings() == null || input.postings().isEmpty()) {
+                return new Output(new ArrayList<>());
+            }
+
             input.postings().forEach(posting -> {
 
                 LOGGER.info("Processing posting: {}", posting);

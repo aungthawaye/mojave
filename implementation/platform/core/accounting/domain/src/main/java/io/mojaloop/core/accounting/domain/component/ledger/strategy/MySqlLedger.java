@@ -213,6 +213,7 @@ public class MySqlLedger implements Ledger {
                                     } while (rs.next());
 
                                     LOGGER.debug("Ledger movement list: {}", movements);
+
                                 }
                                 case "IGNORED" -> {
 
@@ -224,30 +225,6 @@ public class MySqlLedger implements Ledger {
                     } catch (Exception e) {
 
                         LOGGER.error("Exception occurred while trying to execute SQL statement.", e);
-
-                        if (e.getCause() instanceof NegativeAmountException e1) {
-                            throw e1;
-                        }
-
-                        if (e.getCause() instanceof SqlErrorOccurredException e1) {
-                            throw e1;
-                        }
-
-                        if (e.getCause() instanceof NoMovementResultException e1) {
-                            throw e1;
-                        }
-
-                        if (e.getCause() instanceof InsufficientBalanceException e1) {
-                            throw new RuntimeException(e1);
-                        }
-
-                        if (e.getCause() instanceof OverdraftExceededException e1) {
-                            throw new RuntimeException(e1);
-                        }
-
-                        if (e.getCause() instanceof RestoreFailedException e1) {
-                            throw new RuntimeException();
-                        }
 
                         throw e;
                     }
@@ -262,18 +239,6 @@ public class MySqlLedger implements Ledger {
         } catch (RuntimeException e) {
 
             LOGGER.error("Exception occurred while trying to retrieve movements from ledger.", e);
-
-            if (e.getCause() instanceof NegativeAmountException e1) {
-                throw e1;
-            }
-
-            if (e.getCause() instanceof SqlErrorOccurredException e1) {
-                throw e1;
-            }
-
-            if (e.getCause() instanceof NoMovementResultException e1) {
-                throw e1;
-            }
 
             if (e.getCause() instanceof InsufficientBalanceException e1) {
                 throw e1;

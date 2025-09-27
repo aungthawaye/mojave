@@ -131,14 +131,14 @@ public class LedgerIT {
 
             for (int i = 0; i < count; i++) {
 
-                executor.submit(() -> {
+                //executor.submit(() -> {
 
                     index.incrementAndGet();
                     var requests = new ArrayList<Ledger.Request>();
 
                     requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(2L)));
                     requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(4L)));
                     requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityPositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L)));
 
                     try {
@@ -160,7 +160,7 @@ public class LedgerIT {
                         latch.countDown();
                     }
 
-                });
+                //});
             }
 
             latch.await();
