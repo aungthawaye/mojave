@@ -48,15 +48,15 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/connector/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/admin-client/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/admin/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/contract/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/domain/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/intercom/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/src/main/proto" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/src/main/resources/all" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/core/account/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/admin-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/contract/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/intercom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/accounting/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/datatype-converter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/datatype/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/common/src/main/java" charset="UTF-8" />

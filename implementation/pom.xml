@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -127,28 +126,28 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.platform.core.account</groupId>
-                <artifactId>mod-account-admin</artifactId>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.platform.core.account</groupId>
-                <artifactId>mod-account-admin-client</artifactId>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-admin-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.platform.core.account</groupId>
-                <artifactId>mod-account-contract</artifactId>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.platform.core.account</groupId>
-                <artifactId>mod-account-domain</artifactId>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>io.mojaloop.platform.core.account</groupId>
-                <artifactId>mod-account-intercom</artifactId>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-intercom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -443,12 +442,9 @@
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
                     <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-                    <processStartTag>================================================================================
-                    </processStartTag>
-                    <sectionDelimiter>--------------------------------------------------------------------------------
-                    </sectionDelimiter>
-                    <processEndTag>================================================================================
-                    </processEndTag>
+                    <processStartTag>================================================================================</processStartTag>
+                    <sectionDelimiter>--------------------------------------------------------------------------------</sectionDelimiter>
+                    <processEndTag>================================================================================</processEndTag>
                     <includes>
                         <include>**/*.java</include>
                     </includes>
