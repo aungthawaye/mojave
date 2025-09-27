@@ -20,6 +20,8 @@
 
 package io.mojaloop.core.account.domain.component.ledger;
 
+import io.mojaloop.core.common.datatype.enums.account.MovementResult;
+import io.mojaloop.core.common.datatype.enums.account.MovementStage;
 import io.mojaloop.core.common.datatype.enums.account.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
@@ -60,7 +62,10 @@ public interface Ledger {
                     DrCr newDrCr,
                     TransactionId transactionId,
                     Instant transactionAt,
-                    TransactionType transactionType) {
+                    TransactionType transactionType,
+                    MovementStage movementStage,
+                    MovementResult movementResult,
+                    Instant createdAt) {
 
     }
 

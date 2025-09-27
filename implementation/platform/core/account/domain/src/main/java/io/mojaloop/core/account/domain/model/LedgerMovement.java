@@ -26,6 +26,7 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.converter.identifier.account.AccountIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.account.LedgerMovementIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
+import io.mojaloop.core.common.datatype.enums.account.MovementStage;
 import io.mojaloop.core.common.datatype.enums.account.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.account.AccountId;
@@ -69,6 +70,7 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Id
     @JavaType(LedgerMovementIdJavaType.class)
     @JdbcTypeCode(BIGINT)
+    @Column(name = "ledger_movement_id", nullable = false, updatable = false)
     protected LedgerMovementId id;
 
     @Column(name = "account_id", nullable = false, updatable = false)
@@ -105,6 +107,10 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Column(name = "transaction_type", nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     protected TransactionType transactionType;
+
+    @Column(name = "movement_status", nullable = false, updatable = true)
+    @Enumerated(EnumType.STRING)
+    protected MovementStage movementStage;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Convert(converter = JpaInstantConverter.class)
