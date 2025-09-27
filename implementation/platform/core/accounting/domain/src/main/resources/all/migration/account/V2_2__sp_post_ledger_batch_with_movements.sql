@@ -356,11 +356,18 @@ BEGIN
                transaction_id,
                transaction_at,
                transaction_type,
+               movement_stage,
+               movement_result,
                created_at
         FROM acc_ledger_movement
         WHERE transaction_id = v_txn_id
         ORDER BY ledger_movement_id;
     END IF;
+
+    -- Make sure you drop the tables because when the Hikari connection pool reuses the same
+    -- connection, sometimes you will get an error that says "tmp_lines already exists."
+    DROP TABLE IF EXISTS tmp_lines;
+    DROP TABLE IF EXISTS tmp_movements;
 
 END proc_end $$
 DELIMITER ;

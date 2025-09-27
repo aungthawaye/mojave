@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
@@ -73,101 +72,95 @@ public class LedgerIT {
     private Ledger ledger;
 
     @Test
-    public void test_postings() throws ChartIdNotFoundException, InterruptedException {
+    public void test_postings() throws ChartIdNotFoundException, InterruptedException, ChartEntryCodeAlreadyExistsException {
 
-        var chart = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
+        var chart = this.createChartCommand.execute(new CreateChartCommand.Input("HUB"));
 
-        final CreateChartEntryCommand.Output hubLiquidity;
-        try {
-            hubLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chart.chartId(),
-                                                                                                   new ChartEntryCode("1000"),
-                                                                                                   "Hub Liquidity",
-                                                                                                   "Hub Liquidity (Central Bank Trust AC)",
-                                                                                                   AccountType.ASSET));
-        } catch (ChartEntryCodeAlreadyExistsException e) {
-            throw new RuntimeException(e);
-        }
+        var hubLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chart.chartId(),
+                                                                                                  new ChartEntryCode("HUB_1000"),
+                                                                                                  "Hub Liquidity",
+                                                                                                  "Hub Liquidity (Central Bank Trust AC)",
+                                                                                                  AccountType.ASSET));
 
-        final CreateChartEntryCommand.Output fspLiquidity;
-        try {
-            fspLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chart.chartId(),
-                                                                                                   new ChartEntryCode("2000"),
-                                                                                                   "FSP Liability – Liquidity",
-                                                                                                   "FSP Liability – Liquidity from Hub PoV",
-                                                                                                   AccountType.LIABILITY));
-        } catch (ChartEntryCodeAlreadyExistsException e) {
-            throw new RuntimeException(e);
-        }
+        var fspLiabilityLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chart.chartId(),
+                                                                                                           new ChartEntryCode("HUB_2000"),
+                                                                                                           "FSP Liability – Liquidity",
+                                                                                                           "FSP Liability – Liquidity from Hub to FSP in Hub PoV",
+                                                                                                           AccountType.LIABILITY));
+
+        var fspLiabilityPosition = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chart.chartId(),
+                                                                                                          new ChartEntryCode("HUB_3000"),
+                                                                                                          "FSP Liability – Position",
+                                                                                                          "FSP Liability – Position from Hub to FSP in Hub PoV",
+                                                                                                          AccountType.LIABILITY));
 
         var hubLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(hubLiquidity.chartEntryId(),
                                                                                                new OwnerId(new HubId().getId()),
                                                                                                Currency.USD,
-                                                                                               new AccountCode("10001"),
+                                                                                               new AccountCode("HUB_1000_USD"),
                                                                                                "Hub Liquidity",
                                                                                                "Hub Liquidity (USD)",
                                                                                                OverdraftMode.FORBID,
                                                                                                BigDecimal.ZERO));
 
-        var fsp1LiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiquidity.chartEntryId(),
-                                                                                                new OwnerId(2L),
-                                                                                                Currency.USD,
-                                                                                                new AccountCode("20001"),
-                                                                                                "FSP1 Liquidity",
-                                                                                                "FSP1 Liability - Liquidity (USD)",
-                                                                                                OverdraftMode.FORBID,
-                                                                                                BigDecimal.ZERO));
+        var fsp1 = new OwnerId(1L);
+        var fsp1_LiabilityLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityLiquidity.chartEntryId(),
+                                                                                                          fsp1,
+                                                                                                          Currency.USD,
+                                                                                                          new AccountCode("HUB_2000_FSP1_USD"),
+                                                                                                          "FSP1 Liquidity (USD)",
+                                                                                                          "FSP1 Liquidity (USD)",
+                                                                                                          OverdraftMode.FORBID,
+                                                                                                          BigDecimal.ZERO));
 
-        var fsp2LiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiquidity.chartEntryId(),
-                                                                                                new OwnerId(3L),
-                                                                                                Currency.USD,
-                                                                                                new AccountCode("20002"),
-                                                                                                "FSP2 Liquidity",
-                                                                                                "FSP2 Liability - Liquidity (USD)",
-                                                                                                OverdraftMode.FORBID,
-                                                                                                BigDecimal.ZERO));
+        var fsp1_LiabilityPositionAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityPosition.chartEntryId(),
+                                                                                                         fsp1,
+                                                                                                         Currency.USD,
+                                                                                                         new AccountCode("HUB_3000_FSP2_USD"),
+                                                                                                         "FSP1 Position (USD)",
+                                                                                                         "FSP1 Position (USD)",
+                                                                                                         OverdraftMode.FORBID,
+                                                                                                         BigDecimal.ZERO));
 
         try (var executor = Executors.newFixedThreadPool(100)) {
 
-            AtomicLong totalExecutionTime = new AtomicLong(0);
-            AtomicInteger completedThreads = new AtomicInteger(0);
-
-            var count = 1;
+            var count = 10_000;
             var latch = new CountDownLatch(count);
+            var index = new AtomicInteger(0);
             var startAt = System.nanoTime();
 
             for (int i = 0; i < count; i++) {
 
-                //executor.submit(() -> {
+                executor.submit(() -> {
 
-                var requests = new ArrayList<Ledger.Request>();
+                    index.incrementAndGet();
+                    var requests = new ArrayList<Ledger.Request>();
 
-                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(1L)));
-                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.CREDIT, new BigDecimal(1L)));
-                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1LiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(2L)));
-                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.CREDIT, new BigDecimal(2L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(2L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.CREDIT, new BigDecimal(2L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityPositionAcc.accountId(), Side.CREDIT, new BigDecimal(1L)));
 
-                try {
+                    try {
 
-                    var threadStartAt = System.nanoTime();
+                        LOGGER.info("Postings : {}", requests);
 
-                    this.ledger.post(requests, new TransactionId(Snowflake.get().nextId()), Instant.now(), TransactionType.FUND_IN);
+                        var threadStartAt = System.nanoTime();
+                        this.ledger.post(requests, new TransactionId(Snowflake.get().nextId()), Instant.now(), TransactionType.FUND_IN);
+                        var threadEndAt = System.nanoTime();
 
-                    var threadEndAt = System.nanoTime();
+                        LOGGER.info("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
 
-                    LOGGER.debug("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
+                    } catch (Ledger.InsufficientBalanceException | Ledger.OverdraftExceededException | Ledger.RestoreFailedException e) {
 
-                    totalExecutionTime.addAndGet(threadEndAt - threadStartAt);
-                    completedThreads.incrementAndGet();
+                        LOGGER.error("Error posting ledger movements", e);
+                        throw new RuntimeException(e);
 
-                    latch.countDown();
+                    } finally {
+                        latch.countDown();
+                    }
 
-                } catch (Ledger.InsufficientBalanceException | Ledger.OverdraftExceededException | Ledger.RestoreFailedException e) {
-
-                    throw new RuntimeException(e);
-
-                }
-
-                //});
+                });
             }
 
             latch.await();
@@ -175,7 +168,7 @@ public class LedgerIT {
             var duration = (endAt - startAt);
 
             LOGGER.info("Took: {}ns | {}ms", duration, duration / 1_000_000);
-            LOGGER.info("Average execution time for posting: {}ms", (totalExecutionTime.get() / count) / 1_000_000);
+            LOGGER.info("Total run : {}", index.get());
         }
 
     }

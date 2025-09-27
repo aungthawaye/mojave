@@ -35,7 +35,7 @@ public class TestSettings implements AccountDomainConfiguration.RequiredSettings
         return new MySqlLedger.LedgerDbSettings(
             new MySqlLedger.LedgerDbSettings.Connection(
                 "jdbc:mysql://localhost:3306/ml_account?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-                "root", "password", false), new MySqlLedger.LedgerDbSettings.Pool("account-ledger", 2, 12));
+                "root", "password"), new MySqlLedger.LedgerDbSettings.Pool("account-ledger", 2, 12));
     }
 
     @Bean

@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/implementation/connector/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/operation/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/accounting/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

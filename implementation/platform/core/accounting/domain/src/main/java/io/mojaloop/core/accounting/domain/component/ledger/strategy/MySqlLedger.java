@@ -66,15 +66,20 @@ public class MySqlLedger implements Ledger {
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.addDataSourceProperty("useServerPrepStmts", true);
-        config.addDataSourceProperty("useLocalSessionState", true);
         config.addDataSourceProperty("rereadBatchedStatements", true);
         config.addDataSourceProperty("cacheResultSetMetadata", true);
         config.addDataSourceProperty("cacheServerConfiguration", true);
         config.addDataSourceProperty("elideSetAutoCommits", true);
         config.addDataSourceProperty("maintainTimeStats", false);
+        // The below 2 lines are very IMPORTANT
+        // Make sessions pristine between borrows
+        config.addDataSourceProperty("useResetSession", true);
+        // Let the driver manage true session state rather than local emulation
+        config.addDataSourceProperty("useLocalSessionState", false);
 
         config.setMaximumPoolSize(settings.pool().maxPool());
-        config.setAutoCommit(settings.connection().autoCommit());
+        // Ledger's stored-procedure will handle transaction.
+        config.setAutoCommit(true);
 
         this.jdbcTemplate = new JdbcTemplate(new HikariDataSource(config));
         this.objectMapper = objectMapper;
@@ -161,10 +166,7 @@ public class MySqlLedger implements Ledger {
                                             var debits = rs.getBigDecimal("debits");
                                             var credits = rs.getBigDecimal("credits");
 
-                                            throw new RuntimeException(new RestoreFailedException(new AccountId(accountId),
-                                                                                                  Side.valueOf(side),
-                                                                                                  amount,
-                                                                                                  new DrCr(debits, credits)));
+                                            throw new RuntimeException(new RestoreFailedException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits)));
                                         }
 
                                         default:
@@ -202,12 +204,11 @@ public class MySqlLedger implements Ledger {
                                                                     movementStage,
                                                                     movementResult,
                                                                     createdAt);
-
-                                        LOGGER.debug("Ledger movement: {}", movement);
-
                                         movements.add(movement);
 
                                     } while (rs.next());
+
+                                    LOGGER.debug("Ledger movement list: {}", movements);
                                 }
                                 case "IGNORED" -> {
 
@@ -262,7 +263,7 @@ public class MySqlLedger implements Ledger {
 
     public record LedgerDbSettings(LedgerDbSettings.Connection connection, LedgerDbSettings.Pool pool) {
 
-        public record Connection(String url, String username, String password, boolean autoCommit) { }
+        public record Connection(String url, String username, String password) { }
 
         public record Pool(String name, int minPool, int maxPool) { }
 

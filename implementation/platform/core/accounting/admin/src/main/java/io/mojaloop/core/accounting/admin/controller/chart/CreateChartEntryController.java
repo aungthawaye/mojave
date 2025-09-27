@@ -40,6 +40,7 @@
 package io.mojaloop.core.accounting.admin.controller.chart;
 
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public class CreateChartEntryController {
 
     @PostMapping("/charts/entries")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateChartEntryCommand.Output execute(@Valid @RequestBody CreateChartEntryCommand.Input input) throws ChartIdNotFoundException {
+    public CreateChartEntryCommand.Output execute(@Valid @RequestBody CreateChartEntryCommand.Input input) throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException {
 
         return this.createChartEntryCommand.execute(input);
     }
