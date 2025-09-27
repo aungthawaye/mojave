@@ -67,6 +67,16 @@ public class AccountRedisCache implements AccountCache {
         this.withOwnerId = redissonOpsClient.getRedissonClient().getSetMultimap(Names.WITH_OWNER_ID);
         this.withChartEntryIdOwnerIdCurrency = redissonOpsClient.getRedissonClient()
                                                                 .getMap(Names.WITH_CHARTENTRYID_OWNERID_CURRENCY);
+
+    }
+
+    @Override
+    public void clear() {
+
+        this.withId.clear();
+        this.withCode.clear();
+        this.withOwnerId.clear();
+        this.withChartEntryIdOwnerIdCurrency.clear();
     }
 
     @Override
@@ -122,6 +132,8 @@ public class AccountRedisCache implements AccountCache {
 
     @PostConstruct
     public void postConstruct() {
+
+        this.clear();
 
         var accounts = this.accountRepository.findAll();
 

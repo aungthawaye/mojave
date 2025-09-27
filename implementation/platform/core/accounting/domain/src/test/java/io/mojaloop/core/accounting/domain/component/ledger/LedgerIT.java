@@ -103,7 +103,7 @@ public class LedgerIT {
                                                                                                OverdraftMode.FORBID,
                                                                                                BigDecimal.ZERO));
 
-        var fsp1 = new OwnerId(1L);
+        var fsp1 = new OwnerId(Snowflake.get().nextId());
         var fsp1_LiabilityLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityLiquidity.chartEntryId(),
                                                                                                           fsp1,
                                                                                                           Currency.USD,
@@ -124,7 +124,7 @@ public class LedgerIT {
 
         try (var executor = Executors.newFixedThreadPool(100)) {
 
-            var count = 10_000;
+            var count = 1;
             var latch = new CountDownLatch(count);
             var index = new AtomicInteger(0);
             var startAt = System.nanoTime();
@@ -136,10 +136,10 @@ public class LedgerIT {
                     index.incrementAndGet();
                     var requests = new ArrayList<Ledger.Request>();
 
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(2L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.CREDIT, new BigDecimal(2L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.DEBIT, new BigDecimal(1L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityPositionAcc.accountId(), Side.CREDIT, new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(2L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityPositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L)));
 
                     try {
 

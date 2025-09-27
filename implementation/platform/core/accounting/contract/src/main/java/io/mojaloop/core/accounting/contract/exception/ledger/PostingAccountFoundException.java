@@ -37,28 +37,21 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.accounting.contract.exception.account;
+package io.mojaloop.core.accounting.contract.exception.ledger;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.core.common.datatype.enums.accounting.Side;
-import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
+import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.fspiop.spec.core.Currency;
 
-import java.math.BigDecimal;
+public class PostingAccountFoundException extends DomainException {
 
-public class InsufficientBalanceInAccountException extends DomainException {
+    private static final String TEMPLATE = "Posting Account cannot be not found for Owner ID ({0}), Chart Entry ID ({1}) and Currency ({2}) combination.";
 
-    private static final String TEMPLATE = "Account ({0}) does not have sufficient funds to perform ({1}) operation for amount {2}. Current Dr : {3}, Current Cr : {4}";
+    public PostingAccountFoundException(OwnerId ownerId, ChartEntryId chartEntryId, Currency currency) {
 
-    public InsufficientBalanceInAccountException(AccountCode accountCode,
-                                                 Side side,
-                                                 BigDecimal amount,
-                                                 BigDecimal postedDebits,
-                                                 BigDecimal postedCredits) {
-
-        super(
-            new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE), accountCode.toString(), side.name(),
-            amount.toPlainString(), postedDebits.toPlainString(), postedCredits.toPlainString());
+        super(new ErrorTemplate("POSTING_ACCOUNT_NOT_FOUND", TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(), currency.toString());
     }
 
 }

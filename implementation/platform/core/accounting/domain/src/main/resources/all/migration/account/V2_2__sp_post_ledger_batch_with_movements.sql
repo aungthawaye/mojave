@@ -11,6 +11,7 @@ BEGIN
     DECLARE v_ledger_movement_id BIGINT;
     DECLARE v_account_id BIGINT;
     DECLARE v_side VARCHAR(16);
+    DECLARE v_currency VARCHAR(3);
     DECLARE v_amount DECIMAL(34, 4);
     DECLARE v_txn_id BIGINT;
     DECLARE v_txn_at BIGINT;
@@ -34,6 +35,7 @@ BEGIN
     DECLARE v_error_code VARCHAR(32);
     DECLARE v_err_account_id BIGINT;
     DECLARE v_err_side VARCHAR(32);
+    DECLARE v_err_currency VARCHAR(3);
     DECLARE v_err_amount DECIMAL(34, 4);
     DECLARE v_err_debits DECIMAL(34, 4);
     DECLARE v_err_credits DECIMAL(34, 4);
@@ -44,6 +46,7 @@ BEGIN
                ledger_movement_id,
                account_id,
                side,
+               currency,
                amount,
                transaction_id,
                transaction_at,
@@ -62,9 +65,10 @@ BEGIN
     CREATE TEMPORARY TABLE tmp_lines
     (
         idx                INT            NOT NULL,
-        ledger_movement_id BIGINT         NOT NULL, -- ledgerMovementId
+        ledger_movement_id BIGINT         NOT NULL,
         account_id         BIGINT         NOT NULL,
         side               VARCHAR(32)    NOT NULL, -- 'DEBIT' | 'CREDIT'
+        currency           VARCHAR(3)     NOT NULL,
         amount             DECIMAL(34, 4) NOT NULL,
         transaction_id     BIGINT         NOT NULL,
         transaction_at     BIGINT         NOT NULL,
@@ -76,6 +80,7 @@ BEGIN
         ledger_movement_id BIGINT         NOT NULL,
         account_id         BIGINT         NOT NULL,
         side               VARCHAR(32)    NOT NULL,
+        currency           VARCHAR(3)     NOT NULL,
         amount             DECIMAL(34, 4) NOT NULL,
         old_debits         DECIMAL(34, 4) NOT NULL,
         old_credits        DECIMAL(34, 4) NOT NULL,
@@ -94,7 +99,8 @@ BEGIN
     SELECT jt.idx,
            jt.ledgerMovementId,
            jt.accountId,
-           side,
+           jt.side,
+           jt.currency,
            jt.amount,
            jt.transactionId,
            jt.transactionAt,
@@ -105,6 +111,7 @@ BEGIN
                         ledgerMovementId BIGINT PATH '$.ledgerMovementId',
                         accountId BIGINT PATH '$.accountId',
                         side VARCHAR(32) PATH '$.side',
+                        currency VARCHAR(3) PATH '$.currency',
                         amount DECIMAL(34, 4) PATH '$.amount',
                         transactionId BIGINT PATH '$.transactionId',
                         transactionAt BIGINT PATH '$.transactionAt',
@@ -114,13 +121,14 @@ BEGIN
 
     -- INITIATE the movements.
     START TRANSACTION;
-    INSERT INTO acc_ledger_movement (ledger_movement_id, account_id, side, amount,
+    INSERT INTO acc_ledger_movement (ledger_movement_id, account_id, side, currency, amount,
                                      old_debits, old_credits, new_debits, new_credits,
                                      transaction_id, transaction_at, transaction_type, movement_stage, movement_result,
                                      created_at, rec_created_at, rec_updated_at, rec_version)
     SELECT ledger_movement_id,
            account_id,
            side,
+           currency,
            amount,
            0,
            0,
@@ -144,7 +152,7 @@ BEGIN
 
     post_loop:
     LOOP
-        FETCH c_lines INTO v_idx, v_ledger_movement_id, v_account_id, v_side, v_amount, v_txn_id, v_txn_at, v_txn_type;
+        FETCH c_lines INTO v_idx, v_ledger_movement_id, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_txn_type;
         IF done = 1 THEN
             LEAVE post_loop;
         END IF;
@@ -159,6 +167,7 @@ BEGIN
                            v_error_code     AS code,
                            v_err_account_id AS account_id,
                            v_err_side       AS side,
+                           v_err_currency   AS currency,
                            v_err_amount     AS amount,
                            v_err_debits     AS debits,
                            v_err_credits    AS credits;
@@ -199,6 +208,7 @@ BEGIN
                 SET v_error_code = 'INSUFFICIENT_BALANCE';
                 SET v_err_account_id = v_account_id;
                 SET v_err_side = v_side;
+                SET v_err_currency = v_currency;
                 SET v_err_amount = v_amount;
                 SET v_err_debits = v_dr_curr;
                 SET v_err_credits = v_cr_curr;
@@ -211,6 +221,7 @@ BEGIN
                 SET v_error_code = 'OVERDRAFT_EXCEEDED';
                 SET v_err_account_id = v_account_id;
                 SET v_err_side = v_side;
+                SET v_err_currency = v_currency;
                 SET v_err_amount = v_amount;
                 SET v_err_debits = v_dr_curr;
                 SET v_err_credits = v_cr_curr;
@@ -236,11 +247,11 @@ BEGIN
             COMMIT;
 
             -- Stage movement row
-            INSERT INTO tmp_movements (ledger_movement_id, account_id, side, amount,
+            INSERT INTO tmp_movements (ledger_movement_id, account_id, side, currency, amount,
                                        old_debits, old_credits, new_debits, new_credits,
                                        transaction_id, transaction_at, transaction_type, movement_stage,
                                        movement_result, created_at)
-            VALUES (v_ledger_movement_id, v_account_id, v_side, v_amount,
+            VALUES (v_ledger_movement_id, v_account_id, v_side, v_currency, v_amount,
                     v_dr_curr, v_cr_curr,
                     v_dr_new, v_cr_new,
                     v_txn_id, v_txn_at, v_txn_type, 'DEBIT_CREDIT', 'SUCCESS', UNIX_TIMESTAMP());
@@ -265,19 +276,20 @@ BEGIN
             DECLARE r_ledger_movement_id BIGINT;
             DECLARE r_account_id BIGINT;
             DECLARE r_side VARCHAR(32);
+            DECLARE r_currency VARCHAR(3);
             DECLARE r_amount DECIMAL(34, 4);
             DECLARE r_debits DECIMAL(34, 4);
             DECLARE r_credits DECIMAL(34, 4);
 
             DECLARE cur_rev CURSOR FOR
-                SELECT ledger_movement_id, account_id, side, amount, old_debits, old_credits
+                SELECT ledger_movement_id, account_id, side, currency, amount, old_debits, old_credits
                 FROM tmp_movements;
             DECLARE CONTINUE HANDLER FOR NOT FOUND SET r_done = 1;
 
             OPEN cur_rev;
             rev_loop:
             LOOP
-                FETCH cur_rev INTO r_ledger_movement_id, r_account_id, r_side, r_amount, r_debits, r_credits;
+                FETCH cur_rev INTO r_ledger_movement_id, r_account_id, r_side, r_currency, r_amount, r_debits, r_credits;
                 IF r_done = 1 THEN
                     -- Nothing to rollback
                     LEAVE rev_loop;
@@ -290,6 +302,7 @@ BEGIN
                                    'RESTORE_FAILED' AS code,
                                    r_account_id     AS account_id,
                                    r_side           AS side,
+                                   r_currency       AS currency,
                                    r_amount         AS amount,
                                    r_debits         AS debits,
                                    r_credits        AS credits;
@@ -304,8 +317,6 @@ BEGIN
                         UPDATE acc_ledger_balance
                         SET posted_debits = posted_debits - r_amount
                         WHERE ledger_balance_id = r_account_id;
-
-
                     ELSEIF r_side = 'CREDIT' THEN
                         -- Restore for CREDIT
                         UPDATE acc_ledger_balance
@@ -329,6 +340,7 @@ BEGIN
                v_error_code     AS code,
                v_err_account_id AS account_id,
                v_err_side       AS side,
+               v_err_currency   AS currency,
                v_err_amount     AS amount,
                v_err_debits     AS debits,
                v_err_credits    AS credits;
@@ -348,6 +360,7 @@ BEGIN
                ledger_movement_id,
                account_id,
                side,
+               currency,
                amount,
                old_debits,
                old_credits,

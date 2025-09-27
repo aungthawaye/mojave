@@ -34,6 +34,8 @@ import java.util.Set;
 
 public interface ParticipantCache {
 
+    void clear();
+
     void delete(FspId fspId);
 
     void delete(OracleId oracleId);

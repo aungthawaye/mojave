@@ -34,6 +34,8 @@ public abstract class BaseDomainIT {
 
     private JdbcTemplate jdbcTemplate;
 
+
+
     @Autowired
     public void setDataSource(final DataSource dataSource) {
 

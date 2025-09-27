@@ -75,6 +75,17 @@ public class ParticipantRedisCache implements ParticipantCache {
     }
 
     @Override
+    public void clear() {
+
+        this.fspWithId.clear();
+        this.fspWithFspCode.clear();
+        this.oracleWithId.clear();
+        this.oracleWithPartyType.clear();
+        this.fxpWithId.clear();
+        this.fxpWithCurrencyPair.clear();
+    }
+
+    @Override
     public void delete(FspId fspId) {
 
         var deleted = this.fspWithId.remove(fspId.getId());

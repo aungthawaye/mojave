@@ -27,6 +27,7 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.fspiop.spec.core.Currency;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -42,7 +43,7 @@ public interface Ledger {
         throws InsufficientBalanceException, NegativeAmountException, OverdraftExceededException,
                RestoreFailedException;
 
-    record Request(LedgerMovementId ledgerMovementId, AccountId accountId, Side side, BigDecimal amount) {
+    record Request(LedgerMovementId ledgerMovementId, AccountId accountId, Side side, Currency currency, BigDecimal amount) {
 
         public Request {
 
@@ -57,6 +58,7 @@ public interface Ledger {
     record Movement(LedgerMovementId ledgerMovementId,
                     AccountId accountId,
                     Side side,
+                    Currency currency,
                     BigDecimal amount,
                     DrCr oldDrCr,
                     DrCr newDrCr,

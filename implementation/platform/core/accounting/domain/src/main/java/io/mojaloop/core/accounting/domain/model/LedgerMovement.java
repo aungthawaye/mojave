@@ -32,6 +32,7 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -80,6 +81,10 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Column(name = "side", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Side side;
+
+    @Column(name = "currency", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected Currency currency;
 
     @Column(name = "amount", nullable = false, updatable = false)
     protected BigDecimal amount;

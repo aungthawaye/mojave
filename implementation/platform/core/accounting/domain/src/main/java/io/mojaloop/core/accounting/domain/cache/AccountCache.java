@@ -31,6 +31,8 @@ import java.util.Set;
 
 public interface AccountCache {
 
+    void clear();
+
     void delete(AccountId accountId);
 
     AccountData get(AccountCode accountCode);
@@ -55,7 +57,7 @@ public interface AccountCache {
 
         public static String forChart(ChartEntryId chartEntryId, OwnerId ownerId, Currency currency) {
 
-            return chartEntryId.getId() + ":" + ownerId.getId() + ":" + currency.name();
+            return chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" + currency.name();
         }
 
     }

@@ -32,6 +32,7 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -95,6 +96,7 @@ public class MySqlLedger implements Ledger {
                                   .map(request -> new Posting(request.ledgerMovementId().getId(),
                                                               request.accountId().getId(),
                                                               request.side().name(),
+                                                              request.currency().name(),
                                                               request.amount().toPlainString(),
                                                               transactionId.getId(),
                                                               transactionAt.getEpochSecond(),
@@ -180,6 +182,7 @@ public class MySqlLedger implements Ledger {
                                         var ledgerMovementId = rs.getLong("ledger_movement_id");
                                         var accountId = rs.getLong("account_id");
                                         var side = rs.getString("side");
+                                        var currency = Currency.valueOf(rs.getString("currency"));
                                         var amount = rs.getBigDecimal("amount");
                                         var oldDebits = rs.getBigDecimal("old_debits");
                                         var oldCredits = rs.getBigDecimal("old_credits");
@@ -195,6 +198,7 @@ public class MySqlLedger implements Ledger {
                                         var movement = new Movement(new LedgerMovementId(ledgerMovementId),
                                                                     new AccountId(accountId),
                                                                     Side.valueOf(side),
+                                                                    currency,
                                                                     amount,
                                                                     new DrCr(oldDebits, oldCredits),
                                                                     new DrCr(newDebits, newCredits),
@@ -217,6 +221,35 @@ public class MySqlLedger implements Ledger {
                                 case null, default -> throw new NoMovementResultException();
                             }
                         }
+                    } catch (Exception e) {
+
+                        LOGGER.error("Exception occurred while trying to execute SQL statement.", e);
+
+                        if (e.getCause() instanceof NegativeAmountException e1) {
+                            throw e1;
+                        }
+
+                        if (e.getCause() instanceof SqlErrorOccurredException e1) {
+                            throw e1;
+                        }
+
+                        if (e.getCause() instanceof NoMovementResultException e1) {
+                            throw e1;
+                        }
+
+                        if (e.getCause() instanceof InsufficientBalanceException e1) {
+                            throw new RuntimeException(e1);
+                        }
+
+                        if (e.getCause() instanceof OverdraftExceededException e1) {
+                            throw new RuntimeException(e1);
+                        }
+
+                        if (e.getCause() instanceof RestoreFailedException e1) {
+                            throw new RuntimeException();
+                        }
+
+                        throw e;
                     }
 
                     hasResults = stm.getMoreResults();
@@ -227,6 +260,8 @@ public class MySqlLedger implements Ledger {
             });
 
         } catch (RuntimeException e) {
+
+            LOGGER.error("Exception occurred while trying to retrieve movements from ledger.", e);
 
             if (e.getCause() instanceof NegativeAmountException e1) {
                 throw e1;
@@ -269,6 +304,6 @@ public class MySqlLedger implements Ledger {
 
     }
 
-    private record Posting(long ledgerMovementId, long accountId, String side, String amount, long transactionId, long transactionAt, String transactionType) { }
+    private record Posting(long ledgerMovementId, long accountId, String side, String currency, String amount, long transactionId, long transactionAt, String transactionType) { }
 
 }

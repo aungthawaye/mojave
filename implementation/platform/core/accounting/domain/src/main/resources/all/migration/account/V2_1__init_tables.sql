@@ -98,6 +98,7 @@ CREATE TABLE `acc_ledger_movement`
     `ledger_movement_id` bigint         NOT NULL,
     `account_id`         bigint         NOT NULL,
     `side`               varchar(32)    NOT NULL,
+    `currency`           varchar(3)    NOT NULL,
     `amount`             decimal(34, 4) NOT NULL,
     `old_debits`         decimal(34, 4) DEFAULT NULL,
     `old_credits`        decimal(34, 4) DEFAULT NULL,
