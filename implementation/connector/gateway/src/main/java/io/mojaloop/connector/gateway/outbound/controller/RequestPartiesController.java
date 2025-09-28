@@ -53,7 +53,7 @@ public class RequestPartiesController {
     }
 
     @PostMapping("/lookup")
-    public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request) {
+    public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request) throws FspiopException {
 
         LOGGER.info("Received lookup request for partyId: {}, partyIdType: {}, destination: {}",
                     request.partyId(),
@@ -61,24 +61,16 @@ public class RequestPartiesController {
                     request.destination());
         LOGGER.debug("Lookup request: {}", request);
 
-        try {
+        var input = new RequestPartiesCommand.Input(new Destination(request.destination()),
+                                                    request.partyIdType,
+                                                    request.partyId,
+                                                    request.subId);
 
-            var input = new RequestPartiesCommand.Input(new Destination(request.destination()),
-                                                        request.partyIdType,
-                                                        request.partyId,
-                                                        request.subId);
+        var output = this.requestPartiesCommand.execute(input);
 
-            var output = this.requestPartiesCommand.execute(input);
+        this.eventPublisher.publish(new RequestPartiesEvent(input));
 
-            this.eventPublisher.publish(new RequestPartiesEvent(input));
-
-            return ResponseEntity.ok(output.response());
-
-        } catch (FspiopException e) {
-
-            LOGGER.error("Error handling lookup request", e);
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity.ok(output.response());
 
     }
 

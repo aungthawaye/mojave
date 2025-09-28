@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.outbound.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestQuotesCommand;
 import io.mojaloop.connector.gateway.outbound.event.RequestQuotesEvent;
@@ -35,6 +36,8 @@ import io.mojaloop.fspiop.spec.core.TransactionInitiatorType;
 import io.mojaloop.fspiop.spec.core.TransactionScenario;
 import io.mojaloop.fspiop.spec.core.TransactionType;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -62,40 +65,40 @@ public class RequestQuotesController {
     }
 
     @PostMapping("/quote")
-    public ResponseEntity<?> quote(@RequestBody @Valid Request request) {
+    public ResponseEntity<?> quote(@RequestBody @Valid Request request) throws FspiopException {
 
         LOGGER.info("Received quote request for destination: {}", request.destination());
         LOGGER.debug("Quote request: {}", request);
 
-        try {
+        var id = UUID.randomUUID().toString();
 
-            var id = UUID.randomUUID().toString();
+        var quotesPostRequest = new QuotesPostRequest().quoteId(id)
+                                                       .transactionId(id)
+                                                       .payee(new Party().partyIdInfo(request.payee()))
+                                                       .payer(new Party().partyIdInfo(request.payer()))
+                                                       .amountType(request.amountType())
+                                                       .amount(request.amount())
+                                                       .fees(request.fees())
+                                                       .expiration(request.expiration())
+                                                       .transactionType(new TransactionType().scenario(TransactionScenario.TRANSFER)
+                                                                                             .initiator(TransactionInitiator.PAYER)
+                                                                                             .initiatorType(TransactionInitiatorType.CONSUMER));
 
-            var quotesPostRequest = new QuotesPostRequest()
-                                        .quoteId(id)
-                                        .transactionId(id)
-                                        .payee(new Party().partyIdInfo(request.payee()))
-                                        .payer(new Party().partyIdInfo(request.payer()))
-                                        .amountType(request.amountType())
-                                        .amount(request.amount())
-                                        .transactionType(new TransactionType()
-                                                             .scenario(TransactionScenario.TRANSFER)
-                                                             .initiator(TransactionInitiator.PAYER)
-                                                             .initiatorType(TransactionInitiatorType.CONSUMER)
-                                                        );
+        var input = new RequestQuotesCommand.Input(new Destination(request.destination()), quotesPostRequest);
+        var output = this.requestQuotesCommand.execute(input);
 
-            var input = new RequestQuotesCommand.Input(new Destination(request.destination()), quotesPostRequest);
-            var output = this.requestQuotesCommand.execute(input);
+        this.eventPublisher.publish(new RequestQuotesEvent(input));
 
-            this.eventPublisher.publish(new RequestQuotesEvent(input));
+        return ResponseEntity.ok(output.result());
 
-            return ResponseEntity.ok(output.result());
-
-        } catch (FspiopException e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    public record Request(String destination, AmountType amountType, Money amount, PartyIdInfo payer, PartyIdInfo payee) { }
+    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String destination,
+                          @JsonProperty(required = true) @NotNull AmountType amountType,
+                          @JsonProperty(required = true) @NotNull Money amount,
+                          @JsonProperty(required = true) @NotNull PartyIdInfo payer,
+                          @JsonProperty(required = true) @NotNull PartyIdInfo payee,
+                          @JsonProperty() Money fees,
+                          @JsonProperty() String expiration) { }
 
 }

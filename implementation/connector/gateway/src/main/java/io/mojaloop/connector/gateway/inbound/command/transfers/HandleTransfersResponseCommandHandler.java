@@ -21,6 +21,7 @@
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.TransfersResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ class HandleTransfersResponseCommandHandler implements HandleTransfersResponseCo
     @Override
     public Output execute(Input input) {
 
-        var channel = "transfers:" + input.transferId();
+        var channel = PubSubKeys.forTransfersError(input.source().sourceFspCode(), input.transferId());
         LOGGER.info("Publishing transfers result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new TransfersResult(input.transferId(), input.response()));

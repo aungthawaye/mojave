@@ -21,6 +21,7 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.TransfersErrorResult;
 import io.mojaloop.connector.gateway.data.TransfersResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
@@ -70,8 +71,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         assert input.request() != null;
 
         var transferId = input.request().getTransferId();
-        var resultTopic = "transfers:" + transferId;
-        var errorTopic = "transfers-error:" + transferId;
+        var resultTopic = PubSubKeys.forTransfers(input.destination().destinationFspCode(), transferId);
+        var errorTopic = PubSubKeys.forTransfers(input.destination().destinationFspCode(), transferId);
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
