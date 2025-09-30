@@ -1,5 +1,6 @@
-Create integration tests **IT for all the **CommandHandler inside io.mojaloop.core.account.domain.command. 
-You need to create a subpackage like in io.mojaloop.core.account.domain.command.account too when you create **IT accordingly.
+Create integration tests **IT for all the **CommandHandler inside io.mojaloop.core.quoting.domain.command. 
+If needed to organize by the same nature and found more than one nature, you need to create a subpackage 
+like in io.mojaloop.core.account.domain.command.account too when you create **IT accordingly.
 
 When you create a test, make sure you follow these:
 1. All tests must clear the database table before each test is run.

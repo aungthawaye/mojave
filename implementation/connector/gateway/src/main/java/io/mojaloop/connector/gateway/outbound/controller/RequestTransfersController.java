@@ -26,7 +26,7 @@ import io.mojaloop.connector.gateway.outbound.command.RequestTransfersCommand;
 import io.mojaloop.connector.gateway.outbound.event.RequestTransfersEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Extension;
@@ -76,41 +76,36 @@ public class RequestTransfersController {
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<?> transfer(@RequestBody @Valid Request request) {
+    public ResponseEntity<?> transfer(@RequestBody @Valid Request request) throws FspiopException {
 
         LOGGER.info("Received transfer request for destination: {}", request.destination());
         LOGGER.debug("Transfer request: {}", request);
 
-        try {
+        var transfersPostRequest = new TransfersPostRequest();
+        var extensionList = new ExtensionList();
+        // Payer related
+        extensionList.addExtensionItem(new Extension("payerFspId", this.participantContext.fspCode()));
+        extensionList.addExtensionItem(new Extension("payerPartyIdType", request.payer.getPartyIdType().toString()));
+        extensionList.addExtensionItem(new Extension("payerPartyId", request.payer.getPartyIdentifier()));
 
-            var transfersPostRequest = new TransfersPostRequest();
-            var extensionList = new ExtensionList();
-            // Payer related
-            extensionList.addExtensionItem(new Extension("payerFspId", this.participantContext.fspCode()));
-            extensionList.addExtensionItem(new Extension("payerPartyIdType", request.payer.getPartyIdType().toString()));
-            extensionList.addExtensionItem(new Extension("payerPartyId", request.payer.getPartyIdentifier()));
+        // Payee related
+        extensionList.addExtensionItem(new Extension("payeeFspId", request.destination));
+        extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
+        extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
-            // Payee related
-            extensionList.addExtensionItem(new Extension("payeeFspId", request.destination));
-            extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
-            extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
+        var expireAfterSeconds = new Date(Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
 
-            var expireAfterSeconds = new Date(Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
+        transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination)
+                            .amount(request.amount).ilpPacket(request.ilpPacket).condition(request.condition)
+                            .expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
 
-            transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination)
-                                .amount(request.amount).ilpPacket(request.ilpPacket).condition(request.condition)
-                                .expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
+        var input = new RequestTransfersCommand.Input(new Payee(request.destination()), transfersPostRequest);
+        var output = this.requestTransfersCommand.execute(input);
 
-            var input = new RequestTransfersCommand.Input(new Destination(request.destination()), transfersPostRequest);
-            var output = this.requestTransfersCommand.execute(input);
+        this.eventPublisher.publish(new RequestTransfersEvent(input));
 
-            this.eventPublisher.publish(new RequestTransfersEvent(input));
+        return ResponseEntity.ok(output.result());
 
-            return ResponseEntity.ok(output.result());
-
-        } catch (FspiopException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public record Request(String destination,

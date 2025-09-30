@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
@@ -41,9 +41,7 @@ class PutTransfersHandler implements PutTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PutTransfersHandler(ParticipantContext participantContext,
-                               TransfersService transfersService,
-                               FspiopErrorDecoder fspiopErrorDecoder) {
+    public PutTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -55,16 +53,13 @@ class PutTransfersHandler implements PutTransfers {
     }
 
     @Override
-    public void putTransfers(Destination destination, String transferId, TransfersIDPutResponse transfersIDPutResponse)
-        throws FspiopException {
+    public void putTransfers(Payer payer, String transferId, TransfersIDPutResponse transfersIDPutResponse) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(),
-                                                                         destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.transfersService.putTransfers(fspiopHeaders, transferId, transfersIDPutResponse),
-                                   this.fspiopErrorDecoder);
+            RetrofitService.invoke(this.transfersService.putTransfers(fspiopHeaders, transferId, transfersIDPutResponse), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,15 +68,12 @@ class PutTransfersHandler implements PutTransfers {
     }
 
     @Override
-    public void putTransfersError(Destination destination, String transferId, ErrorInformationObject errorInformationObject)
-        throws FspiopException {
+    public void putTransfersError(Payer payer, String transferId, ErrorInformationObject errorInformationObject) throws FspiopException {
 
         try {
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(),
-                                                                         destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.transfersService.putTransfersError(fspiopHeaders, transferId, errorInformationObject),
-                                   this.fspiopErrorDecoder);
+            RetrofitService.invoke(this.transfersService.putTransfersError(fspiopHeaders, transferId, errorInformationObject), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

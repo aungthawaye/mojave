@@ -21,7 +21,7 @@
 package io.mojaloop.fspiop.invoker.api.quotes;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
 import retrofit2.http.Body;
@@ -29,10 +29,8 @@ import retrofit2.http.Path;
 
 public interface PutQuotes {
 
-    void putQuotes(Destination destination, @Path("quoteId") String quoteId, @Body QuotesIDPutResponse quotesIDPutResponse)
-        throws FspiopException;
+    void putQuotes(Payer payer, @Path("quoteId") String quoteId, @Body QuotesIDPutResponse quotesIDPutResponse) throws FspiopException;
 
-    void putQuotesError(Destination destination, @Path("quoteId") String quoteId, @Body ErrorInformationObject errorInformationObject)
-        throws FspiopException;
+    void putQuotesError(Payer payer, @Path("quoteId") String quoteId, @Body ErrorInformationObject errorInformationObject) throws FspiopException;
 
 }

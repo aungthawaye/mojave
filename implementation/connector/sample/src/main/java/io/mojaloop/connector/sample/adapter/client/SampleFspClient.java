@@ -26,7 +26,7 @@ import io.mojaloop.connector.adapter.fsp.payload.Quotes;
 import io.mojaloop.connector.adapter.fsp.payload.Transfers;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -43,7 +43,7 @@ import java.util.List;
 public class SampleFspClient implements FspClient {
 
     @Override
-    public Parties.Get.Response getParties(Source source, Parties.Get.Request request) throws FspiopException {
+    public Parties.Get.Response getParties(Payer payer, Parties.Get.Request request) throws FspiopException {
 
         var partyId = request.partyId();
 
@@ -51,17 +51,18 @@ public class SampleFspClient implements FspClient {
             throw new FspiopException(FspiopErrors.PARTY_NOT_FOUND, request.partyIdType().name() + " with Party ID (" + partyId + ") not found.");
         }
 
-        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko Kamado",
+        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK),
+                                        "Nezuko Kamado",
                                         new PartyPersonalInfo().complexName(new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
     }
 
     @Override
-    public void patchTransfers(Source source, Transfers.Patch.Request request) throws FspiopException {
+    public void patchTransfers(Payer payer, Transfers.Patch.Request request) throws FspiopException {
 
     }
 
     @Override
-    public Quotes.Post.Response postQuotes(Source source, Quotes.Post.Request request) throws FspiopException {
+    public Quotes.Post.Response postQuotes(Payer payer, Quotes.Post.Request request) throws FspiopException {
 
         var currency = request.originalAmount().getCurrency();
         var originalAmount = new BigDecimal(request.originalAmount().getAmount());
@@ -85,13 +86,16 @@ public class SampleFspClient implements FspClient {
         var _15minsLater = new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli());
         var expiration = FspiopDates.forRequestBody(_15minsLater);
 
-        return new Quotes.Post.Response(new Money(currency, originalAmount.toPlainString()), new Money(currency, payeeFspFee.toPlainString()),
-                                        new Money(currency, payeeFspCommission.toPlainString()), new Money(currency, payeeReceiveAmount.toPlainString()),
-                                        new Money(currency, transferAmount.toPlainString()), expiration);
+        return new Quotes.Post.Response(new Money(currency, originalAmount.toPlainString()),
+                                        new Money(currency, payeeFspFee.toPlainString()),
+                                        new Money(currency, payeeFspCommission.toPlainString()),
+                                        new Money(currency, payeeReceiveAmount.toPlainString()),
+                                        new Money(currency, transferAmount.toPlainString()),
+                                        expiration);
     }
 
     @Override
-    public Transfers.Post.Response postTransfers(Source source, Transfers.Post.Request request) throws FspiopException {
+    public Transfers.Post.Response postTransfers(Payer payer, Transfers.Post.Request request) throws FspiopException {
 
         return null;
     }

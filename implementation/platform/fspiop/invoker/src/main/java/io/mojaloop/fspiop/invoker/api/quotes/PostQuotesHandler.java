@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
@@ -52,11 +52,11 @@ class PostQuotesHandler implements PostQuotes {
     }
 
     @Override
-    public void postQuotes(Destination destination, QuotesPostRequest quotesPostRequest) throws FspiopException {
+    public void postQuotes(Payee payee, QuotesPostRequest quotesPostRequest) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forRequest(this.participantContext.fspCode(), destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forRequest(this.participantContext.fspCode(), payee.fspCode());
 
             RetrofitService.invoke(this.quotesService.postQuotes(fspiopHeaders, quotesPostRequest), this.fspiopErrorDecoder);
 

@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.quotes.HandleQuotesErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.quotes.HandlePutQuotesErrorCommand;
 import io.mojaloop.connector.gateway.inbound.event.PutQuotesErrorEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PutQuotesErrorEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PutQuotesErrorEventListener.class);
 
-    private final HandleQuotesErrorCommand handleQuotesError;
+    private final HandlePutQuotesErrorCommand handleQuotesError;
 
-    public PutQuotesErrorEventListener(HandleQuotesErrorCommand handleQuotesError) {
+    public PutQuotesErrorEventListener(HandlePutQuotesErrorCommand handleQuotesError) {
 
         assert null != handleQuotesError;
 
@@ -54,9 +54,7 @@ public class PutQuotesErrorEventListener {
 
         try {
 
-            this.handleQuotesError.execute(new HandleQuotesErrorCommand.Input(payload.source(),
-                                                                              payload.quoteId(),
-                                                                              payload.errorInformationObject()));
+            this.handleQuotesError.execute(new HandlePutQuotesErrorCommand.Input(payload.payee(), payload.quoteId(), payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutQuotesErrorEvent : {}", event);
 

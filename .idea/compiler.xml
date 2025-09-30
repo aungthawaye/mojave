@@ -8,21 +8,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mod-lookup-contract" />
-        <module name="mod-account-domain" />
-        <module name="mod-account-admin-client" />
         <module name="mod-component-flyway" />
         <module name="mod-component-vault" />
         <module name="transfer-pom" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
+        <module name="mod-accounting-intercom" />
         <module name="mod-common-datatype-converter" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-quoting-domain" />
         <module name="mod-component-web" />
         <module name="mod-connector-gateway" />
         <module name="mod-participant-admin" />
-        <module name="mod-account-contract" />
+        <module name="mod-accounting-admin-client" />
         <module name="mod-connector-sample" />
+        <module name="mod-accounting-admin" />
         <module name="mod-common-datatype" />
         <module name="mod-participant-intercom" />
         <module name="mod-connector-adapter" />
@@ -30,17 +30,17 @@
         <module name="mod-fspiop-spec" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
+        <module name="mod-accounting-domain" />
         <module name="mod-fspiop-component" />
         <module name="mod-component-tomcat" />
         <module name="mod-lookup-service" />
-        <module name="mod-account-intercom" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
         <module name="transaction-pom" />
+        <module name="mod-accounting-contract" />
         <module name="mod-component-retrofit" />
         <module name="mod-quoting-contract" />
         <module name="mod-participant-domain" />
-        <module name="mod-account-admin" />
         <module name="mod-fspiop-invoker" />
         <module name="settlement-pom" />
         <module name="mod-participant-store" />
@@ -49,6 +49,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="account-pom" target="21" />
+      <module name="mod-account-admin" target="21" />
+      <module name="mod-account-admin-client" target="21" />
+      <module name="mod-account-contract" target="21" />
+      <module name="mod-account-domain" target="21" />
+      <module name="mod-account-intercom" target="21" />
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
       <module name="mod-component-http" target="21" />
@@ -74,6 +80,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="account-pom" options="-parameters" />
+      <module name="accounting-pom" options="-parameters" />
       <module name="common-pom" options="-parameters" />
       <module name="component-pom" options="-parameters" />
       <module name="connector-pom" options="-parameters" />
@@ -85,6 +92,11 @@
       <module name="mod-account-contract" options="-parameters" />
       <module name="mod-account-domain" options="-parameters" />
       <module name="mod-account-intercom" options="-parameters" />
+      <module name="mod-accounting-admin" options="-parameters" />
+      <module name="mod-accounting-admin-client" options="-parameters" />
+      <module name="mod-accounting-contract" options="-parameters" />
+      <module name="mod-accounting-domain" options="-parameters" />
+      <module name="mod-accounting-intercom" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-common-datatype-converter" options="-parameters" />

@@ -21,10 +21,10 @@
 package io.mojaloop.fspiop.invoker.api.transfers;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 
 public interface GetTransfers {
 
-    void getTransfers(Destination destination, String transferId) throws FspiopException;
+    void getTransfers(Payee payee, String transferId) throws FspiopException;
 
 }

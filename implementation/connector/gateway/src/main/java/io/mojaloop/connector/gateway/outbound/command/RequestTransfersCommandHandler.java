@@ -21,6 +21,7 @@
 package io.mojaloop.connector.gateway.outbound.command;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.TransfersErrorResult;
 import io.mojaloop.connector.gateway.data.TransfersResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
@@ -48,9 +49,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
     private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
-    public RequestTransfersCommandHandler(PostTransfers postTransfers,
-                                          PubSubClient pubSubClient,
-                                          ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public RequestTransfersCommandHandler(PostTransfers postTransfers, PubSubClient pubSubClient, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != postTransfers;
         assert null != pubSubClient;
@@ -70,8 +69,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         assert input.request() != null;
 
         var transferId = input.request().getTransferId();
-        var resultTopic = "transfers:" + transferId;
-        var errorTopic = "transfers-error:" + transferId;
+        var resultTopic = PubSubKeys.forTransfers(input.payee(), transferId);
+        var errorTopic = PubSubKeys.forTransfers(input.payee(), transferId);
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
@@ -117,9 +116,9 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
             }
         }, 60_000);
 
-        this.postTransfers.postTransfers(input.destination(), input.request());
-
         try {
+
+            this.postTransfers.postTransfers(input.payee(), input.request());
 
             var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 
@@ -127,7 +126,9 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
                 throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");
             }
 
-        } catch (InterruptedException ignored) { } finally {
+        } catch (InterruptedException ignored) {
+            // Do nothing.
+        } finally {
             this.pubSubClient.unsubscribe(resultSubscription);
             this.pubSubClient.unsubscribe(errorSubscription);
         }
@@ -139,8 +140,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         var error = errorRef.get();
         var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(),
-                                                      error.errorInformation().getErrorInformation().getErrorDescription()));
+        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

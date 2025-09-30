@@ -21,14 +21,14 @@
 package io.mojaloop.fspiop.service.api.quotes;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
 
 public interface RespondQuotes {
 
-    void putQuotes(Destination destination, String url, QuotesIDPutResponse response) throws FspiopException;
+    void putQuotes(Payer payer, String url, QuotesIDPutResponse response) throws FspiopException;
 
-    void putQuotesError(Destination destination, String url, ErrorInformationObject error) throws FspiopException;
+    void putQuotesError(Payer payer, String url, ErrorInformationObject error) throws FspiopException;
 
 }

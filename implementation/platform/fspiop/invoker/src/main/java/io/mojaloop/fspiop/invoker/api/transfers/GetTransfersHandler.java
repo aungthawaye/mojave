@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
@@ -39,9 +39,7 @@ class GetTransfersHandler implements GetTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public GetTransfersHandler(ParticipantContext participantContext,
-                               TransfersService transfersService,
-                               FspiopErrorDecoder fspiopErrorDecoder) {
+    public GetTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -53,12 +51,11 @@ class GetTransfersHandler implements GetTransfers {
     }
 
     @Override
-    public void getTransfers(Destination destination, String transferId) throws FspiopException {
+    public void getTransfers(Payee payee, String transferId) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(),
-                                                                          destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(), payee.fspCode());
 
             RetrofitService.invoke(this.transfersService.getTransfers(fspiopHeaders, transferId), this.fspiopErrorDecoder);
 

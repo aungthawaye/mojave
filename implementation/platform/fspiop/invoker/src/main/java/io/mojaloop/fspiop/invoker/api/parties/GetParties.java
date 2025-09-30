@@ -21,13 +21,13 @@
 package io.mojaloop.fspiop.invoker.api.parties;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 public interface GetParties {
 
-    void getParties(Destination destination, PartyIdType partyIdType, String partyId, String subId) throws FspiopException;
+    void getParties(Payee payee, PartyIdType partyIdType, String partyId, String subId) throws FspiopException;
 
-    void getParties(Destination destination, PartyIdType partyIdType, String partyId) throws FspiopException;
+    void getParties(Payee payee, PartyIdType partyIdType, String partyId) throws FspiopException;
 
 }

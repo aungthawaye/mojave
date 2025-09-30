@@ -21,13 +21,14 @@
 package io.mojaloop.connector.gateway.inbound.controller;
 
 import io.mojaloop.component.misc.spring.event.EventPublisher;
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersErrorCommand;
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersRequestCommand;
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersResponseCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePutTransfersErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
 import io.mojaloop.connector.gateway.inbound.event.PostTransfersEvent;
 import io.mojaloop.connector.gateway.inbound.event.PutTransfersErrorEvent;
 import io.mojaloop.connector.gateway.inbound.event.PutTransfersEvent;
-import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.common.type.Payee;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
@@ -61,35 +62,31 @@ public class HandleTransfersController {
     public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers, @RequestBody TransfersPostRequest request) {
 
         LOGGER.debug("Received POST /transfers : request : {}", request);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PostTransfersEvent(new HandleTransfersRequestCommand.Input(source, request.getTransferId(), request)));
+        this.eventPublisher.publish(new PostTransfersEvent(new HandlePostTransfersRequestCommand.Input(payer, request.getTransferId(), request)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/transfers/{transferId}")
-    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers,
-                                          @PathVariable String transferId,
-                                          @RequestBody TransfersIDPutResponse response) {
+    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers, @PathVariable String transferId, @RequestBody TransfersIDPutResponse response) {
 
         LOGGER.debug("Received PUT /transfers/{} : response : {}", transferId, response);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutTransfersEvent(new HandleTransfersResponseCommand.Input(source, transferId, response)));
+        this.eventPublisher.publish(new PutTransfersEvent(new HandlePutTransfersResponseCommand.Input(payee, transferId, response)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/transfers/{transferId}/error")
-    public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers,
-                                               @PathVariable String transferId,
-                                               @RequestBody ErrorInformationObject errorInformation) {
+    public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers, @PathVariable String transferId, @RequestBody ErrorInformationObject errorInformation) {
 
         LOGGER.debug("Received PUT /transfers/{}/error : errorInformation : {}", transferId, errorInformation);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutTransfersErrorEvent(new HandleTransfersErrorCommand.Input(source, transferId, errorInformation)));
+        this.eventPublisher.publish(new PutTransfersErrorEvent(new HandlePutTransfersErrorCommand.Input(payee, transferId, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }

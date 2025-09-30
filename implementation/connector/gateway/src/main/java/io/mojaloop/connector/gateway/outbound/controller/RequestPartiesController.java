@@ -24,7 +24,7 @@ import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestPartiesCommand;
 import io.mojaloop.connector.gateway.outbound.event.RequestPartiesEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -53,32 +53,18 @@ public class RequestPartiesController {
     }
 
     @PostMapping("/lookup")
-    public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request) {
+    public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request) throws FspiopException {
 
-        LOGGER.info("Received lookup request for partyId: {}, partyIdType: {}, destination: {}",
-                    request.partyId(),
-                    request.partyIdType(),
-                    request.destination());
+        LOGGER.info("Received lookup request for partyId: {}, partyIdType: {}, destination: {}", request.partyId(), request.partyIdType(), request.destination());
         LOGGER.debug("Lookup request: {}", request);
 
-        try {
+        var input = new RequestPartiesCommand.Input(new Payee(request.destination()), request.partyIdType, request.partyId, request.subId);
 
-            var input = new RequestPartiesCommand.Input(new Destination(request.destination()),
-                                                        request.partyIdType,
-                                                        request.partyId,
-                                                        request.subId);
+        var output = this.requestPartiesCommand.execute(input);
 
-            var output = this.requestPartiesCommand.execute(input);
+        this.eventPublisher.publish(new RequestPartiesEvent(input));
 
-            this.eventPublisher.publish(new RequestPartiesEvent(input));
-
-            return ResponseEntity.ok(output.response());
-
-        } catch (FspiopException e) {
-
-            LOGGER.error("Error handling lookup request", e);
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity.ok(output.response());
 
     }
 

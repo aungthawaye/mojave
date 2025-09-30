@@ -50,7 +50,13 @@ public abstract class EntityId<T> {
     @Override
     public int hashCode() {
 
-        return Objects.hashCode(id);
+        return Objects.hashCode(this.id);
+    }
+
+    @Override
+    public String toString() {
+
+        return this.id.toString();
     }
 
 }

@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
@@ -40,9 +40,7 @@ class PostTransfersHandler implements PostTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PostTransfersHandler(ParticipantContext participantContext,
-                                TransfersService transfersService,
-                                FspiopErrorDecoder fspiopErrorDecoder) {
+    public PostTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -54,12 +52,11 @@ class PostTransfersHandler implements PostTransfers {
     }
 
     @Override
-    public void postTransfers(Destination destination, TransfersPostRequest transfersPostRequest) throws FspiopException {
+    public void postTransfers(Payee payee, TransfersPostRequest transfersPostRequest) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(),
-                                                                          destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(), payee.fspCode());
 
             RetrofitService.invoke(this.transfersService.postTransfers(fspiopHeaders, transfersPostRequest), this.fspiopErrorDecoder);
 

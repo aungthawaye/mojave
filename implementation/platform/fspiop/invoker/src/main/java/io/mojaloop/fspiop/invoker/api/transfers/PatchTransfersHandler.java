@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.TransfersService;
@@ -40,9 +40,7 @@ class PatchTransfersHandler implements PatchTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PatchTransfersHandler(ParticipantContext participantContext,
-                                 TransfersService transfersService,
-                                 FspiopErrorDecoder fspiopErrorDecoder) {
+    public PatchTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -54,16 +52,13 @@ class PatchTransfersHandler implements PatchTransfers {
     }
 
     @Override
-    public void patchTransfers(Destination destination, String transferId, TransfersIDPatchResponse transfersIDPatchResponse)
-        throws FspiopException {
+    public void patchTransfers(Payee payee, String transferId, TransfersIDPatchResponse transfersIDPatchResponse) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(),
-                                                                         destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.transfersService.patchTransfers(fspiopHeaders, transferId, transfersIDPatchResponse),
-                                   this.fspiopErrorDecoder);
+            RetrofitService.invoke(this.transfersService.patchTransfers(fspiopHeaders, transferId, transfersIDPatchResponse), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

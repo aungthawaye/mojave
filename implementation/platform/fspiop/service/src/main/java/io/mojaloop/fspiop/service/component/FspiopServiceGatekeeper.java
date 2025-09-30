@@ -31,7 +31,7 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.handy.FspiopSignature;
 import jakarta.servlet.http.HttpServletResponse;
@@ -97,11 +97,11 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
     private UsernamePasswordAuthenticationToken authenticateUsingJws(CachedServletRequest cachedServletRequest) throws JsonProcessingException {
 
-        var source = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
+        var payer = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
 
         if (!this.participantContext.verifyJws()) {
 
-            return new UsernamePasswordAuthenticationToken(source, new FspiopSignature.Header(null, null), new ArrayList<SimpleGrantedAuthority>());
+            return new UsernamePasswordAuthenticationToken(payer, new FspiopSignature.Header(null, null), new ArrayList<SimpleGrantedAuthority>());
         }
 
         var getMethod = cachedServletRequest.getMethod().equalsIgnoreCase("GET");
@@ -117,13 +117,13 @@ public class FspiopServiceGatekeeper implements Authenticator {
         var signature = this.objectMapper.readValue(signatureHeader, FspiopSignature.Header.class);
         LOGGER.debug("FSPIOP_SIGNATURE : [{}]", signature);
 
-        var publicKey = this.participantContext.publicKeys().get(source);
+        var publicKey = this.participantContext.publicKeys().get(payer);
 
         if (publicKey == null) {
 
-            LOGGER.error("No public key found for Source FSP ({}).", source);
+            LOGGER.error("No public key found for Source FSP ({}).", payer);
             throw new GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
-                                                 new FspiopException(FspiopErrors.INVALID_SIGNATURE, "No public key found for Source FSP (" + source + ")."));
+                                                 new FspiopException(FspiopErrors.INVALID_SIGNATURE, "No public key found for Source FSP (" + payer + ")."));
         }
 
         var payload = getMethod ? this.buildDummyPayload(cachedServletRequest) : cachedServletRequest.getCachedBodyAsString();
@@ -136,14 +136,14 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         if (!verificationOk) {
 
-            LOGGER.error("Signature verification failed when using Source FSP ({})'s public key.", source);
+            LOGGER.error("Signature verification failed when using Source FSP ({})'s public key.", payer);
             throw new GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
                                                  new FspiopException(FspiopErrors.INVALID_SIGNATURE,
-                                                                     "Signature verification failed when using Source FSP (" + source + ")'s public key."));
+                                                                     "Signature verification failed when using Source FSP (" + payer + ")'s public key."));
         }
 
         LOGGER.debug("Signature verification successful");
-        return new UsernamePasswordAuthenticationToken(new Source(source), signature, new ArrayList<SimpleGrantedAuthority>() { });
+        return new UsernamePasswordAuthenticationToken(new Payer(payer), signature, new ArrayList<SimpleGrantedAuthority>() { });
     }
 
     private String buildDummyPayload(CachedServletRequest cachedServletRequest) {

@@ -21,11 +21,11 @@
 package io.mojaloop.connector.gateway.inbound.event;
 
 import io.mojaloop.component.misc.spring.event.DomainEvent;
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersRequestCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
 
-public class PostTransfersEvent extends DomainEvent<HandleTransfersRequestCommand.Input> {
+public class PostTransfersEvent extends DomainEvent<HandlePostTransfersRequestCommand.Input> {
 
-    public PostTransfersEvent(HandleTransfersRequestCommand.Input payload) {
+    public PostTransfersEvent(HandlePostTransfersRequestCommand.Input payload) {
 
         super(payload);
     }

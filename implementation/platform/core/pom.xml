@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mojaloop.platform</groupId>
@@ -13,14 +12,14 @@
     <packaging>pom</packaging>
     <name>Mojaloop - Platform - Core</name>
     <modules>
-        <module>common</module>
-        <module>account</module>
-        <module>participant</module>
-        <module>lookup</module>
-        <module>quoting</module>
-        <module>settlement</module>
-        <module>transaction</module>
-        <module>transfer</module>
+        <module>01_common</module>
+        <module>02_participant</module>
+        <module>03_accounting</module>
+        <module>04_transaction</module>
+        <module>05_lookup</module>
+        <module>06_quoting</module>
+        <module>07_transfer</module>
+        <module>08_settlement</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

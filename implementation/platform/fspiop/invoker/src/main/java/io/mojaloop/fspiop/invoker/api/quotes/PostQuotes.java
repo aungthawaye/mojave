@@ -21,11 +21,11 @@
 package io.mojaloop.fspiop.invoker.api.quotes;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.QuotesPostRequest;
 
 public interface PostQuotes {
 
-    void postQuotes(Destination destination, QuotesPostRequest quotesPostRequest) throws FspiopException;
+    void postQuotes(Payee payee, QuotesPostRequest quotesPostRequest) throws FspiopException;
 
 }

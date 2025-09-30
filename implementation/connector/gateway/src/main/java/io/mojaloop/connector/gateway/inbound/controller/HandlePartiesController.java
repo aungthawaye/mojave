@@ -21,13 +21,14 @@
 package io.mojaloop.connector.gateway.inbound.controller;
 
 import io.mojaloop.component.misc.spring.event.EventPublisher;
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesErrorCommand;
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesRequestCommand;
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesResponseCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandleGetPartiesRequestCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandlePutPartiesErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandlePutPartiesResponseCommand;
 import io.mojaloop.connector.gateway.inbound.event.GetPartiesEvent;
 import io.mojaloop.connector.gateway.inbound.event.PutPartiesErrorEvent;
 import io.mojaloop.connector.gateway.inbound.event.PutPartiesEvent;
-import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.common.type.Payee;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
@@ -61,9 +62,9 @@ public class HandlePartiesController {
     public ResponseEntity<?> getParties(@RequestHeader Map<String, String> headers, @PathVariable PartyIdType partyIdType, @PathVariable String partyId) {
 
         LOGGER.debug("Received GET /parties/{}/{}", partyIdType, partyId);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new GetPartiesEvent(new HandlePartiesRequestCommand.Input(source, partyIdType, partyId, null)));
+        this.eventPublisher.publish(new GetPartiesEvent(new HandleGetPartiesRequestCommand.Input(payer, partyIdType, partyId, null)));
 
         return ResponseEntity.accepted().build();
     }
@@ -75,9 +76,9 @@ public class HandlePartiesController {
                                         @PathVariable String subId) {
 
         LOGGER.debug("Received GET /parties/{}/{}/{}", partyIdType, partyId, subId);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new GetPartiesEvent(new HandlePartiesRequestCommand.Input(source, partyIdType, partyId, subId)));
+        this.eventPublisher.publish(new GetPartiesEvent(new HandleGetPartiesRequestCommand.Input(payer, partyIdType, partyId, subId)));
 
         return ResponseEntity.accepted().build();
     }
@@ -89,9 +90,9 @@ public class HandlePartiesController {
                                         @RequestBody PartiesTypeIDPutResponse response) {
 
         LOGGER.debug("Received PUT /parties/{}/{} : response : {}", partyIdType, partyId, response);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, null, response)));
+        this.eventPublisher.publish(new PutPartiesEvent(new HandlePutPartiesResponseCommand.Input(payee, partyIdType, partyId, null, response)));
 
         return ResponseEntity.accepted().build();
     }
@@ -103,9 +104,9 @@ public class HandlePartiesController {
                                              @RequestBody ErrorInformationObject errorInformation) {
 
         LOGGER.debug("Received PUT /parties/{}/{}/error : response {}", partyIdType, partyId, errorInformation);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, null, errorInformation)));
+        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePutPartiesErrorCommand.Input(payee, partyIdType, partyId, null, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }
@@ -118,9 +119,9 @@ public class HandlePartiesController {
                                              @RequestBody ErrorInformationObject errorInformation) {
 
         LOGGER.debug("Received PUT /parties/{}/{}/{}/error : {}", partyIdType, partyId, subId, errorInformation);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePartiesErrorCommand.Input(source, partyIdType, partyId, subId, errorInformation)));
+        this.eventPublisher.publish(new PutPartiesErrorEvent(new HandlePutPartiesErrorCommand.Input(payee, partyIdType, partyId, subId, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }
@@ -133,9 +134,9 @@ public class HandlePartiesController {
                                                  @RequestBody PartiesTypeIDPutResponse response) {
 
         LOGGER.debug("Received (withSubId) PUT /parties/{}/{}/{} : response : {}", partyIdType, partyId, subId, response);
-        var source = new Source(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+        var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutPartiesEvent(new HandlePartiesResponseCommand.Input(source, partyIdType, partyId, subId, response)));
+        this.eventPublisher.publish(new PutPartiesEvent(new HandlePutPartiesResponseCommand.Input(payee, partyIdType, partyId, subId, response)));
 
         return ResponseEntity.accepted().build();
     }

@@ -21,11 +21,11 @@
 package io.mojaloop.connector.gateway.inbound.event;
 
 import io.mojaloop.component.misc.spring.event.DomainEvent;
-import io.mojaloop.connector.gateway.inbound.command.quotes.HandleQuotesErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.quotes.HandlePutQuotesErrorCommand;
 
-public class PutQuotesErrorEvent extends DomainEvent<HandleQuotesErrorCommand.Input> {
+public class PutQuotesErrorEvent extends DomainEvent<HandlePutQuotesErrorCommand.Input> {
 
-    public PutQuotesErrorEvent(HandleQuotesErrorCommand.Input payload) {
+    public PutQuotesErrorEvent(HandlePutQuotesErrorCommand.Input payload) {
 
         super(payload);
     }

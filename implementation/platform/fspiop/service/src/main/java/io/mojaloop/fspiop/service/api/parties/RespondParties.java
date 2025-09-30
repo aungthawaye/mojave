@@ -21,14 +21,14 @@
 package io.mojaloop.fspiop.service.api.parties;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 
 public interface RespondParties {
 
-    void putParties(Destination destination, String url, PartiesTypeIDPutResponse response) throws FspiopException;
+    void putParties(Payer payer, String url, PartiesTypeIDPutResponse response) throws FspiopException;
 
-    void putPartiesError(Destination destination, String url, ErrorInformationObject error) throws FspiopException;
+    void putPartiesError(Payer payer, String url, ErrorInformationObject error) throws FspiopException;
 
 }

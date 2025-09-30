@@ -34,4 +34,6 @@ public class StringSizeConstraints {
 
     public static final int MAX_NAME_TITLE_LENGTH = 64;
 
+    public static final int MAX_PARAGRAPH_LENGTH = 512;
+
 }

@@ -49,8 +49,7 @@ public class FspiopInvocationErrorHandler {
                 if (errorDefinition != null) {
 
                     // We found the error definition. But we will use the error description returned by the server.
-                    return new FspiopException(new ErrorDefinition(errorDefinition.errorType(),
-                                                                   errorInformation.getErrorDescription()));
+                    return new FspiopException(new ErrorDefinition(errorDefinition.errorType(), errorInformation.getErrorDescription()));
                 }
 
                 // We cannot find the error definition. We have no idea what happened at the server.
@@ -60,17 +59,17 @@ public class FspiopInvocationErrorHandler {
 
             // We cannot parse the error body into ErrorInformationObject.
             // We don't know what had happened.
-            return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);
+            return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, exception.getMessage());
 
         }
 
         // Something went wrong while processing. Then the exception will have the cause.
         if (cause instanceof ConnectException || cause instanceof UnknownHostException || cause instanceof SocketTimeoutException) {
 
-            return new FspiopException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR);
+            return new FspiopException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR, exception.getMessage());
         }
 
-        return new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, cause.getMessage());
+        return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, cause.getMessage());
     }
 
 }

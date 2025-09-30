@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersResponseCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
 import io.mojaloop.connector.gateway.inbound.event.PutTransfersEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PutTransfersEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersEventListener.class);
 
-    private final HandleTransfersResponseCommand handleTransfersResponse;
+    private final HandlePutTransfersResponseCommand handleTransfersResponse;
 
-    public PutTransfersEventListener(HandleTransfersResponseCommand handleTransfersResponse) {
+    public PutTransfersEventListener(HandlePutTransfersResponseCommand handleTransfersResponse) {
 
         assert null != handleTransfersResponse;
 
@@ -54,9 +54,7 @@ public class PutTransfersEventListener {
 
         try {
 
-            this.handleTransfersResponse.execute(new HandleTransfersResponseCommand.Input(payload.source(),
-                                                                                          payload.transferId(),
-                                                                                          payload.response()));
+            this.handleTransfersResponse.execute(new HandlePutTransfersResponseCommand.Input(payload.payee(), payload.transferId(), payload.response()));
 
             LOGGER.info("Done handling PutTransfersEvent : {}", event);
 

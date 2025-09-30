@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.service.api.QuotesResponseService;
@@ -55,11 +55,11 @@ public class RespondQuotesHandler implements RespondQuotes {
     }
 
     @Override
-    public void putQuotes(Destination destination, String url, QuotesIDPutResponse response) throws FspiopException {
+    public void putQuotes(Payer payer, String url, QuotesIDPutResponse response) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(), payer.fspCode());
 
             RetrofitService.invoke(this.quotesResponseService.putQuotes(url, fspiopHeaders, response), this.fspiopErrorDecoder);
 
@@ -70,11 +70,11 @@ public class RespondQuotesHandler implements RespondQuotes {
     }
 
     @Override
-    public void putQuotesError(Destination destination, String url, ErrorInformationObject error) throws FspiopException {
+    public void putQuotesError(Payer payer, String url, ErrorInformationObject error) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(), destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(), payer.fspCode());
 
             RetrofitService.invoke(this.quotesResponseService.putQuotesError(url, fspiopHeaders, error), this.fspiopErrorDecoder);
 

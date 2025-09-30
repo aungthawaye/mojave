@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandlePutPartiesErrorCommand;
 import io.mojaloop.connector.gateway.inbound.event.PutPartiesErrorEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PutPartiesErrorEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PutPartiesErrorEventListener.class);
 
-    private final HandlePartiesErrorCommand handlePartiesError;
+    private final HandlePutPartiesErrorCommand handlePartiesError;
 
-    public PutPartiesErrorEventListener(HandlePartiesErrorCommand handlePartiesError) {
+    public PutPartiesErrorEventListener(HandlePutPartiesErrorCommand handlePartiesError) {
 
         assert null != handlePartiesError;
 
@@ -54,11 +54,11 @@ public class PutPartiesErrorEventListener {
 
         try {
 
-            this.handlePartiesError.execute(new HandlePartiesErrorCommand.Input(payload.source(),
-                                                                                payload.partyIdType(),
-                                                                                payload.partyId(),
-                                                                                payload.subId(),
-                                                                                payload.errorInformationObject()));
+            this.handlePartiesError.execute(new HandlePutPartiesErrorCommand.Input(payload.payee(),
+                                                                                   payload.partyIdType(),
+                                                                                   payload.partyId(),
+                                                                                   payload.subId(),
+                                                                                   payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutPartiesErrorEvent : {}", event);
 

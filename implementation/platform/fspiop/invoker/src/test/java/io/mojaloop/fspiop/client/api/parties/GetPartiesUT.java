@@ -22,7 +22,7 @@ package io.mojaloop.fspiop.client.api.parties;
 
 import io.mojaloop.fspiop.client.api.TestSettings;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.invoker.api.parties.GetParties;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
@@ -42,7 +42,7 @@ public class GetPartiesUT {
     @Test
     public void test() throws FspiopException {
 
-        this.getParties.getParties(new Destination("fsp2"), PartyIdType.MSISDN, "987654321");
+        this.getParties.getParties(new Payee("fsp2"), PartyIdType.MSISDN, "987654321");
     }
 
 }
