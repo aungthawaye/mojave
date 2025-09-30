@@ -20,6 +20,12 @@ public class QuotingDomainConfiguration {
         extends MiscConfiguration.RequiredSettings,
                 FspiopCommonConfiguration.RequiredSettings,
                 ParticipantStoreConfiguration.RequiredSettings,
-                RoutingJpaConfiguration.RequiredSettings { }
+                RoutingJpaConfiguration.RequiredSettings {
+
+        QuoteSettings quoteSettings();
+
+    }
+
+    public record QuoteSettings(boolean stateful) { }
 
 }

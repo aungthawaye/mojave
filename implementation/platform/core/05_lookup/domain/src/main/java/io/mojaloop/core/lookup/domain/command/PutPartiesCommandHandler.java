@@ -56,7 +56,7 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
     @Override
     public Output execute(Input input) {
 
-        LOGGER.info("Executing PutPartiesCommandHandler.");
+        LOGGER.info("Executing PutPartiesCommandHandler with input: [{}].", input);
 
         var payerFspCode = new FspCode(input.request().payer().fspCode());
         var payerFsp = this.participantStore.getFspData(payerFspCode);

@@ -24,7 +24,6 @@ import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.contract.command.GetPartiesCommand;
 import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
@@ -59,26 +58,17 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
     @Override
     public Output execute(Input input) {
 
-        LOGGER.info("Executing GetPartiesCommandHandler.");
+        LOGGER.info("Executing GetPartiesCommandHandler with input: [{}]", input);
 
         var payerFspCode = new FspCode(input.request().payer().fspCode());
         var payerFsp = this.participantStore.getFspData(payerFspCode);
         LOGGER.info("Found payer FSP: [{}]", payerFsp);
 
+        var payeeFspCode = new FspCode(input.request().payee().fspCode());
+        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
+        LOGGER.info("Found payee FSP: [{}]", payeeFsp);
+
         try {
-
-            LOGGER.info("Executing GetPartiesHandler with input: [{}]", input);
-
-            var payeeFspCode = new FspCode(input.request().payee().fspCode());
-            var payeeFsp = this.participantStore.getFspData(payeeFspCode);
-
-            if (payeeFsp == null) {
-
-                LOGGER.error("Destination FSP is not found in Hub. Send error response to payer FSP.");
-                throw new FspiopException(FspiopErrors.PAYEE_FSP_ID_NOT_FOUND);
-            }
-
-            LOGGER.info("Found payee FSP: [{}]", payeeFsp);
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             LOGGER.info("Forwarding request to payee FSP (Url): [{}]", payeeFsp);
@@ -90,13 +80,12 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
             LOGGER.error("FspiopException occurred while executing GetPartiesCommandHandler: [{}]", e.getMessage());
 
-            var payer = new Payer(payerFspCode.value());
             var baseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 
             try {
 
-                this.respondParties.putPartiesError(payer, url, e.toErrorObject());
+                this.respondParties.putPartiesError(new Payer(payerFspCode.value()), url, e.toErrorObject());
                 LOGGER.info("Done sending error response to payer FSP.");
                 LOGGER.info("Returning from GetPartiesCommandHandler.");
 

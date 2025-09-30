@@ -21,7 +21,8 @@ public class TestSettings implements QuotingDomainConfiguration.RequiredSettings
         var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
         var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
         var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
-        var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
+        var fspsEnv = System.getenv("FSPIOP_FSPS");
+                var fsps = (fspsEnv == null || fspsEnv.isBlank()) ? new String[0] : fspsEnv.split(",", -1);
         var fspPublicKeyPem = new HashMap<String, String>();
 
         for (var fsp : fsps) {
@@ -49,6 +50,13 @@ public class TestSettings implements QuotingDomainConfiguration.RequiredSettings
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
         return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "60000")));
+    }
+
+    @Bean
+    @Override
+    public QuotingDomainConfiguration.QuoteSettings quoteSettings() {
+
+        return new QuotingDomainConfiguration.QuoteSettings(true);
     }
 
     @Bean

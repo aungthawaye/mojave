@@ -8,12 +8,12 @@ import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PostQuotesCommand;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
+import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.model.Party;
 import io.mojaloop.core.quoting.domain.model.Quote;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
@@ -42,52 +42,47 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
     private final PlatformTransactionManager transactionManager;
 
+    private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
+
     public PostQuotesCommandHandler(ParticipantStore participantStore,
                                     RespondQuotes respondQuotes,
                                     ForwardRequest forwardRequest,
                                     QuoteRepository quoteRepository,
-                                    PlatformTransactionManager transactionManager) {
+                                    PlatformTransactionManager transactionManager,
+                                    QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         assert participantStore != null;
         assert respondQuotes != null;
         assert forwardRequest != null;
         assert quoteRepository != null;
         assert transactionManager != null;
+        assert quoteSettings != null;
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
         this.quoteRepository = quoteRepository;
         this.transactionManager = transactionManager;
+        this.quoteSettings = quoteSettings;
     }
 
     @Write
     @Override
     public Output execute(Input input) {
 
-        LOGGER.info("Executing PostQuotesCommandHandler.");
-
         var udfQuoteId = new UdfQuoteId(input.quotesPostRequest().getQuoteId());
-        LOGGER.info("UDF Quote ID: {}", udfQuoteId);
+
+        LOGGER.info("({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
         var payerFspCode = new FspCode(input.request().payer().fspCode());
         var payerFsp = this.participantStore.getFspData(payerFspCode);
         LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
 
+        var payeeFspCode = new FspCode(input.request().payee().fspCode());
+        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
+        LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
+
         try {
-
-            LOGGER.info("({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
-
-            var payeeFspCode = new FspCode(input.request().payee().fspCode());
-            var payeeFsp = this.participantStore.getFspData(payeeFspCode);
-
-            if (payeeFsp == null) {
-
-                LOGGER.error("({}) Payee FSP is not found in Hub. Send error response to payer FSP.", udfQuoteId.getId());
-                throw new FspiopException(FspiopErrors.PAYEE_FSP_ID_NOT_FOUND);
-            }
-
-            LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             var postQuotesRequest = input.quotesPostRequest();
             LOGGER.info("({}) postQuotesRequest: [{}]", udfQuoteId.getId(), postQuotesRequest);
@@ -112,29 +107,34 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                 this.forwardRequest.forward(payeeBaseUrl, input.request());
                 LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
 
-                var quote = new Quote(udfQuoteId,
-                                      currency,
-                                      new BigDecimal(amount.getAmount()),
-                                      new BigDecimal(fees.getAmount()),
-                                      postQuotesRequest.getAmountType(),
-                                      transactionType.getScenario(),
-                                      transactionType.getSubScenario(),
-                                      transactionType.getInitiator(),
-                                      transactionType.getInitiatorType(),
-                                      FspiopDates.fromRequestBody(postQuotesRequest.getExpiration()),
-                                      new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
-                                      new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
+                if (this.quoteSettings.stateful()) {
 
-                LOGGER.info("({}) Created Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
+                    var quote = new Quote(payerFsp.fspId(),
+                                          payeeFsp.fspId(),
+                                          udfQuoteId,
+                                          currency,
+                                          new BigDecimal(amount.getAmount()),
+                                          new BigDecimal(fees.getAmount()),
+                                          postQuotesRequest.getAmountType(),
+                                          transactionType.getScenario(),
+                                          transactionType.getSubScenario(),
+                                          transactionType.getInitiator(),
+                                          transactionType.getInitiatorType(),
+                                          FspiopDates.fromRequestBody(postQuotesRequest.getExpiration()),
+                                          new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
+                                          new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
-                // I don't use @Transactional and manually control the transaction scope because
-                // forwardRequest is the HTTP API call, and it has latency. To avoid holding the
-                // connection for a long period, I used manual transaction control.
-                TransactionContext.startNew(this.transactionManager, quote.getId().toString());
-                this.quoteRepository.save(quote);
-                TransactionContext.commit();
+                    LOGGER.info("({}) Created Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
 
-                LOGGER.info("({}) Requested quote : quoteId : {}", udfQuoteId.getId(), quote.getId());
+                    // I don't use @Transactional and manually control the transaction scope because
+                    // forwardRequest is the HTTP API call, and it has latency. To avoid holding the
+                    // connection for a long period, I used manual transaction control.
+                    TransactionContext.startNew(this.transactionManager, quote.getId().toString());
+                    this.quoteRepository.save(quote);
+                    TransactionContext.commit();
+
+                    LOGGER.info("({}) Requested quote : quoteId : {}", udfQuoteId.getId(), quote.getId());
+                }
 
             } catch (ExpirationNotInFutureException e) {
 

@@ -56,7 +56,7 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
     @Override
     public PutPartiesErrorCommand.Output execute(PutPartiesErrorCommand.Input input) {
 
-        LOGGER.info("Executing PutPartiesErrorCommandHandler.");
+        LOGGER.info("Executing PutPartiesErrorCommandHandler with input: [{}].", input);
 
         var payeeFspCode = new FspCode(input.request().payee().fspCode());
         var payeeFsp = this.participantStore.getFspData(payeeFspCode);

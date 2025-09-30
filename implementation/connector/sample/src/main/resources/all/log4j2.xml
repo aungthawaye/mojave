@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss}{GMT+06:30} %highlight{%-5level}{FATAL=bright_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=bright_black, TRACE=black} %style{[%t]}{bright_magenta}:%style{%C{1.}}{cyan}:%L:(%M) - %msg%xEx%n"/>
+        </Console>
+    </appenders>
+    <loggers>
+        <root level="debug">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </loggers>
+</configuration>
