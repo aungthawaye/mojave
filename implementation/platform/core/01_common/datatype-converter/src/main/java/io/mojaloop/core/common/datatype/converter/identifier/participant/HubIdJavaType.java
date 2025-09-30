@@ -75,16 +75,12 @@ public class HubIdJavaType extends AbstractClassJavaType<HubId> {
     @Override
     public HubId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof HubId hubId) {
-            return hubId;
-        }
-        if (value instanceof Number n) {
-            return new HubId();
-        }
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        return switch (value) {
+            case null -> null;
+            case HubId hubId -> hubId;
+            case Number n -> new HubId();
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
     }
 
 }

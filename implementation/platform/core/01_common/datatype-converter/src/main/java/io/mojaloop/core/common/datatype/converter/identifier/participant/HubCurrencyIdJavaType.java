@@ -75,16 +75,12 @@ public class HubCurrencyIdJavaType extends AbstractClassJavaType<HubCurrencyId> 
     @Override
     public HubCurrencyId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof HubCurrencyId id) {
-            return id;
-        }
-        if (value instanceof Number n) {
-            return new HubCurrencyId(n.longValue());
-        }
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        return switch (value) {
+            case null -> null;
+            case HubCurrencyId id -> id;
+            case Number n -> new HubCurrencyId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
     }
 
 }

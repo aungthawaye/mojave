@@ -79,19 +79,13 @@ public class FxpIdJavaType extends AbstractClassJavaType<FxpId> {
     @Override
     public FxpId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case FxpId fxpId -> fxpId;
+            case Number n -> new FxpId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof FxpId fxpId) {
-            return fxpId;
-        }
-
-        if (value instanceof Number n) {
-            return new FxpId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

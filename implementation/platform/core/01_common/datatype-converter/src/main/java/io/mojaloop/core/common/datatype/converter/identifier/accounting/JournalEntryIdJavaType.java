@@ -79,19 +79,13 @@ public class JournalEntryIdJavaType extends AbstractClassJavaType<JournalEntryId
     @Override
     public JournalEntryId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case JournalEntryId id -> id;
+            case Number n -> new JournalEntryId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof JournalEntryId id) {
-            return id;
-        }
-
-        if (value instanceof Number n) {
-            return new JournalEntryId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

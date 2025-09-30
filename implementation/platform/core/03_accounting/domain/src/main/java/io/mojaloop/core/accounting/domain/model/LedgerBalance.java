@@ -71,7 +71,7 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     @Column(name = "ledger_balance_id", nullable = false, updatable = false)
     protected AccountId id;
 
-    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 

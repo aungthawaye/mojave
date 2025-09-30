@@ -22,5 +22,17 @@
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.common</groupId>
+            <artifactId>mod-common-datatype-converter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.quoting</groupId>
+            <artifactId>mod-quoting-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-store</artifactId>
+        </dependency>
     </dependencies>
 </project>

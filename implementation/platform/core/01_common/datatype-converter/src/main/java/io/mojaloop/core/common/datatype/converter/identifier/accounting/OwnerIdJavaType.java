@@ -79,19 +79,13 @@ public class OwnerIdJavaType extends AbstractClassJavaType<OwnerId> {
     @Override
     public OwnerId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case OwnerId ownerId -> ownerId;
+            case Number n -> new OwnerId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof OwnerId ownerId) {
-            return ownerId;
-        }
-
-        if (value instanceof Number n) {
-            return new OwnerId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

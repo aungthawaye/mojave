@@ -79,19 +79,13 @@ public class FspEndpointIdJavaType extends AbstractClassJavaType<FspEndpointId> 
     @Override
     public FspEndpointId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case FspEndpointId fspEndpointId -> fspEndpointId;
+            case Number n -> new FspEndpointId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof FspEndpointId fspEndpointId) {
-            return fspEndpointId;
-        }
-
-        if (value instanceof Number n) {
-            return new FspEndpointId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

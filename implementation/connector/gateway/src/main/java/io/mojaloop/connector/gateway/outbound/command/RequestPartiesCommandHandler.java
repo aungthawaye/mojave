@@ -121,13 +121,13 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
             }
         }, this.outboundSettings.pubSubTimeout());
 
-        if (withSubId) {
-            this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId(), input.subId());
-        } else {
-            this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId());
-        }
-
         try {
+
+            if (withSubId) {
+                this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId(), input.subId());
+            } else {
+                this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId());
+            }
 
             var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 

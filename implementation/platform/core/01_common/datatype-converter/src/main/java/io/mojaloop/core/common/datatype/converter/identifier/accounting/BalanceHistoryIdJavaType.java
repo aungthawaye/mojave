@@ -79,19 +79,13 @@ public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHisto
     @Override
     public BalanceHistoryId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case BalanceHistoryId id -> id;
+            case Number n -> new BalanceHistoryId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof BalanceHistoryId id) {
-            return id;
-        }
-
-        if (value instanceof Number n) {
-            return new BalanceHistoryId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

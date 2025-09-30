@@ -79,19 +79,13 @@ public class ChartIdJavaType extends AbstractClassJavaType<ChartId> {
     @Override
     public ChartId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case ChartId id -> id;
+            case Number n -> new ChartId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof ChartId id) {
-            return id;
-        }
-
-        if (value instanceof Number n) {
-            return new ChartId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

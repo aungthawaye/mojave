@@ -20,15 +20,9 @@
 
 package io.mojaloop.core.participant.intercom.controller;
 
-import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.participant.contract.data.FspData;
-import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.contract.query.FspQuery;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -48,14 +42,7 @@ public class FspController {
         this.fspQuery = fspQuery;
     }
 
-    @GetMapping("/fsps/{fspId}")
-    public ResponseEntity<FspData> getFspById(@PathVariable Long fspId) throws FspIdNotFoundException {
-
-        return ResponseEntity.ok(this.fspQuery.get(new FspId(fspId)));
-    }
-
     @GetMapping("/fsps")
-    @ResponseStatus(HttpStatus.OK)
     public List<FspData> getFsps() {
 
         return this.fspQuery.getAll();

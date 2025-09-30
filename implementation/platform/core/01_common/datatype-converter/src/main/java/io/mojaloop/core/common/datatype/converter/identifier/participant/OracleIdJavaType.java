@@ -79,19 +79,13 @@ public class OracleIdJavaType extends AbstractClassJavaType<OracleId> {
     @Override
     public OracleId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case OracleId oracleId -> oracleId;
+            case Number n -> new OracleId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof OracleId oracleId) {
-            return oracleId;
-        }
-
-        if (value instanceof Number n) {
-            return new OracleId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

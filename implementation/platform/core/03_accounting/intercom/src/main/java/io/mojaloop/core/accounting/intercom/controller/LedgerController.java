@@ -1,4 +1,4 @@
-package io.mojaloop.core.accounting.intercom.controller.ledger;
+package io.mojaloop.core.accounting.intercom.controller;
 
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PostLedgerFlowController {
+public class LedgerController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlowController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LedgerController.class);
 
     private final PostLedgerFlowCommand postLedgerFlowCommand;
 
-    public PostLedgerFlowController(PostLedgerFlowCommand postLedgerFlowCommand) {
+    public LedgerController(PostLedgerFlowCommand postLedgerFlowCommand) {
 
         assert postLedgerFlowCommand != null;
 

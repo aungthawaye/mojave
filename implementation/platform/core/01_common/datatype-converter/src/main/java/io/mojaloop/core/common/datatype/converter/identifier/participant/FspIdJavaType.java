@@ -78,19 +78,13 @@ public class FspIdJavaType extends AbstractClassJavaType<FspId> {
     @Override
     public FspId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case FspId fspId -> fspId;
+            case Number n -> new FspId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof FspId fspId) {
-            return fspId;
-        }
-
-        if (value instanceof Number n) {
-            return new FspId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

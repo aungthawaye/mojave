@@ -78,21 +78,12 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
         } catch (FspiopException e) {
 
-            LOGGER.error("FspiopException occurred while executing PutPartiesErrorCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("FspiopException occurred while executing PutPartiesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("Ignore sending error response back to Payee.");
 
-            var sendBackTo = new Destination(sourceFspCode.value());
-            var baseUrl = sourceFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
-
-            try {
-
-                this.respondParties.putPartiesError(sendBackTo, url, e.toErrorObject());
-                LOGGER.info("Done sending error response to source FSP.");
-                LOGGER.info("Returning from PutPartiesErrorCommandHandler.");
-
-            } catch (FspiopException ignored) {
-                LOGGER.error("Something went wrong while sending error response to source FSP: ", e);
-            }
+            // For PUT calls, we must not send back an error to the Payee.
+            // Here, Payee side responded with PUT, but Hub cannot forward the request to Payer due to some error.
+            // But Hub won't respond with an error to the Payee.
 
         }
 

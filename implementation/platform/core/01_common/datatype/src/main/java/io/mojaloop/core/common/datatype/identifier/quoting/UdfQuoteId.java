@@ -25,16 +25,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
 
 import java.io.IOException;
 
 @JsonDeserialize(using = UdfQuoteId.Deserializer.class)
-public class UdfQuoteId extends EntityId<Long> {
+public class UdfQuoteId extends EntityId<String> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public UdfQuoteId(Long id) {
+    public UdfQuoteId(String id) {
 
         super(id);
     }
@@ -44,19 +43,13 @@ public class UdfQuoteId extends EntityId<Long> {
         @Override
         public UdfQuoteId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
 
-            var field = p.currentName();
             var text = p.getValueAsString();
 
             if (text == null || text.isBlank()) {
                 return null;
             }
 
-            try {
-                return new UdfQuoteId(Long.parseLong(text));
-            } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(
-                    p, "'" + field + "' has invalid format. Must be number.", e);
-            }
+            return new UdfQuoteId(text);
         }
 
     }

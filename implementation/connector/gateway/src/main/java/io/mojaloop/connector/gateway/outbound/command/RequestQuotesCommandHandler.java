@@ -52,9 +52,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
     private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
-    public RequestQuotesCommandHandler(PostQuotes postQuotes,
-                                       PubSubClient pubSubClient,
-                                       ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public RequestQuotesCommandHandler(PostQuotes postQuotes, PubSubClient pubSubClient, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != postQuotes;
         assert null != pubSubClient;
@@ -148,9 +146,9 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             }
         }, 60_000);
 
-        this.postQuotes.postQuotes(input.destination(), input.request());
-
         try {
+
+            this.postQuotes.postQuotes(input.destination(), input.request());
 
             var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 
@@ -158,7 +156,9 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
                 throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");
             }
 
-        } catch (InterruptedException ignored) { } finally {
+        } catch (InterruptedException ignored) {
+            // Do nothing.
+        } finally {
             this.pubSubClient.unsubscribe(resultSubscription);
             this.pubSubClient.unsubscribe(errorSubscription);
         }
@@ -170,8 +170,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         var error = errorRef.get();
         var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(),
-                                                      error.errorInformation().getErrorInformation().getErrorDescription()));
+        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

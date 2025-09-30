@@ -79,19 +79,13 @@ public class TransactionIdJavaType extends AbstractClassJavaType<TransactionId> 
     @Override
     public TransactionId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case TransactionId transactionId -> transactionId;
+            case Number n -> new TransactionId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof TransactionId transactionId) {
-            return transactionId;
-        }
-
-        if (value instanceof Number n) {
-            return new TransactionId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

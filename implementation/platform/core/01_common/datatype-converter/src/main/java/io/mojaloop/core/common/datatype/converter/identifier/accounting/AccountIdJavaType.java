@@ -79,19 +79,13 @@ public class AccountIdJavaType extends AbstractClassJavaType<AccountId> {
     @Override
     public AccountId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case AccountId accountId -> accountId;
+            case Number n -> new AccountId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof AccountId accountId) {
-            return accountId;
-        }
-
-        if (value instanceof Number n) {
-            return new AccountId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

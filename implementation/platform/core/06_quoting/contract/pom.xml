@@ -13,4 +13,22 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.common</groupId>
+            <artifactId>mod-common-datatype</artifactId>
+        </dependency>
+    </dependencies>
 </project>

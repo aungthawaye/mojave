@@ -79,19 +79,13 @@ public class LedgerBalanceIdJavaType extends AbstractClassJavaType<LedgerBalance
     @Override
     public LedgerBalanceId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case LedgerBalanceId id -> id;
+            case Number n -> new LedgerBalanceId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof LedgerBalanceId id) {
-            return id;
-        }
-
-        if (value instanceof Number n) {
-            return new LedgerBalanceId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

@@ -79,19 +79,13 @@ public class LedgerMovementIdJavaType extends AbstractClassJavaType<LedgerMoveme
     @Override
     public LedgerMovementId wrap(Object value, WrapperOptions options) {
 
-        if (value == null) {
-            return null;
-        }
+        return switch (value) {
+            case null -> null;
+            case LedgerMovementId id -> id;
+            case Number n -> new LedgerMovementId(n.longValue());
+            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+        };
 
-        if (value instanceof LedgerMovementId id) {
-            return id;
-        }
-
-        if (value instanceof Number n) {
-            return new LedgerMovementId(n.longValue());
-        }
-
-        throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
     }
 
 }

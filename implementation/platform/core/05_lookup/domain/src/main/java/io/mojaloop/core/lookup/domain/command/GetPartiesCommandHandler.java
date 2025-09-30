@@ -66,13 +66,12 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
         var sourceFsp = this.participantStore.getFspData(sourceFspCode);
         LOGGER.info("Found source FSP: [{}]", sourceFsp);
 
-        FspData destinationFsp = null;
-
         try {
 
             LOGGER.info("Executing GetPartiesHandler with input: [{}]", input);
 
-            destinationFsp = this.findDestinationFsp(input);
+            var destinationFspCode = new FspCode(input.request().destination().destinationFspCode());
+            var destinationFsp = this.participantStore.getFspData(destinationFspCode);
 
             if (destinationFsp == null) {
 
@@ -111,24 +110,4 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
         LOGGER.info("Returning from GetPartiesCommandHandler.");
         return new Output();
     }
-
-    private FspData findDestinationFsp(Input input) {
-
-        if (input.request().destination().isEmpty()) {
-
-            LOGGER.info("Destination FSP is empty. Use Oracle to find it.");
-            var oracle = this.participantStore.getOracleData(input.partyIdType());
-            LOGGER.debug("Found oracle: [{}]", oracle);
-
-            return null;
-
-        } else {
-
-            LOGGER.info("Destination FSP is not empty. Use it.");
-            var destinationFspCode = new FspCode(input.request().destination().destinationFspCode());
-            return this.participantStore.getFspData(destinationFspCode);
-        }
-
-    }
-
 }
