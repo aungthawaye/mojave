@@ -21,11 +21,11 @@
 package io.mojaloop.connector.gateway.inbound.event;
 
 import io.mojaloop.component.misc.spring.event.DomainEvent;
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesRequestCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandleGetPartiesRequestCommand;
 
-public class GetPartiesEvent extends DomainEvent<HandlePartiesRequestCommand.Input> {
+public class GetPartiesEvent extends DomainEvent<HandleGetPartiesRequestCommand.Input> {
 
-    public GetPartiesEvent(HandlePartiesRequestCommand.Input payload) {
+    public GetPartiesEvent(HandleGetPartiesRequestCommand.Input payload) {
 
         super(payload);
     }

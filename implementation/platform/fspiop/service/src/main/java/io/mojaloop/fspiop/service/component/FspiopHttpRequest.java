@@ -21,8 +21,8 @@
 package io.mojaloop.fspiop.service.component;
 
 import io.mojaloop.component.web.request.CachedServletRequest;
-import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.common.type.Source;
+import io.mojaloop.fspiop.common.type.Payee;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -32,14 +32,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public record FspiopHttpRequest(Source source,
-                                Destination destination,
-                                String method,
-                                String uri,
-                                String contentType,
-                                Map<String, String> headers,
-                                Map<String, String> params,
-                                String payload) {
+public record FspiopHttpRequest(Payer payer, Payee payee, String method, String uri, String contentType, Map<String, String> headers, Map<String, String> params, String payload) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopHttpRequest.class);
 
@@ -47,16 +40,31 @@ public record FspiopHttpRequest(Source source,
 
         var cachedRequest = request instanceof CachedServletRequest cachedRequest1 ? cachedRequest1 : new CachedServletRequest(request);
 
-        var source = new Source(cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE));
-        LOGGER.debug("Source: [{}]", source);
-
-        var destinationHeader = cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
-        var destination = destinationHeader == null || destinationHeader.isEmpty() ? Destination.EMPTY() :
-                              new Destination(cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION));
-        LOGGER.debug("Destination: [{}]", destination);
-
         var method = cachedRequest.getMethod();
         LOGGER.debug("Method: [{}]", method);
+
+        /*
+         * HTTP methods such as GET, POST, PATCH are sent to Payee. When Payee responds, it will be through the PUT method.
+         * In this case, if the method is "PUT", then fspiop-source is Payee and fspiop-destination is Payer. Otherwise, it is the opposite.
+         */
+
+        var payerHeader = switch (method) {
+            case "POST", "PATCH", "GET" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
+            case "PUT" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
+            default -> throw new IllegalStateException("Unexpected value: " + method);
+        };
+
+        var payeeHeader = switch (method) {
+            case "POST", "PATCH", "GET" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
+            case "PUT" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
+            default -> throw new IllegalStateException("Unexpected value: " + method);
+        };
+
+        var payer = new Payer(cachedRequest.getHeader(payerHeader));
+        LOGGER.debug("Payer: [{}]", payer);
+
+        var payee = new Payee(cachedRequest.getHeader(payeeHeader));
+        LOGGER.debug("Payee: [{}]", payee);
 
         var uri = cachedRequest.getRequestURI();
         LOGGER.debug("URI: [{}]", uri);
@@ -77,7 +85,7 @@ public record FspiopHttpRequest(Source source,
         var payload = cachedRequest.getCachedBodyAsString();
         LOGGER.debug("Payload: [{}]", payload);
 
-        return new FspiopHttpRequest(source, destination, method, uri, contentType, headers, params, payload);
+        return new FspiopHttpRequest(payer, payee, method, uri, contentType, headers, params, payload);
     }
 
     public boolean hasPayload() {

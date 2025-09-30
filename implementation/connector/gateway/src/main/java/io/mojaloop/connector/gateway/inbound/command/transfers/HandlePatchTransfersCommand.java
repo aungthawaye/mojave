@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -18,18 +18,17 @@
  * ================================================================================
  */
 
-package io.mojaloop.fspiop.common.type;
+package io.mojaloop.connector.gateway.inbound.command.transfers;
 
-public record Destination(String destinationFspCode) {
+import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
 
-    public static Destination EMPTY() {
+public interface HandlePatchTransfersCommand {
 
-        return new Destination(null);
-    }
+    Output execute(Input input);
 
-    public boolean isEmpty() {
+    record Input(Payer payer, String transferId, TransfersIDPatchResponse response) { }
 
-        return this.destinationFspCode == null || this.destinationFspCode.isEmpty();
-    }
+    record Output() { }
 
 }

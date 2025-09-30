@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.quotes.HandleQuotesRequestCommand;
+import io.mojaloop.connector.gateway.inbound.command.quotes.HandlePostQuotesRequestCommand;
 import io.mojaloop.connector.gateway.inbound.event.PostQuotesEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PostQuotesEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostQuotesEventListener.class);
 
-    private final HandleQuotesRequestCommand handleQuotesRequest;
+    private final HandlePostQuotesRequestCommand handleQuotesRequest;
 
-    public PostQuotesEventListener(HandleQuotesRequestCommand handleQuotesRequest) {
+    public PostQuotesEventListener(HandlePostQuotesRequestCommand handleQuotesRequest) {
 
         assert null != handleQuotesRequest;
 
@@ -54,7 +54,7 @@ public class PostQuotesEventListener {
 
         try {
 
-            this.handleQuotesRequest.execute(new HandleQuotesRequestCommand.Input(payload.source(), payload.quoteId(), payload.request()));
+            this.handleQuotesRequest.execute(new HandlePostQuotesRequestCommand.Input(payload.payer(), payload.quoteId(), payload.request()));
 
             LOGGER.info("Done handling PostQuotesEvent : {}", event);
 

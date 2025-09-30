@@ -25,8 +25,6 @@ import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.contract.command.PutPartiesErrorCommand;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.parties.RespondParties;
 import org.slf4j.Logger;
@@ -60,21 +58,21 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
         LOGGER.info("Executing PutPartiesErrorCommandHandler.");
 
-        var sourceFspCode = new FspCode(input.request().source().sourceFspCode());
-        var sourceFsp = this.participantStore.getFspData(sourceFspCode);
-        LOGGER.info("Found source FSP: [{}]", sourceFsp);
+        var payeeFspCode = new FspCode(input.request().payee().fspCode());
+        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
+        LOGGER.info("Found payee FSP: [{}]", payeeFsp);
 
-        var destinationFspCode = new FspCode(input.request().destination().destinationFspCode());
-        var destinationFsp = this.participantStore.getFspData(destinationFspCode);
-        LOGGER.info("Found destination FSP: [{}]", destinationFsp);
+        var payerFspCode = new FspCode(input.request().payer().fspCode());
+        var payerFsp = this.participantStore.getFspData(payerFspCode);
+        LOGGER.info("Found payer FSP: [{}]", payerFsp);
 
         try {
 
-            var destinationBaseUrl = destinationFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            LOGGER.info("Forwarding request to destination FSP (Url): [{}]", destinationFsp);
+            var payerBaseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+            LOGGER.info("Forwarding request to payer FSP (Url): [{}]", payerFsp);
 
-            this.forwardRequest.forward(destinationBaseUrl, input.request());
-            LOGGER.info("Done forwarding request to destination FSP (Url): [{}]", destinationFsp);
+            this.forwardRequest.forward(payerBaseUrl, input.request());
+            LOGGER.info("Done forwarding request to payer FSP (Url): [{}]", payerFsp);
 
         } catch (FspiopException e) {
 

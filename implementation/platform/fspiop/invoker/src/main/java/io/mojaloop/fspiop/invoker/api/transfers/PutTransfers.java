@@ -21,15 +21,14 @@
 package io.mojaloop.fspiop.invoker.api.transfers;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 
 public interface PutTransfers {
 
-    void putTransfers(Destination destination, String transferId, TransfersIDPutResponse transfersIDPutResponse) throws FspiopException;
+    void putTransfers(Payer payer, String transferId, TransfersIDPutResponse transfersIDPutResponse) throws FspiopException;
 
-    void putTransfersError(Destination destination, String transferId, ErrorInformationObject errorInformationObject)
-        throws FspiopException;
+    void putTransfersError(Payer payer, String transferId, ErrorInformationObject errorInformationObject) throws FspiopException;
 
 }

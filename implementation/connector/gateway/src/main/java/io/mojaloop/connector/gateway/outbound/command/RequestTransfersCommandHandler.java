@@ -69,8 +69,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         assert input.request() != null;
 
         var transferId = input.request().getTransferId();
-        var resultTopic = PubSubKeys.forTransfers(input.destination().destinationFspCode(), transferId);
-        var errorTopic = PubSubKeys.forTransfers(input.destination().destinationFspCode(), transferId);
+        var resultTopic = PubSubKeys.forTransfers(input.payee(), transferId);
+        var errorTopic = PubSubKeys.forTransfers(input.payee(), transferId);
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
@@ -118,7 +118,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
         try {
 
-            this.postTransfers.postTransfers(input.destination(), input.request());
+            this.postTransfers.postTransfers(input.payee(), input.request());
 
             var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 

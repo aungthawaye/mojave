@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesResponseCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandlePutPartiesResponseCommand;
 import io.mojaloop.connector.gateway.inbound.event.PutPartiesEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PutPartiesEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PutPartiesEventListener.class);
 
-    private final HandlePartiesResponseCommand handlePartiesResponse;
+    private final HandlePutPartiesResponseCommand handlePartiesResponse;
 
-    public PutPartiesEventListener(HandlePartiesResponseCommand handlePartiesResponse) {
+    public PutPartiesEventListener(HandlePutPartiesResponseCommand handlePartiesResponse) {
 
         assert null != handlePartiesResponse;
 
@@ -54,11 +54,11 @@ public class PutPartiesEventListener {
 
         try {
 
-            this.handlePartiesResponse.execute(new HandlePartiesResponseCommand.Input(payload.source(),
-                                                                                      payload.partyIdType(),
-                                                                                      payload.partyId(),
-                                                                                      payload.subId(),
-                                                                                      payload.response()));
+            this.handlePartiesResponse.execute(new HandlePutPartiesResponseCommand.Input(payload.payee(),
+                                                                                         payload.partyIdType(),
+                                                                                         payload.partyId(),
+                                                                                         payload.subId(),
+                                                                                         payload.response()));
 
             LOGGER.info("Done handling PutPartiesEvent : {}", event);
 

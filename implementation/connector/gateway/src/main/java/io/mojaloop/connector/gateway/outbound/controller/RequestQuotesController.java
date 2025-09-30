@@ -25,7 +25,7 @@ import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestQuotesCommand;
 import io.mojaloop.connector.gateway.outbound.event.RequestQuotesEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Money;
 import io.mojaloop.fspiop.spec.core.Party;
@@ -84,7 +84,8 @@ public class RequestQuotesController {
                                                                                              .initiator(TransactionInitiator.PAYER)
                                                                                              .initiatorType(TransactionInitiatorType.CONSUMER));
 
-        var input = new RequestQuotesCommand.Input(new Destination(request.destination()), quotesPostRequest);
+        var input = new RequestQuotesCommand.Input(new Payee(request.destination), quotesPostRequest);
+
         var output = this.requestQuotesCommand.execute(input);
 
         this.eventPublisher.publish(new RequestQuotesEvent(input));

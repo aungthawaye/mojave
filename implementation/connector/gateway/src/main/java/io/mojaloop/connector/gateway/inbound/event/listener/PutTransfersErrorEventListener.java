@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePutTransfersErrorCommand;
 import io.mojaloop.connector.gateway.inbound.event.PutTransfersErrorEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PutTransfersErrorEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersErrorEventListener.class);
 
-    private final HandleTransfersErrorCommand handleTransfersError;
+    private final HandlePutTransfersErrorCommand handleTransfersError;
 
-    public PutTransfersErrorEventListener(HandleTransfersErrorCommand handleTransfersError) {
+    public PutTransfersErrorEventListener(HandlePutTransfersErrorCommand handleTransfersError) {
 
         assert null != handleTransfersError;
 
@@ -54,9 +54,7 @@ public class PutTransfersErrorEventListener {
 
         try {
 
-            this.handleTransfersError.execute(new HandleTransfersErrorCommand.Input(payload.source(),
-                                                                                    payload.transferId(),
-                                                                                    payload.errorInformationObject()));
+            this.handleTransfersError.execute(new HandlePutTransfersErrorCommand.Input(payload.payee(), payload.transferId(), payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutTransfersErrorEvent : {}", event);
 

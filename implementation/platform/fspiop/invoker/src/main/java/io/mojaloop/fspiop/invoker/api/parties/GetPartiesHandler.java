@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
@@ -52,12 +52,11 @@ class GetPartiesHandler implements GetParties {
     }
 
     @Override
-    public void getParties(Destination destination, PartyIdType partyIdType, String partyId, String subId) throws FspiopException {
+    public void getParties(Payee payee, PartyIdType partyIdType, String partyId, String subId) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(this.participantContext.fspCode(),
-                                                                        destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(this.participantContext.fspCode(), payee.fspCode());
 
             RetrofitService.invoke(this.partiesService.getParties(fspiopHeaders, partyIdType, partyId), this.fspiopErrorDecoder);
 
@@ -68,12 +67,11 @@ class GetPartiesHandler implements GetParties {
     }
 
     @Override
-    public void getParties(Destination destination, PartyIdType partyIdType, String partyId) throws FspiopException {
+    public void getParties(Payee payee, PartyIdType partyIdType, String partyId) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(this.participantContext.fspCode(),
-                                                                        destination.destinationFspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(this.participantContext.fspCode(), payee.fspCode());
 
             RetrofitService.invoke(this.partiesService.getParties(fspiopHeaders, partyIdType, partyId), this.fspiopErrorDecoder);
 

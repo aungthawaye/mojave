@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.event.listener;
 
-import io.mojaloop.connector.gateway.inbound.command.transfers.HandleTransfersRequestCommand;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
 import io.mojaloop.connector.gateway.inbound.event.PostTransfersEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +33,9 @@ public class PostTransfersEventListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostTransfersEventListener.class);
 
-    private final HandleTransfersRequestCommand handleTransfersRequest;
+    private final HandlePostTransfersRequestCommand handleTransfersRequest;
 
-    public PostTransfersEventListener(HandleTransfersRequestCommand handleTransfersRequest) {
+    public PostTransfersEventListener(HandlePostTransfersRequestCommand handleTransfersRequest) {
 
         assert null != handleTransfersRequest;
 
@@ -54,9 +54,7 @@ public class PostTransfersEventListener {
 
         try {
 
-            this.handleTransfersRequest.execute(new HandleTransfersRequestCommand.Input(payload.source(),
-                                                                                        payload.transferId(),
-                                                                                        payload.request()));
+            this.handleTransfersRequest.execute(new HandlePostTransfersRequestCommand.Input(payload.payer(), payload.transferId(), payload.request()));
 
             LOGGER.info("Done handling PostTransfersEvent : {}", event);
 

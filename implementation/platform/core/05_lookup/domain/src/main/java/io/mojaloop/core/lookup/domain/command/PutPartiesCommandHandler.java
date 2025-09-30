@@ -58,21 +58,21 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
 
         LOGGER.info("Executing PutPartiesCommandHandler.");
 
-        var sourceFspCode = new FspCode(input.request().source().sourceFspCode());
-        var sourceFsp = this.participantStore.getFspData(sourceFspCode);
-        LOGGER.info("Found source FSP: [{}]", sourceFsp);
+        var payerFspCode = new FspCode(input.request().payer().fspCode());
+        var payerFsp = this.participantStore.getFspData(payerFspCode);
+        LOGGER.info("Found payer FSP: [{}]", payerFsp);
 
-        var destinationFspCode = new FspCode(input.request().destination().destinationFspCode());
-        var destinationFsp = this.participantStore.getFspData(destinationFspCode);
-        LOGGER.info("Found destination FSP: [{}]", destinationFsp);
+        var payeeFspCode = new FspCode(input.request().payee().fspCode());
+        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
+        LOGGER.info("Found payee FSP: [{}]", payeeFsp);
 
         try {
 
-            var destinationBaseUrl = destinationFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            LOGGER.info("Forwarding request to destination FSP (Url): [{}]", destinationFsp);
+            var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+            LOGGER.info("Forwarding request to payee FSP (Url): [{}]", payeeFsp);
 
-            this.forwardRequest.forward(destinationBaseUrl, input.request());
-            LOGGER.info("Done forwarding request to destination FSP (Url): [{}]", destinationFsp);
+            this.forwardRequest.forward(payeeBaseUrl, input.request());
+            LOGGER.info("Done forwarding request to payee FSP (Url): [{}]", payeeFsp);
 
         } catch (FspiopException e) {
 

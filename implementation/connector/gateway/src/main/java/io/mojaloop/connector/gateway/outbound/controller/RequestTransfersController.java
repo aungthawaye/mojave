@@ -26,7 +26,7 @@ import io.mojaloop.connector.gateway.outbound.command.RequestTransfersCommand;
 import io.mojaloop.connector.gateway.outbound.event.RequestTransfersEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Extension;
@@ -99,7 +99,7 @@ public class RequestTransfersController {
                             .amount(request.amount).ilpPacket(request.ilpPacket).condition(request.condition)
                             .expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
 
-        var input = new RequestTransfersCommand.Input(new Destination(request.destination()), transfersPostRequest);
+        var input = new RequestTransfersCommand.Input(new Payee(request.destination()), transfersPostRequest);
         var output = this.requestTransfersCommand.execute(input);
 
         this.eventPublisher.publish(new RequestTransfersEvent(input));

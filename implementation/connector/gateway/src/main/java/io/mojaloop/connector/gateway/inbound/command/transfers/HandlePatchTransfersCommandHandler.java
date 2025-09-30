@@ -21,50 +21,39 @@
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
 import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
-import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.invoker.api.transfers.PutTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-class HandleTransfersRequestCommandHandler implements HandleTransfersRequestCommand {
+public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersRequestCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePatchTransfersCommandHandler.class.getName());
 
     private final FspCoreAdapter fspCoreAdapter;
 
-    private final PutTransfers putTransfers;
+    public HandlePatchTransfersCommandHandler(FspCoreAdapter fspCoreAdapter) {
 
-    public HandleTransfersRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutTransfers putTransfers) {
-
-        assert fspCoreAdapter != null;
-        assert putTransfers != null;
+        assert null != fspCoreAdapter;
 
         this.fspCoreAdapter = fspCoreAdapter;
-        this.putTransfers = putTransfers;
     }
 
     @Override
-    public void execute(Input input) throws FspiopException {
-
-        var destination = new Destination(input.source().sourceFspCode());
+    public HandlePatchTransfersCommand.Output execute(HandlePatchTransfersCommand.Input input) {
 
         try {
 
             LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            var response = this.fspCoreAdapter.postTransfers(input.source(), input.request());
-            LOGGER.info("FSP adapter returned transfer response : {}", response);
+            this.fspCoreAdapter.patchTransfers(input.payer(), input.transferId(), input.response());
+            LOGGER.info("Done calling FSP adapter to initiate transfer for : {}", input);
 
-            LOGGER.info("Responding the result to Hub : {}", response);
-            this.putTransfers.putTransfers(destination, input.transferId(), response);
-            LOGGER.info("Responded the result to Hub");
+        } catch (Exception e) {
 
-        } catch (FspiopException e) {
-
-            this.putTransfers.putTransfersError(destination, input.transferId(), e.toErrorObject());
+            LOGGER.error("Error handling PatchTransfers", e);
         }
+
+        return null;
     }
 
 }

@@ -23,11 +23,10 @@ package io.mojaloop.core.lookup.domain.command;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.contract.command.GetPartiesCommand;
-import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.parties.RespondParties;
@@ -62,47 +61,47 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
         LOGGER.info("Executing GetPartiesCommandHandler.");
 
-        var sourceFspCode = new FspCode(input.request().source().sourceFspCode());
-        var sourceFsp = this.participantStore.getFspData(sourceFspCode);
-        LOGGER.info("Found source FSP: [{}]", sourceFsp);
+        var payerFspCode = new FspCode(input.request().payer().fspCode());
+        var payerFsp = this.participantStore.getFspData(payerFspCode);
+        LOGGER.info("Found payer FSP: [{}]", payerFsp);
 
         try {
 
             LOGGER.info("Executing GetPartiesHandler with input: [{}]", input);
 
-            var destinationFspCode = new FspCode(input.request().destination().destinationFspCode());
-            var destinationFsp = this.participantStore.getFspData(destinationFspCode);
+            var payeeFspCode = new FspCode(input.request().payee().fspCode());
+            var payeeFsp = this.participantStore.getFspData(payeeFspCode);
 
-            if (destinationFsp == null) {
+            if (payeeFsp == null) {
 
-                LOGGER.error("Destination FSP is not found in Hub. Send error response to source FSP.");
+                LOGGER.error("Destination FSP is not found in Hub. Send error response to payer FSP.");
                 throw new FspiopException(FspiopErrors.PAYEE_FSP_ID_NOT_FOUND);
             }
 
-            LOGGER.info("Found destination FSP: [{}]", destinationFsp);
+            LOGGER.info("Found payee FSP: [{}]", payeeFsp);
 
-            var destinationBaseUrl = destinationFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            LOGGER.info("Forwarding request to destination FSP (Url): [{}]", destinationFsp);
+            var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+            LOGGER.info("Forwarding request to payee FSP (Url): [{}]", payeeFsp);
 
-            this.forwardRequest.forward(destinationBaseUrl, input.request());
-            LOGGER.info("Done forwarding request to destination FSP (Url): [{}]", destinationFsp);
+            this.forwardRequest.forward(payeeBaseUrl, input.request());
+            LOGGER.info("Done forwarding request to payee FSP (Url): [{}]", payeeFsp);
 
         } catch (FspiopException e) {
 
             LOGGER.error("FspiopException occurred while executing GetPartiesCommandHandler: [{}]", e.getMessage());
 
-            var sendBackTo = new Destination(sourceFspCode.value());
-            var baseUrl = sourceFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+            var payer = new Payer(payerFspCode.value());
+            var baseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 
             try {
 
-                this.respondParties.putPartiesError(sendBackTo, url, e.toErrorObject());
-                LOGGER.info("Done sending error response to source FSP.");
+                this.respondParties.putPartiesError(payer, url, e.toErrorObject());
+                LOGGER.info("Done sending error response to payer FSP.");
                 LOGGER.info("Returning from GetPartiesCommandHandler.");
 
             } catch (FspiopException ignored) {
-                LOGGER.error("Something went wrong while sending error response to source FSP: ", e);
+                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
             }
 
         }
@@ -110,4 +109,5 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
         LOGGER.info("Returning from GetPartiesCommandHandler.");
         return new Output();
     }
+
 }

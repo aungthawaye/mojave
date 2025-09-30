@@ -22,7 +22,7 @@ package io.mojaloop.fspiop.client.api.parties;
 
 import io.mojaloop.fspiop.client.api.TestSettings;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import io.mojaloop.fspiop.invoker.api.parties.PutParties;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -64,7 +64,7 @@ public class PutPartiesUT {
         partyIdInfo.partyIdentifier("0987654321");
         party.setPartyIdInfo(partyIdInfo);
 
-        this.putParties.putParties(new Destination("fsp2"), PartyIdType.MSISDN, "987654321", new PartiesTypeIDPutResponse(party));
+        this.putParties.putParties(new Payer("fsp2"), PartyIdType.MSISDN, "987654321", new PartiesTypeIDPutResponse(party));
     }
 
 }

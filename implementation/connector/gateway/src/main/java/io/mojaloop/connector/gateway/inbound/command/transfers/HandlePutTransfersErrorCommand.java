@@ -18,17 +18,16 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.parties;
+package io.mojaloop.connector.gateway.inbound.command.transfers;
 
-import io.mojaloop.fspiop.common.type.Source;
-import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
-import io.mojaloop.fspiop.spec.core.PartyIdType;
+import io.mojaloop.fspiop.common.type.Payee;
+import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 
-public interface HandlePartiesResponseCommand {
+public interface HandlePutTransfersErrorCommand {
 
     Output execute(Input input);
 
-    record Input(Source source, PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse response) { }
+    record Input(Payee payee, String transferId, ErrorInformationObject errorInformationObject) { }
 
     record Output() { }
 

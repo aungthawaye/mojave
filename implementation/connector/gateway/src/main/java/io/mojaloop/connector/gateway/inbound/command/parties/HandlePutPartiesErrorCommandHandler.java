@@ -18,23 +18,23 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.transfers;
+package io.mojaloop.connector.gateway.inbound.command.parties;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
-import io.mojaloop.connector.gateway.data.TransfersErrorResult;
+import io.mojaloop.connector.gateway.data.PartiesErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-class HandleTransfersErrorCommandHandler implements HandleTransfersErrorCommand {
+class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersErrorCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutPartiesErrorCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
-    public HandleTransfersErrorCommandHandler(PubSubClient pubSubClient) {
+    public HandlePutPartiesErrorCommandHandler(PubSubClient pubSubClient) {
 
         assert null != pubSubClient;
 
@@ -44,11 +44,11 @@ class HandleTransfersErrorCommandHandler implements HandleTransfersErrorCommand 
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forTransfersError(input.source().sourceFspCode(), input.transferId());
-        LOGGER.info("Publishing transfers error result to channel : {}", channel);
+        var channel = PubSubKeys.forPartiesError(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        LOGGER.info("Publishing parties error result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new TransfersErrorResult(input.transferId(), input.errorInformationObject()));
-        LOGGER.info("Published transfers error result to channel : {}", channel);
+        this.pubSubClient.publish(channel, new PartiesErrorResult(input.partyIdType(), input.partyId(), input.subId(), input.errorInformationObject()));
+        LOGGER.info("Published parties error result to channel : {}", channel);
 
         return new Output();
     }

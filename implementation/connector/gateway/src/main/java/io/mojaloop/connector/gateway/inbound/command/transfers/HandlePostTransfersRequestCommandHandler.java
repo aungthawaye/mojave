@@ -18,52 +18,51 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.quotes;
+package io.mojaloop.connector.gateway.inbound.command.transfers;
 
 import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
-import io.mojaloop.fspiop.invoker.api.quotes.PutQuotes;
+import io.mojaloop.fspiop.invoker.api.transfers.PutTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-class HandleQuotesRequestCommandHandler implements HandleQuotesRequestCommand {
+class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersRequestCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleQuotesRequestCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePostTransfersRequestCommandHandler.class.getName());
 
     private final FspCoreAdapter fspCoreAdapter;
 
-    private final PutQuotes putQuotes;
+    private final PutTransfers putTransfers;
 
-    public HandleQuotesRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutQuotes putQuotes) {
+    public HandlePostTransfersRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutTransfers putTransfers) {
 
         assert fspCoreAdapter != null;
-        assert putQuotes != null;
+        assert putTransfers != null;
 
         this.fspCoreAdapter = fspCoreAdapter;
-        this.putQuotes = putQuotes;
+        this.putTransfers = putTransfers;
     }
 
     @Override
     public void execute(Input input) throws FspiopException {
 
-        var destination = new Destination(input.source().sourceFspCode());
+        var payer = input.payer();
 
         try {
 
-            LOGGER.info("Calling FSP adapter to get quote for : {}", input);
-            var response = this.fspCoreAdapter.postQuotes(input.source(), input.request());
-            LOGGER.info("FSP adapter returned quote : {}", response);
+            LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
+            var response = this.fspCoreAdapter.postTransfers(payer, input.request());
+            LOGGER.info("FSP adapter returned transfer response : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);
-            this.putQuotes.putQuotes(destination, input.quoteId(), response);
+            this.putTransfers.putTransfers(payer, input.transferId(), response);
             LOGGER.info("Responded the result to Hub");
 
         } catch (FspiopException e) {
 
-            this.putQuotes.putQuotesError(destination, input.quoteId(), e.toErrorObject());
+            this.putTransfers.putTransfersError(payer, input.transferId(), e.toErrorObject());
         }
     }
 

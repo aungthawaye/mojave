@@ -18,17 +18,16 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.transfers;
+package io.mojaloop.connector.gateway.inbound.command.parties;
 
-import io.mojaloop.fspiop.common.type.Source;
-import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
+import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
 
-public interface HandleTransfersResponseCommand {
+public interface HandleGetPartiesRequestCommand {
 
-    Output execute(Input input);
+    void execute(Input input) throws FspiopException;
 
-    record Input(Source source, String transferId, TransfersIDPutResponse response) { }
-
-    record Output() { }
+    record Input(Payer payer, PartyIdType partyIdType, String partyId, String subId) { }
 
 }

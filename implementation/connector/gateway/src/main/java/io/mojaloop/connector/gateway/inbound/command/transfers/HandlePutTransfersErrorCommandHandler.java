@@ -20,40 +20,37 @@
 
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
-import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
+import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.connector.gateway.component.PubSubKeys;
+import io.mojaloop.connector.gateway.data.TransfersErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HandleTransfersPatchCommandHandler implements HandleTransfersPatchCommand {
+class HandlePutTransfersErrorCommandHandler implements HandlePutTransfersErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersPatchCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutTransfersErrorCommandHandler.class.getName());
 
-    private final FspCoreAdapter fspCoreAdapter;
+    private final PubSubClient pubSubClient;
 
-    public HandleTransfersPatchCommandHandler(FspCoreAdapter fspCoreAdapter) {
+    public HandlePutTransfersErrorCommandHandler(PubSubClient pubSubClient) {
 
-        assert null != fspCoreAdapter;
+        assert null != pubSubClient;
 
-        this.fspCoreAdapter = fspCoreAdapter;
+        this.pubSubClient = pubSubClient;
     }
 
     @Override
-    public HandleTransfersPatchCommand.Output execute(HandleTransfersPatchCommand.Input input) {
+    public Output execute(Input input) {
 
-        try {
+        var channel = PubSubKeys.forTransfers(input.payee(), input.transferId());
+        LOGGER.info("Publishing transfers error result to channel : {}", channel);
 
-            LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            this.fspCoreAdapter.patchTransfers(input.source(), input.transferId(), input.response());
-            LOGGER.info("Done calling FSP adapter to initiate transfer for : {}", input);
+        this.pubSubClient.publish(channel, new TransfersErrorResult(input.transferId(), input.errorInformationObject()));
+        LOGGER.info("Published transfers error result to channel : {}", channel);
 
-        } catch (Exception e) {
-
-            LOGGER.error("Error handling PatchTransfers", e);
-        }
-
-        return null;
+        return new Output();
     }
 
 }

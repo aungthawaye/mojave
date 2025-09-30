@@ -18,16 +18,16 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.transfers;
+package io.mojaloop.connector.gateway.inbound.command.quotes;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Source;
-import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
+import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.spec.core.QuotesPostRequest;
 
-public interface HandleTransfersRequestCommand {
+public interface HandlePostQuotesRequestCommand {
 
     void execute(Input input) throws FspiopException;
 
-    record Input(Source source, String transferId, TransfersPostRequest request) { }
+    record Input(Payer payer, String quoteId, QuotesPostRequest request) { }
 
 }

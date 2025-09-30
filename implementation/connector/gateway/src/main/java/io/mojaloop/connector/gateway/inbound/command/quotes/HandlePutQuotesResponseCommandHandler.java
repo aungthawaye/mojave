@@ -18,23 +18,23 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.transfers;
+package io.mojaloop.connector.gateway.inbound.command.quotes;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
-import io.mojaloop.connector.gateway.data.TransfersResult;
+import io.mojaloop.connector.gateway.data.QuotesResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-class HandleTransfersResponseCommandHandler implements HandleTransfersResponseCommand {
+class HandlePutQuotesResponseCommandHandler implements HandlePutQuotesResponseCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersResponseCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutQuotesResponseCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
-    public HandleTransfersResponseCommandHandler(PubSubClient pubSubClient) {
+    public HandlePutQuotesResponseCommandHandler(PubSubClient pubSubClient) {
 
         assert null != pubSubClient;
 
@@ -44,11 +44,11 @@ class HandleTransfersResponseCommandHandler implements HandleTransfersResponseCo
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forTransfersError(input.source().sourceFspCode(), input.transferId());
-        LOGGER.info("Publishing transfers result to channel : {}", channel);
+        var channel = PubSubKeys.forQuotes(input.payee(), input.quoteId());
+        LOGGER.info("Publishing quotes result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new TransfersResult(input.transferId(), input.response()));
-        LOGGER.info("Published transfers result to channel : {}", channel);
+        this.pubSubClient.publish(channel, new QuotesResult(input.quoteId(), input.response()));
+        LOGGER.info("Published quotes result to channel : {}", channel);
 
         return new Output();
     }

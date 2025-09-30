@@ -99,8 +99,8 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             }
         }
 
-        var resultTopic = PubSubKeys.forQuotes(input.destination().destinationFspCode(), quoteId);
-        var errorTopic = PubSubKeys.forQuotes(input.destination().destinationFspCode(), quoteId);
+        var resultTopic = PubSubKeys.forQuotes(input.payee(), quoteId);
+        var errorTopic = PubSubKeys.forQuotes(input.payee(), quoteId);
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
@@ -148,7 +148,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
         try {
 
-            this.postQuotes.postQuotes(input.destination(), input.request());
+            this.postQuotes.postQuotes(input.payee(), input.request());
 
             var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
 

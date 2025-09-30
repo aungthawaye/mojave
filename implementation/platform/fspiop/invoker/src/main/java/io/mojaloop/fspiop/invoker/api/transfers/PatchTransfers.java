@@ -21,12 +21,11 @@
 package io.mojaloop.fspiop.invoker.api.transfers;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Destination;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
 
 public interface PatchTransfers {
 
-    void patchTransfers(Destination destination, String transferId, TransfersIDPatchResponse transfersIDPatchResponse)
-        throws FspiopException;
+    void patchTransfers(Payee payee, String transferId, TransfersIDPatchResponse transfersIDPatchResponse) throws FspiopException;
 
 }

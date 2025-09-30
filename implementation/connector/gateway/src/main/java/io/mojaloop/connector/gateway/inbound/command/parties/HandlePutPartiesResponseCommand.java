@@ -20,15 +20,15 @@
 
 package io.mojaloop.connector.gateway.inbound.command.parties;
 
-import io.mojaloop.fspiop.common.type.Source;
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
+import io.mojaloop.fspiop.common.type.Payee;
+import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 
-public interface HandlePartiesErrorCommand {
+public interface HandlePutPartiesResponseCommand {
 
     Output execute(Input input);
 
-    record Input(Source source, PartyIdType partyIdType, String partyId, String subId, ErrorInformationObject errorInformationObject) { }
+    record Input(Payee payee, PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse response) { }
 
     record Output() { }
 

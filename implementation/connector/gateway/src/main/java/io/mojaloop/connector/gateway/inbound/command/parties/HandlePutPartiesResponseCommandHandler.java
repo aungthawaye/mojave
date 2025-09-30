@@ -18,23 +18,23 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.quotes;
+package io.mojaloop.connector.gateway.inbound.command.parties;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
-import io.mojaloop.connector.gateway.data.QuotesErrorResult;
+import io.mojaloop.connector.gateway.data.PartiesResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-class HandleQuotesErrorCommandHandler implements HandleQuotesErrorCommand {
+class HandlePutPartiesResponseCommandHandler implements HandlePutPartiesResponseCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleQuotesErrorCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutPartiesResponseCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
-    public HandleQuotesErrorCommandHandler(PubSubClient pubSubClient) {
+    public HandlePutPartiesResponseCommandHandler(PubSubClient pubSubClient) {
 
         assert null != pubSubClient;
 
@@ -44,11 +44,12 @@ class HandleQuotesErrorCommandHandler implements HandleQuotesErrorCommand {
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forQuotesError(input.source().sourceFspCode(), input.quoteId());
-        LOGGER.info("Publishing quotes error result to channel : {}", channel);
+        var channel = PubSubKeys.forParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        LOGGER.info("Publishing parties result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));
-        LOGGER.info("Published quotes error result to channel : {}", channel);
+        var result = new PartiesResult(input.partyIdType(), input.partyId(), input.subId(), input.response());
+        this.pubSubClient.publish(channel, result);
+        LOGGER.info("Published parties result to channel : {}, result : {}", channel, result);
 
         return new Output();
     }

@@ -49,9 +49,7 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
     private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
-    public RequestPartiesCommandHandler(GetParties getParties,
-                                        PubSubClient pubSubClient,
-                                        ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public RequestPartiesCommandHandler(GetParties getParties, PubSubClient pubSubClient, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != getParties;
         assert null != pubSubClient;
@@ -70,8 +68,8 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         assert input != null;
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
-        var resultTopic = PubSubKeys.forParties(input.destination().destinationFspCode(), input.partyIdType(), input.partyId(), input.subId());
-        var errorTopic = PubSubKeys.forPartiesError(input.destination().destinationFspCode(), input.partyIdType(), input.partyId(), input.subId());
+        var resultTopic = PubSubKeys.forParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var errorTopic = PubSubKeys.forPartiesError(input.payee(), input.partyIdType(), input.partyId(), input.subId());
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);
@@ -124,9 +122,9 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         try {
 
             if (withSubId) {
-                this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId(), input.subId());
+                this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
             } else {
-                this.getParties.getParties(input.destination(), input.partyIdType(), input.partyId());
+                this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId());
             }
 
             var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);

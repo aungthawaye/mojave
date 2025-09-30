@@ -18,23 +18,23 @@
  * ================================================================================
  */
 
-package io.mojaloop.connector.gateway.inbound.command.parties;
+package io.mojaloop.connector.gateway.inbound.command.quotes;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
-import io.mojaloop.connector.gateway.data.PartiesResult;
+import io.mojaloop.connector.gateway.data.QuotesErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-class HandlePartiesResponseCommandHandler implements HandlePartiesResponseCommand {
+class HandlePutQuotesErrorCommandHandler implements HandlePutQuotesErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePartiesResponseCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutQuotesErrorCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
-    public HandlePartiesResponseCommandHandler(PubSubClient pubSubClient) {
+    public HandlePutQuotesErrorCommandHandler(PubSubClient pubSubClient) {
 
         assert null != pubSubClient;
 
@@ -44,12 +44,11 @@ class HandlePartiesResponseCommandHandler implements HandlePartiesResponseComman
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forParties(input.source().sourceFspCode(), input.partyIdType(), input.partyId(), input.subId());
-        LOGGER.info("Publishing parties result to channel : {}", channel);
+        var channel = PubSubKeys.forQuotesError(input.payee(), input.quoteId());
+        LOGGER.info("Publishing quotes error result to channel : {}", channel);
 
-        var result = new PartiesResult(input.partyIdType(), input.partyId(), input.subId(), input.response());
-        this.pubSubClient.publish(channel, result);
-        LOGGER.info("Published parties result to channel : {}, result : {}", channel, result);
+        this.pubSubClient.publish(channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));
+        LOGGER.info("Published quotes error result to channel : {}", channel);
 
         return new Output();
     }

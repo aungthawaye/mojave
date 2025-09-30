@@ -21,11 +21,11 @@
 package io.mojaloop.connector.gateway.inbound.event;
 
 import io.mojaloop.component.misc.spring.event.DomainEvent;
-import io.mojaloop.connector.gateway.inbound.command.parties.HandlePartiesErrorCommand;
+import io.mojaloop.connector.gateway.inbound.command.parties.HandlePutPartiesErrorCommand;
 
-public class PutPartiesErrorEvent extends DomainEvent<HandlePartiesErrorCommand.Input> {
+public class PutPartiesErrorEvent extends DomainEvent<HandlePutPartiesErrorCommand.Input> {
 
-    public PutPartiesErrorEvent(HandlePartiesErrorCommand.Input payload) {
+    public PutPartiesErrorEvent(HandlePutPartiesErrorCommand.Input payload) {
 
         super(payload);
     }

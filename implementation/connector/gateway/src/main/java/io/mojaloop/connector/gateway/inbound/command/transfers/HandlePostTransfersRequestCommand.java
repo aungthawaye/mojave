@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -18,18 +18,16 @@
  * ================================================================================
  */
 
-package io.mojaloop.fspiop.common.type;
+package io.mojaloop.connector.gateway.inbound.command.transfers;
 
-public record Source(String sourceFspCode) {
+import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 
-    public static Source EMPTY() {
+public interface HandlePostTransfersRequestCommand {
 
-        return new Source(null);
-    }
+    void execute(Input input) throws FspiopException;
 
-    public boolean isEmpty() {
-
-        return this.sourceFspCode == null || this.sourceFspCode.isEmpty();
-    }
+    record Input(Payer payer, String transferId, TransfersPostRequest request) { }
 
 }
