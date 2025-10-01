@@ -22,20 +22,14 @@ package io.mojaloop.core.quoting.contract.exception;
 
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.fspiop.spec.core.AmountType;
 
-import java.math.BigDecimal;
+public class QuoteCurrenciesMismatchException extends DomainException {
 
-public class TransferAmountMismatchException extends DomainException {
+    private static final String TEMPLATE = "Quote currencies must be same.";
 
-    private static final String TEMPLATE = "Transfer Amount ({0}) must be same as the Amount ({1}) of Amount Type ({2}) .";
+    public QuoteCurrenciesMismatchException() {
 
-    public TransferAmountMismatchException(BigDecimal transferAmount, BigDecimal amount, AmountType amountType) {
-
-        super(new ErrorTemplate("TRANSFER_AMOUNT_MISMATCH", TEMPLATE),
-              transferAmount.stripTrailingZeros().toPlainString(),
-              amount.stripTrailingZeros().toPlainString(),
-              amountType.name());
+        super(new ErrorTemplate("QUOTE_CURRENCIES_MISMATCH", TEMPLATE));
 
     }
 

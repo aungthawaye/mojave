@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="lookup-service (4503)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="05 lookup">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/05_lookup/service/src/main/java/io/mojaloop/core/lookup/service/.env" />
+    </option>
+    <module name="mod-lookup-service" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.lookup.service.LookUpServiceApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.mojaloop.core.lookup.service.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

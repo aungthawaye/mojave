@@ -1,5 +1,8 @@
 package io.mojaloop.core.quoting.service;
 
+import io.mojaloop.component.flyway.FlywayMigration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -13,7 +16,22 @@ import org.springframework.context.annotation.Import;
 @Import(value = {QuotingServiceConfiguration.class, QuotingServiceSettings.class})
 public class QuotingServiceApplication {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(QuotingServiceApplication.class);
+
     public static void main(String[] args) {
+
+        LOGGER.info("Starting participant-admin application");
+
+        var flywaySettings = new FlywayMigration.Settings(System.getenv()
+                                                                .getOrDefault("QOT_FLYWAY_DB_URL",
+                                                                              "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
+                                                          System.getenv().getOrDefault("QOT_FLYWAY_DB_USER", "root"),
+                                                          System.getenv().getOrDefault("QOT_FLYWAY_DB_PASSWORD", "password"),
+                                                          "classpath:migration/quoting");
+
+        LOGGER.info("Flyway migration settings: {}", flywaySettings);
+        FlywayMigration.migrate(flywaySettings);
+        LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(QuotingServiceApplication.class)
             .web(WebApplicationType.SERVLET)

@@ -1,14 +1,18 @@
 package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PutQuotesErrorCommand;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
+import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
+import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
     private final ParticipantStore participantStore;
 
+    private final RespondQuotes respondQuotes;
+
     private final ForwardRequest forwardRequest;
 
     private final QuoteRepository quoteRepository;
@@ -30,18 +36,21 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
     public PutQuotesErrorCommandHandler(ParticipantStore participantStore,
+                                        RespondQuotes respondQuotes,
                                         ForwardRequest forwardRequest,
                                         QuoteRepository quoteRepository,
                                         PlatformTransactionManager transactionManager,
                                         QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         assert participantStore != null;
+        assert respondQuotes != null;
         assert forwardRequest != null;
         assert quoteRepository != null;
         assert transactionManager != null;
         assert quoteSettings != null;
 
         this.participantStore = participantStore;
+        this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
         this.quoteRepository = quoteRepository;
         this.transactionManager = transactionManager;
@@ -84,6 +93,14 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
                 LOGGER.info("({}) Retrieved Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
 
                 quote.error(error.getErrorInformation().getErrorDescription());
+
+                if (error.getErrorInformation().getExtensionList() != null && error.getErrorInformation().getExtensionList().getExtension() != null) {
+                    error.getErrorInformation().getExtensionList().getExtension().forEach(ext -> {
+                        LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), ext);
+                        quote.addExtension(Direction.INBOUND, ext.getKey(), ext.getValue());
+                    });
+                }
+
                 this.quoteRepository.save(quote);
                 TransactionContext.commit();
                 LOGGER.info("({}) Quote error set. Error : [{}]", udfQuoteId.getId(), error.getErrorInformation().getErrorDescription());
@@ -105,6 +122,29 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
             // Here, Payee side responded with PUT, but Hub cannot forward the request to Payer due to some error.
             // But Hub won't respond with an error to the Payee.
 
+            try {
+
+                var errorInformationObject = FspiopErrors.GENERIC_PAYEE_ERROR.toErrorObject();
+                this.respondQuotes.putQuotesError(new Payer(payerFspCode.value()), payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl(), errorInformationObject);
+
+            } catch (FspiopException ex) {
+                // Do nothing. We are not interested in the response from Payer.
+                LOGGER.error("FspiopException occurred while sending error response to Payer FSP: ", ex);
+            }
+
+        } catch (Exception e) {
+
+            LOGGER.error("Exception occurred while executing PutQuotesCommandHandler: [{}]", e.getMessage());
+
+            try {
+
+                var errorInformationObject = FspiopErrors.GENERIC_SERVER_ERROR.toErrorObject();
+                this.respondQuotes.putQuotesError(new Payer(payerFspCode.value()), payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl(), errorInformationObject);
+
+            } catch (FspiopException ex) {
+                // Do nothing. We are not interested in the response from Payer.
+                LOGGER.error("FspiopException occurred while sending error response to Payer FSP: ", ex);
+            }
         }
 
         LOGGER.info("Returning from PutQuotesErrorCommandHandler successfully.");

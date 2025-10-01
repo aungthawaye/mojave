@@ -2,17 +2,24 @@ package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PutQuotesCommand;
+import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
+import io.mojaloop.core.quoting.contract.exception.QuoteCurrenciesMismatchException;
 import io.mojaloop.core.quoting.contract.exception.ReceivingAmountMismatchException;
 import io.mojaloop.core.quoting.contract.exception.TransferAmountMismatchException;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
+import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
+import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
+import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,6 +36,8 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
     private final ParticipantStore participantStore;
 
+    private final RespondQuotes respondQuotes;
+
     private final ForwardRequest forwardRequest;
 
     private final QuoteRepository quoteRepository;
@@ -38,18 +47,21 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
     public PutQuotesCommandHandler(ParticipantStore participantStore,
+                                   RespondQuotes respondQuotes,
                                    ForwardRequest forwardRequest,
                                    QuoteRepository quoteRepository,
                                    PlatformTransactionManager transactionManager,
                                    QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         assert participantStore != null;
+        assert respondQuotes != null;
         assert forwardRequest != null;
         assert quoteRepository != null;
         assert transactionManager != null;
         assert quoteSettings != null;
 
         this.participantStore = participantStore;
+        this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
         this.quoteRepository = quoteRepository;
         this.transactionManager = transactionManager;
@@ -93,34 +105,26 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 var quote = optQuote.get();
                 LOGGER.info("({}) Found Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
 
-                Instant responseExpiration;
+                var expiration = quoteIdPutResponse.getExpiration();
+                Instant responseExpiration = null;
 
-                try {
+                if (expiration != null) {
 
-                    responseExpiration = FspiopDates.fromRequestBody(quoteIdPutResponse.getExpiration());
+                    try {
 
-                    if (responseExpiration.isBefore(Instant.now())) {
+                        responseExpiration = FspiopDates.fromRequestBody(quoteIdPutResponse.getExpiration());
 
-                        LOGGER.error("({}) The responded quote has expired.", udfQuoteId.getId());
-                        LOGGER.info("({}) Returning from PutQuotesCommandHandler (quote expired).", udfQuoteId.getId());
+                    } catch (ParseException e) {
 
-                        quote.error("The responded quote has expired. Response expiration : " + responseExpiration.getEpochSecond());
+                        LOGGER.error("({}) Wrong expiration format.", udfQuoteId.getId());
+                        LOGGER.info("({}) Returning from PutQuotesCommandHandler (wrong expiration).", udfQuoteId.getId());
+
+                        quote.error("Wrong expiration format. Response expiration format : " + quoteIdPutResponse.getExpiration());
                         this.quoteRepository.save(quote);
                         TransactionContext.commit();
 
-                        return new Output();
+                        throw e;
                     }
-
-                } catch (ParseException e) {
-
-                    LOGGER.error("({}) Wrong expiration format.", udfQuoteId.getId());
-                    LOGGER.info("({}) Returning from PutQuotesCommandHandler (wrong expiration).", udfQuoteId.getId());
-
-                    quote.error("Wrong expiration format. Response expiration format : " + quoteIdPutResponse.getExpiration());
-                    this.quoteRepository.save(quote);
-                    TransactionContext.commit();
-
-                    return new Output();
                 }
 
                 var quotedCurrency = quote.getCurrency();
@@ -137,7 +141,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    return new Output();
+                    throw new QuoteCurrenciesMismatchException();
                 }
 
                 var transferAmount = new BigDecimal(quoteIdPutResponse.getTransferAmount().getAmount());
@@ -145,16 +149,20 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 var payeeFspCommission = new BigDecimal(quoteIdPutResponse.getPayeeFspCommission().getAmount());
                 var payeeReceiveAmount = new BigDecimal(quoteIdPutResponse.getPayeeReceiveAmount().getAmount());
 
-                LOGGER.info("({}) Quote responded : transferAmount : [{}], payeeFspFee : [{}], payeeFspCommission : [{}], payeeReceiveAmount : [{}]",
-                            udfQuoteId.getId(),
-                            transferAmount,
-                            payeeFspFee,
-                            payeeFspCommission,
-                            payeeReceiveAmount);
-
                 try {
 
                     quote.responded(responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount);
+
+                    if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
+
+                        var extensions = quoteIdPutResponse.getExtensionList().getExtension();
+
+                        extensions.forEach(extension -> {
+                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+                            quote.addExtension(Direction.INBOUND, extension.getKey(), extension.getValue());
+                        });
+                    }
+
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
@@ -165,8 +173,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    return new Output();
-
+                    throw e;
                 } catch (ReceivingAmountMismatchException e) {
 
                     LOGGER.error("({}) Receiving amount mismatch.", udfQuoteId.getId(), e);
@@ -174,7 +181,15 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    return new Output();
+                    throw e;
+                } catch (ExpirationNotInFutureException e) {
+
+                    LOGGER.error("({}) Quote expiration.", udfQuoteId.getId(), e);
+                    quote.error(e.getMessage());
+                    this.quoteRepository.save(quote);
+                    TransactionContext.commit();
+
+                    throw e;
                 }
             }
 
@@ -191,8 +206,45 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
             // For PUT calls, we must not send back an error to the Payee.
             // Here, Payee side responded with PUT, but Hub cannot forward the request to Payer due to some error.
-            // But Hub won't respond with an error to the Payee.
+            // But Hub won't respond with an error to the Payee, only to the Payer.
 
+        } catch (ExpirationNotInFutureException | ReceivingAmountMismatchException | TransferAmountMismatchException | QuoteCurrenciesMismatchException | ParseException e) {
+
+            LOGGER.error("(PayeeError) Exception occurred while executing PutQuotesCommandHandler: [{}]", e.getMessage());
+
+            var sendBackTo = new Payer(payerFspCode.value());
+            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+
+            try {
+
+                var errorInformationObject = FspiopErrors.GENERIC_PAYEE_ERROR.toErrorObject();
+                this.respondQuotes.putQuotesError(sendBackTo, url, errorInformationObject);
+                LOGGER.info("({}) (PayeeError) Done sending error response to payer FSP.", udfQuoteId.getId());
+                LOGGER.info("({}) (PayeeError) Returning from PutQuotesCommandHandler.", udfQuoteId.getId());
+
+            } catch (FspiopException ignored) {
+                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+            }
+
+        } catch (Exception e) {
+
+            LOGGER.error("Exception occurred while executing PutQuotesCommandHandler: ", e);
+
+            var sendBackTo = new Payer(payerFspCode.value());
+            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+
+            try {
+
+                var errorInformationObject = FspiopErrors.GENERIC_SERVER_ERROR.toErrorObject();
+                this.respondQuotes.putQuotesError(sendBackTo, url, errorInformationObject);
+                LOGGER.info("({}) (Exception) Done sending error response to payer FSP.", udfQuoteId.getId());
+                LOGGER.info("({}) (Exception) Returning from PutQuotesCommandHandler.", udfQuoteId.getId());
+
+            } catch (FspiopException ignored) {
+                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+            }
         }
 
         LOGGER.info("Returning from PutQuotesCommandHandler successfully.");

@@ -20,14 +20,13 @@
 
 package io.mojaloop.core.common.datatype.converter.identifier.quoting;
 
-import io.mojaloop.core.common.datatype.identifier.quoting.QuoteId;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
-import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 
 public class UdfQuoteIdJavaType extends AbstractClassJavaType<UdfQuoteId> {
 
@@ -47,13 +46,13 @@ public class UdfQuoteIdJavaType extends AbstractClassJavaType<UdfQuoteId> {
     @Override
     public JdbcType getRecommendedJdbcType(JdbcTypeIndicators context) {
 
-        return BigIntJdbcType.INSTANCE;
+        return VarcharJdbcType.INSTANCE;
     }
 
     @Override
     public String toString(UdfQuoteId value) {
 
-        return value == null ? null : String.valueOf(value.getId());
+        return value == null ? null : value.getId();
     }
 
     @Override
@@ -70,7 +69,6 @@ public class UdfQuoteIdJavaType extends AbstractClassJavaType<UdfQuoteId> {
             return (X) string;
         }
 
-
         throw new IllegalArgumentException("Unsupported unwrap to " + type);
     }
 
@@ -81,6 +79,7 @@ public class UdfQuoteIdJavaType extends AbstractClassJavaType<UdfQuoteId> {
             case null -> null;
             case UdfQuoteId udfQuoteId -> udfQuoteId;
             case String s -> new UdfQuoteId(s);
+            case Character c -> new UdfQuoteId(c.toString());
             default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 

@@ -78,7 +78,13 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_accounting/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_accounting/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_accounting/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/contract/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/domain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_transaction/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/05_lookup/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/05_lookup/domain/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/05_lookup/domain/src/main/java" charset="UTF-8" />

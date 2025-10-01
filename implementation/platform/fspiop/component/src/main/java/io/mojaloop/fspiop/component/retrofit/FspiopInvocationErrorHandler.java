@@ -24,7 +24,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
+import io.mojaloop.fspiop.spec.core.ErrorInformationResponse;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -34,16 +34,14 @@ public class FspiopInvocationErrorHandler {
 
     public FspiopException handle(RetrofitService.InvocationException exception) {
 
-        var cause = exception.getCause();
+        var decodedErrorResponse = exception.getDecodedErrorResponse();
 
-        if (cause == null) {
+        if (decodedErrorResponse != null) {
 
-            // If the cause is null, there must be the response from server.
-            var decodedErrorResponse = exception.getDecodedErrorResponse();
+            // If the decodedErrorResponse is not null, there must be the response from the server.
+            if (decodedErrorResponse instanceof ErrorInformationResponse errorInformationResponse) {
 
-            if (decodedErrorResponse instanceof ErrorInformationObject errorInformationObject) {
-
-                var errorInformation = errorInformationObject.getErrorInformation();
+                var errorInformation = errorInformationResponse.getErrorInformation();
                 var errorDefinition = FspiopErrors.find(errorInformation.getErrorCode());
 
                 if (errorDefinition != null) {
@@ -57,19 +55,28 @@ public class FspiopInvocationErrorHandler {
 
             }
 
-            // We cannot parse the error body into ErrorInformationObject.
-            // We don't know what had happened.
-            return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, exception.getMessage());
+            // We cannot parse the error body into ErrorInformationObject. Must be some other JSON object, but we parsed it.
+            // We don't know what had happened to the server side or connection issue.
+            return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR,
+                                       exception.getMessage() == null || exception.getMessage().isBlank() ?
+                                           FspiopErrors.GENERIC_SERVER_ERROR.description() :
+                                           exception.getMessage());
 
         }
+
+        var cause = exception.getCause();
 
         // Something went wrong while processing. Then the exception will have the cause.
         if (cause instanceof ConnectException || cause instanceof UnknownHostException || cause instanceof SocketTimeoutException) {
 
-            return new FspiopException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR, exception.getMessage());
+            return new FspiopException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR,
+                                       exception.getMessage() == null || exception.getMessage().isBlank() ?
+                                           FspiopErrors.DESTINATION_COMMUNICATION_ERROR.description() :
+                                           exception.getMessage());
         }
 
-        return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, cause.getMessage());
+        return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR,
+                                   exception.getMessage() == null || exception.getMessage().isBlank() ? FspiopErrors.GENERIC_SERVER_ERROR.description() : exception.getMessage());
     }
 
 }

@@ -52,7 +52,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
 
         var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        var optFspEndpoint = fsp.changeEndpoint(input.endpointType(), input.baseUrl());
+        var optFspEndpoint = fsp.changeEndpoint(input.type(), input.baseUrl());
 
         this.fspRepository.save(fsp);
 

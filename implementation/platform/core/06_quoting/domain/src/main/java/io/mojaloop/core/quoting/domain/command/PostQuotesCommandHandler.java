@@ -2,6 +2,7 @@ package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
@@ -26,6 +27,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.Instant;
 
 @Service
 public class PostQuotesCommandHandler implements PostQuotesCommand {
@@ -93,36 +95,55 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             var payer = postQuotesRequest.getPayer().getPartyIdInfo();
             var payee = postQuotesRequest.getPayee().getPartyIdInfo();
             var transactionType = postQuotesRequest.getTransactionType();
+            var expiration = postQuotesRequest.getExpiration();
 
-            try {
+            Instant expireAt = null;
 
-                if (fees.getCurrency() != currency) {
+            if (fees != null && fees.getCurrency() != currency) {
 
-                    throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The currency of amount and fees must be the same.");
+                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The currency of amount and fees must be the same.");
+            }
+
+            if (expiration != null) {
+
+                try {
+
+                    expireAt = FspiopDates.fromRequestBody(expiration);
+
+                } catch (ParseException e) {
+
+                    LOGGER.error("({}) Wrong expiration format.", udfQuoteId.getId());
+                    LOGGER.info("({}) Returning from PutQuotesCommandHandler (wrong expiration).", udfQuoteId.getId());
+
+                    throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Wrong expiration format. Response expiration format : " + expiration);
                 }
+            }
 
-                var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                LOGGER.info("({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+            if (this.quoteSettings.stateful()) {
 
-                this.forwardRequest.forward(payeeBaseUrl, input.request());
-                LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
-
-                if (this.quoteSettings.stateful()) {
+                try {
 
                     var quote = new Quote(payerFsp.fspId(),
                                           payeeFsp.fspId(),
                                           udfQuoteId,
                                           currency,
                                           new BigDecimal(amount.getAmount()),
-                                          new BigDecimal(fees.getAmount()),
+                                          fees != null ? new BigDecimal(fees.getAmount()) : null,
                                           postQuotesRequest.getAmountType(),
                                           transactionType.getScenario(),
                                           transactionType.getSubScenario(),
                                           transactionType.getInitiator(),
                                           transactionType.getInitiatorType(),
-                                          FspiopDates.fromRequestBody(postQuotesRequest.getExpiration()),
+                                          expireAt,
                                           new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
                                           new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
+
+                    if(postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
+                        postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
+                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+                            quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
+                        });
+                    }
 
                     LOGGER.info("({}) Created Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
 
@@ -134,18 +155,22 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                     TransactionContext.commit();
 
                     LOGGER.info("({}) Requested quote : quoteId : {}", udfQuoteId.getId(), quote.getId());
+
+                } catch (ExpirationNotInFutureException e) {
+
+                    LOGGER.error("({}) The requested quote has expired.", udfQuoteId.getId());
+                    LOGGER.info("({}) Returning from PostQuotesCommandHandler (quote expired).", udfQuoteId.getId());
+
+                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "The quote has expired. The expiration is : " + expiration);
+
                 }
-
-            } catch (ExpirationNotInFutureException e) {
-
-                LOGGER.error("({}) Expiration date/time must be in the future.", udfQuoteId.getId());
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Expiration date/time must be in the future.");
-
-            } catch (ParseException e) {
-
-                LOGGER.error("({}) The date/time format of expiration is not valid.", udfQuoteId.getId());
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The date/time format of expiration is not valid.");
             }
+
+            var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+            LOGGER.info("({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+
+            this.forwardRequest.forward(payeeBaseUrl, input.request());
+            LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
 
         } catch (FspiopException e) {
 
@@ -158,13 +183,31 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             try {
 
                 this.respondQuotes.putQuotesError(sendBackTo, url, e.toErrorObject());
-                LOGGER.info("({}) Done sending error response to payer FSP.", udfQuoteId.getId());
-                LOGGER.info("({}) Returning from PostQuotesCommandHandler.", udfQuoteId.getId());
+                LOGGER.info("({}) (FspiopException) Done sending error response to payer FSP.", udfQuoteId.getId());
+                LOGGER.info("({}) (FspiopException) Returning from PostQuotesCommandHandler.", udfQuoteId.getId());
 
             } catch (FspiopException ignored) {
                 LOGGER.error("({}) Something went wrong while sending error response to payer FSP: ", udfQuoteId.getId(), e);
             }
 
+        } catch (Exception e) {
+
+            LOGGER.error("Exception occurred while executing PostQuotesCommandHandler: [{}]", e.getMessage());
+
+            var sendBackTo = new Payer(payerFspCode.value());
+            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+
+            try {
+
+                var errorInformationObject = FspiopErrors.GENERIC_SERVER_ERROR.toErrorObject();
+                this.respondQuotes.putQuotesError(sendBackTo, url, errorInformationObject);
+                LOGGER.info("({}) (Exception) Done sending error response to payer FSP.", udfQuoteId.getId());
+                LOGGER.info("({}) (Exception) Returning from PostQuotesCommandHandler.", udfQuoteId.getId());
+
+            } catch (FspiopException ignored) {
+                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+            }
         }
 
         LOGGER.info("Returning from PostQuotesCommandHandler successfully.");

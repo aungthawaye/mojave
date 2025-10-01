@@ -69,8 +69,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         assert input.request() != null;
 
         var transferId = input.request().getTransferId();
-        var resultTopic = PubSubKeys.forTransfers(input.payee(), transferId);
-        var errorTopic = PubSubKeys.forTransfers(input.payee(), transferId);
+        var resultTopic = PubSubKeys.forTransfers(transferId);
+        var errorTopic = PubSubKeys.forTransfers(transferId);
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);

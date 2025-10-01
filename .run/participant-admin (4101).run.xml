@@ -1,11 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="participant-admin" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="participant">
-    <envs>
-      <env name="VAULT_TOKEN" value="hvs.GJBnvtehSoCzpvF8TFibWbUU" />
-      <env name="VAULT_ADDR" value="http://localhost:8200" />
-      <env name="VAULT_SECRET_PATH" value="Mojaloop" />
-    </envs>
+  <configuration default="false" name="participant-admin (4101)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="02 participant">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/02_participant/admin/src/main/java/io/mojaloop/core/participant/admin/.env" />
+    </option>
     <module name="mod-participant-admin" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.participant.admin.ParticipantAdminApplication" />
     <extension name="coverage">
       <pattern>

@@ -54,7 +54,7 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
 
         var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
-        var optFspEndpoint = fsp.activate(input.endpointType());
+        var optFspEndpoint = fsp.activate(input.type());
 
         this.fspRepository.save(fsp);
 

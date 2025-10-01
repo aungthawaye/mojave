@@ -36,7 +36,7 @@ public interface AddEndpointCommand {
     Output execute(Input input) throws FspEndpointAlreadyConfiguredException, FspIdNotFoundException;
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
-                 @JsonProperty(required = true) @NotNull EndpointType endpointType,
+                 @JsonProperty(required = true) @NotNull EndpointType type,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_HTTP_URL_LENGTH) String baseUrl) { }
 
     record Output(FspEndpointId fspEndpointId) { }

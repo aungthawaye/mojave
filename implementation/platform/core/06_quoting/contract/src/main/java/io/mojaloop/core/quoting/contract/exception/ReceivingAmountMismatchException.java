@@ -28,12 +28,12 @@ import java.math.BigDecimal;
 
 public class ReceivingAmountMismatchException extends DomainException {
 
-    private static final String TEMPLATE = "Payee Receiving Amount ({0}) must be same as the Amount ({1}) of Amount Type ({1}) .";
+    private static final String TEMPLATE = "Payee Receiving Amount ({0}) must be same as the Amount ({1}) of Amount Type ({2}) .";
 
     public ReceivingAmountMismatchException(BigDecimal receivingAmount, BigDecimal amount, AmountType amountType) {
 
         super(new ErrorTemplate("RECEIVING_AMOUNT_MISMATCH", TEMPLATE),
-              receivingAmount.stripTrailingZeros().toString(),
+              receivingAmount.stripTrailingZeros().toPlainString(),
               amount.stripTrailingZeros().toPlainString(),
               amountType.name());
 

@@ -5,22 +5,22 @@ CREATE TABLE `qot_quote`
     `quote_id`             bigint         NOT NULL,
     `payer_fsp_id`         bigint         NOT NULL,
     `payee_fsp_id`         bigint         NOT NULL,
-    `udf_quote_id`         varchar(255)   NOT NULL,
+    `udf_quote_id`         varchar(48)    NOT NULL,
     `currency`             varchar(3)     NOT NULL,
     `amount`               decimal(34, 4) NOT NULL,
-    `fees`                 decimal(34, 4) NOT NULL,
+    `fees`                 decimal(34, 4) DEFAULT NULL,
     `amount_type`          varchar(32)    NOT NULL,
     `scenario`             varchar(32)    NOT NULL,
-    `sub_scenario`         varchar(64)    NOT NULL,
+    `sub_scenario`         varchar(64)    DEFAULT NULL,
     `initiator`            varchar(32)    NOT NULL,
     `initiator_type`       varchar(32)    NOT NULL,
-    `request_expiration`   bigint         NOT NULL,
+    `request_expiration`   bigint         DEFAULT NULL,
 
-    `payer_party_type`     varchar(16)    NOT NULL,
+    `payer_party_type`     varchar(32)    NOT NULL,
     `payer_party_id`       varchar(48)    NOT NULL,
     `payer_sub_id`         varchar(48)    DEFAULT NULL,
 
-    `payee_party_type`     varchar(16)    NOT NULL,
+    `payee_party_type`     varchar(32)    NOT NULL,
     `payee_party_id`       varchar(48)    NOT NULL,
     `payee_sub_id`         varchar(48)    DEFAULT NULL,
 
@@ -33,7 +33,7 @@ CREATE TABLE `qot_quote`
     `requested_at`         bigint         NOT NULL,
     `responded_at`         bigint         DEFAULT NULL,
     `stage`                varchar(32)    NOT NULL,
-    `error`                varchar(256)   DEFAULT NULL,
+    `error`                varchar(255)   DEFAULT NULL,
 
     `rec_created_at`       bigint         DEFAULT NULL,
     `rec_updated_at`       bigint         DEFAULT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE `qot_quote_extension`
 (
     `quote_extension_id` bigint       NOT NULL,
     `direction`          varchar(32)  NOT NULL,
-    `key`                varchar(64)  NOT NULL,
-    `value`              varchar(256) NOT NULL,
+    `x_key`              varchar(64)  NOT NULL,
+    `x_value`            varchar(256) NOT NULL,
     `quote_id`           bigint       NOT NULL,
 
     `rec_created_at`     bigint DEFAULT NULL,

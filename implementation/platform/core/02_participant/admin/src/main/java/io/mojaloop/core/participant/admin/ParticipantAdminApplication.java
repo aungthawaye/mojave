@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Import;
 @Import(value = {ParticipantAdminConfiguration.class, ParticipantAdminSettings.class})
 public class ParticipantAdminApplication {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantAdminApplication.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantAdminApplication.class);
 
     public static void main(String[] args) {
 
