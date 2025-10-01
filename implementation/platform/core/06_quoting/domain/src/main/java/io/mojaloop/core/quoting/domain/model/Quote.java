@@ -45,6 +45,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -164,7 +165,7 @@ public class Quote extends JpaEntity<QuoteId> {
 
     @Getter(AccessLevel.NONE)
     @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    protected List<QuoteExtension> extensions;
+    protected List<QuoteExtension> extensions = new ArrayList<>();
 
     public Quote(FspId payerFspId,
                  FspId payeeFspId,
@@ -265,7 +266,7 @@ public class Quote extends JpaEntity<QuoteId> {
 
     }
 
-    void addExtension(Direction direction, String key, String value) {
+    public void addExtension(Direction direction, String key, String value) {
 
         this.extensions.add(new QuoteExtension(this, direction, key, value));
     }

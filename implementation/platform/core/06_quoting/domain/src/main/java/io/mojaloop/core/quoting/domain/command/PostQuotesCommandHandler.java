@@ -2,6 +2,7 @@ package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
@@ -136,6 +137,13 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                                           expireAt,
                                           new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
                                           new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
+
+                    if(postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
+                        postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
+                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+                            quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
+                        });
+                    }
 
                     LOGGER.info("({}) Created Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
 

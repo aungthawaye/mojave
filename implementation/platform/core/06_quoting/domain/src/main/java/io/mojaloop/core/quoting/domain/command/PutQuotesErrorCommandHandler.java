@@ -1,6 +1,7 @@
 package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.store.ParticipantStore;
@@ -92,6 +93,14 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
                 LOGGER.info("({}) Retrieved Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
 
                 quote.error(error.getErrorInformation().getErrorDescription());
+
+                if (error.getErrorInformation().getExtensionList() != null && error.getErrorInformation().getExtensionList().getExtension() != null) {
+                    error.getErrorInformation().getExtensionList().getExtension().forEach(ext -> {
+                        LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), ext);
+                        quote.addExtension(Direction.INBOUND, ext.getKey(), ext.getValue());
+                    });
+                }
+
                 this.quoteRepository.save(quote);
                 TransactionContext.commit();
                 LOGGER.info("({}) Quote error set. Error : [{}]", udfQuoteId.getId(), error.getErrorInformation().getErrorDescription());

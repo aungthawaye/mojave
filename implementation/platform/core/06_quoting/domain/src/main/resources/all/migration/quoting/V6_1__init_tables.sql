@@ -5,7 +5,7 @@ CREATE TABLE `qot_quote`
     `quote_id`             bigint         NOT NULL,
     `payer_fsp_id`         bigint         NOT NULL,
     `payee_fsp_id`         bigint         NOT NULL,
-    `udf_quote_id`         varchar(48)   NOT NULL,
+    `udf_quote_id`         varchar(48)    NOT NULL,
     `currency`             varchar(3)     NOT NULL,
     `amount`               decimal(34, 4) NOT NULL,
     `fees`                 decimal(34, 4) DEFAULT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE `qot_quote_extension`
 (
     `quote_extension_id` bigint       NOT NULL,
     `direction`          varchar(32)  NOT NULL,
-    `key`                varchar(64)  NOT NULL,
-    `value`              varchar(256) NOT NULL,
+    `x_key`              varchar(64)  NOT NULL,
+    `x_value`            varchar(256) NOT NULL,
     `quote_id`           bigint       NOT NULL,
 
     `rec_created_at`     bigint DEFAULT NULL,

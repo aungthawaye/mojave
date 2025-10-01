@@ -2,6 +2,7 @@ package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.store.ParticipantStore;
@@ -151,6 +152,17 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 try {
 
                     quote.responded(responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount);
+
+                    if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
+
+                        var extensions = quoteIdPutResponse.getExtensionList().getExtension();
+
+                        extensions.forEach(extension -> {
+                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+                            quote.addExtension(Direction.INBOUND, extension.getKey(), extension.getValue());
+                        });
+                    }
+
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
@@ -217,7 +229,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
         } catch (Exception e) {
 
-            LOGGER.error("Exception occurred while executing PutQuotesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("Exception occurred while executing PutQuotesCommandHandler: ", e);
 
             var sendBackTo = new Payer(payerFspCode.value());
             var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();

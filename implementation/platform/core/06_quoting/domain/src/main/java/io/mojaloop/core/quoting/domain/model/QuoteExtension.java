@@ -39,10 +39,10 @@ public class QuoteExtension extends JpaEntity<QuoteExtensionId> {
     @Enumerated(EnumType.STRING)
     protected Direction direction;
 
-    @Column(name = "key", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(name = "x_key", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String key;
 
-    @Column(name = "value", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "x_value", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String value;
 
     @ManyToOne
