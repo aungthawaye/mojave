@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="quoting-service (4603)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="06 quoting">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/06_quoting/service/src/main/java/io/mojaloop/core/quoting/service/.env" />
+    </option>
+    <module name="mod-quoting-service" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.quoting.service.QuotingServiceApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.mojaloop.core.quoting.service.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

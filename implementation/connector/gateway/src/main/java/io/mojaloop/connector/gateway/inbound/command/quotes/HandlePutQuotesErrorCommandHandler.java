@@ -44,7 +44,7 @@ class HandlePutQuotesErrorCommandHandler implements HandlePutQuotesErrorCommand 
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forQuotesError(input.payee(), input.quoteId());
+        var channel = PubSubKeys.forQuotesError(input.quoteId());
         LOGGER.info("Publishing quotes error result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));

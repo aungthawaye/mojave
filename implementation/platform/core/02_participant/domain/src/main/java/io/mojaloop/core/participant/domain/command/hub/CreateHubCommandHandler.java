@@ -81,7 +81,7 @@ public class CreateHubCommandHandler implements CreateHubCommand {
 
         var hub = new Hub(input.name());
 
-        for (var currency : input.supportedCurrencies()) {
+        for (var currency : input.currencies()) {
 
             LOGGER.info("Adding supported currency: {}", currency);
             hub.addCurrency(currency);

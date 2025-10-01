@@ -68,6 +68,9 @@ public class RetrofitService {
 
     public static <RES, E> Response<RES> invoke(Call<RES> invocation, ErrorDecoder<E> errorDecoder) throws InvocationException {
 
+        E decodedErrorResponse = null;
+        String errorResponseBody = null;
+
         try {
 
             Response<RES> response = invocation.execute();
@@ -78,21 +81,12 @@ public class RetrofitService {
 
                     if (responseBody != null) {
 
-                        var errorResponseBody = responseBody.string();
+                        errorResponseBody = responseBody.string();
 
                         if (errorDecoder != null) {
-
-                            try {
-
-                                E decodedError = errorDecoder.decode(response.code(), errorResponseBody);
-                                LOGGER.error("Decoded error response : {}", decodedError);
-                                throw new InvocationException(response.code(), decodedError, errorResponseBody);
-
-                            } catch (Exception unknown) {
-
-                                LOGGER.error("Error decoding error response : {}", unknown.getMessage(), unknown);
-                                throw new InvocationException(response.code(), null, unknown.getMessage());
-                            }
+                            decodedErrorResponse = errorDecoder.decode(response.code(), errorResponseBody);
+                            LOGGER.error("Decoded error response : {}", decodedErrorResponse);
+                            throw new InvocationException(response.code(), decodedErrorResponse, errorResponseBody);
                         }
 
                         LOGGER.error("Error response : {}", responseBody.string());
@@ -106,17 +100,9 @@ public class RetrofitService {
 
             return response;
 
-        } catch (IOException e) {
+        } catch (InvocationException e) {
 
-            if (e instanceof InvocationException) {
-
-                throw (InvocationException) e;
-
-            } else {
-
-                throw new InvocationException(e);
-
-            }
+            throw e;
 
         } catch (Exception e) {
 
@@ -370,7 +356,7 @@ public class RetrofitService {
     }
 
     @Getter
-    public static class InvocationException extends IOException {
+    public static class InvocationException extends Exception {
 
         private final int responseStatusCode;
 

@@ -76,7 +76,7 @@ public class CreateFspCommandHandler implements CreateFspCommand {
         var fsp = new Fsp(hub, input.fspCode(), input.name());
         LOGGER.info("Created FSP: {}", fsp);
 
-        for (var currency : input.supportedCurrencies()) {
+        for (var currency : input.currencies()) {
             LOGGER.info("Adding supported currency: {}", currency);
             fsp.addCurrency(currency);
             LOGGER.info("Added supported currency: {}", currency);

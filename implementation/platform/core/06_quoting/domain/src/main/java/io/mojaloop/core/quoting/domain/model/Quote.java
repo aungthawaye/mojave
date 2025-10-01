@@ -80,7 +80,7 @@ public class Quote extends JpaEntity<QuoteId> {
     @Basic
     @JavaType(UdfQuoteIdJavaType.class)
     @JdbcTypeCode(Types.VARCHAR)
-    @Column(name = "udf_quote_id", nullable = false, updatable = false)
+    @Column(name = "udf_quote_id", nullable = false, updatable = false, length = StringSizeConstraints.MAX_UDF_QUOTE_ID_LENGTH)
     protected UdfQuoteId udfQuoteId;
 
     @Column(name = "currency", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
@@ -90,7 +90,7 @@ public class Quote extends JpaEntity<QuoteId> {
     @Column(name = "amount", nullable = false, updatable = false, precision = 34, scale = 4)
     protected BigDecimal amount;
 
-    @Column(name = "fees", nullable = false, updatable = false, precision = 34, scale = 4)
+    @Column(name = "fees", updatable = false, precision = 34, scale = 4)
     protected BigDecimal fees;
 
     @Column(name = "amount_type", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
@@ -101,7 +101,7 @@ public class Quote extends JpaEntity<QuoteId> {
     @Enumerated(EnumType.STRING)
     protected TransactionScenario scenario;
 
-    @Column(name = "sub_scenario", nullable = false, updatable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(name = "sub_scenario", updatable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String subScenario;
 
     @Column(name = "initiator", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
@@ -112,20 +112,22 @@ public class Quote extends JpaEntity<QuoteId> {
     @Enumerated(EnumType.STRING)
     protected TransactionInitiatorType initiatorType;
 
-    @Column(name = "request_expiration", nullable = false, updatable = false)
+    @Column(name = "request_expiration", updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant requestExpiration;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payer_party_type", nullable = false, length = 16)),
-                                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", nullable = false, length = 48)),
-                                 @AttributeOverride(name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
+    @AttributeOverrides(
+        value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payer_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", nullable = false, length = 48)),
+                 @AttributeOverride(name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
     protected Party payer;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payee_party_type", nullable = false, length = 16)),
-                                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", nullable = false, length = 48)),
-                                 @AttributeOverride(name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
+    @AttributeOverrides(
+        value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payee_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", nullable = false, length = 48)),
+                 @AttributeOverride(name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
 
     protected Party payee;
 
@@ -133,7 +135,7 @@ public class Quote extends JpaEntity<QuoteId> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant responseExpiration;
 
-    @Column(name = "transfer_amount", precision = 34, scale = 4)
+    @Column(name = "transfer_amount", nullable = false, precision = 34, scale = 4)
     protected BigDecimal transferAmount;
 
     @Column(name = "payee_fsp_fee", precision = 34, scale = 4)
@@ -142,7 +144,7 @@ public class Quote extends JpaEntity<QuoteId> {
     @Column(name = "payee_fsp_commission", precision = 34, scale = 4)
     protected BigDecimal payeeFspCommission;
 
-    @Column(name = "payee_receive_amount", precision = 34, scale = 4)
+    @Column(name = "payee_receive_amount", nullable = false, precision = 34, scale = 4)
     protected BigDecimal payeeReceiveAmount;
 
     @Column(name = "requested_at", nullable = false, updatable = false)
@@ -184,13 +186,10 @@ public class Quote extends JpaEntity<QuoteId> {
         assert udfQuoteId != null;
         assert currency != null;
         assert amount != null;
-        assert fees != null;
         assert amountType != null;
         assert scenario != null;
-        assert subScenario != null;
         assert initiator != null;
         assert initiatorType != null;
-        assert requestExpiration != null;
         assert payer != null;
         assert payee != null;
 
@@ -212,7 +211,7 @@ public class Quote extends JpaEntity<QuoteId> {
         this.requestedAt = Instant.now();
         this.stage = QuotingStage.REQUESTED;
 
-        if (this.requestExpiration.isBefore(Instant.now())) {
+        if (this.requestExpiration != null && this.requestExpiration.isBefore(Instant.now())) {
 
             throw new ExpirationNotInFutureException();
         }
@@ -233,12 +232,9 @@ public class Quote extends JpaEntity<QuoteId> {
     }
 
     public void responded(Instant responseExpiration, BigDecimal transferAmount, BigDecimal payeeFspFee, BigDecimal payeeFspCommission, BigDecimal payeeReceiveAmount)
-        throws TransferAmountMismatchException, ReceivingAmountMismatchException {
+        throws TransferAmountMismatchException, ReceivingAmountMismatchException, ExpirationNotInFutureException {
 
-        assert responseExpiration != null;
         assert transferAmount != null;
-        assert payeeFspFee != null;
-        assert payeeFspCommission != null;
         assert payeeReceiveAmount != null;
 
         this.responseExpiration = responseExpiration;
@@ -247,16 +243,22 @@ public class Quote extends JpaEntity<QuoteId> {
         this.payeeFspCommission = payeeFspCommission;
         this.payeeReceiveAmount = payeeReceiveAmount;
         this.respondedAt = Instant.now();
+        this.stage = QuotingStage.RESPONDED;
+
+        if (this.responseExpiration != null && this.responseExpiration.isBefore(Instant.now())) {
+
+            throw new ExpirationNotInFutureException();
+        }
 
         if (this.amountType == AmountType.SEND) {
 
-            if (!transferAmount.equals(this.amount)) {
+            if (transferAmount.subtract(this.amount).signum() != 0) {
                 throw new TransferAmountMismatchException(transferAmount, this.amount, this.amountType);
             }
 
         } else if (this.amountType == AmountType.RECEIVE) {
 
-            if (!payeeReceiveAmount.equals(this.amount)) {
+            if (payeeReceiveAmount.subtract(this.amount).signum() != 0) {
                 throw new ReceivingAmountMismatchException(payeeReceiveAmount, this.amount, this.amountType);
             }
         }

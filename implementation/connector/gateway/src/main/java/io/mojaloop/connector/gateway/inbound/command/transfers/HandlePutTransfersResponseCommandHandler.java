@@ -44,7 +44,7 @@ class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResp
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forTransfers(input.payee(), input.transferId());
+        var channel = PubSubKeys.forTransfers(input.transferId());
         LOGGER.info("Publishing transfers result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new TransfersResult(input.transferId(), input.response()));

@@ -52,7 +52,7 @@ public interface AddHubCurrencyCommand {
     Output execute(Input input) throws HubNotFoundException, HubCurrencyAlreadySupportedException;
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,
-                 @JsonProperty(required = true) @NotNull Currency supportedCurrency) { }
+                 @JsonProperty(required = true) @NotNull Currency currency) { }
 
     record Output(HubCurrencyId hubCurrencyId) { }
 

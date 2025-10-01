@@ -46,7 +46,7 @@ public interface CreateFspCommand {
 
     record Input(@JsonProperty(required = true) @NotNull FspCode fspCode,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull Currency[] supportedCurrencies,
+                 @JsonProperty(required = true) @NotNull Currency[] currencies,
                  @JsonProperty(required = true) @NotNull Endpoint[] endpoints) {
 
         public record Endpoint(@JsonProperty(required = true) @NotNull @NotBlank EndpointType type,

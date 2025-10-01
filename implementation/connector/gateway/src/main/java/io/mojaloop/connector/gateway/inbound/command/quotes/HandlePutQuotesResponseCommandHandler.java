@@ -44,7 +44,7 @@ class HandlePutQuotesResponseCommandHandler implements HandlePutQuotesResponseCo
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forQuotes(input.payee(), input.quoteId());
+        var channel = PubSubKeys.forQuotes(input.quoteId());
         LOGGER.info("Publishing quotes result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new QuotesResult(input.quoteId(), input.response()));

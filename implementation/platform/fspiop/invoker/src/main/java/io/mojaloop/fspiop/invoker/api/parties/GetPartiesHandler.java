@@ -27,12 +27,17 @@ import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 class GetPartiesHandler implements GetParties {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetPartiesHandler.class);
 
     private final ParticipantContext participantContext;
 
@@ -40,15 +45,22 @@ class GetPartiesHandler implements GetParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public GetPartiesHandler(ParticipantContext participantContext, PartiesService partiesService, FspiopErrorDecoder fspiopErrorDecoder) {
+    private final FspiopInvocationErrorHandler fspiopInvocationErrorHandler;
+
+    public GetPartiesHandler(ParticipantContext participantContext,
+                             PartiesService partiesService,
+                             FspiopErrorDecoder fspiopErrorDecoder,
+                             FspiopInvocationErrorHandler fspiopInvocationErrorHandler) {
 
         assert participantContext != null;
         assert partiesService != null;
         assert fspiopErrorDecoder != null;
+        assert fspiopInvocationErrorHandler != null;
 
         this.participantContext = participantContext;
         this.partiesService = partiesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
+        this.fspiopInvocationErrorHandler = fspiopInvocationErrorHandler;
     }
 
     @Override
@@ -77,7 +89,7 @@ class GetPartiesHandler implements GetParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationErrorHandler.handle(e);
         }
     }
 

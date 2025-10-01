@@ -15,24 +15,24 @@ public class PubSubKeys {
         return "parties-error:" + payee.fspCode() + "-" + partyId + "-" + partyIdType + (subId != null && !subId.isBlank() ? "-" + subId : "");
     }
 
-    public static String forQuotes(Payee payee, String quoteId) {
+    public static String forQuotes(String quoteId) {
 
-        return "quotes:" + payee.fspCode() + "-" + quoteId;
+        return "quotes:" + quoteId;
     }
 
-    public static String forQuotesError(Payee payee, String quoteId) {
+    public static String forQuotesError(String quoteId) {
 
-        return "quotes-error:" + payee.fspCode() + "-" + quoteId;
+        return "quotes-error:" + quoteId;
     }
 
-    public static String forTransfers(Payee payee, String transferId) {
+    public static String forTransfers(String transferId) {
 
-        return "transfers:" + payee.fspCode() + "-" + transferId;
+        return "transfers:" + transferId;
     }
 
     public static String forTransfersError(Payee payee, String transferId) {
 
-        return "transfers-error:" + payee.fspCode() + "-" + transferId;
+        return "transfers-error:" + transferId;
     }
 
 }

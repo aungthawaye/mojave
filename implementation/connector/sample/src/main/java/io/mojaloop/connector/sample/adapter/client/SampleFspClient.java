@@ -73,13 +73,15 @@ public class SampleFspClient implements FspClient {
 
         if (request.amountType() == AmountType.SEND) {
 
-            payeeReceiveAmount = originalAmount.subtract(payeeFspFee).add(payeeFspCommission);
+            // Dummy fee 5USD.
+            payeeReceiveAmount = originalAmount.subtract(new BigDecimal("5"));
             transferAmount = originalAmount;
 
         } else {
 
+            // Dummy fee 5USD.
             payeeReceiveAmount = originalAmount;
-            transferAmount = originalAmount.add(payeeFspFee).subtract(payeeFspCommission);
+            transferAmount = originalAmount.add(new BigDecimal("5"));
 
         }
 

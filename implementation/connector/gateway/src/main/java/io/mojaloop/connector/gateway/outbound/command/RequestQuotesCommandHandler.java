@@ -99,8 +99,8 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             }
         }
 
-        var resultTopic = PubSubKeys.forQuotes(input.payee(), quoteId);
-        var errorTopic = PubSubKeys.forQuotes(input.payee(), quoteId);
+        var resultTopic = PubSubKeys.forQuotes(quoteId);
+        var errorTopic = PubSubKeys.forQuotes(quoteId);
 
         // Listening to the pub/sub
         var blocker = new CountDownLatch(1);

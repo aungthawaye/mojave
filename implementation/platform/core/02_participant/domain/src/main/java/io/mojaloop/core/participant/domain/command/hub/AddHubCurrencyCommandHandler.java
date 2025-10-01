@@ -41,7 +41,6 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
@@ -72,7 +71,7 @@ public class AddHubCurrencyCommandHandler implements AddHubCurrencyCommand {
 
         var hub = this.hubRepository.findById(input.hubId()).orElseThrow(HubNotFoundException::new);
 
-        var supportedCurrency = hub.addCurrency(input.supportedCurrency());
+        var supportedCurrency = hub.addCurrency(input.currency());
 
         this.hubRepository.save(hub);
 

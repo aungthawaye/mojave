@@ -26,14 +26,16 @@ public class StringSizeConstraints {
 
     public static final int MAX_CURRENCY_LENGTH = 3;
 
-    public static final int MAX_DESCRIPTION_LENGTH = 256;
+    public static final int MAX_DESCRIPTION_LENGTH = 255;
 
     public static final int MAX_ENUM_LENGTH = 32;
 
-    public static final int MAX_HTTP_URL_LENGTH = 256;
+    public static final int MAX_HTTP_URL_LENGTH = 255;
 
     public static final int MAX_NAME_TITLE_LENGTH = 64;
 
     public static final int MAX_PARAGRAPH_LENGTH = 512;
+
+    public static final int MAX_UDF_QUOTE_ID_LENGTH = 48;
 
 }

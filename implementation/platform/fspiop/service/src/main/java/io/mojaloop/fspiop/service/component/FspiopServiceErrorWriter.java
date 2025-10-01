@@ -60,11 +60,13 @@ public class FspiopServiceErrorWriter implements AuthenticationErrorWriter {
 
             writer = response.getWriter();
 
-            if (exception instanceof FspiopServiceGatekeeper.GatekeeperFailureException ge) {
+            if (exception instanceof FspiopServiceGatekeeper.GatekeeperFailureException gke) {
 
-                var cause = (FspiopException) ge.getCause();
+                var cause = (FspiopException) gke.getCause();
 
-                response.setStatus(ge.getStatusCode());
+                LOGGER.info("Error cause : {}", cause.toErrorObject());
+
+                response.setStatus(gke.getStatusCode());
                 writer.write(this.objectMapper.writeValueAsString(cause.toErrorObject()));
 
             } else {

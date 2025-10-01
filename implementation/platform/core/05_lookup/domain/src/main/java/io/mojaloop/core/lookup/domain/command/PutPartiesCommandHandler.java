@@ -68,11 +68,11 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
 
         try {
 
-            var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            LOGGER.info("Forwarding request to payee FSP (Url): [{}]", payeeFsp);
+            var payerBaseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+            LOGGER.info("Forwarding request to payer FSP (Url): [{}]", payerFsp);
 
-            this.forwardRequest.forward(payeeBaseUrl, input.request());
-            LOGGER.info("Done forwarding request to payee FSP (Url): [{}]", payeeFsp);
+            this.forwardRequest.forward(payerBaseUrl, input.request());
+            LOGGER.info("Done forwarding request to payer FSP (Url): [{}]", payerFsp);
 
         } catch (FspiopException e) {
 
@@ -82,6 +82,11 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
             // For PUT calls, we must not send back an error to the Payee.
             // Here, Payee side responded with PUT, but Hub cannot forward the request to Payer due to some error.
             // But Hub won't respond with an error to the Payee.
+
+        } catch (Exception e) {
+
+            LOGGER.error("Exception occurred while executing PutPartiesCommandHandler: ", e);
+
         }
 
         LOGGER.info("Returning from PutPartiesCommandHandler.");

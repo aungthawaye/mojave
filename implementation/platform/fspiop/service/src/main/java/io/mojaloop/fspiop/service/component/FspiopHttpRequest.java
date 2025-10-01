@@ -38,7 +38,7 @@ public record FspiopHttpRequest(Payer payer, Payee payee, String method, String 
 
     public static FspiopHttpRequest with(HttpServletRequest request) throws IOException {
 
-        var cachedRequest = request instanceof CachedServletRequest cachedRequest1 ? cachedRequest1 : new CachedServletRequest(request);
+        var cachedRequest = request instanceof CachedServletRequest already ? already : new CachedServletRequest(request);
 
         var method = cachedRequest.getMethod();
         LOGGER.debug("Method: [{}]", method);
@@ -49,14 +49,14 @@ public record FspiopHttpRequest(Payer payer, Payee payee, String method, String 
          */
 
         var payerHeader = switch (method) {
-            case "POST", "PATCH", "GET" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
-            case "PUT" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
+            case "POST", "PATCH", "GET" -> FspiopHeaders.Names.FSPIOP_SOURCE;
+            case "PUT" -> FspiopHeaders.Names.FSPIOP_DESTINATION;
             default -> throw new IllegalStateException("Unexpected value: " + method);
         };
 
         var payeeHeader = switch (method) {
-            case "POST", "PATCH", "GET" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
-            case "PUT" -> cachedRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
+            case "POST", "PATCH", "GET" -> FspiopHeaders.Names.FSPIOP_DESTINATION;
+            case "PUT" -> FspiopHeaders.Names.FSPIOP_SOURCE;
             default -> throw new IllegalStateException("Unexpected value: " + method);
         };
 

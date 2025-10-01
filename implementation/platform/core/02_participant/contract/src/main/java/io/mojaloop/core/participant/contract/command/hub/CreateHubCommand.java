@@ -54,7 +54,7 @@ public interface CreateHubCommand {
     Output execute(Input input) throws HubCountLimitReachedException, HubCurrencyAlreadySupportedException;
 
     record Input(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull Currency[] supportedCurrencies) { }
+                 @JsonProperty(required = true) @NotNull Currency[] currencies) { }
 
     record Output(HubId hubId) { }
 
