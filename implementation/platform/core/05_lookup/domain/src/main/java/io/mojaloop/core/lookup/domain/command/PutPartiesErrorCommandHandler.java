@@ -23,8 +23,12 @@ package io.mojaloop.core.lookup.domain.command;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.contract.command.PutPartiesErrorCommand;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.exception.FspiopCommunicationException;
+import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.component.handy.FspiopUrls;
+import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.parties.RespondParties;
 import org.slf4j.Logger;
@@ -58,15 +62,20 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
         LOGGER.info("Executing PutPartiesErrorCommandHandler with input: [{}].", input);
 
-        var payeeFspCode = new FspCode(input.request().payee().fspCode());
-        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
-        LOGGER.info("Found payee FSP: [{}]", payeeFsp);
-
-        var payerFspCode = new FspCode(input.request().payer().fspCode());
-        var payerFsp = this.participantStore.getFspData(payerFspCode);
-        LOGGER.info("Found payer FSP: [{}]", payerFsp);
+        FspCode payerFspCode = null;
+        FspData payerFsp = null;
+        FspCode payeeFspCode = null;
+        FspData payeeFsp = null;
 
         try {
+
+            payeeFspCode = new FspCode(input.request().payee().fspCode());
+            payeeFsp = this.participantStore.getFspData(payeeFspCode);
+            LOGGER.info("Found payee FSP: [{}]", payeeFsp);
+
+            payerFspCode = new FspCode(input.request().payer().fspCode());
+            payerFsp = this.participantStore.getFspData(payerFspCode);
+            LOGGER.info("Found payer FSP: [{}]", payerFsp);
 
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             LOGGER.info("Forwarding request to payer FSP (Url): [{}]", payerFsp);
@@ -74,15 +83,26 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
             this.forwardRequest.forward(payerBaseUrl, input.request());
             LOGGER.info("Done forwarding request to payer FSP (Url): [{}]", payerFsp);
 
-        } catch (FspiopException e) {
+        } catch (FspiopCommunicationException e) {
 
-            LOGGER.error("FspiopException occurred while executing PutPartiesCommandHandler: [{}]", e.getMessage());
-            LOGGER.error("Ignore sending error response back to Payee.");
+            LOGGER.error("(FspiopCommunicationException) Exception occurred while executing PutPartiesErrorCommandHandler: [{}]", e.getMessage());
 
-            // For PUT calls, we must not send back an error to the Payee.
-            // Here, Payee side responded with PUT, but Hub cannot forward the request to Payer due to some error.
-            // But Hub won't respond with an error to the Payee.
+        } catch (Exception e) {
 
+            if (payerFspCode != null && payerFsp != null) {
+
+                final var sendBackTo = new Payer(payerFspCode.value());
+                final var baseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+                final var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+
+                try {
+
+                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+
+                } catch (Throwable ignored) {
+                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                }
+            }
         }
 
         LOGGER.info("Returning from PutPartiesErrorCommandHandler.");

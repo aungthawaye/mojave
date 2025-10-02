@@ -6,6 +6,7 @@ import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PostQuotesCommand;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
@@ -18,6 +19,7 @@ import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
+import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
@@ -26,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.time.Instant;
 
 @Service
@@ -76,15 +77,20 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
         LOGGER.info("({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
-        var payerFspCode = new FspCode(input.request().payer().fspCode());
-        var payerFsp = this.participantStore.getFspData(payerFspCode);
-        LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
-
-        var payeeFspCode = new FspCode(input.request().payee().fspCode());
-        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
-        LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
+        FspCode payerFspCode = null;
+        FspData payerFsp = null;
+        FspCode payeeFspCode = null;
+        FspData payeeFsp = null;
 
         try {
+
+            payerFspCode = new FspCode(input.request().payer().fspCode());
+            payerFsp = this.participantStore.getFspData(payerFspCode);
+            LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
+
+            payeeFspCode = new FspCode(input.request().payee().fspCode());
+            payeeFsp = this.participantStore.getFspData(payeeFspCode);
+            LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             var postQuotesRequest = input.quotesPostRequest();
             LOGGER.info("({}) postQuotesRequest: [{}]", udfQuoteId.getId(), postQuotesRequest);
@@ -106,17 +112,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (expiration != null) {
 
-                try {
-
-                    expireAt = FspiopDates.fromRequestBody(expiration);
-
-                } catch (ParseException e) {
-
-                    LOGGER.error("({}) Wrong expiration format.", udfQuoteId.getId());
-                    LOGGER.info("({}) Returning from PutQuotesCommandHandler (wrong expiration).", udfQuoteId.getId());
-
-                    throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Wrong expiration format. Response expiration format : " + expiration);
-                }
+                expireAt = FspiopDates.fromRequestBody(expiration);
             }
 
             if (this.quoteSettings.stateful()) {
@@ -138,7 +134,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                                           new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
                                           new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
-                    if(postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
+                    if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
                         postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
                             LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
                             quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
@@ -172,41 +168,23 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             this.forwardRequest.forward(payeeBaseUrl, input.request());
             LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
 
-        } catch (FspiopException e) {
-
-            LOGGER.error("({}) FspiopException occurred while executing PostQuotesCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
-
-            var sendBackTo = new Payer(payerFspCode.value());
-            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
-
-            try {
-
-                this.respondQuotes.putQuotesError(sendBackTo, url, e.toErrorObject());
-                LOGGER.info("({}) (FspiopException) Done sending error response to payer FSP.", udfQuoteId.getId());
-                LOGGER.info("({}) (FspiopException) Returning from PostQuotesCommandHandler.", udfQuoteId.getId());
-
-            } catch (FspiopException ignored) {
-                LOGGER.error("({}) Something went wrong while sending error response to payer FSP: ", udfQuoteId.getId(), e);
-            }
-
         } catch (Exception e) {
 
             LOGGER.error("Exception occurred while executing PostQuotesCommandHandler: [{}]", e.getMessage());
 
-            var sendBackTo = new Payer(payerFspCode.value());
-            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+            if (payerFsp != null) {
 
-            try {
+                final var sendBackTo = new Payer(payerFspCode.value());
+                final var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+                final var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 
-                var errorInformationObject = FspiopErrors.GENERIC_SERVER_ERROR.toErrorObject();
-                this.respondQuotes.putQuotesError(sendBackTo, url, errorInformationObject);
-                LOGGER.info("({}) (Exception) Done sending error response to payer FSP.", udfQuoteId.getId());
-                LOGGER.info("({}) (Exception) Returning from PostQuotesCommandHandler.", udfQuoteId.getId());
+                try {
 
-            } catch (FspiopException ignored) {
-                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+
+                } catch (Throwable ignored) {
+                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                }
             }
         }
 

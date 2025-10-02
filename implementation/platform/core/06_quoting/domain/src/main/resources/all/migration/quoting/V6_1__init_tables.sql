@@ -40,7 +40,7 @@ CREATE TABLE `qot_quote`
     `rec_version`          int            DEFAULT NULL,
 
     PRIMARY KEY (`quote_id`),
-    UNIQUE KEY `qot_udf_quote_id_UK` (`udf_quote_id`),
+    UNIQUE KEY `qot_quote_udf_quote_id_UK` (`udf_quote_id`),
 
     KEY `qot_quote_requested_at_IDX` (`requested_at`),
     KEY `qot_quote_responded_at_IDX` (`responded_at`),
@@ -67,8 +67,28 @@ CREATE TABLE `qot_quote_extension`
     `rec_version`        int    DEFAULT NULL,
 
     PRIMARY KEY (`quote_extension_id`),
-    KEY `quote_extension_quote_FK` (`quote_id`),
+    KEY `qot_quote_extension_quote_id_IDX` (`quote_id`),
     CONSTRAINT `quote_extension_quote_FK` FOREIGN KEY (`quote_id`) REFERENCES `qot_quote` (`quote_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+-- ml_quoting.qot_quote_ilp_packet definition
+
+CREATE TABLE `qot_quote_ilp_packet`
+(
+    `quote_id`      bigint      NOT NULL,
+    `ilp_packet`    MEDIUMTEXT  DEFAULT NULL,
+    `ilp_condition`     varchar(64) DEFAULT NULL,
+    `ilp_fulfilment`    varchar(64) DEFAULT NULL,
+
+    `rec_created_at` bigint DEFAULT NULL,
+    `rec_updated_at` bigint DEFAULT NULL,
+    `rec_version`    int    DEFAULT NULL,
+
+    PRIMARY KEY (`quote_id`),
+    KEY `qot_quote_ilp_packet_quote_id_IDX` (`quote_id`),
+    CONSTRAINT `quote_ilp_packet_quote_FK` FOREIGN KEY (`quote_id`) REFERENCES `qot_quote` (`quote_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

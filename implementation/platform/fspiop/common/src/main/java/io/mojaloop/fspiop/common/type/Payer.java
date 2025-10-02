@@ -15,6 +15,11 @@ public record Payer(String fspCode) {
         return new Payer("");
     }
 
+    public static Payer of(String fspCode) {
+
+        return fspCode != null ? new Payer(fspCode) : EMPTY();
+    }
+
     public boolean isEmpty() {
 
         return this.fspCode.isEmpty();

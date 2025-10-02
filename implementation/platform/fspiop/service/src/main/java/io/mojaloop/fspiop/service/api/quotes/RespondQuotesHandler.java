@@ -27,6 +27,7 @@ import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
 import io.mojaloop.fspiop.service.api.QuotesResponseService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
@@ -41,17 +42,22 @@ public class RespondQuotesHandler implements RespondQuotes {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
+    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
+
     public RespondQuotesHandler(ParticipantContext participantContext,
                                 QuotesResponseService quotesResponseService,
-                                FspiopErrorDecoder fspiopErrorDecoder) {
+                                FspiopErrorDecoder fspiopErrorDecoder,
+                                FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
 
         assert participantContext != null;
         assert quotesResponseService != null;
         assert fspiopErrorDecoder != null;
+        assert fspiopInvocationExceptionHandler != null;
 
         this.participantContext = participantContext;
         this.quotesResponseService = quotesResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
+        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
     }
 
     @Override
@@ -65,7 +71,7 @@ public class RespondQuotesHandler implements RespondQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 
@@ -80,7 +86,7 @@ public class RespondQuotesHandler implements RespondQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 

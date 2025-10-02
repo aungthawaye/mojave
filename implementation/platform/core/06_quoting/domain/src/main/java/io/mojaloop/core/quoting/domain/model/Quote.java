@@ -15,8 +15,11 @@ import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
 import io.mojaloop.core.quoting.contract.exception.ReceivingAmountMismatchException;
 import io.mojaloop.core.quoting.contract.exception.TransferAmountMismatchException;
+import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Currency;
+import io.mojaloop.fspiop.spec.core.Money;
+import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
 import io.mojaloop.fspiop.spec.core.TransactionInitiator;
 import io.mojaloop.fspiop.spec.core.TransactionInitiatorType;
 import io.mojaloop.fspiop.spec.core.TransactionScenario;
@@ -34,6 +37,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -47,6 +52,7 @@ import java.sql.Types;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static java.sql.Types.BIGINT;
@@ -164,8 +170,12 @@ public class Quote extends JpaEntity<QuoteId> {
     protected String error;
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<QuoteExtension> extensions = new ArrayList<>();
+
+    @OneToOne(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    protected QuoteIlpPacket ilpPacket;
 
     public Quote(FspId payerFspId,
                  FspId payeeFspId,
@@ -211,12 +221,18 @@ public class Quote extends JpaEntity<QuoteId> {
         this.payee = payee;
         this.requestedAt = Instant.now();
         this.stage = QuotingStage.REQUESTED;
+        this.ilpPacket = new QuoteIlpPacket(this);
 
         if (this.requestExpiration != null && this.requestExpiration.isBefore(Instant.now())) {
 
             throw new ExpirationNotInFutureException();
         }
 
+    }
+
+    public void addExtension(Direction direction, String key, String value) {
+
+        this.extensions.add(new QuoteExtension(this, direction, key, value));
     }
 
     public void error(String reason) {
@@ -232,8 +248,13 @@ public class Quote extends JpaEntity<QuoteId> {
         return this.id;
     }
 
-    public void responded(Instant responseExpiration, BigDecimal transferAmount, BigDecimal payeeFspFee, BigDecimal payeeFspCommission, BigDecimal payeeReceiveAmount)
-        throws TransferAmountMismatchException, ReceivingAmountMismatchException, ExpirationNotInFutureException {
+    public void responded(Instant responseExpiration,
+                          BigDecimal transferAmount,
+                          BigDecimal payeeFspFee,
+                          BigDecimal payeeFspCommission,
+                          BigDecimal payeeReceiveAmount,
+                          String ilpPacket,
+                          String condition) throws TransferAmountMismatchException, ReceivingAmountMismatchException, ExpirationNotInFutureException {
 
         assert transferAmount != null;
         assert payeeReceiveAmount != null;
@@ -264,11 +285,16 @@ public class Quote extends JpaEntity<QuoteId> {
             }
         }
 
+        this.ilpPacket.responded(ilpPacket, condition);
+
     }
 
-    public void addExtension(Direction direction, String key, String value) {
+    public QuotesIDPutResponse toFspiopResponse() {
 
-        this.extensions.add(new QuoteExtension(this, direction, key, value));
+        return new QuotesIDPutResponse(new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()),
+                                       FspiopDates.forRequestBody(Date.from(this.responseExpiration)),
+                                       this.ilpPacket.getIlpPacket(),
+                                       this.ilpPacket.getCondition());
     }
 
     List<QuoteExtension> getExtensions() {

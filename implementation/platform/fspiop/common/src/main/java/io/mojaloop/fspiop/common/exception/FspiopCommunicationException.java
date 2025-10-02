@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojave
+ * Mojaloop OSS
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -18,26 +18,25 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.misc.constraint;
+package io.mojaloop.fspiop.common.exception;
 
-public class StringSizeConstraints {
+import io.mojaloop.fspiop.common.error.ErrorDefinition;
 
-    public static final int MAX_CODE_LENGTH = 32;
+public class FspiopCommunicationException extends FspiopException {
 
-    public static final int MAX_CURRENCY_LENGTH = 3;
+    public FspiopCommunicationException(ErrorDefinition errorDefinition) {
 
-    public static final int MAX_DESCRIPTION_LENGTH = 255;
+        super(errorDefinition);
+    }
 
-    public static final int MAX_ENUM_LENGTH = 32;
+    public FspiopCommunicationException(ErrorDefinition errorDefinition, String message) {
 
-    public static final int MAX_HTTP_URL_LENGTH = 255;
+        super(errorDefinition, message);
+    }
 
-    public static final int MAX_NAME_TITLE_LENGTH = 64;
+    public FspiopCommunicationException(ErrorDefinition errorDefinition, Throwable e) {
 
-    public static final int MAX_PARAGRAPH_LENGTH = 512;
-
-    public static final int MAX_UDF_QUOTE_ID_LENGTH = 48;
-
-    public static final int MAX_ILP_PACKET_LENGTH = 32768;
+        super(errorDefinition, e);
+    }
 
 }

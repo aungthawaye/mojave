@@ -23,10 +23,11 @@ package io.mojaloop.core.lookup.domain.command;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.contract.command.GetPartiesCommand;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
+import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.parties.RespondParties;
 import org.slf4j.Logger;
@@ -60,15 +61,20 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
         LOGGER.info("Executing GetPartiesCommandHandler with input: [{}]", input);
 
-        var payerFspCode = new FspCode(input.request().payer().fspCode());
-        var payerFsp = this.participantStore.getFspData(payerFspCode);
-        LOGGER.info("Found payer FSP: [{}]", payerFsp);
-
-        var payeeFspCode = new FspCode(input.request().payee().fspCode());
-        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
-        LOGGER.info("Found payee FSP: [{}]", payeeFsp);
+        FspCode payerFspCode = null;
+        FspData payerFsp = null;
+        FspCode payeeFspCode = null;
+        FspData payeeFsp = null;
 
         try {
+
+            payerFspCode = new FspCode(input.request().payer().fspCode());
+            payerFsp = this.participantStore.getFspData(payerFspCode);
+            LOGGER.info("Found payer FSP: [{}]", payerFsp);
+
+            payeeFspCode = new FspCode(input.request().payee().fspCode());
+            payeeFsp = this.participantStore.getFspData(payeeFspCode);
+            LOGGER.info("Found payee FSP: [{}]", payeeFsp);
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
             LOGGER.info("Forwarding request to payee FSP (Url): [{}]", payeeFsp);
@@ -76,21 +82,23 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
             this.forwardRequest.forward(payeeBaseUrl, input.request());
             LOGGER.info("Done forwarding request to payee FSP (Url): [{}]", payeeFsp);
 
-        } catch (FspiopException e) {
+        } catch (Exception e) {
 
-            LOGGER.error("FspiopException occurred while executing GetPartiesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("Exception occurred while executing GetPartiesCommandHandler: ", e);
 
-            var baseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+            if (payerFspCode != null && payerFsp != null) {
 
-            try {
+                final var sendBackTo = new Payer(payerFspCode.value());
+                final var baseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
+                final var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 
-                this.respondParties.putPartiesError(new Payer(payerFspCode.value()), url, e.toErrorObject());
-                LOGGER.info("Done sending error response to payer FSP.");
-                LOGGER.info("Returning from GetPartiesCommandHandler.");
+                try {
 
-            } catch (FspiopException ignored) {
-                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+
+                } catch (Throwable ignored) {
+                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                }
             }
 
         }

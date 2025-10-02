@@ -23,14 +23,16 @@ package io.mojaloop.fspiop.component.retrofit;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopCommunicationException;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.ErrorInformationResponse;
 
-import java.net.ConnectException;
+import javax.net.ssl.SSLException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-public class FspiopInvocationErrorHandler {
+public class FspiopInvocationExceptionHandler {
 
     public FspiopException handle(RetrofitService.InvocationException exception) {
 
@@ -66,13 +68,13 @@ public class FspiopInvocationErrorHandler {
 
         var cause = exception.getCause();
 
-        // Something went wrong while processing. Then the exception will have the cause.
-        if (cause instanceof ConnectException || cause instanceof UnknownHostException || cause instanceof SocketTimeoutException) {
+        // Something went wrong while sending the request. Then the exception will have the cause.
+        if (cause instanceof UnknownHostException || cause instanceof SocketTimeoutException || cause instanceof SocketException || cause instanceof SSLException) {
 
-            return new FspiopException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR,
-                                       exception.getMessage() == null || exception.getMessage().isBlank() ?
-                                           FspiopErrors.DESTINATION_COMMUNICATION_ERROR.description() :
-                                           exception.getMessage());
+            return new FspiopCommunicationException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR,
+                                                    exception.getMessage() == null || exception.getMessage().isBlank() ?
+                                                        FspiopErrors.DESTINATION_COMMUNICATION_ERROR.description() :
+                                                        exception.getMessage());
         }
 
         return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR,

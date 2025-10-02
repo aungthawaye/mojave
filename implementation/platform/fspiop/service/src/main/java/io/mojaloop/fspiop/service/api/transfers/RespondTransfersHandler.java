@@ -21,12 +21,12 @@
 package io.mojaloop.fspiop.service.api.transfers;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
 import io.mojaloop.fspiop.service.api.TransfersResponseService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
@@ -42,15 +42,22 @@ public class RespondTransfersHandler implements RespondTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public RespondTransfersHandler(ParticipantContext participantContext, TransfersResponseService transfersResponseService, FspiopErrorDecoder fspiopErrorDecoder) {
+    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
+
+    public RespondTransfersHandler(ParticipantContext participantContext,
+                                   TransfersResponseService transfersResponseService,
+                                   FspiopErrorDecoder fspiopErrorDecoder,
+                                   FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
 
         assert participantContext != null;
         assert transfersResponseService != null;
         assert fspiopErrorDecoder != null;
+        assert fspiopInvocationExceptionHandler != null;
 
         this.participantContext = participantContext;
         this.transfersResponseService = transfersResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
+        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
     }
 
     @Override
@@ -64,7 +71,7 @@ public class RespondTransfersHandler implements RespondTransfers {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 
@@ -79,7 +86,7 @@ public class RespondTransfersHandler implements RespondTransfers {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 
@@ -94,7 +101,7 @@ public class RespondTransfersHandler implements RespondTransfers {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 

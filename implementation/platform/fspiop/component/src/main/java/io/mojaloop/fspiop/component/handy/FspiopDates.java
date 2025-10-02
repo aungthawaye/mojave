@@ -20,6 +20,9 @@
 
 package io.mojaloop.fspiop.component.handy;
 
+import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -64,14 +67,22 @@ public class FspiopDates {
         return FOR_HEADER.get().format(date);
     }
 
-    public static Instant fromRequestBody(String body) throws ParseException {
+    public static Instant fromRequestBody(String body) throws FspiopException {
 
-        return FOR_BODY.get().parse(body).toInstant();
+        try {
+            return FOR_BODY.get().parse(body).toInstant();
+        } catch (ParseException e) {
+            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request body.");
+        }
     }
 
-    public static Instant fromRequestHeader(String header) throws ParseException {
+    public static Instant fromRequestHeader(String header) throws FspiopException {
 
-        return FOR_HEADER.get().parse(header).toInstant();
+        try {
+            return FOR_HEADER.get().parse(header).toInstant();
+        } catch (ParseException e) {
+            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request header.");
+        }
     }
 
 }

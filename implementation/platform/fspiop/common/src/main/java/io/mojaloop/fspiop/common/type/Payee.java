@@ -15,6 +15,11 @@ public record Payee(String fspCode) {
         return new Payee("");
     }
 
+    public static Payee of(String fspCode) {
+
+        return fspCode != null ? new Payee(fspCode) : EMPTY();
+    }
+
     public boolean isEmpty() {
 
         return this.fspCode.isEmpty();

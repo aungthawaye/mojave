@@ -5,19 +5,21 @@ import io.mojaloop.component.jpa.transaction.TransactionContext;
 import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PutQuotesCommand;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
-import io.mojaloop.core.quoting.contract.exception.QuoteCurrenciesMismatchException;
 import io.mojaloop.core.quoting.contract.exception.ReceivingAmountMismatchException;
 import io.mojaloop.core.quoting.contract.exception.TransferAmountMismatchException;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopCommunicationException;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
+import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
@@ -26,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.time.Instant;
 
 @Service
@@ -76,15 +77,20 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
         LOGGER.info("({}) Executing PutQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
-        var payeeFspCode = new FspCode(input.request().payee().fspCode());
-        var payeeFsp = this.participantStore.getFspData(payeeFspCode);
-        LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
-
-        var payerFspCode = new FspCode(input.request().payer().fspCode());
-        var payerFsp = this.participantStore.getFspData(payerFspCode);
-        LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
+        FspCode payerFspCode = null;
+        FspData payerFsp = null;
+        FspCode payeeFspCode = null;
+        FspData payeeFsp = null;
 
         try {
+
+            payeeFspCode = new FspCode(input.request().payee().fspCode());
+            payeeFsp = this.participantStore.getFspData(payeeFspCode);
+            LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
+
+            payerFspCode = new FspCode(input.request().payer().fspCode());
+            payerFsp = this.participantStore.getFspData(payerFspCode);
+            LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
 
             var quoteIdPutResponse = input.quotesIDPutResponse();
             LOGGER.info("({}) quotesIDPutResponse: [{}]", udfQuoteId.getId(), quoteIdPutResponse);
@@ -114,7 +120,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
                         responseExpiration = FspiopDates.fromRequestBody(quoteIdPutResponse.getExpiration());
 
-                    } catch (ParseException e) {
+                    } catch (FspiopException e) {
 
                         LOGGER.error("({}) Wrong expiration format.", udfQuoteId.getId());
                         LOGGER.info("({}) Returning from PutQuotesCommandHandler (wrong expiration).", udfQuoteId.getId());
@@ -123,7 +129,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                         this.quoteRepository.save(quote);
                         TransactionContext.commit();
 
-                        throw e;
+                        throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, e.toErrorObject().getErrorInformation().getErrorDescription());
                     }
                 }
 
@@ -141,7 +147,8 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    throw new QuoteCurrenciesMismatchException();
+                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR,
+                                              "The currency of quote, transferAmount, payeeFspFee, payeeFspCommission and payeeReceiveAmount must be the same.");
                 }
 
                 var transferAmount = new BigDecimal(quoteIdPutResponse.getTransferAmount().getAmount());
@@ -151,7 +158,13 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
                 try {
 
-                    quote.responded(responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount);
+                    quote.responded(responseExpiration,
+                                    transferAmount,
+                                    payeeFspFee,
+                                    payeeFspCommission,
+                                    payeeReceiveAmount,
+                                    quoteIdPutResponse.getIlpPacket(),
+                                    quoteIdPutResponse.getCondition());
 
                     if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
 
@@ -173,7 +186,8 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    throw e;
+                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, e.getMessage());
+
                 } catch (ReceivingAmountMismatchException e) {
 
                     LOGGER.error("({}) Receiving amount mismatch.", udfQuoteId.getId(), e);
@@ -181,7 +195,8 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    throw e;
+                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, e.getMessage());
+
                 } catch (ExpirationNotInFutureException e) {
 
                     LOGGER.error("({}) Quote expiration.", udfQuoteId.getId(), e);
@@ -189,7 +204,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    throw e;
+                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, e.getMessage());
                 }
             }
 
@@ -199,51 +214,27 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
             this.forwardRequest.forward(payerBaseUrl, input.request());
             LOGGER.info("({}) Done forwarding request to payer FSP (Url): [{}]", udfQuoteId.getId(), payerFsp);
 
-        } catch (FspiopException e) {
+        } catch (FspiopCommunicationException e) {
 
-            LOGGER.error("FspiopException occurred while executing PutQuotesCommandHandler: [{}]", e.getMessage());
-            LOGGER.error("Ignore sending error response back to Payee.");
-
-            // For PUT calls, we must not send back an error to the Payee.
-            // Here, Payee side responded with PUT, but Hub cannot forward the request to Payer due to some error.
-            // But Hub won't respond with an error to the Payee, only to the Payer.
-
-        } catch (ExpirationNotInFutureException | ReceivingAmountMismatchException | TransferAmountMismatchException | QuoteCurrenciesMismatchException | ParseException e) {
-
-            LOGGER.error("(PayeeError) Exception occurred while executing PutQuotesCommandHandler: [{}]", e.getMessage());
-
-            var sendBackTo = new Payer(payerFspCode.value());
-            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
-
-            try {
-
-                var errorInformationObject = FspiopErrors.GENERIC_PAYEE_ERROR.toErrorObject();
-                this.respondQuotes.putQuotesError(sendBackTo, url, errorInformationObject);
-                LOGGER.info("({}) (PayeeError) Done sending error response to payer FSP.", udfQuoteId.getId());
-                LOGGER.info("({}) (PayeeError) Returning from PutQuotesCommandHandler.", udfQuoteId.getId());
-
-            } catch (FspiopException ignored) {
-                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
-            }
+            LOGGER.error("({}) (FspiopCommunicationException) Exception occurred while executing PutQuotesCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
 
         } catch (Exception e) {
 
-            LOGGER.error("Exception occurred while executing PutQuotesCommandHandler: ", e);
+            LOGGER.error("({}) (Exception) Exception occurred while executing PutQuotesCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
 
-            var sendBackTo = new Payer(payerFspCode.value());
-            var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+            if (payerFsp != null) {
 
-            try {
+                final var sendBackTo = new Payer(payerFspCode.value());
+                final var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+                final var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
 
-                var errorInformationObject = FspiopErrors.GENERIC_SERVER_ERROR.toErrorObject();
-                this.respondQuotes.putQuotesError(sendBackTo, url, errorInformationObject);
-                LOGGER.info("({}) (Exception) Done sending error response to payer FSP.", udfQuoteId.getId());
-                LOGGER.info("({}) (Exception) Returning from PutQuotesCommandHandler.", udfQuoteId.getId());
+                try {
 
-            } catch (FspiopException ignored) {
-                LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+
+                } catch (Throwable ignored) {
+                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                }
             }
         }
 
