@@ -27,10 +27,10 @@ import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartNameRequiredException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartNameTooLongException;
-import io.mojaloop.core.accounting.contract.exception.chart.SameChartEntryCodeExistsException;
-import io.mojaloop.core.accounting.contract.exception.chart.SameChartEntryNameExistsException;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartIdJavaType;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
@@ -87,21 +87,10 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
         this.createdAt = Instant.now();
     }
 
-    public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType) {
+    public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType)
+        throws ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
 
         ChartEntry entry = new ChartEntry(this, code, name, description, accountType);
-
-        this.entries.stream().findFirst().ifPresent(existingEntry -> {
-            if (existingEntry.getCode().equals(code)) {
-                throw new SameChartEntryCodeExistsException();
-            }
-        });
-
-        this.entries.stream().findFirst().ifPresent(existingEntry -> {
-            if (existingEntry.getName().equalsIgnoreCase(name)) {
-                throw new SameChartEntryNameExistsException();
-            }
-        });
 
         this.entries.add(entry);
 

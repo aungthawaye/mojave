@@ -24,6 +24,8 @@ public enum TransactionType {
 
     FUND_IN,
     FUND_OUT,
-    TRANSFER,
-    CONVERSION
+    FUND_TRANSFER,
+    FX_CONVERSION,
+    ADJUSTMENT,
+    REFUND_FEE
 }

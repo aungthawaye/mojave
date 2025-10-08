@@ -86,14 +86,14 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
             payeeFspCode = new FspCode(input.request().payee().fspCode());
             payeeFsp = this.participantStore.getFspData(payeeFspCode);
-            LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
+            LOGGER.debug("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             payerFspCode = new FspCode(input.request().payer().fspCode());
             payerFsp = this.participantStore.getFspData(payerFspCode);
-            LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
+            LOGGER.debug("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
 
             var quoteIdPutResponse = input.quotesIDPutResponse();
-            LOGGER.info("({}) quotesIDPutResponse: [{}]", udfQuoteId.getId(), quoteIdPutResponse);
+            LOGGER.debug("({}) quotesIDPutResponse: [{}]", udfQuoteId.getId(), quoteIdPutResponse);
 
             if (this.quoteSettings.stateful()) {
 
@@ -109,8 +109,6 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 }
 
                 var quote = optQuote.get();
-                LOGGER.info("({}) Found Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
-
                 var expiration = quoteIdPutResponse.getExpiration();
                 Instant responseExpiration = null;
 

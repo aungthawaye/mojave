@@ -311,11 +311,32 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="trciOFP74JbbWXvL6SP_" name="Page-3">
-    <mxGraphModel dx="1426" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <diagram id="trciOFP74JbbWXvL6SP_" name="Transaction Definition">
+    <mxGraphModel dx="1826" dy="1122" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="EHJElT_RQcglv37j19T6-1" value="FUND_IN" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;arcSize=0;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-360" y="-40" width="360" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="EHJElT_RQcglv37j19T6-4" value="POSTING FLOW" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=left;verticalAlign=bottom;spacing=2;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;labelPosition=center;verticalLabelPosition=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-350" y="140" width="340" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="EHJElT_RQcglv37j19T6-6" value="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=left;verticalAlign=bottom;spacing=2;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;labelPosition=center;verticalLabelPosition=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-340" y="170" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="EHJElT_RQcglv37j19T6-2" value="currency: &lt;b&gt;USD&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=left;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="-330" y="180" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EHJElT_RQcglv37j19T6-7" value="forAmountType: &lt;b&gt;LIQUIDITY_AMOUNT&lt;/b&gt;&amp;nbsp;&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; text-wrap-mode: nowrap;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22CURRENCY%3A%20%26lt%3Bb%26gt%3BUSD%26lt%3B%2Fb%26gt%3B%22%20style%3D%22rounded%3D0%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BstrokeColor%3Ddefault%3Balign%3Dleft%3BverticalAlign%3Dmiddle%3BfontFamily%3DFira%20Sans%3BfontSource%3Dhttps%253A%252F%252Ffonts.googleapis.com%252Fcss%253Ffamily%253DFira%252BSans%3BfontSize%3D12%3BfontColor%3Ddefault%3BfillColor%3Ddefault%3Bspacing%3D10%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22-340%22%20y%3D%22-20%22%20width%3D%22120%22%20height%3D%2230%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E &lt;b&gt;L&lt;/b&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=left;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="180" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EHJElT_RQcglv37j19T6-8" value="side: &lt;b&gt;DEBIT&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=left;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="-330" y="220" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EHJElT_RQcglv37j19T6-9" value="chartEntryId: &lt;b&gt;&amp;lt;&lt;i&gt;SystemProvided&amp;gt;&lt;/i&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=left;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="220" width="180" height="30" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

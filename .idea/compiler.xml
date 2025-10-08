@@ -15,6 +15,7 @@
         <module name="mod-fspiop-service" />
         <module name="mod-accounting-intercom" />
         <module name="mod-common-datatype-converter" />
+        <module name="mod-transaction-intercom-client" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-quoting-domain" />
         <module name="mod-component-web" />
@@ -34,6 +35,7 @@
         <module name="mod-fspiop-component" />
         <module name="mod-component-tomcat" />
         <module name="mod-lookup-service" />
+        <module name="mod-accounting-intercom-client" />
         <module name="mod-transaction-admin" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
@@ -41,6 +43,8 @@
         <module name="mod-component-retrofit" />
         <module name="mod-quoting-contract" />
         <module name="mod-transaction-contract" />
+        <module name="mod-transaction-admin-client" />
+        <module name="mod-transaction-intercom" />
         <module name="mod-transaction-domain" />
         <module name="mod-participant-domain" />
         <module name="mod-fspiop-invoker" />
@@ -99,6 +103,7 @@
       <module name="mod-accounting-contract" options="-parameters" />
       <module name="mod-accounting-domain" options="-parameters" />
       <module name="mod-accounting-intercom" options="-parameters" />
+      <module name="mod-accounting-intercom-client" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-common-datatype-converter" options="-parameters" />
@@ -149,8 +154,11 @@
       <module name="mod-quoting-service" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="mod-transaction-admin" options="-parameters" />
+      <module name="mod-transaction-admin-client" options="-parameters" />
       <module name="mod-transaction-contract" options="-parameters" />
       <module name="mod-transaction-domain" options="-parameters" />
+      <module name="mod-transaction-intercom" options="-parameters" />
+      <module name="mod-transaction-intercom-client" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />

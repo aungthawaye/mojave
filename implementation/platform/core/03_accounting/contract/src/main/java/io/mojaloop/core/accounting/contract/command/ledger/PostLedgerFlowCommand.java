@@ -22,7 +22,7 @@ package io.mojaloop.core.accounting.contract.command.ledger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
-import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountFoundException;
+import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementResult;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementStage;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
@@ -41,7 +41,7 @@ import java.util.List;
 
 public interface PostLedgerFlowCommand {
 
-    Output execute(Input input) throws PostingAccountFoundException, InsufficientBalanceInAccountException;
+    Output execute(Input input) throws PostingAccountNotFoundException, InsufficientBalanceInAccountException;
 
     record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull TransactionType transactionType,

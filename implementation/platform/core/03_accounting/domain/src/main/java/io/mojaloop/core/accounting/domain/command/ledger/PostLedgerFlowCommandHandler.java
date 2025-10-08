@@ -4,7 +4,7 @@ import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
-import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountFoundException;
+import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
@@ -35,7 +35,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
     }
 
     @Override
-    public Output execute(Input input) throws PostingAccountFoundException, InsufficientBalanceInAccountException {
+    public Output execute(Input input) throws PostingAccountNotFoundException, InsufficientBalanceInAccountException {
 
         var requests = new ArrayList<Ledger.Request>();
         var accounts = new HashMap<AccountId, AccountData>();
@@ -56,9 +56,9 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
                     try {
 
-                        throw new PostingAccountFoundException(posting.ownerId(), posting.chartEntryId(), posting.currency());
+                        throw new PostingAccountNotFoundException(posting.ownerId(), posting.chartEntryId(), posting.currency());
 
-                    } catch (PostingAccountFoundException e) {
+                    } catch (PostingAccountNotFoundException e) {
 
                         throw new RuntimeException(e);
                     }
@@ -98,7 +98,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
         } catch (RuntimeException e) {
 
-            if (e.getCause() instanceof PostingAccountFoundException e1) {
+            if (e.getCause() instanceof PostingAccountNotFoundException e1) {
 
                 throw e1;
             }

@@ -86,22 +86,22 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             payerFspCode = new FspCode(input.request().payer().fspCode());
             payerFsp = this.participantStore.getFspData(payerFspCode);
-            LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
+            LOGGER.debug("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
 
             payeeFspCode = new FspCode(input.request().payee().fspCode());
             payeeFsp = this.participantStore.getFspData(payeeFspCode);
-            LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
+            LOGGER.debug("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             var postQuotesRequest = input.quotesPostRequest();
-            LOGGER.info("({}) postQuotesRequest: [{}]", udfQuoteId.getId(), postQuotesRequest);
 
             var amount = postQuotesRequest.getAmount();
             var fees = postQuotesRequest.getFees();
             var currency = amount.getCurrency();
-            var payer = postQuotesRequest.getPayer().getPartyIdInfo();
-            var payee = postQuotesRequest.getPayee().getPartyIdInfo();
-            var transactionType = postQuotesRequest.getTransactionType();
-            var expiration = postQuotesRequest.getExpiration();
+
+            final var payer = postQuotesRequest.getPayer().getPartyIdInfo();
+            final var payee = postQuotesRequest.getPayee().getPartyIdInfo();
+            final var transactionType = postQuotesRequest.getTransactionType();
+            final var expiration = postQuotesRequest.getExpiration();
 
             Instant expireAt = null;
 
@@ -113,13 +113,19 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             if (expiration != null) {
 
                 expireAt = FspiopDates.fromRequestBody(expiration);
+
+                if (expireAt.isBefore(Instant.now())) {
+
+                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "The quote has expired. The expiration is : " + expiration);
+                }
+
             }
 
             if (this.quoteSettings.stateful()) {
 
                 try {
 
-                    var quote = new Quote(payerFsp.fspId(),
+                    var quote = new Quote(payeeFsp.fspId(),
                                           payeeFsp.fspId(),
                                           udfQuoteId,
                                           currency,
@@ -140,9 +146,6 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                             quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
                         });
                     }
-
-                    LOGGER.info("({}) Created Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
-
                     // I don't use @Transactional and manually control the transaction scope because
                     // forwardRequest is the HTTP API call, and it has latency. To avoid holding the
                     // connection for a long period, I used manual transaction control.
@@ -150,16 +153,13 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
-                    LOGGER.info("({}) Requested quote : quoteId : {}", udfQuoteId.getId(), quote.getId());
+                } catch (ExpirationNotInFutureException ignored) {
 
-                } catch (ExpirationNotInFutureException e) {
-
-                    LOGGER.error("({}) The requested quote has expired.", udfQuoteId.getId());
-                    LOGGER.info("({}) Returning from PostQuotesCommandHandler (quote expired).", udfQuoteId.getId());
-
-                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "The quote has expired. The expiration is : " + expiration);
-
+                } catch (Throwable e) {
+                    TransactionContext.rollback();
+                    LOGGER.error("({}) Exception in TransactionContext: [{}]", udfQuoteId.getId(), e);
                 }
+
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();

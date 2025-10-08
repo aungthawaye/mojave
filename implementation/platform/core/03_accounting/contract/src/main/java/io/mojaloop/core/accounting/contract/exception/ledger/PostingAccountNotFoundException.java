@@ -37,18 +37,21 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.accounting.contract.exception.chart;
+package io.mojaloop.core.accounting.contract.exception.ledger;
 
+import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
+import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.fspiop.spec.core.Currency;
 
-public class SameChartEntryNameExistsException extends InputException {
+public class PostingAccountNotFoundException extends DomainException {
 
-    private static final String TEMPLATE = "The same Chart Entry Name already exists in Chart.";
+    private static final String TEMPLATE = "Posting Account cannot be not found for Owner ID ({0}), Chart Entry ID ({1}) and Currency ({2}) combination.";
 
-    public SameChartEntryNameExistsException() {
+    public PostingAccountNotFoundException(OwnerId ownerId, ChartEntryId chartEntryId, Currency currency) {
 
-        super(new ErrorTemplate("SAME_CHART_ENTRY_NAME_EXISTS", TEMPLATE));
+        super(new ErrorTemplate("POSTING_ACCOUNT_NOT_FOUND", TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(), currency.toString());
     }
 
 }

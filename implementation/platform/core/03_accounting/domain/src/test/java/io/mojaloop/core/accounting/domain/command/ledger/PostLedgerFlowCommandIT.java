@@ -26,7 +26,7 @@ import io.mojaloop.core.accounting.contract.command.chart.CreateChartCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
-import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountFoundException;
+import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import io.mojaloop.core.accounting.domain.command.BaseDomainIT;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
@@ -123,7 +123,7 @@ public class PostLedgerFlowCommandIT extends BaseDomainIT {
         final var input = new PostLedgerFlowCommand.Input(new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
 
         // Act & Assert
-        Assertions.assertThrows(PostingAccountFoundException.class, () -> this.postLedgerFlowCommand.execute(input));
+        Assertions.assertThrows(PostingAccountNotFoundException.class, () -> this.postLedgerFlowCommand.execute(input));
     }
 
     @Test

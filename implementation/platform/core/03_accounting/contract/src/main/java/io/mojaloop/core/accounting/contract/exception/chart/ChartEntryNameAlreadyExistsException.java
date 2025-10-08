@@ -39,16 +39,16 @@
 
 package io.mojaloop.core.accounting.contract.exception.chart;
 
+import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
 
-public class SameChartEntryCodeExistsException extends InputException {
+public class ChartEntryNameAlreadyExistsException extends DomainException {
 
-    private static final String TEMPLATE = "The same Chart Entry Code already exists in Chart.";
+    private static final String TEMPLATE = "The Chart Entry Name ({0}) already exists in Chart ({1}).";
 
-    public SameChartEntryCodeExistsException() {
+    public ChartEntryNameAlreadyExistsException(String chartEntryName, String chartName) {
 
-        super(new ErrorTemplate("SAME_CHART_ENTRY_CODE_EXISTS", TEMPLATE));
+        super(new ErrorTemplate("CHART_ENTRY_NAME_ALREADY_EXISTS", TEMPLATE), chartEntryName, chartName);
     }
 
 }
