@@ -15,20 +15,20 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-contract</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.common</groupId>
             <artifactId>mod-common-datatype-converter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -20,6 +20,7 @@
         <module>06_quoting</module>
         <module>07_transfer</module>
         <module>08_settlement</module>
+        <module>09_wallet</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
