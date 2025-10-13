@@ -3,8 +3,11 @@ package io.mojaloop.core.accounting.domain.command.ledger;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
+import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
+import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
@@ -35,7 +38,12 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
     }
 
     @Override
-    public Output execute(Input input) throws PostingAccountNotFoundException, InsufficientBalanceInAccountException {
+    public Output execute(Input input) throws
+                                       PostingAccountNotFoundException,
+                                       InsufficientBalanceInAccountException,
+                                       OverdraftLimitReachedInAccountException,
+                                       DuplicatePostingInLedgerException,
+                                       RestoreFailedInAccountException {
 
         var requests = new ArrayList<Ledger.Request>();
         var accounts = new HashMap<AccountId, AccountData>();
@@ -50,13 +58,13 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
                 LOGGER.info("Processing posting: {}", posting);
 
-                var accountData = this.accountCache.get(posting.chartEntryId(), posting.ownerId(), posting.currency());
+                var accountData = this.accountCache.get(posting.chartEntryId(), posting.ownerId(), input.currency());
 
                 if (accountData == null) {
 
                     try {
 
-                        throw new PostingAccountNotFoundException(posting.ownerId(), posting.chartEntryId(), posting.currency());
+                        throw new PostingAccountNotFoundException(posting.ownerId(), posting.chartEntryId(), input.currency());
 
                     } catch (PostingAccountNotFoundException e) {
 
@@ -66,7 +74,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
                 accounts.put(accountData.accountId(), accountData);
 
-                var request = new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), accountData.accountId(), posting.side(), posting.currency(), posting.amount());
+                var request = new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), accountData.accountId(), posting.side(), input.currency(), posting.amount());
 
                 requests.add(request);
 
@@ -89,7 +97,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                                           movement.side(),
                                           movement.amount(),
                                           new Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
-                                          new Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
+                                          new Output.DrCr(movement.newDrCr().debits(), movement.newDrCr().credits()),
                                           movement.movementStage(),
                                           movement.movementResult()));
             });
@@ -109,12 +117,26 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
             var accountData = this.accountCache.get(e.getAccountId());
 
-            throw new InsufficientBalanceInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits());
+            throw new InsufficientBalanceInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), e.getTransactionId());
 
         } catch (Ledger.OverdraftExceededException e) {
-            throw new RuntimeException(e);
+
+            var accountData = this.accountCache.get(e.getAccountId());
+
+            throw new OverdraftLimitReachedInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), e.getTransactionId());
+
         } catch (Ledger.RestoreFailedException e) {
-            throw new RuntimeException(e);
+
+            var accountData = this.accountCache.get(e.getAccountId());
+
+            throw new RestoreFailedInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), e.getTransactionId());
+
+        } catch (Ledger.DuplicatePostingException e) {
+
+            var accountData = this.accountCache.get(e.getAccountId());
+
+            throw new DuplicatePostingInLedgerException(accountData.code(), e.getSide(), e.getTransactionId());
+
         }
 
     }

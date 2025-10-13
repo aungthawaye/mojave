@@ -42,23 +42,29 @@ package io.mojaloop.core.accounting.contract.exception.ledger;
 import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
+import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
 import java.math.BigDecimal;
 
 public class OverdraftLimitReachedInAccountException extends DomainException {
 
-    private static final String TEMPLATE = "Account ({0}) has already reached the overdraft limit () to perform ({1}) operation for amount {2}. Current Dr : {3}, Current Cr : {4}";
+    private static final String TEMPLATE = "Overdraft limit reached : account ({0}) | side ({1}) | amount({2}) | posted debits: ({3}) | posted credits: ({4}) | transaction id: ({5}).";
 
     public OverdraftLimitReachedInAccountException(AccountCode accountCode,
                                                    Side side,
                                                    BigDecimal amount,
                                                    BigDecimal postedDebits,
-                                                   BigDecimal postedCredits) {
+                                                   BigDecimal postedCredits,
+                                                   TransactionId transactionId) {
 
-        super(
-            new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE), accountCode.toString(), side.name(),
-            amount.toPlainString(), postedDebits.toPlainString(), postedCredits.toPlainString());
+        super(new ErrorTemplate("OVERDRAFT_LIMIT_REACHED_IN_ACCOUNT", TEMPLATE),
+              accountCode.value(),
+              side.name(),
+              amount.toPlainString(),
+              postedDebits.toPlainString(),
+              postedCredits.toPlainString(),
+              transactionId.getId().toString());
     }
 
 }

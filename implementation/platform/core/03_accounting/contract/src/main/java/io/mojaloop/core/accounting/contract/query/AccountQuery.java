@@ -28,7 +28,7 @@ import io.mojaloop.core.accounting.contract.exception.account.AccountCodeNotFoun
 import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 
@@ -38,7 +38,7 @@ public interface AccountQuery {
 
     PagedResult<AccountData> find(AccountCode accountCode,
                                   String name,
-                                  OwnerId ownerId,
+                                  AccountOwnerId ownerId,
                                   ChartEntryId chartEntryId,
                                   Currency currency,
                                   PagedRequest pagedRequest,
@@ -47,7 +47,7 @@ public interface AccountQuery {
 
     AccountData get(AccountCode accountCode) throws AccountCodeNotFoundException;
 
-    List<AccountData> get(OwnerId ownerId);
+    List<AccountData> get(AccountOwnerId ownerId);
 
     AccountData get(AccountId accountId) throws AccountIdNotFoundException;
 

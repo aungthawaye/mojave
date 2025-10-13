@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS sp_post_ledger_batch_with_movements $$
 CREATE PROCEDURE sp_post_ledger_batch_with_movements(
     IN p_lines_json JSON -- [{ledgerMovementId, accountId, side, amount, transactionId, transactionAt}, ...]
 )
-proc_end:
+proc_posting:
 BEGIN
     /* ---------------- Vars ---------------- */
     DECLARE v_idx INT;
@@ -58,8 +58,13 @@ BEGIN
     /* ---------------- Early no-op ---------------- */
     IF p_lines_json IS NULL OR JSON_TYPE(p_lines_json) <> 'ARRAY' OR JSON_LENGTH(p_lines_json) = 0 THEN
         SELECT 'IGNORED' AS status;
-        LEAVE proc_end;
+        LEAVE proc_posting;
     END IF;
+
+    -- Make sure you drop the tables because when the Hikari connection pool reuses the same
+    -- connection, sometimes you will get an error that says "tmp_lines already exists."
+    DROP TABLE IF EXISTS tmp_lines;
+    DROP TABLE IF EXISTS tmp_movements;
 
     /* ---------------- Temp staging ---------------- */
     CREATE TEMPORARY TABLE tmp_lines
@@ -119,11 +124,61 @@ BEGIN
                         )
          ) AS jt;
 
-    -- INITIATE the movements.
-    START TRANSACTION;
+    /* ---------------- INITIATE the movements (with handlers) ---------------- */
+    /* ---------- Detect duplicates before inserting ---------- */
+    IF EXISTS (SELECT 1
+               FROM acc_ledger_movement m
+                        JOIN tmp_lines t
+                             ON m.account_id = t.account_id
+                                 AND m.side = t.side
+                                 AND m.transaction_id = t.transaction_id) THEN
+        /* Capture which row(s) conflict */
+        SELECT t.idx,
+               t.account_id,
+               t.side,
+               t.transaction_id,
+               t.amount,
+               t.currency,
+               m.ledger_movement_id AS existing_ledger_movement_id
+        INTO
+            v_idx, v_err_account_id, v_err_side, v_txn_id, v_err_amount, v_err_currency, v_ledger_movement_id
+        FROM acc_ledger_movement m
+                 JOIN tmp_lines t
+                      ON m.account_id = t.account_id
+                          AND m.side = t.side
+                          AND m.transaction_id = t.transaction_id
+        LIMIT 1; -- If multiple duplicates, just take the first one
+
+        SET v_error = 1;
+        SET v_error_code = 'DUPLICATE_POSTING';
+
+        SELECT 'ERROR'          AS status,
+               v_error_code     AS code,
+               v_err_account_id AS account_id,
+               v_err_side       AS side,
+               v_err_currency   AS currency,
+               v_err_amount     AS amount,
+               '0'              AS debits,
+               '0'              AS credits,
+               NULL AS ledger_movement_id,
+               NULL AS old_debits,
+               NULL AS old_credits,
+               NULL AS new_debits,
+               NULL AS new_credits,
+               NULL AS transaction_id,
+               NULL AS transaction_at,
+               NULL AS transaction_type,
+               'DEBIT_CREDIT' AS movement_stage,
+               'PENDING' AS movement_result,
+               UNIX_TIMESTAMP() AS created_at;
+
+        LEAVE proc_posting;
+    END IF;
+
     INSERT INTO acc_ledger_movement (ledger_movement_id, account_id, side, currency, amount,
                                      old_debits, old_credits, new_debits, new_credits,
-                                     transaction_id, transaction_at, transaction_type, movement_stage, movement_result,
+                                     transaction_id, transaction_at, transaction_type,
+                                     movement_stage, movement_result,
                                      created_at, rec_created_at, rec_updated_at, rec_version)
     SELECT ledger_movement_id,
            account_id,
@@ -163,6 +218,7 @@ BEGIN
                 BEGIN
                     /* Any SQL problem → mark and bail */
                     ROLLBACK;
+
                     SELECT 'ERROR'          AS status,
                            v_error_code     AS code,
                            v_err_account_id AS account_id,
@@ -170,7 +226,18 @@ BEGIN
                            v_err_currency   AS currency,
                            v_err_amount     AS amount,
                            v_err_debits     AS debits,
-                           v_err_credits    AS credits;
+                           v_err_credits    AS credits,
+                           NULL AS ledger_movement_id,
+                           NULL AS old_debits,
+                           NULL AS old_credits,
+                           NULL AS new_debits,
+                           NULL AS new_credits,
+                           NULL AS transaction_id,
+                           NULL AS transaction_at,
+                           NULL AS transaction_type,
+                           'DEBIT_CREDIT' AS movement_stage,
+                           'PENDING' AS movement_result,
+                           UNIX_TIMESTAMP() AS created_at;
                 END;
 
             START TRANSACTION;
@@ -305,7 +372,18 @@ BEGIN
                                    r_currency       AS currency,
                                    r_amount         AS amount,
                                    r_debits         AS debits,
-                                   r_credits        AS credits;
+                                   r_credits        AS credits,
+                                   NULL AS ledger_movement_id,
+                                   NULL AS old_debits,
+                                   NULL AS old_credits,
+                                   NULL AS new_debits,
+                                   NULL AS new_credits,
+                                   NULL AS transaction_id,
+                                   NULL AS transaction_at,
+                                   NULL AS transaction_type,
+                                   'DEBIT_CREDIT' AS movement_stage,
+                                   'PENDING' AS movement_result,
+                                   UNIX_TIMESTAMP() AS created_at;
                             ROLLBACK;
                         END;
                     START TRANSACTION;
@@ -343,7 +421,18 @@ BEGIN
                v_err_currency   AS currency,
                v_err_amount     AS amount,
                v_err_debits     AS debits,
-               v_err_credits    AS credits;
+               v_err_credits    AS credits,
+               NULL AS ledger_movement_id,
+               NULL AS old_debits,
+               NULL AS old_credits,
+               NULL AS new_debits,
+               NULL AS new_credits,
+               NULL AS transaction_id,
+               NULL AS transaction_at,
+               NULL AS transaction_type,
+               'DEBIT_CREDIT' AS movement_stage,
+               v_error_code AS movement_result,
+               UNIX_TIMESTAMP() AS created_at;
 
     ELSE
         -- There is no error.
@@ -377,10 +466,5 @@ BEGIN
         ORDER BY ledger_movement_id;
     END IF;
 
-    -- Make sure you drop the tables because when the Hikari connection pool reuses the same
-    -- connection, sometimes you will get an error that says "tmp_lines already exists."
-    DROP TABLE IF EXISTS tmp_lines;
-    DROP TABLE IF EXISTS tmp_movements;
-
-END proc_end $$
+END proc_posting $$
 DELIMITER ;

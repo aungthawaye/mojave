@@ -42,8 +42,8 @@ package io.mojaloop.core.accounting.admin.client.api.account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.accounting.admin.client.exception.AccountAdminClientException;
-import io.mojaloop.core.accounting.admin.client.service.AccountAdminService;
+import io.mojaloop.core.accounting.admin.client.exception.AccountingAdminClientException;
+import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import io.mojaloop.core.accounting.contract.command.account.DeactivateAccountCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +54,11 @@ public class DeactivateAccount {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateAccount.class);
 
-    private final AccountAdminService.AccountCommands accountCommands;
+    private final AccountingAdminService.AccountCommands accountCommands;
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateAccount(AccountAdminService.AccountCommands accountCommands, ObjectMapper objectMapper) {
+    public DeactivateAccount(AccountingAdminService.AccountCommands accountCommands, ObjectMapper objectMapper) {
 
         assert accountCommands != null;
         assert objectMapper != null;
@@ -67,7 +67,7 @@ public class DeactivateAccount {
         this.objectMapper = objectMapper;
     }
 
-    public void execute(DeactivateAccountCommand.Input input) throws AccountAdminClientException {
+    public void execute(DeactivateAccountCommand.Input input) throws AccountingAdminClientException {
 
         try {
 
@@ -83,10 +83,10 @@ public class DeactivateAccount {
 
             if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
 
-                throw new AccountAdminClientException(code, message);
+                throw new AccountingAdminClientException(code, message);
             }
 
-            throw new AccountAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
+            throw new AccountingAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
 

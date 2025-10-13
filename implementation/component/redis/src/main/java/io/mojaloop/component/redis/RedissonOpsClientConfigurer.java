@@ -55,7 +55,7 @@ public class RedissonOpsClientConfigurer {
         }
 
         config.setNettyThreads(Runtime.getRuntime().availableProcessors() * 2);
-        config.setExecutor(Executors.newFixedThreadPool(settings.executorCount()));
+        config.setExecutor(Executors.newFixedThreadPool(settings.executorCount() != 0 ? settings.executorCount() : Runtime.getRuntime().availableProcessors() * 2));
 
         if (!settings.cluster()) {
 
@@ -66,8 +66,8 @@ public class RedissonOpsClientConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setConnectionPoolSize(settings.connectionPoolSize())
-                .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+                .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
                 .setPingConnectionInterval(10000);
 
         } else {
@@ -80,10 +80,10 @@ public class RedissonOpsClientConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setMasterConnectionPoolSize(settings.connectionPoolSize())
-                .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
-                .setSlaveConnectionPoolSize(settings.connectionPoolSize() / 2)
-                .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize())
+                .setMasterConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+                .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
+                .setSlaveConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+                .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
                 .setPingConnectionInterval(10000);
         }
 

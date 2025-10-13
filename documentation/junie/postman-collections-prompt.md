@@ -1,0 +1,2 @@
+Create Postman Collection for all the controllers inside this package `io.mojaloop.core.accounting.intercom.controller`.
+All the API must have sample request and response. Collection file must be put in `resources/all` package.

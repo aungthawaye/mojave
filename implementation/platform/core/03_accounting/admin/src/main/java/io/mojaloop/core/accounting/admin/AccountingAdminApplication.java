@@ -33,17 +33,17 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
-@Import(value = {AccountAdminConfiguration.class, AccountAdminSettings.class})
-public class AccountAdminApplication {
+@Import(value = {AccountingAdminConfiguration.class, AccountingAdminSettings.class})
+public class AccountingAdminApplication {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AccountAdminApplication.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(AccountingAdminApplication.class);
 
     public static void main(String[] args) {
 
         LOGGER.info("Starting account-admin application");
         var flywaySettings = new FlywayMigration.Settings(System.getenv()
                                                                 .getOrDefault("ACC_FLYWAY_DB_URL",
-                                                                              "jdbc:mysql://localhost:3306/ml_account?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
+                                                                              "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
                                                           System.getenv().getOrDefault("ACC_FLYWAY_DB_USER", "root"),
                                                           System.getenv().getOrDefault("ACC_FLYWAY_DB_PASSWORD", "password"),
                                                           "classpath:migration/account");
@@ -52,8 +52,8 @@ public class AccountAdminApplication {
         FlywayMigration.migrate(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
-        new SpringApplicationBuilder(AccountAdminApplication.class).web(WebApplicationType.SERVLET)
-                                                                   .properties("spring.application.name=account-admin",
+        new SpringApplicationBuilder(AccountingAdminApplication.class).web(WebApplicationType.SERVLET)
+                                                                      .properties("spring.application.name=account-admin",
                                                                                "spring.jmx.enabled=true",
                                                                                "spring.jmx.unique-names=true",
                                                                                "spring.jmx.default-domain=account-admin",
@@ -69,7 +69,7 @@ public class AccountAdminApplication {
                                                                                "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
                                                                                "management.endpoint.health.show-details=always",
                                                                                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=AccountAdminApplication,context=account-admin")
-                                                                   .run(args);
+                                                                      .run(args);
     }
 
 }

@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.common.datatype.converter.identifier.accounting;
 
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -28,19 +28,19 @@ import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
-public class OwnerIdJavaType extends AbstractClassJavaType<OwnerId> {
+public class OwnerIdJavaType extends AbstractClassJavaType<AccountOwnerId> {
 
     public static final OwnerIdJavaType INSTANCE = new OwnerIdJavaType();
 
     public OwnerIdJavaType() {
 
-        super(OwnerId.class, ImmutableMutabilityPlan.instance());
+        super(AccountOwnerId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public OwnerId fromString(CharSequence string) {
+    public AccountOwnerId fromString(CharSequence string) {
 
-        return (string == null) ? null : new OwnerId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new AccountOwnerId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -50,14 +50,14 @@ public class OwnerIdJavaType extends AbstractClassJavaType<OwnerId> {
     }
 
     @Override
-    public String toString(OwnerId value) {
+    public String toString(AccountOwnerId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(OwnerId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(AccountOwnerId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -77,12 +77,12 @@ public class OwnerIdJavaType extends AbstractClassJavaType<OwnerId> {
     }
 
     @Override
-    public OwnerId wrap(Object value, WrapperOptions options) {
+    public AccountOwnerId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case OwnerId ownerId -> ownerId;
-            case Number n -> new OwnerId(n.longValue());
+            case AccountOwnerId ownerId -> ownerId;
+            case Number n -> new AccountOwnerId(n.longValue());
             default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 

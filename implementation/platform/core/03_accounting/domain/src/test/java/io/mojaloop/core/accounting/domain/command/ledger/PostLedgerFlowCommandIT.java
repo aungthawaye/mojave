@@ -32,7 +32,7 @@ import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
@@ -59,43 +59,110 @@ public class PostLedgerFlowCommandIT extends BaseDomainIT {
     @Autowired
     private PostLedgerFlowCommand postLedgerFlowCommand;
 
+    @Test
+    void should_fail_when_posting_account_not_found() throws Exception {
+        // Arrange
+        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("CHARTX"));
+        final var entry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                 new ChartEntryCode("ENTRY_X"),
+                                                                                                 "Entry X",
+                                                                                                 "Entry X Desc",
+                                                                                                 AccountType.ASSET));
+
+        final var missingOwner = new AccountOwnerId(Snowflake.get().nextId());
+        // No account created for (missingOwner, entry)
+
+        final var postings = List.of(new PostLedgerFlowCommand.Input.Posting(missingOwner, entry.chartEntryId(), Side.DEBIT, new BigDecimal("1")));
+        final var input = new PostLedgerFlowCommand.Input(Currency.USD, new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
+
+        // Act & Assert
+        Assertions.assertThrows(PostingAccountNotFoundException.class, () -> this.postLedgerFlowCommand.execute(input));
+    }
+
+    @Test
+    void should_fail_with_insufficient_balance_for_forbid_mode() throws Exception {
+        // Arrange
+        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("CHARTY"));
+        final var assetEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                      new ChartEntryCode("ASSET_X"),
+                                                                                                      "Asset X",
+                                                                                                      "Asset X Desc",
+                                                                                                      AccountType.ASSET));
+
+        final var owner = new AccountOwnerId(Snowflake.get().nextId());
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(assetEntry.chartEntryId(),
+                                                                         owner,
+                                                                         Currency.USD,
+                                                                         new AccountCode("ASSET_X_ACC"),
+                                                                         "Asset X Acc",
+                                                                         "Asset X Acc",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
+
+        // For an ASSET (DEBIT-nature) account, a CREDIT without prior balance should cause insufficient balance
+        final var postings = List.of(new PostLedgerFlowCommand.Input.Posting(owner, assetEntry.chartEntryId(), Side.CREDIT, new BigDecimal("1")));
+        final var input = new PostLedgerFlowCommand.Input(Currency.USD, new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
+
+        // Act & Assert
+        Assertions.assertThrows(InsufficientBalanceInAccountException.class, () -> this.postLedgerFlowCommand.execute(input));
+    }
+
     @org.junit.jupiter.api.Disabled("Flaky with current MySQL driver result set mapping in this environment; covered by component LedgerIT")
     @Test
     void should_post_balanced_flows_successfully() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("HUB"));
 
-        final var hubLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
-            chartOut.chartId(), new ChartEntryCode("HUB_1000"), "Hub Liquidity", "Hub Liquidity (Central Bank Trust AC)", AccountType.ASSET
-        ));
-        final var fspLiabilityLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
-            chartOut.chartId(), new ChartEntryCode("HUB_2000"), "FSP Liability – Liquidity", "FSP Liability – Liquidity from Hub to FSP in Hub PoV", AccountType.LIABILITY
-        ));
-        final var fspLiabilityPosition = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
-            chartOut.chartId(), new ChartEntryCode("HUB_3000"), "FSP Liability – Position", "FSP Liability – Position from Hub to FSP in Hub PoV", AccountType.LIABILITY
-        ));
+        final var hubLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                        new ChartEntryCode("HUB_1000"),
+                                                                                                        "Hub Liquidity",
+                                                                                                        "Hub Liquidity (Central Bank Trust AC)",
+                                                                                                        AccountType.ASSET));
+        final var fspLiabilityLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                                 new ChartEntryCode("HUB_2000"),
+                                                                                                                 "FSP Liability – Liquidity",
+                                                                                                                 "FSP Liability – Liquidity from Hub to FSP in Hub PoV",
+                                                                                                                 AccountType.LIABILITY));
+        final var fspLiabilityPosition = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                                new ChartEntryCode("HUB_3000"),
+                                                                                                                "FSP Liability – Position",
+                                                                                                                "FSP Liability – Position from Hub to FSP in Hub PoV",
+                                                                                                                AccountType.LIABILITY));
 
-        final var hubOwner = new OwnerId(Snowflake.get().nextId());
-        final var fsp1 = new OwnerId(Snowflake.get().nextId());
+        final var hubOwner = new AccountOwnerId(Snowflake.get().nextId());
+        final var fsp1 = new AccountOwnerId(Snowflake.get().nextId());
 
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            hubLiquidity.chartEntryId(), hubOwner, Currency.USD, new AccountCode("HUB_1000_USD"), "Hub Liquidity", "Hub Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO
-        ));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            fspLiabilityLiquidity.chartEntryId(), fsp1, Currency.USD, new AccountCode("HUB_2000_FSP1_USD"), "FSP1 Liquidity (USD)", "FSP1 Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO
-        ));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            fspLiabilityPosition.chartEntryId(), fsp1, Currency.USD, new AccountCode("HUB_3000_FSP1_USD"), "FSP1 Position (USD)", "FSP1 Position (USD)", OverdraftMode.FORBID, BigDecimal.ZERO
-        ));
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(hubLiquidity.chartEntryId(),
+                                                                         hubOwner,
+                                                                         Currency.USD,
+                                                                         new AccountCode("HUB_1000_USD"),
+                                                                         "Hub Liquidity",
+                                                                         "Hub Liquidity (USD)",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityLiquidity.chartEntryId(),
+                                                                         fsp1,
+                                                                         Currency.USD,
+                                                                         new AccountCode("HUB_2000_FSP1_USD"),
+                                                                         "FSP1 Liquidity (USD)",
+                                                                         "FSP1 Liquidity (USD)",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityPosition.chartEntryId(),
+                                                                         fsp1,
+                                                                         Currency.USD,
+                                                                         new AccountCode("HUB_3000_FSP1_USD"),
+                                                                         "FSP1 Position (USD)",
+                                                                         "FSP1 Position (USD)",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
 
-        final var postings = List.of(
-            new PostLedgerFlowCommand.Input.Posting(hubOwner, hubLiquidity.chartEntryId(), Currency.USD, Side.DEBIT, new BigDecimal("2")),
-            new PostLedgerFlowCommand.Input.Posting(fsp1, fspLiabilityLiquidity.chartEntryId(), Currency.USD, Side.CREDIT, new BigDecimal("2")),
-            new PostLedgerFlowCommand.Input.Posting(fsp1, fspLiabilityLiquidity.chartEntryId(), Currency.USD, Side.DEBIT, new BigDecimal("1")),
-            new PostLedgerFlowCommand.Input.Posting(fsp1, fspLiabilityPosition.chartEntryId(), Currency.USD, Side.CREDIT, new BigDecimal("1"))
-        );
+        final var postings = List.of(new PostLedgerFlowCommand.Input.Posting(hubOwner, hubLiquidity.chartEntryId(), Side.DEBIT, new BigDecimal("2")),
+                                     new PostLedgerFlowCommand.Input.Posting(fsp1, fspLiabilityLiquidity.chartEntryId(), Side.CREDIT, new BigDecimal("2")),
+                                     new PostLedgerFlowCommand.Input.Posting(fsp1, fspLiabilityLiquidity.chartEntryId(), Side.DEBIT, new BigDecimal("1")),
+                                     new PostLedgerFlowCommand.Input.Posting(fsp1, fspLiabilityPosition.chartEntryId(), Side.CREDIT, new BigDecimal("1")));
 
-        final var input = new PostLedgerFlowCommand.Input(new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
+        final var input = new PostLedgerFlowCommand.Input(Currency.USD, new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
 
         // Act
         final var output = this.postLedgerFlowCommand.execute(input);
@@ -107,34 +174,9 @@ public class PostLedgerFlowCommandIT extends BaseDomainIT {
     }
 
     @Test
-    void should_fail_when_posting_account_not_found() throws Exception {
-        // Arrange
-        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("CHARTX"));
-        final var entry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
-            chartOut.chartId(), new ChartEntryCode("ENTRY_X"), "Entry X", "Entry X Desc", AccountType.ASSET
-        ));
-
-        final var missingOwner = new OwnerId(Snowflake.get().nextId());
-        // No account created for (missingOwner, entry)
-
-        final var postings = List.of(
-            new PostLedgerFlowCommand.Input.Posting(missingOwner, entry.chartEntryId(), Currency.USD, Side.DEBIT, new BigDecimal("1"))
-        );
-        final var input = new PostLedgerFlowCommand.Input(new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
-
-        // Act & Assert
-        Assertions.assertThrows(PostingAccountNotFoundException.class, () -> this.postLedgerFlowCommand.execute(input));
-    }
-
-    @Test
     void should_return_empty_flows_when_no_postings() throws Exception {
         // Arrange
-        final var input = new PostLedgerFlowCommand.Input(
-            new TransactionId(Snowflake.get().nextId()),
-            TransactionType.FUND_IN,
-            Instant.now(),
-            List.of()
-        );
+        final var input = new PostLedgerFlowCommand.Input(Currency.USD, new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), List.of());
 
         // Act
         final var output = this.postLedgerFlowCommand.execute(input);
@@ -145,26 +187,4 @@ public class PostLedgerFlowCommandIT extends BaseDomainIT {
         Assertions.assertTrue(output.flows().isEmpty());
     }
 
-    @Test
-    void should_fail_with_insufficient_balance_for_forbid_mode() throws Exception {
-        // Arrange
-        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("CHARTY"));
-        final var assetEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
-            chartOut.chartId(), new ChartEntryCode("ASSET_X"), "Asset X", "Asset X Desc", AccountType.ASSET
-        ));
-
-        final var owner = new OwnerId(Snowflake.get().nextId());
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            assetEntry.chartEntryId(), owner, Currency.USD, new AccountCode("ASSET_X_ACC"), "Asset X Acc", "Asset X Acc", OverdraftMode.FORBID, BigDecimal.ZERO
-        ));
-
-        // For an ASSET (DEBIT-nature) account, a CREDIT without prior balance should cause insufficient balance
-        final var postings = List.of(
-            new PostLedgerFlowCommand.Input.Posting(owner, assetEntry.chartEntryId(), Currency.USD, Side.CREDIT, new BigDecimal("1"))
-        );
-        final var input = new PostLedgerFlowCommand.Input(new TransactionId(Snowflake.get().nextId()), TransactionType.FUND_IN, Instant.now(), postings);
-
-        // Act & Assert
-        Assertions.assertThrows(InsufficientBalanceInAccountException.class, () -> this.postLedgerFlowCommand.execute(input));
-    }
 }

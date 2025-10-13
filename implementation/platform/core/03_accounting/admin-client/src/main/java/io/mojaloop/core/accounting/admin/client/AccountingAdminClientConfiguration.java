@@ -23,7 +23,7 @@ package io.mojaloop.core.accounting.admin.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.accounting.admin.client.service.AccountAdminService;
+import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,23 +31,23 @@ import org.springframework.context.annotation.Import;
 
 @Import(value = {MiscConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.admin.client"})
-public class AccountAdminClientConfiguration {
+public class AccountingAdminClientConfiguration {
 
     @Bean
-    public AccountAdminService.AccountCommands accountCommands(AccountAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.AccountCommands accountCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(AccountAdminService.AccountCommands.class, settings.baseUrl())
+                   .newBuilder(AccountingAdminService.AccountCommands.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();
     }
 
     @Bean
-    public AccountAdminService.ChartCommands chartCommands(AccountAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.ChartCommands chartCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(AccountAdminService.ChartCommands.class, settings.baseUrl())
+                   .newBuilder(AccountingAdminService.ChartCommands.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();
@@ -57,7 +57,7 @@ public class AccountAdminClientConfiguration {
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {
 
-        AccountAdminService.Settings accountCommandServiceSettings();
+        AccountingAdminService.Settings accountCommandServiceSettings();
 
     }
 

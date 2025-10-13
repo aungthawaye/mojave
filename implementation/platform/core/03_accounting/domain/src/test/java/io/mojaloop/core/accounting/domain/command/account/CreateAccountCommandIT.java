@@ -27,7 +27,7 @@ import io.mojaloop.core.accounting.domain.command.BaseDomainIT;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -67,7 +67,7 @@ public class CreateAccountCommandIT extends BaseDomainIT {
 
         final var input = new CreateAccountCommand.Input(
             chartEntryId,
-            new OwnerId(1001L),
+            new AccountOwnerId(1001L),
             Currency.USD,
             new AccountCode("ACC001"),
             "Cash Account",
@@ -91,7 +91,7 @@ public class CreateAccountCommandIT extends BaseDomainIT {
 
         final var input = new CreateAccountCommand.Input(
             invalidChartEntryId,
-            new OwnerId(1002L),
+            new AccountOwnerId(1002L),
             Currency.USD,
             new AccountCode("ACC002"),
             "Invalid Account",

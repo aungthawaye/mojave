@@ -1,4 +1,4 @@
--- ml_account.acc_chart definition
+-- ml_accounting.acc_chart definition
 
 CREATE TABLE `acc_chart`
 (
@@ -15,7 +15,7 @@ CREATE TABLE `acc_chart`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_account.acc_chart_entry definition
+-- ml_accounting.acc_chart_entry definition
 
 CREATE TABLE `acc_chart_entry`
 (
@@ -38,7 +38,7 @@ CREATE TABLE `acc_chart_entry`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_account.acc_account definition
+-- ml_accounting.acc_account definition
 
 CREATE TABLE `acc_account`
 (
@@ -67,7 +67,7 @@ CREATE TABLE `acc_account`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_account.acc_ledger_balance definition
+-- ml_accounting.acc_ledger_balance definition
 
 CREATE TABLE `acc_ledger_balance`
 (
@@ -91,7 +91,7 @@ CREATE TABLE `acc_ledger_balance`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_account.acc_ledger_movement definition
+-- ml_accounting.acc_ledger_movement definition
 
 CREATE TABLE `acc_ledger_movement`
 (

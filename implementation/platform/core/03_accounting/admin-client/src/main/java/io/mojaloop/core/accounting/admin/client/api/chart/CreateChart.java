@@ -42,8 +42,8 @@ package io.mojaloop.core.accounting.admin.client.api.chart;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.accounting.admin.client.exception.AccountAdminClientException;
-import io.mojaloop.core.accounting.admin.client.service.AccountAdminService;
+import io.mojaloop.core.accounting.admin.client.exception.AccountingAdminClientException;
+import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +54,11 @@ public class CreateChart {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateChart.class);
 
-    private final AccountAdminService.ChartCommands chartCommands;
+    private final AccountingAdminService.ChartCommands chartCommands;
 
     private final ObjectMapper objectMapper;
 
-    public CreateChart(AccountAdminService.ChartCommands chartCommands, ObjectMapper objectMapper) {
+    public CreateChart(AccountingAdminService.ChartCommands chartCommands, ObjectMapper objectMapper) {
 
         assert chartCommands != null;
         assert objectMapper != null;
@@ -67,7 +67,7 @@ public class CreateChart {
         this.objectMapper = objectMapper;
     }
 
-    public CreateChartCommand.Output execute(CreateChartCommand.Input input) throws AccountAdminClientException {
+    public CreateChartCommand.Output execute(CreateChartCommand.Input input) throws AccountingAdminClientException {
 
         try {
 
@@ -84,10 +84,10 @@ public class CreateChart {
 
             if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
 
-                throw new AccountAdminClientException(code, message);
+                throw new AccountingAdminClientException(code, message);
             }
 
-            throw new AccountAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
+            throw new AccountingAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
 

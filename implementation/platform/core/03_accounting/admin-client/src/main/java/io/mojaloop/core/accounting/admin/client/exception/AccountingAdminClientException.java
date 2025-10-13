@@ -22,12 +22,12 @@ package io.mojaloop.core.accounting.admin.client.exception;
 
 import lombok.Getter;
 
-public class AccountAdminClientException extends Exception {
+public class AccountingAdminClientException extends Exception {
 
     @Getter
     private final String code;
 
-    public AccountAdminClientException(String code, String message) {
+    public AccountingAdminClientException(String code, String message) {
 
         super(message);
         this.code = code;

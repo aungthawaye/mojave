@@ -23,7 +23,7 @@ package io.mojaloop.core.accounting.domain.cache;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 
@@ -37,11 +37,11 @@ public interface AccountCache {
 
     AccountData get(AccountCode accountCode);
 
-    Set<AccountData> get(OwnerId ownerId);
+    Set<AccountData> get(AccountOwnerId ownerId);
 
     AccountData get(AccountId accountId);
 
-    AccountData get(ChartEntryId chartEntryId, OwnerId ownerId, Currency currency);
+    AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency);
 
     void save(AccountData account);
 
@@ -55,7 +55,7 @@ public interface AccountCache {
 
     class Keys {
 
-        public static String forChart(ChartEntryId chartEntryId, OwnerId ownerId, Currency currency) {
+        public static String forChart(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
 
             return chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" + currency.name();
         }

@@ -26,7 +26,7 @@ import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
@@ -111,7 +111,7 @@ public class AccountRedisCache implements AccountCache {
     }
 
     @Override
-    public Set<AccountData> get(OwnerId ownerId) {
+    public Set<AccountData> get(AccountOwnerId ownerId) {
 
         return this.withOwnerId.get(ownerId.getId());
     }
@@ -123,7 +123,7 @@ public class AccountRedisCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(ChartEntryId chartEntryId, OwnerId ownerId, Currency currency) {
+    public AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
 
         var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
 

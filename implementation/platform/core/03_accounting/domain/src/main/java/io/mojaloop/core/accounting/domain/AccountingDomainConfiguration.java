@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.domain"})
 @Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class, RedissonOpsClientConfiguration.class})
-public class AccountDomainConfiguration {
+public class AccountingDomainConfiguration {
 
     @Bean
     public Ledger ledgers(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {

@@ -25,7 +25,7 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
@@ -44,7 +44,7 @@ public interface CreateAccountCommand {
      * representations to keep the contract decoupled from domain models, as requested.
      */
     record Input(@JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
-                 @JsonProperty(required = true) @NotNull OwnerId ownerId,
+                 @JsonProperty(required = true) @NotNull AccountOwnerId ownerId,
                  @JsonProperty(required = true) @NotNull @NotBlank Currency currency,
                  @JsonProperty(required = true) @NotNull AccountCode code,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,

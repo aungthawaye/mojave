@@ -38,8 +38,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class MySqlLedger implements Ledger {
@@ -66,7 +69,6 @@ public class MySqlLedger implements Ledger {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("useServerPrepStmts", true);
         config.addDataSourceProperty("rereadBatchedStatements", true);
         config.addDataSourceProperty("cacheResultSetMetadata", true);
         config.addDataSourceProperty("cacheServerConfiguration", true);
@@ -77,6 +79,11 @@ public class MySqlLedger implements Ledger {
         config.addDataSourceProperty("useResetSession", true);
         // Let the driver manage true session state rather than local emulation
         config.addDataSourceProperty("useLocalSessionState", false);
+        // Turn OFF server-side prepared statements for CALL (avoids metadata bugs)
+        config.addDataSourceProperty("useServerPrepStmts", false);
+        config.addDataSourceProperty("cacheResultSetMetadata", false);
+        config.addDataSourceProperty("callableStmtCacheSize", "0");
+
 
         config.setMaximumPoolSize(settings.pool().maxPool());
         // Ledger's stored-procedure will handle transaction.
@@ -88,9 +95,20 @@ public class MySqlLedger implements Ledger {
 
     @Override
     public List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt, TransactionType transactionType)
-        throws InsufficientBalanceException, OverdraftExceededException, RestoreFailedException {
+        throws InsufficientBalanceException, OverdraftExceededException, RestoreFailedException, DuplicatePostingException {
 
         try {
+
+            var addedKeys = new HashSet<String>();
+
+            requests.forEach(request -> {
+
+                var added = addedKeys.add(request.accountId().getId() + request.side().name() + transactionId.getId());
+
+                if (!added) {
+                    throw new RuntimeException(new DuplicatePostingException(request.accountId(), request.side(), transactionId));
+                }
+            });
 
             var posting = requests.stream()
                                   .map(request -> new Posting(request.ledgerMovementId().getId(),
@@ -104,132 +122,45 @@ public class MySqlLedger implements Ledger {
                                   .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
+
             LOGGER.debug("Posting to ledger: {}", postingJson);
 
             return this.jdbcTemplate.execute((ConnectionCallback<List<Movement>>) con -> {
 
-                var stm = con.prepareCall("{call sp_post_ledger_batch_with_movements(?)}");
-
-                stm.setString(1, postingJson);
-
                 var movements = new ArrayList<Movement>();
-                var hasResults = stm.execute();
 
-                while (hasResults) {
+                try (var stm = con.prepareCall("{call sp_post_ledger_batch_with_movements(?)}")) {
 
-                    try (var rs = stm.getResultSet()) {
+                    stm.setString(1, postingJson);
 
-                        if (rs != null && rs.next()) {
+                    var hasResults = stm.execute();
 
-                            var status = rs.getString("status");
-                            LOGGER.debug("Ledger movement status: {}", status);
+                    while (hasResults) {
 
-                            switch (status) {
-                                case "ERROR" -> {
+                        try (var rs = stm.getResultSet()) {
 
-                                    var code = rs.getString("code");
-                                    LOGGER.debug("Ledger movement error code: {}", code);
+                            if (rs != null && rs.next()) {
 
-                                    switch (code) {
+                                var status = rs.getString("status");
 
-                                        case "INSUFFICIENT_BALANCE": {
-
-                                            var accountId = rs.getLong("account_id");
-                                            var side = rs.getString("side");
-                                            var amount = rs.getBigDecimal("amount");
-                                            var debits = rs.getBigDecimal("debits");
-                                            var credits = rs.getBigDecimal("credits");
-
-                                            throw new RuntimeException(new InsufficientBalanceException(new AccountId(accountId),
-                                                                                                        Side.valueOf(side),
-                                                                                                        amount,
-                                                                                                        new DrCr(debits, credits)));
-                                        }
-
-                                        case "OVERDRAFT_EXCEEDED": {
-
-                                            var accountId = rs.getLong("account_id");
-                                            var side = rs.getString("side");
-                                            var amount = rs.getBigDecimal("amount");
-                                            var debits = rs.getBigDecimal("debits");
-                                            var credits = rs.getBigDecimal("credits");
-
-                                            throw new RuntimeException(new OverdraftExceededException(new AccountId(accountId),
-                                                                                                      Side.valueOf(side),
-                                                                                                      amount,
-                                                                                                      new DrCr(debits, credits)));
-                                        }
-
-                                        case "RESTORE_FAILED": {
-
-                                            var accountId = rs.getLong("account_id");
-                                            var side = rs.getString("side");
-                                            var amount = rs.getBigDecimal("amount");
-                                            var debits = rs.getBigDecimal("debits");
-                                            var credits = rs.getBigDecimal("credits");
-
-                                            throw new RuntimeException(new RestoreFailedException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits)));
-                                        }
-
-                                        default:
-                                            throw new NoMovementResultException();
+                                switch (status) {
+                                    case "ERROR" -> {
+                                        handleError(rs, transactionId);
                                     }
+                                    case "SUCCESS" -> {
+                                        return handleSuccess(rs, transactionId);
+                                    }
+                                    case "IGNORED" -> {
+                                        return movements;
+                                    }
+                                    default -> { }
                                 }
-                                case "SUCCESS" -> {
-
-                                    do {
-
-                                        var ledgerMovementId = rs.getLong("ledger_movement_id");
-                                        var accountId = rs.getLong("account_id");
-                                        var side = rs.getString("side");
-                                        var currency = Currency.valueOf(rs.getString("currency"));
-                                        var amount = rs.getBigDecimal("amount");
-                                        var oldDebits = rs.getBigDecimal("old_debits");
-                                        var oldCredits = rs.getBigDecimal("old_credits");
-                                        var newDebits = rs.getBigDecimal("new_debits");
-                                        var newCredits = rs.getBigDecimal("new_credits");
-                                        var txnId = new TransactionId(rs.getLong("transaction_id"));
-                                        var txnAt = Instant.ofEpochSecond(rs.getLong("transaction_at"));
-                                        var txnType = TransactionType.valueOf(rs.getString("transaction_type"));
-                                        var movementStage = MovementStage.valueOf(rs.getString("movement_stage"));
-                                        var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
-                                        var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
-
-                                        var movement = new Movement(new LedgerMovementId(ledgerMovementId),
-                                                                    new AccountId(accountId),
-                                                                    Side.valueOf(side),
-                                                                    currency,
-                                                                    amount,
-                                                                    new DrCr(oldDebits, oldCredits),
-                                                                    new DrCr(newDebits, newCredits),
-                                                                    txnId,
-                                                                    txnAt,
-                                                                    txnType,
-                                                                    movementStage,
-                                                                    movementResult,
-                                                                    createdAt);
-                                        movements.add(movement);
-
-                                    } while (rs.next());
-
-                                    LOGGER.debug("Ledger movement list: {}", movements);
-
-                                }
-                                case "IGNORED" -> {
-
-                                    return movements;
-                                }
-                                case null, default -> throw new NoMovementResultException();
                             }
+
                         }
-                    } catch (Exception e) {
 
-                        LOGGER.error("Exception occurred while trying to execute SQL statement.", e);
-
-                        throw e;
+                        hasResults = stm.getMoreResults();
                     }
-
-                    hasResults = stm.getMoreResults();
                 }
 
                 return movements;
@@ -252,6 +183,10 @@ public class MySqlLedger implements Ledger {
                 throw e1;
             }
 
+            if (e.getCause() instanceof DuplicatePostingException e1) {
+                throw e1;
+            }
+
             throw e;
 
         } catch (JsonProcessingException e) {
@@ -259,6 +194,81 @@ public class MySqlLedger implements Ledger {
             LOGGER.error("Unable to serialize ledger movement request", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private void handleError(ResultSet rs, TransactionId transactionId) throws SQLException {
+
+        var code = rs.getString("code");
+        var accountId = rs.getLong("account_id");
+        var side = rs.getString("side");
+        var currency = Currency.valueOf(rs.getString("currency"));
+        var amount = rs.getBigDecimal("amount");
+        var debits = rs.getBigDecimal("debits");
+        var credits = rs.getBigDecimal("credits");
+
+        switch (code) {
+
+            case "DUPLICATE_POSTING": {
+                throw new RuntimeException(new DuplicatePostingException(new AccountId(accountId), Side.valueOf(side), transactionId));
+            }
+
+            case "INSUFFICIENT_BALANCE": {
+                throw new RuntimeException(new InsufficientBalanceException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+            }
+
+            case "OVERDRAFT_EXCEEDED": {
+                throw new RuntimeException(new OverdraftExceededException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+            }
+
+            case "RESTORE_FAILED": {
+                throw new RuntimeException(new RestoreFailedException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+            }
+
+            default:
+                throw new NoMovementResultException();
+        }
+    }
+
+    private List<Movement> handleSuccess(ResultSet rs, TransactionId transactionId) throws SQLException {
+
+        var movements = new ArrayList<Movement>();
+
+        do {
+
+            var ledgerMovementId = rs.getLong("ledger_movement_id");
+            var accountId = rs.getLong("account_id");
+            var side = rs.getString("side");
+            var currency = Currency.valueOf(rs.getString("currency"));
+            var amount = rs.getBigDecimal("amount");
+            var oldDebits = rs.getBigDecimal("old_debits");
+            var oldCredits = rs.getBigDecimal("old_credits");
+            var newDebits = rs.getBigDecimal("new_debits");
+            var newCredits = rs.getBigDecimal("new_credits");
+            var txnId = new TransactionId(rs.getLong("transaction_id"));
+            var txnAt = Instant.ofEpochSecond(rs.getLong("transaction_at"));
+            var txnType = TransactionType.valueOf(rs.getString("transaction_type"));
+            var movementStage = MovementStage.valueOf(rs.getString("movement_stage"));
+            var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
+            var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
+
+            var movement = new Movement(new LedgerMovementId(ledgerMovementId),
+                                        new AccountId(accountId),
+                                        Side.valueOf(side),
+                                        currency,
+                                        amount,
+                                        new DrCr(oldDebits, oldCredits),
+                                        new DrCr(newDebits, newCredits),
+                                        txnId,
+                                        txnAt,
+                                        txnType,
+                                        movementStage,
+                                        movementResult,
+                                        createdAt);
+            movements.add(movement);
+
+        } while (rs.next());
+
+        return movements;
     }
 
     public record LedgerDbSettings(LedgerDbSettings.Connection connection, LedgerDbSettings.Pool pool) {

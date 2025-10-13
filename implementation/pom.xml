@@ -151,6 +151,11 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>io.mojaloop.platform.core.common</groupId>
                 <artifactId>mod-common-datatype</artifactId>
                 <version>1.0.0</version>
@@ -237,6 +242,11 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.transaction</groupId>
+                <artifactId>mod-transaction-admin-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transaction</groupId>
                 <artifactId>mod-transaction-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -246,8 +256,33 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.platform.core.transaction</groupId>
+                <artifactId>mod-transaction-intercom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transaction</groupId>
+                <artifactId>mod-transaction-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>io.mojaloop.platform.core.transfer</groupId>
                 <artifactId>transfer-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

@@ -29,7 +29,7 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.accounting.admin.component.EmptyGatekeeper;
-import io.mojaloop.core.accounting.domain.AccountDomainConfiguration;
+import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -45,13 +45,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
-@Import(value = {AccountDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
-public class AccountAdminConfiguration extends JacksonWebMvcExtension
-    implements AccountDomainConfiguration.RequiredBeans,
+@Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
+public class AccountingAdminConfiguration extends JacksonWebMvcExtension
+    implements AccountingDomainConfiguration.RequiredBeans,
                SpringSecurityConfiguration.RequiredBeans,
                SpringSecurityConfiguration.RequiredSettings {
 
-    public AccountAdminConfiguration(ObjectMapper objectMapper) {
+    public AccountingAdminConfiguration(ObjectMapper objectMapper) {
 
         super(objectMapper);
     }
@@ -83,7 +83,7 @@ public class AccountAdminConfiguration extends JacksonWebMvcExtension
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends AccountDomainConfiguration.RequiredSettings {
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

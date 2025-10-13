@@ -1,4 +1,4 @@
-# Ports of Functions of Modules
+# Ports of Modules By its Function
 
 | Module      | Function | Port |
 |-------------|----------|------|
@@ -23,3 +23,6 @@
 | Transfer    | Admin    | -    |
 | Transfer    | Intercom | -    |
 | Transfer    | Service  | 4703 |
+| Wallet      | Admin    | 4801 |
+| Wallet      | Intercom | 4802 |
+| Wallet      | Service  | 4803 |

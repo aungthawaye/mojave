@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.common.datatype.identifier.accounting;
+package io.mojaloop.core.common.datatype.identifier.wallet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -30,19 +30,19 @@ import io.mojaloop.component.misc.ddd.EntityId;
 
 import java.io.IOException;
 
-@JsonDeserialize(using = OwnerId.Deserializer.class)
-public class OwnerId extends EntityId<Long> {
+@JsonDeserialize(using = BalanceHistoryId.Deserializer.class)
+public class BalanceHistoryId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public OwnerId(Long id) {
+    public BalanceHistoryId(Long id) {
 
         super(id);
     }
 
-    public static class Deserializer extends JsonDeserializer<OwnerId> {
+    public static class Deserializer extends JsonDeserializer<BalanceHistoryId> {
 
         @Override
-        public OwnerId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public BalanceHistoryId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -52,7 +52,7 @@ public class OwnerId extends EntityId<Long> {
             }
 
             try {
-                return new OwnerId(Long.parseLong(text));
+                return new BalanceHistoryId(Long.parseLong(text));
             } catch (NumberFormatException e) {
                 throw InvalidFormatException.from(
                     p, "'" + field + "' has invalid format. Must be number.", e);

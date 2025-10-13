@@ -24,16 +24,11 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
-import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.data.LedgerBalanceData;
-import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
-import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.fspiop.component.handy.FspiopCurrencies;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
@@ -101,8 +96,7 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "ledger_balance_id", nullable = false,
-                foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
+    @JoinColumn(name = "ledger_balance_id", nullable = false, foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
     protected Account account;
 
     public LedgerBalance(Account account, Side nature, OverdraftMode overdraftMode, BigDecimal overdraftLimit) {
@@ -124,58 +118,18 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
         this.account = account;
     }
 
-    public LedgerMovement apply(Side side,
-                                BigDecimal amount,
-                                TransactionId transactionId,
-                                Instant transactionAt,
-                                TransactionType transactionType)
-        throws Ledger.InsufficientBalanceException, Ledger.NegativeAmountException {
-
-        var amt = this.norm(amount);
-
-        var oldDrCr = new DrCr(this.postedDebits, this.postedCredits);
-
-        var nd = this.postedDebits.setScale(this.scale, RoundingMode.UNNECESSARY);
-        var nc = this.postedCredits.setScale(this.scale, RoundingMode.UNNECESSARY);
-
-        if (side == Side.DEBIT) {
-            nd = nd.add(amt);
-        } else {
-            nc = nc.add(amt);
-        }
-
-        var nb = (this.nature == Side.DEBIT ? nd.subtract(nc) : nc.subtract(nd));
-
-        if (nb.signum() < 0) {
-
-            throw new Ledger.InsufficientBalanceException(
-                this.getId(), side, amount, new Ledger.DrCr(this.postedDebits, this.postedCredits));
-        }
-
-        this.postedDebits = nd;
-        this.postedCredits = nc;
-
-        return new LedgerMovement(
-            new LedgerMovementId(Snowflake.get().nextId()), this.getId(), side, amt, oldDrCr,
-            new DrCr(this.postedDebits, this.postedCredits), transactionId, transactionAt, transactionType);
-
-    }
-
-    public BigDecimal available() {
-
-        return switch (this.nature) {
-            case CREDIT -> this.postedCredits.subtract(this.postedDebits).add(this.overdraftLimit);
-            case DEBIT -> this.postedDebits.subtract(this.postedCredits).add(this.overdraftLimit);
-        };
-    }
-
     @Override
     public LedgerBalanceData convert() {
 
-        return new LedgerBalanceData(
-            this.getId(), this.currency, this.scale, this.nature, this.postedDebits, this.postedCredits,
-            this.overdraftMode,
-            this.overdraftLimit, this.createdAt);
+        return new LedgerBalanceData(this.getId(),
+                                     this.currency,
+                                     this.scale,
+                                     this.nature,
+                                     this.postedDebits,
+                                     this.postedCredits,
+                                     this.overdraftMode,
+                                     this.overdraftLimit,
+                                     this.createdAt);
     }
 
     public DrCr getDrCr() {
@@ -187,19 +141,6 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     public AccountId getId() {
 
         return this.id;
-    }
-
-    private BigDecimal norm(BigDecimal amount) throws Ledger.NegativeAmountException {
-
-        assert amount != null;
-
-        var n = amount.setScale(this.scale, RoundingMode.UNNECESSARY);
-
-        if (n.signum() < 0) {
-            throw new Ledger.NegativeAmountException();
-        }
-
-        return n;
     }
 
 }
