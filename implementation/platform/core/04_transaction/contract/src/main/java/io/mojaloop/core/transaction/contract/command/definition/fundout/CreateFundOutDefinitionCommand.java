@@ -22,27 +22,43 @@ package io.mojaloop.core.transaction.contract.command.definition.fundout;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.core.common.datatype.enums.accounting.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.definition.fundout.PostingAmountType;
+import io.mojaloop.core.common.datatype.enums.trasaction.definition.fundout.PostingOwnerType;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.transaction.DefinitionId;
+import io.mojaloop.core.common.datatype.identifier.transaction.PostingId;
+import io.mojaloop.core.transaction.contract.exception.PostingAlreadyExistsException;
+import io.mojaloop.core.transaction.contract.exception.fundout.FundOutDefinitionNameTakenException;
+import io.mojaloop.core.transaction.contract.exception.fundout.FundOutDefinitionWithCurrencyExistsException;
+import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 /**
  * Command contract for creating a Fund-Out Definition.
  */
 public interface CreateFundOutDefinitionCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws PostingAlreadyExistsException, FundOutDefinitionWithCurrencyExistsException, FundOutDefinitionNameTakenException;
 
     /**
      * Input for creating a Fund-Out Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_CURRENCY_LENGTH) String currency,
+    record Input(@JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
+                 @JsonProperty(required = true) List<Posting> postings) {
+
+        public record Posting(Side side, PostingOwnerType forOwner, PostingAmountType forAmount, ChartEntryId chartEntryId) { }
+
+    }
 
     /**
      * Output of creation, returning the generated DefinitionId.
      */
-    record Output(DefinitionId definitionId) { }
+    record Output(DefinitionId definitionId, List<PostingId> postingIds) { }
 }

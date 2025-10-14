@@ -2,6 +2,7 @@ package io.mojaloop.core.transaction.domain.model.definition;
 
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.DefinitionIdJavaType;
@@ -9,12 +10,16 @@ import io.mojaloop.core.common.datatype.converter.identifier.transaction.Posting
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.definition.fundin.PostingAmountType;
+import io.mojaloop.core.common.datatype.enums.trasaction.definition.fundin.PostingOwnerType;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.transaction.DefinitionId;
 import io.mojaloop.core.common.datatype.identifier.transaction.PostingId;
+import io.mojaloop.core.transaction.contract.data.definition.FundInDefinitionData;
 import io.mojaloop.core.transaction.contract.exception.DefinitionDescriptionTooLongException;
 import io.mojaloop.core.transaction.contract.exception.DefinitionNameTooLongException;
 import io.mojaloop.core.transaction.contract.exception.PostingAlreadyExistsException;
+import io.mojaloop.core.transaction.contract.exception.fundin.FundInDefinitionPostingNotFoundException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -45,7 +50,7 @@ import static java.sql.Types.BIGINT;
                                                              @UniqueConstraint(name = "trn_fund_in_definition_name_UK", columnNames = {"name"})})
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FundInDefinition extends JpaEntity<DefinitionId> {
+public class FundInDefinition extends JpaEntity<DefinitionId> implements DataConversion<FundInDefinitionData> {
 
     @Id
     @JavaType(DefinitionIdJavaType.class)
@@ -83,14 +88,40 @@ public class FundInDefinition extends JpaEntity<DefinitionId> {
         this.name(name).currency(currency).description(description);
     }
 
-    public FundInDefinition.Posting addPosting(PostingAmountType forAmountType, Side side, ChartEntryId chartEntryId, String description)
+    public void activate() {
+
+        this.activationStatus = ActivationStatus.ACTIVE;
+    }
+
+    public FundInDefinition.Posting addPosting(PostingOwnerType forOwner, PostingAmountType forAmount, Side side, ChartEntryId chartEntryId, String description)
         throws PostingAlreadyExistsException {
 
-        var posting = new FundInDefinition.Posting(this, forAmountType, side, chartEntryId, description);
+        var posting = new FundInDefinition.Posting(this, side, forOwner, forAmount, chartEntryId, description);
 
         this.postings.add(posting);
 
         return posting;
+    }
+
+    @Override
+    public FundInDefinitionData convert() {
+
+        var postingData = this.postings.stream()
+                                       .map(p -> new FundInDefinitionData.Posting(p.getId(),
+                                                                                  p.getForOwner(),
+                                                                                  p.getForAmount(),
+                                                                                  p.getSide(),
+                                                                                  p.getChartEntryId(),
+                                                                                  p.getDescription()))
+                                       .toList();
+
+        return new FundInDefinitionData(this.getId(),
+                                        this.getCurrency(),
+                                        this.getName(),
+                                        this.getDescription(),
+                                        this.getActivationStatus(),
+                                        this.getTerminationStatus(),
+                                        postingData);
     }
 
     public FundInDefinition currency(Currency currency) {
@@ -100,6 +131,11 @@ public class FundInDefinition extends JpaEntity<DefinitionId> {
         this.currency = currency;
 
         return this;
+    }
+
+    public void deactivate() {
+
+        this.activationStatus = ActivationStatus.INACTIVE;
     }
 
     public FundInDefinition description(String description) {
@@ -136,9 +172,23 @@ public class FundInDefinition extends JpaEntity<DefinitionId> {
         return this;
     }
 
-    public enum PostingAmountType {
+    public void removePosting(PostingId postingId) throws FundInDefinitionPostingNotFoundException {
 
-        LIQUIDITY_AMOUNT
+        assert postingId != null;
+
+        if (this.postings.stream().noneMatch(p -> p.getId().equals(postingId))) {
+
+            throw new FundInDefinitionPostingNotFoundException(postingId);
+        }
+
+        this.postings.removeIf(p -> p.getId().equals(postingId));
+
+    }
+
+    public void terminate() {
+
+        this.activationStatus = ActivationStatus.INACTIVE;
+        this.terminationStatus = TerminationStatus.TERMINATED;
     }
 
     @Getter
@@ -152,9 +202,13 @@ public class FundInDefinition extends JpaEntity<DefinitionId> {
         @JdbcTypeCode(BIGINT)
         protected PostingId id;
 
-        @Column(name = "for_amount_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+        @Column(name = "for_owner", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
         @Enumerated(EnumType.STRING)
-        protected PostingAmountType forAmountType;
+        protected PostingOwnerType forOwner;
+
+        @Column(name = "for_amount", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+        @Enumerated(EnumType.STRING)
+        protected PostingAmountType forAmount;
 
         @Column(name = "side", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
         @Enumerated(EnumType.STRING)
@@ -173,43 +227,18 @@ public class FundInDefinition extends JpaEntity<DefinitionId> {
         @JoinColumn(name = "definition_id", nullable = false)
         protected FundInDefinition definition;
 
-        public Posting(FundInDefinition definition, PostingAmountType forAmountType, Side side, ChartEntryId chartEntryId, String description)
+        public Posting(FundInDefinition definition, Side side, PostingOwnerType forOwner, PostingAmountType forAmount, ChartEntryId chartEntryId, String description)
             throws PostingAlreadyExistsException {
 
             assert definition != null;
-            assert forAmountType != null;
             assert side != null;
+            assert forOwner != null;
+            assert forAmount != null;
             assert chartEntryId != null;
 
             this.id = new PostingId(Snowflake.get().nextId());
             this.definition = definition;
-            this.forAmountType(forAmountType).side(side).chartEntryId(chartEntryId).description(description);
-        }
-
-        public Posting chartEntryId(ChartEntryId chartEntryId) throws PostingAlreadyExistsException {
-
-            assert chartEntryId != null;
-
-            try {
-
-                this.definition.postings.stream().filter(p -> p.getChartEntryId().equals(chartEntryId)).findFirst().ifPresent(p -> {
-                    try {
-                        throw new PostingAlreadyExistsException();
-                    } catch (PostingAlreadyExistsException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
-            } catch (RuntimeException e) {
-
-                if (e.getCause() instanceof PostingAlreadyExistsException e1) {
-                    throw e1;
-                }
-            }
-
-            this.chartEntryId = chartEntryId;
-
-            return this;
+            this.side(side).forPosting(forOwner, forAmount, chartEntryId).description(description);
         }
 
         public Posting description(String description) {
@@ -229,11 +258,34 @@ public class FundInDefinition extends JpaEntity<DefinitionId> {
             return this;
         }
 
-        public Posting forAmountType(PostingAmountType forAmountType) {
+        public Posting forPosting(PostingOwnerType forOwner, PostingAmountType forAmount, ChartEntryId chartEntryId) throws PostingAlreadyExistsException {
 
-            assert forAmountType != null;
+            assert forOwner != null;
+            assert forAmount != null;
+            assert chartEntryId != null;
 
-            this.forAmountType = forAmountType;
+            try {
+
+                this.definition.postings.stream()
+                                        .filter(p -> p.getForOwner().equals(forOwner) && p.getForAmount().equals(forAmount) && p.getChartEntryId().equals(chartEntryId))
+                                        .findFirst()
+                                        .ifPresent(p -> {
+                                            try {
+                                                throw new PostingAlreadyExistsException();
+                                            } catch (PostingAlreadyExistsException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        });
+            } catch (RuntimeException e) {
+
+                if (e.getCause() instanceof PostingAlreadyExistsException e1) {
+                    throw e1;
+                }
+            }
+
+            this.forOwner = forOwner;
+            this.forAmount = forAmount;
+            this.chartEntryId = chartEntryId;
 
             return this;
         }

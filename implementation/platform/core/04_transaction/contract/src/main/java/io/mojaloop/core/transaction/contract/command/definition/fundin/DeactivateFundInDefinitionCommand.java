@@ -22,6 +22,7 @@ package io.mojaloop.core.transaction.contract.command.definition.fundin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.transaction.DefinitionId;
+import io.mojaloop.core.transaction.contract.exception.fundin.FundInDefinitionNotFoundException;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -29,7 +30,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public interface DeactivateFundInDefinitionCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws FundInDefinitionNotFoundException;
 
     /**
      * Input specifying the definition to deactivate.

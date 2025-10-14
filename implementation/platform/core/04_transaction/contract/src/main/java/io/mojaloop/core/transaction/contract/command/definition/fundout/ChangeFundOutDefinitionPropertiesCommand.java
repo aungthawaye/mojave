@@ -23,6 +23,8 @@ package io.mojaloop.core.transaction.contract.command.definition.fundout;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.identifier.transaction.DefinitionId;
+import io.mojaloop.core.transaction.contract.exception.fundout.FundOutDefinitionNameTakenException;
+import io.mojaloop.core.transaction.contract.exception.fundout.FundOutDefinitionNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -31,7 +33,7 @@ import jakarta.validation.constraints.Size;
  */
 public interface ChangeFundOutDefinitionPropertiesCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws FundOutDefinitionNotFoundException, FundOutDefinitionNameTakenException;
 
     /**
      * Input accepting the identifier and optional properties to change.
