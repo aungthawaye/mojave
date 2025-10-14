@@ -33,4 +33,5 @@ public class AddFundTransferDefinitionPostingController {
 
         this.addFundTransferDefinitionPostingCommand.execute(input);
     }
+
 }

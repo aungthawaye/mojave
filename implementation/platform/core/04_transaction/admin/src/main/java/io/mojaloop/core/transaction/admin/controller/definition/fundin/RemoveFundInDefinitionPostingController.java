@@ -33,4 +33,5 @@ public class RemoveFundInDefinitionPostingController {
 
         this.removeFundInDefinitionPostingCommand.execute(input);
     }
+
 }

@@ -33,4 +33,5 @@ public class AddFundInDefinitionPostingController {
 
         this.addFundInDefinitionPostingCommand.execute(input);
     }
+
 }

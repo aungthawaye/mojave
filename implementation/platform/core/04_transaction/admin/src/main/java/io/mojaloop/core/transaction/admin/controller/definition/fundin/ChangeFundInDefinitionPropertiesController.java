@@ -33,4 +33,5 @@ public class ChangeFundInDefinitionPropertiesController {
 
         this.changeFundInDefinitionPropertiesCommand.execute(input);
     }
+
 }

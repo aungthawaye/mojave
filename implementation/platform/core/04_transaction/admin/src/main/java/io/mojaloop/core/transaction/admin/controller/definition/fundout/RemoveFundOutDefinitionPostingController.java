@@ -33,4 +33,5 @@ public class RemoveFundOutDefinitionPostingController {
 
         this.removeFundOutDefinitionPostingCommand.execute(input);
     }
+
 }

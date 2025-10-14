@@ -31,4 +31,5 @@ public class DeactivateFundOutDefinitionController {
 
         this.deactivateFundOutDefinitionCommand.execute(input);
     }
+
 }

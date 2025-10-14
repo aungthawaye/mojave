@@ -33,4 +33,5 @@ public class ChangeFundOutDefinitionCurrencyController {
 
         this.changeFundOutDefinitionCurrencyCommand.execute(input);
     }
+
 }

@@ -31,4 +31,5 @@ public class DeactivateFundInDefinitionController {
 
         this.deactivateFundInDefinitionCommand.execute(input);
     }
+
 }

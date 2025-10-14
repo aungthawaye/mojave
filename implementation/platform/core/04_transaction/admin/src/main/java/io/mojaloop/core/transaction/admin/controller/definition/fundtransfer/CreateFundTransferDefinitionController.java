@@ -34,4 +34,5 @@ public class CreateFundTransferDefinitionController {
 
         return this.createFundTransferDefinitionCommand.execute(input);
     }
+
 }

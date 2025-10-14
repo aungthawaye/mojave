@@ -31,4 +31,5 @@ public class ActivateFundTransferDefinitionController {
 
         this.activateFundTransferDefinitionCommand.execute(input);
     }
+
 }

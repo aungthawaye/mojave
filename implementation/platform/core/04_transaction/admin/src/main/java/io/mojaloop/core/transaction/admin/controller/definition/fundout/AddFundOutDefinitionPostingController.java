@@ -33,4 +33,5 @@ public class AddFundOutDefinitionPostingController {
 
         this.addFundOutDefinitionPostingCommand.execute(input);
     }
+
 }

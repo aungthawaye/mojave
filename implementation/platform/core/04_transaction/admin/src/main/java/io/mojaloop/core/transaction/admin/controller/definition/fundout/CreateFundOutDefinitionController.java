@@ -34,4 +34,5 @@ public class CreateFundOutDefinitionController {
 
         return this.createFundOutDefinitionCommand.execute(input);
     }
+
 }

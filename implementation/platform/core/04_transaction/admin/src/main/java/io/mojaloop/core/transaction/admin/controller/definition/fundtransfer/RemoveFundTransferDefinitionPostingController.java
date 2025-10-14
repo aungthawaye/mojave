@@ -33,4 +33,5 @@ public class RemoveFundTransferDefinitionPostingController {
 
         this.removeFundTransferDefinitionPostingCommand.execute(input);
     }
+
 }

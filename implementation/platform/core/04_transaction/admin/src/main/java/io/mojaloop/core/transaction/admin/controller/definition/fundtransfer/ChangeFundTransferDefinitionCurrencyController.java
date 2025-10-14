@@ -33,4 +33,5 @@ public class ChangeFundTransferDefinitionCurrencyController {
 
         this.changeFundTransferDefinitionCurrencyCommand.execute(input);
     }
+
 }
