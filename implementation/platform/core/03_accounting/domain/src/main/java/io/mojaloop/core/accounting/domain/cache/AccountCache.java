@@ -43,6 +43,8 @@ public interface AccountCache {
 
     AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency);
 
+    Set<AccountData> get(ChartEntryId chartEntryId);
+
     void save(AccountData account);
 
     class Qualifiers {

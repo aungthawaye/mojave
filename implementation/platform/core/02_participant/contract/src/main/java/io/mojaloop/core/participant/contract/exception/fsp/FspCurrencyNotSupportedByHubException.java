@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.fsp;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.Currency;
 
-public class FspCurrencyNotSupportedByHubException extends DomainException {
+public class FspCurrencyNotSupportedByHubException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Currency, {0}, being added by FSP, is not supported by Hub.";
 

@@ -20,12 +20,23 @@
 
 package io.mojaloop.core.common.datatype.enums.trasaction;
 
+import lombok.Getter;
+
+import java.util.Set;
+
 public enum TransactionType {
 
-    FUND_IN,
-    FUND_OUT,
-    FUND_TRANSFER,
-    FX_CONVERSION,
-    ADJUSTMENT,
-    REFUND_FEE
+    FUND_IN(new Definition(TransactionPartyType.VOID, TransactionPartyType.FSP, Set.of("LIQUIDITY_AMOUNT"))),
+    FUND_OUT(new Definition(TransactionPartyType.FSP, TransactionPartyType.VOID, Set.of("LIQUIDITY_AMOUNT"))),
+    FUND_TRANSFER(new Definition(TransactionPartyType.FSP, TransactionPartyType.FSP, Set.of("TRANSFER_AMOUNT", "PAYEE_FSP_FEE", "PAYEE_FSP_COMMISSION")));
+
+    @Getter
+    private final Definition definition;
+
+    TransactionType(Definition definition) {
+
+        this.definition = definition;
+    }
+
+    public record Definition(TransactionPartyType source, TransactionPartyType destination, Set<String> amounts) { }
 }

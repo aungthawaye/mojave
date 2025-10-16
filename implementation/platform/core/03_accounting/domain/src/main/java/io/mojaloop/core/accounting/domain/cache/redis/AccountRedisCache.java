@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -128,6 +129,20 @@ public class AccountRedisCache implements AccountCache {
         var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
 
         return this.withChartEntryIdOwnerIdCurrency.get(key);
+    }
+
+    @Override
+    public Set<AccountData> get(ChartEntryId chartEntryId) {
+
+        var result = new HashSet<AccountData>();
+
+        for (var account : this.withId.values()) {
+            if (account.chartEntryId().equals(chartEntryId)) {
+                result.add(account);
+            }
+        }
+
+        return result;
     }
 
     @PostConstruct

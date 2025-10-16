@@ -39,13 +39,13 @@
 
 package io.mojaloop.core.accounting.contract.exception.ledger;
 
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
-public class DuplicatePostingInLedgerException extends DomainException {
+public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Duplicate Posting in Ledger : account ({0}) | side ({1}) | transaction Id : ({2}).";
 

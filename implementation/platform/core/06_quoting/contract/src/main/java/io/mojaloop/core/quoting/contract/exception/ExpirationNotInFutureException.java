@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.quoting.contract.exception;
 
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 
-public class ExpirationNotInFutureException extends DomainException {
+public class ExpirationNotInFutureException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Expiration date/time must be in the future.";
 

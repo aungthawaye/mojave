@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.fsp;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 
-public class FspCodeNotFoundException extends DomainException {
+public class FspCodeNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "FSP Code ({0}) cannot be not found.";
 

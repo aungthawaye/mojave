@@ -40,9 +40,9 @@
 package io.mojaloop.core.accounting.contract.exception.account;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class AccountNameRequiredException extends InputException {
+public class AccountNameRequiredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Account Name is required.";
 

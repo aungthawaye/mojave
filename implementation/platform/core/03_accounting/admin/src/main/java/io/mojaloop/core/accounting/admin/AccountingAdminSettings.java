@@ -73,7 +73,7 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
                                                                                  System.getenv().getOrDefault("ACC_READ_DB_PASSWORD", "password"),
                                                                                  false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("account-admin-read",
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-admin-read",
                                                                      Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MIN_POOL_SIZE", "2")),
                                                                      Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MAX_POOL_SIZE", "10")));
 
@@ -91,7 +91,7 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
                                                                                   System.getenv().getOrDefault("ACC_WRITE_DB_PASSWORD", "password"),
                                                                                   false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("account-admin-write",
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-admin-write",
                                                                       Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MIN_POOL_SIZE", "2")),
                                                                       Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MAX_POOL_SIZE", "10")));
 
@@ -102,14 +102,14 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     @Override
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
-        return new RoutingEntityManagerConfigurer.Settings("account-admin", false, false);
+        return new RoutingEntityManagerConfigurer.Settings("accounting-admin", false, false);
     }
 
     @Bean
     @Override
     public AccountingAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new AccountingAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("ACCOUNT_ADMIN_PORT", "4201")));
+        return new AccountingAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("ACCOUNTING_ADMIN_PORT", "4201")));
     }
 
 }

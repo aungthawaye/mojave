@@ -40,9 +40,9 @@
 package io.mojaloop.core.accounting.contract.exception.chart;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class ChartEntryNameRequiredException extends InputException {
+public class ChartEntryNameRequiredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Chart Entry Name is required.";
 

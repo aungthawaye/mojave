@@ -28,7 +28,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface ActivateFspCommand {
 
-    Output execute(Input input) throws FspIdNotFoundException, FspCurrencyNotSupportedByHubException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId) { }
 

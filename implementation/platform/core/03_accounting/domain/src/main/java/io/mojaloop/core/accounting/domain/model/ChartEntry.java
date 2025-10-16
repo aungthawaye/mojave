@@ -31,6 +31,7 @@ import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryDescriptio
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameRequiredException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameTooLongException;
+import io.mojaloop.core.accounting.domain.cache.redis.updater.ChartEntryCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.accounting.ChartEntryCodeConverter;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
@@ -39,6 +40,7 @@ import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
@@ -58,8 +60,9 @@ import java.time.Instant;
 import static java.sql.Types.BIGINT;
 
 @Getter
-@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @Entity
+@EntityListeners(value = {ChartEntryCacheUpdater.class})
+@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 

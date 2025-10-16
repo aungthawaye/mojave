@@ -21,9 +21,9 @@
 package io.mojaloop.core.participant.contract.exception.fsp;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class FspEndpointBaseUrlRequiredException extends InputException {
+public class FspEndpointBaseUrlRequiredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Base URL of FSP Endpoint is required.";
 

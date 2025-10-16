@@ -20,13 +20,13 @@
 
 package io.mojaloop.core.quoting.contract.exception;
 
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.fspiop.spec.core.AmountType;
 
 import java.math.BigDecimal;
 
-public class TransferAmountMismatchException extends DomainException {
+public class TransferAmountMismatchException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Transfer Amount ({0}) must be same as the Amount ({1}) of Amount Type ({2}) .";
 

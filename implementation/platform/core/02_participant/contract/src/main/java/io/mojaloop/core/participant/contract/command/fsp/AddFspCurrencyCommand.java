@@ -31,7 +31,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface AddFspCurrencyCommand {
 
-    Output execute(Input input) throws FspIdNotFoundException, FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
                  @JsonProperty(required = true) @NotNull Currency currency) { }

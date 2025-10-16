@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface ActivateAccountCommand {
 
-    Output execute(Input input) throws AccountIdNotFoundException;
+    Output execute(Input input);
 
     /**
      * Input for activating an Account.

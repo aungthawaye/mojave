@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.hub;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.Currency;
 
-public class HubCurrencyAlreadySupportedException extends DomainException {
+public class HubCurrencyAlreadySupportedException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Currency, {0}, is already supported for Hub.";
 

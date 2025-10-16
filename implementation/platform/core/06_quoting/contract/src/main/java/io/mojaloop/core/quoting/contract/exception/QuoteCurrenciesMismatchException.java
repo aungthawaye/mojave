@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.quoting.contract.exception;
 
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 
-public class QuoteCurrenciesMismatchException extends DomainException {
+public class QuoteCurrenciesMismatchException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Quote currencies must be same.";
 

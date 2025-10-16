@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.oracle;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
 
-public class OracleIdNotFoundException extends DomainException {
+public class OracleIdNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Oracle ID ({0}) cannot be not found.";
 

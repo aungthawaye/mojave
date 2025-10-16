@@ -49,7 +49,7 @@ import jakarta.validation.constraints.Size;
 
 public interface ChangeHubNameCommand {
 
-    Output execute(Input input) throws HubNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name) { }

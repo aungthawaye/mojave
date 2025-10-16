@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface TerminateFspCommand {
 
-    Output execute(Input input) throws FspIdNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId) { }
 

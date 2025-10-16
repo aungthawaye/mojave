@@ -39,11 +39,11 @@
 
 package io.mojaloop.core.accounting.contract.exception.account;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
-public class AccountCodeNotFoundException extends DomainException {
+public class AccountCodeNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Account Code ({0}) cannot be not found.";
 

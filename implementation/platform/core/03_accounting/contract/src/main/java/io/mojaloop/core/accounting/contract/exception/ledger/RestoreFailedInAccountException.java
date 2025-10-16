@@ -39,7 +39,7 @@
 
 package io.mojaloop.core.accounting.contract.exception.ledger;
 
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -47,7 +47,7 @@ import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
 import java.math.BigDecimal;
 
-public class RestoreFailedInAccountException extends DomainException {
+public class RestoreFailedInAccountException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Unable to restore Dr/Cr : account ({0}) | side ({1}) | amount({2}) | posted debits: ({3}) | posted credits: ({4}) | transaction id: ({5}).";
 

@@ -44,13 +44,12 @@ import java.util.List;
 
 public interface PostLedgerFlowCommand {
 
-    Output execute(Input input)
-        throws
-        PostingAccountNotFoundException,
-        InsufficientBalanceInAccountException,
-        OverdraftLimitReachedInAccountException,
-        DuplicatePostingInLedgerException,
-        RestoreFailedInAccountException;
+    Output execute(Input input) throws
+                                PostingAccountNotFoundException,
+                                InsufficientBalanceInAccountException,
+                                OverdraftLimitReachedInAccountException,
+                                DuplicatePostingInLedgerException,
+                                RestoreFailedInAccountException;
 
     record Input(@JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull TransactionId transactionId,
@@ -61,7 +60,9 @@ public interface PostLedgerFlowCommand {
         public record Posting(@JsonProperty(required = true) @NotNull AccountOwnerId ownerId,
                               @JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
                               @JsonProperty(required = true) @NotNull Side side,
-                              @JsonProperty(required = true) @NotNull BigDecimal amount) { }
+                              @JsonProperty(required = true) @NotNull BigDecimal amount) {
+
+        }
 
     }
 

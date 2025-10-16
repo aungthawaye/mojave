@@ -30,7 +30,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface ActivateEndpointCommand {
 
-    Output execute(Input input) throws FspIdNotFoundException, CannotActivateFspEndpointException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
                  @JsonProperty(required = true) @NotNull EndpointType type) { }

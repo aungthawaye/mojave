@@ -32,7 +32,7 @@ import jakarta.validation.constraints.Size;
 
 public interface ChangeEndpointCommand {
 
-    Output execute(Input input) throws FspIdNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
                  @JsonProperty(required = true) @NotNull EndpointType type,

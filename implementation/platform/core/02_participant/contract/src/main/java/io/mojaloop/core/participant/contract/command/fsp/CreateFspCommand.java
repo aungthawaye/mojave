@@ -37,12 +37,7 @@ import jakarta.validation.constraints.Size;
 
 public interface CreateFspCommand {
 
-    Output execute(Input input) throws
-                                FspCurrencyAlreadySupportedException,
-                                FspEndpointAlreadyConfiguredException,
-                                FspCodeAlreadyExistsException,
-                                HubNotFoundException,
-                                FspCurrencyNotSupportedByHubException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspCode fspCode,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,

@@ -89,6 +89,33 @@ public interface AccountingAdminService {
 
     }
 
+    interface DefinitionCommands {
+
+        @POST("definitions/flows")
+        Call<io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand.Output> createFlowDefinition(@Body io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand.Input input);
+
+        @POST("definitions/flows/activate")
+        Call<Void> activateFlowDefinition(@Body io.mojaloop.core.accounting.contract.command.definition.ActivateFlowDefinitionCommand.Input input);
+
+        @POST("definitions/flows/deactivate")
+        Call<Void> deactivateFlowDefinition(@Body io.mojaloop.core.accounting.contract.command.definition.DeactivateFlowDefinitionCommand.Input input);
+
+        @POST("definitions/flows/terminate")
+        Call<Void> terminateFlowDefinition(@Body io.mojaloop.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand.Input input);
+
+        @POST("definitions/flows/change-currency")
+        Call<Void> changeFlowDefinitionCurrency(@Body io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionCurrencyCommand.Input input);
+
+        @POST("definitions/flows/change-properties")
+        Call<Void> changeFlowDefinitionProperties(@Body io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand.Input input);
+
+        @POST("definitions/flows/add-postings")
+        Call<Void> addFlowDefinitionPostings(@Body io.mojaloop.core.accounting.contract.command.definition.AddFlowDefinitionPostingCommand.Input input);
+
+        @POST("definitions/flows/remove-posting")
+        Call<Void> removeFlowDefinitionPosting(@Body io.mojaloop.core.accounting.contract.command.definition.RemoveFlowDefinitionPostingCommand.Input input);
+    }
+
     record Settings(String baseUrl) { }
 
 }

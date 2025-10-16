@@ -39,11 +39,11 @@
 
 package io.mojaloop.core.accounting.contract.exception.chart;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 
-public class ChartIdNotFoundException extends DomainException {
+public class ChartIdNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Chart ID ({0}) cannot be not found.";
 

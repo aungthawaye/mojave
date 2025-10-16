@@ -22,6 +22,8 @@
         <option value="$PROJECT_DIR$/implementation/platform/connector/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/consumer/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/publisher/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/04_transaction/admin-client/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/04_transaction/admin/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/lookup/infra/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/lookup/routes-fspiop/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/oracle/pom.xml" />

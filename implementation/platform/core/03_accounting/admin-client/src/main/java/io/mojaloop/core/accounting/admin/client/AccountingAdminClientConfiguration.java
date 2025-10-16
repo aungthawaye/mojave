@@ -53,6 +53,16 @@ public class AccountingAdminClientConfiguration {
                    .build();
     }
 
+    @Bean
+    public AccountingAdminService.DefinitionCommands definitionCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.DefinitionCommands.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {

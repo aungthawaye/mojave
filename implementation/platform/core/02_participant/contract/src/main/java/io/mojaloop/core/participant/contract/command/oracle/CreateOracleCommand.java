@@ -31,7 +31,7 @@ import jakarta.validation.constraints.Size;
 
 public interface CreateOracleCommand {
 
-    Output execute(Input input) throws OracleAlreadyExistsException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull PartyIdType type,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,

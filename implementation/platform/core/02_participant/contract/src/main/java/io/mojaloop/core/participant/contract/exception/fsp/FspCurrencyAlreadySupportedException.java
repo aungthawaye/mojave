@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.fsp;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.Currency;
 
-public class FspCurrencyAlreadySupportedException extends DomainException {
+public class FspCurrencyAlreadySupportedException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Currency, {0}, is already supported for FSP.";
 

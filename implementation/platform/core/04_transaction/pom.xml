@@ -13,8 +13,6 @@
     <modules>
         <module>contract</module>
         <module>domain</module>
-        <module>admin</module>
-        <module>admin-client</module>
         <module>intercom</module>
         <module>intercom-client</module>
     </modules>

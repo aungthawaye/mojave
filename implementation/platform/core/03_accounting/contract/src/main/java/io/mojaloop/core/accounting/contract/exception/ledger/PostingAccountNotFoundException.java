@@ -39,13 +39,13 @@
 
 package io.mojaloop.core.accounting.contract.exception.ledger;
 
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.fspiop.spec.core.Currency;
 
-public class PostingAccountNotFoundException extends DomainException {
+public class PostingAccountNotFoundException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Posting Account cannot be not found for Owner ID ({0}), Chart Entry ID ({1}) and Currency ({2}) combination.";
 

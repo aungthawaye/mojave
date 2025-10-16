@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface DeactivateAccountCommand {
 
-    Output execute(Input input) throws AccountIdNotFoundException;
+    Output execute(Input input);
 
     /**
      * Input for deactivating an Account.

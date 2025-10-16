@@ -39,11 +39,11 @@
 
 package io.mojaloop.core.participant.contract.exception.oracle;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 
-public class OracleAlreadyExistsException extends DomainException {
+public class OracleAlreadyExistsException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Oracle for PartyIdType ({0}) already exists.";
 

@@ -22,9 +22,9 @@ package io.mojaloop.core.participant.contract.exception.oracle;
 
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class OracleNameTooLongException extends InputException {
+public class OracleNameTooLongException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Oracle Name is too long. Must not exceed " + StringSizeConstraints.MAX_NAME_TITLE_LENGTH + " characters.";
 

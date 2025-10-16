@@ -30,7 +30,7 @@ import jakarta.validation.constraints.Size;
 
 public interface ChangeFspNameCommand {
 
-    Output execute(Input input) throws FspIdNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name) { }
