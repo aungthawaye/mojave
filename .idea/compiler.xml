@@ -14,13 +14,15 @@
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-accounting-intercom" />
+        <module name="mod-transaction-intercom-client" />
         <module name="mod-common-datatype-converter" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-quoting-domain" />
         <module name="mod-component-web" />
         <module name="mod-connector-gateway" />
-        <module name="mod-participant-admin" />
         <module name="mod-accounting-admin-client" />
+        <module name="mod-participant-admin" />
+        <module name="mod-wallet-contract" />
         <module name="mod-connector-sample" />
         <module name="mod-accounting-admin" />
         <module name="mod-common-datatype" />
@@ -30,17 +32,20 @@
         <module name="mod-fspiop-spec" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
+        <module name="mod-wallet-admin" />
         <module name="mod-accounting-domain" />
         <module name="mod-fspiop-component" />
         <module name="mod-component-tomcat" />
         <module name="mod-lookup-service" />
-        <module name="mod-transaction-admin" />
+        <module name="mod-accounting-intercom-client" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
+        <module name="mod-wallet-domain" />
         <module name="mod-accounting-contract" />
         <module name="mod-component-retrofit" />
         <module name="mod-quoting-contract" />
         <module name="mod-transaction-contract" />
+        <module name="mod-transaction-intercom" />
         <module name="mod-transaction-domain" />
         <module name="mod-participant-domain" />
         <module name="mod-fspiop-invoker" />
@@ -57,6 +62,8 @@
       <module name="mod-account-contract" target="21" />
       <module name="mod-account-domain" target="21" />
       <module name="mod-account-intercom" target="21" />
+      <module name="mod-accounting-consumer" target="21" />
+      <module name="mod-accounting-publisher" target="21" />
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
       <module name="mod-component-http" target="21" />
@@ -75,6 +82,8 @@
       <module name="mod-participant-util" target="21" />
       <module name="mod-participant-utility" target="21" />
       <module name="mod-shared-security" target="21" />
+      <module name="mod-transaction-admin" target="21" />
+      <module name="mod-transaction-admin-client" target="21" />
       <module name="oracle-pom" target="21" />
       <module name="shared-pom" target="21" />
     </bytecodeTargetLevel>
@@ -96,9 +105,12 @@
       <module name="mod-account-intercom" options="-parameters" />
       <module name="mod-accounting-admin" options="-parameters" />
       <module name="mod-accounting-admin-client" options="-parameters" />
+      <module name="mod-accounting-consumer" options="-parameters" />
       <module name="mod-accounting-contract" options="-parameters" />
       <module name="mod-accounting-domain" options="-parameters" />
       <module name="mod-accounting-intercom" options="-parameters" />
+      <module name="mod-accounting-intercom-client" options="-parameters" />
+      <module name="mod-accounting-publisher" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-common-datatype-converter" options="-parameters" />
@@ -149,8 +161,14 @@
       <module name="mod-quoting-service" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="mod-transaction-admin" options="-parameters" />
+      <module name="mod-transaction-admin-client" options="-parameters" />
       <module name="mod-transaction-contract" options="-parameters" />
       <module name="mod-transaction-domain" options="-parameters" />
+      <module name="mod-transaction-intercom" options="-parameters" />
+      <module name="mod-transaction-intercom-client" options="-parameters" />
+      <module name="mod-wallet-admin" options="-parameters" />
+      <module name="mod-wallet-contract" options="-parameters" />
+      <module name="mod-wallet-domain" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
@@ -161,6 +179,7 @@
       <module name="shared-pom" options="-parameters" />
       <module name="transaction-pom" options="-parameters" />
       <module name="transfer-pom" options="-parameters" />
+      <module name="wallet-pom" options="-parameters" />
     </option>
   </component>
 </project>

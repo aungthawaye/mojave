@@ -52,6 +52,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -286,10 +287,7 @@ public class FspCoreAdapter {
             LOGGER.info("Posting transfers to FSP Core: {}", agreement);
             var result = this.fspClient.postTransfers(payer,
                                                       new Transfers.Post.Request(request.getTransferId(),
-                                                                                 agreement.quoteId(),
-                                                                                 agreement.payer(),
-                                                                                 agreement.payee(),
-                                                                                 request.getAmount(),
+                                                                                 agreement,
                                                                                  request.getExtensionList()));
             LOGGER.info("Got transfers from FSP Core: {}", result);
 

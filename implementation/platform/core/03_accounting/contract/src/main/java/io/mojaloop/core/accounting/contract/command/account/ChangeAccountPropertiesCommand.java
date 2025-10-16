@@ -29,7 +29,7 @@ import jakarta.validation.constraints.Size;
 
 public interface ChangeAccountPropertiesCommand {
 
-    Output execute(Input input) throws AccountIdNotFoundException;
+    Output execute(Input input);
 
     /**
      * Input for changing Account properties. Only allows changing code, name, and description.

@@ -29,7 +29,7 @@ import jakarta.validation.constraints.Size;
 
 public interface ChangeChartEntryPropertiesCommand {
 
-    Output execute(Input input) throws ChartEntryIdNotFoundException;
+    Output execute(Input input);
 
     record Input(
         @JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,

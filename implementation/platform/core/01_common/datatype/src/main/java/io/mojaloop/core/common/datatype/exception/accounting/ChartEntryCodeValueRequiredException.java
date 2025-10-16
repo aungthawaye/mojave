@@ -21,9 +21,9 @@
 package io.mojaloop.core.common.datatype.exception.accounting;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class ChartEntryCodeValueRequiredException extends InputException {
+public class ChartEntryCodeValueRequiredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Value is required to create Chart Entry Code.";
 

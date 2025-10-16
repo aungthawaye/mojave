@@ -22,9 +22,9 @@ package io.mojaloop.core.common.datatype.exception.participant;
 
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class FspCodeValueTooLargeException extends InputException {
+public class FspCodeValueTooLargeException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "FSP Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
 

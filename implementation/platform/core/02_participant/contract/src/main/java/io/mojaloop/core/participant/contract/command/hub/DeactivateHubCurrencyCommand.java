@@ -48,7 +48,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface DeactivateHubCurrencyCommand {
 
-    Output execute(Input input) throws HubNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,
                  @JsonProperty(required = true) @NotNull Currency currency) { }

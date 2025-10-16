@@ -19,16 +19,16 @@
             <artifactId>mod-component-misc</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
+            <groupId>io.mojaloop.platform.core.common</groupId>
+            <artifactId>mod-common-datatype</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.fspiop</groupId>
             <artifactId>mod-fspiop-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.common</groupId>
-            <artifactId>mod-common-datatype</artifactId>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -49,7 +49,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface AddHubCurrencyCommand {
 
-    Output execute(Input input) throws HubNotFoundException, HubCurrencyAlreadySupportedException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,
                  @JsonProperty(required = true) @NotNull Currency currency) { }

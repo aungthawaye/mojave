@@ -21,16 +21,19 @@
 package io.mojaloop.core.accounting.contract.command.ledger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
-import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountFoundException;
+import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
+import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementResult;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementStage;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotNull;
@@ -41,25 +44,32 @@ import java.util.List;
 
 public interface PostLedgerFlowCommand {
 
-    Output execute(Input input) throws PostingAccountFoundException, InsufficientBalanceInAccountException;
+    Output execute(Input input) throws
+                                PostingAccountNotFoundException,
+                                InsufficientBalanceInAccountException,
+                                OverdraftLimitReachedInAccountException,
+                                DuplicatePostingInLedgerException,
+                                RestoreFailedInAccountException;
 
-    record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
+    record Input(@JsonProperty(required = true) @NotNull Currency currency,
+                 @JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull TransactionType transactionType,
                  @JsonProperty(required = true) @NotNull Instant transactionAt,
                  List<Posting> postings) {
 
-        public record Posting(@JsonProperty(required = true) @NotNull OwnerId ownerId,
+        public record Posting(@JsonProperty(required = true) @NotNull AccountOwnerId ownerId,
                               @JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
-                              @JsonProperty(required = true) @NotNull Currency currency,
                               @JsonProperty(required = true) @NotNull Side side,
-                              @JsonProperty(required = true) @NotNull BigDecimal amount) { }
+                              @JsonProperty(required = true) @NotNull BigDecimal amount) {
+
+        }
 
     }
 
     record Output(List<Flow> flows) {
 
         public record Flow(AccountId accountId,
-                           OwnerId ownerId,
+                           AccountOwnerId ownerId,
                            ChartEntryId chartEntryId,
                            LedgerMovementId ledgerMovementId,
                            Side side,

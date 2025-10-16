@@ -26,9 +26,12 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryDescriptionTooLongException;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameRequiredException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameTooLongException;
+import io.mojaloop.core.accounting.domain.cache.redis.updater.ChartEntryCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.accounting.ChartEntryCodeConverter;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
@@ -37,6 +40,7 @@ import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
@@ -56,8 +60,9 @@ import java.time.Instant;
 import static java.sql.Types.BIGINT;
 
 @Getter
-@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @Entity
+@EntityListeners(value = {ChartEntryCacheUpdater.class})
+@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 
@@ -89,7 +94,8 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @JoinColumn(name = "chart_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
     protected Chart chart;
 
-    public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType) {
+    public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType)
+        throws ChartEntryNameAlreadyExistsException, ChartEntryCodeAlreadyExistsException {
 
         assert chart != null;
         assert code != null;
@@ -104,9 +110,39 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
         this.createdAt = Instant.now();
     }
 
-    public ChartEntry code(ChartEntryCode code) {
+    public ChartEntry code(ChartEntryCode code) throws ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
 
         assert code != null;
+
+        try {
+            this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
+                if (existingEntry.getCode().equals(code)) {
+                    try {
+                        throw new ChartEntryCodeAlreadyExistsException(code);
+                    } catch (ChartEntryCodeAlreadyExistsException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+            this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
+                if (existingEntry.getName().equalsIgnoreCase(name)) {
+                    try {
+                        throw new ChartEntryNameAlreadyExistsException(name, this.chart.name);
+                    } catch (ChartEntryNameAlreadyExistsException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+        } catch (RuntimeException e) {
+
+            if (e.getCause() instanceof ChartEntryCodeAlreadyExistsException e1) {
+                throw e1;
+            } else if (e.getCause() instanceof ChartEntryNameAlreadyExistsException e2) {
+                throw e2;
+            }
+        }
 
         this.code = code;
 

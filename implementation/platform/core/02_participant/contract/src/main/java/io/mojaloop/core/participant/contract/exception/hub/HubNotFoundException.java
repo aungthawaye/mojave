@@ -39,10 +39,10 @@
 
 package io.mojaloop.core.participant.contract.exception.hub;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class HubNotFoundException extends DomainException {
+public class HubNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Hub cannot be not found. Need to configure Hub first.";
 

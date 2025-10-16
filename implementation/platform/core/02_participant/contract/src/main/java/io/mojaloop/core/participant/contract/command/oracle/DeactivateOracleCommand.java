@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface DeactivateOracleCommand {
 
-    Output execute(Input input) throws OracleIdNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull OracleId oracleId) { }
 

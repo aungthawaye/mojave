@@ -29,7 +29,7 @@ import io.mojaloop.core.accounting.domain.command.BaseDomainIT;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -63,7 +63,7 @@ public class DeactivateAccountCommandIT extends BaseDomainIT {
             chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
 
         final var createInput = new CreateAccountCommand.Input(
-            entryOut.chartEntryId(), new OwnerId(2002L), Currency.USD, new AccountCode("ACC004"),
+            entryOut.chartEntryId(), new AccountOwnerId(2002L), Currency.USD, new AccountCode("ACC004"),
             "Account", "Desc", OverdraftMode.FORBID, BigDecimal.ZERO);
         final var accountOut = this.createAccountCommand.execute(createInput);
 

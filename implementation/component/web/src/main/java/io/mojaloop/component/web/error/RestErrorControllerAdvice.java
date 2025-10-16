@@ -21,7 +21,7 @@
 package io.mojaloop.component.web.error;
 
 import io.mojaloop.component.misc.error.RestErrorResponse;
-import io.mojaloop.component.misc.exception.DomainException;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -36,8 +36,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class RestErrorControllerAdvice {
 
-    @ExceptionHandler(DomainException.class)
-    public ResponseEntity<RestErrorResponse> handle(DomainException e) {
+    @ExceptionHandler(CheckedDomainException.class)
+    public ResponseEntity<RestErrorResponse> handle(CheckedDomainException e) {
 
         return new ResponseEntity<>(new RestErrorResponse(e.getTemplate().code(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }

@@ -40,9 +40,9 @@
 package io.mojaloop.core.participant.contract.exception.hub;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class HubNameRequiredException extends InputException {
+public class HubNameRequiredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Hub Name is required.";
 

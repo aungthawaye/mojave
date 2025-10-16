@@ -7,7 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-common-datatype-converter</artifactId>
-    <name>Mojaloop - Core - Common - Datatype Converter</name>
+    <name>Mojaloop - Platform - Core - Common - Datatype Converter</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

@@ -22,9 +22,9 @@ package io.mojaloop.core.common.datatype.exception.accounting;
 
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class ChartEntryCodeValueTooLargeException extends InputException {
+public class ChartEntryCodeValueTooLargeException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Chart Entry Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
 

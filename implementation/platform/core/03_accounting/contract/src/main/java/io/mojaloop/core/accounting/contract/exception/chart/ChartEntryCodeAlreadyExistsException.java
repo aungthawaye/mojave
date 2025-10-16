@@ -39,11 +39,11 @@
 
 package io.mojaloop.core.accounting.contract.exception.chart;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 
-public class ChartEntryCodeAlreadyExistsException extends DomainException {
+public class ChartEntryCodeAlreadyExistsException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "The Chart Entry Code ({0}) already exists.";
 

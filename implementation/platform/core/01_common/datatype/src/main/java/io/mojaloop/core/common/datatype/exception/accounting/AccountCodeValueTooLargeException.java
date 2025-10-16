@@ -22,9 +22,9 @@ package io.mojaloop.core.common.datatype.exception.accounting;
 
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class AccountCodeValueTooLargeException extends InputException {
+public class AccountCodeValueTooLargeException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Account Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
 

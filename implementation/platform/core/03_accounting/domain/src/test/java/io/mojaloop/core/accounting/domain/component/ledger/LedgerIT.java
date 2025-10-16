@@ -20,32 +20,37 @@
 
 package io.mojaloop.core.accounting.domain.component.ledger;
 
+import io.mojaloop.component.jpa.routing.RoutingDataSource;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import io.mojaloop.core.accounting.domain.TestConfiguration;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import io.mojaloop.fspiop.spec.core.Currency;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -59,6 +64,8 @@ public class LedgerIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LedgerIT.class);
 
+    private JdbcTemplate jdbcTemplate;
+
     @Autowired
     private CreateChartCommand createChartCommand;
 
@@ -71,8 +78,15 @@ public class LedgerIT {
     @Autowired
     private Ledger ledger;
 
+    @Autowired
+    public void setDataSource(final DataSource dataSource) {
+
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
     @Test
-    public void test_postings() throws ChartIdNotFoundException, InterruptedException, ChartEntryCodeAlreadyExistsException {
+    public void test_postings()
+        throws ChartIdNotFoundException, InterruptedException, ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
 
         var chart = this.createChartCommand.execute(new CreateChartCommand.Input("HUB"));
 
@@ -95,7 +109,7 @@ public class LedgerIT {
                                                                                                           AccountType.LIABILITY));
 
         var hubLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(hubLiquidity.chartEntryId(),
-                                                                                               new OwnerId(new HubId().getId()),
+                                                                                               new AccountOwnerId(new HubId().getId()),
                                                                                                Currency.USD,
                                                                                                new AccountCode("HUB_1000_USD"),
                                                                                                "Hub Liquidity",
@@ -103,7 +117,7 @@ public class LedgerIT {
                                                                                                OverdraftMode.FORBID,
                                                                                                BigDecimal.ZERO));
 
-        var fsp1 = new OwnerId(Snowflake.get().nextId());
+        var fsp1 = new AccountOwnerId(2L);
         var fsp1_LiabilityLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityLiquidity.chartEntryId(),
                                                                                                           fsp1,
                                                                                                           Currency.USD,
@@ -116,15 +130,34 @@ public class LedgerIT {
         var fsp1_LiabilityPositionAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityPosition.chartEntryId(),
                                                                                                          fsp1,
                                                                                                          Currency.USD,
-                                                                                                         new AccountCode("HUB_3000_FSP2_USD"),
+                                                                                                         new AccountCode("HUB_3000_FSP1_USD"),
                                                                                                          "FSP1 Position (USD)",
                                                                                                          "FSP1 Position (USD)",
                                                                                                          OverdraftMode.FORBID,
                                                                                                          BigDecimal.ZERO));
 
+        var fsp2 = new AccountOwnerId(3L);
+        var fsp2_LiabilityLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityLiquidity.chartEntryId(),
+                                                                                                          fsp2,
+                                                                                                          Currency.USD,
+                                                                                                          new AccountCode("HUB_2000_FSP2_USD"),
+                                                                                                          "FSP2 Liquidity (USD)",
+                                                                                                          "FSP2 Liquidity (USD)",
+                                                                                                          OverdraftMode.FORBID,
+                                                                                                          BigDecimal.ZERO));
+
+        var fsp2_LiabilityPositionAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(fspLiabilityPosition.chartEntryId(),
+                                                                                                         fsp2,
+                                                                                                         Currency.USD,
+                                                                                                         new AccountCode("HUB_3000_FSP2_USD"),
+                                                                                                         "FSP2 Position (USD)",
+                                                                                                         "FSP2 Position (USD)",
+                                                                                                         OverdraftMode.FORBID,
+                                                                                                         BigDecimal.ZERO));
+
         try (var executor = Executors.newFixedThreadPool(100)) {
 
-            var count = 1;
+            var count = 0;
             var latch = new CountDownLatch(count);
             var index = new AtomicInteger(0);
             var startAt = System.nanoTime();
@@ -133,32 +166,63 @@ public class LedgerIT {
 
                 //executor.submit(() -> {
 
-                    index.incrementAndGet();
-                    var requests = new ArrayList<Ledger.Request>();
+                index.incrementAndGet();
+                var requests = new ArrayList<Ledger.Request>();
 
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(2L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(4L)));
-                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), fsp1_LiabilityPositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L)));
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(4L)));
 
-                    try {
+                // Hub -> Fsp1
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()),
+                                                fsp1_LiabilityLiquidityAcc.accountId(),
+                                                Side.CREDIT,
+                                                Currency.USD,
+                                                new BigDecimal(2L)));
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()),
+                                                fsp1_LiabilityLiquidityAcc.accountId(),
+                                                Side.DEBIT,
+                                                Currency.USD,
+                                                new BigDecimal(1L)));
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()),
+                                                fsp1_LiabilityPositionAcc.accountId(),
+                                                Side.CREDIT,
+                                                Currency.USD,
+                                                new BigDecimal(1L)));
 
-                        LOGGER.info("Postings : {}", requests);
+                // Hub -> Fsp2
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()),
+                                                fsp2_LiabilityLiquidityAcc.accountId(),
+                                                Side.CREDIT,
+                                                Currency.USD,
+                                                new BigDecimal(2L)));
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()),
+                                                fsp2_LiabilityLiquidityAcc.accountId(),
+                                                Side.DEBIT,
+                                                Currency.USD,
+                                                new BigDecimal(1L)));
+                requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()),
+                                                fsp2_LiabilityPositionAcc.accountId(),
+                                                Side.CREDIT,
+                                                Currency.USD,
+                                                new BigDecimal(1L)));
 
-                        var threadStartAt = System.nanoTime();
-                        this.ledger.post(requests, new TransactionId(Snowflake.get().nextId()), Instant.now(), TransactionType.FUND_IN);
-                        var threadEndAt = System.nanoTime();
+                try {
 
-                        LOGGER.info("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
+                    LOGGER.info("Postings : {}", requests);
 
-                    } catch (Ledger.InsufficientBalanceException | Ledger.OverdraftExceededException | Ledger.RestoreFailedException e) {
+                    var threadStartAt = System.nanoTime();
+                    this.ledger.post(requests, new TransactionId(Snowflake.get().nextId()), Instant.now(), TransactionType.FUND_IN);
+                    var threadEndAt = System.nanoTime();
 
-                        LOGGER.error("Error posting ledger movements", e);
-                        throw new RuntimeException(e);
+                    LOGGER.info("Thread {} took {}ns", Thread.currentThread().getName(), threadEndAt - threadStartAt);
 
-                    } finally {
-                        latch.countDown();
-                    }
+                } catch (Ledger.InsufficientBalanceException | Ledger.DuplicatePostingException | Ledger.OverdraftExceededException | Ledger.RestoreFailedException e) {
+
+                    LOGGER.error("Error posting ledger movements", e);
+                    throw new RuntimeException(e);
+
+                } finally {
+                    latch.countDown();
+                }
 
                 //});
             }
@@ -171,6 +235,25 @@ public class LedgerIT {
             LOGGER.info("Total run : {}", index.get());
         }
 
+    }
+
+    @BeforeEach
+    void cleanupDb() {
+
+        RoutingDataSource.setDataSourceKey(RoutingDataSource.Keys.WRITE);
+
+        // Disable FK checks to truncate in any order
+        this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=0");
+
+        // Order doesn't matter with FK checks disabled
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_ledger_movement");
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_ledger_balance");
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_account");
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_chart_entry");
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_chart");
+
+        // Re-enable FK checks
+        this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=1");
     }
 
 }

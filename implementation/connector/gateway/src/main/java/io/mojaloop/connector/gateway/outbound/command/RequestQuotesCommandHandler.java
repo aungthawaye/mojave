@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.time.Instant;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -78,16 +77,10 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
         if (expiration != null && !expiration.isBlank()) {
 
-            try {
+            var expireAt = FspiopDates.fromRequestBody(expiration);
 
-                var expireAt = FspiopDates.fromRequestBody(expiration);
-
-                if (expireAt.isBefore(Instant.now())) {
-                    throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Expiration date/time must be in the future.");
-                }
-
-            } catch (ParseException e) {
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The date/time format of expiration is not valid.");
+            if (expireAt.isBefore(Instant.now())) {
+                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Expiration date/time must be in the future.");
             }
         }
 

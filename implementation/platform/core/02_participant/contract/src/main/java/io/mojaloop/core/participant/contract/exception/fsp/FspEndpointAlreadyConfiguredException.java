@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.fsp;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 
-public class FspEndpointAlreadyConfiguredException extends DomainException {
+public class FspEndpointAlreadyConfiguredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Endpoint type ({0}) is already configured.";
 

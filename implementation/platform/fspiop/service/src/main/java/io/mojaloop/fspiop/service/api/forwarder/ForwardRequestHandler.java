@@ -25,7 +25,7 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -42,19 +42,19 @@ public class ForwardRequestHandler implements ForwardRequest {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationErrorHandler fspiopInvocationErrorHandler;
+    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
 
     public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService,
                                  FspiopErrorDecoder fspiopErrorDecoder,
-                                 FspiopInvocationErrorHandler fspiopInvocationErrorHandler) {
+                                 FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
 
         assert forwardingService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationErrorHandler != null;
+        assert fspiopInvocationExceptionHandler != null;
 
         this.forwardingService = forwardingService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationErrorHandler = fspiopInvocationErrorHandler;
+        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ForwardRequestHandler implements ForwardRequest {
         } catch (RetrofitService.InvocationException e) {
 
             LOGGER.error("Error forwarding request to : {} {} - error {}", method, baseUrl, e.getMessage());
-            throw this.fspiopInvocationErrorHandler.handle(e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 

@@ -6,7 +6,7 @@ import io.mojaloop.component.misc.query.SortingMode;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.query.AccountQuery;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class FindAccountController {
 
         public record Criteria(AccountCode accountCode,
                                String name,
-                               OwnerId ownerId,
+                               AccountOwnerId ownerId,
                                ChartEntryId chartEntryId,
                                Currency currency) { }
 

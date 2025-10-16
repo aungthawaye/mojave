@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotNull;
 
 public interface TerminateAccountCommand {
 
-    Output execute(Input input) throws AccountIdNotFoundException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull AccountId accountId) { }
 

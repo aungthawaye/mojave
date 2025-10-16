@@ -5,7 +5,7 @@ import io.mojaloop.core.accounting.contract.exception.account.AccountCodeNotFoun
 import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.accounting.contract.query.AccountQuery;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class GetAccountController {
     @ResponseBody
     public List<AccountData> byOwnerId(@RequestParam Long ownerId) {
 
-        return this.accountQuery.get(new OwnerId(ownerId));
+        return this.accountQuery.get(new AccountOwnerId(ownerId));
     }
 
 }

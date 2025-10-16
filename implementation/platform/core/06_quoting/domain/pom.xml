@@ -15,8 +15,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-flyway</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
@@ -27,17 +28,16 @@
             <artifactId>mod-common-datatype-converter</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.quoting</groupId>
-            <artifactId>mod-quoting-contract</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.mojaloop.platform.core.participant</groupId>
             <artifactId>mod-participant-store</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-flyway</artifactId>
-            <scope>test</scope>
+            <groupId>io.mojaloop.platform.core.quoting</groupId>
+            <artifactId>mod-quoting-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
         </dependency>
     </dependencies>
 </project>

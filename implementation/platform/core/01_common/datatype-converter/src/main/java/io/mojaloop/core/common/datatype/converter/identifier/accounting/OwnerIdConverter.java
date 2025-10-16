@@ -20,23 +20,23 @@
 
 package io.mojaloop.core.common.datatype.converter.identifier.accounting;
 
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
-public class OwnerIdConverter implements AttributeConverter<OwnerId, Long> {
+public class OwnerIdConverter implements AttributeConverter<AccountOwnerId, Long> {
 
     @Override
-    public Long convertToDatabaseColumn(OwnerId attribute) {
+    public Long convertToDatabaseColumn(AccountOwnerId attribute) {
 
         return attribute == null ? null : attribute.getId();
     }
 
     @Override
-    public OwnerId convertToEntityAttribute(Long dbData) {
+    public AccountOwnerId convertToEntityAttribute(Long dbData) {
 
-        return dbData == null ? null : new OwnerId(dbData);
+        return dbData == null ? null : new AccountOwnerId(dbData);
     }
 
 }

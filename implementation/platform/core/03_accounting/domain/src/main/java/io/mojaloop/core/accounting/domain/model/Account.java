@@ -41,7 +41,7 @@ import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
@@ -88,7 +88,7 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @JavaType(OwnerIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(name = "owner_id", nullable = false, updatable = false)
-    protected OwnerId ownerId;
+    protected AccountOwnerId ownerId;
 
     @Column(name = "type", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
@@ -129,7 +129,7 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     protected LedgerBalance ledgerBalance;
 
     public Account(ChartEntry chartEntry,
-                   OwnerId ownerId,
+                   AccountOwnerId ownerId,
                    Currency currency,
                    AccountCode code,
                    String name,

@@ -23,6 +23,7 @@ package io.mojaloop.core.accounting.contract.command.chart;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
@@ -34,7 +35,7 @@ import jakarta.validation.constraints.Size;
 
 public interface CreateChartEntryCommand {
 
-    Output execute(Input input) throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException;
+    Output execute(Input input) throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException;
 
     record Input(@JsonProperty(required = true) @NotNull ChartId chartId,
                  @JsonProperty(required = true) @NotNull ChartEntryCode code,

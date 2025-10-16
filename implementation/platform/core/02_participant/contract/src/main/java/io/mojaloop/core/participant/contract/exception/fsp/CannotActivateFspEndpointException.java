@@ -20,11 +20,11 @@
 
 package io.mojaloop.core.participant.contract.exception.fsp;
 
-import io.mojaloop.component.misc.exception.DomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 
-public class CannotActivateFspEndpointException extends DomainException {
+public class CannotActivateFspEndpointException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Cannot activate the endpoint, {0}. FSP is not active.";
 

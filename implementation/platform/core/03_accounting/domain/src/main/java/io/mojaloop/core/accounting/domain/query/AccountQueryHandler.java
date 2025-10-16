@@ -12,7 +12,7 @@ import io.mojaloop.core.accounting.domain.model.Account;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +41,7 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public PagedResult<AccountData> find(AccountCode accountCode,
                                          String name,
-                                         OwnerId ownerId,
+                                         AccountOwnerId ownerId,
                                          ChartEntryId chartEntryId,
                                          Currency currency,
                                          PagedRequest pagedRequest,
@@ -108,7 +108,7 @@ public class AccountQueryHandler implements AccountQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<AccountData> get(OwnerId ownerId) {
+    public List<AccountData> get(AccountOwnerId ownerId) {
 
         return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId)).stream().map(
             Account::convert).collect(Collectors.toList());

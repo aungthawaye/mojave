@@ -55,7 +55,7 @@ public class RedissonPubSubClientConfigurer {
         }
 
         config.setNettyThreads(Runtime.getRuntime().availableProcessors() * 2);
-        config.setExecutor(Executors.newFixedThreadPool(settings.executorCount()));
+        config.setExecutor(Executors.newFixedThreadPool(settings.executorCount() != 0 ? settings.executorCount() : Runtime.getRuntime().availableProcessors() * 2));
 
         if (!settings.cluster()) {
 
@@ -66,8 +66,8 @@ public class RedissonPubSubClientConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize())
-                .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
+                .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() : 64)
                 .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
                 .setPingConnectionInterval(10000);
 
@@ -81,8 +81,8 @@ public class RedissonPubSubClientConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize())
-                .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
+                .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() : 64)
                 .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
                 .setPingConnectionInterval(10000);
         }

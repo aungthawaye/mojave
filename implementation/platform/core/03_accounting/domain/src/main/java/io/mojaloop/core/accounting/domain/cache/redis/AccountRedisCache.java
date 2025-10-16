@@ -26,7 +26,7 @@ import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
-import io.mojaloop.core.common.datatype.identifier.accounting.OwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -111,7 +112,7 @@ public class AccountRedisCache implements AccountCache {
     }
 
     @Override
-    public Set<AccountData> get(OwnerId ownerId) {
+    public Set<AccountData> get(AccountOwnerId ownerId) {
 
         return this.withOwnerId.get(ownerId.getId());
     }
@@ -123,11 +124,25 @@ public class AccountRedisCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(ChartEntryId chartEntryId, OwnerId ownerId, Currency currency) {
+    public AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
 
         var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
 
         return this.withChartEntryIdOwnerIdCurrency.get(key);
+    }
+
+    @Override
+    public Set<AccountData> get(ChartEntryId chartEntryId) {
+
+        var result = new HashSet<AccountData>();
+
+        for (var account : this.withId.values()) {
+            if (account.chartEntryId().equals(chartEntryId)) {
+                result.add(account);
+            }
+        }
+
+        return result;
     }
 
     @PostConstruct

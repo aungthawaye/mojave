@@ -27,7 +27,7 @@ import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationErrorHandler;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
 import io.mojaloop.fspiop.invoker.api.PartiesService;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.slf4j.Logger;
@@ -45,22 +45,22 @@ class GetPartiesHandler implements GetParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationErrorHandler fspiopInvocationErrorHandler;
+    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
 
     public GetPartiesHandler(ParticipantContext participantContext,
                              PartiesService partiesService,
                              FspiopErrorDecoder fspiopErrorDecoder,
-                             FspiopInvocationErrorHandler fspiopInvocationErrorHandler) {
+                             FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
 
         assert participantContext != null;
         assert partiesService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationErrorHandler != null;
+        assert fspiopInvocationExceptionHandler != null;
 
         this.participantContext = participantContext;
         this.partiesService = partiesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationErrorHandler = fspiopInvocationErrorHandler;
+        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
     }
 
     @Override
@@ -89,7 +89,7 @@ class GetPartiesHandler implements GetParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationErrorHandler.handle(e);
+            throw this.fspiopInvocationExceptionHandler.handle(e);
         }
     }
 

@@ -21,9 +21,9 @@
 package io.mojaloop.core.participant.contract.exception.fsp;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.component.misc.exception.InputException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class FspCodeRequiredException extends InputException {
+public class FspCodeRequiredException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "FSP Code is required.";
 
