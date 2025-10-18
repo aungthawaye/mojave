@@ -2,25 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.platform</groupId>
-        <artifactId>platform-pom</artifactId>
+        <groupId>io.mojaloop.platform.core</groupId>
+        <artifactId>core-pom</artifactId>
         <version>1.0.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>io.mojaloop.platform.core</groupId>
-    <artifactId>core-pom</artifactId>
+    <groupId>io.mojaloop.platform.core.transaction</groupId>
+    <artifactId>transaction-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core</name>
+    <name>Mojaloop - Platform - Core - 03 Transaction</name>
     <modules>
-        <module>00_common</module>
-        <module>01_participant</module>
-        <module>02_accounting</module>
-        <module>03_transaction</module>
-        <module>04_lookup</module>
-        <module>05_quoting</module>
-        <module>06_transfer</module>
-        <module>07_settlement</module>
-        <module>08_wallet</module>
+        <module>contract</module>
+        <module>domain</module>
+        <module>intercom</module>
+        <module>intercom-client</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
