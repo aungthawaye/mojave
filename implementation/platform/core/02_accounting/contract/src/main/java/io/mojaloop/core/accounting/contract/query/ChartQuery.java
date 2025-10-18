@@ -20,5 +20,17 @@
 
 package io.mojaloop.core.accounting.contract.query;
 
+import io.mojaloop.core.accounting.contract.data.ChartData;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
+
+import java.util.List;
+
 public interface ChartQuery {
+
+    ChartData get(ChartId chartId) throws ChartIdNotFoundException;
+
+    List<ChartData> getByNameContains(String name);
+
+    List<ChartData> getAll();
 }

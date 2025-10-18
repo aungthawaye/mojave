@@ -401,6 +401,166 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "GET /charts/get-all-charts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/get-all-charts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "get-all-charts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /charts/get-by-chart-id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/get-by-chart-id?chartId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "get-by-chart-id"
+              ],
+              "query": [
+                {
+                  "key": "chartId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /charts/get-by-name-contains",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/get-by-name-contains?name=Assets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "get-by-name-contains"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Assets"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /charts/entries/get-all-entries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries/get-all-entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries",
+                "get-all-entries"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /charts/entries/get-by-entry-id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries/get-by-entry-id?entryId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries",
+                "get-by-entry-id"
+              ],
+              "query": [
+                {
+                  "key": "entryId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /charts/entries/get-by-chart-id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries/get-by-chart-id?chartId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries",
+                "get-by-chart-id"
+              ],
+              "query": [
+                {
+                  "key": "chartId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /charts/entries/get-by-name-contains",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries/get-by-name-contains?name=Cash",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries",
+                "get-by-name-contains"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Cash"
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -625,6 +785,75 @@
                 "definitions",
                 "flows",
                 "remove-posting"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /definitions/flows/get-all-definitions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/get-all-definitions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "get-all-definitions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /definitions/flows/get-by-id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/get-by-id?flowDefinitionId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "get-by-id"
+              ],
+              "query": [
+                {
+                  "key": "flowDefinitionId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /definitions/flows/get-by-name-contains",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/get-by-name-contains?name=P2P",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "get-by-name-contains"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "P2P"
+                }
               ]
             }
           },
