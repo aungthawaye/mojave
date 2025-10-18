@@ -1,0 +1,181 @@
+package io.mojaloop.core.accounting.domain.command.ledger;
+
+import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.data.AccountData;
+import io.mojaloop.core.accounting.contract.exception.account.AccountNotActiveException;
+import io.mojaloop.core.accounting.contract.exception.definition.AmountNameNotFoundInTransactionException;
+import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotConfiguredException;
+import io.mojaloop.core.accounting.contract.exception.definition.ParticipantTypeNotFoundInTransactionException;
+import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
+import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
+import io.mojaloop.core.accounting.domain.cache.AccountCache;
+import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
+import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
+import io.mojaloop.core.common.datatype.enums.ActivationStatus;
+import io.mojaloop.core.common.datatype.enums.accounting.AccountResolving;
+import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
+import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+
+@Service
+public class PostTransactionCommandHandler implements PostTransactionCommand {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostTransactionCommandHandler.class);
+
+    private final AccountCache accountCache;
+
+    private final FlowDefinitionCache flowDefinitionCache;
+
+    private final Ledger ledger;
+
+    public PostTransactionCommandHandler(AccountCache accountCache, FlowDefinitionCache flowDefinitionCache, Ledger ledger) {
+
+        assert accountCache != null;
+        assert flowDefinitionCache != null;
+        assert ledger != null;
+
+        this.accountCache = accountCache;
+        this.flowDefinitionCache = flowDefinitionCache;
+        this.ledger = ledger;
+    }
+
+    @Override
+    public Output execute(Input input)
+        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException {
+
+        LOGGER.info("Executing PostTransactionCommand with input: {}", input);
+
+        var flowDefinition = this.flowDefinitionCache.get(input.transactionType(), input.currency());
+
+        if (flowDefinition == null) {
+            LOGGER.error("Flow Definition not found for transaction type: {} and currency: {}", input.transactionType(), input.currency());
+            throw new FlowDefinitionNotConfiguredException(input.transactionType(), input.currency());
+        }
+
+        var requests = new ArrayList<Ledger.Request>();
+
+        flowDefinition.postings().forEach(posting -> {
+
+            var accountOwnerId = input.participants().get(posting.participantType());
+
+            if (accountOwnerId == null) {
+                var participants = String.join(",", input.participants().keySet());
+                LOGGER.error("Configured participant type not found in Transaction's participants: configured type: {}, participants : {}",
+                             posting.participantType(),
+                             participants);
+                throw new ParticipantTypeNotFoundInTransactionException(posting.participantType(), participants);
+            }
+
+            var amount = input.amounts().get(posting.amountName());
+
+            if (amount == null) {
+                var amounts = String.join(",", input.amounts().keySet());
+                LOGGER.error("Configured amount name not found in Transaction's amounts: configured amount name: {}, amounts: {}", posting.amountName(), amounts);
+                throw new AmountNameNotFoundInTransactionException(posting.amountName(), amounts);
+            }
+
+            AccountId accountId = null;
+            AccountData accountData = null;
+
+            if (posting.accountResolving() == AccountResolving.BY_CHART_ENTRY) {
+
+                accountData = this.accountCache.get(new ChartEntryId(posting.accountOrChartEntryId()), accountOwnerId, input.currency());
+                accountId = accountData.accountId();
+
+            } else {
+
+                accountId = new AccountId(posting.accountOrChartEntryId());
+                accountData = this.accountCache.get(accountId);
+            }
+
+            if (accountData.activationStatus() != ActivationStatus.ACTIVE) {
+                LOGGER.warn("Account {} is not active", accountId);
+                throw new AccountNotActiveException(accountData.code());
+            }
+
+            var request = new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), accountId, posting.side(), input.currency(), amount);
+
+            requests.add(request);
+        });
+
+        try {
+
+            var movements = this.ledger.post(requests, input.transactionId(), input.transactionAt(), input.transactionType());
+            var flows = new ArrayList<Output.Flow>();
+
+            movements.forEach(movement -> {
+
+                var accountData = this.accountCache.get(movement.accountId());
+
+                flows.add(new Output.Flow(movement.ledgerMovementId(),
+                                          movement.accountId(),
+                                          accountData.ownerId(),
+                                          accountData.chartEntryId(),
+                                          movement.side(),
+                                          movement.currency(),
+                                          movement.amount(),
+                                          new PostTransactionCommand.Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
+                                          new PostTransactionCommand.Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
+                                          movement.movementStage(),
+                                          movement.movementResult(),
+                                          movement.createdAt()));
+            });
+
+            return new Output(input.transactionId(), input.transactionAt(), input.transactionType(), flows);
+
+        } catch (Ledger.InsufficientBalanceException e) {
+
+            var accountData = this.accountCache.get(e.getAccountId());
+            LOGGER.error("Insufficient balance in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}",
+                         accountData.code(),
+                         e.getSide(),
+                         e.getAmount(),
+                         e.getDrCr().debits(),
+                         e.getDrCr().credits(),
+                         input.transactionId());
+            throw new InsufficientBalanceInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+
+        } catch (Ledger.OverdraftExceededException e) {
+
+            var accountData = this.accountCache.get(e.getAccountId());
+            LOGGER.error("Insufficient balance in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}",
+                         accountData.code(),
+                         e.getSide(),
+                         e.getAmount(),
+                         e.getDrCr().debits(),
+                         e.getDrCr().credits(),
+                         input.transactionId());
+
+            throw new OverdraftLimitReachedInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+
+        } catch (Ledger.RestoreFailedException e) {
+
+            var accountData = this.accountCache.get(e.getAccountId());
+            LOGGER.error("Restore failed in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}",
+                         accountData.code(),
+                         e.getSide(),
+                         e.getAmount(),
+                         e.getDrCr().debits(),
+                         e.getDrCr().credits(),
+                         input.transactionId());
+
+            throw new RestoreFailedInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+
+        } catch (Ledger.DuplicatePostingException e) {
+
+            var accountData = this.accountCache.get(e.getAccountId());
+            LOGGER.error("Duplicate posting in ledger : code : {} | side : {} | transactionId : {}", accountData.code(), e.getSide(), input.transactionId());
+
+            throw new DuplicatePostingInLedgerException(accountData.code(), e.getSide(), input.transactionId());
+        }
+    }
+
+}

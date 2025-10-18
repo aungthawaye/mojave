@@ -12,15 +12,15 @@
     <packaging>pom</packaging>
     <name>Mojaloop - Platform - Core</name>
     <modules>
-        <module>01_common</module>
-        <module>02_participant</module>
-        <module>03_accounting</module>
-        <module>04_transaction</module>
-        <module>05_lookup</module>
-        <module>06_quoting</module>
-        <module>07_transfer</module>
-        <module>08_settlement</module>
-        <module>09_wallet</module>
+        <module>00_common</module>
+        <module>01_participant</module>
+        <module>02_accounting</module>
+        <module>03_transaction</module>
+        <module>04_lookup</module>
+        <module>05_quoting</module>
+        <module>06_transfer</module>
+        <module>07_settlement</module>
+        <module>08_wallet</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

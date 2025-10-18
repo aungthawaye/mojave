@@ -1,0 +1,636 @@
+{
+  "info": {
+    "_postman_id": "f5f0c5a0-2d7c-4b03-9b77-7a9aa1c3d001",
+    "name": "Account Admin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for io.mojaloop.core.accounting.admin.controller endpoints."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Welcome",
+      "item": [
+        {
+          "name": "GET /",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "POST /accounts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /accounts/activate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/activate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "activate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /accounts/deactivate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/deactivate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /accounts/terminate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/terminate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "terminate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /accounts/change-properties",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/change-properties",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "change-properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /accounts/get-all-accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-all-accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-all-accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /accounts/get-by-account-code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-by-account-code?accountCode=ACC-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-by-account-code"
+              ],
+              "query": [
+                {
+                  "key": "accountCode",
+                  "value": "ACC-001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /accounts/get-by-account-id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-by-account-id?accountId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-by-account-id"
+              ],
+              "query": [
+                {
+                  "key": "accountId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /accounts/get-by-owner-id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/get-by-owner-id?ownerId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "get-by-owner-id"
+              ],
+              "query": [
+                {
+                  "key": "ownerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /accounts/find-accounts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/find-accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "find-accounts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Charts",
+      "item": [
+        {
+          "name": "POST /charts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /charts/entries",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /charts/change-name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts/change-name",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "change-name"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /charts/entries/change-properties",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/charts/entries/change-properties",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "charts",
+                "entries",
+                "change-properties"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Definitions",
+      "item": [
+        {
+          "name": "POST /definitions/flows",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/activate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/activate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "activate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/deactivate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/deactivate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/terminate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/terminate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "terminate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/change-currency",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/change-currency",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "change-currency"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/change-properties",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/change-properties",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "change-properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/add-postings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/add-postings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "add-postings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /definitions/flows/remove-posting",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/definitions/flows/remove-posting",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "definitions",
+                "flows",
+                "remove-posting"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
