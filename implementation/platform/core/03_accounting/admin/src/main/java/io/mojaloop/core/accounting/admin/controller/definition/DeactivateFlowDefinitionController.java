@@ -66,7 +66,7 @@ public class DeactivateFlowDefinitionController {
 
     @PostMapping("/definitions/flows/deactivate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final DeactivateFlowDefinitionCommand.Input input) throws FlowDefinitionNotFoundException {
+    public void execute(@Valid @RequestBody final DeactivateFlowDefinitionCommand.Input input) {
 
         this.deactivateFlowDefinitionCommand.execute(input);
     }

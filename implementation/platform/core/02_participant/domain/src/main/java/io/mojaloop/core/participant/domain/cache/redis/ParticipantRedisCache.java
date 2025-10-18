@@ -30,6 +30,7 @@ import io.mojaloop.core.participant.contract.data.FxpData;
 import io.mojaloop.core.participant.contract.data.OracleData;
 import io.mojaloop.core.participant.domain.cache.ParticipantCache;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
+import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.annotation.PostConstruct;
@@ -43,6 +44,8 @@ public class ParticipantRedisCache implements ParticipantCache {
 
     private final FspRepository fspRepository;
 
+    private final OracleRepository oracleRepository;
+
     private final RMap<Long, FspData> fspWithId;
 
     private final RMap<String, FspData> fspWithFspCode;
@@ -55,12 +58,14 @@ public class ParticipantRedisCache implements ParticipantCache {
 
     private final RSetMultimap<String, FxpData> fxpWithCurrencyPair;
 
-    public ParticipantRedisCache(FspRepository fspRepository, RedissonOpsClient redissonOpsClient) {
+    public ParticipantRedisCache(FspRepository fspRepository, OracleRepository oracleRepository, RedissonOpsClient redissonOpsClient) {
 
         assert fspRepository != null;
+        assert oracleRepository != null;
         assert redissonOpsClient != null;
 
         this.fspRepository = fspRepository;
+        this.oracleRepository = oracleRepository;
 
         var redissonClient = redissonOpsClient.getRedissonClient();
 
@@ -72,6 +77,25 @@ public class ParticipantRedisCache implements ParticipantCache {
 
         this.fxpWithId = redissonClient.getMap(ParticipantCache.Names.FXP_WITH_ID);
         this.fxpWithCurrencyPair = redissonClient.getSetMultimap(ParticipantCache.Names.FXP_WITH_CURRENCY_PAIR);
+    }
+
+    @Override
+    public void bootstrap() {
+
+        this.clear();
+
+        var fsps = this.fspRepository.findAll();
+        var oracles = this.oracleRepository.findAll();
+
+        for (var fsp : fsps) {
+
+            this.save(fsp.convert());
+        }
+
+        for (var oracle : oracles) {
+
+            this.save(oracle.convert());
+        }
     }
 
     @Override
@@ -171,12 +195,7 @@ public class ParticipantRedisCache implements ParticipantCache {
     @PostConstruct
     public void postConstruct() {
 
-        var fsps = this.fspRepository.findAll();
-
-        for (var fsp : fsps) {
-
-            this.save(fsp.convert());
-        }
+        this.bootstrap();
     }
 
     @Override

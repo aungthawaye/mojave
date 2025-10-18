@@ -33,9 +33,9 @@ public interface OracleQuery {
 
     Optional<OracleData> find(PartyIdType type);
 
-    OracleData get(PartyIdType type) throws OracleTypeNotFoundException;
+    OracleData get(PartyIdType type);
 
-    OracleData get(OracleId oracleId) throws OracleIdNotFoundException;
+    OracleData get(OracleId oracleId);
 
     List<OracleData> getAll();
 

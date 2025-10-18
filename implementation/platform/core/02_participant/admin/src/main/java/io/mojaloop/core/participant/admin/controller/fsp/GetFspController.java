@@ -62,7 +62,7 @@ public class GetFspController {
     @GetMapping("/fsps/get-by-fsp-code")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public FspData byFspCode(@RequestParam String fspCode) throws FspCodeNotFoundException {
+    public FspData byFspCode(@RequestParam String fspCode) {
 
         return this.fspQuery.get(new FspCode(fspCode));
     }
@@ -70,7 +70,7 @@ public class GetFspController {
     @GetMapping("/fsps/get-by-fsp-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public FspData byFspId(@RequestParam Long fspId) throws FspIdNotFoundException {
+    public FspData byFspId(@RequestParam Long fspId) {
 
         return this.fspQuery.get(new FspId(fspId));
     }

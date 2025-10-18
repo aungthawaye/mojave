@@ -67,8 +67,7 @@ public class RemoveFlowDefinitionPostingController {
 
     @PostMapping("/definitions/flows/remove-posting")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final RemoveFlowDefinitionPostingCommand.Input input)
-        throws PostingDefinitionNotFoundException, FlowDefinitionNotFoundException {
+    public void execute(@Valid @RequestBody final RemoveFlowDefinitionPostingCommand.Input input) {
 
         this.removeFlowDefinitionPostingCommand.execute(input);
     }

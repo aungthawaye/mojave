@@ -49,8 +49,7 @@ public class ChangeOracleTypeController {
     @PostMapping("/oracles/change-type")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeOracleTypeCommand.Output execute(@Valid @RequestBody ChangeOracleTypeCommand.Input input)
-        throws OracleAlreadyExistsException, OracleIdNotFoundException {
+    public ChangeOracleTypeCommand.Output execute(@Valid @RequestBody ChangeOracleTypeCommand.Input input) {
 
         return this.changeOracleTypeCommand.execute(input);
     }

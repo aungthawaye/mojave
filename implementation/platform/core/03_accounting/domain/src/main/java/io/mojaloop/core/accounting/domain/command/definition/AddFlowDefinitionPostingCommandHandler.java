@@ -30,6 +30,7 @@ import io.mojaloop.core.accounting.domain.model.PostingDefinition;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +46,8 @@ public class AddFlowDefinitionPostingCommandHandler implements AddFlowDefinition
     private final ChartEntryCache chartEntryCache;
 
     public AddFlowDefinitionPostingCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
-                                                  final AccountCache accountCache,
-                                                  final ChartEntryCache chartEntryCache) {
+                                                  @Qualifier(AccountCache.Qualifiers.DEFAULT) final AccountCache accountCache,
+                                                  @Qualifier(ChartEntryCache.Qualifiers.DEFAULT) final ChartEntryCache chartEntryCache) {
 
         assert flowDefinitionRepository != null;
         assert accountCache != null;
@@ -60,7 +61,7 @@ public class AddFlowDefinitionPostingCommandHandler implements AddFlowDefinition
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws ChartEntryConflictsInPostingDefinitionException, FlowDefinitionNotFoundException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing AddFlowDefinitionPostingCommand with input: {}", input);
 
@@ -72,7 +73,7 @@ public class AddFlowDefinitionPostingCommandHandler implements AddFlowDefinition
 
             final var pd = new PostingDefinition(
                 definition,
-                posting.partyType(),
+                posting.participantType(),
                 posting.amountName(),
                 posting.side(),
                 posting.selection(),

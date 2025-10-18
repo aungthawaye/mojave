@@ -48,8 +48,7 @@ public class ActivateOracleController {
     @PostMapping("/oracles/activate-oracle")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ActivateOracleCommand.Output execute(@Valid @RequestBody ActivateOracleCommand.Input input)
-        throws OracleIdNotFoundException {
+    public ActivateOracleCommand.Output execute(@Valid @RequestBody ActivateOracleCommand.Input input) {
 
         return this.activateOracleCommand.execute(input);
     }

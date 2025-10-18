@@ -14,6 +14,7 @@ import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
     private final Ledger ledger;
 
-    public PostLedgerFlowCommandHandler(AccountCache accountCache, Ledger ledger) {
+    public PostLedgerFlowCommandHandler(@Qualifier(AccountCache.Qualifiers.DEFAULT) AccountCache accountCache, Ledger ledger) {
 
         assert accountCache != null;
         assert ledger != null;

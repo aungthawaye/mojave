@@ -64,7 +64,7 @@ public class ChangeChartEntryPropertiesCommandHandler implements ChangeChartEntr
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws ChartEntryIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeChartEntryPropertiesCommand with input: {}", input);
 

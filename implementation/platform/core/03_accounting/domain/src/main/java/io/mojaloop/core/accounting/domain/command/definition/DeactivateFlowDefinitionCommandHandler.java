@@ -46,7 +46,7 @@ public class DeactivateFlowDefinitionCommandHandler implements DeactivateFlowDef
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws FlowDefinitionNotFoundException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing DeactivateFlowDefinitionCommand with input: {}", input);
 

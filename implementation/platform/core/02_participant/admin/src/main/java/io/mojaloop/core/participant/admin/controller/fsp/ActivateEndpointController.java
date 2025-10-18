@@ -48,8 +48,7 @@ public class ActivateEndpointController {
 
     @PostMapping("/fsps/activate-endpoint")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ActivateEndpointCommand.Input input)
-        throws FspIdNotFoundException, CannotActivateFspEndpointException {
+    public void execute(@Valid @RequestBody ActivateEndpointCommand.Input input) {
 
         this.activateEndpointCommand.execute(input);
     }

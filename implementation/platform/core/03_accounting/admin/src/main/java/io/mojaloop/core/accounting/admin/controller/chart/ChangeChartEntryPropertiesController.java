@@ -66,7 +66,7 @@ public class ChangeChartEntryPropertiesController {
 
     @PostMapping("/charts/entries/change-properties")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ChangeChartEntryPropertiesCommand.Input input) throws ChartEntryIdNotFoundException {
+    public void execute(@Valid @RequestBody ChangeChartEntryPropertiesCommand.Input input) {
 
         this.changeChartEntryPropertiesCommand.execute(input);
     }

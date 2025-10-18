@@ -124,7 +124,7 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
         return true;
     }
 
-    public HubCurrency addCurrency(Currency currency) throws HubCurrencyAlreadySupportedException {
+    public HubCurrency addCurrency(Currency currency) {
 
         assert currency != null;
 

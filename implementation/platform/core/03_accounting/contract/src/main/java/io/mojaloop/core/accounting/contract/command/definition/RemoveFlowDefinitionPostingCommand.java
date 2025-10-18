@@ -32,7 +32,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public interface RemoveFlowDefinitionPostingCommand {
 
-    Output execute(Input input) throws PostingDefinitionNotFoundException, FlowDefinitionNotFoundException;
+    Output execute(Input input);
 
     /**
      * Input for creating a Fund-In Definition.

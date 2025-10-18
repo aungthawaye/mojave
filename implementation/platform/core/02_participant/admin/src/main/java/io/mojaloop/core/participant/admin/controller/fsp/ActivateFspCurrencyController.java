@@ -50,8 +50,7 @@ public class ActivateFspCurrencyController {
 
     @PostMapping("/fsps/activate-currency")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ActivateFspCurrencyCommand.Input input)
-        throws FspIdNotFoundException, CannotActivateFspCurrencyException, FspCurrencyNotSupportedByHubException, HubNotFoundException {
+    public void execute(@Valid @RequestBody ActivateFspCurrencyCommand.Input input) {
 
         this.activateFspCurrencyCommand.execute(input);
     }

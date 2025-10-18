@@ -51,8 +51,7 @@ public class AddHubCurrencyController {
     @PostMapping("/hubs/add-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public AddHubCurrencyCommand.Output execute(@Valid @RequestBody AddHubCurrencyCommand.Input input)
-        throws HubNotFoundException, FspCurrencyAlreadySupportedException, HubCurrencyAlreadySupportedException {
+    public AddHubCurrencyCommand.Output execute(@Valid @RequestBody AddHubCurrencyCommand.Input input) {
 
         return this.addHubCurrencyCommand.execute(input);
     }

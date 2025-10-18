@@ -66,7 +66,7 @@ public class DeactivateAccountController {
 
     @PostMapping("/accounts/deactivate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody DeactivateAccountCommand.Input input) throws AccountIdNotFoundException {
+    public void execute(@Valid @RequestBody DeactivateAccountCommand.Input input) {
 
         this.deactivateAccountCommand.execute(input);
     }

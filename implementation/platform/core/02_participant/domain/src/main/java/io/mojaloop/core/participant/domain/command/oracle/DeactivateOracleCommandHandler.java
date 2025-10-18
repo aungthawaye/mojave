@@ -64,7 +64,7 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws OracleIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing DeactivateOracleCommand with input: {}", input);
 

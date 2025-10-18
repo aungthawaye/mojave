@@ -45,7 +45,7 @@ public class ActivateAccountCommandHandler implements ActivateAccountCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws AccountIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ActivateAccountCommand with input: {}", input);
 

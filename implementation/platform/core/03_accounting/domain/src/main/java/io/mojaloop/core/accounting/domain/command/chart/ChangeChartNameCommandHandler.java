@@ -64,7 +64,7 @@ public class ChangeChartNameCommandHandler implements ChangeChartNameCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws ChartIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeChartNameCommand with input: {}", input);
 

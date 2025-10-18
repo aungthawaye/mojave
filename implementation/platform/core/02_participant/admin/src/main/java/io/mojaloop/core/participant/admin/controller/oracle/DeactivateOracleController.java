@@ -48,8 +48,7 @@ public class DeactivateOracleController {
     @PostMapping("/oracles/deactivate-oracle")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DeactivateOracleCommand.Output execute(@Valid @RequestBody DeactivateOracleCommand.Input input)
-        throws OracleIdNotFoundException {
+    public DeactivateOracleCommand.Output execute(@Valid @RequestBody DeactivateOracleCommand.Input input) {
 
         return this.deactivateOracleCommand.execute(input);
     }

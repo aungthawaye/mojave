@@ -59,7 +59,7 @@ public class GetOracleController {
     @GetMapping("/oracles/get-oracle")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public OracleData byOracleId(@RequestParam Long oracleId) throws OracleIdNotFoundException {
+    public OracleData byOracleId(@RequestParam Long oracleId) {
 
         return this.oracleQuery.get(new OracleId(oracleId));
     }

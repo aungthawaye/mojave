@@ -51,8 +51,7 @@ public class CreateHubController {
     @PostMapping("/hubs/create-hub")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateHubCommand.Output execute(@Valid @RequestBody CreateHubCommand.Input input)
-        throws FspCurrencyAlreadySupportedException, HubCountLimitReachedException, HubCurrencyAlreadySupportedException {
+    public CreateHubCommand.Output execute(@Valid @RequestBody CreateHubCommand.Input input) {
 
         return this.createHubCommand.execute(input);
     }

@@ -88,7 +88,7 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
     @JoinColumn(name = "fsp_id", nullable = false, foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
     private Fsp fsp;
 
-    public FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) throws FspEndpointAlreadyConfiguredException {
+    public FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) {
 
         assert fsp != null;
         assert type != null;
@@ -140,7 +140,7 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
         return this.activationStatus == ActivationStatus.ACTIVE;
     }
 
-    void activate() throws CannotActivateFspEndpointException {
+    void activate() {
 
         if (!this.fsp.isActive()) {
 

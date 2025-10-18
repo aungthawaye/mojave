@@ -48,7 +48,7 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws CannotActivateFspEndpointException, FspIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ActivateEndpointCommand with input: {}", input);
 

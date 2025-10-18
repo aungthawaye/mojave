@@ -67,7 +67,7 @@ public class CreateHubCommandHandler implements CreateHubCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws HubCountLimitReachedException, HubCurrencyAlreadySupportedException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing CreateHubCommand with input: {}", input);
 

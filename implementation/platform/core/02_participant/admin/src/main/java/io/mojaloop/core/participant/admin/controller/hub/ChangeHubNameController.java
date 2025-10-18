@@ -49,7 +49,7 @@ public class ChangeHubNameController {
     @PostMapping("/hubs/change-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeHubNameCommand.Output execute(@Valid @RequestBody ChangeHubNameCommand.Input input) throws HubNotFoundException {
+    public ChangeHubNameCommand.Output execute(@Valid @RequestBody ChangeHubNameCommand.Input input) {
 
         return this.changeHubNameCommand.execute(input);
     }

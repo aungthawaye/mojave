@@ -47,7 +47,7 @@ public class DeactivateFspCurrencyController {
 
     @PostMapping("/fsps/deactivate-currency")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody DeactivateFspCurrencyCommand.Input input) throws FspIdNotFoundException {
+    public void execute(@Valid @RequestBody DeactivateFspCurrencyCommand.Input input) {
 
         this.deactivateFspCurrencyCommand.execute(input);
     }

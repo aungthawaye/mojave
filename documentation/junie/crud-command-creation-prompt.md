@@ -11,4 +11,4 @@ You must follow the rules below:
 - Avoid using FQNs whenever importing the classes. Must use the "import" statement.
 - Ensure that the controller handles all possible exceptions and errors gracefully.
 - Follow the coding style and conventions used in the existing codebase.
-- Use meaningful and descriptive variable names.
+- Use meaningful and descriptive variable types.

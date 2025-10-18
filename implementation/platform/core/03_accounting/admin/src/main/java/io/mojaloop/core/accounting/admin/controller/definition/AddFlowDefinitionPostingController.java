@@ -67,8 +67,7 @@ public class AddFlowDefinitionPostingController {
 
     @PostMapping("/definitions/flows/add-postings")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final AddFlowDefinitionPostingCommand.Input input)
-        throws FlowDefinitionNotFoundException, ChartEntryConflictsInPostingDefinitionException {
+    public void execute(@Valid @RequestBody final AddFlowDefinitionPostingCommand.Input input) {
 
         this.addFlowDefinitionPostingCommand.execute(input);
     }

@@ -33,7 +33,7 @@ import jakarta.validation.constraints.Size;
  */
 public interface ChangeFlowDefinitionPropertiesCommand {
 
-    Output execute(Input input) throws FlowDefinitionNotFoundException, FlowDefinitionNameTakenException;
+    Output execute(Input input);
 
     /**
      * Input accepting the identifier and optional properties to change.

@@ -82,7 +82,7 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     @JoinColumn(name = "fsp_id", nullable = false, foreignKey = @ForeignKey(name = "fsp_currency_fsp_FK"))
     private Fsp fsp;
 
-    public FspCurrency(Fsp fsp, Currency currency) throws FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException {
+    public FspCurrency(Fsp fsp, Currency currency) {
 
         assert fsp != null;
         assert currency != null;
@@ -114,7 +114,7 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
         return this.activationStatus == ActivationStatus.ACTIVE;
     }
 
-    void activate() throws CannotActivateFspCurrencyException, FspCurrencyNotSupportedByHubException {
+    void activate() {
 
         if (!this.fsp.isActive()) {
 

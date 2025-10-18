@@ -67,8 +67,7 @@ public class ChangeFlowDefinitionPropertiesController {
 
     @PostMapping("/definitions/flows/change-properties")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input)
-        throws FlowDefinitionNotFoundException, FlowDefinitionNameTakenException {
+    public void execute(@Valid @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input) {
 
         this.changeFlowDefinitionPropertiesCommand.execute(input);
     }

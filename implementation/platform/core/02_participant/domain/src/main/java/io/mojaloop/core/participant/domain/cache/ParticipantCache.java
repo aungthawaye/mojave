@@ -60,9 +60,13 @@ public interface ParticipantCache {
 
     void save(OracleData oracleData);
 
+    void bootstrap();
+
     class Qualifiers {
 
         public static final String REDIS = "redis";
+
+        public static final String IN_MEMORY = "in-memory";
 
         public static final String DEFAULT = REDIS;
 

@@ -64,7 +64,7 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws OracleIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeOracleNameCommand with input: {}", input);
 

@@ -47,7 +47,7 @@ public class DeactivateFspController {
 
     @PostMapping("/fsps/deactivate-fsp")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody DeactivateFspCommand.Input input) throws FspIdNotFoundException {
+    public void execute(@Valid @RequestBody DeactivateFspCommand.Input input) {
 
         this.deactivateFspCommand.execute(input);
     }

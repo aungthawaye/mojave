@@ -64,7 +64,7 @@ public class TerminateOracleCommandHandler implements TerminateOracleCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws OracleIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing TerminateOracleCommand with input: {}", input);
 

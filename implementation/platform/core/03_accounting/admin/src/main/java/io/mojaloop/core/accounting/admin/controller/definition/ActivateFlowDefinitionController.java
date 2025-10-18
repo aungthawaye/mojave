@@ -66,7 +66,7 @@ public class ActivateFlowDefinitionController {
 
     @PostMapping("/definitions/flows/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final ActivateFlowDefinitionCommand.Input input) throws FlowDefinitionNotFoundException {
+    public void execute(@Valid @RequestBody final ActivateFlowDefinitionCommand.Input input) {
 
         this.activateFlowDefinitionCommand.execute(input);
     }

@@ -22,7 +22,6 @@ package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictsInPostingDefinitionException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
@@ -33,6 +32,7 @@ import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,8 +50,8 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
     private final ChartEntryCache chartEntryCache;
 
     public CreateFlowDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
-                                              final AccountCache accountCache,
-                                              final ChartEntryCache chartEntryCache) {
+                                              @Qualifier(AccountCache.Qualifiers.DEFAULT) final AccountCache accountCache,
+                                              @Qualifier(ChartEntryCache.Qualifiers.DEFAULT) final ChartEntryCache chartEntryCache) {
 
         assert flowDefinitionRepository != null;
         assert accountCache != null;
@@ -65,7 +65,7 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws ChartEntryConflictsInPostingDefinitionException, FlowDefinitionWithCurrencyExistsException, FlowDefinitionNameTakenException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing CreateFlowDefinitionCommand with input: {}", input);
 
@@ -91,7 +91,7 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
             final var pd = new PostingDefinition(
                 definition,
-                posting.partyType(),
+                posting.participantType(),
                 posting.amountName(),
                 posting.side(),
                 posting.selection(),

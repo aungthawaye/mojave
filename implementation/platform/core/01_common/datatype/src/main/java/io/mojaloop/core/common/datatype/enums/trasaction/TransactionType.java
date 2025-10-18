@@ -22,21 +22,52 @@ package io.mojaloop.core.common.datatype.enums.trasaction;
 
 import lombok.Getter;
 
+import java.util.Collections;
 import java.util.Set;
 
 public enum TransactionType {
 
-    FUND_IN(new Definition(TransactionPartyType.VOID, TransactionPartyType.FSP, Set.of("LIQUIDITY_AMOUNT"))),
-    FUND_OUT(new Definition(TransactionPartyType.FSP, TransactionPartyType.VOID, Set.of("LIQUIDITY_AMOUNT"))),
-    FUND_TRANSFER(new Definition(TransactionPartyType.FSP, TransactionPartyType.FSP, Set.of("TRANSFER_AMOUNT", "PAYEE_FSP_FEE", "PAYEE_FSP_COMMISSION")));
+    FUND_IN(new Participants(Set.of("FSP")), new Amounts(Set.of("LIQUIDITY_AMOUNT"))),
+    FUND_OUT(new Participants(Set.of("FSP")), new Amounts(Set.of("LIQUIDITY_AMOUNT"))),
+    FUND_TRANSFER(new Participants(Set.of("PAYER_FSP", "PAYEE_FSP")), new Amounts(Set.of("TRANSFER_AMOUNT", "PAYEE_FSP_FEE", "PAYEE_FSP_COMMISSION")));
 
     @Getter
-    private final Definition definition;
+    private final Participants participants;
 
-    TransactionType(Definition definition) {
+    @Getter
+    private final Amounts amounts;
 
-        this.definition = definition;
+    TransactionType(Participants participants, Amounts amounts) {
+
+        this.participants = participants;
+        this.amounts = amounts;
     }
 
-    public record Definition(TransactionPartyType source, TransactionPartyType destination, Set<String> amounts) { }
+    public record Amounts(Set<String> names) {
+
+        public Amounts(Set<String> names) {
+
+            this.names = Collections.unmodifiableSet(names);
+        }
+
+        public boolean contains(String name) {
+
+            return this.names.contains(name);
+        }
+
+    }
+
+    public record Participants(Set<String> types) {
+
+        public Participants(Set<String> types) {
+
+            this.types = Collections.unmodifiableSet(types);
+        }
+
+        public boolean contains(String name) {
+
+            return this.types.contains(name);
+        }
+
+    }
 }

@@ -66,7 +66,7 @@ public class ChangeAccountPropertiesController {
 
     @PostMapping("/accounts/change-properties")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ChangeAccountPropertiesCommand.Input input) throws AccountIdNotFoundException {
+    public void execute(@Valid @RequestBody ChangeAccountPropertiesCommand.Input input) {
 
         this.changeAccountPropertiesCommand.execute(input);
     }

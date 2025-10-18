@@ -46,7 +46,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeEndpointCommand with input: {}", input);
 

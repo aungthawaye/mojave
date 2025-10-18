@@ -49,8 +49,7 @@ public class DeactivateHubCurrencyController {
     @PostMapping("/hubs/deactivate-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DeactivateHubCurrencyCommand.Output execute(@Valid @RequestBody DeactivateHubCurrencyCommand.Input input)
-        throws HubNotFoundException {
+    public DeactivateHubCurrencyCommand.Output execute(@Valid @RequestBody DeactivateHubCurrencyCommand.Input input) {
 
         return this.deactivateHubCurrencyCommand.execute(input);
     }

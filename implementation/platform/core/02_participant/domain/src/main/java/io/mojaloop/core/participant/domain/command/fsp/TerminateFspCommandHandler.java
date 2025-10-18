@@ -46,7 +46,7 @@ public class TerminateFspCommandHandler implements TerminateFspCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing TerminateFspCommand with input: {}", input);
 

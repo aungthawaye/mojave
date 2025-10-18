@@ -47,7 +47,7 @@ public class ChangeFlowDefinitionCurrencyCommandHandler implements ChangeFlowDef
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws FlowDefinitionNotFoundException, FlowDefinitionWithCurrencyExistsException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing ChangeFlowDefinitionCurrencyCommand with input: {}", input);
 

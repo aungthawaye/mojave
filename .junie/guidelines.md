@@ -11,7 +11,7 @@ This document captures conventions and practices to keep development consistent 
 
 ## Testing Information
 - Always create tests to cover all business logic and edge cases.
-- Integration and unit-style tests in this codebase should follow the naming rule: test class names must end with `IT`.
+- Integration and unit-style tests in this codebase should follow the naming rule: test class types must end with `IT`.
   - Example: `CreateChartCommandIT`, `ActivateAccountCommandIT`.
 - Prefer JUnit 5 (`org.junit.jupiter`) and Spring Test where applicable.
 - Keep tests deterministic and independent. Avoid cross-test dependencies.

@@ -55,7 +55,7 @@ public class AccountingAdminApplication {
         new SpringApplicationBuilder(AccountingAdminApplication.class).web(WebApplicationType.SERVLET)
                                                                       .properties("spring.application.name=accounting-admin",
                                                                                   "spring.jmx.enabled=true",
-                                                                                  "spring.jmx.unique-names=true",
+                                                                                  "spring.jmx.unique-types=true",
                                                                                   "spring.jmx.default-domain=accounting-admin",
                                                                                   "spring.application.admin.enabled=true",
                                                                                   "management.endpoints.web.base-path=/actuator",

@@ -50,7 +50,7 @@ public class ActivateFspCurrencyCommandHandler implements ActivateFspCurrencyCom
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws CannotActivateFspCurrencyException, FspIdNotFoundException, HubNotFoundException, FspCurrencyNotSupportedByHubException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ActivateSupportedCurrencyCommand with input: {}", input);
 

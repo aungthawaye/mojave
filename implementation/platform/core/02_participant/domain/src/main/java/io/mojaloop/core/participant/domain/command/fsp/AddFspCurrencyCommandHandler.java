@@ -48,7 +48,7 @@ public class AddFspCurrencyCommandHandler implements AddFspCurrencyCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException, FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing AddSupportedCurrencyCommand with input: {}", input);
 

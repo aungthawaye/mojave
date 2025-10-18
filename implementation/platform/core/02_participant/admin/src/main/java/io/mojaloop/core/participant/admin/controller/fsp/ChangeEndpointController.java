@@ -49,7 +49,7 @@ public class ChangeEndpointController {
     @PostMapping("/fsps/change-endpoint")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeEndpointCommand.Output execute(@Valid @RequestBody ChangeEndpointCommand.Input input) throws FspIdNotFoundException {
+    public ChangeEndpointCommand.Output execute(@Valid @RequestBody ChangeEndpointCommand.Input input) {
 
         return this.changeEndpointCommand.execute(input);
     }

@@ -66,7 +66,7 @@ public class TerminateAccountController {
 
     @PostMapping("/accounts/terminate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody TerminateAccountCommand.Input input) throws AccountIdNotFoundException {
+    public void execute(@Valid @RequestBody TerminateAccountCommand.Input input) {
 
         this.terminateAccountCommand.execute(input);
     }

@@ -49,8 +49,7 @@ public class ActivateFspController {
 
     @PostMapping("/fsps/activate-fsp")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ActivateFspCommand.Input input)
-        throws FspIdNotFoundException, FspCurrencyNotSupportedByHubException, HubNotFoundException {
+    public void execute(@Valid @RequestBody ActivateFspCommand.Input input) {
 
         this.activateFspCommand.execute(input);
     }

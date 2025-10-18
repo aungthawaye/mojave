@@ -56,7 +56,7 @@ public class ParticipantIntercomApplication {
         new SpringApplicationBuilder(ParticipantIntercomApplication.class).web(WebApplicationType.SERVLET)
                                                                           .properties("spring.application.name=participant-intercom",
                                                                                       "spring.jmx.enabled=true",
-                                                                                      "spring.jmx.unique-names=true",
+                                                                                      "spring.jmx.unique-types=true",
                                                                                       "spring.jmx.default-domain=participant-intercom",
                                                                                       "spring.application.admin.enabled=true",
                                                                                       "management.endpoints.web.base-path=/actuator",

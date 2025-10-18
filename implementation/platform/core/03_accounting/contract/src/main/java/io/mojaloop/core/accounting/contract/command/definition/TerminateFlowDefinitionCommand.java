@@ -30,7 +30,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public interface TerminateFlowDefinitionCommand {
 
-    Output execute(Input input) throws FlowDefinitionNotFoundException;
+    Output execute(Input input);
 
     /**
      * Input specifying the definition to terminate.

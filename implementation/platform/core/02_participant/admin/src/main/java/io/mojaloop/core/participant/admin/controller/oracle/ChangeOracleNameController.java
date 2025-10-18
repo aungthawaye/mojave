@@ -48,8 +48,7 @@ public class ChangeOracleNameController {
     @PostMapping("/oracles/change-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeOracleNameCommand.Output execute(@Valid @RequestBody ChangeOracleNameCommand.Input input)
-        throws OracleIdNotFoundException {
+    public ChangeOracleNameCommand.Output execute(@Valid @RequestBody ChangeOracleNameCommand.Input input) {
 
         return this.changeOracleNameCommand.execute(input);
     }

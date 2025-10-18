@@ -47,7 +47,7 @@ public class ActivateFspCommandHandler implements ActivateFspCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException, FspCurrencyNotSupportedByHubException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ActivateFspCommand with input: {}", input);
 

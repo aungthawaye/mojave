@@ -22,8 +22,6 @@ package io.mojaloop.core.accounting.domain.command.chart;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartRepository;
@@ -39,21 +37,17 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
 
     private final ChartRepository chartRepository;
 
-    private final ChartEntryRepository chartEntryRepository;
-
-    public CreateChartEntryCommandHandler(ChartRepository chartRepository, ChartEntryRepository chartEntryRepository) {
+    public CreateChartEntryCommandHandler(ChartRepository chartRepository) {
 
         assert chartRepository != null;
-        assert chartEntryRepository != null;
 
         this.chartRepository = chartRepository;
-        this.chartEntryRepository = chartEntryRepository;
     }
 
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing CreateChartEntryCommand with input: {}", input);
 

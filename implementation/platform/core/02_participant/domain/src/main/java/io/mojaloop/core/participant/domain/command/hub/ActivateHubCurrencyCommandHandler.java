@@ -65,7 +65,7 @@ public class ActivateHubCurrencyCommandHandler implements ActivateHubCurrencyCom
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws HubNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ActivateHubCurrencyCommand with input: {}", input);
 

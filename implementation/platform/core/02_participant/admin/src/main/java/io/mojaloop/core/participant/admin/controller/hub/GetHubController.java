@@ -48,7 +48,7 @@ public class GetHubController {
     @GetMapping("/hubs/get-hub")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public HubData execute() throws HubNotFoundException {
+    public HubData execute() {
 
         return this.hubQuery.get();
     }

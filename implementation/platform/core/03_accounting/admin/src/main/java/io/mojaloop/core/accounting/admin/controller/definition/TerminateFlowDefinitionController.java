@@ -66,7 +66,7 @@ public class TerminateFlowDefinitionController {
 
     @PostMapping("/definitions/flows/terminate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final TerminateFlowDefinitionCommand.Input input) throws FlowDefinitionNotFoundException {
+    public void execute(@Valid @RequestBody final TerminateFlowDefinitionCommand.Input input) {
 
         this.terminateFlowDefinitionCommand.execute(input);
     }

@@ -52,8 +52,7 @@ public class AddFspCurrencyController {
     @PostMapping("/fsps/add-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public AddFspCurrencyCommand.Output execute(@Valid @RequestBody AddFspCurrencyCommand.Input input)
-        throws FspIdNotFoundException, FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException, HubNotFoundException {
+    public AddFspCurrencyCommand.Output execute(@Valid @RequestBody AddFspCurrencyCommand.Input input) {
 
         return this.addFspCurrencyCommand.execute(input);
     }

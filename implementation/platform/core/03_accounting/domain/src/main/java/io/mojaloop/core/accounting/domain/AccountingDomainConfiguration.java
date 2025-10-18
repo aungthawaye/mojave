@@ -24,8 +24,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.redis.RedissonOpsClientConfiguration;
+import io.mojaloop.core.accounting.domain.cache.AccountCache;
+import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
+import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
+import io.mojaloop.core.accounting.domain.cache.local.AccountLocalCache;
+import io.mojaloop.core.accounting.domain.cache.local.ChartEntryLocalCache;
+import io.mojaloop.core.accounting.domain.cache.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
+import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
+import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheAccountResolver;
+import io.mojaloop.core.accounting.domain.repository.AccountRepository;
+import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
+import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -35,6 +46,30 @@ import org.springframework.context.annotation.Import;
 public class AccountingDomainConfiguration {
 
     @Bean
+    public AccountCache accountCache(AccountRepository accountRepository) {
+
+        return new AccountLocalCache(accountRepository);
+    }
+
+    @Bean
+    public AccountResolver accountResolver(AccountCache accountCache) {
+
+        return new CacheAccountResolver(accountCache);
+    }
+
+    @Bean
+    public ChartEntryCache chartEntryCache(ChartEntryRepository chartEntryRepository) {
+
+        return new ChartEntryLocalCache(chartEntryRepository);
+    }
+
+    @Bean
+    public FlowDefinitionCache flowDefinitionCache(FlowDefinitionRepository flowDefinitionRepository) {
+
+        return new FlowDefinitionLocalCache(flowDefinitionRepository);
+    }
+
+    @Bean
     public Ledger ledgers(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {
 
         return new MySqlLedger(ledgerDbSettings, objectMapper);
@@ -42,9 +77,7 @@ public class AccountingDomainConfiguration {
 
     public interface RequiredBeans { }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              RoutingJpaConfiguration.RequiredSettings,
-                                              RedissonOpsClientConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings, RedissonOpsClientConfiguration.RequiredSettings {
 
         MySqlLedger.LedgerDbSettings ledgerDbSettings();
 

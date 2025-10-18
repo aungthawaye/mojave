@@ -21,11 +21,8 @@
 package io.mojaloop.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictsInPostingDefinitionException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.common.datatype.enums.accounting.AccountSelectionMethod;
+import io.mojaloop.core.common.datatype.enums.accounting.AccountResolving;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
-import io.mojaloop.core.common.datatype.enums.trasaction.TransactionPartyType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import jakarta.validation.constraints.NotNull;
 
@@ -36,7 +33,7 @@ import java.util.List;
  */
 public interface AddFlowDefinitionPostingCommand {
 
-    Output execute(Input input) throws ChartEntryConflictsInPostingDefinitionException, FlowDefinitionNotFoundException;
+    Output execute(Input input);
 
     /**
      * Input for adding postings under a Flow Definition.
@@ -44,10 +41,10 @@ public interface AddFlowDefinitionPostingCommand {
     record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
                  @JsonProperty(required = true) List<Posting> postings) {
 
-        public record Posting(TransactionPartyType partyType,
+        public record Posting(String participantType,
                                String amountName,
                                Side side,
-                               AccountSelectionMethod selection,
+                               AccountResolving selection,
                                Long selectedId,
                                String description) { }
 

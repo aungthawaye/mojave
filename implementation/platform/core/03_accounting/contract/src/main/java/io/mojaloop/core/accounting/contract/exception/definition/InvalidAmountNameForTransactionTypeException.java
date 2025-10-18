@@ -43,13 +43,13 @@ import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 
-public class DefinitionAmountNameInvalidException extends UncheckedDomainException {
+public class InvalidAmountNameForTransactionTypeException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Definition's Amount Name is invalid. It must be one of {0}.";
 
-    public DefinitionAmountNameInvalidException(TransactionType transactionType) {
+    public InvalidAmountNameForTransactionTypeException(TransactionType transactionType) {
 
-        super(new ErrorTemplate("DEFINITION_AMOUNT_NAME_INVALID", TEMPLATE), transactionType.getDefinition().amounts().toArray(new String[0]));
+        super(new ErrorTemplate("INVALID_AMOUNT_NAME_FOR_TRANSACTION_TYPE", TEMPLATE), transactionType.getAmounts().names().toArray(new String[0]));
     }
 
 }

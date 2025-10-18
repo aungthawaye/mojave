@@ -30,9 +30,9 @@ import java.util.List;
 
 public interface FspQuery {
 
-    FspData get(FspId fspId) throws FspIdNotFoundException;
+    FspData get(FspId fspId);
 
-    FspData get(FspCode fspCode) throws FspCodeNotFoundException;
+    FspData get(FspCode fspCode);
 
     List<FspData> getAll();
 

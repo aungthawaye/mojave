@@ -64,7 +64,7 @@ public class ChangeHubNameCommandHandler implements ChangeHubNameCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws HubNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeHubNameCommand with input: {}", input);
 

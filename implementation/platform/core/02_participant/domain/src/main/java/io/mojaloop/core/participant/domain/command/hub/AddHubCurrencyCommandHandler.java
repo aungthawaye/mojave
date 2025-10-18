@@ -65,7 +65,7 @@ public class AddHubCurrencyCommandHandler implements AddHubCurrencyCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws HubNotFoundException, HubCurrencyAlreadySupportedException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing AddHubCurrencyCommand with input: {}", input);
 

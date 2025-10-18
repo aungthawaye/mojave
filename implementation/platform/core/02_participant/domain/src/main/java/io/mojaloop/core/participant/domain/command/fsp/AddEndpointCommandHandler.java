@@ -47,7 +47,7 @@ public class AddEndpointCommandHandler implements AddEndpointCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspEndpointAlreadyConfiguredException, FspIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ConfigureEndpointCommand with input: {}", input);
 

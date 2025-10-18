@@ -46,7 +46,7 @@ public class TerminateFlowDefinitionCommandHandler implements TerminateFlowDefin
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws FlowDefinitionNotFoundException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing TerminateFlowDefinitionCommand with input: {}", input);
 

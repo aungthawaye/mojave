@@ -45,7 +45,7 @@ public class DeactivateAccountCommandHandler implements DeactivateAccountCommand
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws AccountIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing DeactivateAccountCommand with input: {}", input);
 

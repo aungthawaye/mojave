@@ -48,7 +48,7 @@ public interface HubQuery {
 
     long count();
 
-    HubData get() throws HubNotFoundException;
+    HubData get();
 
     List<HubData> getAll();
 

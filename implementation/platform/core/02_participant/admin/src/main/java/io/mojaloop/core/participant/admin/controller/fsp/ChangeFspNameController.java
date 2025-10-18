@@ -49,7 +49,7 @@ public class ChangeFspNameController {
     @PostMapping("/fsps/change-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeFspNameCommand.Output execute(@Valid @RequestBody ChangeFspNameCommand.Input input) throws FspIdNotFoundException {
+    public ChangeFspNameCommand.Output execute(@Valid @RequestBody ChangeFspNameCommand.Input input) {
 
         return this.changeFspNameCommand.execute(input);
     }

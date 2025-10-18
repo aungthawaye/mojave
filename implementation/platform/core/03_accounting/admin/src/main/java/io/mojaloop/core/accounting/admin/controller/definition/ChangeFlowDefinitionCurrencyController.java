@@ -67,8 +67,7 @@ public class ChangeFlowDefinitionCurrencyController {
 
     @PostMapping("/definitions/flows/change-currency")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final ChangeFlowDefinitionCurrencyCommand.Input input)
-        throws FlowDefinitionNotFoundException, FlowDefinitionWithCurrencyExistsException {
+    public void execute(@Valid @RequestBody final ChangeFlowDefinitionCurrencyCommand.Input input) {
 
         this.changeFlowDefinitionCurrencyCommand.execute(input);
     }

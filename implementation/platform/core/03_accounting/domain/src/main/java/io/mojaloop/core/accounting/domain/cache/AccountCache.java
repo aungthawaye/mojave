@@ -51,6 +51,8 @@ public interface AccountCache {
 
         public static final String REDIS = "redis";
 
+        public static final String IN_MEMORY = "in-memory";
+
         public static final String DEFAULT = REDIS;
 
     }

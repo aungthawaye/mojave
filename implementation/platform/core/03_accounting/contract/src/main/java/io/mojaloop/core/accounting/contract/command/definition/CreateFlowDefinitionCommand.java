@@ -22,14 +22,11 @@ package io.mojaloop.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.core.common.datatype.enums.accounting.AccountSelectionMethod;
+import io.mojaloop.core.common.datatype.enums.accounting.AccountResolving;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
-import io.mojaloop.core.common.datatype.enums.trasaction.TransactionPartyType;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
-import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictsInPostingDefinitionException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,23 +39,23 @@ import java.util.List;
  */
 public interface CreateFlowDefinitionCommand {
 
-    Output execute(Input input) throws ChartEntryConflictsInPostingDefinitionException, FlowDefinitionWithCurrencyExistsException, FlowDefinitionNameTakenException;
+    Output execute(Input input);
 
     /**
      * Input for creating a Flow Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull io.mojaloop.core.common.datatype.enums.trasaction.TransactionType transactionType,
+    record Input(@JsonProperty(required = true) @NotNull TransactionType transactionType,
                  @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
                  @JsonProperty(required = true) List<Posting> postings) {
 
-        public record Posting(TransactionPartyType partyType,
-                               String amountName,
-                               Side side,
-                               AccountSelectionMethod selection,
-                               Long selectedId,
-                               String description) { }
+        public record Posting(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participantType,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
+                              @JsonProperty(required = true) @NotNull Side side,
+                              @JsonProperty(required = true) @NotNull AccountResolving selection,
+                              @JsonProperty(required = true) @NotNull Long selectedId,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     }
 

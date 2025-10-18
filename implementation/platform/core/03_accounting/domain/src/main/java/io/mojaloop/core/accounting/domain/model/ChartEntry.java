@@ -94,8 +94,7 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @JoinColumn(name = "chart_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
     protected Chart chart;
 
-    public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType)
-        throws ChartEntryNameAlreadyExistsException, ChartEntryCodeAlreadyExistsException {
+    public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType) {
 
         assert chart != null;
         assert code != null;
@@ -110,39 +109,21 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
         this.createdAt = Instant.now();
     }
 
-    public ChartEntry code(ChartEntryCode code) throws ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
+    public ChartEntry code(ChartEntryCode code) {
 
         assert code != null;
 
-        try {
-            this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
-                if (existingEntry.getCode().equals(code)) {
-                    try {
-                        throw new ChartEntryCodeAlreadyExistsException(code);
-                    } catch (ChartEntryCodeAlreadyExistsException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-
-            this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
-                if (existingEntry.getName().equalsIgnoreCase(name)) {
-                    try {
-                        throw new ChartEntryNameAlreadyExistsException(name, this.chart.name);
-                    } catch (ChartEntryNameAlreadyExistsException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-
-        } catch (RuntimeException e) {
-
-            if (e.getCause() instanceof ChartEntryCodeAlreadyExistsException e1) {
-                throw e1;
-            } else if (e.getCause() instanceof ChartEntryNameAlreadyExistsException e2) {
-                throw e2;
+        this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
+            if (existingEntry.getCode().equals(code)) {
+                throw new ChartEntryCodeAlreadyExistsException(code);
             }
-        }
+        });
+
+        this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
+            if (existingEntry.getName().equalsIgnoreCase(name)) {
+                throw new ChartEntryNameAlreadyExistsException(name, this.chart.name);
+            }
+        });
 
         this.code = code;
 

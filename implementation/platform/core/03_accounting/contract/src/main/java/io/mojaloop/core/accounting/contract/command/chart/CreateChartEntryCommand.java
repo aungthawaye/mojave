@@ -35,7 +35,7 @@ import jakarta.validation.constraints.Size;
 
 public interface CreateChartEntryCommand {
 
-    Output execute(Input input) throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException;
+    Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull ChartId chartId,
                  @JsonProperty(required = true) @NotNull ChartEntryCode code,

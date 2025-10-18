@@ -5,16 +5,15 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.exception.definition.AccountConflictsInPostingDefinitionException;
 import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictsInPostingDefinitionException;
-import io.mojaloop.core.accounting.contract.exception.definition.DefinitionAmountNameInvalidException;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.ImmatureChartEntryException;
+import io.mojaloop.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionAlreadyExistsException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.PostingDefinitionIdJavaType;
-import io.mojaloop.core.common.datatype.enums.accounting.AccountSelectionMethod;
+import io.mojaloop.core.common.datatype.enums.accounting.AccountResolving;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
-import io.mojaloop.core.common.datatype.enums.trasaction.TransactionPartyType;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import jakarta.persistence.Column;
@@ -51,9 +50,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     @Column(name = "posting_definition_id", nullable = false)
     protected PostingDefinitionId id;
 
-    @Column(name = "party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected TransactionPartyType partyType;
+    @Column(name = "participant_type", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    protected String participantType;
 
     @Column(name = "amount_name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String amountName;
@@ -62,11 +60,11 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     @Enumerated(EnumType.STRING)
     protected Side side;
 
-    @Column(name = "selection", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "account_resolving", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected AccountSelectionMethod selection;
+    protected AccountResolving accountResolving;
 
-    @Column(name = "selected_id", nullable = false)
+    @Column(name = "account_or_chart_entry_id", nullable = false)
     protected Long accountOrChartEntryId;
 
     @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
@@ -77,21 +75,21 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     protected FlowDefinition definition;
 
     public PostingDefinition(FlowDefinition definition,
-                             TransactionPartyType partyType,
+                             String participantType,
                              String amountName,
                              Side side,
-                             AccountSelectionMethod selection,
-                             Long selectedId,
+                             AccountResolving accountResolving,
+                             Long accountOrChartEntryId,
                              String description,
                              AccountCache accountCache,
-                             ChartEntryCache chartEntryCache) throws ChartEntryConflictsInPostingDefinitionException {
+                             ChartEntryCache chartEntryCache) {
 
         assert definition != null;
         assert side != null;
 
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
-        this.forPosting(partyType, amountName, side, selection, selectedId, accountCache, chartEntryCache).description(description);
+        this.forPosting(participantType, amountName, side, accountResolving, accountOrChartEntryId, accountCache, chartEntryCache).description(description);
     }
 
     public PostingDefinition description(String description) {
@@ -111,18 +109,18 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         return this;
     }
 
-    public PostingDefinition forPosting(TransactionPartyType partyType,
+    public PostingDefinition forPosting(String participantType,
                                         String amountName,
                                         Side side,
-                                        AccountSelectionMethod selection,
+                                        AccountResolving accountResolving,
                                         Long accountOrChartEntryId,
                                         AccountCache accountCache,
                                         ChartEntryCache chartEntryCache) {
 
-        assert partyType != null;
+        assert participantType != null;
         assert amountName != null;
         assert side != null;
-        assert selection != null;
+        assert accountResolving != null;
         assert accountOrChartEntryId != null;
         assert accountCache != null;
         assert chartEntryCache != null;
@@ -131,9 +129,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         // Validate that the posting definition does not already exist for this flow definition.
         // First, check that the amount name is valid for the flow definition's transaction type.
-        if (!this.definition.transactionType.getDefinition().amounts().contains(amountName)) {
+        if (!this.definition.transactionType.getAmounts().names().contains(amountName)) {
 
-            throw new DefinitionAmountNameInvalidException(this.definition.transactionType);
+            throw new InvalidAmountNameForTransactionTypeException(this.definition.transactionType);
         }
 
         // Now verify whether the newly adding posting conflicts with any of the existing posting definition.
@@ -143,18 +141,19 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         // Find all the accounts, created under the same accountOrChartEntryId in the accounting system, and previously added for the same Side and AmountName.
         var existingAccountIds = this.definition.postingDefinitions.stream()
-                                                                   .filter(pd -> pd.partyType == partyType && pd.selection == AccountSelectionMethod.BY_ACCOUNT &&
+                                                                   .filter(pd -> pd.participantType.equals(participantType) && pd.accountResolving == AccountResolving.BY_ACCOUNT &&
                                                                                      pd.side == side && pd.amountName.equals(_amountName))
                                                                    .map(pd -> pd.accountOrChartEntryId)
                                                                    .collect(Collectors.toSet());
 
         var existingChartEntryIds = this.definition.postingDefinitions.stream()
-                                                                      .filter(pd -> pd.partyType == partyType && pd.selection == AccountSelectionMethod.BY_CHART_ENTRY &&
-                                                                                        pd.side == side && pd.amountName.equals(_amountName))
+                                                                      .filter(pd -> pd.participantType.equals(participantType) &&
+                                                                                        pd.accountResolving == AccountResolving.BY_CHART_ENTRY && pd.side == side &&
+                                                                                        pd.amountName.equals(_amountName))
                                                                       .map(pd -> pd.accountOrChartEntryId)
                                                                       .collect(Collectors.toSet());
 
-        if (selection == AccountSelectionMethod.BY_CHART_ENTRY) {
+        if (accountResolving == AccountResolving.BY_CHART_ENTRY) {
 
             if (existingChartEntryIds.contains(accountOrChartEntryId)) {
 
@@ -208,20 +207,11 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
             }
         }
 
-        this.partyType = partyType;
+        this.participantType = participantType;
         this.amountName = _amountName;
         this.side = side;
-        this.selection = selection;
+        this.accountResolving = accountResolving;
         this.accountOrChartEntryId = accountOrChartEntryId;
-
-        return this;
-    }
-
-    public PostingDefinition side(Side side) {
-
-        assert side != null;
-
-        this.side = side;
 
         return this;
     }

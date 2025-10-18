@@ -68,8 +68,7 @@ public class CreateFlowDefinitionController {
 
     @PostMapping("/definitions/flows")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateFlowDefinitionCommand.Output execute(@Valid @RequestBody final CreateFlowDefinitionCommand.Input input)
-        throws ChartEntryConflictsInPostingDefinitionException, FlowDefinitionWithCurrencyExistsException, FlowDefinitionNameTakenException {
+    public CreateFlowDefinitionCommand.Output execute(@Valid @RequestBody final CreateFlowDefinitionCommand.Input input) {
 
         return this.createFlowDefinitionCommand.execute(input);
     }

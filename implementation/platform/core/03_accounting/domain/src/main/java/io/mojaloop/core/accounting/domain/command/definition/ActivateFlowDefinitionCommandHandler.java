@@ -46,7 +46,7 @@ public class ActivateFlowDefinitionCommandHandler implements ActivateFlowDefinit
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws FlowDefinitionNotFoundException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing ActivateFlowDefinitionCommand with input: {}", input);
 

@@ -47,7 +47,7 @@ public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowD
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws FlowDefinitionNotFoundException, FlowDefinitionNameTakenException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing ChangeFlowDefinitionPropertiesCommand with input: {}", input);
 

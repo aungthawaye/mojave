@@ -53,7 +53,7 @@ public class FspQueryHandler implements FspQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public FspData get(FspId fspId) throws FspIdNotFoundException {
+    public FspData get(FspId fspId) {
 
         return this.fspRepository.findById(fspId).orElseThrow(() -> new FspIdNotFoundException(fspId)).convert();
     }
@@ -61,7 +61,7 @@ public class FspQueryHandler implements FspQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public FspData get(FspCode fspCode) throws FspCodeNotFoundException {
+    public FspData get(FspCode fspCode) {
 
         return this.fspRepository
                    .findOne(FspRepository.Filters.withFspCode(fspCode))

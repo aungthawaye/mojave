@@ -66,7 +66,7 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws OracleAlreadyExistsException, OracleIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeOracleTypeCommand with input: {}", input);
 

@@ -37,8 +37,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
-@Qualifier(ChartEntryCache.Qualifiers.REDIS)
+
 public class ChartEntryRedisCache implements ChartEntryCache {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChartEntryRedisCache.class);

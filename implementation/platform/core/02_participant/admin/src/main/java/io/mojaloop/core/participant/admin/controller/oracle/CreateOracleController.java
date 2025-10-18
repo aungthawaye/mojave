@@ -49,8 +49,7 @@ public class CreateOracleController {
     @PostMapping("/oracles/create-oracle")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateOracleCommand.Output execute(@Valid @RequestBody CreateOracleCommand.Input input)
-        throws OracleAlreadyExistsException {
+    public CreateOracleCommand.Output execute(@Valid @RequestBody CreateOracleCommand.Input input) {
 
         return this.createOracleCommand.execute(input);
     }

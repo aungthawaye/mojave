@@ -38,7 +38,7 @@ public class QuotingServiceApplication {
             .properties(
                 "spring.application.name=quoting-service",
                 "spring.jmx.enabled=true",
-                "spring.jmx.unique-names=true",
+                "spring.jmx.unique-types=true",
                 "spring.jmx.default-domain=quoting-service",
                 "spring.application.admin.enabled=true",
                 "management.endpoints.web.base-path=/actuator",

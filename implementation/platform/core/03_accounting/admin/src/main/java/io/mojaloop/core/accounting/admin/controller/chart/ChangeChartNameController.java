@@ -66,7 +66,7 @@ public class ChangeChartNameController {
 
     @PostMapping("/charts/change-name")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ChangeChartNameCommand.Input input) throws ChartIdNotFoundException {
+    public void execute(@Valid @RequestBody ChangeChartNameCommand.Input input) {
 
         this.changeChartNameCommand.execute(input);
     }

@@ -47,8 +47,7 @@ public class DeactivateEndpointController {
 
     @PostMapping("/fsps/deactivate-endpoint")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody DeactivateEndpointCommand.Input input)
-        throws FspIdNotFoundException {
+    public void execute(@Valid @RequestBody DeactivateEndpointCommand.Input input) {
 
         this.deactivateEndpointCommand.execute(input);
     }

@@ -87,8 +87,7 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
         this.createdAt = Instant.now();
     }
 
-    public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType)
-        throws ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
+    public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType) {
 
         ChartEntry entry = new ChartEntry(this, code, name, description, accountType);
 

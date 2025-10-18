@@ -66,7 +66,7 @@ public class ActivateAccountController {
 
     @PostMapping("/accounts/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ActivateAccountCommand.Input input) throws AccountIdNotFoundException {
+    public void execute(@Valid @RequestBody ActivateAccountCommand.Input input) {
 
         this.activateAccountCommand.execute(input);
     }

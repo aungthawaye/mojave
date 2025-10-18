@@ -40,7 +40,7 @@ public class LookUpServiceApplication {
             .properties(
                 "spring.application.name=lookup-service",
                 "spring.jmx.enabled=true",
-                "spring.jmx.unique-names=true",
+                "spring.jmx.unique-types=true",
                 "spring.jmx.default-domain=lookup-service",
                 "spring.application.admin.enabled=true",
                 "management.endpoints.web.base-path=/actuator",

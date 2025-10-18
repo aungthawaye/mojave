@@ -32,7 +32,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public interface ChangeFlowDefinitionCurrencyCommand {
 
-    Output execute(Input input) throws FlowDefinitionNotFoundException, FlowDefinitionWithCurrencyExistsException;
+    Output execute(Input input);
 
     /**
      * Input specifying the definition to change currency.

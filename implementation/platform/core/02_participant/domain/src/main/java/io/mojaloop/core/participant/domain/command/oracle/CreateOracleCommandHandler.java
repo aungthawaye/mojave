@@ -65,7 +65,7 @@ public class CreateOracleCommandHandler implements CreateOracleCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws OracleAlreadyExistsException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing CreateOracleCommand with input: {}", input);
 

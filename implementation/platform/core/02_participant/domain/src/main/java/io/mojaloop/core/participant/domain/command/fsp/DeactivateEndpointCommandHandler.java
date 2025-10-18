@@ -47,7 +47,7 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing DeactivateEndpointCommand with input: {}", input);
 

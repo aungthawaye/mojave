@@ -8,16 +8,17 @@ import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
+import io.mojaloop.core.accounting.domain.cache.redis.updater.FlowDefinitionCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
-import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -38,6 +39,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
+@EntityListeners(value = {FlowDefinitionCacheUpdater.class})
 @Table(name = "acc_flow_definition", uniqueConstraints = {@UniqueConstraint(name = "acc_flow_definition_currency_UK", columnNames = {"currency"}),
                                                           @UniqueConstraint(name = "acc_flow_definition_name_UK", columnNames = {"name"})})
 
@@ -75,7 +77,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     @OneToMany(mappedBy = "definition", orphanRemoval = true, cascade = {jakarta.persistence.CascadeType.ALL}, fetch = FetchType.EAGER)
     protected List<PostingDefinition> postingDefinitions = new ArrayList<>();
 
-    public FlowDefinition(TransactionType transactionType,Currency currency, String name, String description) {
+    public FlowDefinition(TransactionType transactionType, Currency currency, String name, String description) {
 
         assert transactionType != null;
         assert currency != null;
@@ -96,16 +98,17 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
 
         var postingData = this.postingDefinitions.stream()
                                                  .map(p -> new FlowDefinitionData.Posting(
-                                                     p.getId(),
-                                                     p.getPartyType(),
-                                                     p.getAmountName(),
-                                                     p.getSide(),
-                                                     p.getSelection(),
-                                                     p.getAccountOrChartEntryId(),
-                                                     p.getDescription()))
+                                                     p.id,
+                                                     p.participantType,
+                                                     p.amountName,
+                                                     p.side,
+                                                     p.accountResolving,
+                                                     p.accountOrChartEntryId,
+                                                     p.description))
                                                  .toList();
 
         return new FlowDefinitionData(this.getId(),
+                                      this.getTransactionType(),
                                       this.getCurrency(),
                                       this.getName(),
                                       this.getDescription(),
@@ -168,7 +171,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
         return this;
     }
 
-    public void removePosting(PostingDefinitionId postingDefinitionId) throws PostingDefinitionNotFoundException {
+    public void removePosting(PostingDefinitionId postingDefinitionId) {
 
         assert postingDefinitionId != null;
 
@@ -186,7 +189,5 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
         this.activationStatus = ActivationStatus.INACTIVE;
         this.terminationStatus = TerminationStatus.TERMINATED;
     }
-
-
 
 }

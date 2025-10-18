@@ -45,7 +45,7 @@ public class TerminateAccountCommandHandler implements TerminateAccountCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws AccountIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing TerminateAccountCommand with input: {}", input);
 

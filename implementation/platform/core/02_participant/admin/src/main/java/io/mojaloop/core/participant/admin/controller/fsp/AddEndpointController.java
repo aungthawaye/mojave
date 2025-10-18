@@ -50,8 +50,7 @@ public class AddEndpointController {
     @PostMapping("/fsps/add-endpoint")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public AddEndpointCommand.Output execute(@Valid @RequestBody AddEndpointCommand.Input input)
-        throws FspIdNotFoundException, FspEndpointAlreadyConfiguredException {
+    public AddEndpointCommand.Output execute(@Valid @RequestBody AddEndpointCommand.Input input) {
 
         return this.addEndpointCommand.execute(input);
 

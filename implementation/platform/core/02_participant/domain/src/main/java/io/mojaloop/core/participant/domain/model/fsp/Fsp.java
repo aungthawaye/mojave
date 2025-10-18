@@ -38,9 +38,7 @@ import io.mojaloop.core.participant.contract.data.FspEndpointData;
 import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
 import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCodeRequiredException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspNameRequiredException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspNameTooLongException;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
@@ -143,7 +141,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         this.createdAt = Instant.now();
     }
 
-    public Optional<FspCurrency> activate(Currency currency) throws CannotActivateFspCurrencyException, FspCurrencyNotSupportedByHubException {
+    public Optional<FspCurrency> activate(Currency currency) {
 
         var fspCurrency = this.currencies.stream().filter(f -> f.getCurrency().equals(currency)).findFirst();
 
@@ -157,7 +155,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         return Optional.empty();
     }
 
-    public Optional<FspEndpoint> activate(EndpointType type) throws CannotActivateFspEndpointException {
+    public Optional<FspEndpoint> activate(EndpointType type) {
 
         var fspEndpoint = this.endpoints.stream().filter(f -> f.getType().equals(type)).findFirst();
 
@@ -171,36 +169,15 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         return Optional.empty();
     }
 
-    public void activate() throws FspCurrencyNotSupportedByHubException {
+    public void activate() {
 
         this.activationStatus = ActivationStatus.ACTIVE;
 
-        try {
-            this.currencies.forEach(sc -> {
-                try {
-                    sc.activate();
-                } catch (CannotActivateFspCurrencyException ignored) {
-                    // Do nothing.
-                } catch (FspCurrencyNotSupportedByHubException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        } catch (RuntimeException e) {
-
-            if (e.getCause() instanceof FspCurrencyNotSupportedByHubException e1) {
-                throw e1;
-            }
-
-        }
-
-        this.endpoints.forEach(e -> {
-            try {
-                e.activate();
-            } catch (CannotActivateFspEndpointException ignored) { }
-        });
+        this.currencies.forEach(FspCurrency::activate);
+        this.endpoints.forEach(FspEndpoint::activate);
     }
 
-    public FspCurrency addCurrency(Currency currency) throws FspCurrencyAlreadySupportedException, FspCurrencyNotSupportedByHubException {
+    public FspCurrency addCurrency(Currency currency) {
 
         assert currency != null;
 
@@ -211,7 +188,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         return supportedCurrency;
     }
 
-    public FspEndpoint addEndpoint(EndpointType type, String host) throws FspEndpointAlreadyConfiguredException {
+    public FspEndpoint addEndpoint(EndpointType type, String host) {
 
         assert type != null;
         assert host != null;

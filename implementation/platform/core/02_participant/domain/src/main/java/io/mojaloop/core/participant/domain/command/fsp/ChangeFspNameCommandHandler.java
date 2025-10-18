@@ -45,7 +45,7 @@ public class ChangeFspNameCommandHandler implements ChangeFspNameCommand {
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws FspIdNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing ChangeFspNameCommand with input: {}", input);
 

@@ -71,7 +71,7 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
     @Override
     @Transactional
     @Write
-    public Output execute(Input input) throws HubNotFoundException {
+    public Output execute(Input input) {
 
         LOGGER.info("Executing DeactivateHubCurrencyCommand with input: {}", input);
 
@@ -97,7 +97,7 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
         LOGGER.info("Completed DeactivateHubCurrencyCommand with input: {} -> deactivated={} ", input, optHubCurrency);
 
         if (optHubCurrency.isPresent()) {
-            return new Output(optHubCurrency.map(HubCurrency::getId).orElse(null), optHubCurrency.get().isActive());
+            return new Output(optHubCurrency.map(HubCurrency::getId).orElse(null), !optHubCurrency.get().isActive());
         }
 
         return new Output(null, false);

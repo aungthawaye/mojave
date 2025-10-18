@@ -40,8 +40,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
-@Qualifier(AccountCache.Qualifiers.REDIS)
+
 public class AccountRedisCache implements AccountCache {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountRedisCache.class);

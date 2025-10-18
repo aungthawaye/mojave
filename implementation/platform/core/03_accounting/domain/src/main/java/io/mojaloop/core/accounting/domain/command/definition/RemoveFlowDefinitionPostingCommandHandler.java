@@ -47,7 +47,7 @@ public class RemoveFlowDefinitionPostingCommandHandler implements RemoveFlowDefi
     @Override
     @Transactional
     @Write
-    public Output execute(final Input input) throws PostingDefinitionNotFoundException, FlowDefinitionNotFoundException {
+    public Output execute(final Input input) {
 
         LOGGER.info("Executing RemoveFlowDefinitionPostingCommand with input: {}", input);
 
