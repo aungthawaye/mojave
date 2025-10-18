@@ -41,15 +41,16 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
+import io.mojaloop.fspiop.spec.core.Currency;
 
-public class FlowDefinitionNotFoundException extends UncheckedDomainException {
+public class FlowDefinitionNotConfiguredException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Flow Definition Id ({0}) cannot be not found.";
+    private static final String TEMPLATE = "Flow Definition for Transaction Type ({0}) and Currency ({1}) is not yet configured.";
 
-    public FlowDefinitionNotFoundException(FlowDefinitionId flowDefinitionId) {
+    public FlowDefinitionNotConfiguredException(TransactionType transactionType, Currency currency) {
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_FOUND", TEMPLATE), flowDefinitionId.getId().toString());
+        super(new ErrorTemplate("FLOW_DEFINITION_NOT_CONFIGURED", TEMPLATE), transactionType.name(), currency.name());
     }
 
 }

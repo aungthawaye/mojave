@@ -41,15 +41,14 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 
-public class FlowDefinitionNotFoundException extends UncheckedDomainException {
+public class AmountNameNotFoundInTransactionException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Flow Definition Id ({0}) cannot be not found.";
+    private static final String TEMPLATE = "Amount Name ({0}) cannot be found in Transaction's amounts ({1}).";
 
-    public FlowDefinitionNotFoundException(FlowDefinitionId flowDefinitionId) {
+    public AmountNameNotFoundInTransactionException(String participantType, String amounts) {
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_FOUND", TEMPLATE), flowDefinitionId.getId().toString());
+        super(new ErrorTemplate("FLOW_DEFINITION_NOT_CONFIGURED", TEMPLATE), participantType, amounts);
     }
 
 }

@@ -1,6 +1,6 @@
 package io.mojaloop.core.accounting.intercom.controller;
 
-import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
 import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
@@ -18,28 +18,28 @@ public class LedgerController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LedgerController.class);
 
-    private final PostLedgerFlowCommand postLedgerFlowCommand;
+    private final PostTransactionCommand postTransactionCommand;
 
-    public LedgerController(PostLedgerFlowCommand postLedgerFlowCommand) {
+    public LedgerController(PostTransactionCommand postTransactionCommand) {
 
-        assert postLedgerFlowCommand != null;
+        assert postTransactionCommand != null;
 
-        this.postLedgerFlowCommand = postLedgerFlowCommand;
+        this.postTransactionCommand = postTransactionCommand;
     }
 
-    @PostMapping("/ledgers/post-ledger-flow")
-    public PostLedgerFlowCommand.Output execute(@Valid @RequestBody PostLedgerFlowCommand.Input input) throws
-                                                                                                       PostingAccountNotFoundException,
-                                                                                                       InsufficientBalanceInAccountException,
-                                                                                                       DuplicatePostingInLedgerException,
-                                                                                                       RestoreFailedInAccountException,
-                                                                                                       OverdraftLimitReachedInAccountException {
+    @PostMapping("/ledgers/post-transaction")
+    public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input) throws
+                                                                                                         PostingAccountNotFoundException,
+                                                                                                         InsufficientBalanceInAccountException,
+                                                                                                         DuplicatePostingInLedgerException,
+                                                                                                         RestoreFailedInAccountException,
+                                                                                                         OverdraftLimitReachedInAccountException {
 
-        LOGGER.info("Entering PostLedgerFlowController.execute: input : {}", input);
+        LOGGER.info("Entering PostTransactionCommand.execute: input : {}", input);
 
-        final var output = this.postLedgerFlowCommand.execute(input);
+        final var output = this.postTransactionCommand.execute(input);
 
-        LOGGER.info("Exiting PostLedgerFlowController.execute: {}", output);
+        LOGGER.info("Exiting PostTransactionCommand.execute: {}", output);
 
         return output;
     }

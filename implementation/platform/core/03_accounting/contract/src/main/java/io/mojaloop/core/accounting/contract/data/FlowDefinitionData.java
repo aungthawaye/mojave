@@ -19,7 +19,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                                  String description,
                                  ActivationStatus activationStatus,
                                  TerminationStatus terminationStatus,
-                                 List<Posting> postings) {
+                                 List<PostingDefinitionData> postings) {
 
     @Override
     public boolean equals(Object o) {
@@ -36,18 +36,18 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         return Objects.hashCode(flowDefinitionId);
     }
 
-    public record Posting(PostingDefinitionId postingDefinitionId,
-                          String participantType,
-                          String amountName,
-                          Side side,
-                          AccountResolving selection,
-                          Long accountOrChartEntryId,
-                          String description) {
+    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
+                                        String participantType,
+                                        String amountName,
+                                        Side side,
+                                        AccountResolving accountResolving,
+                                        Long accountOrChartEntryId,
+                                        String description) {
 
         @Override
         public boolean equals(Object o) {
 
-            if (!(o instanceof Posting that)) {
+            if (!(o instanceof PostingDefinitionData that)) {
                 return false;
             }
             return Objects.equals(postingDefinitionId, that.postingDefinitionId);

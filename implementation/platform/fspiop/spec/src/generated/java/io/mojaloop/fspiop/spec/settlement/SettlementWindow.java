@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SettlementWindow")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-09-30T09:26:45.287036+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-10-18T18:54:11.485109+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class SettlementWindow   {
   private Integer id;
   private String reason;

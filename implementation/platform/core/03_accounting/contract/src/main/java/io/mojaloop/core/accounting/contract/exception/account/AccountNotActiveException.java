@@ -37,19 +37,19 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.accounting.contract.exception.definition;
+package io.mojaloop.core.accounting.contract.exception.account;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
-public class FlowDefinitionNotFoundException extends UncheckedDomainException {
+public class AccountNotActiveException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Flow Definition Id ({0}) cannot be not found.";
+    private static final String TEMPLATE = "Account with Code ({0}) is not active.";
 
-    public FlowDefinitionNotFoundException(FlowDefinitionId flowDefinitionId) {
+    public AccountNotActiveException(AccountCode accountCode) {
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_FOUND", TEMPLATE), flowDefinitionId.getId().toString());
+        super(new ErrorTemplate("ACCOUNT_NOT_ACTIVE", TEMPLATE), accountCode.value());
     }
 
 }

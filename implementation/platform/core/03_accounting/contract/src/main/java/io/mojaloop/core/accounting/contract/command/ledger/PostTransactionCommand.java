@@ -1,6 +1,10 @@
 package io.mojaloop.core.accounting.contract.command.ledger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
+import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementResult;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementStage;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
@@ -20,7 +24,8 @@ import java.util.Map;
 
 public interface PostTransactionCommand {
 
-    Output execute(Input input);
+    Output execute(Input input)
+        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException;
 
     record Input(@JsonProperty(required = true) @NotNull TransactionType transactionType,
                  @JsonProperty(required = true) @NotNull Currency currency,
@@ -31,18 +36,20 @@ public interface PostTransactionCommand {
 
     }
 
-    record Output(List<Flow> flows) {
+    record Output(TransactionId transactionId, Instant transactionAt, TransactionType transactionType, List<Flow> flows) {
 
-        public record Flow(AccountId accountId,
+        public record Flow(LedgerMovementId ledgerMovementId,
+                           AccountId accountId,
                            AccountOwnerId ownerId,
                            ChartEntryId chartEntryId,
-                           LedgerMovementId ledgerMovementId,
                            Side side,
+                           Currency currency,
                            BigDecimal amount,
                            DrCr oldDrCr,
                            DrCr newDrCr,
                            MovementStage movementStage,
-                           MovementResult movementResult) {
+                           MovementResult movementResult,
+                           Instant createdAt) {
 
         }
 

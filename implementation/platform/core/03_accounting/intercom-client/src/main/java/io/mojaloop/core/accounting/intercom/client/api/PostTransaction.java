@@ -23,7 +23,7 @@ package io.mojaloop.core.accounting.intercom.client.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
 import io.mojaloop.core.accounting.intercom.client.exception.AccountingIntercomClientException;
 import io.mojaloop.core.accounting.intercom.client.service.AccountingIntercomService;
 import org.slf4j.Logger;
@@ -31,15 +31,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PostLedgerFlow {
+public class PostTransaction {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlow.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostTransaction.class);
 
     private final AccountingIntercomService accountingIntercomService;
 
     private final ObjectMapper objectMapper;
 
-    public PostLedgerFlow(AccountingIntercomService accountingIntercomService, ObjectMapper objectMapper) {
+    public PostTransaction(AccountingIntercomService accountingIntercomService, ObjectMapper objectMapper) {
 
         assert accountingIntercomService != null;
         assert objectMapper != null;
@@ -48,15 +48,12 @@ public class PostLedgerFlow {
         this.objectMapper = objectMapper;
     }
 
-    public PostLedgerFlowCommand.Output execute(PostLedgerFlowCommand.Input input) throws AccountingIntercomClientException {
+    public PostTransactionCommand.Output execute(PostTransactionCommand.Input input) throws AccountingIntercomClientException {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.accountingIntercomService.postLedgerFlow(input),
-                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)
-                              )
-                       .body();
+            return RetrofitService.invoke(this.accountingIntercomService.postLedgerFlow(input),
+                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -72,4 +69,5 @@ public class PostLedgerFlow {
             throw new AccountingIntercomClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
+
 }

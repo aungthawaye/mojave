@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.accounting.intercom.client.service;
 
-import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -34,8 +34,9 @@ public interface AccountingIntercomService {
     @GET("/accounts")
     Call<List<AccountData>> getAccounts();
 
-    @POST("/ledgers/post-ledger-flow")
-    Call<PostLedgerFlowCommand.Output> postLedgerFlow(@Body PostLedgerFlowCommand.Input input);
+    @POST("/ledgers/post-transaction")
+    Call<PostTransactionCommand.Output> postLedgerFlow(@Body PostTransactionCommand.Input input);
 
     record Settings(String baseUrl) { }
+
 }

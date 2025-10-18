@@ -97,7 +97,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     public FlowDefinitionData convert() {
 
         var postingData = this.postingDefinitions.stream()
-                                                 .map(p -> new FlowDefinitionData.Posting(
+                                                 .map(p -> new FlowDefinitionData.PostingDefinitionData(
                                                      p.id,
                                                      p.participantType,
                                                      p.amountName,
