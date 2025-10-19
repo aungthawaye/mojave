@@ -125,22 +125,56 @@ public class LedgerIT {
     }
 
     @Test
-    public void test_fundIn()
-        throws DuplicatePostingInLedgerException, RestoreFailedInAccountException, OverdraftLimitReachedInAccountException, InsufficientBalanceInAccountException {
+    public void test_fundIn() throws InterruptedException {
 
-        this.postTransactionCommand.execute(new PostTransactionCommand.Input(TransactionType.FUND_IN,
-                                                                             Currency.USD,
-                                                                             new TransactionId(Snowflake.get().nextId()),
-                                                                             Instant.now(),
-                                                                             Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(), new AccountOwnerId(fsp1.getId())),
-                                                                             Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1000))));
+        try (var executor = Executors.newFixedThreadPool(100)) {
 
-        this.postTransactionCommand.execute(new PostTransactionCommand.Input(TransactionType.FUND_IN,
-                                                                             Currency.USD,
-                                                                             new TransactionId(Snowflake.get().nextId()),
-                                                                             Instant.now(),
-                                                                             Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(), new AccountOwnerId(fsp2.getId())),
-                                                                             Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1000))));
+            var count = 100;
+            var latch = new CountDownLatch(count);
+            var index = new AtomicInteger(0);
+            var startAt = System.nanoTime();
+
+            for (int i = 0; i < count; i++) {
+
+                executor.submit(() -> {
+
+                    try {
+
+                        index.incrementAndGet();
+                        this.postTransactionCommand.execute(new PostTransactionCommand.Input(TransactionType.FUND_IN,
+                                                                                             Currency.USD,
+                                                                                             new TransactionId(Snowflake.get().nextId()),
+                                                                                             Instant.now(),
+                                                                                             Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(),
+                                                                                                    new AccountOwnerId(fsp1.getId())),
+                                                                                             Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1))));
+
+                        this.postTransactionCommand.execute(new PostTransactionCommand.Input(TransactionType.FUND_IN,
+                                                                                             Currency.USD,
+                                                                                             new TransactionId(Snowflake.get().nextId()),
+                                                                                             Instant.now(),
+                                                                                             Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(),
+                                                                                                    new AccountOwnerId(fsp2.getId())),
+                                                                                             Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1))));
+
+                    } catch (OverdraftLimitReachedInAccountException | DuplicatePostingInLedgerException | InsufficientBalanceInAccountException |
+                             RestoreFailedInAccountException e) {
+
+                        throw new RuntimeException(e);
+
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            latch.await();
+            var endAt = System.nanoTime();
+            var duration = (endAt - startAt);
+
+            LOGGER.info("Took: {}ns | {}ms", duration, duration / 1_000_000);
+            LOGGER.info("Total run : {}", index.get());
+        }
     }
 
     @Test
