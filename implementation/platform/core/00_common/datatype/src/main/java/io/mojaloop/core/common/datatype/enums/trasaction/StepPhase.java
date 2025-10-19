@@ -1,6 +1,6 @@
 package io.mojaloop.core.common.datatype.enums.trasaction;
 
-public enum TransactionStepPhase {
+public enum StepPhase {
 
     BEFORE,
     AFTER

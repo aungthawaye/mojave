@@ -4,6 +4,5 @@ public enum TransactionPhase {
 
     OPEN,
     COMMIT,
-    ROLLBACK,
-    BROKEN
+    ERROR
 }

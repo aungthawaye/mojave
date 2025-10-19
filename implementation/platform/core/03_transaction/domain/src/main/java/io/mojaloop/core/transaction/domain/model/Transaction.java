@@ -3,16 +3,20 @@ package io.mojaloop.core.transaction.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
+import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionPhase;
-import io.mojaloop.core.common.datatype.enums.trasaction.TransactionStepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.core.transaction.contract.data.TransactionData;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
@@ -25,20 +29,20 @@ import org.hibernate.annotations.JdbcTypeCode;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "txn_transaction", indexes = {@Index(name = "txn_transaction_type_stage_initiated_at_IDX", columnList = "type, stage, initiated_at"),
-                                            @Index(name = "txn_transaction_type_stage_reserved_at_IDX", columnList = "type, stage, reserved_at"),
-                                            @Index(name = "txn_transaction_type_stage_completed_at_IDX", columnList = "type, stage, completed_at"),
-                                            @Index(name = "txn_transaction_initiated_at_IDX", columnList = "initiated_at"),
-                                            @Index(name = "txn_transaction_reserved_at_IDX", columnList = "reserved_at"),
-                                            @Index(name = "txn_transaction_completed_at_IDX", columnList = "completed_at")})
+@Table(name = "txn_transaction", indexes = {@Index(name = "txn_transaction_type_phase_open_at_IDX", columnList = "type, phase, open_at"),
+                                            @Index(name = "txn_transaction_type_phase_close_at_IDX", columnList = "type, phase, close_at"),
+                                            @Index(name = "txn_transaction_open_at_IDX", columnList = "open_at"),
+                                            @Index(name = "txn_transaction_close_at_IDX", columnList = "close_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Transaction extends JpaEntity<TransactionId> {
+public class Transaction extends JpaEntity<TransactionId> implements DataConversion<TransactionData> {
 
     @Id
     @JavaType(TransactionIdJavaType.class)
@@ -52,35 +56,23 @@ public class Transaction extends JpaEntity<TransactionId> {
 
     @Column(name = "phase", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected TransactionPhase stage;
-
-    @Column(name = "status", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected TransactionStepPhase status;
+    protected TransactionPhase phase;
 
     @Column(name = "open_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant openAt;
 
-    @Column(name = "commit_at")
+    @Column(name = "close_at")
     @Convert(converter = JpaInstantConverter.class)
-    protected Instant commitAt;
-
-    @Column(name = "rollback_at")
-    @Convert(converter = JpaInstantConverter.class)
-    protected Instant rollbackAt;
-
-    @Column(name = "broken_at")
-    @Convert(converter = JpaInstantConverter.class)
-    protected Instant brokenAt;
-
-    @Column(name = "mature")
-    protected Boolean mature = false;
+    protected Instant closeAt;
 
     @Column(name = "error", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String error;
 
-    @OneToMany(mappedBy = "transaction")
+    @Column(name = "success")
+    protected Boolean success = true;
+
+    @OneToMany(mappedBy = "transaction", orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     protected List<TransactionStep> steps = new ArrayList<>();
 
     public Transaction(TransactionId transactionId, TransactionType type) {
@@ -91,6 +83,36 @@ public class Transaction extends JpaEntity<TransactionId> {
         this.id = transactionId;
         this.type = type;
         this.openAt = Instant.now();
+    }
+
+    public TransactionStep addStep(StepPhase phase, String name, Map<String, String> params) {
+
+        var step = new TransactionStep(this, phase, name);
+
+        params.forEach(step::addParam);
+
+        this.steps.add(step);
+
+        return step;
+    }
+
+    public void close(String error) {
+
+        this.closeAt = Instant.now();
+        this.error = error;
+        this.success = this.error == null;
+    }
+
+    public TransactionData convert() {
+
+        var stepData = this.steps.stream().map(TransactionStep::convert).toList();
+
+        return new TransactionData(this.id, this.type, this.phase, this.openAt, this.closeAt, this.error, this.success, stepData);
+    }
+
+    public List<TransactionStep> getSteps() {
+
+        return Collections.unmodifiableList(this.steps);
     }
 
 }
