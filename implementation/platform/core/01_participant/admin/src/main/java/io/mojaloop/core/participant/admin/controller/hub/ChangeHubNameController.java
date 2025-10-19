@@ -21,7 +21,6 @@
 package io.mojaloop.core.participant.admin.controller.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.ChangeHubNameCommand;
-import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

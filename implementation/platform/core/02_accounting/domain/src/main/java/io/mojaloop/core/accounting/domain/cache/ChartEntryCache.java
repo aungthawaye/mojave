@@ -28,6 +28,7 @@ public interface ChartEntryCache {
         public static final String IN_MEMORY = "in-memory";
 
         public static final String DEFAULT = REDIS;
+
     }
 
     class Names {
@@ -35,5 +36,7 @@ public interface ChartEntryCache {
         public static final String WITH_ID = "acc-chart-entry-with-id";
 
         public static final String WITH_CODE = "acc-chart-entry-with-code";
+
     }
+
 }

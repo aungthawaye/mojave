@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,10 +47,11 @@ public class DeactivateFspController {
     }
 
     @PostMapping("/fsps/deactivate-fsp")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody DeactivateFspCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public DeactivateFspCommand.Output execute(@Valid @RequestBody DeactivateFspCommand.Input input) {
 
-        this.deactivateFspCommand.execute(input);
+        return this.deactivateFspCommand.execute(input);
     }
 
 }

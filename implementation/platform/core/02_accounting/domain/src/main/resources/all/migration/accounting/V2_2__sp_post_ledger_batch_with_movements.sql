@@ -16,6 +16,8 @@ BEGIN
     DECLARE v_txn_id BIGINT;
     DECLARE v_txn_at BIGINT;
     DECLARE v_txn_type VARCHAR(32);
+    DECLARE v_flow_definition_id BIGINT;
+    DECLARE v_posting_definition_id BIGINT;
     DECLARE done INT DEFAULT 0;
 
     -- Locked balance snapshot
@@ -50,7 +52,9 @@ BEGIN
                amount,
                transaction_id,
                transaction_at,
-               transaction_type
+               transaction_type,
+               flow_definition_id,
+               posting_definition_id
         FROM tmp_lines
         ORDER BY idx;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
@@ -69,34 +73,38 @@ BEGIN
     /* ---------------- Temp staging ---------------- */
     CREATE TEMPORARY TABLE tmp_lines
     (
-        idx                INT            NOT NULL,
-        ledger_movement_id BIGINT         NOT NULL,
-        account_id         BIGINT         NOT NULL,
-        side               VARCHAR(32)    NOT NULL, -- 'DEBIT' | 'CREDIT'
-        currency           VARCHAR(3)     NOT NULL,
-        amount             DECIMAL(34, 4) NOT NULL,
-        transaction_id     BIGINT         NOT NULL,
-        transaction_at     BIGINT         NOT NULL,
-        transaction_type   VARCHAR(32)    NOT NULL
+        idx                   INT            NOT NULL,
+        ledger_movement_id    BIGINT         NOT NULL,
+        account_id            BIGINT         NOT NULL,
+        side                  VARCHAR(32)    NOT NULL, -- 'DEBIT' | 'CREDIT'
+        currency              VARCHAR(3)     NOT NULL,
+        amount                DECIMAL(34, 4) NOT NULL,
+        transaction_id        BIGINT         NOT NULL,
+        transaction_at        BIGINT         NOT NULL,
+        transaction_type      VARCHAR(32)    NOT NULL,
+        flow_definition_id    BIGINT         NOT NULL,
+        posting_definition_id BIGINT         NOT NULL
     ) ENGINE = MEMORY;
 
     CREATE TEMPORARY TABLE tmp_movements
     (
-        ledger_movement_id BIGINT         NOT NULL,
-        account_id         BIGINT         NOT NULL,
-        side               VARCHAR(32)    NOT NULL,
-        currency           VARCHAR(3)     NOT NULL,
-        amount             DECIMAL(34, 4) NOT NULL,
-        old_debits         DECIMAL(34, 4) NOT NULL,
-        old_credits        DECIMAL(34, 4) NOT NULL,
-        new_debits         DECIMAL(34, 4) NOT NULL,
-        new_credits        DECIMAL(34, 4) NOT NULL,
-        transaction_id     BIGINT         NOT NULL,
-        transaction_at     BIGINT         NOT NULL,
-        transaction_type   VARCHAR(32)    NOT NULL,
-        movement_stage     VARCHAR(32)    NOT NULL,
-        movement_result    VARCHAR(32)    NOT NULL,
-        created_at         BIGINT         NOT NULL
+        ledger_movement_id    BIGINT         NOT NULL,
+        account_id            BIGINT         NOT NULL,
+        side                  VARCHAR(32)    NOT NULL,
+        currency              VARCHAR(3)     NOT NULL,
+        amount                DECIMAL(34, 4) NOT NULL,
+        old_debits            DECIMAL(34, 4) NOT NULL,
+        old_credits           DECIMAL(34, 4) NOT NULL,
+        new_debits            DECIMAL(34, 4) NOT NULL,
+        new_credits           DECIMAL(34, 4) NOT NULL,
+        transaction_id        BIGINT         NOT NULL,
+        transaction_at        BIGINT         NOT NULL,
+        transaction_type      VARCHAR(32)    NOT NULL,
+        flow_definition_id    BIGINT         NOT NULL,
+        posting_definition_id BIGINT         NOT NULL,
+        movement_stage        VARCHAR(32)    NOT NULL,
+        movement_result       VARCHAR(32)    NOT NULL,
+        created_at            BIGINT         NOT NULL
     ) ENGINE = MEMORY;
 
     -- Initially copy all the JSON rows to tmp_lines.
@@ -109,7 +117,9 @@ BEGIN
            jt.amount,
            jt.transactionId,
            jt.transactionAt,
-           jt.transactionType
+           jt.transactionType,
+           jt.flowDefinitionId,
+           jt.postingDefinitionId
     FROM JSON_TABLE(p_lines_json, '$[*]'
                     COLUMNS (
                         idx FOR ORDINALITY,
@@ -120,7 +130,9 @@ BEGIN
                         amount DECIMAL(34, 4) PATH '$.amount',
                         transactionId BIGINT PATH '$.transactionId',
                         transactionAt BIGINT PATH '$.transactionAt',
-                        transactionType VARCHAR(32) PATH '$.transactionType'
+                        transactionType VARCHAR(32) PATH '$.transactionType',
+                        flowDefinitionId BIGINT PATH '$.flowDefinitionId',
+                        postingDefinitionId BIGINT PATH '$.postingDefinitionId'
                         )
          ) AS jt;
 
@@ -160,16 +172,16 @@ BEGIN
                v_err_amount     AS amount,
                '0'              AS debits,
                '0'              AS credits,
-               NULL AS ledger_movement_id,
-               NULL AS old_debits,
-               NULL AS old_credits,
-               NULL AS new_debits,
-               NULL AS new_credits,
-               NULL AS transaction_id,
-               NULL AS transaction_at,
-               NULL AS transaction_type,
-               'DEBIT_CREDIT' AS movement_stage,
-               'PENDING' AS movement_result,
+               NULL             AS ledger_movement_id,
+               NULL             AS old_debits,
+               NULL             AS old_credits,
+               NULL             AS new_debits,
+               NULL             AS new_credits,
+               NULL             AS transaction_id,
+               NULL             AS transaction_at,
+               NULL             AS transaction_type,
+               'DEBIT_CREDIT'   AS movement_stage,
+               'PENDING'        AS movement_result,
                UNIX_TIMESTAMP() AS created_at;
 
         LEAVE proc_posting;
@@ -177,8 +189,8 @@ BEGIN
 
     INSERT INTO acc_ledger_movement (ledger_movement_id, account_id, side, currency, amount,
                                      old_debits, old_credits, new_debits, new_credits,
-                                     transaction_id, transaction_at, transaction_type,
-                                     movement_stage, movement_result,
+                                     transaction_id, transaction_at, transaction_type, flow_definition_id,
+                                     posting_definition_id, movement_stage, movement_result,
                                      created_at, rec_created_at, rec_updated_at, rec_version)
     SELECT ledger_movement_id,
            account_id,
@@ -192,6 +204,8 @@ BEGIN
            transaction_id,
            transaction_at,
            transaction_type,
+           flow_definition_id,
+           posting_definition_id,
            'INITIATED',
            'PENDING',
            UNIX_TIMESTAMP(),
@@ -207,7 +221,7 @@ BEGIN
 
     post_loop:
     LOOP
-        FETCH c_lines INTO v_idx, v_ledger_movement_id, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_txn_type;
+        FETCH c_lines INTO v_idx, v_ledger_movement_id, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_txn_type, v_flow_definition_id, v_posting_definition_id;
         IF done = 1 THEN
             LEAVE post_loop;
         END IF;
@@ -219,25 +233,27 @@ BEGIN
                     /* Any SQL problem → mark and bail */
                     ROLLBACK;
 
-                    SELECT 'ERROR'          AS status,
-                           v_error_code     AS code,
-                           v_err_account_id AS account_id,
-                           v_err_side       AS side,
-                           v_err_currency   AS currency,
-                           v_err_amount     AS amount,
-                           v_err_debits     AS debits,
-                           v_err_credits    AS credits,
-                           NULL AS ledger_movement_id,
-                           NULL AS old_debits,
-                           NULL AS old_credits,
-                           NULL AS new_debits,
-                           NULL AS new_credits,
-                           NULL AS transaction_id,
-                           NULL AS transaction_at,
-                           NULL AS transaction_type,
-                           'DEBIT_CREDIT' AS movement_stage,
-                           'PENDING' AS movement_result,
-                           UNIX_TIMESTAMP() AS created_at;
+                    SELECT 'ERROR'                 AS status,
+                           v_error_code            AS code,
+                           v_err_account_id        AS account_id,
+                           v_err_side              AS side,
+                           v_err_currency          AS currency,
+                           v_err_amount            AS amount,
+                           v_err_debits            AS debits,
+                           v_err_credits           AS credits,
+                           NULL                    AS ledger_movement_id,
+                           NULL                    AS old_debits,
+                           NULL                    AS old_credits,
+                           NULL                    AS new_debits,
+                           NULL                    AS new_credits,
+                           NULL                    AS transaction_id,
+                           NULL                    AS transaction_at,
+                           NULL                    AS transaction_type,
+                           v_flow_definition_id    AS flow_definition_id,
+                           v_posting_definition_id AS posting_definition_id,
+                           'DEBIT_CREDIT'          AS movement_stage,
+                           'PENDING'               AS movement_result,
+                           UNIX_TIMESTAMP()        AS created_at;
                 END;
 
             START TRANSACTION;
@@ -316,12 +332,14 @@ BEGIN
             -- Stage movement row
             INSERT INTO tmp_movements (ledger_movement_id, account_id, side, currency, amount,
                                        old_debits, old_credits, new_debits, new_credits,
-                                       transaction_id, transaction_at, transaction_type, movement_stage,
+                                       transaction_id, transaction_at, transaction_type, flow_definition_id,
+                                       posting_definition_id, movement_stage,
                                        movement_result, created_at)
             VALUES (v_ledger_movement_id, v_account_id, v_side, v_currency, v_amount,
                     v_dr_curr, v_cr_curr,
                     v_dr_new, v_cr_new,
-                    v_txn_id, v_txn_at, v_txn_type, 'DEBIT_CREDIT', 'SUCCESS', UNIX_TIMESTAMP());
+                    v_txn_id, v_txn_at, v_txn_type, v_flow_definition_id, v_posting_definition_id, 'DEBIT_CREDIT',
+                    'SUCCESS', UNIX_TIMESTAMP());
         END;
     END LOOP post_loop;
     CLOSE c_lines;
@@ -365,25 +383,27 @@ BEGIN
                 BEGIN
                     DECLARE EXIT HANDLER FOR SQLEXCEPTION
                         BEGIN
-                            SELECT 'ERROR'          AS status,
-                                   'RESTORE_FAILED' AS code,
-                                   r_account_id     AS account_id,
-                                   r_side           AS side,
-                                   r_currency       AS currency,
-                                   r_amount         AS amount,
-                                   r_debits         AS debits,
-                                   r_credits        AS credits,
-                                   NULL AS ledger_movement_id,
-                                   NULL AS old_debits,
-                                   NULL AS old_credits,
-                                   NULL AS new_debits,
-                                   NULL AS new_credits,
-                                   NULL AS transaction_id,
-                                   NULL AS transaction_at,
-                                   NULL AS transaction_type,
-                                   'DEBIT_CREDIT' AS movement_stage,
-                                   'PENDING' AS movement_result,
-                                   UNIX_TIMESTAMP() AS created_at;
+                            SELECT 'ERROR'              AS status,
+                                   'RESTORE_FAILED'     AS code,
+                                   r_account_id         AS account_id,
+                                   r_side               AS side,
+                                   r_currency           AS currency,
+                                   r_amount             AS amount,
+                                   r_debits             AS debits,
+                                   r_credits            AS credits,
+                                   r_ledger_movement_id AS ledger_movement_id,
+                                   NULL                 AS old_debits,
+                                   NULL                 AS old_credits,
+                                   NULL                 AS new_debits,
+                                   NULL                 AS new_credits,
+                                   NULL                 AS transaction_id,
+                                   NULL                 AS transaction_at,
+                                   NULL                 AS transaction_type,
+                                   NULL                 AS flow_definition_id,
+                                   NULL                 AS posting_definition_id,
+                                   'DEBIT_CREDIT'       AS movement_stage,
+                                   'PENDING'            AS movement_result,
+                                   UNIX_TIMESTAMP()     AS created_at;
                             ROLLBACK;
                         END;
                     START TRANSACTION;
@@ -422,24 +442,26 @@ BEGIN
                v_err_amount     AS amount,
                v_err_debits     AS debits,
                v_err_credits    AS credits,
-               NULL AS ledger_movement_id,
-               NULL AS old_debits,
-               NULL AS old_credits,
-               NULL AS new_debits,
-               NULL AS new_credits,
-               NULL AS transaction_id,
-               NULL AS transaction_at,
-               NULL AS transaction_type,
-               'DEBIT_CREDIT' AS movement_stage,
-               v_error_code AS movement_result,
+               NULL             AS ledger_movement_id,
+               NULL             AS old_debits,
+               NULL             AS old_credits,
+               NULL             AS new_debits,
+               NULL             AS new_credits,
+               NULL             AS transaction_id,
+               NULL             AS transaction_at,
+               NULL             AS transaction_type,
+               NULL             AS flow_definition_id,
+               NULL             AS posting_definition_id,
+               'DEBIT_CREDIT'   AS movement_stage,
+               v_error_code     AS movement_result,
                UNIX_TIMESTAMP() AS created_at;
 
     ELSE
         -- There is no error.
-        -- Update all the movements' stage to COMPLETED
+        -- Update all the movements' stage to COMMIT
         START TRANSACTION;
         UPDATE acc_ledger_movement
-        SET movement_stage  = 'COMPLETED',
+        SET movement_stage  = 'COMMIT',
             movement_result = 'SUCCESS'
         WHERE transaction_id = v_txn_id;
         COMMIT;
@@ -458,6 +480,8 @@ BEGIN
                transaction_id,
                transaction_at,
                transaction_type,
+               flow_definition_id,
+               posting_definition_id,
                movement_stage,
                movement_result,
                created_at

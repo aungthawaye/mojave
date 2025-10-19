@@ -24,13 +24,18 @@ import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.AccountIdConverter;
+import io.mojaloop.core.common.datatype.converter.identifier.accounting.FlowDefinitionIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.LedgerMovementIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.accounting.PostingDefinitionIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
+import io.mojaloop.core.common.datatype.enums.accounting.MovementResult;
 import io.mojaloop.core.common.datatype.enums.accounting.MovementStage;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
+import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
+import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.AttributeOverride;
@@ -109,10 +114,21 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Enumerated(EnumType.STRING)
     protected TransactionType transactionType;
 
-    @Column(name = "movement_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "flow_definition_id", nullable = false, updatable = false)
+    @Convert(converter = FlowDefinitionIdConverter.class)
+    protected FlowDefinitionId flowDefinitionId;
+
+    @Column(name = "posting_definition_id", nullable = false, updatable = false)
+    @Convert(converter = PostingDefinitionIdConverter.class)
+    protected PostingDefinitionId postingDefinitionId;
+
+    @Column(name = "movement_stage", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected MovementStage movementStage;
 
+    @Column(name = "movement_result", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected MovementResult movementResult;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Convert(converter = JpaInstantConverter.class)

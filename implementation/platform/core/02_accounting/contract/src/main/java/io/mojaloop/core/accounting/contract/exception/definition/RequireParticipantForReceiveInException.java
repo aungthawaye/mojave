@@ -42,13 +42,13 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class PostingDefinitionAlreadyExistsException extends UncheckedDomainException {
+public class RequireParticipantForReceiveInException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Posting Definition with Account or Chart Entry, Side and Amount Name already exists.";
+    private static final String TEMPLATE = "Participant is required to receive through Chart Entry.";
 
-    public PostingDefinitionAlreadyExistsException() {
+    public RequireParticipantForReceiveInException() {
 
-        super(new ErrorTemplate("POSTING_DEFINITION_ALREADY_EXISTS", TEMPLATE));
+        super(new ErrorTemplate("REQUIRE_PARTICIPANT_FOR_RECEIVE_IN", TEMPLATE));
     }
 
 }

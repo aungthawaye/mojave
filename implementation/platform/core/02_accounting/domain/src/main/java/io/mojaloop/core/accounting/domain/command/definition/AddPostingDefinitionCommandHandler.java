@@ -21,11 +21,10 @@
 package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.accounting.contract.command.definition.AddFlowDefinitionPostingCommand;
+import io.mojaloop.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
-import io.mojaloop.core.accounting.domain.model.PostingDefinition;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AddFlowDefinitionPostingCommandHandler implements AddFlowDefinitionPostingCommand {
+public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddFlowDefinitionPostingCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddPostingDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -43,7 +42,7 @@ public class AddFlowDefinitionPostingCommandHandler implements AddFlowDefinition
 
     private final ChartEntryCache chartEntryCache;
 
-    public AddFlowDefinitionPostingCommandHandler(final FlowDefinitionRepository flowDefinitionRepository, final AccountCache accountCache, final ChartEntryCache chartEntryCache) {
+    public AddPostingDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository, final AccountCache accountCache, final ChartEntryCache chartEntryCache) {
 
         assert flowDefinitionRepository != null;
         assert accountCache != null;
@@ -59,31 +58,25 @@ public class AddFlowDefinitionPostingCommandHandler implements AddFlowDefinition
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Executing AddFlowDefinitionPostingCommand with input: {}", input);
+        LOGGER.info("Executing AddPostingDefinitionCommand with input: {}", input);
 
         final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var posting = input.posting();
 
-        for (final var posting : input.postings()) {
-            LOGGER.info("Adding posting: {}", posting);
-
-            final var pd = new PostingDefinition(definition,
-                                                 posting.participantType(),
-                                                 posting.amountName(),
-                                                 posting.side(),
-                                                 posting.selection(),
-                                                 posting.selectedId(),
-                                                 posting.description(),
-                                                 this.accountCache,
-                                                 this.chartEntryCache);
-
-            definition.getPostingDefinitions().add(pd);
-        }
+        var pd = definition.addPosting(posting.receiveIn(),
+                                       posting.receiveInId(),
+                                       posting.participant(),
+                                       posting.amountName(),
+                                       posting.side(),
+                                       posting.description(),
+                                       this.accountCache,
+                                       this.chartEntryCache);
 
         this.flowDefinitionRepository.save(definition);
 
-        LOGGER.info("Completed AddFlowDefinitionPostingCommand with input: {}", input);
+        LOGGER.info("Completed AddPostingDefinitionCommand with input: {}", input);
 
-        return new Output(definition.getId());
+        return new Output(definition.getId(), pd.getId());
     }
 
 }

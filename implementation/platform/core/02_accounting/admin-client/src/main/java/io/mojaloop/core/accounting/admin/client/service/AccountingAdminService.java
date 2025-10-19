@@ -48,6 +48,7 @@ import io.mojaloop.core.accounting.contract.command.chart.ChangeChartEntryProper
 import io.mojaloop.core.accounting.contract.command.chart.ChangeChartNameCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
+import io.mojaloop.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -110,7 +111,7 @@ public interface AccountingAdminService {
         Call<Void> changeFlowDefinitionProperties(@Body io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand.Input input);
 
         @POST("definitions/flows/add-postings")
-        Call<Void> addFlowDefinitionPostings(@Body io.mojaloop.core.accounting.contract.command.definition.AddFlowDefinitionPostingCommand.Input input);
+        Call<Void> addFlowDefinitionPostings(@Body AddPostingDefinitionCommand.Input input);
 
         @POST("definitions/flows/remove-posting")
         Call<Void> removeFlowDefinitionPosting(@Body io.mojaloop.core.accounting.contract.command.definition.RemoveFlowDefinitionPostingCommand.Input input);

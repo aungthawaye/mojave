@@ -7,14 +7,10 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-@Qualifier(FlowDefinitionCache.Qualifiers.IN_MEMORY)
 public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
     private final FlowDefinitionRepository flowDefinitionRepository;
@@ -83,4 +79,5 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
         final var key = FlowDefinitionCache.Keys.forTransaction(flowDefinition.transactionType(), flowDefinition.currency());
         this.withTxnTypeCurrency.put(key, flowDefinition);
     }
+
 }

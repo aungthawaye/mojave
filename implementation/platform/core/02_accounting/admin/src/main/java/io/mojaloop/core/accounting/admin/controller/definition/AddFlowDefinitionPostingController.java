@@ -39,15 +39,14 @@
 
 package io.mojaloop.core.accounting.admin.controller.definition;
 
-import io.mojaloop.core.accounting.contract.command.definition.AddFlowDefinitionPostingCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictsInPostingDefinitionException;
+import io.mojaloop.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,19 +55,20 @@ public class AddFlowDefinitionPostingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AddFlowDefinitionPostingController.class);
 
-    private final AddFlowDefinitionPostingCommand addFlowDefinitionPostingCommand;
+    private final AddPostingDefinitionCommand addPostingDefinitionCommand;
 
-    public AddFlowDefinitionPostingController(final AddFlowDefinitionPostingCommand addFlowDefinitionPostingCommand) {
+    public AddFlowDefinitionPostingController(final AddPostingDefinitionCommand addPostingDefinitionCommand) {
 
-        assert addFlowDefinitionPostingCommand != null;
+        assert addPostingDefinitionCommand != null;
 
-        this.addFlowDefinitionPostingCommand = addFlowDefinitionPostingCommand;
+        this.addPostingDefinitionCommand = addPostingDefinitionCommand;
     }
 
     @PostMapping("/definitions/flows/add-postings")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final AddFlowDefinitionPostingCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public AddPostingDefinitionCommand.Output execute(@Valid @RequestBody final AddPostingDefinitionCommand.Input input) {
 
-        this.addFlowDefinitionPostingCommand.execute(input);
+        return this.addPostingDefinitionCommand.execute(input);
     }
 }

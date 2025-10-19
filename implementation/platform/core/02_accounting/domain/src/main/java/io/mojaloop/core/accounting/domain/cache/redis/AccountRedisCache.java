@@ -25,8 +25,8 @@ import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
@@ -34,12 +34,9 @@ import org.redisson.api.RMap;
 import org.redisson.api.RSetMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
-
 
 public class AccountRedisCache implements AccountCache {
 

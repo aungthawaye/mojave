@@ -30,7 +30,9 @@ import io.mojaloop.core.common.datatype.enums.accounting.MovementStage;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
+import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
+import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
@@ -84,7 +86,6 @@ public class MySqlLedger implements Ledger {
         config.addDataSourceProperty("cacheResultSetMetadata", false);
         config.addDataSourceProperty("callableStmtCacheSize", "0");
 
-
         config.setMaximumPoolSize(settings.pool().maxPool());
         // Ledger's stored-procedure will handle transaction.
         config.setAutoCommit(true);
@@ -118,7 +119,9 @@ public class MySqlLedger implements Ledger {
                                                               request.amount().toPlainString(),
                                                               transactionId.getId(),
                                                               transactionAt.getEpochSecond(),
-                                                              transactionType.name()))
+                                                              transactionType.name(),
+                                                              request.flowDefinitionId().getId(),
+                                                              request.postingDefinitionId().getId()))
                                   .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
@@ -247,6 +250,8 @@ public class MySqlLedger implements Ledger {
             var txnId = new TransactionId(rs.getLong("transaction_id"));
             var txnAt = Instant.ofEpochSecond(rs.getLong("transaction_at"));
             var txnType = TransactionType.valueOf(rs.getString("transaction_type"));
+            var flowDefinitionId = new FlowDefinitionId(rs.getLong("flow_definition_id"));
+            var postingDefinitionId = new PostingDefinitionId(rs.getLong("posting_definition_id"));
             var movementStage = MovementStage.valueOf(rs.getString("movement_stage"));
             var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
             var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
@@ -261,6 +266,8 @@ public class MySqlLedger implements Ledger {
                                         txnId,
                                         txnAt,
                                         txnType,
+                                        flowDefinitionId,
+                                        postingDefinitionId,
                                         movementStage,
                                         movementResult,
                                         createdAt);
@@ -279,6 +286,15 @@ public class MySqlLedger implements Ledger {
 
     }
 
-    private record Posting(long ledgerMovementId, long accountId, String side, String currency, String amount, long transactionId, long transactionAt, String transactionType) { }
+    private record Posting(long ledgerMovementId,
+                           long accountId,
+                           String side,
+                           String currency,
+                           String amount,
+                           long transactionId,
+                           long transactionAt,
+                           String transactionType,
+                           long flowDefinitionId,
+                           long postingDefinitionId) { }
 
 }

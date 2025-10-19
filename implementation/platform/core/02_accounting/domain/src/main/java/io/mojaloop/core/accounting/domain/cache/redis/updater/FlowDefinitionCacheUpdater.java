@@ -13,14 +13,15 @@ public class FlowDefinitionCacheUpdater {
     @PostUpdate
     public void persistOrUpdate(final FlowDefinition flowDefinition) {
 
-        final var cache = SpringContext.getBean(FlowDefinitionCache.class, FlowDefinitionCache.Qualifiers.DEFAULT);
+        final var cache = SpringContext.getBean(FlowDefinitionCache.class);
         cache.save(flowDefinition.convert());
     }
 
     @PostRemove
     public void postRemove(final FlowDefinition flowDefinition) {
 
-        final var cache = SpringContext.getBean(FlowDefinitionCache.class, FlowDefinitionCache.Qualifiers.DEFAULT);
+        final var cache = SpringContext.getBean(FlowDefinitionCache.class);
         cache.delete(flowDefinition.getId());
     }
+
 }

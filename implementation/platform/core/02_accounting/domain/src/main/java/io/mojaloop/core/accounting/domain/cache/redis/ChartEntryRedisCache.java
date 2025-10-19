@@ -31,12 +31,9 @@ import jakarta.annotation.PostConstruct;
 import org.redisson.api.RMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
-
 
 public class ChartEntryRedisCache implements ChartEntryCache {
 
@@ -120,4 +117,5 @@ public class ChartEntryRedisCache implements ChartEntryCache {
         this.withId.put(chartEntry.chartEntryId().getId(), chartEntry);
         this.withCode.put(chartEntry.code().value(), chartEntry);
     }
+
 }

@@ -41,15 +41,15 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.enums.accounting.Side;
+import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
-public class ChartEntryConflictsInPostingDefinitionException extends UncheckedDomainException {
+public class AccountConflictInDefinitionException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Account ({0}) of Chart Entry ({1}) conflicts in Definition for the Side ({2}) and Amount Name ({3}).";
+    private static final String TEMPLATE = "Account ({0}) conflicts in Definition.";
 
-    public ChartEntryConflictsInPostingDefinitionException(String accountOfChartEntry, String chartEntryName, Side side, String amountName) {
+    public AccountConflictInDefinitionException(AccountCode accountCode) {
 
-        super(new ErrorTemplate("CHART_ENTRY_CONFLICTS_IN_POSTING_DEFINITION", TEMPLATE), accountOfChartEntry, chartEntryName, side.name(), amountName);
+        super(new ErrorTemplate("ACCOUNT_CONFLICT_IN_DEFINITION", TEMPLATE), accountCode.value());
     }
 
 }

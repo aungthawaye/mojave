@@ -12,6 +12,7 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
+import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -36,20 +37,20 @@ public interface PostTransactionCommand {
 
     }
 
-    record Output(TransactionId transactionId, Instant transactionAt, TransactionType transactionType, List<Flow> flows) {
+    record Output(TransactionId transactionId, Instant transactionAt, TransactionType transactionType, FlowDefinitionId flowDefinitionId, List<Movement> movements) {
 
-        public record Flow(LedgerMovementId ledgerMovementId,
-                           AccountId accountId,
-                           AccountOwnerId ownerId,
-                           ChartEntryId chartEntryId,
-                           Side side,
-                           Currency currency,
-                           BigDecimal amount,
-                           DrCr oldDrCr,
-                           DrCr newDrCr,
-                           MovementStage movementStage,
-                           MovementResult movementResult,
-                           Instant createdAt) {
+        public record Movement(LedgerMovementId ledgerMovementId,
+                               AccountId accountId,
+                               AccountOwnerId ownerId,
+                               ChartEntryId chartEntryId,
+                               Side side,
+                               Currency currency,
+                               BigDecimal amount,
+                               DrCr oldDrCr,
+                               DrCr newDrCr,
+                               MovementStage movementStage,
+                               MovementResult movementResult,
+                               Instant createdAt) {
 
         }
 

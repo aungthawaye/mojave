@@ -21,38 +21,39 @@
 package io.mojaloop.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.mojaloop.core.common.datatype.enums.accounting.AccountResolving;
+import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.core.common.datatype.enums.accounting.ReceiveIn;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
+import jakarta.validation.constraints.Size;
 
 /**
  * Command contract for adding postings to a Flow Definition.
  */
-public interface AddFlowDefinitionPostingCommand {
+public interface AddPostingDefinitionCommand {
 
     Output execute(Input input);
 
     /**
      * Input for adding postings under a Flow Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
-                 @JsonProperty(required = true) List<Posting> postings) {
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull Posting posting) {
 
-        public record Posting(String participantType,
-                               String amountName,
-                               Side side,
-                               AccountResolving selection,
-                               Long selectedId,
-                               String description) { }
+        public record Posting(@JsonProperty(required = true) @NotNull ReceiveIn receiveIn,
+                              @JsonProperty(required = true) @NotNull Long receiveInId,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
+                              @JsonProperty(required = true) @NotNull Side side,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     }
 
     /**
      * Output, returning the target DefinitionId.
      */
-    record Output(FlowDefinitionId flowDefinitionId) { }
+    record Output(FlowDefinitionId flowDefinitionId, PostingDefinitionId postingDefinitionId) { }
 
 }

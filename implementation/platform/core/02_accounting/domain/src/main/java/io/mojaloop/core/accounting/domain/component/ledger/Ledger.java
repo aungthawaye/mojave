@@ -25,7 +25,9 @@ import io.mojaloop.core.common.datatype.enums.accounting.MovementStage;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
+import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
+import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import lombok.Getter;
@@ -39,7 +41,13 @@ public interface Ledger {
     List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt, TransactionType transactionType)
         throws InsufficientBalanceException, NegativeAmountException, OverdraftExceededException, RestoreFailedException, DuplicatePostingException;
 
-    record Request(LedgerMovementId ledgerMovementId, AccountId accountId, Side side, Currency currency, BigDecimal amount) {
+    record Request(LedgerMovementId ledgerMovementId,
+                   AccountId accountId,
+                   Side side,
+                   Currency currency,
+                   BigDecimal amount,
+                   FlowDefinitionId flowDefinitionId,
+                   PostingDefinitionId postingDefinitionId) {
 
         public Request {
 
@@ -61,6 +69,8 @@ public interface Ledger {
                     TransactionId transactionId,
                     Instant transactionAt,
                     TransactionType transactionType,
+                    FlowDefinitionId flowDefinitionId,
+                    PostingDefinitionId postingDefinitionId,
                     MovementStage movementStage,
                     MovementResult movementResult,
                     Instant createdAt) {

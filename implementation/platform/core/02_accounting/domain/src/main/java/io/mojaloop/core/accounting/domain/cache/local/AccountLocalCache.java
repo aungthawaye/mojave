@@ -4,13 +4,11 @@ import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,8 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-@Qualifier(AccountCache.Qualifiers.IN_MEMORY)
 public class AccountLocalCache implements AccountCache {
 
     private final AccountRepository accountRepository;
@@ -138,4 +134,5 @@ public class AccountLocalCache implements AccountCache {
         final var key = AccountCache.Keys.forChart(account.chartEntryId(), account.ownerId(), account.currency());
         this.withChartEntryIdOwnerIdCurrency.put(key, account);
     }
+
 }

@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,10 +66,11 @@ public class ActivateAccountController {
     }
 
     @PostMapping("/accounts/activate")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ActivateAccountCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ActivateAccountCommand.Output execute(@Valid @RequestBody ActivateAccountCommand.Input input) {
 
-        this.activateAccountCommand.execute(input);
+        return this.activateAccountCommand.execute(input);
     }
 
 }

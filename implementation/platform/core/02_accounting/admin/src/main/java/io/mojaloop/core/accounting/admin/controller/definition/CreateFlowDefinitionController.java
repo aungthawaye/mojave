@@ -40,15 +40,13 @@
 package io.mojaloop.core.accounting.admin.controller.definition;
 
 import io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
-import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictsInPostingDefinitionException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,7 +65,8 @@ public class CreateFlowDefinitionController {
     }
 
     @PostMapping("/definitions/flows")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public CreateFlowDefinitionCommand.Output execute(@Valid @RequestBody final CreateFlowDefinitionCommand.Input input) {
 
         return this.createFlowDefinitionCommand.execute(input);

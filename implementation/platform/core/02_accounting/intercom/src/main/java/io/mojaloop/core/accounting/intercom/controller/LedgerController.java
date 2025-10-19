@@ -4,7 +4,6 @@ import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionComman
 import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
-import io.mojaloop.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -28,12 +27,8 @@ public class LedgerController {
     }
 
     @PostMapping("/ledgers/post-transaction")
-    public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input) throws
-                                                                                                         PostingAccountNotFoundException,
-                                                                                                         InsufficientBalanceInAccountException,
-                                                                                                         DuplicatePostingInLedgerException,
-                                                                                                         RestoreFailedInAccountException,
-                                                                                                         OverdraftLimitReachedInAccountException {
+    public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input)
+        throws InsufficientBalanceInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException, OverdraftLimitReachedInAccountException {
 
         LOGGER.info("Entering PostTransactionCommand.execute: input : {}", input);
 

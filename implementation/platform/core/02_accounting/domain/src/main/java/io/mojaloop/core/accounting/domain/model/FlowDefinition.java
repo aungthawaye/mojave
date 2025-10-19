@@ -8,10 +8,14 @@ import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
+import io.mojaloop.core.accounting.domain.cache.AccountCache;
+import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.cache.redis.updater.FlowDefinitionCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
+import io.mojaloop.core.common.datatype.enums.accounting.ReceiveIn;
+import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
@@ -33,6 +37,7 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.sql.Types.BIGINT;
@@ -75,7 +80,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
     @OneToMany(mappedBy = "definition", orphanRemoval = true, cascade = {jakarta.persistence.CascadeType.ALL}, fetch = FetchType.EAGER)
-    protected List<PostingDefinition> postingDefinitions = new ArrayList<>();
+    protected List<PostingDefinition> postings = new ArrayList<>();
 
     public FlowDefinition(TransactionType transactionType, Currency currency, String name, String description) {
 
@@ -93,19 +98,29 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
+    public PostingDefinition addPosting(ReceiveIn receiveIn,
+                                        Long receiveInId,
+                                        String participant,
+                                        String amountName,
+                                        Side side,
+                                        String description,
+                                        AccountCache accountCache,
+                                        ChartEntryCache chartEntryCache) {
+
+        var posting = new PostingDefinition(this, receiveIn, receiveInId, participant, amountName, side, description, accountCache, chartEntryCache);
+
+        this.postings.add(posting);
+
+        return posting;
+
+    }
+
     @Override
     public FlowDefinitionData convert() {
 
-        var postingData = this.postingDefinitions.stream()
-                                                 .map(p -> new FlowDefinitionData.PostingDefinitionData(
-                                                     p.id,
-                                                     p.participantType,
-                                                     p.amountName,
-                                                     p.side,
-                                                     p.accountResolving,
-                                                     p.accountOrChartEntryId,
-                                                     p.description))
-                                                 .toList();
+        var postingData = this.postings.stream()
+                                       .map(p -> new FlowDefinitionData.PostingDefinitionData(p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName, p.side, p.description))
+                                       .toList();
 
         return new FlowDefinitionData(this.getId(),
                                       this.getTransactionType(),
@@ -154,6 +169,11 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
         return this.id;
     }
 
+    public List<PostingDefinition> getPostings() {
+
+        return Collections.unmodifiableList(this.postings);
+    }
+
     public FlowDefinition name(String name) {
 
         if (name == null) {
@@ -175,12 +195,12 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
 
         assert postingDefinitionId != null;
 
-        if (this.postingDefinitions.stream().noneMatch(p -> p.getId().equals(postingDefinitionId))) {
+        if (this.postings.stream().noneMatch(p -> p.getId().equals(postingDefinitionId))) {
 
             throw new PostingDefinitionNotFoundException(postingDefinitionId);
         }
 
-        this.postingDefinitions.removeIf(p -> p.getId().equals(postingDefinitionId));
+        this.postings.removeIf(p -> p.getId().equals(postingDefinitionId));
 
     }
 

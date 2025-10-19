@@ -2,7 +2,7 @@ package io.mojaloop.core.accounting.contract.data;
 
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
-import io.mojaloop.core.common.datatype.enums.accounting.AccountResolving;
+import io.mojaloop.core.common.datatype.enums.accounting.ReceiveIn;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
@@ -37,11 +37,11 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
     }
 
     public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
-                                        String participantType,
+                                        ReceiveIn receiveIn,
+                                        Long receiveInId,
+                                        String participant,
                                         String amountName,
                                         Side side,
-                                        AccountResolving accountResolving,
-                                        Long accountOrChartEntryId,
                                         String description) {
 
         @Override

@@ -27,9 +27,29 @@ import java.util.Set;
 
 public enum TransactionType {
 
-    FUND_IN(new Participants(Set.of("FSP")), new Amounts(Set.of("LIQUIDITY_AMOUNT"))),
-    FUND_OUT(new Participants(Set.of("FSP")), new Amounts(Set.of("LIQUIDITY_AMOUNT"))),
-    FUND_TRANSFER(new Participants(Set.of("PAYER_FSP", "PAYEE_FSP")), new Amounts(Set.of("TRANSFER_AMOUNT", "PAYEE_FSP_FEE", "PAYEE_FSP_COMMISSION")));
+    /**
+     * Define the type of Transaction. Each transaction will have its own requirements regarding
+     * 1. Who (is/are) involved.
+     * 2. What (amounts) are involved?
+     */
+
+    FUND_IN(new Participants(Set.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name())),
+            new Amounts(Set.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name()))),
+
+    FUND_OUT(new Participants(Set.of(FundOutDimension.Participants.WITHDRAW_FROM_FSP.name())),
+             new Amounts(Set.of(FundOutDimension.Amounts.LIQUIDITY_AMOUNT.name()))),
+
+    FUND_TRANSFER_RESERVE(new Participants(Set.of(FundTransferReserveDimension.Participants.PAYER_FSP.name(),
+                                                  FundTransferReserveDimension.Participants.PAYEE_FSP.name())),
+                          new Amounts(Set.of(FundTransferReserveDimension.Amounts.TRANSFER_AMOUNT.name(),
+                                             FundTransferReserveDimension.Amounts.PAYEE_FSP_FEE.name(),
+                                             FundTransferReserveDimension.Amounts.PAYEE_FSP_COMMISSION.name()))),
+
+    FUND_TRANSFER_COMMIT(new Participants(Set.of(FundTransferCommitDimension.Participants.PAYER_FSP.name(),
+                                                 FundTransferCommitDimension.Participants.PAYEE_FSP.name())),
+                         new Amounts(Set.of(FundTransferCommitDimension.Amounts.TRANSFER_AMOUNT.name(),
+                                            FundTransferCommitDimension.Amounts.PAYEE_FSP_FEE.name(),
+                                            FundTransferCommitDimension.Amounts.PAYEE_FSP_COMMISSION.name())));
 
     @Getter
     private final Participants participants;
