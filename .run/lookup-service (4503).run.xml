@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="lookup-service (4503)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="05 lookup">
+  <configuration default="false" name="lookup-service (4503)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="04 lookup">
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/05_lookup/service/src/main/java/io/mojaloop/core/lookup/service/.env" />
     </option>

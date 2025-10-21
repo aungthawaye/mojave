@@ -27,7 +27,6 @@ import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionW
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.model.FlowDefinition;
-import io.mojaloop.core.accounting.domain.model.PostingDefinition;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.slf4j.Logger;
@@ -48,7 +47,9 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
     private final ChartEntryCache chartEntryCache;
 
-    public CreateFlowDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository, final AccountCache accountCache, final ChartEntryCache chartEntryCache) {
+    public CreateFlowDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
+                                              final AccountCache accountCache,
+                                              final ChartEntryCache chartEntryCache) {
 
         assert flowDefinitionRepository != null;
         assert accountCache != null;
@@ -84,18 +85,11 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
         final var postingIds = new ArrayList<PostingDefinitionId>();
 
         for (final var posting : input.postings()) {
+
             LOGGER.info("Adding posting: {}", posting);
 
-            final var pd = new PostingDefinition(definition,
-                                                 posting.participantType(),
-                                                 posting.amountName(),
-                                                 posting.side(),
-                                                 posting.selection(),
-                                                 posting.selectedId(),
-                                                 posting.description(),
-                                                 this.accountCache,
-                                                 this.chartEntryCache);
-            definition.getPostingDefinitions().add(pd);
+            final var pd = definition.addPosting(posting.receiveIn(), posting.receiveInId(), posting.participant(), posting.amountName(),
+                                                 posting.side(), posting.description(), this.accountCache, this.chartEntryCache);
             postingIds.add(pd.getId());
         }
 

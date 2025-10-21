@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Participant")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-10-18T18:54:11.485109+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-10-21T13:38:24.498118+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class Participant   {
   private Integer id;
   private @Valid List<@Valid Accounts> accounts = new ArrayList<>();

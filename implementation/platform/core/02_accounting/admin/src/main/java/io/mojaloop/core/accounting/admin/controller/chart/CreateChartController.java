@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -64,7 +65,8 @@ public class CreateChartController {
     }
 
     @PostMapping("/charts")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public CreateChartCommand.Output execute(@Valid @RequestBody CreateChartCommand.Input input) {
 
         return this.createChartCommand.execute(input);

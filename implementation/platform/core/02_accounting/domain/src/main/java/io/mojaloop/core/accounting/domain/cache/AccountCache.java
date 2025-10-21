@@ -22,8 +22,8 @@ package io.mojaloop.core.accounting.domain.cache;
 
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 

@@ -44,7 +44,7 @@ import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.accounting.admin.client.exception.AccountingAdminClientException;
 import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
-import io.mojaloop.core.accounting.contract.command.definition.AddFlowDefinitionPostingCommand;
+import io.mojaloop.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -67,13 +67,12 @@ public class AddFlowDefinitionPosting {
         this.objectMapper = objectMapper;
     }
 
-    public void execute(AddFlowDefinitionPostingCommand.Input input) throws AccountingAdminClientException {
+    public void execute(AddPostingDefinitionCommand.Input input) throws AccountingAdminClientException {
 
         try {
 
-            RetrofitService
-                .invoke(this.definitionCommands.addFlowDefinitionPostings(input),
-                        (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(this.definitionCommands.addFlowDefinitionPostings(input),
+                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -89,4 +88,5 @@ public class AddFlowDefinitionPosting {
             throw new AccountingAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
+
 }

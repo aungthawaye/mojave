@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PostingDefinitionRepository extends JpaRepository<PostingDefinition, PostingDefinitionId>, JpaSpecificationExecutor<PostingDefinition> {
-
+public interface PostingDefinitionRepository
+    extends JpaRepository<PostingDefinition, PostingDefinitionId>, JpaSpecificationExecutor<PostingDefinition> {
 
 }

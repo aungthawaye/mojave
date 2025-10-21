@@ -22,8 +22,6 @@ package io.mojaloop.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotNull;
 
@@ -37,7 +35,8 @@ public interface ChangeFlowDefinitionCurrencyCommand {
     /**
      * Input specifying the definition to change currency.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull Currency currency) { }
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
+                 @JsonProperty(required = true) @NotNull Currency currency) { }
 
     /**
      * Output returning the affected DefinitionId.

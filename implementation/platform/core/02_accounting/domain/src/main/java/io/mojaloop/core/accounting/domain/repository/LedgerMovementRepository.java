@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LedgerMovementRepository extends JpaRepository<LedgerMovement, LedgerMovementId>, JpaSpecificationExecutor<LedgerMovement> { }
+public interface LedgerMovementRepository
+    extends JpaRepository<LedgerMovement, LedgerMovementId>, JpaSpecificationExecutor<LedgerMovement> { }

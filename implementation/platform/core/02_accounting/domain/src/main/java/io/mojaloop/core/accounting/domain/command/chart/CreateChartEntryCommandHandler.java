@@ -23,7 +23,6 @@ package io.mojaloop.core.accounting.domain.command.chart;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
-import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +50,7 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
 
         LOGGER.info("Executing CreateChartEntryCommand with input: {}", input);
 
-        var chart = this.chartRepository.findById(input.chartId())
-                                        .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
+        var chart = this.chartRepository.findById(input.chartId()).orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
         LOGGER.info("Found Chart with id: {}", input.chartId());
 
         var entry = chart.addEntry(input.code(), input.name(), input.description(), input.accountType());

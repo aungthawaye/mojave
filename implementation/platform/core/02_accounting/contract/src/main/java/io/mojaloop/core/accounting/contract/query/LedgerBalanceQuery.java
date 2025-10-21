@@ -20,5 +20,4 @@
 
 package io.mojaloop.core.accounting.contract.query;
 
-public interface LedgerBalanceQuery {
-}
+public interface LedgerBalanceQuery { }

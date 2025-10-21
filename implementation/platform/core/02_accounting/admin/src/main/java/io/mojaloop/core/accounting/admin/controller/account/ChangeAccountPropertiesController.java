@@ -40,13 +40,13 @@
 package io.mojaloop.core.accounting.admin.controller.account;
 
 import io.mojaloop.core.accounting.contract.command.account.ChangeAccountPropertiesCommand;
-import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,10 +65,11 @@ public class ChangeAccountPropertiesController {
     }
 
     @PostMapping("/accounts/change-properties")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ChangeAccountPropertiesCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ChangeAccountPropertiesCommand.Output execute(@Valid @RequestBody ChangeAccountPropertiesCommand.Input input) {
 
-        this.changeAccountPropertiesCommand.execute(input);
+        return this.changeAccountPropertiesCommand.execute(input);
     }
 
 }

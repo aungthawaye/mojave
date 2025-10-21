@@ -40,13 +40,13 @@
 package io.mojaloop.core.accounting.admin.controller.chart;
 
 import io.mojaloop.core.accounting.contract.command.chart.ChangeChartEntryPropertiesCommand;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,10 +65,11 @@ public class ChangeChartEntryPropertiesController {
     }
 
     @PostMapping("/charts/entries/change-properties")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ChangeChartEntryPropertiesCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ChangeChartEntryPropertiesCommand.Output execute(@Valid @RequestBody ChangeChartEntryPropertiesCommand.Input input) {
 
-        this.changeChartEntryPropertiesCommand.execute(input);
+        return this.changeChartEntryPropertiesCommand.execute(input);
     }
 
 }

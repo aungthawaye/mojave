@@ -28,6 +28,7 @@ public class AccountingIntercomClientException extends Exception {
     private final String code;
 
     public AccountingIntercomClientException(String code, String message) {
+
         super(message);
         assert code != null;
         this.code = code;

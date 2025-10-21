@@ -44,4 +44,5 @@ public class CreateChartCommandIT extends BaseDomainIT {
         assertNotNull(output);
         assertNotNull(output.chartId());
     }
+
 }

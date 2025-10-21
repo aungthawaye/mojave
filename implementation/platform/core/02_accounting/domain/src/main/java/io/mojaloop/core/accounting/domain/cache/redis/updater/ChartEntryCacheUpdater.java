@@ -13,7 +13,7 @@ public class ChartEntryCacheUpdater {
     @PostUpdate
     public void persistOrUpdate(ChartEntry entry) {
 
-        var cache = SpringContext.getBean(ChartEntryCache.class, ChartEntryCache.Qualifiers.DEFAULT);
+        var cache = SpringContext.getBean(ChartEntryCache.class);
 
         cache.save(entry.convert());
     }
@@ -21,8 +21,9 @@ public class ChartEntryCacheUpdater {
     @PostRemove
     public void postRemove(ChartEntry entry) {
 
-        var cache = SpringContext.getBean(ChartEntryCache.class, ChartEntryCache.Qualifiers.DEFAULT);
+        var cache = SpringContext.getBean(ChartEntryCache.class);
 
         cache.delete(entry.getId());
     }
+
 }

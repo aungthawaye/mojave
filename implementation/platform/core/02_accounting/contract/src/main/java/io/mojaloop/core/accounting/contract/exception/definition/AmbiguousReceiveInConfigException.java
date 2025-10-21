@@ -42,13 +42,13 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
-public class ParticipantTypeNotFoundInTransactionException extends UncheckedDomainException {
+public class AmbiguousReceiveInConfigException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Participant Type ({0}) cannot be found in Transaction's participants ({1})..";
+    private static final String TEMPLATE = "Receive In (ACCOUNT) and Participant cannot coexist.";
 
-    public ParticipantTypeNotFoundInTransactionException(String participantType, String participants) {
+    public AmbiguousReceiveInConfigException() {
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_CONFIGURED", TEMPLATE), participantType, participants);
+        super(new ErrorTemplate("AMBIGUOUS_RECEIVE_IN_CONFIG", TEMPLATE));
     }
 
 }

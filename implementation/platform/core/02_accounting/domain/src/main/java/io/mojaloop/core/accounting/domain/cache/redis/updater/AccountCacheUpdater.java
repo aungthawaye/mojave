@@ -13,7 +13,7 @@ public class AccountCacheUpdater {
     @PostUpdate
     public void persistOrUpdate(Account account) {
 
-        var accountCache = SpringContext.getBean(AccountCache.class, AccountCache.Qualifiers.DEFAULT);
+        var accountCache = SpringContext.getBean(AccountCache.class);
 
         accountCache.save(account.convert());
     }
@@ -21,7 +21,7 @@ public class AccountCacheUpdater {
     @PostRemove
     public void postRemove(Account account) {
 
-        var accountCache = SpringContext.getBean(AccountCache.class, AccountCache.Qualifiers.DEFAULT);
+        var accountCache = SpringContext.getBean(AccountCache.class);
 
         accountCache.delete(account.getId());
     }

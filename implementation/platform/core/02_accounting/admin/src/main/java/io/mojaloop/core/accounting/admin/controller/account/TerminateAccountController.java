@@ -40,13 +40,13 @@
 package io.mojaloop.core.accounting.admin.controller.account;
 
 import io.mojaloop.core.accounting.contract.command.account.TerminateAccountCommand;
-import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,10 +65,11 @@ public class TerminateAccountController {
     }
 
     @PostMapping("/accounts/terminate")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody TerminateAccountCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public TerminateAccountCommand.Output execute(@Valid @RequestBody TerminateAccountCommand.Input input) {
 
-        this.terminateAccountCommand.execute(input);
+        return this.terminateAccountCommand.execute(input);
     }
 
 }

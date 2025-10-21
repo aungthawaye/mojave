@@ -68,8 +68,7 @@ public class ChangeChartNameCommandHandler implements ChangeChartNameCommand {
 
         LOGGER.info("Executing ChangeChartNameCommand with input: {}", input);
 
-        var chart = this.chartRepository.findById(input.chartId())
-                                        .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
+        var chart = this.chartRepository.findById(input.chartId()).orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
         LOGGER.info("Found Chart with id: {}", input.chartId());
 
         chart.name(input.name());

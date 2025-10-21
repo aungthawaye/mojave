@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,10 +49,11 @@ public class ActivateFspController {
     }
 
     @PostMapping("/fsps/activate-fsp")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody ActivateFspCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ActivateFspCommand.Output execute(@Valid @RequestBody ActivateFspCommand.Input input) {
 
-        this.activateFspCommand.execute(input);
+        return this.activateFspCommand.execute(input);
     }
 
 }

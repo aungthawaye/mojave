@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,7 +68,8 @@ public class CreateChartEntryController {
     }
 
     @PostMapping("/charts/entries")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public CreateChartEntryCommand.Output execute(@Valid @RequestBody CreateChartEntryCommand.Input input)
         throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
 

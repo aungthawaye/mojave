@@ -22,7 +22,6 @@ package io.mojaloop.core.accounting.contract.command.chart;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

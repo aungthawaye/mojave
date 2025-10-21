@@ -21,7 +21,6 @@
 package io.mojaloop.core.participant.admin.controller.oracle;
 
 import io.mojaloop.core.participant.contract.command.oracle.ActivateOracleCommand;
-import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -23,7 +23,6 @@ package io.mojaloop.core.accounting.domain;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.component.redis.RedissonOpsClientConfiguration;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
@@ -42,7 +41,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.domain"})
-@Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class, RedissonOpsClientConfiguration.class})
+@Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
 public class AccountingDomainConfiguration {
 
     @Bean
@@ -77,7 +76,7 @@ public class AccountingDomainConfiguration {
 
     public interface RequiredBeans { }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings, RedissonOpsClientConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
 
         MySqlLedger.LedgerDbSettings ledgerDbSettings();
 

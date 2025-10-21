@@ -54,11 +54,8 @@ public class GetAccounts {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.accountingIntercomService.getAccounts(),
-                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)
-                              )
-                       .body();
+            return RetrofitService.invoke(this.accountingIntercomService.getAccounts(),
+                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -74,4 +71,5 @@ public class GetAccounts {
             throw new AccountingIntercomClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
+
 }

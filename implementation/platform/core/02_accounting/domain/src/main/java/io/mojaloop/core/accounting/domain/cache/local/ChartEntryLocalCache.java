@@ -7,16 +7,12 @@ import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-@Qualifier(ChartEntryCache.Qualifiers.IN_MEMORY)
 public class ChartEntryLocalCache implements ChartEntryCache {
 
     private final ChartEntryRepository chartEntryRepository;
@@ -96,4 +92,5 @@ public class ChartEntryLocalCache implements ChartEntryCache {
         this.withId.put(chartEntry.chartEntryId().getId(), chartEntry);
         this.withCode.put(chartEntry.code().value(), chartEntry);
     }
+
 }

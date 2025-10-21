@@ -24,26 +24,17 @@ import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.time.Instant;
 import java.util.Objects;
 
-public record AccountData(AccountId accountId,
-                          AccountOwnerId ownerId,
-                          AccountType type,
-                          Currency currency,
-                          AccountCode code,
-                          String name,
-                          String description,
-                          Instant createdAt,
-                          ActivationStatus activationStatus,
-                          TerminationStatus terminationStatus,
-                          ChartEntryId chartEntryId,
-                          LedgerBalanceData ledgerBalance) {
+public record AccountData(AccountId accountId, AccountOwnerId ownerId, AccountType type, Currency currency, AccountCode code, String name,
+                          String description, Instant createdAt, ActivationStatus activationStatus, TerminationStatus terminationStatus,
+                          ChartEntryId chartEntryId, LedgerBalanceData ledgerBalance) {
 
     @Override
     public boolean equals(Object o) {

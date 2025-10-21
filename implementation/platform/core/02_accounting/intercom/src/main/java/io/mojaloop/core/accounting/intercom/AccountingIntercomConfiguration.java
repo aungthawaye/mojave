@@ -46,8 +46,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom")
 @Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-public class AccountingIntercomConfiguration extends JacksonWebMvcExtension
-    implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+public class AccountingIntercomConfiguration extends JacksonWebMvcExtension implements AccountingDomainConfiguration.RequiredBeans,
+                                                                                       SpringSecurityConfiguration.RequiredBeans,
+                                                                                       SpringSecurityConfiguration.RequiredSettings {
 
     public AccountingIntercomConfiguration(ObjectMapper objectMapper) {
 

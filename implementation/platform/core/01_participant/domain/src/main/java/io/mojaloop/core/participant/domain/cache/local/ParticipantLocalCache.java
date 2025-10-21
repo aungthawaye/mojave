@@ -21,8 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-@Qualifier(ParticipantCache.Qualifiers.IN_MEMORY)
+
 public class ParticipantLocalCache implements ParticipantCache {
 
     private final FspRepository fspRepository;

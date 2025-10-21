@@ -23,8 +23,6 @@ package io.mojaloop.core.accounting.contract.command.definition;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -46,4 +44,5 @@ public interface ChangeFlowDefinitionPropertiesCommand {
      * Output returning the affected DefinitionId.
      */
     record Output(FlowDefinitionId flowDefinitionId) { }
+
 }

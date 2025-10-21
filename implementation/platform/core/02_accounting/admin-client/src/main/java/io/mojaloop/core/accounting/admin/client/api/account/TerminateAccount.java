@@ -71,9 +71,8 @@ public class TerminateAccount {
 
         try {
 
-            RetrofitService
-                .invoke(this.accountCommands.terminateAccount(input),
-                        (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(this.accountCommands.terminateAccount(input),
+                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 

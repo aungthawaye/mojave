@@ -40,13 +40,13 @@
 package io.mojaloop.core.accounting.admin.controller.definition;
 
 import io.mojaloop.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,9 +65,11 @@ public class TerminateFlowDefinitionController {
     }
 
     @PostMapping("/definitions/flows/terminate")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody final TerminateFlowDefinitionCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public TerminateFlowDefinitionCommand.Output execute(@Valid @RequestBody final TerminateFlowDefinitionCommand.Input input) {
 
-        this.terminateFlowDefinitionCommand.execute(input);
+        return this.terminateFlowDefinitionCommand.execute(input);
     }
+
 }

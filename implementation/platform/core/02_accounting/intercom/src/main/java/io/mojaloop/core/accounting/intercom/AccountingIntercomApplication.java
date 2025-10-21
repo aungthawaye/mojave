@@ -42,9 +42,10 @@ public class AccountingIntercomApplication {
 
         LOGGER.info("Starting accounting intercom application");
 
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("ACC_FLYWAY_DB_URL",
-                                                                              "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
+        var flywaySettings = new FlywayMigration.Settings(System
+                                                              .getenv()
+                                                              .getOrDefault("ACC_FLYWAY_DB_URL",
+                                                                            "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
                                                           System.getenv().getOrDefault("ACC_FLYWAY_DB_USER", "root"),
                                                           System.getenv().getOrDefault("ACC_FLYWAY_DB_PASSWORD", "password"),
                                                           "classpath:migration/accounting");
@@ -53,24 +54,19 @@ public class AccountingIntercomApplication {
         FlywayMigration.migrate(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
-        new SpringApplicationBuilder(AccountingIntercomApplication.class).web(WebApplicationType.SERVLET)
-                                                                         .properties("spring.application.name=accounting-intercom",
-                                                                                  "spring.jmx.enabled=true",
-                                                                                  "spring.jmx.unique-types=true",
-                                                                                  "spring.jmx.default-domain=accounting-intercom",
-                                                                                  "spring.application.admin.enabled=true",
-                                                                                  "management.endpoints.web.base-path=/actuator",
-                                                                                  "management.endpoint.health.show-details=always",
-                                                                                  "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
-                                                                                  "management.endpoint.health.group.liveness.include=db,diskSpace,process,throttling",
-                                                                                  "management.endpoint.health.group.throttling.include=throttling",
-                                                                                  "management.endpoint.throttling.enabled=true",
-                                                                                  "management.endpoint.health.validate-group-membership=false",
-                                                                                  "management.endpoint.health.probes.enabled=true",
-                                                                                  "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                                                                                  "management.endpoint.health.show-details=always",
-                                                                                  "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=AccountingIntercomApplication,context=accounting-intercom")
-                                                                         .run(args);
+        new SpringApplicationBuilder(AccountingIntercomApplication.class)
+            .web(WebApplicationType.SERVLET)
+            .properties("spring.application.name=accounting-intercom", "spring.jmx.enabled=true", "spring.jmx.unique-types=true",
+                        "spring.jmx.default-domain=accounting-intercom", "spring.application.admin.enabled=true",
+                        "management.endpoints.web.base-path=/actuator", "management.endpoint.health.show-details=always",
+                        "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
+                        "management.endpoint.health.group.liveness.include=db,diskSpace,process,throttling",
+                        "management.endpoint.health.group.throttling.include=throttling", "management.endpoint.throttling.enabled=true",
+                        "management.endpoint.health.validate-group-membership=false", "management.endpoint.health.probes.enabled=true",
+                        "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
+                        "management.endpoint.health.show-details=always",
+                        "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=AccountingIntercomApplication,context=accounting-intercom")
+            .run(args);
     }
 
 }

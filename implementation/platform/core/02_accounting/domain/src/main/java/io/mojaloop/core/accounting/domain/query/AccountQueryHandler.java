@@ -11,8 +11,8 @@ import io.mojaloop.core.accounting.contract.query.AccountQuery;
 import io.mojaloop.core.accounting.domain.model.Account;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.springframework.data.domain.PageRequest;
@@ -84,16 +84,14 @@ public class AccountQueryHandler implements AccountQuery {
 
         final var sort = Sort.by(direction, sortProperty);
 
-        final var page = PageRequest.of(
-            Math.max(0, pagedRequest.pageNo() - 1), Math.max(1, pagedRequest.pageSize()), sort);
+        final var page = PageRequest.of(Math.max(0, pagedRequest.pageNo() - 1), Math.max(1, pagedRequest.pageSize()), sort);
 
         final var resultPage = this.accountRepository.findAll(spec, page);
 
         final var data = resultPage.getContent().stream().map(Account::convert).toList();
 
-        return new PagedResult<>(
-            resultPage.getNumber() + 1, resultPage.getSize(), resultPage.getTotalPages(),
-            (int) resultPage.getTotalElements(), data);
+        return new PagedResult<>(resultPage.getNumber() + 1, resultPage.getSize(), resultPage.getTotalPages(),
+                                 (int) resultPage.getTotalElements(), data);
     }
 
     @Transactional(readOnly = true)
@@ -110,8 +108,8 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public List<AccountData> get(AccountOwnerId ownerId) {
 
-        return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId)).stream().map(
-            Account::convert).collect(Collectors.toList());
+        return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId)).stream().map(Account::convert).collect(
+            Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -119,9 +117,7 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public AccountData get(AccountId accountId) throws AccountIdNotFoundException {
 
-        return this.accountRepository.findById(accountId)
-                                     .orElseThrow(() -> new AccountIdNotFoundException(accountId))
-                                     .convert();
+        return this.accountRepository.findById(accountId).orElseThrow(() -> new AccountIdNotFoundException(accountId)).convert();
     }
 
     @Transactional(readOnly = true)

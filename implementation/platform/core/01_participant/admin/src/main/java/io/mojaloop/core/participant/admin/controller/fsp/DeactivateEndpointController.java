@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,10 +47,11 @@ public class DeactivateEndpointController {
     }
 
     @PostMapping("/fsps/deactivate-endpoint")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void execute(@Valid @RequestBody DeactivateEndpointCommand.Input input) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public DeactivateEndpointCommand.Output execute(@Valid @RequestBody DeactivateEndpointCommand.Input input) {
 
-        this.deactivateEndpointCommand.execute(input);
+        return this.deactivateEndpointCommand.execute(input);
     }
 
 }

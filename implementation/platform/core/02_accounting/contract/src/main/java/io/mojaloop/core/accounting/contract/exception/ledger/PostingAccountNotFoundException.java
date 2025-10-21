@@ -41,8 +41,8 @@ package io.mojaloop.core.accounting.contract.exception.ledger;
 
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 public class PostingAccountNotFoundException extends CheckedDomainException {
@@ -51,7 +51,8 @@ public class PostingAccountNotFoundException extends CheckedDomainException {
 
     public PostingAccountNotFoundException(AccountOwnerId ownerId, ChartEntryId chartEntryId, Currency currency) {
 
-        super(new ErrorTemplate("POSTING_ACCOUNT_NOT_FOUND", TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(), currency.toString());
+        super(new ErrorTemplate("POSTING_ACCOUNT_NOT_FOUND", TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(),
+              currency.toString());
     }
 
 }

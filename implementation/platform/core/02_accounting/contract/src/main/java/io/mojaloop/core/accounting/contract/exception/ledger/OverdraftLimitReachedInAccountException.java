@@ -58,13 +58,8 @@ public class OverdraftLimitReachedInAccountException extends CheckedDomainExcept
                                                    BigDecimal postedCredits,
                                                    TransactionId transactionId) {
 
-        super(new ErrorTemplate("OVERDRAFT_LIMIT_REACHED_IN_ACCOUNT", TEMPLATE),
-              accountCode.value(),
-              side.name(),
-              amount.toPlainString(),
-              postedDebits.toPlainString(),
-              postedCredits.toPlainString(),
-              transactionId.getId().toString());
+        super(new ErrorTemplate("OVERDRAFT_LIMIT_REACHED_IN_ACCOUNT", TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(),
+              postedDebits.toPlainString(), postedCredits.toPlainString(), transactionId.getId().toString());
     }
 
 }

@@ -51,17 +51,17 @@ public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowD
 
         LOGGER.info("Executing ChangeFlowDefinitionPropertiesCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId())
-                                                            .orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(
+            () -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
 
         final var newName = input.name();
 
         if (newName != null) {
 
-            final var conflict = this.flowDefinitionRepository.findOne(
-                FlowDefinitionRepository.Filters.withNameEquals(newName)
-                    .and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId()))
-            );
+            final var conflict = this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters
+                                                                           .withNameEquals(newName)
+                                                                           .and(FlowDefinitionRepository.Filters.withIdNotEquals(
+                                                                               definition.getId())));
 
             if (conflict.isPresent()) {
                 LOGGER.info("Flow Definition with name {} already exists", newName);
@@ -78,4 +78,5 @@ public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowD
 
         return new Output(definition.getId());
     }
+
 }
