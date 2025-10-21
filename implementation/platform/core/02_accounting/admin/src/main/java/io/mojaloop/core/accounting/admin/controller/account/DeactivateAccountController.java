@@ -40,7 +40,6 @@
 package io.mojaloop.core.accounting.admin.controller.account;
 
 import io.mojaloop.core.accounting.contract.command.account.DeactivateAccountCommand;
-import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

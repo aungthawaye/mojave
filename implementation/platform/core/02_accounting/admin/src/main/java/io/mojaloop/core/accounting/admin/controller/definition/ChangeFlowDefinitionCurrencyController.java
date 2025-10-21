@@ -40,8 +40,6 @@
 package io.mojaloop.core.accounting.admin.controller.definition;
 
 import io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionCurrencyCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,4 +71,5 @@ public class ChangeFlowDefinitionCurrencyController {
 
         return this.changeFlowDefinitionCurrencyCommand.execute(input);
     }
+
 }

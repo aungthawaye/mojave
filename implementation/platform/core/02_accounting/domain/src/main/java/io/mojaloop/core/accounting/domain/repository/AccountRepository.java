@@ -22,8 +22,8 @@ package io.mojaloop.core.accounting.domain.repository;
 
 import io.mojaloop.core.accounting.domain.model.Account;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.springframework.data.jpa.domain.Specification;

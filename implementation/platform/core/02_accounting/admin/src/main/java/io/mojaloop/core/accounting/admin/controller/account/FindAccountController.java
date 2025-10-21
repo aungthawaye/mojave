@@ -5,8 +5,8 @@ import io.mojaloop.component.misc.query.PagedResult;
 import io.mojaloop.component.misc.query.SortingMode;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.query.AccountQuery;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
@@ -39,17 +39,13 @@ public class FindAccountController {
 
         var criteria = request.criteria;
 
-        return this.accountQuery.find(
-            criteria.accountCode, criteria.name, criteria.ownerId, criteria.chartEntryId, criteria.currency,
-            request.pagedRequest, request.sortBy.column, request.sortBy.mode);
+        return this.accountQuery.find(criteria.accountCode, criteria.name, criteria.ownerId, criteria.chartEntryId, criteria.currency,
+                                      request.pagedRequest, request.sortBy.column, request.sortBy.mode);
     }
 
     public record Request(Criteria criteria, SortBy sortBy, PagedRequest pagedRequest) {
 
-        public record Criteria(AccountCode accountCode,
-                               String name,
-                               AccountOwnerId ownerId,
-                               ChartEntryId chartEntryId,
+        public record Criteria(AccountCode accountCode, String name, AccountOwnerId ownerId, ChartEntryId chartEntryId,
                                Currency currency) { }
 
         public record SortBy(AccountQuery.Sorting.Column column, SortingMode mode) { }

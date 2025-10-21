@@ -23,7 +23,6 @@ package io.mojaloop.core.accounting.domain.command.definition;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.accounting.contract.command.definition.RemoveFlowDefinitionPostingCommand;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +50,8 @@ public class RemoveFlowDefinitionPostingCommandHandler implements RemoveFlowDefi
 
         LOGGER.info("Executing RemoveFlowDefinitionPostingCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId())
-                                                            .orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(
+            () -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
 
         definition.removePosting(input.postingDefinitionId());
 
@@ -62,4 +61,5 @@ public class RemoveFlowDefinitionPostingCommandHandler implements RemoveFlowDefi
 
         return new Output(definition.getId());
     }
+
 }

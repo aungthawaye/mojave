@@ -38,20 +38,20 @@ public class GetChartEntryController {
         return this.chartEntryQuery.getAll();
     }
 
-    @GetMapping("/charts/entries/get-by-entry-id")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ChartEntryData byEntryId(@RequestParam final Long entryId) throws ChartEntryIdNotFoundException {
-
-        return this.chartEntryQuery.get(new ChartEntryId(entryId));
-    }
-
     @GetMapping("/charts/entries/get-by-chart-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<ChartEntryData> byChartId(@RequestParam final Long chartId) {
 
         return this.chartEntryQuery.get(new ChartId(chartId));
+    }
+
+    @GetMapping("/charts/entries/get-by-entry-id")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ChartEntryData byEntryId(@RequestParam final Long entryId) throws ChartEntryIdNotFoundException {
+
+        return this.chartEntryQuery.get(new ChartEntryId(entryId));
     }
 
     @GetMapping("/charts/entries/get-by-name-contains")
@@ -61,4 +61,5 @@ public class GetChartEntryController {
 
         return this.chartEntryQuery.getByNameContains(name);
     }
+
 }

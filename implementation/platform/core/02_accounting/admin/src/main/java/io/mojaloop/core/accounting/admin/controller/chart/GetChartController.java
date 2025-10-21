@@ -52,4 +52,5 @@ public class GetChartController {
 
         return this.chartQuery.getByNameContains(name);
     }
+
 }

@@ -50,8 +50,8 @@ public class ActivateFlowDefinitionCommandHandler implements ActivateFlowDefinit
 
         LOGGER.info("Executing ActivateFlowDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId())
-                                                            .orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(
+            () -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
 
         definition.activate();
 
@@ -61,4 +61,5 @@ public class ActivateFlowDefinitionCommandHandler implements ActivateFlowDefinit
 
         return new Output(definition.getId());
     }
+
 }

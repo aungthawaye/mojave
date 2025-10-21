@@ -23,8 +23,6 @@ package io.mojaloop.core.accounting.contract.command.definition;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -37,7 +35,8 @@ public interface RemoveFlowDefinitionPostingCommand {
     /**
      * Input for creating a Fund-In Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull PostingDefinitionId postingDefinitionId) {
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
+                 @JsonProperty(required = true) @NotNull PostingDefinitionId postingDefinitionId) {
 
     }
 

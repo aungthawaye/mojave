@@ -21,7 +21,6 @@
 package io.mojaloop.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import jakarta.validation.constraints.NotNull;
 
@@ -41,4 +40,5 @@ public interface ActivateFlowDefinitionCommand {
      * Output returning the affected DefinitionId.
      */
     record Output(FlowDefinitionId flowDefinitionId) { }
+
 }

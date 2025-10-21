@@ -33,7 +33,7 @@ public class FspCacheUpdater {
     @PostUpdate
     public void persistOrUpdate(Fsp fsp) {
 
-        var participantCache = SpringContext.getBean(ParticipantCache.class, ParticipantCache.Qualifiers.DEFAULT);
+        var participantCache = SpringContext.getBean(ParticipantCache.class);
 
         participantCache.save(fsp.convert());
     }
@@ -41,7 +41,7 @@ public class FspCacheUpdater {
     @PostRemove
     public void postRemove(Fsp fsp) {
 
-        var participantCache = SpringContext.getBean(ParticipantCache.class, ParticipantCache.Qualifiers.DEFAULT);
+        var participantCache = SpringContext.getBean(ParticipantCache.class);
 
         participantCache.delete(fsp.getId());
     }

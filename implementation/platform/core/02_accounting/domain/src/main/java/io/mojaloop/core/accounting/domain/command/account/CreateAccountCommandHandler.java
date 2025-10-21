@@ -55,12 +55,12 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
 
         LOGGER.info("Executing CreateAccountCommand with input: {}", input);
 
-        var chartEntry = this.chartEntryRepository.findById(input.chartEntryId())
-                                                  .orElseThrow(() -> new IllegalArgumentException("ChartEntry not found: " + input.chartEntryId()));
+        var chartEntry = this.chartEntryRepository.findById(input.chartEntryId()).orElseThrow(
+            () -> new IllegalArgumentException("ChartEntry not found: " + input.chartEntryId()));
         LOGGER.info("Found ChartEntry with id: {}", input.chartEntryId());
 
-        var account = new Account(chartEntry, input.ownerId(), input.currency(), input.code(), input.name(), input.description(), input.overdraftMode(),
-                                  input.overdraftLimit());
+        var account = new Account(chartEntry, input.ownerId(), input.currency(), input.code(), input.name(), input.description(),
+                                  input.overdraftMode(), input.overdraftLimit());
         LOGGER.info("Created Account: {}", account);
 
         account = this.accountRepository.save(account);

@@ -24,8 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
+import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
@@ -48,7 +48,8 @@ public interface CreateAccountCommand {
                  @JsonProperty(required = true) @NotNull @NotBlank Currency currency,
                  @JsonProperty(required = true) @NotNull AccountCode code,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(
+                     max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
                  @JsonProperty(required = true) @NotNull OverdraftMode overdraftMode,
                  @JsonProperty(required = true) @NotNull BigDecimal overdraftLimit) { }
 

@@ -33,7 +33,8 @@ public interface ChartEntryQuery {
 
     List<ChartEntryData> get(ChartId chartId);
 
+    List<ChartEntryData> getAll();
+
     List<ChartEntryData> getByNameContains(String name);
 
-    List<ChartEntryData> getAll();
 }

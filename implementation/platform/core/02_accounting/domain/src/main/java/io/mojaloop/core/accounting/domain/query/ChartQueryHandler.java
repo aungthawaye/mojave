@@ -29,9 +29,7 @@ public class ChartQueryHandler implements ChartQuery {
     @Override
     public ChartData get(final ChartId chartId) throws ChartIdNotFoundException {
 
-        return this.chartRepository.findById(chartId)
-                                   .orElseThrow(() -> new ChartIdNotFoundException(chartId))
-                                   .convert();
+        return this.chartRepository.findById(chartId).orElseThrow(() -> new ChartIdNotFoundException(chartId)).convert();
     }
 
     @Transactional(readOnly = true)
@@ -47,10 +45,7 @@ public class ChartQueryHandler implements ChartQuery {
     @Override
     public List<ChartData> getByNameContains(final String name) {
 
-        return this.chartRepository.findAll(ChartRepository.Filters.withNameContains(name))
-                                   .stream()
-                                   .map(Chart::convert)
-                                   .toList();
+        return this.chartRepository.findAll(ChartRepository.Filters.withNameContains(name)).stream().map(Chart::convert).toList();
     }
 
 }

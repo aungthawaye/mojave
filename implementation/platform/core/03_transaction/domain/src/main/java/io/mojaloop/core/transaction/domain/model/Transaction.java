@@ -82,6 +82,7 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
 
         this.id = transactionId;
         this.type = type;
+        this.phase = TransactionPhase.OPEN;
         this.openAt = Instant.now();
     }
 

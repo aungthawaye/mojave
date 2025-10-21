@@ -62,8 +62,7 @@ public class AccountRedisCache implements AccountCache {
         this.withId = redissonOpsClient.getRedissonClient().getMap(Names.WITH_ID);
         this.withCode = redissonOpsClient.getRedissonClient().getMap(Names.WITH_CODE);
         this.withOwnerId = redissonOpsClient.getRedissonClient().getSetMultimap(Names.WITH_OWNER_ID);
-        this.withChartEntryIdOwnerIdCurrency = redissonOpsClient.getRedissonClient()
-                                                                .getMap(Names.WITH_CHARTENTRYID_OWNERID_CURRENCY);
+        this.withChartEntryIdOwnerIdCurrency = redissonOpsClient.getRedissonClient().getMap(Names.WITH_CHARTENTRYID_OWNERID_CURRENCY);
 
     }
 
@@ -91,9 +90,7 @@ public class AccountRedisCache implements AccountCache {
 
         if (set != null && !set.isEmpty()) {
 
-            set.stream()
-               .filter(a -> a.accountId().equals(accountId))
-               .forEach(a -> this.withOwnerId.remove(a.ownerId().getId(), a));
+            set.stream().filter(a -> a.accountId().equals(accountId)).forEach(a -> this.withOwnerId.remove(a.ownerId().getId(), a));
 
         }
 

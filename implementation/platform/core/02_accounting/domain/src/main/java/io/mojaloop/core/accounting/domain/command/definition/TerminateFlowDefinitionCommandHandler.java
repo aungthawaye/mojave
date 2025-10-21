@@ -50,8 +50,8 @@ public class TerminateFlowDefinitionCommandHandler implements TerminateFlowDefin
 
         LOGGER.info("Executing TerminateFlowDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId())
-                                                            .orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(
+            () -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
 
         definition.terminate();
 
@@ -61,4 +61,5 @@ public class TerminateFlowDefinitionCommandHandler implements TerminateFlowDefin
 
         return new Output(definition.getId());
     }
+
 }

@@ -31,9 +31,20 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, FlowDefinitionId>, JpaSpecificationExecutor<FlowDefinition> {
+public interface FlowDefinitionRepository
+    extends JpaRepository<FlowDefinition, FlowDefinitionId>, JpaSpecificationExecutor<FlowDefinition> {
 
     class Filters {
+
+        public static Specification<FlowDefinition> withActivationStatus(ActivationStatus status) {
+
+            return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
+        }
+
+        public static Specification<FlowDefinition> withCurrency(Currency currency) {
+
+            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
+        }
 
         public static Specification<FlowDefinition> withId(FlowDefinitionId id) {
 
@@ -45,11 +56,6 @@ public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, 
             return (root, query, cb) -> cb.notEqual(root.get("id"), id);
         }
 
-        public static Specification<FlowDefinition> withCurrency(Currency currency) {
-
-            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
-        }
-
         public static Specification<FlowDefinition> withNameContains(String name) {
 
             return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
@@ -58,11 +64,6 @@ public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, 
         public static Specification<FlowDefinition> withNameEquals(String name) {
 
             return (root, query, cb) -> cb.equal(root.get("name"), name);
-        }
-
-        public static Specification<FlowDefinition> withActivationStatus(ActivationStatus status) {
-
-            return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
         }
 
         public static Specification<FlowDefinition> withTerminationStatus(TerminationStatus status) {

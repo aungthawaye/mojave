@@ -49,8 +49,8 @@ public class ActivateAccountCommandHandler implements ActivateAccountCommand {
 
         LOGGER.info("Executing ActivateAccountCommand with input: {}", input);
 
-        var account = this.accountRepository.findById(input.accountId())
-                                            .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
+        var account = this.accountRepository.findById(input.accountId()).orElseThrow(
+            () -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
         account.activate();

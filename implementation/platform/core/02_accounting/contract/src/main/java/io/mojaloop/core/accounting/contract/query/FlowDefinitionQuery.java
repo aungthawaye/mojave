@@ -10,7 +10,8 @@ public interface FlowDefinitionQuery {
 
     FlowDefinitionData get(FlowDefinitionId flowDefinitionId) throws FlowDefinitionNotFoundException;
 
+    List<FlowDefinitionData> getAll();
+
     List<FlowDefinitionData> getByNameContains(String name);
 
-    List<FlowDefinitionData> getAll();
 }

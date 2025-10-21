@@ -40,8 +40,6 @@
 package io.mojaloop.core.accounting.admin.controller.definition;
 
 import io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,8 +67,10 @@ public class ChangeFlowDefinitionPropertiesController {
     @PostMapping("/definitions/flows/change-properties")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeFlowDefinitionPropertiesCommand.Output execute(@Valid @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input) {
+    public ChangeFlowDefinitionPropertiesCommand.Output execute(
+        @Valid @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input) {
 
         return this.changeFlowDefinitionPropertiesCommand.execute(input);
     }
+
 }

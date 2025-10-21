@@ -48,7 +48,8 @@ public class CreateChartEntryCommandIT extends BaseDomainIT {
         final var chartOutput = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
         final var chartId = chartOutput.chartId();
 
-        final var input = new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("ASSETS"), "Assets", "Assets Description", AccountType.ASSET);
+        final var input = new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("ASSETS"), "Assets", "Assets Description",
+                                                            AccountType.ASSET);
 
         // Act
         final var output = this.createChartEntryCommand.execute(input);
@@ -70,7 +71,8 @@ public class CreateChartEntryCommandIT extends BaseDomainIT {
         this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartA, code, "Cash", "Cash on hand", AccountType.ASSET));
 
         // Second creation with the same code (even in another chart) should fail due to global uniqueness
-        final var duplicateInput = new CreateChartEntryCommand.Input(chartB, code, "Cash Duplicate", "Another description", AccountType.ASSET);
+        final var duplicateInput = new CreateChartEntryCommand.Input(chartB, code, "Cash Duplicate", "Another description",
+                                                                     AccountType.ASSET);
 
         // Act & Assert
         assertThrows(ChartEntryCodeAlreadyExistsException.class, () -> this.createChartEntryCommand.execute(duplicateInput));
@@ -79,7 +81,8 @@ public class CreateChartEntryCommandIT extends BaseDomainIT {
     @Test
     void should_fail_when_chart_not_found() {
         // Arrange
-        final var input = new CreateChartEntryCommand.Input(new ChartId(999999L), new ChartEntryCode("LIAB"), "Liabilities", "Liabilities Description", AccountType.LIABILITY);
+        final var input = new CreateChartEntryCommand.Input(new ChartId(999999L), new ChartEntryCode("LIAB"), "Liabilities",
+                                                            "Liabilities Description", AccountType.LIABILITY);
 
         // Act & Assert
         assertThrows(ChartIdNotFoundException.class, () -> this.createChartEntryCommand.execute(input));

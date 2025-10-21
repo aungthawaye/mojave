@@ -27,8 +27,11 @@ public class LedgerController {
     }
 
     @PostMapping("/ledgers/post-transaction")
-    public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input)
-        throws InsufficientBalanceInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException, OverdraftLimitReachedInAccountException {
+    public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input) throws
+                                                                                                         InsufficientBalanceInAccountException,
+                                                                                                         DuplicatePostingInLedgerException,
+                                                                                                         RestoreFailedInAccountException,
+                                                                                                         OverdraftLimitReachedInAccountException {
 
         LOGGER.info("Entering PostTransactionCommand.execute: input : {}", input);
 

@@ -40,7 +40,6 @@
 package io.mojaloop.core.accounting.admin.controller.chart;
 
 import io.mojaloop.core.accounting.contract.command.chart.ChangeChartEntryPropertiesCommand;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

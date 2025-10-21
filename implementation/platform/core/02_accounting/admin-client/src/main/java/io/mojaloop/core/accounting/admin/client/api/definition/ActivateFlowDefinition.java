@@ -71,9 +71,8 @@ public class ActivateFlowDefinition {
 
         try {
 
-            RetrofitService
-                .invoke(this.definitionCommands.activateFlowDefinition(input),
-                        (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(this.definitionCommands.activateFlowDefinition(input),
+                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -89,4 +88,5 @@ public class ActivateFlowDefinition {
             throw new AccountingAdminClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
+
 }

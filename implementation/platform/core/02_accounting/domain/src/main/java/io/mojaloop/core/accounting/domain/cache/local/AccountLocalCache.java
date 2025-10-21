@@ -128,7 +128,8 @@ public class AccountLocalCache implements AccountCache {
         this.withId.put(account.accountId().getId(), account);
         this.withCode.put(account.code().value(), account);
 
-        final var set = this.withOwnerId.computeIfAbsent(account.ownerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        final var set = this.withOwnerId.computeIfAbsent(account.ownerId().getId(),
+                                                         __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(account);
 
         final var key = AccountCache.Keys.forChart(account.chartEntryId(), account.ownerId(), account.currency());

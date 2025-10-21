@@ -6,6 +6,7 @@
         <artifactId>accounting-pom</artifactId>
         <version>1.0.0</version>
     </parent>
+    <name>Mojaloop - Platform - Core - Accounting - Intercom Client</name>
     <artifactId>mod-accounting-intercom-client</artifactId>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

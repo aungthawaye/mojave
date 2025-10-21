@@ -40,7 +40,6 @@
 package io.mojaloop.core.accounting.admin.controller.definition;
 
 import io.mojaloop.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,4 +71,5 @@ public class TerminateFlowDefinitionController {
 
         return this.terminateFlowDefinitionCommand.execute(input);
     }
+
 }

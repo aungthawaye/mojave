@@ -39,7 +39,6 @@
 
 package io.mojaloop.core.accounting.contract.exception.definition;
 
-import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.Currency;

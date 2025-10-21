@@ -21,7 +21,6 @@
 package io.mojaloop.core.accounting.contract.command.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import jakarta.validation.constraints.NotNull;
 

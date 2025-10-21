@@ -12,13 +12,8 @@ import io.mojaloop.fspiop.spec.core.Currency;
 import java.util.List;
 import java.util.Objects;
 
-public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
-                                 TransactionType transactionType,
-                                 Currency currency,
-                                 String name,
-                                 String description,
-                                 ActivationStatus activationStatus,
-                                 TerminationStatus terminationStatus,
+public record FlowDefinitionData(FlowDefinitionId flowDefinitionId, TransactionType transactionType, Currency currency, String name,
+                                 String description, ActivationStatus activationStatus, TerminationStatus terminationStatus,
                                  List<PostingDefinitionData> postings) {
 
     @Override
@@ -36,13 +31,8 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         return Objects.hashCode(flowDefinitionId);
     }
 
-    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
-                                        ReceiveIn receiveIn,
-                                        Long receiveInId,
-                                        String participant,
-                                        String amountName,
-                                        Side side,
-                                        String description) {
+    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId, ReceiveIn receiveIn, Long receiveInId, String participant,
+                                        String amountName, Side side, String description) {
 
         @Override
         public boolean equals(Object o) {

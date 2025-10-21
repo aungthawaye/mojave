@@ -29,9 +29,8 @@ public class FlowDefinitionQueryHandler implements FlowDefinitionQuery {
     @Override
     public FlowDefinitionData get(final FlowDefinitionId flowDefinitionId) throws FlowDefinitionNotFoundException {
 
-        return this.flowDefinitionRepository.findById(flowDefinitionId)
-                                            .orElseThrow(() -> new FlowDefinitionNotFoundException(flowDefinitionId))
-                                            .convert();
+        return this.flowDefinitionRepository.findById(flowDefinitionId).orElseThrow(
+            () -> new FlowDefinitionNotFoundException(flowDefinitionId)).convert();
     }
 
     @Transactional(readOnly = true)
@@ -47,10 +46,8 @@ public class FlowDefinitionQueryHandler implements FlowDefinitionQuery {
     @Override
     public List<FlowDefinitionData> getByNameContains(final String name) {
 
-        return this.flowDefinitionRepository.findAll(FlowDefinitionRepository.Filters.withNameContains(name))
-                                            .stream()
-                                            .map(FlowDefinition::convert)
-                                            .toList();
+        return this.flowDefinitionRepository.findAll(FlowDefinitionRepository.Filters.withNameContains(name)).stream().map(
+            FlowDefinition::convert).toList();
     }
 
 }

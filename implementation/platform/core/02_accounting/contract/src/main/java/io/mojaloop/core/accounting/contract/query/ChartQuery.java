@@ -30,7 +30,8 @@ public interface ChartQuery {
 
     ChartData get(ChartId chartId) throws ChartIdNotFoundException;
 
+    List<ChartData> getAll();
+
     List<ChartData> getByNameContains(String name);
 
-    List<ChartData> getAll();
 }

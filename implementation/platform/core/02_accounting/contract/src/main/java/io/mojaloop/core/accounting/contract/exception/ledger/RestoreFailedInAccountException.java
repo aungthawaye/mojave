@@ -51,15 +51,15 @@ public class RestoreFailedInAccountException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Unable to restore Dr/Cr : account ({0}) | side ({1}) | amount({2}) | posted debits: ({3}) | posted credits: ({4}) | transaction id: ({5}).";
 
-    public RestoreFailedInAccountException(AccountCode accountCode, Side side, BigDecimal amount, BigDecimal postedDebits, BigDecimal postedCredits, TransactionId transactionId) {
+    public RestoreFailedInAccountException(AccountCode accountCode,
+                                           Side side,
+                                           BigDecimal amount,
+                                           BigDecimal postedDebits,
+                                           BigDecimal postedCredits,
+                                           TransactionId transactionId) {
 
-        super(new ErrorTemplate("RESTORE_FAILED_IN_ACCOUNT", TEMPLATE),
-              accountCode.value(),
-              side.name(),
-              amount.toPlainString(),
-              postedDebits.toPlainString(),
-              postedCredits.toPlainString(),
-              transactionId.getId().toString());
+        super(new ErrorTemplate("RESTORE_FAILED_IN_ACCOUNT", TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(),
+              postedDebits.toPlainString(), postedCredits.toPlainString(), transactionId.getId().toString());
     }
 
 }

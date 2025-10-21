@@ -63,4 +63,5 @@ public class ChangeChartNameCommandIT extends BaseDomainIT {
         // Act & Assert
         assertThrows(ChartIdNotFoundException.class, () -> this.changeChartNameCommand.execute(input));
     }
+
 }

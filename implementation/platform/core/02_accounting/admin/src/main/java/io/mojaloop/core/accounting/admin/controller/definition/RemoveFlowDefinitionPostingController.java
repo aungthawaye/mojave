@@ -40,8 +40,6 @@
 package io.mojaloop.core.accounting.admin.controller.definition;
 
 import io.mojaloop.core.accounting.contract.command.definition.RemoveFlowDefinitionPostingCommand;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,4 +71,5 @@ public class RemoveFlowDefinitionPostingController {
 
         return this.removeFlowDefinitionPostingCommand.execute(input);
     }
+
 }

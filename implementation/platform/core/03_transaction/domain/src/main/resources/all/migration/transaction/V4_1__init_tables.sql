@@ -1,142 +1,67 @@
--- txn_fund_in_definition definition
+-- txn_transaction definition
 
-CREATE TABLE `txn_fund_in_definition`
+CREATE TABLE `txn_transaction`
 (
-    `definition_id`      bigint       NOT NULL,
-    `currency`           varchar(3)   NOT NULL,
-    `name`               varchar(64)  NOT NULL,
-    `description`        varchar(255) DEFAULT NULL,
-    `activation_status`  varchar(32)  NOT NULL,
-    `termination_status` varchar(32)  NOT NULL,
-
-    `rec_created_at`     bigint       DEFAULT NULL,
-    `rec_updated_at`     bigint       DEFAULT NULL,
-    `rec_version`        int          DEFAULT NULL,
-
-    PRIMARY KEY (`definition_id`),
-    UNIQUE KEY `trn_fund_in_definition_currency_UK` (`currency`),
-    UNIQUE KEY `trn_fund_in_definition_name_UK` (`name`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
-
--- txn_fund_in_posting definition
-
-CREATE TABLE `txn_fund_in_posting`
-(
-    `posting_id`      bigint       NOT NULL,
-    `for_owner`      varchar(32)  NOT NULL,
-    `for_amount`     varchar(32)  NOT NULL,
-    `side`           varchar(32)  NOT NULL,
-    `chart_entry_id` bigint       NOT NULL,
-    `description`    varchar(255) DEFAULT NULL,
-    `definition_id`  bigint       NOT NULL,
+    `transaction_id` bigint      NOT NULL,
+    `type`           varchar(32) NOT NULL,
+    `phase`          varchar(32) NOT NULL,
+    `open_at`        bigint      NOT NULL,
+    `close_at`       bigint       DEFAULT NULL,
+    `error`          varchar(255) DEFAULT NULL,
+    `success`        tinyint(1)   DEFAULT 1,
 
     `rec_created_at` bigint       DEFAULT NULL,
     `rec_updated_at` bigint       DEFAULT NULL,
     `rec_version`    int          DEFAULT NULL,
 
-    PRIMARY KEY (`posting_id`),
-    UNIQUE KEY `trn_fund_in_posting_for_posting_UK` (`for_owner`, `for_amount`, `chart_entry_id`),
-    KEY `txn_fund_in_posting_definition_id_IDX` (`definition_id`),
-    CONSTRAINT `fund_in_posting_fund_in_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `txn_fund_in_definition` (`definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (`transaction_id`),
+    KEY              `txn_transaction_type_phase_open_at_IDX` (`type`, `phase`, `open_at`),
+    KEY              `txn_transaction_type_phase_close_at_IDX` (`type`, `phase`, `close_at`),
+    KEY              `txn_transaction_open_at_IDX` (`open_at`),
+    KEY              `txn_transaction_close_at_IDX` (`close_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- txn_fund_out_definition definition
+-- txn_transaction_step definition
 
-CREATE TABLE `txn_fund_out_definition`
+CREATE TABLE `txn_transaction_step`
 (
-    `definition_id`      bigint       NOT NULL,
-    `currency`           varchar(3)   NOT NULL,
-    `name`               varchar(64)  NOT NULL,
-    `description`        varchar(255) DEFAULT NULL,
-    `activation_status`  varchar(32)  NOT NULL,
-    `termination_status` varchar(32)  NOT NULL,
+    `step_id`        bigint      NOT NULL,
+    `name`           varchar(64) NOT NULL,
+    `phase`          varchar(32) NOT NULL,
+    `created_at`     bigint      NOT NULL,
+    `transaction_id` bigint      NOT NULL,
 
-    `rec_created_at`     bigint       DEFAULT NULL,
-    `rec_updated_at`     bigint       DEFAULT NULL,
-    `rec_version`        int          DEFAULT NULL,
+    `rec_created_at` bigint DEFAULT NULL,
+    `rec_updated_at` bigint DEFAULT NULL,
+    `rec_version`    int    DEFAULT NULL,
 
-    PRIMARY KEY (`definition_id`),
-    UNIQUE KEY `trn_fund_out_definition_currency_UK` (`currency`),
-    UNIQUE KEY `trn_fund_out_definition_name_UK` (`name`)
+    PRIMARY KEY (`step_id`),
+    KEY              `txn_transaction_step_transaction_id_IDX` (`transaction_id`),
+    CONSTRAINT `txn_transaction_txn_transaction_step_FK` FOREIGN KEY (`transaction_id`) REFERENCES `txn_transaction` (`transaction_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- txn_fund_out_posting definition
+-- txn_step_param definition
 
-CREATE TABLE `txn_fund_out_posting`
+CREATE TABLE `txn_step_param`
 (
-    `posting_id`      bigint       NOT NULL,
-    `for_owner`      varchar(32)  NOT NULL,
-    `for_amount`     varchar(32)  NOT NULL,
-    `side`           varchar(32)  NOT NULL,
-    `chart_entry_id` bigint       NOT NULL,
-    `description`    varchar(255) DEFAULT NULL,
-    `definition_id`  bigint       NOT NULL,
+    `param_id`       bigint       NOT NULL,
+    `param_name`     varchar(64)  NOT NULL,
+    `param_value`    varchar(255) NOT NULL,
+    `step_id`        bigint       NOT NULL,
 
-    `rec_created_at` bigint       DEFAULT NULL,
-    `rec_updated_at` bigint       DEFAULT NULL,
-    `rec_version`    int          DEFAULT NULL,
+    `rec_created_at` bigint DEFAULT NULL,
+    `rec_updated_at` bigint DEFAULT NULL,
+    `rec_version`    int    DEFAULT NULL,
 
-    PRIMARY KEY (`posting_id`),
-    UNIQUE KEY `trn_fund_out_posting_for_posting_UK` (`for_owner`, `for_amount`, `chart_entry_id`),
-    KEY `txn_fund_out_posting_definition_id_IDX` (`definition_id`),
-    CONSTRAINT `fund_out_posting_fund_out_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `txn_fund_out_definition` (`definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
-
--- txn_fund_transfer_definition definition
-
-CREATE TABLE `txn_fund_transfer_definition`
-(
-    `definition_id`      bigint       NOT NULL,
-    `currency`           varchar(3)   NOT NULL,
-    `name`               varchar(64)  NOT NULL,
-    `description`        varchar(255) DEFAULT NULL,
-    `activation_status`  varchar(32)  NOT NULL,
-    `termination_status` varchar(32)  NOT NULL,
-
-    `rec_created_at`     bigint       DEFAULT NULL,
-    `rec_updated_at`     bigint       DEFAULT NULL,
-    `rec_version`        int          DEFAULT NULL,
-
-    PRIMARY KEY (`definition_id`),
-    UNIQUE KEY `trn_fund_transfer_definition_currency_UK` (`currency`),
-    UNIQUE KEY `trn_fund_transfer_definition_name_UK` (`name`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
-
--- txn_fund_transfer_posting definition
-
-CREATE TABLE `txn_fund_transfer_posting`
-(
-    `posting_id`      bigint       NOT NULL,
-    `for_owner`      varchar(32)  NOT NULL,
-    `for_amount`     varchar(32)  NOT NULL,
-    `side`           varchar(32)  NOT NULL,
-    `chart_entry_id` bigint       NOT NULL,
-    `description`    varchar(255) DEFAULT NULL,
-    `definition_id`  bigint       NOT NULL,
-
-    `rec_created_at` bigint       DEFAULT NULL,
-    `rec_updated_at` bigint       DEFAULT NULL,
-    `rec_version`    int          DEFAULT NULL,
-
-    PRIMARY KEY (`posting_id`),
-    UNIQUE KEY `trn_fund_in_transfer_for_posting_UK` (`for_owner`, `for_amount`, `chart_entry_id`),
-    KEY `txn_fund_transfer_posting_definition_id_IDX` (`definition_id`),
-    CONSTRAINT `fund_transfer_posting_fund_transfer_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `txn_fund_transfer_definition` (`definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (`param_id`),
+    KEY              `txn_step_param_step_id_IDX` (`step_id`),
+    CONSTRAINT `txn_transaction_step_txn_step_param_FK` FOREIGN KEY (`step_id`) REFERENCES `txn_transaction_step` (`step_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

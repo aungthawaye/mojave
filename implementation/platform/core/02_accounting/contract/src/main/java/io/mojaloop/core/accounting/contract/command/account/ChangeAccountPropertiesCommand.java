@@ -22,7 +22,6 @@ package io.mojaloop.core.accounting.contract.command.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,11 +33,9 @@ public interface ChangeAccountPropertiesCommand {
     /**
      * Input for changing Account properties. Only allows changing code, name, and description.
      */
-    record Input(
-        @JsonProperty(required = true) @NotNull AccountId accountId,
-        @JsonProperty(required = false) @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-        @JsonProperty(required = false) @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description
-    ) { }
+    record Input(@JsonProperty(required = true) @NotNull AccountId accountId,
+                 @JsonProperty(required = false) @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
+                 @JsonProperty(required = false) @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(AccountId accountId) { }
 

@@ -27,8 +27,6 @@ import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
-import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartNameRequiredException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartNameTooLongException;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartIdJavaType;
@@ -99,9 +97,7 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
     @Override
     public ChartData convert() {
 
-        var entriesData = this.getEntries().stream()
-                              .map(ChartEntry::convert)
-                              .toArray(ChartEntryData[]::new);
+        var entriesData = this.getEntries().stream().map(ChartEntry::convert).toArray(ChartEntryData[]::new);
 
         return new ChartData(this.getId(), this.getName(), this.createdAt, entriesData);
     }
