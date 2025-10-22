@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
  */
 /*-
  * ==============================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -41,15 +41,16 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.enums.accounting.Side;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 
-public class AccountConflictsInPostingDefinitionException extends UncheckedDomainException {
+public class InvalidParticipantForTransactionTypeException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Account ({0}) conflicts in Definition for the Side ({1}) and Amount Name ({2}).";
+    private static final String TEMPLATE = "Participant is invalid for Transaction Type. It must be one of {0}.";
 
-    public AccountConflictsInPostingDefinitionException(String addingAccountName, Side side, String amountName) {
+    public InvalidParticipantForTransactionTypeException(TransactionType transactionType) {
 
-        super(new ErrorTemplate("ACCOUNT_CONFLICTS_IN_POSTING_DEFINITION", TEMPLATE), addingAccountName, side.name(), amountName);
+        super(new ErrorTemplate("INVALID_PARTICIPANT_FOR_TRANSACTION_TYPE", TEMPLATE),
+              transactionType.getParticipants().types().toString());
     }
 
 }

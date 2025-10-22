@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
  */
 /*-
  * ==============================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -45,11 +45,11 @@ import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionI
 
 public class PostingDefinitionNotFoundException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Flow Definition's Posting not found for the given Posting Id ({0}).";
+    private static final String TEMPLATE = "Posting Definition Id ({0}) cannot be found.";
 
     public PostingDefinitionNotFoundException(PostingDefinitionId postingDefinitionId) {
 
-        super(new ErrorTemplate("FLOW_DEFINITION_POSTING_NOT_FOUND", TEMPLATE), postingDefinitionId.getId().toString());
+        super(new ErrorTemplate("POSTING_DEFINITION_NOT_FOUND", TEMPLATE), postingDefinitionId.getId().toString());
     }
 
 }

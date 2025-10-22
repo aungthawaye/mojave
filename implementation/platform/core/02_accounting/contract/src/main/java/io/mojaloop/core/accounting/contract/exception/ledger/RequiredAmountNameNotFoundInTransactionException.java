@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
  */
 /*-
  * ==============================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -37,18 +37,24 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.accounting.contract.exception.definition;
+package io.mojaloop.core.accounting.contract.exception.ledger;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 
-public class AmountNameNotFoundInTransactionException extends UncheckedDomainException {
+import java.util.Set;
 
-    private static final String TEMPLATE = "Amount Name ({0}) cannot be found in Transaction's amounts ({1}).";
+public class RequiredAmountNameNotFoundInTransactionException extends UncheckedDomainException {
 
-    public AmountNameNotFoundInTransactionException(String participantType, String amounts) {
+    private static final String TEMPLATE = "Required Amount name ({0}) cannot be found in amounts ({1}) of Transaction Id ({2}).";
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_CONFIGURED", TEMPLATE), participantType, amounts);
+    public RequiredAmountNameNotFoundInTransactionException(String requiredAmountName,
+                                                            Set<String> amounts,
+                                                            TransactionId transactionId) {
+
+        super(new ErrorTemplate("REQUIRED_AMOUNT_NAME_NOT_FOUND_IN_TRANSACTION", TEMPLATE), requiredAmountName,
+              amounts.toString(), transactionId.getId().toString());
     }
 
 }

@@ -9,8 +9,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="mod-lookup-contract" />
         <module name="mod-component-flyway" />
+        <module name="mod-transfer-contract" />
         <module name="mod-component-vault" />
-        <module name="transfer-pom" />
+        <module name="mod-transfer-service" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
         <module name="mod-accounting-intercom" />
@@ -51,6 +52,7 @@
         <module name="mod-fspiop-invoker" />
         <module name="settlement-pom" />
         <module name="mod-participant-store" />
+        <module name="mod-transfer-domain" />
         <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
       </profile>
@@ -166,6 +168,9 @@
       <module name="mod-transaction-domain" options="-parameters" />
       <module name="mod-transaction-intercom" options="-parameters" />
       <module name="mod-transaction-intercom-client" options="-parameters" />
+      <module name="mod-transfer-contract" options="-parameters" />
+      <module name="mod-transfer-domain" options="-parameters" />
+      <module name="mod-transfer-service" options="-parameters" />
       <module name="mod-wallet-admin" options="-parameters" />
       <module name="mod-wallet-contract" options="-parameters" />
       <module name="mod-wallet-domain" options="-parameters" />

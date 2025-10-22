@@ -237,16 +237,6 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.transaction</groupId>
-                <artifactId>mod-transaction-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>io.mojaloop.platform.core.transaction</groupId>
-                <artifactId>mod-transaction-admin-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>io.mojaloop.platform.core.transaction</groupId>
                 <artifactId>mod-transaction-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -267,7 +257,17 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.transfer</groupId>
-                <artifactId>transfer-pom</artifactId>
+                <artifactId>mod-transfer-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transfer</groupId>
+                <artifactId>mod-transfer-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.transfer</groupId>
+                <artifactId>mod-transfer-service</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

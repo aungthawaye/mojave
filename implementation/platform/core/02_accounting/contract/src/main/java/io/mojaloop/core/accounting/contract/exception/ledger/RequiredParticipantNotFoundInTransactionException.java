@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
  */
 /*-
  * ==============================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -37,18 +37,24 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.accounting.contract.exception.definition;
+package io.mojaloop.core.accounting.contract.exception.ledger;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 
-public class ParticipantNotFoundInTransactionException extends UncheckedDomainException {
+import java.util.Set;
 
-    private static final String TEMPLATE = "Participant ({0}) cannot be found in Transaction's participants ({1})..";
+public class RequiredParticipantNotFoundInTransactionException extends UncheckedDomainException {
 
-    public ParticipantNotFoundInTransactionException(String participantType, String participants) {
+    private static final String TEMPLATE = "Required Participant ({0}) cannot be found in participants ({1}) of Transaction Id ({2}).";
 
-        super(new ErrorTemplate("PARTICIPANT_NOT_FOUND_IN_TRANSACTION", TEMPLATE), participantType, participants);
+    public RequiredParticipantNotFoundInTransactionException(String participant,
+                                                             Set<String> participants,
+                                                             TransactionId transactionId) {
+
+        super(new ErrorTemplate("REQUIRED_PARTICIPANT_NOT_FOUND_IN_TRANSACTION", TEMPLATE), participant,
+              participants.toString(), transactionId.getId().toString());
     }
 
 }

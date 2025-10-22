@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
  */
 /*-
  * ==============================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -45,11 +45,11 @@ import io.mojaloop.fspiop.spec.core.Currency;
 
 public class FlowDefinitionWithCurrencyExistsException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Fund In Definition with currency ({0}) already exists.";
+    private static final String TEMPLATE = "Flow Definition with currency ({0}) already exists.";
 
     public FlowDefinitionWithCurrencyExistsException(Currency currency) {
 
-        super(new ErrorTemplate("FUND_IN_DEFINITION_WITH_CURRENCY_EXISTS", TEMPLATE), currency.toString());
+        super(new ErrorTemplate("FLOW_DEFINITION_WITH_CURRENCY_EXISTS", TEMPLATE), currency.toString());
     }
 
 }

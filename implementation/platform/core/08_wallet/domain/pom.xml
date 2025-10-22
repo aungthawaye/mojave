@@ -15,12 +15,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.platform.core.wallet</groupId>
-            <artifactId>mod-wallet-contract</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.mojaloop.platform.core.common</groupId>
             <artifactId>mod-common-datatype-converter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-contract</artifactId>
         </dependency>
     </dependencies>
 </project>

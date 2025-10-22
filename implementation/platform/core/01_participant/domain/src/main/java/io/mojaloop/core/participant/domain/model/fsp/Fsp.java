@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ import static java.sql.Types.BIGINT;
  * The FSP has activation and termination statuses that control its operational state within
  * the Mojaloop ecosystem.</p>
  *
- * @author Mojaloop OSS
+ * @author Mojave
  * @since 1.0
  */
 @Getter

@@ -112,7 +112,13 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/05_quoting/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/05_quoting/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/05_quoting/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/contract/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/domain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/06_transfer/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/07_settlement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/08_wallet/admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/08_wallet/contract/src/main/java" charset="UTF-8" />
