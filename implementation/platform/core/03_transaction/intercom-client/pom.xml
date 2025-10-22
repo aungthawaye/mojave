@@ -13,4 +13,14 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-retrofit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-contract</artifactId>
+        </dependency>
+    </dependencies>
 </project>
