@@ -35,9 +35,5 @@
             <groupId>io.mojaloop.platform.core.quoting</groupId>
             <artifactId>mod-quoting-contract</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
-        </dependency>
     </dependencies>
 </project>

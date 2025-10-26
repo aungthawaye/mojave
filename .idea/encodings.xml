@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/implementation/component/http/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/jackson/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/jpa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/kafka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/misc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/redis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/retrofit/src/main/java" charset="UTF-8" />
@@ -83,10 +84,12 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/02_accounting/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/admin-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/consumer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/domain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/intercom-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/intercom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/publisher/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/src/main/resources/all" charset="UTF-8" />

@@ -15,6 +15,10 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-jpa</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.platform.core.common</groupId>
             <artifactId>mod-common-datatype-converter</artifactId>
         </dependency>

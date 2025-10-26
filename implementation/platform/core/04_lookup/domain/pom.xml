@@ -22,9 +22,5 @@
             <groupId>io.mojaloop.platform.core.participant</groupId>
             <artifactId>mod-participant-store</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-common</artifactId>
-        </dependency>
     </dependencies>
 </project>

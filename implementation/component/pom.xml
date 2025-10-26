@@ -20,6 +20,7 @@
         <module>retrofit</module>
         <module>jpa</module>
         <module>flyway</module>
+        <module>kafka</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

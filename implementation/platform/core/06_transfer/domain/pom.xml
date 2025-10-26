@@ -7,6 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>mod-transfer-domain</artifactId>
+    <name>Mojaloop - Platform - Core - Transfer - Domain</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
