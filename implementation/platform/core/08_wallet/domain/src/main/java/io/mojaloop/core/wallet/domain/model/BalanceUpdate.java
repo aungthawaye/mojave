@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.BalanceUpdateIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.BalanceUpdateIdJavaType;
@@ -31,6 +32,7 @@ import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.wallet.contract.data.BalanceUpdateData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -62,7 +64,7 @@ import static java.sql.Types.BIGINT;
         columnList = "wallet_id, action, transaction_at"), @Index(name = "wlt_balance_update_transaction_at_idx",
         columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BalanceUpdate extends JpaEntity<BalanceUpdateId> {
+public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataConversion<BalanceUpdateData> {
 
     @Id
     @JavaType(BalanceUpdateIdJavaType.class)
@@ -109,6 +111,14 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId> {
     @Column(name = "reversed_id")
     @Convert(converter = BalanceUpdateIdConverter.class)
     protected BalanceUpdateId reversedId;
+
+    @Override
+    public BalanceUpdateData convert() {
+
+        return new BalanceUpdateData(this.id, this.walletId, this.action, this.transactionId, this.currency,
+                                     this.amount, this.oldBalance, this.newBalance, this.description,
+                                     this.transactionAt, this.createdAt, this.reversedId);
+    }
 
     @Override
     public BalanceUpdateId getId() {

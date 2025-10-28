@@ -2,7 +2,7 @@ DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_reverse_fund $$
 CREATE PROCEDURE sp_reverse_fund(
-    IN p_reversed_id BIGINT,
+    IN p_reversal_id BIGINT,
     IN p_balance_update_id BIGINT
 )
 proc_reverse:
@@ -19,8 +19,8 @@ BEGIN
     DECLARE v_old_balance DECIMAL(34, 4);
     DECLARE v_new_balance DECIMAL(34, 4);
 
-    /* Use epoch millis for timestamps */
-    SET v_now = CAST(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)) * 1000 AS UNSIGNED);
+    /* Use epoch seconds for timestamps */
+    SET v_now = UNIX_TIMESTAMP();
 
     /* 1) Fetch the original balance update row */
     SELECT bu.wallet_id,
@@ -36,7 +36,7 @@ BEGIN
         v_transaction_id,
         v_description
     FROM wlt_balance_update bu
-    WHERE bu.balance_update_id = p_reversed_id;
+    WHERE bu.balance_update_id = p_reversal_id;
 
     /* 3) Branch by action */
     IF v_action = 'WITHDRAW' THEN
@@ -68,7 +68,7 @@ BEGIN
                                         description,
                                         transaction_at,
                                         created_at,
-                                        reversed_id,
+                                        reversal_id,
                                         rec_created_at,
                                         rec_updated_at,
                                         rec_version)
@@ -83,7 +83,7 @@ BEGIN
                 v_description,
                 v_now,
                 v_now,
-                p_reversed_id,
+                p_reversal_id,
                 v_now,
                 v_now,
                 0);
@@ -100,13 +100,11 @@ BEGIN
                bu.old_balance,
                bu.new_balance,
                bu.transaction_at,
-               bu.reversed_id
+               bu.reversal_id
         FROM wlt_balance_update bu
         WHERE bu.balance_update_id = p_balance_update_id;
 
     ELSEIF v_action = 'DEPOSIT' THEN
-        /* 3.d) Reversal not allowed for DEPOSIT */
-        ROLLBACK;
         SELECT 'REVERSAL_FAILED' AS status,
                bu.balance_update_id,
                bu.wallet_id,
@@ -117,10 +115,9 @@ BEGIN
                bu.old_balance,
                bu.new_balance,
                bu.transaction_at,
-               NULL AS reversed_id
+               NULL              AS reversal_id
         FROM wlt_balance_update bu
-        WHERE bu.balance_update_id = p_reversed_id;
-
+        WHERE bu.balance_update_id = p_reversal_id;
     ELSE
         SELECT 'REVERSAL_FAILED' AS status,
                bu.balance_update_id,
@@ -132,9 +129,9 @@ BEGIN
                bu.old_balance,
                bu.new_balance,
                bu.transaction_at,
-               NULL AS reversed_id
+               NULL              AS reversal_id
         FROM wlt_balance_update bu
-        WHERE bu.balance_update_id = p_reversed_id;
+        WHERE bu.balance_update_id = p_reversal_id;
     END IF;
 END $$
 

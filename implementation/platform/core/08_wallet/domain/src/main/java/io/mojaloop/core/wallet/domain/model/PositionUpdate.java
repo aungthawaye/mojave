@@ -2,6 +2,7 @@ package io.mojaloop.core.wallet.domain.model;
 
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionUpdateIdConverter;
@@ -10,6 +11,7 @@ import io.mojaloop.core.common.datatype.enums.wallet.PositionAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
+import io.mojaloop.core.wallet.contract.data.PositionUpdateData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -41,7 +43,7 @@ import static java.sql.Types.BIGINT;
         columnList = "position_id, action, transaction_at"), @Index(name = "wlt_position_update_transaction_at_idx",
         columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PositionUpdate {
+public class PositionUpdate implements DataConversion<PositionUpdateData> {
 
     @Id
     @JavaType(PositionUpdateIdJavaType.class)
@@ -74,6 +76,15 @@ public class PositionUpdate {
     @Column(name = "new_position", precision = 34, scale = 4, nullable = false, updatable = false)
     protected BigDecimal newPosition;
 
+    @Column(name = "old_reserved", precision = 34, scale = 4, nullable = false, updatable = false)
+    protected BigDecimal oldReserved;
+
+    @Column(name = "new_reserved", precision = 34, scale = 4, nullable = false, updatable = false)
+    protected BigDecimal newReserved;
+
+    @Column(name = "net_debit_cap", precision = 34, scale = 4, nullable = false, updatable = false)
+    protected BigDecimal netDebitCap;
+
     @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
@@ -88,5 +99,13 @@ public class PositionUpdate {
     @Column(name = "reversed_id")
     @Convert(converter = PositionUpdateIdConverter.class)
     protected PositionUpdateId reversedId;
+
+    @Override
+    public PositionUpdateData convert() {
+
+        return new PositionUpdateData(this.id, this.positionId, this.action, this.transactionId, this.currency,
+                                      this.amount, this.oldPosition, this.newPosition, this.description,
+                                      this.transactionAt, this.createdAt, this.reversedId);
+    }
 
 }

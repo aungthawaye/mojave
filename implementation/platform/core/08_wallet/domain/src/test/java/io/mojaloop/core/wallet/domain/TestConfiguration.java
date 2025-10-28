@@ -20,31 +20,18 @@
 
 package io.mojaloop.core.wallet.domain;
 
-import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
-import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import io.mojaloop.component.flyway.FlywayMigration;
 import org.springframework.context.annotation.Import;
 
-@ComponentScan(basePackages = {"io.mojaloop.core.wallet.domain"})
-@Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
-public class WalletDomainConfiguration {
+@Import(value = {WalletDomainConfiguration.class, TestSettings.class})
+public class TestConfiguration {
 
-    @Bean
-    public BalanceUpdater balanceUpdater(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings) {
+    static {
 
-        return new MySqlBalanceUpdater(balanceDbSettings);
+        var flywaySettings = new FlywayMigration.Settings(
+            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
+            "root", "password", "classpath:migration/wallet");
+
+        FlywayMigration.migrate(flywaySettings);
     }
-
-    public interface RequiredBeans { }
-
-    public interface RequiredSettings
-        extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
-
-        MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
-
-    }
-
 }

@@ -8,7 +8,6 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.fspiop.spec.core.Currency;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -78,11 +77,72 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                 try (var stm = con.prepareStatement("CALL sp_deposit_fund(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.getEpochSecond());
+                    stm.setLong(2, transactionAt.toEpochMilli());
                     stm.setLong(3, balanceUpdateId.getId());
                     stm.setLong(4, walletId.getId());
                     stm.setBigDecimal(5, amount);
                     stm.setString(6, description);
+
+                    var hasResults = stm.execute();
+
+                    while (hasResults) {
+
+                        try (var rs = stm.getResultSet()) {
+
+                            if (rs != null && rs.next()) {
+
+                                var status = rs.getString("result");
+
+                                if ("SUCCESS".equals(status)) {
+
+                                    return new BalanceHistory(new BalanceUpdateId(rs.getLong("balance_update_id")),
+                                                              new WalletId(rs.getLong("wallet_id")),
+                                                              BalanceAction.valueOf(rs.getString("action")),
+                                                              new TransactionId(rs.getLong("transaction_id")),
+                                                              Currency.valueOf(rs.getString("currency")),
+                                                              rs.getBigDecimal("amount"),
+                                                              rs.getBigDecimal("old_balance"),
+                                                              rs.getBigDecimal("new_balance"),
+                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")), null);
+                                }
+                            }
+
+                        }
+
+                        hasResults = stm.getMoreResults();
+                    }
+
+                    throw new RuntimeException(new NoBalanceUpdateException(transactionId));
+                }
+
+            });
+        } catch (RuntimeException e) {
+
+            LOGGER.error("Exception occurred while trying to deposit for transactionId : {}, amount : {}.",
+                         transactionId.getId(), amount.toPlainString(), e);
+
+            if (e.getCause() instanceof NoBalanceUpdateException e1) {
+                throw e1;
+            }
+
+            throw e;
+        }
+    }
+
+    @Override
+    public BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId)
+        throws ReversalFailedException {
+
+        LOGGER.info("Reverse reversedId: {}, balanceUpdateId: {}", reversedId, balanceUpdateId);
+
+        try {
+
+            return this.jdbcTemplate.execute((ConnectionCallback<BalanceHistory>) con -> {
+
+                try (var stm = con.prepareStatement("CALL sp_reverse_fund(?, ?)")) {
+
+                    stm.setLong(1, reversedId.getId());
+                    stm.setLong(2, balanceUpdateId.getId());
 
                     var hasResults = stm.execute();
 
@@ -104,7 +164,12 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                                               rs.getBigDecimal("amount"),
                                                               rs.getBigDecimal("old_balance"),
                                                               rs.getBigDecimal("new_balance"),
-                                                              Instant.ofEpochSecond(rs.getLong("transaction_at")));
+                                                              Instant.ofEpochSecond(rs.getLong("transaction_at")),
+                                                              new BalanceUpdateId(rs.getLong("reversal_id")));
+                                } else if ("REVERSAL_FAILED".equals(status)) {
+
+                                    throw new RuntimeException(
+                                        new ReversalFailedException(new BalanceUpdateId(rs.getLong("reversal_id"))));
                                 }
                             }
 
@@ -113,21 +178,94 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                         hasResults = stm.getMoreResults();
                     }
 
-                    throw new NoBalanceUpdateException(transactionId);
-
-                } catch (NoBalanceUpdateException e) {
-
-                    LOGGER.warn("No balance update found for transactionId: {}", transactionId);
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(new ReversalFailedException(reversedId));
                 }
 
             });
         } catch (RuntimeException e) {
 
-            LOGGER.error("Exception occurred while trying to deposit for transactionId : {}, amount : {}.",
+            LOGGER.error("Exception occurred while trying to reverse for reversedId : {}.", reversedId.getId(), e);
+
+            if (e.getCause() instanceof ReversalFailedException e1) {
+                throw e1;
+            }
+
+            throw e;
+        }
+    }
+
+    @Override
+    public BalanceHistory withdraw(TransactionId transactionId,
+                                   Instant transactionAt,
+                                   BalanceUpdateId balanceUpdateId,
+                                   WalletId walletId,
+                                   BigDecimal amount,
+                                   String description) throws NoBalanceUpdateException, InsufficientBalanceException {
+
+        LOGGER.info("Withdraw transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId, walletId,
+                    amount, description);
+
+        try {
+
+            return this.jdbcTemplate.execute((ConnectionCallback<BalanceHistory>) con -> {
+
+                try (var stm = con.prepareStatement("CALL sp_withdraw_fund(?, ?, ?, ?, ?)")) {
+
+                    stm.setLong(1, transactionId.getId());
+                    stm.setLong(2, balanceUpdateId.getId());
+                    stm.setLong(3, walletId.getId());
+                    stm.setBigDecimal(4, amount);
+                    stm.setString(5, description);
+
+                    var hasResults = stm.execute();
+
+                    while (hasResults) {
+
+                        try (var rs = stm.getResultSet()) {
+
+                            if (rs != null && rs.next()) {
+
+                                var status = rs.getString("status");
+
+                                if ("SUCCESS".equals(status)) {
+
+                                    return new BalanceHistory(new BalanceUpdateId(rs.getLong("balance_update_id")),
+                                                              new WalletId(rs.getLong("wallet_id")),
+                                                              BalanceAction.valueOf(rs.getString("action")),
+                                                              new TransactionId(rs.getLong("transaction_id")),
+                                                              Currency.valueOf(rs.getString("currency")),
+                                                              rs.getBigDecimal("amount"),
+                                                              rs.getBigDecimal("old_balance"),
+                                                              rs.getBigDecimal("new_balance"),
+                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")), null);
+                                } else if ("INSUFFICIENT_BALANCE".equals(status)) {
+
+                                    var balance = rs.getBigDecimal("old_balance");
+
+                                    throw new RuntimeException(
+                                        new InsufficientBalanceException(transactionId, walletId, amount, balance));
+                                }
+                            }
+
+                        }
+
+                        hasResults = stm.getMoreResults();
+                    }
+
+                    throw new RuntimeException(new NoBalanceUpdateException(transactionId));
+                }
+
+            });
+        } catch (RuntimeException e) {
+
+            LOGGER.error("Exception occurred while trying to withdraw for transactionId : {}, amount : {}.",
                          transactionId.getId(), amount.toPlainString(), e);
 
             if (e.getCause() instanceof NoBalanceUpdateException e1) {
+                throw e1;
+            }
+
+            if (e.getCause() instanceof InsufficientBalanceException e1) {
                 throw e1;
             }
 

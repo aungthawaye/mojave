@@ -38,7 +38,19 @@ public interface BalanceUpdater {
                            BalanceUpdateId balanceUpdateId,
                            WalletId walletId,
                            BigDecimal amount,
-                           String description) throws MySqlBalanceUpdater.NoBalanceUpdateException;
+                           String description) throws BalanceUpdater.NoBalanceUpdateException;
+
+    BalanceHistory withdraw(TransactionId transactionId,
+                            Instant transactionAt,
+                            BalanceUpdateId balanceUpdateId,
+                            WalletId walletId,
+                            BigDecimal amount,
+                            String description)
+        throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
+
+    BalanceHistory reverse(BalanceUpdateId reversedId,
+                           BalanceUpdateId balanceUpdateId)
+        throws BalanceUpdater.ReversalFailedException;
 
     record BalanceHistory(BalanceUpdateId balanceUpdateId,
                           WalletId walletId,
@@ -48,7 +60,8 @@ public interface BalanceUpdater {
                           BigDecimal amount,
                           BigDecimal oldBalance,
                           BigDecimal newBalance,
-                          Instant transactionAt) { }
+                          Instant transactionAt,
+                          BalanceUpdateId reversedId) { }
 
     @Getter
     class NoBalanceUpdateException extends Exception {
@@ -60,6 +73,47 @@ public interface BalanceUpdater {
             super("No balance update found for transactionId: " + transactionId);
 
             this.transactionId = transactionId;
+        }
+
+    }
+
+    @Getter
+    class InsufficientBalanceException extends Exception {
+
+        private final TransactionId transactionId;
+
+        private final WalletId walletId;
+
+        private final BigDecimal amount;
+
+        private final BigDecimal oldBalance;
+
+        public InsufficientBalanceException(TransactionId transactionId,
+                                            WalletId walletId,
+                                            BigDecimal amount,
+                                            BigDecimal oldBalance) {
+
+            super("Insufficient balance in walletId: " + walletId + " amount: " + amount + " transactionId: " +
+                      transactionId + " oldBalance: " + oldBalance.stripTrailingZeros().toPlainString());
+
+            this.transactionId = transactionId;
+            this.walletId = walletId;
+            this.amount = amount;
+            this.oldBalance = oldBalance;
+        }
+
+    }
+
+    @Getter
+    class ReversalFailedException extends Exception {
+
+        private final BalanceUpdateId reversedId;
+
+        public ReversalFailedException(BalanceUpdateId reversedId) {
+
+            super("Reversal failed for balance update id: " + reversedId);
+
+            this.reversedId = reversedId;
         }
 
     }

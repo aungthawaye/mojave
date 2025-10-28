@@ -197,7 +197,6 @@ public class MySqlLedger implements Ledger {
         var code = rs.getString("code");
         var accountId = rs.getLong("account_id");
         var side = rs.getString("side");
-        var currency = Currency.valueOf(rs.getString("currency"));
         var amount = rs.getBigDecimal("amount");
         var debits = rs.getBigDecimal("debits");
         var credits = rs.getBigDecimal("credits");

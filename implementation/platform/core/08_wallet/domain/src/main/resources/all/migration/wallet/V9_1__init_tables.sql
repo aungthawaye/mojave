@@ -36,14 +36,14 @@ CREATE TABLE `wlt_balance_update`
     `transaction_at`    bigint         NOT NULL,
 
     `created_at`        bigint         NOT NULL,
-    `reversed_id`       bigint       DEFAULT NULL,
+    `reversal_id`       bigint       DEFAULT NULL,
     `rec_created_at`    bigint       DEFAULT NULL,
     `rec_updated_at`    bigint       DEFAULT NULL,
     `rec_version`       int          DEFAULT NULL,
 
     PRIMARY KEY (`balance_update_id`),
     UNIQUE KEY `wlt_balance_update_wallet_id_action_transaction_id_UK` (`wallet_id`, `action`, `transaction_id`),
-    UNIQUE KEY `wlt_balance_update_reversed_id_UK` (`reversed_id`),
+    UNIQUE KEY `wlt_balance_update_reversed_id_UK` (`reversal_id`),
     KEY `wlt_balance_update_wallet_id_action_transaction_at_IDX` (`wallet_id`, `action`, `transaction_at`),
     KEY `wlt_balance_update_transaction_at_IDX` (`transaction_at`),
     KEY `wlt_balance_update_wlt_wallet_FK` (`wallet_id`),
@@ -85,22 +85,23 @@ CREATE TABLE `wlt_position_update`
     `transaction_id`     bigint         NOT NULL,
     `currency`           varchar(3)     NOT NULL,
     `amount`             decimal(34, 4) NOT NULL,
-
     `old_position`       decimal(34, 4) NOT NULL,
     `new_position`       decimal(34, 4) NOT NULL,
-
+    `old_reserved`       decimal(34, 4) NOT NULL,
+    `new_reserved`       decimal(34, 4) NOT NULL,
+    `net_debit_cap`      decimal(34, 4) NOT NULL,
     `description`        varchar(256) DEFAULT NULL,
     `transaction_at`     bigint         NOT NULL,
-
     `created_at`         bigint         NOT NULL,
-    `reversed_id`        bigint       DEFAULT NULL,
+    `reservation_id`     bigint       DEFAULT NULL,
+
     `rec_created_at`     bigint       DEFAULT NULL,
     `rec_updated_at`     bigint       DEFAULT NULL,
     `rec_version`        int          DEFAULT NULL,
 
     PRIMARY KEY (`position_update_id`),
     UNIQUE KEY `wlt_position_update_position_id_action_transaction_id_UK` (`position_id`, `action`, `transaction_id`),
-    UNIQUE KEY `wlt_position_update_reversed_id_UK` (`reversed_id`),
+    UNIQUE KEY `wlt_position_update_reversed_id_UK` (reservation_id),
     KEY `wlt_position_update_position_id_action_transaction_at_IDX` (`position_id`, `action`, `transaction_at`),
     KEY `wlt_position_update_transaction_at_IDX` (`transaction_at`),
     KEY `wlt_position_update_wlt_position_FK` (`position_id`),

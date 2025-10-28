@@ -4,21 +4,17 @@ import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
-import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public interface DepositFundCommand {
+public interface ReverseFundCommand {
 
-    Output execute(Input input) throws NoBalanceUpdateForTransactionException;
+    Output execute(Input input) throws ReversalFailedInWalletException;
 
-    record Input(WalletId walletId,
-                 BigDecimal amount,
-                 TransactionId transactionId,
-                 Instant transactionAt,
-                 String description) { }
+    record Input(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId, String description) { }
 
     record Output(BalanceUpdateId balanceUpdateId,
                   WalletId walletId,
@@ -28,6 +24,7 @@ public interface DepositFundCommand {
                   BigDecimal amount,
                   BigDecimal oldBalance,
                   BigDecimal newBalance,
-                  Instant transactionAt) { }
+                  Instant transactionAt,
+                  BalanceUpdateId reversedId) { }
 
 }

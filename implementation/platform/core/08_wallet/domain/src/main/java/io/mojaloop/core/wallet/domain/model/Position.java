@@ -3,10 +3,12 @@ package io.mojaloop.core.wallet.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.WalletOwnerIdConverter;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.core.wallet.contract.data.PositionData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -30,10 +32,10 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "wlt_position",
-       uniqueConstraints = @UniqueConstraint(name = "wlt_wallet_owner_id_currency_UK",
-                                             columnNames = {"wallet_owner_id", "currency"}))
+    uniqueConstraints = @UniqueConstraint(name = "wlt_wallet_owner_id_currency_UK",
+        columnNames = {"wallet_owner_id", "currency"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Position extends JpaEntity<PositionId> {
+public class Position extends JpaEntity<PositionId> implements DataConversion<PositionData> {
 
     @Id
     @JavaType(PositionIdJavaType.class)
@@ -64,6 +66,13 @@ public class Position extends JpaEntity<PositionId> {
     @Column(name = "created_at")
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
+
+    @Override
+    public PositionData convert() {
+
+        return new PositionData(this.id, this.walletOwnerId, this.currency, this.name, this.position, this.reserved,
+                                this.netDebitCap, this.createdAt);
+    }
 
     @Override
     public PositionId getId() {

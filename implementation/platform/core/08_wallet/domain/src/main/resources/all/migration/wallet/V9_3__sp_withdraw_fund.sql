@@ -16,8 +16,8 @@ BEGIN
     DECLARE v_currency VARCHAR(3);
     DECLARE v_now BIGINT;
 
-    /* Use epoch millis for timestamps */
-    SET v_now = CAST(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)) * 1000 AS UNSIGNED);
+    /* Use epoch seconds for timestamps */
+    SET v_now = UNIX_TIMESTAMP();
 
     START TRANSACTION;
 
@@ -43,9 +43,7 @@ BEGIN
                p_amount AS amount,
                v_old_balance AS old_balance,
                v_new_balance AS new_balance,
-               p_description AS description,
-               v_now AS transaction_at,
-               v_now AS created_at;
+               v_now AS transaction_at;
         LEAVE proc_withdraw;
     END IF;
 

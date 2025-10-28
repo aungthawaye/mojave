@@ -16,10 +16,10 @@ BEGIN
     DECLARE v_currency VARCHAR(3);
     DECLARE v_now BIGINT;
 
-    START TRANSACTION;
+    /* Use epoch seconds for timestamps */
+    SET v_now = UNIX_TIMESTAMP();
 
-    /* Use epoch millis for timestamps */
-    SET v_now = CAST(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)) * 1000 AS UNSIGNED);
+    START TRANSACTION;
 
     /* 1) Lock wallet row and capture snapshot */
     SELECT w.balance,
@@ -30,8 +30,10 @@ BEGIN
     UPDATE;
 
     /* 2) Compute and apply new balance */
+    SET v_new_balance = v_old_balance + p_amount;
+
     UPDATE wlt_wallet
-    SET balance = balance + p_amount
+    SET balance = v_new_balance
     WHERE wallet_id = p_wallet_id;
 
     /* 3) Insert balance update row */
