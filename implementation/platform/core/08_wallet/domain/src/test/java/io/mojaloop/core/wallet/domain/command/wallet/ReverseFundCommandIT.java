@@ -53,7 +53,7 @@ public class ReverseFundCommandIT extends BaseDomainIT {
     private ReverseFundCommand reverseFundCommand;
 
     @Test
-    void should_reverse_withdraw_successfully() {
+    void should_reverse_withdraw_successfully() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException, io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException, io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException {
         // Arrange
         final var walletOut = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(new WalletOwnerId(84001L), Currency.USD, "Reverse Wallet"));
@@ -87,7 +87,7 @@ public class ReverseFundCommandIT extends BaseDomainIT {
     }
 
     @Test
-    void should_fail_to_reverse_deposit() {
+    void should_fail_to_reverse_deposit() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException {
         // Arrange
         final var walletOut = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(new WalletOwnerId(84002L), Currency.USD, "Reverse Fail Wallet"));

@@ -23,7 +23,9 @@ package io.mojaloop.core.wallet.domain;
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -36,6 +38,12 @@ public class WalletDomainConfiguration {
     public BalanceUpdater balanceUpdater(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings) {
 
         return new MySqlBalanceUpdater(balanceDbSettings);
+    }
+
+    @Bean
+    public PositionUpdater positionUpdater(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings) {
+
+        return new MySqlPositionUpdater(balanceDbSettings);
     }
 
     public interface RequiredBeans { }

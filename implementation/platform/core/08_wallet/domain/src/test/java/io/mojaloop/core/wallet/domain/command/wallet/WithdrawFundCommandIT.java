@@ -48,7 +48,7 @@ public class WithdrawFundCommandIT extends BaseDomainIT {
     private WithdrawFundCommand withdrawFundCommand;
 
     @Test
-    void should_withdraw_fund_successfully_when_sufficient_balance() {
+    void should_withdraw_fund_successfully_when_sufficient_balance() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException, io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException {
         // Arrange
         final var walletOut = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(new WalletOwnerId(83001L), Currency.USD, "Test Wallet"));

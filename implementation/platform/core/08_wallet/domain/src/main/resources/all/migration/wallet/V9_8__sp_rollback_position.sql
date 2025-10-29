@@ -1,11 +1,11 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS `sp_reserve_position` $$
-CREATE PROCEDURE sp_reserve_position(
+DROP PROCEDURE IF EXISTS `sp_rollback_position` $$
+CREATE PROCEDURE sp_rollback_position(
     IN p_reservation_id BIGINT,
     IN p_position_update_id BIGINT
 )
-proc_commit:
+proc_rollback:
 BEGIN
     /* -------- Variables -------- */
     DECLARE v_position_id BIGINT;
@@ -20,7 +20,6 @@ BEGIN
     DECLARE v_new_reserved DECIMAL(34, 4);
     DECLARE v_net_debit_cap DECIMAL(34, 4);
     DECLARE v_currency VARCHAR(3);
-    DECLARE v_now BIGINT;
 
     SET v_now = UNIX_TIMESTAMP();
 
@@ -49,7 +48,7 @@ BEGIN
                v_new_reserved    AS new_reserved,
                v_net_debit_cap   AS net_debit_cap,
                v_transaction_at  AS transaction_at;
-        LEAVE proc_commit;
+        LEAVE proc_rollback;
     END IF;
 
     START TRANSACTION;

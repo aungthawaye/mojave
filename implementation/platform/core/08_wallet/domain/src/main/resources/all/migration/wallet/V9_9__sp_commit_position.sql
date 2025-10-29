@@ -1,7 +1,7 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS `sp_reserve_position` $$
-CREATE PROCEDURE sp_reserve_position(
+DROP PROCEDURE IF EXISTS `sp_commit_position` $$
+CREATE PROCEDURE sp_commit_position(
     IN p_reservation_id BIGINT,
     IN p_position_update_id BIGINT
 )
@@ -21,7 +21,6 @@ BEGIN
     DECLARE v_new_reserved DECIMAL(34, 4);
     DECLARE v_net_debit_cap DECIMAL(34, 4);
     DECLARE v_currency VARCHAR(3);
-    DECLARE v_now BIGINT;
 
     SET v_now = UNIX_TIMESTAMP();
 

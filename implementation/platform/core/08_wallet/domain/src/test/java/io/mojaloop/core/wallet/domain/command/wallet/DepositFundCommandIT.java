@@ -44,7 +44,7 @@ public class DepositFundCommandIT extends BaseDomainIT {
     private DepositFundCommand depositFundCommand;
 
     @Test
-    void should_deposit_fund_successfully() {
+    void should_deposit_fund_successfully() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException {
         // Arrange
         final var walletOut = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(new WalletOwnerId(82001L), Currency.USD, "Test Wallet"));
