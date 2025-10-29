@@ -26,6 +26,8 @@ import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
+import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.core.wallet.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
@@ -48,7 +50,7 @@ public class DecreasePositionCommandIT extends BaseDomainIT {
     private DecreasePositionCommand decreasePositionCommand;
 
     @Test
-    void should_decrease_position_successfully() {
+    void should_decrease_position_successfully() throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
         // Arrange
         final var createOut = this.createPositionCommand.execute(
             new CreatePositionCommand.Input(new WalletOwnerId(86001L), Currency.USD, "Position D",

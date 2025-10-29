@@ -18,29 +18,22 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.wallet.domain;
+package io.mojaloop.core.wallet.admin.component;
 
-import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
-import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
+import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.Authenticator;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-@ComponentScan(basePackages = {"io.mojaloop.core.wallet.domain"})
-@Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
-public class WalletDomainConfiguration {
+import java.util.ArrayList;
 
-    public interface RequiredBeans {
+public class EmptyGatekeeper implements Authenticator {
 
-        BalanceUpdater balanceUpdater();
+    @Override
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
+        throws AuthenticationFailureException {
 
-        PositionUpdater positionUpdater();
-
-    }
-
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
-
+        return new UsernamePasswordAuthenticationToken("user", "password", new ArrayList<>());
     }
 
 }

@@ -20,11 +20,14 @@
 
 package io.mojaloop.core.accounting.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.flyway.FlywayMigration;
+import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
+import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {AccountingDomainConfiguration.class, TestSettings.class})
-public class TestConfiguration {
+public class TestConfiguration implements AccountingDomainConfiguration.RequiredBeans {
 
     static {
 
@@ -34,4 +37,18 @@ public class TestConfiguration {
 
         FlywayMigration.migrate(flywaySettings);
     }
+
+    private final Ledger ledger;
+
+    public TestConfiguration(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {
+
+        this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
+    }
+
+    @Override
+    public Ledger ledger() {
+
+        return this.ledger;
+    }
+
 }

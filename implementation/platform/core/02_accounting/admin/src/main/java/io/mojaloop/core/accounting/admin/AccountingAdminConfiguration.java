@@ -30,6 +30,8 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.accounting.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
+import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
+import io.mojaloop.core.accounting.domain.component.ledger.strategy.EmptyLedger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -46,9 +48,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
 @Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
-public class AccountingAdminConfiguration extends JacksonWebMvcExtension implements AccountingDomainConfiguration.RequiredBeans,
-                                                                                    SpringSecurityConfiguration.RequiredBeans,
-                                                                                    SpringSecurityConfiguration.RequiredSettings {
+public class AccountingAdminConfiguration extends JacksonWebMvcExtension
+    implements AccountingDomainConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredSettings {
 
     public AccountingAdminConfiguration(ObjectMapper objectMapper) {
 
@@ -67,6 +70,12 @@ public class AccountingAdminConfiguration extends JacksonWebMvcExtension impleme
     public Authenticator authenticator() {
 
         return new EmptyGatekeeper();
+    }
+
+    @Override
+    public Ledger ledger() {
+
+        return new EmptyLedger();
     }
 
     @Bean

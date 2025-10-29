@@ -23,17 +23,25 @@ package io.mojaloop.core.wallet.domain;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.springframework.context.annotation.Bean;
 
 public class TestSettings implements WalletDomainConfiguration.RequiredSettings {
 
     @Bean
-    @Override
     public MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings() {
 
         return new MySqlBalanceUpdater.BalanceDbSettings(new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root", "password"), new MySqlBalanceUpdater.BalanceDbSettings.Pool("wallet-balance", 2, 12));
+            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
+            "password"), new MySqlBalanceUpdater.BalanceDbSettings.Pool("wallet-balance", 2, 12));
+    }
+
+    @Bean
+    public MySqlPositionUpdater.PositionDbSettings positionDbSettings() {
+
+        return new MySqlPositionUpdater.PositionDbSettings(new MySqlPositionUpdater.PositionDbSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
+            "password"), new MySqlPositionUpdater.PositionDbSettings.Pool("wallet-balance", 2, 12));
     }
 
     @Bean
@@ -41,8 +49,8 @@ public class TestSettings implements WalletDomainConfiguration.RequiredSettings 
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         return new RoutingDataSourceConfigurer.ReadSettings(new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root", "password", false), new RoutingDataSourceConfigurer.ReadSettings.Pool("wallet-read", 2, 4));
+            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
+            "password", false), new RoutingDataSourceConfigurer.ReadSettings.Pool("wallet-read", 2, 4));
     }
 
     @Bean
@@ -50,8 +58,8 @@ public class TestSettings implements WalletDomainConfiguration.RequiredSettings 
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         return new RoutingDataSourceConfigurer.WriteSettings(new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root", "password", false), new RoutingDataSourceConfigurer.WriteSettings.Pool("wallet-write", 2, 4));
+            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
+            "password", false), new RoutingDataSourceConfigurer.WriteSettings.Pool("wallet-write", 2, 4));
     }
 
     @Bean

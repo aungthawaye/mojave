@@ -18,28 +18,16 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.wallet.domain;
+package io.mojaloop.core.wallet.admin.component;
 
-import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
-import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import jakarta.servlet.http.HttpServletResponse;
 
-@ComponentScan(basePackages = {"io.mojaloop.core.wallet.domain"})
-@Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
-public class WalletDomainConfiguration {
+public class EmptyErrorWriter implements AuthenticationErrorWriter {
 
-    public interface RequiredBeans {
-
-        BalanceUpdater balanceUpdater();
-
-        PositionUpdater positionUpdater();
-
-    }
-
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
+    @Override
+    public void write(HttpServletResponse response, AuthenticationFailureException exception) {
 
     }
 

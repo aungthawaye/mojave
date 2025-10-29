@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Bean;
 final class AccountingIntercomSettings implements AccountingIntercomConfiguration.RequiredSettings {
 
     @Bean
-    @Override
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
         return new MySqlLedger.LedgerDbSettings(new MySqlLedger.LedgerDbSettings.Connection(
@@ -35,13 +34,6 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
             System.getenv().getOrDefault("ACC_LEDGER_DB_USER", "root"), System.getenv().getOrDefault("ACC_LEDGER_DB_PASSWORD", "password")),
                                                 new MySqlLedger.LedgerDbSettings.Pool("accounting-ledger", 2, 12));
     }
-
-    /**
-     public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
-
-     return new RedissonOpsClientConfigurer.Settings(new String[]{"redis://localhost:6379"}, false, null, 10, 10, 10);
-     }
-     **/
 
     @Bean
     @Override

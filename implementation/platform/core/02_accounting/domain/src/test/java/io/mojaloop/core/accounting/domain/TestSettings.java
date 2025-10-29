@@ -28,21 +28,12 @@ import org.springframework.context.annotation.Bean;
 public class TestSettings implements AccountingDomainConfiguration.RequiredSettings {
 
     @Bean
-    @Override
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
         return new MySqlLedger.LedgerDbSettings(new MySqlLedger.LedgerDbSettings.Connection(
             "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
             "root", "password"), new MySqlLedger.LedgerDbSettings.Pool("account-ledger", 2, 12));
     }
-
-    /**
-     @Bean
-     @Override public RedissonOpsClientConfigurer.Settings redissonOpsClientSettings() {
-
-     return new RedissonOpsClientConfigurer.Settings(new String[]{"redis://localhost:6379"}, false, null, 10, 10, 10);
-     }
-     **/
 
     @Bean
     @Override

@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.accounting.domain;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
@@ -30,7 +29,6 @@ import io.mojaloop.core.accounting.domain.cache.local.AccountLocalCache;
 import io.mojaloop.core.accounting.domain.cache.local.ChartEntryLocalCache;
 import io.mojaloop.core.accounting.domain.cache.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
-import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
 import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheAccountResolver;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
@@ -68,17 +66,14 @@ public class AccountingDomainConfiguration {
         return new FlowDefinitionLocalCache(flowDefinitionRepository);
     }
 
-    @Bean
-    public Ledger ledgers(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {
+    public interface RequiredBeans {
 
-        return new MySqlLedger(ledgerDbSettings, objectMapper);
+        Ledger ledger();
+
     }
 
-    public interface RequiredBeans { }
-
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
-
-        MySqlLedger.LedgerDbSettings ledgerDbSettings();
+    public interface RequiredSettings
+        extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
 
     }
 
