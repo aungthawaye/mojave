@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -63,9 +63,9 @@ public class ActivateAccountCommandIT extends BaseDomainIT {
             new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc",
                                               AccountType.ASSET));
 
-        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(), new AccountOwnerId(2001L), Currency.USD,
-                                                               new AccountCode("ACC003"), "Account", "Desc", OverdraftMode.FORBID,
-                                                               BigDecimal.ZERO);
+        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(), new AccountOwnerId(2001L),
+                                                               Currency.USD, new AccountCode("ACC003"), "Account",
+                                                               "Desc", OverdraftMode.FORBID, BigDecimal.ZERO);
         final var accountOut = this.createAccountCommand.execute(createInput);
 
         final var input = new ActivateAccountCommand.Input(accountOut.accountId());

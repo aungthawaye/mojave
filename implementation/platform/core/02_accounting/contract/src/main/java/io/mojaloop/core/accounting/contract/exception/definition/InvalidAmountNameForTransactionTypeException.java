@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
  */
 /*-
  * ==============================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -45,12 +45,12 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 
 public class InvalidAmountNameForTransactionTypeException extends UncheckedDomainException {
 
-    private static final String TEMPLATE = "Definition's Amount Name is invalid. It must be one of {0}.";
+    private static final String TEMPLATE = "Amount Name is invalid for Transaction Type. It must be one of {0}.";
 
     public InvalidAmountNameForTransactionTypeException(TransactionType transactionType) {
 
         super(new ErrorTemplate("INVALID_AMOUNT_NAME_FOR_TRANSACTION_TYPE", TEMPLATE),
-              transactionType.getAmounts().names().toArray(new String[0]));
+              transactionType.getAmounts().names().toString());
     }
 
 }

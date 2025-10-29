@@ -1,3 +1,22 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
 package io.mojaloop.core.accounting.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -9,6 +28,7 @@ import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConfl
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.ImmatureChartEntryException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
+import io.mojaloop.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
 import io.mojaloop.core.accounting.contract.exception.definition.RequireParticipantForReceiveInException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
@@ -42,8 +62,8 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "acc_posting_definition", uniqueConstraints = {
-    @UniqueConstraint(name = "acc_posting_definition_for_posting_UK",
-                      columnNames = {"definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"})})
+    @UniqueConstraint(name = "acc_posting_definition_for_posting_UK", columnNames = {
+        "definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
@@ -74,7 +94,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     protected String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "definition_id", nullable = false, foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
+    @JoinColumn(name = "definition_id", nullable = false,
+                foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
     protected FlowDefinition definition;
 
     public PostingDefinition(FlowDefinition definition,
@@ -92,7 +113,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
-        this.forPosting(receiveIn, receiveInId, participant, amountName, side, accountCache, chartEntryCache).description(description);
+        this
+            .forPosting(receiveIn, receiveInId, participant, amountName, side, accountCache, chartEntryCache)
+            .description(description);
     }
 
     public PostingDefinition description(String description) {
@@ -142,11 +165,18 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
             throw new RequireParticipantForReceiveInException();
         }
 
+
+
         // Validate that the posting definition does not already exist for this flow definition.
-        // First, check that the amount name is valid for the flow definition's transaction type.
+        // First, check that the amount name/participant is valid for the flow definition's transaction type.
         if (!this.definition.transactionType.getAmounts().names().contains(amountName)) {
 
             throw new InvalidAmountNameForTransactionTypeException(this.definition.transactionType);
+        }
+
+        if (!this.definition.transactionType.getParticipants().types().contains(participant)) {
+
+            throw new InvalidParticipantForTransactionTypeException(this.definition.transactionType);
         }
 
         // Now verify whether the newly adding posting conflicts with any of the existing posting definition.
@@ -157,14 +187,18 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         // Find all the accounts, created under the same receiveInId in the accounting system, and previously added for the same Side and AmountName.
         var existingAccountIds = this.definition.postings
                                      .stream()
-                                     .filter(
-                                         pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
+                                     .filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side &&
+                                                       pd.amountName.equals(_amountName))
                                      .map(pd -> pd.receiveInId)
                                      .collect(Collectors.toSet());
 
-        var existingChartEntryIds = this.definition.postings.stream().filter(
-            pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side &&
-                      pd.amountName.equals(_amountName)).map(pd -> pd.receiveInId).collect(Collectors.toSet());
+        var existingChartEntryIds = this.definition.postings
+                                        .stream()
+                                        .filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY &&
+                                                          pd.participant.equals(participant) && pd.side == side &&
+                                                          pd.amountName.equals(_amountName))
+                                        .map(pd -> pd.receiveInId)
+                                        .collect(Collectors.toSet());
 
         if (receiveIn == ReceiveIn.CHART_ENTRY) {
 
@@ -184,8 +218,11 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
             } else {
 
-                accounts.stream().filter(account -> existingAccountIds.contains(account.accountId().getId())).findFirst().ifPresent(
-                    (conflict) -> {
+                accounts
+                    .stream()
+                    .filter(account -> existingAccountIds.contains(account.accountId().getId()))
+                    .findFirst()
+                    .ifPresent((conflict) -> {
                         throw new AccountConflictInDefinitionException(conflict.code());
                     });
             }
@@ -200,15 +237,21 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
                 throw new AccountConflictInDefinitionException(accountData.code());
             }
 
-            // Then, make sure this AccountId won't conflict with any other Posting Definition configured with BY_CHART_ENTRY for the same side and amountName.
-            // In this case, we need to check using the accounts of the ChartEntryId.
+            // Then, make sure this AccountId won't conflict with any other Posting Definition configured with
+            // BY_CHART_ENTRY for the same side and amountName.
+            // In this case, we need to check using the accounts of each ChartEntryId which are already
+            // added to the definition.
             for (var existingChartEntryId : existingChartEntryIds) {
 
                 var accounts = accountCache.get(new ChartEntryId(existingChartEntryId));
 
-                accounts.stream().filter(account -> account.accountId().equals(_accountId)).findFirst().ifPresent((conflict) -> {
-                    throw new AccountConflictInDefinitionException(conflict.code());
-                });
+                accounts
+                    .stream()
+                    .filter(account -> account.accountId().equals(_accountId))
+                    .findFirst()
+                    .ifPresent((conflict) -> {
+                        throw new AccountConflictInDefinitionException(conflict.code());
+                    });
             }
         }
 

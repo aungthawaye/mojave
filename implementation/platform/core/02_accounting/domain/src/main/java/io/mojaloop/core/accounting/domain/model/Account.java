@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -72,11 +72,11 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {AccountCacheUpdater.class})
-@Table(name = "acc_account", uniqueConstraints = {
-    @UniqueConstraint(name = "acc_account_owner_id_currency_chart_entry_id_UK", columnNames = {"owner_id", "currency", "chart_entry_id"})},
-       indexes = {
-           @Index(name = "acc_account_owner_id_IDX", columnList = "owner_id"),
-           @Index(name = "acc_account_currency_IDX", columnList = "currency")})
+@Table(name = "acc_account",
+    uniqueConstraints = {@UniqueConstraint(name = "acc_account_owner_id_currency_chart_entry_id_UK",
+        columnNames = {"owner_id", "currency", "chart_entry_id"})},
+    indexes = {@Index(name = "acc_account_owner_id_IDX",
+        columnList = "owner_id"), @Index(name = "acc_account_currency_IDX", columnList = "currency")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends JpaEntity<AccountId> implements DataConversion<AccountData> {
 
@@ -127,7 +127,11 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Convert(converter = ChartEntryIdConverter.class)
     protected ChartEntryId chartEntryId;
 
-    @OneToOne(mappedBy = "account", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @OneToOne(mappedBy = "account",
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        optional = false)
     protected LedgerBalance ledgerBalance;
 
     public Account(ChartEntry chartEntry,
@@ -180,8 +184,9 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Override
     public AccountData convert() {
 
-        return new AccountData(this.getId(), this.ownerId, this.type, this.currency, this.code, this.name, this.description, this.createdAt,
-                               this.activationStatus, this.terminationStatus, this.chartEntryId, this.ledgerBalance.convert());
+        return new AccountData(this.getId(), this.ownerId, this.type, this.currency, this.code, this.name,
+                               this.description, this.createdAt, this.activationStatus, this.terminationStatus,
+                               this.chartEntryId, this.ledgerBalance.convert());
     }
 
     public void deactivate() {

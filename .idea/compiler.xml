@@ -7,51 +7,56 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mod-lookup-contract" />
         <module name="mod-component-flyway" />
+        <module name="mod-transfer-contract" />
         <module name="mod-component-vault" />
-        <module name="transfer-pom" />
-        <module name="mod-lookup-domain" />
-        <module name="mod-fspiop-service" />
-        <module name="mod-accounting-intercom" />
         <module name="mod-transaction-intercom-client" />
-        <module name="mod-common-datatype-converter" />
         <module name="mod-participant-intercom-client" />
-        <module name="mod-quoting-domain" />
         <module name="mod-component-web" />
         <module name="mod-connector-gateway" />
         <module name="mod-accounting-admin-client" />
+        <module name="mod-common-datatype" />
+        <module name="mod-participant-intercom" />
+        <module name="mod-connector-adapter" />
+        <module name="mod-fspiop-spec" />
+        <module name="mod-wallet-admin" />
+        <module name="mod-fspiop-component" />
+        <module name="mod-transaction-publisher" />
+        <module name="mod-component-tomcat" />
+        <module name="mod-lookup-service" />
+        <module name="mod-transaction-consumer" />
+        <module name="mod-quoting-contract" />
+        <module name="mod-transaction-intercom" />
+        <module name="mod-participant-store" />
+        <module name="mod-transfer-domain" />
+        <module name="mod-component-redis" />
+        <module name="mod-lookup-contract" />
+        <module name="mod-transfer-service" />
+        <module name="mod-lookup-domain" />
+        <module name="mod-fspiop-service" />
+        <module name="mod-accounting-intercom" />
+        <module name="mod-common-datatype-converter" />
+        <module name="mod-quoting-domain" />
         <module name="mod-participant-admin" />
         <module name="mod-wallet-contract" />
         <module name="mod-connector-sample" />
         <module name="mod-accounting-admin" />
-        <module name="mod-common-datatype" />
-        <module name="mod-participant-intercom" />
-        <module name="mod-connector-adapter" />
         <module name="mod-quoting-service" />
-        <module name="mod-fspiop-spec" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
-        <module name="mod-wallet-admin" />
         <module name="mod-accounting-domain" />
-        <module name="mod-fspiop-component" />
-        <module name="mod-component-tomcat" />
-        <module name="mod-lookup-service" />
         <module name="mod-accounting-intercom-client" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
         <module name="mod-wallet-domain" />
         <module name="mod-accounting-contract" />
         <module name="mod-component-retrofit" />
-        <module name="mod-quoting-contract" />
         <module name="mod-transaction-contract" />
-        <module name="mod-transaction-intercom" />
+        <module name="mod-component-kafka" />
         <module name="mod-transaction-domain" />
         <module name="mod-participant-domain" />
         <module name="mod-fspiop-invoker" />
         <module name="settlement-pom" />
-        <module name="mod-participant-store" />
-        <module name="mod-component-redis" />
         <module name="mod-participant-contract" />
       </profile>
     </annotationProcessing>
@@ -119,6 +124,7 @@
       <module name="mod-component-http" options="-parameters" />
       <module name="mod-component-jackson" options="-parameters" />
       <module name="mod-component-jpa" options="-parameters" />
+      <module name="mod-component-kafka" options="-parameters" />
       <module name="mod-component-misc" options="-parameters" />
       <module name="mod-component-redis" options="-parameters" />
       <module name="mod-component-retrofit" options="-parameters" />
@@ -162,10 +168,15 @@
       <module name="mod-shared-security" options="-parameters" />
       <module name="mod-transaction-admin" options="-parameters" />
       <module name="mod-transaction-admin-client" options="-parameters" />
+      <module name="mod-transaction-consumer" options="-parameters" />
       <module name="mod-transaction-contract" options="-parameters" />
       <module name="mod-transaction-domain" options="-parameters" />
       <module name="mod-transaction-intercom" options="-parameters" />
       <module name="mod-transaction-intercom-client" options="-parameters" />
+      <module name="mod-transaction-publisher" options="-parameters" />
+      <module name="mod-transfer-contract" options="-parameters" />
+      <module name="mod-transfer-domain" options="-parameters" />
+      <module name="mod-transfer-service" options="-parameters" />
       <module name="mod-wallet-admin" options="-parameters" />
       <module name="mod-wallet-contract" options="-parameters" />
       <module name="mod-wallet-domain" options="-parameters" />

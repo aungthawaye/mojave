@@ -1,6 +1,6 @@
 /*-
  * ================================================================================
- * Mojaloop OSS
+ * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
  * --------------------------------------------------------------------------------
@@ -54,6 +54,8 @@ public abstract class BaseDomainIT {
         this.jdbcTemplate.execute("TRUNCATE TABLE acc_account");
         this.jdbcTemplate.execute("TRUNCATE TABLE acc_chart_entry");
         this.jdbcTemplate.execute("TRUNCATE TABLE acc_chart");
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_posting_definition");
+        this.jdbcTemplate.execute("TRUNCATE TABLE acc_flow_definition");
 
         // Re-enable FK checks
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=1");

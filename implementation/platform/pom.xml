@@ -297,7 +297,7 @@
                 <configuration>
                     <addSvnKeyWords>false</addSvnKeyWords>
                     <organizationName>Open Source</organizationName>
-                    <projectName>Mojaloop OSS</projectName>
+                    <projectName>Mojave</projectName>
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
                     <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>

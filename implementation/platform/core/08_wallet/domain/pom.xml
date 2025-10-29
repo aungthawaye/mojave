@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mojaloop.platform.core.wallet</groupId>
@@ -15,12 +16,21 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.platform.core.wallet</groupId>
-            <artifactId>mod-wallet-contract</artifactId>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-flyway</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.common</groupId>
             <artifactId>mod-common-datatype-converter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-contract</artifactId>
         </dependency>
     </dependencies>
 </project>

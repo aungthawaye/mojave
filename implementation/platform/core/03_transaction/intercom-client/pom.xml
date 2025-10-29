@@ -6,11 +6,21 @@
         <artifactId>transaction-pom</artifactId>
         <version>1.0.0</version>
     </parent>
-    <name>Mojaloop - Platform - Core - Transaction - Intercom Client</name>
     <artifactId>mod-transaction-intercom-client</artifactId>
+    <name>Mojaloop - Platform - Core - Transaction - Intercom Client</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-retrofit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-contract</artifactId>
+        </dependency>
+    </dependencies>
 </project>
