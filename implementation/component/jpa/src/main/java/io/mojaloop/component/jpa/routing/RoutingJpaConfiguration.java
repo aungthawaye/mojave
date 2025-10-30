@@ -39,15 +39,13 @@ public class RoutingJpaConfiguration {
 
     @Primary
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(RoutingDataSource routingDataSource,
-                                                                       RoutingEntityManagerConfigurer.Settings settings) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(RoutingDataSource routingDataSource, RoutingEntityManagerConfigurer.Settings settings) {
 
         return RoutingEntityManagerConfigurer.configure(routingDataSource, settings, "io.mojaloop");
     }
 
     @Bean
-    public RoutingDataSource routingDataSource(RoutingDataSourceConfigurer.ReadSettings readSettings,
-                                               RoutingDataSourceConfigurer.WriteSettings writeSettings) {
+    public RoutingDataSource routingDataSource(RoutingDataSourceConfigurer.ReadSettings readSettings, RoutingDataSourceConfigurer.WriteSettings writeSettings) {
 
         return RoutingDataSourceConfigurer.configure(readSettings, writeSettings);
     }

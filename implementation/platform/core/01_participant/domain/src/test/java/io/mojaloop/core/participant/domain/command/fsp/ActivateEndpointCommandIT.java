@@ -52,12 +52,9 @@ class ActivateEndpointCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP700"), "FSP-700",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP700"), "FSP-700", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new ActivateEndpointCommand.Input(created.fspId(), EndpointType.PARTIES);
@@ -76,12 +73,9 @@ class ActivateEndpointCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://fsp.example/transfers")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://fsp.example/transfers")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP701"), "FSP-701",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP701"), "FSP-701", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new ActivateEndpointCommand.Input(created.fspId(), EndpointType.PARTIES);
@@ -99,4 +93,5 @@ class ActivateEndpointCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(FspIdNotFoundException.class, () -> this.activateEndpoint.execute(input));
     }
+
 }

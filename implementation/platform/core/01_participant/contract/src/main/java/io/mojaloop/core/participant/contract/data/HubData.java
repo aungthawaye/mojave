@@ -46,9 +46,7 @@ import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.util.Objects;
 
-public record HubData(HubId hubId,
-                      String name,
-                      HubCurrencyData[] currencies) {
+public record HubData(HubId hubId, String name, HubCurrencyData[] currencies) {
 
     @Override
     public boolean equals(Object o) {

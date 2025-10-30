@@ -36,7 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DecreasePositionCommandIT extends BaseDomainIT {
 
@@ -52,17 +53,16 @@ public class DecreasePositionCommandIT extends BaseDomainIT {
     @Test
     void should_decrease_position_successfully() throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
         // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(86001L), Currency.USD, "Position D",
-                new BigDecimal("500.0000")));
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(86001L),
+                                                                                                 Currency.USD,
+                                                                                                 "Position D",
+                                                                                                 new BigDecimal("500.0000")));
         final var positionId = createOut.positionId();
 
         // Seed initial position to 100.0000 by increasing first
         final var seedTxId = new TransactionId(8600000000001L);
         final var seedTxAt = Instant.parse("2025-01-06T08:30:00Z");
-        this.increasePositionCommand.execute(
-            new IncreasePositionCommand.Input(positionId, new BigDecimal("100.0000"), seedTxId, seedTxAt,
-                "Seed position"));
+        this.increasePositionCommand.execute(new IncreasePositionCommand.Input(positionId, new BigDecimal("100.0000"), seedTxId, seedTxAt, "Seed position"));
 
         final var txId = new TransactionId(8600000001001L);
         final var txAt = Instant.parse("2025-01-06T09:00:00Z");
@@ -87,4 +87,5 @@ public class DecreasePositionCommandIT extends BaseDomainIT {
         assertEquals(txAt, output.transactionAt());
         assertNotNull(output.positionUpdateId());
     }
+
 }

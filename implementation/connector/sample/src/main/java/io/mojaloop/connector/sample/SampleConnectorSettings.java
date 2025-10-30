@@ -75,14 +75,15 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
         }
 
         return new FspiopInvokerConfiguration.TransportSettings(true,
-                                                                new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
-                                                                    P12Reader.ContentType.valueOf(System.getenv("INVOKER_KEYSTORE_CONTENT_TYPE")),
-                                                                    System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"),
-                                                                    System.getenv("INVOKER_KEYSTORE_PASSWORD")),
-                                                                new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(
-                                                                    P12Reader.ContentType.valueOf(System.getenv("INVOKER_TRUSTSTORE_CONTENT_TYPE")),
-                                                                    System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"),
-                                                                    System.getenv("INVOKER_TRUSTSTORE_PASSWORD")), true);
+                                                                new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(P12Reader.ContentType.valueOf(System.getenv(
+                                                                    "INVOKER_KEYSTORE_CONTENT_TYPE")),
+                                                                                                                                  System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"),
+                                                                                                                                  System.getenv("INVOKER_KEYSTORE_PASSWORD")),
+                                                                new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(P12Reader.ContentType.valueOf(System.getenv(
+                                                                    "INVOKER_TRUSTSTORE_CONTENT_TYPE")),
+                                                                                                                                    System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"),
+                                                                                                                                    System.getenv("INVOKER_TRUSTSTORE_PASSWORD")),
+                                                                true);
     }
 
     @Bean
@@ -95,20 +96,28 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
 
             return new ConnectorInboundConfiguration.InboundSettings(Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
                                                                      Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
-                                                                     Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), false, null, null);
+                                                                     Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")),
+                                                                     false,
+                                                                     null,
+                                                                     null);
         }
 
         return new ConnectorInboundConfiguration.InboundSettings(Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
                                                                  Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
-                                                                 Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), true,
-                                                                 new ConnectorInboundConfiguration.InboundSettings.KeyStoreSettings(
-                                                                     P12Reader.ContentType.valueOf(System.getenv("FSPIOP_INBOUND_KEYSTORE_CONTENT_TYPE")),
-                                                                     System.getenv("FSPIOP_INBOUND_KEYSTORE_CONTENT_VALUE"),
-                                                                     System.getenv("FSPIOP_INBOUND_KEYSTORE_PASSWORD"), null),
-                                                                 new ConnectorInboundConfiguration.InboundSettings.TrustStoreSettings(
-                                                                     P12Reader.ContentType.valueOf(System.getenv("FSPIOP_INBOUND_TRUSTSTORE_CONTENT_TYPE")),
-                                                                     System.getenv("FSPIOP_INBOUND_TRUSTSTORE_CONTENT_VALUE"),
-                                                                     System.getenv("FSPIOP_INBOUND_TRUSTSTORE_PASSWORD")));
+                                                                 Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")),
+                                                                 true,
+                                                                 new ConnectorInboundConfiguration.InboundSettings.KeyStoreSettings(P12Reader.ContentType.valueOf(System.getenv(
+                                                                     "FSPIOP_INBOUND_KEYSTORE_CONTENT_TYPE")),
+                                                                                                                                    System.getenv(
+                                                                                                                                        "FSPIOP_INBOUND_KEYSTORE_CONTENT_VALUE"),
+                                                                                                                                    System.getenv("FSPIOP_INBOUND_KEYSTORE_PASSWORD"),
+                                                                                                                                    null),
+                                                                 new ConnectorInboundConfiguration.InboundSettings.TrustStoreSettings(P12Reader.ContentType.valueOf(System.getenv(
+                                                                     "FSPIOP_INBOUND_TRUSTSTORE_CONTENT_TYPE")),
+                                                                                                                                      System.getenv(
+                                                                                                                                          "FSPIOP_INBOUND_TRUSTSTORE_CONTENT_VALUE"),
+                                                                                                                                      System.getenv(
+                                                                                                                                          "FSPIOP_INBOUND_TRUSTSTORE_PASSWORD")));
     }
 
     @Bean

@@ -127,17 +127,10 @@ public class Interledger {
         LOGGER.debug("preimage: {}", preimage);
         LOGGER.debug("fulfillment.preimage: {}", fulfillment.getPreimage());
 
-        InterledgerPreparePacket preparePacket = InterledgerPreparePacket
-                                                     .builder()
-                                                     .amount(amount)
-                                                     .destination(InterledgerAddress.of(peer))
-                                                     .executionCondition(condition)
-                                                     .expiresAt(Instant.now().plusSeconds(lifetimeSeconds))
-                                                     .data(data.getBytes(StandardCharsets.UTF_8))
-                                                     .build();
+        InterledgerPreparePacket preparePacket = InterledgerPreparePacket.builder().amount(amount).destination(InterledgerAddress.of(peer)).executionCondition(condition)
+                                                                         .expiresAt(Instant.now().plusSeconds(lifetimeSeconds)).data(data.getBytes(StandardCharsets.UTF_8)).build();
 
-        return new Prepare(base64Encode(serialize(preparePacket), true), base64Encode(fulfillment.getPreimage(), false),
-                           base64Encode(condition.getHash(), false));
+        return new Prepare(base64Encode(serialize(preparePacket), true), base64Encode(fulfillment.getPreimage(), false), base64Encode(condition.getHash(), false));
 
     }
 

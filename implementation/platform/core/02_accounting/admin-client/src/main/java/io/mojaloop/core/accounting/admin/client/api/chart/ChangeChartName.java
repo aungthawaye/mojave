@@ -71,8 +71,7 @@ public class ChangeChartName {
 
         try {
 
-            RetrofitService.invoke(this.chartCommands.changeChartName(input),
-                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(this.chartCommands.changeChartName(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 

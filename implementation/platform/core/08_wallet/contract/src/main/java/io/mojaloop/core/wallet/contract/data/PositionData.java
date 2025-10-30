@@ -31,4 +31,5 @@ public record PositionData(PositionId positionId,
 
         return Objects.hashCode(positionId);
     }
+
 }

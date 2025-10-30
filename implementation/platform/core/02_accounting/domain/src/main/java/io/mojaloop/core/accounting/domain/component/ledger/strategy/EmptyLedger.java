@@ -10,10 +10,7 @@ import java.util.List;
 public class EmptyLedger implements Ledger {
 
     @Override
-    public List<Movement> post(List<Request> requests,
-                               TransactionId transactionId,
-                               Instant transactionAt,
-                               TransactionType transactionType) {
+    public List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt, TransactionType transactionType) {
 
         throw new UnsupportedOperationException("Ledger is empty");
     }

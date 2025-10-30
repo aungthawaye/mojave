@@ -41,15 +41,7 @@ public final class Rs256Jwt {
         assert headers != null;
         assert payload != null;
 
-        String token = Jwts
-                           .builder()
-                           .signWith(privateKey)
-                           .header()
-                           .add("typ", "JWT")
-                           .add(headers)
-                           .and()
-                           .content(payload, "application/json")
-                           .compact();
+        String token = Jwts.builder().signWith(privateKey).header().add("typ", "JWT").add(headers).and().content(payload, "application/json").compact();
 
         String[] parts = token.split("\\.");
 
@@ -63,8 +55,7 @@ public final class Rs256Jwt {
             assert token != null;
             LOGGER.debug("Verifying token : {}", token.full());
 
-            var content = new String(Jwts.parser().verifyWith(publicKey).build().parseSignedContent(token.full()).getPayload(),
-                                     StandardCharsets.UTF_8);
+            var content = new String(Jwts.parser().verifyWith(publicKey).build().parseSignedContent(token.full()).getPayload(), StandardCharsets.UTF_8);
 
             return true;
 

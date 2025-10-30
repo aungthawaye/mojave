@@ -45,8 +45,7 @@ import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
 public class ChartEntryDescriptionTooLongException extends UncheckedDomainException {
 
-    private static final String TEMPLATE =
-        "Chart Entry Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
+    private static final String TEMPLATE = "Chart Entry Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
 
     public ChartEntryDescriptionTooLongException() {
 

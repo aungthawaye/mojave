@@ -42,12 +42,13 @@ public class CreateFspIT {
     @Test
     public void test_successfully_create() throws ParticipantAdminClientException {
 
-        this.createFsp.execute(
-            new CreateFspCommand.Input(new FspCode("fsp2"), "FSP 1", new Currency[]{Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK},
-                                       new CreateFspCommand.Input.Endpoint[]{
-                                           new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080"),
-                                           new CreateFspCommand.Input.Endpoint(EndpointType.QUOTES, "http://localhost:7080"),
-                                           new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://localhost:7080")}));
+        this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp2"),
+                                                          "FSP 1",
+                                                          new Currency[]{Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK},
+                                                          new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080"),
+                                                                                                new CreateFspCommand.Input.Endpoint(EndpointType.QUOTES, "http://localhost:7080"),
+                                                                                                new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS,
+                                                                                                                                    "http://localhost:7080")}));
     }
 
 }

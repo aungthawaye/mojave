@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,13 +70,33 @@ class ActivateFspCurrencyCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP20"), "FSP Twenty",
-            new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP20"),
+                                                                          "FSP Twenty",
+                                                                          new Currency[]{Currency.USD},
+                                                                          new CreateFspCommand.Input.Endpoint[]{}));
 
         var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
 
         // Act & Assert (should not throw)
         this.activateCurrency.execute(input);
+    }
+
+    @Test
+    void should_throw_when_currency_not_supported_by_hub_on_activation() throws Exception {
+
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
+
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP21"),
+                                                                          "FSP Twenty One",
+                                                                          new Currency[]{Currency.USD},
+                                                                          new CreateFspCommand.Input.Endpoint[]{}));
+
+        var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.TZS);
+
+        // Act & Assert
+        Assertions.assertThrows(FspCurrencyNotSupportedByHubException.class, () -> this.activateCurrency.execute(input));
     }
 
     @Test
@@ -90,22 +110,6 @@ class ActivateFspCurrencyCommandIT extends BaseDomainIT {
     }
 
     @Test
-    void should_throw_when_currency_not_supported_by_hub_on_activation() throws Exception {
-
-        // Arrange
-        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
-        this.createHub.execute(hubInput);
-
-        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP21"), "FSP Twenty One",
-            new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
-
-        var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.TZS);
-
-        // Act & Assert
-        Assertions.assertThrows(FspCurrencyNotSupportedByHubException.class, () -> this.activateCurrency.execute(input));
-    }
-
-    @Test
     void should_throw_when_hub_not_found_on_activation() {
 
         // Arrange
@@ -114,4 +118,5 @@ class ActivateFspCurrencyCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(HubNotFoundException.class, () -> this.activateCurrency.execute(input));
     }
+
 }

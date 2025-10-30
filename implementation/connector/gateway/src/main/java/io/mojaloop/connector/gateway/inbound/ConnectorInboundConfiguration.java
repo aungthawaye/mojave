@@ -129,16 +129,16 @@ public class ConnectorInboundConfiguration
 
                             var keystoreSettings = inboundSettings.keyStoreSettings();
                             var truststoreSettings = inboundSettings.trustStoreSettings();
-                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
+                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(),
+                                                                                             inboundSettings.maxThreads(),
                                                                                              inboundSettings.connectionTimeout(),
-                                                                                             new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
-                                                                                                 truststoreSettings.contentType(),
-                                                                                                 truststoreSettings.contentValue(),
-                                                                                                 truststoreSettings.password),
-                                                                                             new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
-                                                                                                 keystoreSettings.contentType(),
-                                                                                                 keystoreSettings.contentValue(), keystoreSettings.password,
-                                                                                                 keystoreSettings.keyAlias()));
+                                                                                             new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(truststoreSettings.contentType(),
+                                                                                                                                                         truststoreSettings.contentValue(),
+                                                                                                                                                         truststoreSettings.password),
+                                                                                             new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(keystoreSettings.contentType(),
+                                                                                                                                                       keystoreSettings.contentValue(),
+                                                                                                                                                       keystoreSettings.password,
+                                                                                                                                                       keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
 
@@ -160,9 +160,7 @@ public class ConnectorInboundConfiguration
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              ConnectorAdapterConfiguration.RequiredSettings,
-                                              FspiopInvokerConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, ConnectorAdapterConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
 
         InboundSettings inboundSettings();
 
@@ -175,12 +173,9 @@ public class ConnectorInboundConfiguration
                                   KeyStoreSettings keyStoreSettings,
                                   TrustStoreSettings trustStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password,
-                                       String keyAlias) {
-        }
+        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password, String keyAlias) { }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) {
-        }
+        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
 
     }
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.controller.account;
 
 import io.mojaloop.component.misc.query.PagedRequest;
@@ -58,14 +59,19 @@ public class FindAccountController {
 
         var criteria = request.criteria;
 
-        return this.accountQuery.find(criteria.accountCode, criteria.name, criteria.ownerId, criteria.chartEntryId, criteria.currency,
-                                      request.pagedRequest, request.sortBy.column, request.sortBy.mode);
+        return this.accountQuery.find(criteria.accountCode,
+                                      criteria.name,
+                                      criteria.ownerId,
+                                      criteria.chartEntryId,
+                                      criteria.currency,
+                                      request.pagedRequest,
+                                      request.sortBy.column,
+                                      request.sortBy.mode);
     }
 
     public record Request(Criteria criteria, SortBy sortBy, PagedRequest pagedRequest) {
 
-        public record Criteria(AccountCode accountCode, String name, AccountOwnerId ownerId, ChartEntryId chartEntryId,
-                               Currency currency) { }
+        public record Criteria(AccountCode accountCode, String name, AccountOwnerId ownerId, ChartEntryId chartEntryId, Currency currency) { }
 
         public record SortBy(AccountQuery.Sorting.Column column, SortingMode mode) { }
 

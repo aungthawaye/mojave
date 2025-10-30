@@ -52,9 +52,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "wlt_wallet",
-    uniqueConstraints = @UniqueConstraint(name = "wlt_wallet_owner_id_currency_UK",
-        columnNames = {"wallet_owner_id", "currency"}))
+@Table(name = "wlt_wallet", uniqueConstraints = @UniqueConstraint(name = "wlt_wallet_owner_id_currency_UK", columnNames = {"wallet_owner_id", "currency"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wallet extends JpaEntity<WalletId> implements DataConversion<WalletData> {
 

@@ -73,14 +73,14 @@ class ConnectorOutboundSettings implements ConnectorOutboundConfiguration.Requir
         }
 
         return new FspiopInvokerConfiguration.TransportSettings(true,
-                                                                new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
-                                                                    P12Reader.ContentType.valueOf(System.getenv("INVOKER_KEYSTORE_CONTENT_TYPE")),
-                                                                    System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"),
-                                                                    System.getenv("INVOKER_KEYSTORE_PASSWORD")),
-                                                                new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(
-                                                                    P12Reader.ContentType.valueOf(System.getenv("INVOKER_TRUSTSTORE_CONTENT_TYPE")),
-                                                                    System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"),
-                                                                    System.getenv("INVOKER_TRUSTSTORE_PASSWORD")),
+                                                                new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(P12Reader.ContentType.valueOf(System.getenv(
+                                                                    "INVOKER_KEYSTORE_CONTENT_TYPE")),
+                                                                                                                                  System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"),
+                                                                                                                                  System.getenv("INVOKER_KEYSTORE_PASSWORD")),
+                                                                new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(P12Reader.ContentType.valueOf(System.getenv(
+                                                                    "INVOKER_TRUSTSTORE_CONTENT_TYPE")),
+                                                                                                                                    System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"),
+                                                                                                                                    System.getenv("INVOKER_TRUSTSTORE_PASSWORD")),
                                                                 true);
     }
 

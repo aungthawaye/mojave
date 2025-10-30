@@ -71,10 +71,8 @@ public class CreateChart {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.chartCommands.createChart(input),
-                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.chartCommands.createChart(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

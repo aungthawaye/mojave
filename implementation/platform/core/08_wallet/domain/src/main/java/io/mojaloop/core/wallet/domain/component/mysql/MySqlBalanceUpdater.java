@@ -60,15 +60,10 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     }
 
     @Override
-    public BalanceHistory deposit(TransactionId transactionId,
-                                  Instant transactionAt,
-                                  BalanceUpdateId balanceUpdateId,
-                                  WalletId walletId,
-                                  BigDecimal amount,
-                                  String description) throws NoBalanceUpdateException {
+    public BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+        throws NoBalanceUpdateException {
 
-        LOGGER.info("Deposit transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId, walletId,
-                    amount, description);
+        LOGGER.info("Deposit transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId, walletId, amount, description);
 
         try {
 
@@ -103,7 +98,8 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                                               rs.getBigDecimal("amount"),
                                                               rs.getBigDecimal("old_balance"),
                                                               rs.getBigDecimal("new_balance"),
-                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")), null);
+                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")),
+                                                              null);
                                 }
                             }
 
@@ -118,8 +114,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
             });
         } catch (RuntimeException e) {
 
-            LOGGER.error("Exception occurred while trying to deposit for transactionId : {}, amount : {}.",
-                         transactionId.getId(), amount.toPlainString(), e);
+            LOGGER.error("Exception occurred while trying to deposit for transactionId : {}, amount : {}.", transactionId.getId(), amount.toPlainString(), e);
 
             if (e.getCause() instanceof NoBalanceUpdateException e1) {
                 throw e1;
@@ -130,8 +125,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     }
 
     @Override
-    public BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId)
-        throws ReversalFailedException {
+    public BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId) throws ReversalFailedException {
 
         LOGGER.info("Reverse reversedId: {}, balanceUpdateId: {}", reversedId, balanceUpdateId);
 
@@ -168,8 +162,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                                               new BalanceUpdateId(rs.getLong("reversal_id")));
                                 } else if ("REVERSAL_FAILED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new ReversalFailedException(new BalanceUpdateId(rs.getLong("reversal_id"))));
+                                    throw new RuntimeException(new ReversalFailedException(new BalanceUpdateId(rs.getLong("reversal_id"))));
                                 }
                             }
 
@@ -195,15 +188,10 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     }
 
     @Override
-    public BalanceHistory withdraw(TransactionId transactionId,
-                                   Instant transactionAt,
-                                   BalanceUpdateId balanceUpdateId,
-                                   WalletId walletId,
-                                   BigDecimal amount,
-                                   String description) throws NoBalanceUpdateException, InsufficientBalanceException {
+    public BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+        throws NoBalanceUpdateException, InsufficientBalanceException {
 
-        LOGGER.info("Withdraw transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId, walletId,
-                    amount, description);
+        LOGGER.info("Withdraw transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId, walletId, amount, description);
 
         try {
 
@@ -237,13 +225,13 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                                               rs.getBigDecimal("amount"),
                                                               rs.getBigDecimal("old_balance"),
                                                               rs.getBigDecimal("new_balance"),
-                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")), null);
+                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")),
+                                                              null);
                                 } else if ("INSUFFICIENT_BALANCE".equals(status)) {
 
                                     var balance = rs.getBigDecimal("old_balance");
 
-                                    throw new RuntimeException(
-                                        new InsufficientBalanceException(transactionId, walletId, amount, balance));
+                                    throw new RuntimeException(new InsufficientBalanceException(transactionId, walletId, amount, balance));
                                 }
                             }
 
@@ -258,8 +246,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
             });
         } catch (RuntimeException e) {
 
-            LOGGER.error("Exception occurred while trying to withdraw for transactionId : {}, amount : {}.",
-                         transactionId.getId(), amount.toPlainString(), e);
+            LOGGER.error("Exception occurred while trying to withdraw for transactionId : {}, amount : {}.", transactionId.getId(), amount.toPlainString(), e);
 
             if (e.getCause() instanceof NoBalanceUpdateException e1) {
                 throw e1;

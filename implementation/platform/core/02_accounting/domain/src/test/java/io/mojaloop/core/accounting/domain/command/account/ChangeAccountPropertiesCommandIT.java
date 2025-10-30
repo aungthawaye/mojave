@@ -59,12 +59,19 @@ public class ChangeAccountPropertiesCommandIT extends BaseDomainIT {
     void should_change_account_name_and_description_successfully() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        final var entryOut = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc",
-                                              AccountType.ASSET));
+        final var entryOut = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                    new ChartEntryCode("ASSETS"),
+                                                                                                    "Assets",
+                                                                                                    "Assets Desc",
+                                                                                                    AccountType.ASSET));
 
-        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(), new AccountOwnerId(2004L), Currency.USD,
-                                                               new AccountCode("ACC006"), "Account", "Desc", OverdraftMode.FORBID,
+        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(),
+                                                               new AccountOwnerId(2004L),
+                                                               Currency.USD,
+                                                               new AccountCode("ACC006"),
+                                                               "Account",
+                                                               "Desc",
+                                                               OverdraftMode.FORBID,
                                                                BigDecimal.ZERO);
         final var accountOut = this.createAccountCommand.execute(createInput);
 

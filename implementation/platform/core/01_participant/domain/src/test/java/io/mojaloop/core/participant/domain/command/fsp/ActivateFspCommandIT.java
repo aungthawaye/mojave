@@ -52,12 +52,9 @@ class ActivateFspCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD, Currency.TZS});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP200"), "FSP-200",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP200"), "FSP-200", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new ActivateFspCommand.Input(created.fspId());
@@ -86,12 +83,9 @@ class ActivateFspCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.TZS});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP201"), "FSP-201",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP201"), "FSP-201", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new ActivateFspCommand.Input(created.fspId());
@@ -99,4 +93,5 @@ class ActivateFspCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(FspCurrencyNotSupportedByHubException.class, () -> this.activateFsp.execute(input));
     }
+
 }

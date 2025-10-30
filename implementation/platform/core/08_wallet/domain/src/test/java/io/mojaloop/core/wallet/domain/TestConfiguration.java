@@ -33,8 +33,10 @@ public class TestConfiguration implements WalletDomainConfiguration.RequiredBean
     static {
 
         var flywaySettings = new FlywayMigration.Settings(
-            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root",
-            "password", "classpath:migration/wallet");
+            "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
+            "root",
+            "password",
+            "classpath:migration/wallet");
 
         FlywayMigration.migrate(flywaySettings);
     }

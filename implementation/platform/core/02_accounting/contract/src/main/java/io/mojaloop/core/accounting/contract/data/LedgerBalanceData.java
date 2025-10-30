@@ -29,8 +29,15 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
-public record LedgerBalanceData(AccountId accountId, Currency currency, int scale, Side nature, BigDecimal postedDebits,
-                                BigDecimal postedCredits, OverdraftMode overdraftMode, BigDecimal overdraftLimit, Instant createdAt) {
+public record LedgerBalanceData(AccountId accountId,
+                                Currency currency,
+                                int scale,
+                                Side nature,
+                                BigDecimal postedDebits,
+                                BigDecimal postedCredits,
+                                OverdraftMode overdraftMode,
+                                BigDecimal overdraftLimit,
+                                Instant createdAt) {
 
     @Override
     public boolean equals(Object o) {

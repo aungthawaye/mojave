@@ -33,7 +33,9 @@ public class TestConfiguration implements AccountingDomainConfiguration.Required
 
         var flywaySettings = new FlywayMigration.Settings(
             "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root", "password", "classpath:migration/accounting");
+            "root",
+            "password",
+            "classpath:migration/accounting");
 
         FlywayMigration.migrate(flywaySettings);
     }

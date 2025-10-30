@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,11 +67,18 @@ public abstract class BaseDomainIT {
         // Disable FK checks to truncate in any order
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=0");
 
-        try { this.jdbcTemplate.execute("TRUNCATE TABLE txn_step_param"); } catch (Exception ignored) { }
-        try { this.jdbcTemplate.execute("TRUNCATE TABLE txn_transaction_step"); } catch (Exception ignored) { }
-        try { this.jdbcTemplate.execute("TRUNCATE TABLE txn_transaction"); } catch (Exception ignored) { }
+        try {
+            this.jdbcTemplate.execute("TRUNCATE TABLE txn_step_param");
+        } catch (Exception ignored) { }
+        try {
+            this.jdbcTemplate.execute("TRUNCATE TABLE txn_transaction_step");
+        } catch (Exception ignored) { }
+        try {
+            this.jdbcTemplate.execute("TRUNCATE TABLE txn_transaction");
+        } catch (Exception ignored) { }
 
         // Re-enable FK checks
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=1");
     }
+
 }

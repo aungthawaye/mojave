@@ -62,8 +62,7 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {ChartEntryCacheUpdater.class})
-@Table(name = "acc_chart_entry",
-       uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
+@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 
@@ -134,8 +133,7 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @Override
     public ChartEntryData convert() {
 
-        return new ChartEntryData(this.getId(), this.code, this.name, this.description, this.accountType, this.createdAt,
-                                  this.chart.getId());
+        return new ChartEntryData(this.getId(), this.code, this.name, this.description, this.accountType, this.createdAt, this.chart.getId());
     }
 
     public ChartEntry description(String description) {

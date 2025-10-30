@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,24 +63,6 @@ class AddStepCommandIT extends BaseDomainIT {
     private CommitTransactionCommand commitTransaction;
 
     @Test
-    void add_step_before_close_phase_before() {
-
-        // Arrange
-        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_RESERVE);
-        var openOutput = this.openTransaction.execute(openInput);
-
-        var params = Map.of("k1", "v1", "k2", "v2");
-        var input = new AddStepCommand.Input(openOutput.transactionId(), "reserve", params);
-
-        // Act
-        var output = this.addStep.execute(input);
-
-        // Assert
-        Assertions.assertNotNull(output);
-        Assertions.assertNotNull(output.transactionId());
-    }
-
-    @Test
     void add_step_after_close_phase_after() {
 
         // Arrange
@@ -102,6 +84,24 @@ class AddStepCommandIT extends BaseDomainIT {
     }
 
     @Test
+    void add_step_before_close_phase_before() {
+
+        // Arrange
+        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_RESERVE);
+        var openOutput = this.openTransaction.execute(openInput);
+
+        var params = Map.of("k1", "v1", "k2", "v2");
+        var input = new AddStepCommand.Input(openOutput.transactionId(), "reserve", params);
+
+        // Act
+        var output = this.addStep.execute(input);
+
+        // Assert
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.transactionId());
+    }
+
+    @Test
     void add_step_throws_when_transaction_not_found() {
 
         // Arrange
@@ -111,4 +111,5 @@ class AddStepCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(TransactionIdNotFoundException.class, () -> this.addStep.execute(input));
     }
+
 }

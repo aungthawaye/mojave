@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.common.datatype.converter.identifier.quoting;
 
-import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.quoting.QuoteId;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

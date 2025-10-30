@@ -68,9 +68,7 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
 
         LOGGER.info("Executing ChangeOracleNameCommand with input: {}", input);
 
-        var oracle = this.oracleRepository
-                         .findById(input.oracleId())
-                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+        var oracle = this.oracleRepository.findById(input.oracleId()).orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.name(input.name());
         this.oracleRepository.save(oracle);

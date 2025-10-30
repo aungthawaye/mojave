@@ -68,16 +68,14 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(
-            System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4202"));
+        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4202"));
     }
 
     @Bean
     @Override
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return new ParticipantStoreConfiguration.Settings(
-            Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "300000")));
+        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "300000")));
     }
 
     @Bean

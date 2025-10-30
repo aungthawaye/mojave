@@ -11,17 +11,17 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record PositionUpdateData(PositionUpdateId positionUpdateId,
-                                PositionId positionId,
-                                PositionAction action,
-                                TransactionId transactionId,
-                                Currency currency,
-                                BigDecimal amount,
-                                BigDecimal oldPosition,
-                                BigDecimal newPosition,
-                                String description,
-                                Instant transactionAt,
-                                Instant createdAt,
-                                PositionUpdateId reversedId) {
+                                 PositionId positionId,
+                                 PositionAction action,
+                                 TransactionId transactionId,
+                                 Currency currency,
+                                 BigDecimal amount,
+                                 BigDecimal oldPosition,
+                                 BigDecimal newPosition,
+                                 String description,
+                                 Instant transactionAt,
+                                 Instant createdAt,
+                                 PositionUpdateId reversedId) {
 
     @Override
     public boolean equals(Object o) {
@@ -37,4 +37,5 @@ public record PositionUpdateData(PositionUpdateId positionUpdateId,
 
         return Objects.hashCode(positionUpdateId);
     }
+
 }

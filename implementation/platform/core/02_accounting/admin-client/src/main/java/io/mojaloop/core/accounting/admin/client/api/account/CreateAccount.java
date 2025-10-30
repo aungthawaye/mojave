@@ -71,10 +71,8 @@ public class CreateAccount {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.accountCommands.createAccount(input),
-                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.accountCommands.createAccount(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

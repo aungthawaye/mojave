@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -64,9 +65,9 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {FlowDefinitionCacheUpdater.class})
-@Table(name = "acc_flow_definition", uniqueConstraints = {
-    @UniqueConstraint(name = "acc_flow_definition_currency_UK", columnNames = {"currency"}),
-    @UniqueConstraint(name = "acc_flow_definition_name_UK", columnNames = {"name"})})
+@Table(name = "acc_flow_definition",
+       uniqueConstraints = {@UniqueConstraint(name = "acc_flow_definition_currency_UK", columnNames = {"currency"}),
+                            @UniqueConstraint(name = "acc_flow_definition_name_UK", columnNames = {"name"})})
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataConversion<FlowDefinitionData> {
@@ -127,8 +128,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
                                         AccountCache accountCache,
                                         ChartEntryCache chartEntryCache) {
 
-        var posting = new PostingDefinition(this, receiveIn, receiveInId, participant, amountName, side, description, accountCache,
-                                            chartEntryCache);
+        var posting = new PostingDefinition(this, receiveIn, receiveInId, participant, amountName, side, description, accountCache, chartEntryCache);
 
         this.postings.add(posting);
 
@@ -139,12 +139,18 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     @Override
     public FlowDefinitionData convert() {
 
-        var postingData = this.postings.stream().map(
-            p -> new FlowDefinitionData.PostingDefinitionData(p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName, p.side,
-                                                              p.description)).toList();
+        var postingData = this.postings.stream()
+                                       .map(p -> new FlowDefinitionData.PostingDefinitionData(p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName, p.side, p.description))
+                                       .toList();
 
-        return new FlowDefinitionData(this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(), this.getDescription(),
-                                      this.getActivationStatus(), this.getTerminationStatus(), postingData);
+        return new FlowDefinitionData(this.getId(),
+                                      this.getTransactionType(),
+                                      this.getCurrency(),
+                                      this.getName(),
+                                      this.getDescription(),
+                                      this.getActivationStatus(),
+                                      this.getTerminationStatus(),
+                                      postingData);
     }
 
     public FlowDefinition currency(Currency currency) {

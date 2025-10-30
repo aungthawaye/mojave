@@ -67,8 +67,7 @@ public class ChangeFlowDefinitionPropertiesController {
     @PostMapping("/definitions/flows/change-properties")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeFlowDefinitionPropertiesCommand.Output execute(
-        @Valid @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input) {
+    public ChangeFlowDefinitionPropertiesCommand.Output execute(@Valid @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input) {
 
         return this.changeFlowDefinitionPropertiesCommand.execute(input);
     }

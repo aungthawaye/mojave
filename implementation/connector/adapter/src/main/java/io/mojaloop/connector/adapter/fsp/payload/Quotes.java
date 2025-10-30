@@ -30,12 +30,7 @@ public class Quotes {
 
         public record Request(String quoteId, Party payer, Party payee, AmountType amountType, Money originalAmount, String expiration) { }
 
-        public record Response(Money originalAmount,
-                               Money payeeFspFee,
-                               Money payeeFspCommission,
-                               Money payeeReceiveAmount,
-                               Money transferAmount,
-                               String expiration) { }
+        public record Response(Money originalAmount, Money payeeFspFee, Money payeeFspCommission, Money payeeReceiveAmount, Money transferAmount, String expiration) { }
 
     }
 

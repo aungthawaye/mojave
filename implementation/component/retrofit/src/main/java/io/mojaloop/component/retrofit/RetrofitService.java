@@ -328,9 +328,7 @@ public class RetrofitService {
 
                 this.httpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), tm);
 
-                okhttp3.ConnectionSpec spec = new okhttp3.ConnectionSpec.Builder(okhttp3.ConnectionSpec.MODERN_TLS)
-                                                  .tlsVersions(okhttp3.TlsVersion.TLS_1_2)
-                                                  .build();
+                okhttp3.ConnectionSpec spec = new okhttp3.ConnectionSpec.Builder(okhttp3.ConnectionSpec.MODERN_TLS).tlsVersions(okhttp3.TlsVersion.TLS_1_2).build();
 
                 this.httpClientBuilder.connectionSpecs(List.of(spec));
                 this.httpClientBuilder.hostnameVerifier((hostname, session) -> ignoreHostnameVerification);

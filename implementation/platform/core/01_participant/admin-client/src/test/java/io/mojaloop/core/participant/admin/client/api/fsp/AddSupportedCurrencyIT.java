@@ -47,11 +47,11 @@ public class AddSupportedCurrencyIT {
     @Test
     public void test_successfully_add_supported_currency() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(
-            new CreateFspCommand.Input(new FspCode("fsp-add-currency-usd1"), "FSP Add Currency", new Currency[]{Currency.USD},
-                                       new CreateFspCommand.Input.Endpoint[]{
-                                           new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")
-                                       }));
+        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-add-currency-usd1"),
+                                                                       "FSP Add Currency",
+                                                                       new Currency[]{Currency.USD},
+                                                                       new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES,
+                                                                                                                                                 "http://localhost:7080")}));
 
         this.addSupportedCurrency.execute(new AddFspCurrencyCommand.Input(new FspId(output.fspId().getId()), Currency.EUR));
     }

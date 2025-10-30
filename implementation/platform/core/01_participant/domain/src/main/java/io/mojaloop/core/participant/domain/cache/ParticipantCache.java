@@ -34,6 +34,8 @@ import java.util.Set;
 
 public interface ParticipantCache {
 
+    void bootstrap();
+
     void clear();
 
     void delete(FspId fspId);
@@ -59,8 +61,6 @@ public interface ParticipantCache {
     void save(FxpData fxpData);
 
     void save(OracleData oracleData);
-
-    void bootstrap();
 
     class Qualifiers {
 

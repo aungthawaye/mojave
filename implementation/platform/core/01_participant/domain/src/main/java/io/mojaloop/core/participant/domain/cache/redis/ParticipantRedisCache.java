@@ -150,9 +150,7 @@ public class ParticipantRedisCache implements ParticipantCache {
                 return;
             }
 
-            set.stream()
-               .filter(fxp -> fxp.fxpId().equals(fxpId))
-               .forEach(fxp -> this.fxpWithCurrencyPair.remove(currencyPair, fxp));
+            set.stream().filter(fxp -> fxp.fxpId().equals(fxpId)).forEach(fxp -> this.fxpWithCurrencyPair.remove(currencyPair, fxp));
         });
     }
 

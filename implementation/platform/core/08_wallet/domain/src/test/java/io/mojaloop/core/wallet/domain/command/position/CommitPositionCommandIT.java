@@ -51,17 +51,17 @@ public class CommitPositionCommandIT extends BaseDomainIT {
     @Test
     void should_commit_reserved_successfully() {
         // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(88001L), Currency.USD, "Position C",
-                new BigDecimal("100.0000")));
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(88001L),
+                                                                                                 Currency.USD,
+                                                                                                 "Position C",
+                                                                                                 new BigDecimal("100.0000")));
         final var positionId = createOut.positionId();
 
         final var reserveTxId = new TransactionId(8800000001001L);
         final var reserveTxAt = Instant.parse("2025-01-08T09:00:00Z");
         final var amount = new BigDecimal("40.00");
 
-        final var reserveOut = this.reservePositionCommand.execute(
-            new ReservePositionCommand.Input(positionId, amount, reserveTxId, reserveTxAt, "Reserve before commit"));
+        final var reserveOut = this.reservePositionCommand.execute(new ReservePositionCommand.Input(positionId, amount, reserveTxId, reserveTxAt, "Reserve before commit"));
 
         final var reservationId = reserveOut.positionUpdateId();
         final var commitUpdateId = new PositionUpdateId(8800000099001L);
@@ -95,4 +95,5 @@ public class CommitPositionCommandIT extends BaseDomainIT {
         // Act & Assert
         assertThrows(RuntimeException.class, () -> this.commitPositionCommand.execute(input));
     }
+
 }

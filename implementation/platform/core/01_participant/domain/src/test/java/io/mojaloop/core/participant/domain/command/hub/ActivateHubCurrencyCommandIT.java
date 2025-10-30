@@ -82,4 +82,5 @@ class ActivateHubCurrencyCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(HubNotFoundException.class, () -> this.activateCurrency.execute(input));
     }
+
 }

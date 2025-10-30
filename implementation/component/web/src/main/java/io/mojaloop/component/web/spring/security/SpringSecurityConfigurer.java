@@ -29,10 +29,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 public class SpringSecurityConfigurer {
 
-    public static SecurityFilterChain configure(HttpSecurity http,
-                                                Settings settings,
-                                                Authenticator authenticator,
-                                                AuthenticationErrorWriter authenticationErrorWriter) throws Exception {
+    public static SecurityFilterChain configure(HttpSecurity http, Settings settings, Authenticator authenticator, AuthenticationErrorWriter authenticationErrorWriter)
+        throws Exception {
 
         //@@formatter:off
         http

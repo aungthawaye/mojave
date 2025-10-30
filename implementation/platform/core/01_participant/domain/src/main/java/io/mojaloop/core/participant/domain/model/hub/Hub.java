@@ -153,7 +153,7 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
         var optSupportedCurrency = this.currencies.stream().filter(sc -> sc.getCurrency() == currency).findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
-            return Optional.empty() ;
+            return Optional.empty();
         }
 
         optSupportedCurrency.get().deactivate();

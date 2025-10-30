@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.service.controller;
 
 import io.mojaloop.component.misc.spring.event.EventPublisher;
@@ -61,23 +62,6 @@ public class QuotesController {
         this.eventPublisher = eventPublisher;
     }
 
-    @PostMapping("/quotes")
-    public ResponseEntity<?> postQuotes(@RequestBody QuotesPostRequest requestBody, HttpServletRequest request) throws IOException {
-
-        LOGGER.info("Received POST /quotes");
-
-        var cachedBodyRequest = new CachedServletRequest(request);
-        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
-
-        var event = new PostQuotesEvent(new PostQuotesCommand.Input(fspiopHttpRequest, requestBody));
-
-        LOGGER.info("Publishing PostQuotesEvent : [{}]", event);
-        this.eventPublisher.publish(event);
-        LOGGER.info("Published PostQuotesEvent : [{}]", event);
-
-        return ResponseEntity.accepted().build();
-    }
-
     @GetMapping("/quotes/{quoteId}")
     public ResponseEntity<?> getQuotes(@PathVariable UdfQuoteId quoteId, HttpServletRequest request) throws IOException {
 
@@ -95,10 +79,25 @@ public class QuotesController {
         return ResponseEntity.accepted().build();
     }
 
+    @PostMapping("/quotes")
+    public ResponseEntity<?> postQuotes(@RequestBody QuotesPostRequest requestBody, HttpServletRequest request) throws IOException {
+
+        LOGGER.info("Received POST /quotes");
+
+        var cachedBodyRequest = new CachedServletRequest(request);
+        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
+
+        var event = new PostQuotesEvent(new PostQuotesCommand.Input(fspiopHttpRequest, requestBody));
+
+        LOGGER.info("Publishing PostQuotesEvent : [{}]", event);
+        this.eventPublisher.publish(event);
+        LOGGER.info("Published PostQuotesEvent : [{}]", event);
+
+        return ResponseEntity.accepted().build();
+    }
+
     @PutMapping("/quotes/{quoteId}")
-    public ResponseEntity<?> putQuotes(@PathVariable UdfQuoteId quoteId,
-                                       @RequestBody QuotesIDPutResponse response,
-                                       HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> putQuotes(@PathVariable UdfQuoteId quoteId, @RequestBody QuotesIDPutResponse response, HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /quotes/{}", quoteId);
 
@@ -115,9 +114,7 @@ public class QuotesController {
     }
 
     @PutMapping("/quotes/{quoteId}/error")
-    public ResponseEntity<?> putQuotesError(@PathVariable UdfQuoteId quoteId,
-                                            @RequestBody ErrorInformationObject error,
-                                            HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> putQuotesError(@PathVariable UdfQuoteId quoteId, @RequestBody ErrorInformationObject error, HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /quotes/{}/error", quoteId);
 
@@ -132,4 +129,5 @@ public class QuotesController {
 
         return ResponseEntity.accepted().build();
     }
+
 }

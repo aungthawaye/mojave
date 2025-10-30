@@ -40,10 +40,6 @@ public abstract class BaseDomainIT {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    protected JdbcTemplate jdbc() {
-        return this.jdbcTemplate;
-    }
-
     @BeforeEach
     void cleanupDb() {
 
@@ -58,4 +54,10 @@ public abstract class BaseDomainIT {
         // Re-enable FK checks
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=1");
     }
+
+    protected JdbcTemplate jdbc() {
+
+        return this.jdbcTemplate;
+    }
+
 }

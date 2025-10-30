@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -74,6 +74,17 @@ class CommitTransactionCommandIT extends BaseDomainIT {
     }
 
     @Test
+    void commit_throws_when_transaction_not_found() {
+
+        // Arrange
+        var fakeId = new TransactionId(9876543210L);
+        var input = new CommitTransactionCommand.Input(fakeId, null);
+
+        // Act & Assert
+        Assertions.assertThrows(TransactionIdNotFoundException.class, () -> this.commitTransaction.execute(input));
+    }
+
+    @Test
     void commit_with_error_sets_failure() {
 
         // Arrange
@@ -90,14 +101,4 @@ class CommitTransactionCommandIT extends BaseDomainIT {
         Assertions.assertNotNull(output.transactionId());
     }
 
-    @Test
-    void commit_throws_when_transaction_not_found() {
-
-        // Arrange
-        var fakeId = new TransactionId(9876543210L);
-        var input = new CommitTransactionCommand.Input(fakeId, null);
-
-        // Act & Assert
-        Assertions.assertThrows(TransactionIdNotFoundException.class, () -> this.commitTransaction.execute(input));
-    }
 }

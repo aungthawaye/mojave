@@ -72,8 +72,7 @@ public class AccountingDomainConfiguration {
 
     }
 
-    public interface RequiredSettings
-        extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
 
     }
 

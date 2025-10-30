@@ -45,13 +45,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.transaction.intercom")
-@Import(value = {
-    TransactionDomainConfiguration.class, RestErrorConfiguration.class,
-    SpringSecurityConfiguration.class})
+@Import(value = {TransactionDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class TransactionIntercomConfiguration extends JacksonWebMvcExtension
-    implements TransactionDomainConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredSettings {
+    implements TransactionDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     public TransactionIntercomConfiguration(ObjectMapper objectMapper) {
 

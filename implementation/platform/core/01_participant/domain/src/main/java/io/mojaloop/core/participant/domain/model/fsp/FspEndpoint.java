@@ -57,8 +57,7 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_endpoint",
-       uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK", columnNames = {"fsp_endpoint_id", "type"})})
+@Table(name = "pcp_fsp_endpoint", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK", columnNames = {"fsp_endpoint_id", "type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataConversion<FspEndpointData> {
 

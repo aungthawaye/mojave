@@ -50,9 +50,7 @@ public class TerminateFspCommandHandler implements TerminateFspCommand {
 
         LOGGER.info("Executing TerminateFspCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         fsp.terminate();
 

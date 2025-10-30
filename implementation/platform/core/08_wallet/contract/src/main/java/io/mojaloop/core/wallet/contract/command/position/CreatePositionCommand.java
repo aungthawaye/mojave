@@ -13,4 +13,5 @@ public interface CreatePositionCommand {
     record Input(WalletOwnerId walletOwnerId, Currency currency, String name, BigDecimal netDebitCap) { }
 
     record Output(PositionId positionId) { }
+
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,126 +17,134 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.fspiop.spec.settlement;
 
-import io.mojaloop.fspiop.spec.settlement.SettlementUpdateBySettlementIdInnerPayload;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("SettlementUpdateBySettlementIDOuterPayload")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-10-22T16:46:48.253622+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
-public class SettlementUpdateBySettlementIDOuterPayload   {
-  private Integer id;
-  private @Valid List<@Valid SettlementUpdateBySettlementIdInnerPayload> accounts = new ArrayList<>();
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              date = "2025-10-22T16:46:48.253622+06:30[Asia/Rangoon]",
+                              comments = "Generator version: 7.13.0")
+public class SettlementUpdateBySettlementIDOuterPayload {
 
-  public SettlementUpdateBySettlementIDOuterPayload() {
-  }
+    private Integer id;
 
-  /**
-   * Participant Id
-   **/
-  public SettlementUpdateBySettlementIDOuterPayload id(Integer id) {
-    this.id = id;
-    return this;
-  }
+    private @Valid List<@Valid SettlementUpdateBySettlementIdInnerPayload> accounts = new ArrayList<>();
 
-  
-  @JsonProperty("id")
-  public Integer getId() {
-    return id;
-  }
+    public SettlementUpdateBySettlementIDOuterPayload() {
 
-  @JsonProperty("id")
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  public SettlementUpdateBySettlementIDOuterPayload accounts(List<@Valid SettlementUpdateBySettlementIdInnerPayload> accounts) {
-    this.accounts = accounts;
-    return this;
-  }
-
-  
-  @JsonProperty("accounts")
-  @Valid public List<@Valid SettlementUpdateBySettlementIdInnerPayload> getAccounts() {
-    return accounts;
-  }
-
-  @JsonProperty("accounts")
-  public void setAccounts(List<@Valid SettlementUpdateBySettlementIdInnerPayload> accounts) {
-    this.accounts = accounts;
-  }
-
-  public SettlementUpdateBySettlementIDOuterPayload addAccountsItem(SettlementUpdateBySettlementIdInnerPayload accountsItem) {
-    if (this.accounts == null) {
-      this.accounts = new ArrayList<>();
     }
 
-    this.accounts.add(accountsItem);
-    return this;
-  }
+    /**
+     **/
+    public SettlementUpdateBySettlementIDOuterPayload accounts(List<@Valid SettlementUpdateBySettlementIdInnerPayload> accounts) {
 
-  public SettlementUpdateBySettlementIDOuterPayload removeAccountsItem(SettlementUpdateBySettlementIdInnerPayload accountsItem) {
-    if (accountsItem != null && this.accounts != null) {
-      this.accounts.remove(accountsItem);
+        this.accounts = accounts;
+        return this;
     }
 
-    return this;
-  }
+    public SettlementUpdateBySettlementIDOuterPayload addAccountsItem(SettlementUpdateBySettlementIdInnerPayload accountsItem) {
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+        if (this.accounts == null) {
+            this.accounts = new ArrayList<>();
+        }
+
+        this.accounts.add(accountsItem);
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SettlementUpdateBySettlementIDOuterPayload settlementUpdateBySettlementIDOuterPayload = (SettlementUpdateBySettlementIDOuterPayload) o;
+        return Objects.equals(this.id, settlementUpdateBySettlementIDOuterPayload.id) && Objects.equals(this.accounts, settlementUpdateBySettlementIDOuterPayload.accounts);
     }
-    SettlementUpdateBySettlementIDOuterPayload settlementUpdateBySettlementIDOuterPayload = (SettlementUpdateBySettlementIDOuterPayload) o;
-    return Objects.equals(this.id, settlementUpdateBySettlementIDOuterPayload.id) &&
-        Objects.equals(this.accounts, settlementUpdateBySettlementIDOuterPayload.accounts);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, accounts);
-  }
+    @JsonProperty("accounts")
+    @Valid
+    public List<@Valid SettlementUpdateBySettlementIdInnerPayload> getAccounts() {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class SettlementUpdateBySettlementIDOuterPayload {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    accounts: ").append(toIndentedString(accounts)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+        return accounts;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
 
+    @JsonProperty("accounts")
+    public void setAccounts(List<@Valid SettlementUpdateBySettlementIdInnerPayload> accounts) {
+
+        this.accounts = accounts;
+    }
+
+    @JsonProperty("id")
+    public Integer getId() {
+
+        return id;
+    }
+
+    @JsonProperty("id")
+    public void setId(Integer id) {
+
+        this.id = id;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, accounts);
+    }
+
+    /**
+     * Participant Id
+     **/
+    public SettlementUpdateBySettlementIDOuterPayload id(Integer id) {
+
+        this.id = id;
+        return this;
+    }
+
+    public SettlementUpdateBySettlementIDOuterPayload removeAccountsItem(SettlementUpdateBySettlementIdInnerPayload accountsItem) {
+
+        if (accountsItem != null && this.accounts != null) {
+            this.accounts.remove(accountsItem);
+        }
+
+        return this;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("class SettlementUpdateBySettlementIDOuterPayload {\n");
+
+        sb.append("    id: ").append(toIndentedString(id)).append("\n");
+        sb.append("    accounts: ").append(toIndentedString(accounts)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(Object o) {
+
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 
 }
 

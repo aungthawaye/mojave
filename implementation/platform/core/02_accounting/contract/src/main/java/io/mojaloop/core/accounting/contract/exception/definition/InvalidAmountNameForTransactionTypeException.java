@@ -49,8 +49,7 @@ public class InvalidAmountNameForTransactionTypeException extends UncheckedDomai
 
     public InvalidAmountNameForTransactionTypeException(TransactionType transactionType) {
 
-        super(new ErrorTemplate("INVALID_AMOUNT_NAME_FOR_TRANSACTION_TYPE", TEMPLATE),
-              transactionType.getAmounts().names().toString());
+        super(new ErrorTemplate("INVALID_AMOUNT_NAME_FOR_TRANSACTION_TYPE", TEMPLATE), transactionType.getAmounts().names().toString());
     }
 
 }

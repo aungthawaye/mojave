@@ -95,9 +95,8 @@ public class RequestTransfersController {
 
         var expireAfterSeconds = new Date(Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
 
-        transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination)
-                            .amount(request.amount).ilpPacket(request.ilpPacket).condition(request.condition)
-                            .expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
+        transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination).amount(request.amount)
+                            .ilpPacket(request.ilpPacket).condition(request.condition).expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
 
         var input = new RequestTransfersCommand.Input(new Payee(request.destination()), transfersPostRequest);
         var output = this.requestTransfersCommand.execute(input);
@@ -108,13 +107,6 @@ public class RequestTransfersController {
 
     }
 
-    public record Request(String destination,
-                          String transferId,
-                          AmountType amountType,
-                          Money amount,
-                          PartyIdInfo payer,
-                          PartyIdInfo payee,
-                          String ilpPacket,
-                          String condition) { }
+    public record Request(String destination, String transferId, AmountType amountType, Money amount, PartyIdInfo payer, PartyIdInfo payee, String ilpPacket, String condition) { }
 
 }

@@ -32,21 +32,13 @@ import java.time.Instant;
 
 public interface BalanceUpdater {
 
-    BalanceHistory deposit(TransactionId transactionId,
-                           Instant transactionAt,
-                           BalanceUpdateId balanceUpdateId,
-                           WalletId walletId,
-                           BigDecimal amount,
-                           String description) throws BalanceUpdater.NoBalanceUpdateException;
+    BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+        throws BalanceUpdater.NoBalanceUpdateException;
 
     BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId) throws BalanceUpdater.ReversalFailedException;
 
-    BalanceHistory withdraw(TransactionId transactionId,
-                            Instant transactionAt,
-                            BalanceUpdateId balanceUpdateId,
-                            WalletId walletId,
-                            BigDecimal amount,
-                            String description) throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
+    BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+        throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
 
     record BalanceHistory(BalanceUpdateId balanceUpdateId,
                           WalletId walletId,

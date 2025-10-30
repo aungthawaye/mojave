@@ -68,12 +68,7 @@ public class Rs256 {
     private static String extractBase64FromPem(String pem) {
         // Remove begin and end markers, newlines, and any whitespace
 
-        return pem
-                   .replace(BEGIN_PRIVATE_KEY, "")
-                   .replace(END_PRIVATE_KEY, "")
-                   .replace(BEGIN_PUBLIC_KEY, "")
-                   .replace(END_PUBLIC_KEY, "")
-                   .replaceAll("\\s", "");
+        return pem.replace(BEGIN_PRIVATE_KEY, "").replace(END_PRIVATE_KEY, "").replace(BEGIN_PUBLIC_KEY, "").replace(END_PUBLIC_KEY, "").replaceAll("\\s", "");
     }
 
     // Helper method to format a Base64 string as PEM

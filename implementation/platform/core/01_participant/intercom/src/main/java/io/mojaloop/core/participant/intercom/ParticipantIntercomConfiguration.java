@@ -47,9 +47,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.participant.intercom")
 @Import(value = {ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantIntercomConfiguration extends JacksonWebMvcExtension
-    implements ParticipantDomainConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredSettings {
+    implements ParticipantDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     public ParticipantIntercomConfiguration(ObjectMapper objectMapper) {
 

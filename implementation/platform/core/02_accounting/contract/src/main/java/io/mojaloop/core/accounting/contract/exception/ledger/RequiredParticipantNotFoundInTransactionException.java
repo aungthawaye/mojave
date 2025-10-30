@@ -49,12 +49,9 @@ public class RequiredParticipantNotFoundInTransactionException extends Unchecked
 
     private static final String TEMPLATE = "Required Participant ({0}) cannot be found in participants ({1}) of Transaction Id ({2}).";
 
-    public RequiredParticipantNotFoundInTransactionException(String participant,
-                                                             Set<String> participants,
-                                                             TransactionId transactionId) {
+    public RequiredParticipantNotFoundInTransactionException(String participant, Set<String> participants, TransactionId transactionId) {
 
-        super(new ErrorTemplate("REQUIRED_PARTICIPANT_NOT_FOUND_IN_TRANSACTION", TEMPLATE), participant,
-              participants.toString(), transactionId.getId().toString());
+        super(new ErrorTemplate("REQUIRED_PARTICIPANT_NOT_FOUND_IN_TRANSACTION", TEMPLATE), participant, participants.toString(), transactionId.getId().toString());
     }
 
 }

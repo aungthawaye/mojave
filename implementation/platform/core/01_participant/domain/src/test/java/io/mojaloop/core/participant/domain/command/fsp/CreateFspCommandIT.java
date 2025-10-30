@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,13 +68,10 @@ class CreateFspCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD, Currency.TZS});
         this.createHub.execute(hubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties"),
-            new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://fsp.example/transfers")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties"),
+                                                              new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://fsp.example/transfers")};
 
-        var input = new CreateFspCommand.Input(new FspCode("DFSP1"), "FSP One",
-            new Currency[]{Currency.USD, Currency.TZS}, endpoints);
+        var input = new CreateFspCommand.Input(new FspCode("DFSP1"), "FSP One", new Currency[]{Currency.USD, Currency.TZS}, endpoints);
 
         // Act
         var output = this.createFsp.execute(input);
@@ -85,57 +82,15 @@ class CreateFspCommandIT extends BaseDomainIT {
     }
 
     @Test
-    void should_throw_when_hub_not_found() {
-
-        // Arrange
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
-
-        var input = new CreateFspCommand.Input(new FspCode("DFSP2"), "FSP Two",
-            new Currency[]{Currency.USD}, endpoints);
-
-        // Act & Assert
-        Assertions.assertThrows(HubNotFoundException.class, () -> this.createFsp.execute(input));
-    }
-
-    @Test
-    void should_throw_when_fsp_code_already_exists() throws Exception {
-
-        // Arrange
-        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
-        this.createHub.execute(hubInput);
-
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
-
-        var input1 = new CreateFspCommand.Input(new FspCode("DFSP3"), "FSP Three",
-            new Currency[]{Currency.USD}, endpoints);
-
-        var input2 = new CreateFspCommand.Input(new FspCode("DFSP3"), "FSP Three Duplicate",
-            new Currency[]{Currency.USD}, endpoints);
-
-        // Act
-        this.createFsp.execute(input1);
-
-        // Assert
-        Assertions.assertThrows(FspCodeAlreadyExistsException.class, () -> this.createFsp.execute(input2));
-    }
-
-    @Test
     void should_throw_when_currency_not_supported_by_hub() throws Exception {
 
         // Arrange
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var input = new CreateFspCommand.Input(new FspCode("DFSP4"), "FSP Four",
-            new Currency[]{Currency.TZS}, endpoints);
+        var input = new CreateFspCommand.Input(new FspCode("DFSP4"), "FSP Four", new Currency[]{Currency.TZS}, endpoints);
 
         // Act & Assert
         Assertions.assertThrows(FspCurrencyNotSupportedByHubException.class, () -> this.createFsp.execute(input));
@@ -148,15 +103,45 @@ class CreateFspCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties1"),
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties2")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties1"),
+                                                              new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties2")};
 
-        var input = new CreateFspCommand.Input(new FspCode("DFSP5"), "FSP Five",
-            new Currency[]{Currency.USD}, endpoints);
+        var input = new CreateFspCommand.Input(new FspCode("DFSP5"), "FSP Five", new Currency[]{Currency.USD}, endpoints);
 
         // Act & Assert
         Assertions.assertThrows(FspEndpointAlreadyConfiguredException.class, () -> this.createFsp.execute(input));
     }
+
+    @Test
+    void should_throw_when_fsp_code_already_exists() throws Exception {
+
+        // Arrange
+        var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
+        this.createHub.execute(hubInput);
+
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
+
+        var input1 = new CreateFspCommand.Input(new FspCode("DFSP3"), "FSP Three", new Currency[]{Currency.USD}, endpoints);
+
+        var input2 = new CreateFspCommand.Input(new FspCode("DFSP3"), "FSP Three Duplicate", new Currency[]{Currency.USD}, endpoints);
+
+        // Act
+        this.createFsp.execute(input1);
+
+        // Assert
+        Assertions.assertThrows(FspCodeAlreadyExistsException.class, () -> this.createFsp.execute(input2));
+    }
+
+    @Test
+    void should_throw_when_hub_not_found() {
+
+        // Arrange
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
+
+        var input = new CreateFspCommand.Input(new FspCode("DFSP2"), "FSP Two", new Currency[]{Currency.USD}, endpoints);
+
+        // Act & Assert
+        Assertions.assertThrows(HubNotFoundException.class, () -> this.createFsp.execute(input));
+    }
+
 }

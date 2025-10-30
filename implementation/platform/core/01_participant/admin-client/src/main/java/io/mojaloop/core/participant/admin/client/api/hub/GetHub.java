@@ -52,9 +52,7 @@ public class GetHub {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.hubCommands.getHub(hubId), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.hubCommands.getHub(hubId), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

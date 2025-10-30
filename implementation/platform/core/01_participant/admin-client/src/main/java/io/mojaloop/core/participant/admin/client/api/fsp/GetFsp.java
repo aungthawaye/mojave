@@ -52,9 +52,7 @@ public class GetFsp {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.fspCommands.getFsp(fspId), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.fspCommands.getFsp(fspId), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

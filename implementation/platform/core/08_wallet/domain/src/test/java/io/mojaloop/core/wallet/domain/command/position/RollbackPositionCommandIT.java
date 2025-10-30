@@ -49,19 +49,31 @@ public class RollbackPositionCommandIT extends BaseDomainIT {
     private RollbackPositionCommand rollbackPositionCommand;
 
     @Test
+    void should_fail_rollback_when_not_a_reservation() {
+        // Arrange
+        final var reservationId = new PositionUpdateId(8900000099009L); // non-existent
+        final var rollbackUpdateId = new PositionUpdateId(8900000099010L);
+
+        final var input = new RollbackPositionCommand.Input(reservationId, rollbackUpdateId, "Rollback invalid");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> this.rollbackPositionCommand.execute(input));
+    }
+
+    @Test
     void should_rollback_reservation_successfully() {
         // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(89001L), Currency.USD, "Position RB",
-                new BigDecimal("100.0000")));
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(89001L),
+                                                                                                 Currency.USD,
+                                                                                                 "Position RB",
+                                                                                                 new BigDecimal("100.0000")));
         final var positionId = createOut.positionId();
 
         final var reserveTxId = new TransactionId(8900000001001L);
         final var reserveTxAt = Instant.parse("2025-01-09T09:00:00Z");
         final var amount = new BigDecimal("25.00");
 
-        final var reserveOut = this.reservePositionCommand.execute(
-            new ReservePositionCommand.Input(positionId, amount, reserveTxId, reserveTxAt, "Reserve before rollback"));
+        final var reserveOut = this.reservePositionCommand.execute(new ReservePositionCommand.Input(positionId, amount, reserveTxId, reserveTxAt, "Reserve before rollback"));
 
         final var reservationId = reserveOut.positionUpdateId();
         final var rollbackUpdateId = new PositionUpdateId(8900000099001L);
@@ -84,15 +96,4 @@ public class RollbackPositionCommandIT extends BaseDomainIT {
         assertNotNull(output.positionUpdateId());
     }
 
-    @Test
-    void should_fail_rollback_when_not_a_reservation() {
-        // Arrange
-        final var reservationId = new PositionUpdateId(8900000099009L); // non-existent
-        final var rollbackUpdateId = new PositionUpdateId(8900000099010L);
-
-        final var input = new RollbackPositionCommand.Input(reservationId, rollbackUpdateId, "Rollback invalid");
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> this.rollbackPositionCommand.execute(input));
-    }
 }

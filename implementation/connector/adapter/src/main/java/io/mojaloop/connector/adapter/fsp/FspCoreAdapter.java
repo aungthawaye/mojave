@@ -52,7 +52,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -88,8 +87,7 @@ public class FspCoreAdapter {
             var result = fspClient.getParties(payer, new Parties.Get.Request(partyIdType, partyId, subId));
             LOGGER.info("Got parties from FSP Core: {}", result);
 
-            var party = new Party().name(result.name())
-                                   .personalInfo(result.personalInfo())
+            var party = new Party().name(result.name()).personalInfo(result.personalInfo())
                                    .partyIdInfo(new PartyIdInfo().partyIdType(partyIdType).partyIdentifier(partyId).partySubIdOrType(subId))
                                    .supportedCurrencies(result.supportedCurrencies());
 
@@ -200,14 +198,11 @@ public class FspCoreAdapter {
             extensionList.addExtensionItem(new Extension("payeePartyIdType", request.getPayee().getPartyIdInfo().getPartyIdType().toString()));
             extensionList.addExtensionItem(new Extension("payeePartyId", request.getPayee().getPartyIdInfo().getPartyIdentifier()));
 
-            var response = new QuotesIDPutResponse().condition(preparePacket.base64Condition())
-                                                    .ilpPacket(preparePacket.base64PreparePacket())
-                                                    .expiration(result.expiration())
+            var response = new QuotesIDPutResponse().condition(preparePacket.base64Condition()).ilpPacket(preparePacket.base64PreparePacket()).expiration(result.expiration())
                                                     .payeeFspCommission(new Money(currency, payeeFspCommission.toPlainString()))
                                                     .payeeFspFee(new Money(currency, payeeFspFee.toPlainString()))
                                                     .payeeReceiveAmount(new Money(currency, payeeReceiveAmount.toPlainString()))
-                                                    .transferAmount(new Money(currency, transferAmount.toPlainString()))
-                                                    .extensionList(extensionList);
+                                                    .transferAmount(new Money(currency, transferAmount.toPlainString())).extensionList(extensionList);
 
             LOGGER.debug("Returning quotes: {}", response);
 
@@ -285,17 +280,12 @@ public class FspCoreAdapter {
             }
 
             LOGGER.info("Posting transfers to FSP Core: {}", agreement);
-            var result = this.fspClient.postTransfers(payer,
-                                                      new Transfers.Post.Request(request.getTransferId(),
-                                                                                 agreement,
-                                                                                 request.getExtensionList()));
+            var result = this.fspClient.postTransfers(payer, new Transfers.Post.Request(request.getTransferId(), agreement, request.getExtensionList()));
             LOGGER.info("Got transfers from FSP Core: {}", result);
 
             var response = new TransfersIDPutResponse();
 
-            response.fulfilment(fulfillment.base64Fulfillment())
-                    .transferState(TransferState.RESERVED)
-                    .completedTimestamp(FspiopDates.forRequestBody())
+            response.fulfilment(fulfillment.base64Fulfillment()).transferState(TransferState.RESERVED).completedTimestamp(FspiopDates.forRequestBody())
                     .extensionList(new ExtensionList().addExtensionItem(new Extension("homeTransactionId", UUID.randomUUID().toString()))
                                                       .addExtensionItem(new Extension("transferId", transferId)));
 

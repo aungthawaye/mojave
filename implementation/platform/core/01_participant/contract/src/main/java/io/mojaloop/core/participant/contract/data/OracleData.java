@@ -27,12 +27,7 @@ import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 import java.util.Objects;
 
-public record OracleData(OracleId oracleId,
-                         PartyIdType type,
-                         String name,
-                         String host,
-                         ActivationStatus activationStatus,
-                         TerminationStatus terminationStatus) {
+public record OracleData(OracleId oracleId, PartyIdType type, String name, String host, ActivationStatus activationStatus, TerminationStatus terminationStatus) {
 
     @Override
     public boolean equals(Object o) {

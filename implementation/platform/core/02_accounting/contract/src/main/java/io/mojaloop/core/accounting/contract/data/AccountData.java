@@ -32,9 +32,18 @@ import io.mojaloop.fspiop.spec.core.Currency;
 import java.time.Instant;
 import java.util.Objects;
 
-public record AccountData(AccountId accountId, AccountOwnerId ownerId, AccountType type, Currency currency, AccountCode code, String name,
-                          String description, Instant createdAt, ActivationStatus activationStatus, TerminationStatus terminationStatus,
-                          ChartEntryId chartEntryId, LedgerBalanceData ledgerBalance) {
+public record AccountData(AccountId accountId,
+                          AccountOwnerId ownerId,
+                          AccountType type,
+                          Currency currency,
+                          AccountCode code,
+                          String name,
+                          String description,
+                          Instant createdAt,
+                          ActivationStatus activationStatus,
+                          TerminationStatus terminationStatus,
+                          ChartEntryId chartEntryId,
+                          LedgerBalanceData ledgerBalance) {
 
     @Override
     public boolean equals(Object o) {

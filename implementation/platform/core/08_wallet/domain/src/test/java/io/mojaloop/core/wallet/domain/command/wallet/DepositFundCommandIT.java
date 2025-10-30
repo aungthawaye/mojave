@@ -33,7 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DepositFundCommandIT extends BaseDomainIT {
 
@@ -46,8 +47,7 @@ public class DepositFundCommandIT extends BaseDomainIT {
     @Test
     void should_deposit_fund_successfully() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException {
         // Arrange
-        final var walletOut = this.createWalletCommand.execute(
-            new CreateWalletCommand.Input(new WalletOwnerId(82001L), Currency.USD, "Test Wallet"));
+        final var walletOut = this.createWalletCommand.execute(new CreateWalletCommand.Input(new WalletOwnerId(82001L), Currency.USD, "Test Wallet"));
 
         final var txId = new TransactionId(8100000000001L);
         final var txAt = Instant.parse("2025-01-02T09:00:00Z");
@@ -70,4 +70,5 @@ public class DepositFundCommandIT extends BaseDomainIT {
         assertEquals(txAt, output.transactionAt());
         assertNotNull(output.balanceUpdateId());
     }
+
 }

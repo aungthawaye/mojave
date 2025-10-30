@@ -69,9 +69,7 @@ public class ActivateHubCurrencyCommandHandler implements ActivateHubCurrencyCom
 
         LOGGER.info("Executing ActivateHubCurrencyCommand with input: {}", input);
 
-        var hub = this.hubRepository
-                      .findById(input.hubId())
-                      .orElseThrow(HubNotFoundException::new);
+        var hub = this.hubRepository.findById(input.hubId()).orElseThrow(HubNotFoundException::new);
 
         boolean activated = hub.activateCurrency(input.currency());
 

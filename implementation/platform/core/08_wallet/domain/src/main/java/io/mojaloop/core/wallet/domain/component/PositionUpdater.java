@@ -12,8 +12,7 @@ import java.time.Instant;
 
 public interface PositionUpdater {
 
-    PositionHistory commit(PositionUpdateId reservationId, PositionUpdateId positionUpdateId)
-        throws CommitFailedException;
+    PositionHistory commit(PositionUpdateId reservationId, PositionUpdateId positionUpdateId) throws CommitFailedException;
 
     PositionHistory decrease(TransactionId transactionId,
                              Instant transactionAt,
@@ -36,8 +35,7 @@ public interface PositionUpdater {
                             BigDecimal amount,
                             String description) throws NoPositionUpdateException, LimitExceededException;
 
-    PositionHistory rollback(PositionUpdateId reservationId, PositionUpdateId positionUpdateId)
-        throws RollbackFailedException;
+    PositionHistory rollback(PositionUpdateId reservationId, PositionUpdateId positionUpdateId) throws RollbackFailedException;
 
     record PositionHistory(PositionUpdateId positionUpdateId,
                            PositionId positionId,
@@ -78,15 +76,10 @@ public interface PositionUpdater {
 
         private final TransactionId transactionId;
 
-        public LimitExceededException(PositionId positionId,
-                                      BigDecimal amount,
-                                      BigDecimal oldPosition,
-                                      BigDecimal netDebitCap,
-                                      TransactionId transactionId) {
+        public LimitExceededException(PositionId positionId, BigDecimal amount, BigDecimal oldPosition, BigDecimal netDebitCap, TransactionId transactionId) {
 
-            super("Position limit exceeded for positionId: " + positionId + ", amount: " + amount + ", oldPosition: " +
-                      oldPosition + ", netDebitCap: " + netDebitCap.stripTrailingZeros().toPlainString() +
-                      ", transactionId: " + transactionId);
+            super("Position limit exceeded for positionId: " + positionId + ", amount: " + amount + ", oldPosition: " + oldPosition + ", netDebitCap: " +
+                      netDebitCap.stripTrailingZeros().toPlainString() + ", transactionId: " + transactionId);
 
             this.positionId = positionId;
             this.amount = amount;

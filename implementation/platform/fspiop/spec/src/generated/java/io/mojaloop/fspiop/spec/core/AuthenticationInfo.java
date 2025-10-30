@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,16 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.fspiop.spec.core;
 
-import io.mojaloop.fspiop.spec.core.AuthenticationType;
-import io.mojaloop.fspiop.spec.core.AuthenticationValue;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Data model for the complex type AuthenticationInfo.
@@ -36,99 +34,109 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("AuthenticationInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
-public class AuthenticationInfo   {
-  private AuthenticationType authentication;
-  private AuthenticationValue authenticationValue;
+public class AuthenticationInfo {
 
-  public AuthenticationInfo() {
-  }
+    private AuthenticationType authentication;
 
-  @JsonCreator
-  public AuthenticationInfo(
-    @JsonProperty(required = true, value = "authentication") AuthenticationType authentication,
-    @JsonProperty(required = true, value = "authenticationValue") AuthenticationValue authenticationValue
-  ) {
-    this.authentication = authentication;
-    this.authenticationValue = authenticationValue;
-  }
+    private AuthenticationValue authenticationValue;
 
-  /**
-   **/
-  public AuthenticationInfo authentication(AuthenticationType authentication) {
-    this.authentication = authentication;
-    return this;
-  }
+    public AuthenticationInfo() {
 
-  
-  @JsonProperty(required = true, value = "authentication")
-  @NotNull public AuthenticationType getAuthentication() {
-    return authentication;
-  }
-
-  @JsonProperty(required = true, value = "authentication")
-  public void setAuthentication(AuthenticationType authentication) {
-    this.authentication = authentication;
-  }
-
-  /**
-   **/
-  public AuthenticationInfo authenticationValue(AuthenticationValue authenticationValue) {
-    this.authenticationValue = authenticationValue;
-    return this;
-  }
-
-  
-  @JsonProperty(required = true, value = "authenticationValue")
-  @NotNull @Valid public AuthenticationValue getAuthenticationValue() {
-    return authenticationValue;
-  }
-
-  @JsonProperty(required = true, value = "authenticationValue")
-  public void setAuthenticationValue(AuthenticationValue authenticationValue) {
-    this.authenticationValue = authenticationValue;
-  }
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    @JsonCreator
+    public AuthenticationInfo(@JsonProperty(required = true, value = "authentication") AuthenticationType authentication,
+                              @JsonProperty(required = true, value = "authenticationValue") AuthenticationValue authenticationValue) {
+
+        this.authentication = authentication;
+        this.authenticationValue = authenticationValue;
     }
-    AuthenticationInfo authenticationInfo = (AuthenticationInfo) o;
-    return Objects.equals(this.authentication, authenticationInfo.authentication) &&
-        Objects.equals(this.authenticationValue, authenticationInfo.authenticationValue);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(authentication, authenticationValue);
-  }
+    /**
+     **/
+    public AuthenticationInfo authentication(AuthenticationType authentication) {
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class AuthenticationInfo {\n");
-    
-    sb.append("    authentication: ").append(toIndentedString(authentication)).append("\n");
-    sb.append("    authenticationValue: ").append(toIndentedString(authenticationValue)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+        this.authentication = authentication;
+        return this;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
 
+    /**
+     **/
+    public AuthenticationInfo authenticationValue(AuthenticationValue authenticationValue) {
+
+        this.authenticationValue = authenticationValue;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AuthenticationInfo authenticationInfo = (AuthenticationInfo) o;
+        return Objects.equals(this.authentication, authenticationInfo.authentication) && Objects.equals(this.authenticationValue, authenticationInfo.authenticationValue);
+    }
+
+    @JsonProperty(required = true, value = "authentication")
+    @NotNull
+    public AuthenticationType getAuthentication() {
+
+        return authentication;
+    }
+
+    @JsonProperty(required = true, value = "authentication")
+    public void setAuthentication(AuthenticationType authentication) {
+
+        this.authentication = authentication;
+    }
+
+    @JsonProperty(required = true, value = "authenticationValue")
+    @NotNull
+    @Valid
+    public AuthenticationValue getAuthenticationValue() {
+
+        return authenticationValue;
+    }
+
+    @JsonProperty(required = true, value = "authenticationValue")
+    public void setAuthenticationValue(AuthenticationValue authenticationValue) {
+
+        this.authenticationValue = authenticationValue;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(authentication, authenticationValue);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("class AuthenticationInfo {\n");
+
+        sb.append("    authentication: ").append(toIndentedString(authentication)).append("\n");
+        sb.append("    authenticationValue: ").append(toIndentedString(authenticationValue)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(Object o) {
+
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 
 }
 

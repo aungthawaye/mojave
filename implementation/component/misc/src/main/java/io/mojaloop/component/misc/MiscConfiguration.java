@@ -92,18 +92,12 @@ public class MiscConfiguration {
 
         objectMapper.findAndRegisterModules();
 
-        var module = new SimpleModule()
-                         .addSerializer(Instant.class, new InstantConversion.Serializer())
-                         .addDeserializer(Instant.class, new InstantConversion.Deserializer())
-                         .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
-                         .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer())
-                         .addSerializer(Long.class, ToStringSerializer.instance)
-                         .addSerializer(Long.TYPE, ToStringSerializer.instance)
-                         .addSerializer(Integer.class, ToStringSerializer.instance)
-                         .addSerializer(Integer.TYPE, ToStringSerializer.instance)
-                         .addSerializer(Boolean.class, ToStringSerializer.instance)
-                         .addSerializer(Boolean.TYPE, ToStringSerializer.instance)
-                         .addSerializer(BigInteger.class, ToStringSerializer.instance);
+        var module = new SimpleModule().addSerializer(Instant.class, new InstantConversion.Serializer()).addDeserializer(Instant.class, new InstantConversion.Deserializer())
+                                       .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
+                                       .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer()).addSerializer(Long.class, ToStringSerializer.instance)
+                                       .addSerializer(Long.TYPE, ToStringSerializer.instance).addSerializer(Integer.class, ToStringSerializer.instance)
+                                       .addSerializer(Integer.TYPE, ToStringSerializer.instance).addSerializer(Boolean.class, ToStringSerializer.instance)
+                                       .addSerializer(Boolean.TYPE, ToStringSerializer.instance).addSerializer(BigInteger.class, ToStringSerializer.instance);
 
         objectMapper.registerModule(module);
 

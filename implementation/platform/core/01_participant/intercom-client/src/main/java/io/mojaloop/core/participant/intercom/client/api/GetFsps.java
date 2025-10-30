@@ -54,11 +54,8 @@ public class GetFsps {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.participantIntercomService.getFsps(),
-                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)
-                              )
-                       .body();
+            return RetrofitService.invoke(this.participantIntercomService.getFsps(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

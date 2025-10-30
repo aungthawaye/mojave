@@ -38,8 +38,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @JsonDeserialize(using = ChartEntryCode.Deserializer.class)
-public record ChartEntryCode(@JsonValue @JsonProperty(required = true) @NotNull @NotBlank @Size(
-    max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
+public record ChartEntryCode(@JsonValue @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public ChartEntryCode(String value) {

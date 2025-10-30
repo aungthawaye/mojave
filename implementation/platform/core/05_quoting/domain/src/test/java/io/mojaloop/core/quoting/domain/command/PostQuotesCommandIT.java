@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.core.quoting.contract.command.PostQuotesCommand;
@@ -96,9 +97,7 @@ class PostQuotesCommandIT extends BaseDomainIT {
         var amount = new Money().currency(currency).amount("100.00");
         var fees = new Money().currency(feesCurrency).amount("1.00");
 
-        var txnType = new TransactionType().scenario(TransactionScenario.TRANSFER)
-                                           .subScenario("BILL")
-                                           .initiator(TransactionInitiator.PAYER)
+        var txnType = new TransactionType().scenario(TransactionScenario.TRANSFER).subScenario("BILL").initiator(TransactionInitiator.PAYER)
                                            .initiatorType(TransactionInitiatorType.CONSUMER);
 
         var request = new io.mojaloop.fspiop.spec.core.QuotesPostRequest(quoteId, quoteId, payee, payer, AmountType.SEND, amount, txnType).fees(fees).expiration(expiration);

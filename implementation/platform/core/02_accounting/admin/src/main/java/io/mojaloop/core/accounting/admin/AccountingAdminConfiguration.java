@@ -49,9 +49,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
 @Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
 public class AccountingAdminConfiguration extends JacksonWebMvcExtension
-    implements AccountingDomainConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredSettings {
+    implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     public AccountingAdminConfiguration(ObjectMapper objectMapper) {
 

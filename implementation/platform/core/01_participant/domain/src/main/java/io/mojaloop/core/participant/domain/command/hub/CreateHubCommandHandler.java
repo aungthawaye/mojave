@@ -42,7 +42,6 @@ package io.mojaloop.core.participant.domain.command.hub;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;

@@ -22,8 +22,6 @@ package io.mojaloop.connector.adapter.fsp.payload;
 
 import io.mojaloop.fspiop.common.data.Agreement;
 import io.mojaloop.fspiop.spec.core.ExtensionList;
-import io.mojaloop.fspiop.spec.core.Money;
-import io.mojaloop.fspiop.spec.core.PartyIdInfo;
 import io.mojaloop.fspiop.spec.core.TransferState;
 
 public class Transfers {

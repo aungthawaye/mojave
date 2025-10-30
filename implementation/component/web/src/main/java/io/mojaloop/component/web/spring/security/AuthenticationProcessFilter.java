@@ -70,8 +70,7 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         var uri = request.getRequestURI();
         LOGGER.debug("Received request for URI : [{}]", uri);

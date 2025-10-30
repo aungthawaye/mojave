@@ -50,15 +50,14 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
     private static final String TEMPLATE = "Position limit exceeded : position ({0}) | amount({2}) | position: ({3}) | netDebitCap: ({4}) | transaction id: ({5}).";
 
-    public PositionLimitExceededException(PositionId positionId,
-                                          BigDecimal amount,
-                                          BigDecimal position,
-                                          BigDecimal netDebitCap,
-                                          TransactionId transactionId) {
+    public PositionLimitExceededException(PositionId positionId, BigDecimal amount, BigDecimal position, BigDecimal netDebitCap, TransactionId transactionId) {
 
-        super(new ErrorTemplate("POSITION_LIMIT_EXCEEDED", TEMPLATE), positionId.toString(),
-              amount.stripTrailingZeros().toPlainString(), position.stripTrailingZeros().toPlainString(),
-              netDebitCap.stripTrailingZeros().toPlainString(), transactionId.getId().toString());
+        super(new ErrorTemplate("POSITION_LIMIT_EXCEEDED", TEMPLATE),
+              positionId.toString(),
+              amount.stripTrailingZeros().toPlainString(),
+              position.stripTrailingZeros().toPlainString(),
+              netDebitCap.stripTrailingZeros().toPlainString(),
+              transactionId.getId().toString());
     }
 
 }

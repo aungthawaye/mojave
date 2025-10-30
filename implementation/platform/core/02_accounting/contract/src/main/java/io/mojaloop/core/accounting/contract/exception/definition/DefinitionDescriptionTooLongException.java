@@ -45,8 +45,7 @@ import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
 public class DefinitionDescriptionTooLongException extends UncheckedDomainException {
 
-    private static final String TEMPLATE =
-        "Definition Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
+    private static final String TEMPLATE = "Definition Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
 
     public DefinitionDescriptionTooLongException() {
 

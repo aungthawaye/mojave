@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,11 +47,12 @@ import retrofit2.http.POST;
 
 public interface TransactionIntercomService {
 
-    @POST("/transactions/open")
-    Call<OpenTransactionCommand.Output> open(@Body OpenTransactionCommand.Input input);
-
     @POST("/transactions/commit")
     Call<CommitTransactionCommand.Output> commit(@Body CommitTransactionCommand.Input input);
 
+    @POST("/transactions/open")
+    Call<OpenTransactionCommand.Output> open(@Body OpenTransactionCommand.Input input);
+
     record Settings(String baseUrl) { }
+
 }

@@ -51,8 +51,7 @@ public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
     public DuplicatePostingInLedgerException(AccountCode accountCode, Side side, TransactionId transactionId) {
 
-        super(new ErrorTemplate("DUPLICATE_POSTING_IN_LEDGER", TEMPLATE), accountCode.value(), side.name(),
-              transactionId.getId().toString());
+        super(new ErrorTemplate("DUPLICATE_POSTING_IN_LEDGER", TEMPLATE), accountCode.value(), side.name(), transactionId.getId().toString());
     }
 
 }

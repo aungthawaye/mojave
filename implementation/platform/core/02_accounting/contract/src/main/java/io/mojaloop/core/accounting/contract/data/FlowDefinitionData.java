@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.contract.data;
 
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
@@ -31,8 +32,13 @@ import io.mojaloop.fspiop.spec.core.Currency;
 import java.util.List;
 import java.util.Objects;
 
-public record FlowDefinitionData(FlowDefinitionId flowDefinitionId, TransactionType transactionType, Currency currency, String name,
-                                 String description, ActivationStatus activationStatus, TerminationStatus terminationStatus,
+public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
+                                 TransactionType transactionType,
+                                 Currency currency,
+                                 String name,
+                                 String description,
+                                 ActivationStatus activationStatus,
+                                 TerminationStatus terminationStatus,
                                  List<PostingDefinitionData> postings) {
 
     @Override
@@ -50,8 +56,13 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId, TransactionT
         return Objects.hashCode(flowDefinitionId);
     }
 
-    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId, ReceiveIn receiveIn, Long receiveInId, String participant,
-                                        String amountName, Side side, String description) {
+    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
+                                        ReceiveIn receiveIn,
+                                        Long receiveInId,
+                                        String participant,
+                                        String amountName,
+                                        Side side,
+                                        String description) {
 
         @Override
         public boolean equals(Object o) {

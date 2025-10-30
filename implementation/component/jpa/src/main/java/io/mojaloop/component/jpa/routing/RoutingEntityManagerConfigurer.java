@@ -28,9 +28,7 @@ import java.util.Properties;
 
 public class RoutingEntityManagerConfigurer {
 
-    public static LocalContainerEntityManagerFactoryBean configure(RoutingDataSource routingDataSource,
-                                                                   Settings settings,
-                                                                   String... packagesToScan) {
+    public static LocalContainerEntityManagerFactoryBean configure(RoutingDataSource routingDataSource, Settings settings, String... packagesToScan) {
 
         var entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 

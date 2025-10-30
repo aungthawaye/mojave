@@ -52,8 +52,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
 
         var builder = RetrofitService.newBuilder(PartiesService.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                                      .withInterceptors(fspiopSigningInterceptor)
-                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                                                             JacksonConverterFactory.create(objectMapper));
+                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -65,8 +64,11 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
                  var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
 
-                builder.withMutualTLS(keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
-                                      transportSettings.trustStoreSettings.password, transportSettings.ignoreHostnameVerification);
+                builder.withMutualTLS(keyStoreInput,
+                                      transportSettings.keyStoreSettings.password,
+                                      trustStoreInput,
+                                      transportSettings.trustStoreSettings.password,
+                                      transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to read key store.", e);
@@ -85,8 +87,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
 
         var builder = RetrofitService.newBuilder(QuotesService.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                                      .withInterceptors(fspiopSigningInterceptor)
-                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                                                             JacksonConverterFactory.create(objectMapper));
+                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -98,8 +99,11 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
                  var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
 
-                builder.withMutualTLS(keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
-                                      transportSettings.trustStoreSettings.password, transportSettings.ignoreHostnameVerification);
+                builder.withMutualTLS(keyStoreInput,
+                                      transportSettings.keyStoreSettings.password,
+                                      trustStoreInput,
+                                      transportSettings.trustStoreSettings.password,
+                                      transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to read key store.", e);
@@ -117,8 +121,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
 
         var builder = RetrofitService.newBuilder(TransfersService.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                                      .withInterceptors(fspiopSigningInterceptor)
-                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                                                             JacksonConverterFactory.create(objectMapper));
+                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -130,8 +133,11 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
                  var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
 
-                builder.withMutualTLS(keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
-                                      transportSettings.trustStoreSettings.password, transportSettings.ignoreHostnameVerification);
+                builder.withMutualTLS(keyStoreInput,
+                                      transportSettings.keyStoreSettings.password,
+                                      trustStoreInput,
+                                      transportSettings.trustStoreSettings.password,
+                                      transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to read key store.", e);
@@ -155,10 +161,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
 
     }
 
-    public record TransportSettings(boolean useMutualTls,
-                                    KeyStoreSettings keyStoreSettings,
-                                    TrustStoreSettings trustStoreSettings,
-                                    boolean ignoreHostnameVerification) {
+    public record TransportSettings(boolean useMutualTls, KeyStoreSettings keyStoreSettings, TrustStoreSettings trustStoreSettings, boolean ignoreHostnameVerification) {
 
         public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
 

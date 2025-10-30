@@ -38,8 +38,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @JsonDeserialize(using = AccountCode.Deserializer.class)
-public record AccountCode(@JsonValue @JsonProperty(required = true) @NotNull @NotBlank @Size(
-    max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
+public record AccountCode(@JsonValue @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_CODE_LENGTH) String value) {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public AccountCode(String value) {

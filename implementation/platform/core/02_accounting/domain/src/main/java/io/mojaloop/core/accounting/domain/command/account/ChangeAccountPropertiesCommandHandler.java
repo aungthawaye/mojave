@@ -49,8 +49,7 @@ public class ChangeAccountPropertiesCommandHandler implements ChangeAccountPrope
 
         LOGGER.info("Executing ChangeAccountPropertiesCommand with input: {}", input);
 
-        var account = this.accountRepository.findById(input.accountId()).orElseThrow(
-            () -> new AccountIdNotFoundException(input.accountId()));
+        var account = this.accountRepository.findById(input.accountId()).orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
         if (input.name() != null) {

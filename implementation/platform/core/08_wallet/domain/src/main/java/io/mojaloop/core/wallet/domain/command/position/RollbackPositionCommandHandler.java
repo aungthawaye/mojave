@@ -28,10 +28,18 @@ public class RollbackPositionCommandHandler implements RollbackPositionCommand {
 
             final var history = this.positionUpdater.rollback(input.reservationId(), input.positionUpdateId());
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(),
-                                          history.transactionId(), history.currency(), history.amount(),
-                                          history.oldPosition(), history.newPosition(), history.oldReserved(),
-                                          history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(history.positionUpdateId(),
+                                          history.positionId(),
+                                          history.action(),
+                                          history.transactionId(),
+                                          history.currency(),
+                                          history.amount(),
+                                          history.oldPosition(),
+                                          history.newPosition(),
+                                          history.oldReserved(),
+                                          history.newReserved(),
+                                          history.netDebitCap(),
+                                          history.transactionAt());
 
             LOGGER.info("RollbackPositionCommand executed successfully with output: {}", output);
 

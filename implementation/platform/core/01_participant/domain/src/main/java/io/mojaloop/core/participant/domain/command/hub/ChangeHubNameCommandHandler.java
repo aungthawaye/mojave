@@ -68,9 +68,7 @@ public class ChangeHubNameCommandHandler implements ChangeHubNameCommand {
 
         LOGGER.info("Executing ChangeHubNameCommand with input: {}", input);
 
-        var hub = this.hubRepository
-                      .findById(input.hubId())
-                      .orElseThrow(HubNotFoundException::new);
+        var hub = this.hubRepository.findById(input.hubId()).orElseThrow(HubNotFoundException::new);
 
         hub.name(input.name());
 

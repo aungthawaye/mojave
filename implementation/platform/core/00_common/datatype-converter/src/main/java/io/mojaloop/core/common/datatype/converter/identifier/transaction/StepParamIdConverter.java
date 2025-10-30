@@ -21,7 +21,6 @@
 package io.mojaloop.core.common.datatype.converter.identifier.transaction;
 
 import io.mojaloop.core.common.datatype.identifier.transaction.StepParamId;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

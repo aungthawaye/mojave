@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -52,7 +53,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
@@ -78,9 +78,12 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "qot_quote", uniqueConstraints = {@UniqueConstraint(name = "qot_udf_quote_id_UK", columnNames = {"udf_quote_id"})},
-       indexes = {@Index(name = "qot_quote_requested_at_IDX", columnList = "requested_at"), @Index(name = "qot_quote_responded_at_IDX", columnList = "responded_at"),
-                  @Index(name = "qot_quote_currency_IDX", columnList = "currency"), @Index(name = "qot_quote_amount_type_IDX", columnList = "amount_type"),
+@Table(name = "qot_quote",
+       uniqueConstraints = {@UniqueConstraint(name = "qot_udf_quote_id_UK", columnNames = {"udf_quote_id"})},
+       indexes = {@Index(name = "qot_quote_requested_at_IDX", columnList = "requested_at"),
+                  @Index(name = "qot_quote_responded_at_IDX", columnList = "responded_at"),
+                  @Index(name = "qot_quote_currency_IDX", columnList = "currency"),
+                  @Index(name = "qot_quote_amount_type_IDX", columnList = "amount_type"),
                   @Index(name = "qot_quote_payer_fsp_id_payee_fsp_id_IDX", columnList = "payer_fsp_id, payee_fsp_id")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quote extends JpaEntity<QuoteId> {
@@ -143,17 +146,17 @@ public class Quote extends JpaEntity<QuoteId> {
     protected Instant requestExpiration;
 
     @Embedded
-    @AttributeOverrides(
-        value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payer_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", nullable = false, length = 48)),
-                 @AttributeOverride(name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
+    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
+                                                    column = @Column(name = "payer_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", nullable = false, length = 48)),
+                                 @AttributeOverride(name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
     protected Party payer;
 
     @Embedded
-    @AttributeOverrides(
-        value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payee_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", nullable = false, length = 48)),
-                 @AttributeOverride(name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
+    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
+                                                    column = @Column(name = "payee_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", nullable = false, length = 48)),
+                                 @AttributeOverride(name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
 
     protected Party payee;
 

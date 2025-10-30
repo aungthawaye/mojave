@@ -71,8 +71,7 @@ public class ActivateAccount {
 
         try {
 
-            RetrofitService.invoke(this.accountCommands.activateAccount(input),
-                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(this.accountCommands.activateAccount(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 

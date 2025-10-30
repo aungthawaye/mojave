@@ -55,16 +55,6 @@ class AddHubCurrencyCommandIT extends BaseDomainIT {
     }
 
     @Test
-    void should_throw_when_hub_not_found() {
-
-        // Arrange
-        var input = new AddHubCurrencyCommand.Input(new HubId(), Currency.TZS);
-
-        // Act & Assert
-        Assertions.assertThrows(HubNotFoundException.class, () -> this.addCurrency.execute(input));
-    }
-
-    @Test
     void should_throw_when_currency_already_supported() throws Exception {
 
         // Arrange
@@ -77,4 +67,15 @@ class AddHubCurrencyCommandIT extends BaseDomainIT {
         // Assert
         Assertions.assertThrows(HubCurrencyAlreadySupportedException.class, () -> this.addCurrency.execute(input));
     }
+
+    @Test
+    void should_throw_when_hub_not_found() {
+
+        // Arrange
+        var input = new AddHubCurrencyCommand.Input(new HubId(), Currency.TZS);
+
+        // Act & Assert
+        Assertions.assertThrows(HubNotFoundException.class, () -> this.addCurrency.execute(input));
+    }
+
 }

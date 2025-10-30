@@ -13,11 +13,7 @@ public interface ReservePositionCommand {
 
     Output execute(Input input);
 
-    record Input(PositionId positionId,
-                 BigDecimal amount,
-                 TransactionId transactionId,
-                 Instant transactionAt,
-                 String description) { }
+    record Input(PositionId positionId, BigDecimal amount, TransactionId transactionId, Instant transactionAt, String description) { }
 
     record Output(PositionUpdateId positionUpdateId,
                   PositionId positionId,
@@ -31,4 +27,5 @@ public interface ReservePositionCommand {
                   BigDecimal newReserved,
                   BigDecimal netDebitCap,
                   Instant transactionAt) { }
+
 }

@@ -30,8 +30,7 @@ import java.util.ArrayList;
 public class EmptyGatekeeper implements Authenticator {
 
     @Override
-    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
-        throws AuthenticationFailureException {
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest) throws AuthenticationFailureException {
 
         return new UsernamePasswordAuthenticationToken("user", "password", new ArrayList<>());
     }

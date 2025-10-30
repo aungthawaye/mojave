@@ -15,11 +15,7 @@ public interface IncreasePositionCommand {
 
     Output execute(Input input) throws NoPositionUpdateForTransactionException, PositionLimitExceededException;
 
-    record Input(PositionId positionId,
-                 BigDecimal amount,
-                 TransactionId transactionId,
-                 Instant transactionAt,
-                 String description) { }
+    record Input(PositionId positionId, BigDecimal amount, TransactionId transactionId, Instant transactionAt, String description) { }
 
     record Output(PositionUpdateId positionUpdateId,
                   PositionId positionId,

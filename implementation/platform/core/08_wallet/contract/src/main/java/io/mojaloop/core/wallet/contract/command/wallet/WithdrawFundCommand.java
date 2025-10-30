@@ -15,11 +15,7 @@ public interface WithdrawFundCommand {
 
     Output execute(Input input) throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException;
 
-    record Input(WalletId walletId,
-                 BigDecimal amount,
-                 TransactionId transactionId,
-                 Instant transactionAt,
-                 String description) { }
+    record Input(WalletId walletId, BigDecimal amount, TransactionId transactionId, Instant transactionAt, String description) { }
 
     record Output(BalanceUpdateId balanceUpdateId,
                   WalletId walletId,

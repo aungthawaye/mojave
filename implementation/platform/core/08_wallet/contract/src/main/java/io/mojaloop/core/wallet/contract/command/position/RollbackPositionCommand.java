@@ -13,9 +13,7 @@ public interface RollbackPositionCommand {
 
     Output execute(Input input);
 
-    record Input(PositionUpdateId reservationId,
-                 PositionUpdateId positionUpdateId,
-                 String description) { }
+    record Input(PositionUpdateId reservationId, PositionUpdateId positionUpdateId, String description) { }
 
     record Output(PositionUpdateId positionUpdateId,
                   PositionId positionId,
@@ -29,4 +27,5 @@ public interface RollbackPositionCommand {
                   BigDecimal newReserved,
                   BigDecimal netDebitCap,
                   Instant transactionAt) { }
+
 }
