@@ -31,6 +31,7 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.component.handy.FspiopCurrencies;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.interledger.Interledger;
 import io.mojaloop.fspiop.spec.core.Extension;
@@ -51,6 +52,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.UUID;
@@ -183,7 +185,7 @@ public class FspCoreAdapter {
             var payload = this.objectMapper.writeValueAsString(agreement);
             var preparePacket = Interledger.prepare(this.participantContext.ilpSecret(),
                                                     Interledger.address(payer.fspCode()),
-                                                    UnsignedLong.valueOf(transferAmount.toPlainString()),
+                                                    Interledger.Amount.serialize(transferAmount, FspiopCurrencies.get(currency).scale(), RoundingMode.UNNECESSARY),
                                                     payload,
                                                     900);
 

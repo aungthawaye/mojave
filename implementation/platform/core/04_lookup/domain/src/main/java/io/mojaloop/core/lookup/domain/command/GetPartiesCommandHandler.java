@@ -27,7 +27,7 @@ import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
-import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
+import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.parties.RespondParties;
 import org.slf4j.Logger;
@@ -94,7 +94,7 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
                 try {
 
-                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
 
                 } catch (Throwable ignored) {
                     LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);

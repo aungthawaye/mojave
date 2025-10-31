@@ -18,9 +18,8 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.redis;
+package io.mojaloop.core.accounting.domain.cache.strategy.local;
 
-import io.mojaloop.component.redis.RedissonOpsClient;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
@@ -28,32 +27,28 @@ import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import jakarta.annotation.PostConstruct;
-import org.redisson.api.RMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class ChartEntryRedisCache implements ChartEntryCache {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChartEntryRedisCache.class);
+public class ChartEntryLocalCache implements ChartEntryCache {
 
     private final ChartEntryRepository chartEntryRepository;
 
-    private final RMap<Long, ChartEntryData> withId;
+    private final Map<Long, ChartEntryData> withId;
 
-    private final RMap<String, ChartEntryData> withCode;
+    private final Map<String, ChartEntryData> withCode;
 
-    public ChartEntryRedisCache(ChartEntryRepository chartEntryRepository, RedissonOpsClient redissonOpsClient) {
+    public ChartEntryLocalCache(final ChartEntryRepository chartEntryRepository) {
 
         assert chartEntryRepository != null;
-        assert redissonOpsClient != null;
 
         this.chartEntryRepository = chartEntryRepository;
 
-        this.withId = redissonOpsClient.getRedissonClient().getMap(Names.WITH_ID);
-        this.withCode = redissonOpsClient.getRedissonClient().getMap(Names.WITH_CODE);
+        this.withId = new ConcurrentHashMap<>();
+        this.withCode = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -64,9 +59,9 @@ public class ChartEntryRedisCache implements ChartEntryCache {
     }
 
     @Override
-    public void delete(ChartEntryId chartEntryId) {
+    public void delete(final ChartEntryId chartEntryId) {
 
-        var removed = this.withId.remove(chartEntryId.getId());
+        final var removed = this.withId.remove(chartEntryId.getId());
 
         if (removed != null) {
             this.withCode.remove(removed.code().value());
@@ -74,23 +69,23 @@ public class ChartEntryRedisCache implements ChartEntryCache {
     }
 
     @Override
-    public ChartEntryData get(ChartEntryId chartEntryId) {
+    public ChartEntryData get(final ChartEntryId chartEntryId) {
 
         return this.withId.get(chartEntryId.getId());
     }
 
     @Override
-    public ChartEntryData get(ChartEntryCode code) {
+    public ChartEntryData get(final ChartEntryCode code) {
 
         return this.withCode.get(code.value());
     }
 
     @Override
-    public Set<ChartEntryData> get(ChartId chartId) {
+    public Set<ChartEntryData> get(final ChartId chartId) {
 
-        var result = new HashSet<ChartEntryData>();
+        final var result = new HashSet<ChartEntryData>();
 
-        for (var entry : this.withId.values()) {
+        for (final var entry : this.withId.values()) {
             if (entry.chartId().equals(chartId)) {
                 result.add(entry);
             }
@@ -104,15 +99,15 @@ public class ChartEntryRedisCache implements ChartEntryCache {
 
         this.clear();
 
-        var entries = this.chartEntryRepository.findAll();
+        final var entries = this.chartEntryRepository.findAll();
 
-        for (var entry : entries) {
+        for (final var entry : entries) {
             this.save(entry.convert());
         }
     }
 
     @Override
-    public void save(ChartEntryData chartEntry) {
+    public void save(final ChartEntryData chartEntry) {
 
         this.withId.put(chartEntry.chartEntryId().getId(), chartEntry);
         this.withCode.put(chartEntry.code().value(), chartEntry);

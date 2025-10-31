@@ -18,28 +18,21 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.misc.constraint;
+package io.mojaloop.core.quoting.contract.exception;
 
-public class StringSizeConstraints {
+import io.mojaloop.component.misc.exception.CheckedDomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
 
-    public static final int MAX_CODE_LENGTH = 32;
+import java.math.BigDecimal;
 
-    public static final int MAX_CURRENCY_LENGTH = 3;
+public class ReceivingAmountLargerException extends CheckedDomainException {
 
-    public static final int MAX_DESCRIPTION_LENGTH = 255;
+    private static final String TEMPLATE = "Payee Receiving Amount ({0}) must not be larger than the Transfer Amount ({1}) for Amount Type (RECEIVE) .";
 
-    public static final int MAX_ENUM_LENGTH = 32;
+    public ReceivingAmountLargerException(BigDecimal receivingAmount, BigDecimal transferAmount) {
 
-    public static final int MAX_HTTP_URL_LENGTH = 255;
+        super(new ErrorTemplate("RECEIVING_AMOUNT_LARGER", TEMPLATE), receivingAmount.stripTrailingZeros().toPlainString(), transferAmount.stripTrailingZeros().toPlainString());
 
-    public static final int MAX_NAME_TITLE_LENGTH = 64;
-
-    public static final int MAX_PARAGRAPH_LENGTH = 512;
-
-    public static final int MAX_UDF_QUOTE_ID_LENGTH = 48;
-
-    public static final int MAX_UDF_TRANSFER_ID_LENGTH = 48;
-
-    public static final int MAX_ILP_PACKET_LENGTH = 32768;
+    }
 
 }

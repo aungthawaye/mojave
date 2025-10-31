@@ -1,5 +1,6 @@
 package io.mojaloop.core.wallet.domain.model;
 
+import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
@@ -41,7 +42,7 @@ import static java.sql.Types.BIGINT;
        indexes = {@Index(name = "wlt_position_update_position_id_action_transaction_at_idx", columnList = "position_id, action, transaction_at"),
                   @Index(name = "wlt_position_update_transaction_at_idx", columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PositionUpdate implements DataConversion<PositionUpdateData> {
+public class PositionUpdate extends JpaEntity<PositionUpdateId> implements DataConversion<PositionUpdateData> {
 
     @Id
     @JavaType(PositionUpdateIdJavaType.class)

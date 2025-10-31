@@ -27,6 +27,7 @@ import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomS
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
+import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
@@ -127,6 +128,14 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("quoting-service", false, false);
+    }
+
+    @Bean
+    @Override
+    public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
+
+        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
+                                                              Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
     }
 
     @Bean

@@ -30,7 +30,7 @@ import io.mojaloop.core.accounting.contract.exception.account.AccountCodeRequire
 import io.mojaloop.core.accounting.contract.exception.account.AccountDescriptionTooLongException;
 import io.mojaloop.core.accounting.contract.exception.account.AccountNameRequiredException;
 import io.mojaloop.core.accounting.contract.exception.account.AccountNameTooLongException;
-import io.mojaloop.core.accounting.domain.cache.redis.updater.AccountCacheUpdater;
+import io.mojaloop.core.accounting.domain.cache.updater.AccountCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartEntryIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.OwnerIdJavaType;

@@ -18,32 +18,26 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.redis.updater;
+package io.mojaloop.core.common.datatype.converter.identifier.wallet;
 
-import io.mojaloop.component.misc.spring.SpringContext;
-import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
-import io.mojaloop.core.accounting.domain.model.ChartEntry;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostRemove;
-import jakarta.persistence.PostUpdate;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import io.mojaloop.core.common.datatype.identifier.wallet.NetDebitCapUpdateId;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
-public class ChartEntryCacheUpdater {
+@Converter(autoApply = true)
+public class NetDebitCapUpdateIdConverter implements AttributeConverter<NetDebitCapUpdateId, Long> {
 
-    @PostPersist
-    @PostUpdate
-    public void persistOrUpdate(ChartEntry entry) {
+    @Override
+    public Long convertToDatabaseColumn(NetDebitCapUpdateId attribute) {
 
-        var cache = SpringContext.getBean(ChartEntryCache.class);
-
-        cache.save(entry.convert());
+        return attribute == null ? null : attribute.getId();
     }
 
-    @PostRemove
-    public void postRemove(ChartEntry entry) {
+    @Override
+    public NetDebitCapUpdateId convertToEntityAttribute(Long dbData) {
 
-        var cache = SpringContext.getBean(ChartEntryCache.class);
-
-        cache.delete(entry.getId());
+        return dbData == null ? null : new NetDebitCapUpdateId(dbData);
     }
 
 }

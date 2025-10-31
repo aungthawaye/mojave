@@ -18,9 +18,8 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.redis;
+package io.mojaloop.core.accounting.domain.cache.strategy.local;
 
-import io.mojaloop.component.redis.RedissonOpsClient;
 import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -28,29 +27,26 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
-import org.redisson.api.RMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class FlowDefinitionRedisCache implements FlowDefinitionCache {
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlowDefinitionRedisCache.class);
+public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
-    private final RMap<Long, FlowDefinitionData> withId;
+    private final Map<Long, FlowDefinitionData> withId;
 
-    private final RMap<String, FlowDefinitionData> withTxnTypeCurrency;
+    private final Map<String, FlowDefinitionData> withTxnTypeCurrency;
 
-    public FlowDefinitionRedisCache(final FlowDefinitionRepository flowDefinitionRepository, final RedissonOpsClient redissonOpsClient) {
+    public FlowDefinitionLocalCache(final FlowDefinitionRepository flowDefinitionRepository) {
 
         assert flowDefinitionRepository != null;
-        assert redissonOpsClient != null;
 
         this.flowDefinitionRepository = flowDefinitionRepository;
 
-        this.withId = redissonOpsClient.getRedissonClient().getMap(Names.WITH_ID);
-        this.withTxnTypeCurrency = redissonOpsClient.getRedissonClient().getMap(Names.WITH_TXN_TYPE_CURRENCY);
+        this.withId = new ConcurrentHashMap<>();
+        this.withTxnTypeCurrency = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -89,9 +85,9 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
 
         this.clear();
 
-        final var definitions = this.flowDefinitionRepository.findAll();
+        final var defs = this.flowDefinitionRepository.findAll();
 
-        for (final var def : definitions) {
+        for (final var def : defs) {
             this.save(def.convert());
         }
     }
@@ -100,7 +96,6 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
     public void save(final FlowDefinitionData flowDefinition) {
 
         this.withId.put(flowDefinition.flowDefinitionId().getId(), flowDefinition);
-
         final var key = FlowDefinitionCache.Keys.forTransaction(flowDefinition.transactionType(), flowDefinition.currency());
         this.withTxnTypeCurrency.put(key, flowDefinition);
     }

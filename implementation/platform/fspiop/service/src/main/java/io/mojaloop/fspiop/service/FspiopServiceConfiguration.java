@@ -55,20 +55,25 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
 
     private final ObjectMapper objectMapper;
 
+    private final FspiopServiceConfiguration.ServiceSettings serviceSettings;
+
     public FspiopServiceConfiguration(SpringSecurityConfigurer.Settings springSecuritySettings,
                                       ParticipantContext participantContext,
                                       ParticipantVerifier participantVerifier,
-                                      ObjectMapper objectMapper) {
+                                      ObjectMapper objectMapper,
+                                      FspiopServiceConfiguration.ServiceSettings serviceSettings) {
 
         assert springSecuritySettings != null;
         assert participantContext != null;
         assert participantVerifier != null;
         assert objectMapper != null;
+        assert serviceSettings != null;
 
         this.springSecuritySettings = springSecuritySettings;
         this.participantContext = participantContext;
         this.participantVerifier = participantVerifier;
         this.objectMapper = objectMapper;
+        this.serviceSettings = serviceSettings;
 
     }
 
@@ -83,7 +88,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
     @Override
     public Authenticator authenticator() {
 
-        return new FspiopServiceGatekeeper(this.springSecuritySettings, this.participantContext, this.participantVerifier, this.objectMapper);
+        return new FspiopServiceGatekeeper(this.springSecuritySettings, this.participantContext, this.participantVerifier, this.objectMapper, this.serviceSettings);
     }
 
     @Bean
@@ -125,6 +130,10 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
 
     public interface RequiredSettings extends SpringSecurityConfiguration.RequiredSettings, FspiopComponentConfiguration.RequiredSettings {
 
+        ServiceSettings serviceSettings();
+
     }
+
+    public record ServiceSettings(int requestAgeMs, boolean requestAgeVerification) { }
 
 }

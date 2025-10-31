@@ -33,6 +33,7 @@ import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.identifier.quoting.QuoteId;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
+import io.mojaloop.core.quoting.contract.exception.ReceivingAmountLargerException;
 import io.mojaloop.core.quoting.contract.exception.ReceivingAmountMismatchException;
 import io.mojaloop.core.quoting.contract.exception.TransferAmountMismatchException;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
@@ -276,7 +277,8 @@ public class Quote extends JpaEntity<QuoteId> {
                           BigDecimal payeeFspCommission,
                           BigDecimal payeeReceiveAmount,
                           String ilpPacket,
-                          String condition) throws TransferAmountMismatchException, ReceivingAmountMismatchException, ExpirationNotInFutureException {
+                          String condition)
+        throws TransferAmountMismatchException, ReceivingAmountMismatchException, ExpirationNotInFutureException, ReceivingAmountLargerException {
 
         assert transferAmount != null;
         assert payeeReceiveAmount != null;
@@ -294,18 +296,23 @@ public class Quote extends JpaEntity<QuoteId> {
             throw new ExpirationNotInFutureException();
         }
 
-        if (this.amountType == AmountType.SEND) {
-
-            if (transferAmount.subtract(this.amount).signum() != 0) {
-                throw new TransferAmountMismatchException(transferAmount, this.amount, this.amountType);
-            }
-
-        } else if (this.amountType == AmountType.RECEIVE) {
-
-            if (payeeReceiveAmount.subtract(this.amount).signum() != 0) {
-                throw new ReceivingAmountMismatchException(payeeReceiveAmount, this.amount, this.amountType);
-            }
-        }
+//        if (this.amountType == AmountType.SEND) {
+//
+//            if (transferAmount.subtract(this.amount).signum() != 0) {
+//                throw new TransferAmountMismatchException(transferAmount, this.amount, this.amountType);
+//            }
+//
+//        } else if (this.amountType == AmountType.RECEIVE) {
+//
+//            if (payeeReceiveAmount.subtract(this.amount).signum() != 0) {
+//                throw new ReceivingAmountMismatchException(payeeReceiveAmount, this.amount, this.amountType);
+//            }
+//        }
+//
+//        if (transferAmount.subtract(payeeReceiveAmount).signum() < 0) {
+//
+//            throw new ReceivingAmountLargerException(payeeReceiveAmount, transferAmount);
+//        }
 
         this.ilpPacket.responded(ilpPacket, condition);
 

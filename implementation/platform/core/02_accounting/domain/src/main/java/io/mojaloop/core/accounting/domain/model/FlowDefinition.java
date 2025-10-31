@@ -30,7 +30,7 @@ import io.mojaloop.core.accounting.contract.exception.definition.DefinitionNameT
 import io.mojaloop.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
-import io.mojaloop.core.accounting.domain.cache.redis.updater.FlowDefinitionCacheUpdater;
+import io.mojaloop.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
 import io.mojaloop.core.common.datatype.enums.TerminationStatus;

@@ -1,10 +1,15 @@
 package io.mojaloop.core.wallet.contract.command.position;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.enums.wallet.PositionAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.fspiop.spec.core.Currency;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -13,7 +18,9 @@ public interface CommitPositionCommand {
 
     Output execute(Input input);
 
-    record Input(PositionUpdateId reservationId, PositionUpdateId positionUpdateId, String description) { }
+    record Input(@JsonProperty(required = true) @NotNull PositionUpdateId reservationId,
+                 @JsonProperty(required = true) @NotNull PositionUpdateId positionUpdateId,
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(PositionUpdateId positionUpdateId,
                   PositionId positionId,

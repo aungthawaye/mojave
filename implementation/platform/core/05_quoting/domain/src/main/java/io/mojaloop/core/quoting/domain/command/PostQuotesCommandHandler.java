@@ -39,7 +39,7 @@ import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
-import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
+import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
@@ -161,11 +161,14 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                                           new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
                     if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
+
                         postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
                             LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
                             quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
                         });
+
                     }
+
                     // I don't use @Transactional and manually control the transaction scope because
                     // forwardRequest is the HTTP API call, and it has latency. To avoid holding the
                     // connection for a long period, I used manual transaction control.
@@ -190,7 +193,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
         } catch (Exception e) {
 
-            LOGGER.error("Exception occurred while executing PostQuotesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("({}) Exception occurred while executing PostQuotesCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
 
             if (payerFsp != null) {
 
@@ -200,7 +203,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 try {
 
-                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
 
                 } catch (Throwable ignored) {
                     LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
@@ -208,7 +211,8 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             }
         }
 
-        LOGGER.info("Returning from PostQuotesCommandHandler successfully.");
+        LOGGER.info("({}) Returning from PostQuotesCommandHandler successfully.", udfQuoteId.getId());
+
         return new Output();
     }
 

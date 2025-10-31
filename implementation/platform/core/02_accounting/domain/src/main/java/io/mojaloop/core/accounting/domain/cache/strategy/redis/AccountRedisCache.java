@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.redis;
+package io.mojaloop.core.accounting.domain.cache.strategy.redis;
 
 import io.mojaloop.component.redis.RedissonOpsClient;
 import io.mojaloop.core.accounting.contract.data.AccountData;

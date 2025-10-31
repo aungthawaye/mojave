@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.local;
+package io.mojaloop.core.accounting.domain.cache.strategy.local;
 
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;

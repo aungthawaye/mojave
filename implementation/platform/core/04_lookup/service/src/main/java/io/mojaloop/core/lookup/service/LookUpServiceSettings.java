@@ -24,6 +24,7 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
+import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
@@ -76,6 +77,14 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
         return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "300000")));
+    }
+
+    @Bean
+    @Override
+    public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
+
+        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
+                                                              Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
     }
 
     @Bean

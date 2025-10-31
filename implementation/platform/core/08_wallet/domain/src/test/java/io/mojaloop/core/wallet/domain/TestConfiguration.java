@@ -25,6 +25,7 @@ import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {WalletDomainConfiguration.class, TestSettings.class})
@@ -51,12 +52,14 @@ public class TestConfiguration implements WalletDomainConfiguration.RequiredBean
         this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
     }
 
+    @Bean
     @Override
     public BalanceUpdater balanceUpdater() {
 
         return this.balanceUpdater;
     }
 
+    @Bean
     @Override
     public PositionUpdater positionUpdater() {
 

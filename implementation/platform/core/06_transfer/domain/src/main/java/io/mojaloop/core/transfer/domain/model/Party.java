@@ -18,30 +18,15 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.redis.updater;
+package io.mojaloop.core.transfer.domain.model;
 
-import io.mojaloop.component.misc.spring.SpringContext;
-import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
-import io.mojaloop.core.accounting.domain.model.FlowDefinition;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostRemove;
-import jakarta.persistence.PostUpdate;
+import io.mojaloop.fspiop.spec.core.PartyIdType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-public class FlowDefinitionCacheUpdater {
-
-    @PostPersist
-    @PostUpdate
-    public void persistOrUpdate(final FlowDefinition flowDefinition) {
-
-        final var cache = SpringContext.getBean(FlowDefinitionCache.class);
-        cache.save(flowDefinition.convert());
-    }
-
-    @PostRemove
-    public void postRemove(final FlowDefinition flowDefinition) {
-
-        final var cache = SpringContext.getBean(FlowDefinitionCache.class);
-        cache.delete(flowDefinition.getId());
-    }
-
-}
+@Embeddable
+public record Party(@Column(name = "party_id_type", nullable = false) @Enumerated(EnumType.STRING) PartyIdType partyIdType,
+                    @Column(name = "party_id", nullable = false) String partyId,
+                    @Column(name = "sub_id") String subId) { }

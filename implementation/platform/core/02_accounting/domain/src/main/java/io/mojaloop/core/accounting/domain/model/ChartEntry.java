@@ -31,7 +31,7 @@ import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryDescriptio
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameRequiredException;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryNameTooLongException;
-import io.mojaloop.core.accounting.domain.cache.redis.updater.ChartEntryCacheUpdater;
+import io.mojaloop.core.accounting.domain.cache.updater.ChartEntryCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.accounting.ChartEntryCodeConverter;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;

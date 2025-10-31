@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.cache.redis.updater;
+package io.mojaloop.core.accounting.domain.cache.updater;
 
 import io.mojaloop.component.misc.spring.SpringContext;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;

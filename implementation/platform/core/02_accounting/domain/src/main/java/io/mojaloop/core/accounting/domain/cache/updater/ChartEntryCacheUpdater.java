@@ -18,28 +18,32 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.misc.constraint;
+package io.mojaloop.core.accounting.domain.cache.updater;
 
-public class StringSizeConstraints {
+import io.mojaloop.component.misc.spring.SpringContext;
+import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
+import io.mojaloop.core.accounting.domain.model.ChartEntry;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
+import jakarta.persistence.PostUpdate;
 
-    public static final int MAX_CODE_LENGTH = 32;
+public class ChartEntryCacheUpdater {
 
-    public static final int MAX_CURRENCY_LENGTH = 3;
+    @PostPersist
+    @PostUpdate
+    public void persistOrUpdate(ChartEntry entry) {
 
-    public static final int MAX_DESCRIPTION_LENGTH = 255;
+        var cache = SpringContext.getBean(ChartEntryCache.class);
 
-    public static final int MAX_ENUM_LENGTH = 32;
+        cache.save(entry.convert());
+    }
 
-    public static final int MAX_HTTP_URL_LENGTH = 255;
+    @PostRemove
+    public void postRemove(ChartEntry entry) {
 
-    public static final int MAX_NAME_TITLE_LENGTH = 64;
+        var cache = SpringContext.getBean(ChartEntryCache.class);
 
-    public static final int MAX_PARAGRAPH_LENGTH = 512;
-
-    public static final int MAX_UDF_QUOTE_ID_LENGTH = 48;
-
-    public static final int MAX_UDF_TRANSFER_ID_LENGTH = 48;
-
-    public static final int MAX_ILP_PACKET_LENGTH = 32768;
+        cache.delete(entry.getId());
+    }
 
 }
