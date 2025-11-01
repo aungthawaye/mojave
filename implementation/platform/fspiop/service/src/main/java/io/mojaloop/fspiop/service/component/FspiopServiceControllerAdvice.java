@@ -21,6 +21,7 @@
 package io.mojaloop.fspiop.service.component;
 
 import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopCommunicationException;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.ErrorInformation;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
@@ -76,6 +77,12 @@ public class FspiopServiceControllerAdvice {
 
         return new ResponseEntity<>(new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
                                     HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FspiopCommunicationException.class)
+    public ResponseEntity<ErrorInformationObject> handle(FspiopCommunicationException e) {
+
+        return new ResponseEntity<>(e.toErrorObject(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(FspiopException.class)

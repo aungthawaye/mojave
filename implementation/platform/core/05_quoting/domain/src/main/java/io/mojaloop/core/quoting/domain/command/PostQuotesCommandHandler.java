@@ -38,8 +38,8 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
-import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
+import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
@@ -113,6 +113,14 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             LOGGER.debug("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             var postQuotesRequest = input.quotesPostRequest();
+
+            var payerFspInRequest = postQuotesRequest.getPayer().getPartyIdInfo().getFspId();
+            var payeeFspInRequest = postQuotesRequest.getPayee().getPartyIdInfo().getFspId();
+
+            if (!payeeFspInRequest.equals(payeeFspCode.value()) || !payerFspInRequest.equals(payerFspCode.value())) {
+
+                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "FSPs information in the request body and request header must be the same.");
+            }
 
             var amount = postQuotesRequest.getAmount();
             var fees = postQuotesRequest.getFees();
