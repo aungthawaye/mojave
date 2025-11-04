@@ -22,7 +22,6 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateEndpointCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.fsp.FspEndpoint;
 import io.mojaloop.core.participant.domain.repository.FspRepository;

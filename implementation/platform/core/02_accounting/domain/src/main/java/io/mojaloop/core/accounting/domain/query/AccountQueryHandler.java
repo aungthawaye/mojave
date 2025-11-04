@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.domain.query;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
@@ -109,8 +110,7 @@ public class AccountQueryHandler implements AccountQuery {
 
         final var data = resultPage.getContent().stream().map(Account::convert).toList();
 
-        return new PagedResult<>(resultPage.getNumber() + 1, resultPage.getSize(), resultPage.getTotalPages(),
-                                 (int) resultPage.getTotalElements(), data);
+        return new PagedResult<>(resultPage.getNumber() + 1, resultPage.getSize(), resultPage.getTotalPages(), (int) resultPage.getTotalElements(), data);
     }
 
     @Transactional(readOnly = true)
@@ -118,8 +118,7 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public AccountData get(AccountCode accountCode) throws AccountCodeNotFoundException {
 
-        return this.accountRepository.findOne(AccountRepository.Filters.withCode(accountCode)).orElseThrow(
-            () -> new AccountCodeNotFoundException(accountCode)).convert();
+        return this.accountRepository.findOne(AccountRepository.Filters.withCode(accountCode)).orElseThrow(() -> new AccountCodeNotFoundException(accountCode)).convert();
     }
 
     @Transactional(readOnly = true)
@@ -127,8 +126,7 @@ public class AccountQueryHandler implements AccountQuery {
     @Override
     public List<AccountData> get(AccountOwnerId ownerId) {
 
-        return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId)).stream().map(Account::convert).collect(
-            Collectors.toList());
+        return this.accountRepository.findAll(AccountRepository.Filters.withOwnerId(ownerId)).stream().map(Account::convert).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

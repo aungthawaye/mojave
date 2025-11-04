@@ -61,4 +61,5 @@ class ChangeHubNameCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(HubNotFoundException.class, () -> this.changeName.execute(input));
     }
+
 }

@@ -51,11 +51,11 @@ public class DeactivateSupportedCurrencyIT {
     @Test
     public void test_successfully_deactivate_supported_currency() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(
-            new CreateFspCommand.Input(new FspCode("fsp-deactivate-currency"), "FSP Deactivate Currency", new Currency[]{Currency.USD},
-                                       new CreateFspCommand.Input.Endpoint[]{
-                                           new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")
-                                       }));
+        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-deactivate-currency"),
+                                                                       "FSP Deactivate Currency",
+                                                                       new Currency[]{Currency.USD},
+                                                                       new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES,
+                                                                                                                                                 "http://localhost:7080")}));
 
         var fspId = new FspId(output.fspId().getId());
         this.addSupportedCurrency.execute(new AddFspCurrencyCommand.Input(fspId, Currency.EUR));

@@ -25,18 +25,14 @@ import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.TransfersErrorResult;
 import io.mojaloop.connector.gateway.data.TransfersResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
+import io.mojaloop.connector.gateway.outbound.component.FspiopResultListener;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.invoker.api.transfers.PostTransfers;
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 class RequestTransfersCommandHandler implements RequestTransfersCommand {
@@ -70,74 +66,21 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
         var transferId = input.request().getTransferId();
         var resultTopic = PubSubKeys.forTransfers(transferId);
-        var errorTopic = PubSubKeys.forTransfers(transferId);
+        var errorTopic = PubSubKeys.forTransfersError(input.payee(), transferId);
 
         // Listening to the pub/sub
-        var blocker = new CountDownLatch(1);
+        var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, TransfersResult.class, TransfersErrorResult.class);
+        resultListener.init(resultTopic, errorTopic);
 
-        AtomicReference<TransfersResult> responseRef = new AtomicReference<>();
-        AtomicReference<TransfersErrorResult> errorRef = new AtomicReference<>();
+        this.postTransfers.postTransfers(input.payee(), input.request());
 
-        var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
+        resultListener.await();
 
-            @Override
-            public void handle(String channel, Object message) {
-
-                if (message instanceof TransfersResult response) {
-                    responseRef.set(response);
-                }
-
-                blocker.countDown();
-            }
-
-            @Override
-            public Class<TransfersResult> messageType() {
-
-                return TransfersResult.class;
-            }
-        }, this.outboundSettings.pubSubTimeout());
-
-        var errorSubscription = this.pubSubClient.subscribe(errorTopic, new PubSubClient.MessageHandler() {
-
-            @Override
-            public void handle(String channel, Object message) {
-
-                if (message instanceof TransfersErrorResult response) {
-                    errorRef.set(response);
-                }
-
-                blocker.countDown();
-            }
-
-            @Override
-            public Class<?> messageType() {
-
-                return ErrorInformationObject.class;
-            }
-        }, 60_000);
-
-        try {
-
-            this.postTransfers.postTransfers(input.payee(), input.request());
-
-            var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
-
-            if (!ok) {
-                throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");
-            }
-
-        } catch (InterruptedException ignored) {
-            // Do nothing.
-        } finally {
-            this.pubSubClient.unsubscribe(resultSubscription);
-            this.pubSubClient.unsubscribe(errorSubscription);
+        if (resultListener.getResponse() != null) {
+            return new Output(resultListener.getResponse());
         }
 
-        if (responseRef.get() != null) {
-            return new Output(responseRef.get());
-        }
-
-        var error = errorRef.get();
+        var error = resultListener.getError();
         var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
         throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));

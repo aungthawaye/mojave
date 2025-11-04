@@ -54,9 +54,7 @@ public class GetAllFsps {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.fspCommands.getAllFsps(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.fspCommands.getAllFsps(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

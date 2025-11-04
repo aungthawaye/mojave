@@ -25,7 +25,6 @@ import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
-import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.core.wallet.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -46,11 +45,33 @@ public class IncreasePositionCommandIT extends BaseDomainIT {
     private IncreasePositionCommand increasePositionCommand;
 
     @Test
-    void should_increase_position_successfully() throws io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException, io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException {
+    void should_fail_when_increase_exceeds_net_debit_cap() {
         // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(85001L), Currency.USD, "Position I",
-                new BigDecimal("100.0000")));
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(85002L),
+                                                                                                 Currency.USD,
+                                                                                                 "Cap Position",
+                                                                                                 new BigDecimal("50.0000")));
+        final var positionId = createOut.positionId();
+
+        final var txId = new TransactionId(8500000001002L);
+        final var txAt = Instant.parse("2025-01-05T09:10:00Z");
+        final var amount = new BigDecimal("60.00");
+
+        final var input = new IncreasePositionCommand.Input(positionId, amount, txId, txAt, "Should exceed cap");
+
+        // Act & Assert
+        assertThrows(PositionLimitExceededException.class, () -> this.increasePositionCommand.execute(input));
+    }
+
+    @Test
+    void should_increase_position_successfully() throws
+                                                 io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException,
+                                                 io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException {
+        // Arrange
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(85001L),
+                                                                                                 Currency.USD,
+                                                                                                 "Position I",
+                                                                                                 new BigDecimal("100.0000")));
         final var positionId = createOut.positionId();
 
         final var txId = new TransactionId(8500000001001L);
@@ -76,21 +97,4 @@ public class IncreasePositionCommandIT extends BaseDomainIT {
         assertNotNull(output.positionUpdateId());
     }
 
-    @Test
-    void should_fail_when_increase_exceeds_net_debit_cap() {
-        // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(85002L), Currency.USD, "Cap Position",
-                new BigDecimal("50.0000")));
-        final var positionId = createOut.positionId();
-
-        final var txId = new TransactionId(8500000001002L);
-        final var txAt = Instant.parse("2025-01-05T09:10:00Z");
-        final var amount = new BigDecimal("60.00");
-
-        final var input = new IncreasePositionCommand.Input(positionId, amount, txId, txAt, "Should exceed cap");
-
-        // Act & Assert
-        assertThrows(PositionLimitExceededException.class, () -> this.increasePositionCommand.execute(input));
-    }
 }

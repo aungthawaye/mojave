@@ -50,13 +50,13 @@ public class InsufficientBalanceInWalletException extends CheckedDomainException
 
     private static final String TEMPLATE = "Insufficient Balance : wallet ({0}) | amount({2}) | old balance: ({3}) | new balance: ({4}) | transaction id: ({5}).";
 
-    public InsufficientBalanceInWalletException(WalletId walletId,
-                                                BigDecimal amount,
-                                                BigDecimal oldBalance,
-                                                TransactionId transactionId) {
+    public InsufficientBalanceInWalletException(WalletId walletId, BigDecimal amount, BigDecimal oldBalance, TransactionId transactionId) {
 
-        super(new ErrorTemplate("INSUFFICIENT_BALANCE_IN_WALLET", TEMPLATE), walletId.toString(),
-              amount.toPlainString(), oldBalance.toPlainString(), transactionId.getId().toString());
+        super(new ErrorTemplate("INSUFFICIENT_BALANCE_IN_WALLET", TEMPLATE),
+              walletId.toString(),
+              amount.toPlainString(),
+              oldBalance.toPlainString(),
+              transactionId.getId().toString());
     }
 
 }

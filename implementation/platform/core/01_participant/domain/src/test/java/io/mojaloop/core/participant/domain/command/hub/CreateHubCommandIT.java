@@ -22,7 +22,6 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Assertions;
@@ -33,6 +32,19 @@ class CreateHubCommandIT extends BaseDomainIT {
 
     @Autowired
     private CreateHubCommand handler;
+
+    @Test
+    void should_allow_empty_supported_currencies() throws Exception {
+
+        // Arrange
+        var input = new CreateHubCommand.Input("Hub-Empty", new Currency[]{});
+
+        // Act
+        var output = this.handler.execute(input);
+
+        // Assert
+        Assertions.assertNotNull(output.hubId());
+    }
 
     @Test
     void should_create_hub_with_supported_currencies() throws Exception {
@@ -62,16 +74,4 @@ class CreateHubCommandIT extends BaseDomainIT {
         Assertions.assertThrows(HubCountLimitReachedException.class, () -> this.handler.execute(input2));
     }
 
-    @Test
-    void should_allow_empty_supported_currencies() throws Exception {
-
-        // Arrange
-        var input = new CreateHubCommand.Input("Hub-Empty", new Currency[]{});
-
-        // Act
-        var output = this.handler.execute(input);
-
-        // Assert
-        Assertions.assertNotNull(output.hubId());
-    }
 }

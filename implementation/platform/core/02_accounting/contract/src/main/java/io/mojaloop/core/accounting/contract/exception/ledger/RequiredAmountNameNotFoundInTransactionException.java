@@ -49,12 +49,9 @@ public class RequiredAmountNameNotFoundInTransactionException extends UncheckedD
 
     private static final String TEMPLATE = "Required Amount name ({0}) cannot be found in amounts ({1}) of Transaction Id ({2}).";
 
-    public RequiredAmountNameNotFoundInTransactionException(String requiredAmountName,
-                                                            Set<String> amounts,
-                                                            TransactionId transactionId) {
+    public RequiredAmountNameNotFoundInTransactionException(String requiredAmountName, Set<String> amounts, TransactionId transactionId) {
 
-        super(new ErrorTemplate("REQUIRED_AMOUNT_NAME_NOT_FOUND_IN_TRANSACTION", TEMPLATE), requiredAmountName,
-              amounts.toString(), transactionId.getId().toString());
+        super(new ErrorTemplate("REQUIRED_AMOUNT_NAME_NOT_FOUND_IN_TRANSACTION", TEMPLATE), requiredAmountName, amounts.toString(), transactionId.getId().toString());
     }
 
 }

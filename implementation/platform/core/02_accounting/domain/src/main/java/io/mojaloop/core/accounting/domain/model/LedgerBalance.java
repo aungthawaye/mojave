@@ -96,8 +96,7 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "ledger_balance_id", nullable = false,
-                foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
+    @JoinColumn(name = "ledger_balance_id", nullable = false, foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
     protected Account account;
 
     public LedgerBalance(Account account, Side nature, OverdraftMode overdraftMode, BigDecimal overdraftLimit) {
@@ -122,8 +121,15 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     @Override
     public LedgerBalanceData convert() {
 
-        return new LedgerBalanceData(this.getId(), this.currency, this.scale, this.nature, this.postedDebits,
-                                     this.postedCredits, this.overdraftMode, this.overdraftLimit, this.createdAt);
+        return new LedgerBalanceData(this.getId(),
+                                     this.currency,
+                                     this.scale,
+                                     this.nature,
+                                     this.postedDebits,
+                                     this.postedCredits,
+                                     this.overdraftMode,
+                                     this.overdraftLimit,
+                                     this.createdAt);
     }
 
     public DrCr getDrCr() {

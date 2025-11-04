@@ -40,17 +40,14 @@ public interface AddPostingDefinitionCommand {
     /**
      * Input for adding postings under a Flow Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
-                 @JsonProperty(required = true) @NotNull Posting posting) {
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull Posting posting) {
 
         public record Posting(@JsonProperty(required = true) @NotNull ReceiveIn receiveIn,
                               @JsonProperty(required = true) @NotNull Long receiveInId,
-                              @JsonProperty(required = true) @NotNull @NotBlank @Size(
-                                  max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
-                              @JsonProperty(required = true) @NotNull @NotBlank @Size(
-                                  max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
-                              @JsonProperty(required = true) @NotNull Side side, @JsonProperty(required = true) @NotNull @NotBlank @Size(
-            max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
+                              @JsonProperty(required = true) @NotNull Side side,
+                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     }
 

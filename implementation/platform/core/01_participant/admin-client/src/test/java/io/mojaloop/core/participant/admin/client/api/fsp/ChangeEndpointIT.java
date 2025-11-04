@@ -47,11 +47,11 @@ public class ChangeEndpointIT {
     @Test
     public void test_successfully_change_endpoint() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(
-            new CreateFspCommand.Input(new FspCode("fsp-change-endpoint"), "FSP Change Endpoint", new Currency[]{Currency.USD},
-                                       new CreateFspCommand.Input.Endpoint[]{
-                                           new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")
-                                       }));
+        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-change-endpoint"),
+                                                                       "FSP Change Endpoint",
+                                                                       new Currency[]{Currency.USD},
+                                                                       new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES,
+                                                                                                                                                 "http://localhost:7080")}));
 
         this.changeEndpoint.execute(new ChangeEndpointCommand.Input(new FspId(output.fspId().getId()), EndpointType.PARTIES, "http://localhost:7081"));
     }

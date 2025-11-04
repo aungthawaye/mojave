@@ -41,7 +41,6 @@ package io.mojaloop.core.transaction.contract.exception;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 
 public class TransactionAlreadyCompletedException extends UncheckedDomainException {
 

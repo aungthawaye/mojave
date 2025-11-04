@@ -51,9 +51,7 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
 
         LOGGER.info("Executing DeactivateEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspEndpoint = fsp.deactivate(input.type());
 

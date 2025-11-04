@@ -21,17 +21,49 @@
 package io.mojaloop.core.wallet.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
+import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.PositionUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {WalletDomainConfiguration.class, TestSettings.class})
-public class TestConfiguration {
+public class TestConfiguration implements WalletDomainConfiguration.RequiredBeans {
 
     static {
 
         var flywaySettings = new FlywayMigration.Settings(
             "jdbc:mysql://localhost:3306/ml_wallet?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root", "password", "classpath:migration/wallet");
+            "root",
+            "password",
+            "classpath:migration/wallet");
 
         FlywayMigration.migrate(flywaySettings);
     }
+
+    private final BalanceUpdater balanceUpdater;
+
+    private final PositionUpdater positionUpdater;
+
+    public TestConfiguration(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings, MySqlPositionUpdater.PositionDbSettings positionDbSettings) {
+
+        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
+        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
+    }
+
+    @Bean
+    @Override
+    public BalanceUpdater balanceUpdater() {
+
+        return this.balanceUpdater;
+    }
+
+    @Bean
+    @Override
+    public PositionUpdater positionUpdater() {
+
+        return this.positionUpdater;
+    }
+
 }

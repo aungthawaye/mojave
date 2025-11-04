@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.core.common.datatype.enums.ActivationStatus;
@@ -56,11 +57,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class PutQuotesErrorCommandIT extends BaseDomainIT {
 
@@ -76,45 +73,36 @@ class PutQuotesErrorCommandIT extends BaseDomainIT {
     @Autowired
     private PutQuotesErrorCommand putQuotesErrorCommand;
 
-    private FspData mockFsp(final String code, final long id, final String baseUrl) {
+    @Test
+    void should_ignore_when_quote_not_found() throws Exception {
 
-        var fspId = new FspId(id);
-        var fspCode = new FspCode(code);
-        var endpoint = new FspEndpointData(new FspEndpointId(id * 10), EndpointType.QUOTES, baseUrl, Instant.now(), fspId);
+        // Arrange
+        reset(this.participantStore, this.forwardRequest);
 
-        var endpoints = new HashMap<EndpointType, FspEndpointData>();
-        endpoints.put(EndpointType.QUOTES, endpoint);
+        var payer = mockFsp("DFSP61", 61L, "http://payer.example");
+        var payee = mockFsp("DFSP62", 62L, "http://payee.example");
 
-        return new FspData(fspId, fspCode, code + " Name", new FspCurrencyData[] {}, endpoints,
-            ActivationStatus.ACTIVE, TerminationStatus.ALIVE);
-    }
+        when(this.participantStore.getFspData(new FspCode("DFSP61"))).thenReturn(payer);
+        when(this.participantStore.getFspData(new FspCode("DFSP62"))).thenReturn(payee);
 
-    private PostQuotesCommand.Input buildPostInput(final String quoteId, final String payerFsp, final String payeeFsp,
-                                                   final Currency currency, final Currency feesCurrency, final String expiration) {
+        var error = new ErrorInformationObject(new ErrorInformation("2001", "Validation error"));
+        var httpReq = new FspiopHttpRequest(new Payer("DFSP61"),
+                                            new Payee("DFSP62"),
+                                            "PUT",
+                                            "/quotes/" + java.util.UUID.randomUUID() + "/error",
+                                            "application/json",
+                                            Map.of(),
+                                            Map.of(),
+                                            "{}");
 
-        var payerInfo = new PartyIdInfo().partyIdType(PartyIdType.MSISDN).partyIdentifier("12345");
-        var payeeInfo = new PartyIdInfo().partyIdType(PartyIdType.MSISDN).partyIdentifier("67890");
+        var input = new PutQuotesErrorCommand.Input(httpReq, new UdfQuoteId(java.util.UUID.randomUUID().toString()), error);
 
-        var payer = new Party().partyIdInfo(payerInfo);
-        var payee = new Party().partyIdInfo(payeeInfo);
+        // Act
+        var output = this.putQuotesErrorCommand.execute(input);
 
-        var amount = new Money().currency(currency).amount("100.00");
-        var fees = new Money().currency(feesCurrency).amount("1.00");
-
-        var txnType = new TransactionType()
-            .scenario(TransactionScenario.TRANSFER)
-            .subScenario("BILL")
-            .initiator(TransactionInitiator.PAYER)
-            .initiatorType(TransactionInitiatorType.CONSUMER);
-
-        var request = new io.mojaloop.fspiop.spec.core.QuotesPostRequest(quoteId, quoteId, payee, payer, AmountType.SEND, amount, txnType)
-            .fees(fees)
-            .expiration(expiration);
-
-        var httpReq = new FspiopHttpRequest(new Payer(payerFsp), new Payee(payeeFsp), "POST", "/quotes", "application/json",
-            Map.of(), Map.of(), "{}");
-
-        return new PostQuotesCommand.Input(httpReq, request);
+        // Assert
+        Assertions.assertNotNull(output);
+        verify(this.forwardRequest, times(0)).forward(ArgumentMatchers.anyString(), ArgumentMatchers.any());
     }
 
     @Test
@@ -140,8 +128,7 @@ class PutQuotesErrorCommandIT extends BaseDomainIT {
         doNothing().when(this.forwardRequest).forward(ArgumentMatchers.eq("http://payer.example"), ArgumentMatchers.any());
 
         var error = new ErrorInformationObject(new ErrorInformation("2001", "Validation error"));
-        var httpReq = new FspiopHttpRequest(new Payer("DFSP51"), new Payee("DFSP52"), "PUT", "/quotes/" + quoteId + "/error", "application/json",
-            Map.of(), Map.of(), "{}");
+        var httpReq = new FspiopHttpRequest(new Payer("DFSP51"), new Payee("DFSP52"), "PUT", "/quotes/" + quoteId + "/error", "application/json", Map.of(), Map.of(), "{}");
 
         var input = new PutQuotesErrorCommand.Input(httpReq, new UdfQuoteId(quoteId), error);
 
@@ -157,29 +144,42 @@ class PutQuotesErrorCommandIT extends BaseDomainIT {
         verify(this.forwardRequest, times(1)).forward(ArgumentMatchers.eq("http://payer.example"), ArgumentMatchers.any());
     }
 
-    @Test
-    void should_ignore_when_quote_not_found() throws Exception {
+    private PostQuotesCommand.Input buildPostInput(final String quoteId,
+                                                   final String payerFsp,
+                                                   final String payeeFsp,
+                                                   final Currency currency,
+                                                   final Currency feesCurrency,
+                                                   final String expiration) {
 
-        // Arrange
-        reset(this.participantStore, this.forwardRequest);
+        var payerInfo = new PartyIdInfo().partyIdType(PartyIdType.MSISDN).partyIdentifier("12345");
+        var payeeInfo = new PartyIdInfo().partyIdType(PartyIdType.MSISDN).partyIdentifier("67890");
 
-        var payer = mockFsp("DFSP61", 61L, "http://payer.example");
-        var payee = mockFsp("DFSP62", 62L, "http://payee.example");
+        var payer = new Party().partyIdInfo(payerInfo);
+        var payee = new Party().partyIdInfo(payeeInfo);
 
-        when(this.participantStore.getFspData(new FspCode("DFSP61"))).thenReturn(payer);
-        when(this.participantStore.getFspData(new FspCode("DFSP62"))).thenReturn(payee);
+        var amount = new Money().currency(currency).amount("100.00");
+        var fees = new Money().currency(feesCurrency).amount("1.00");
 
-        var error = new ErrorInformationObject(new ErrorInformation("2001", "Validation error"));
-        var httpReq = new FspiopHttpRequest(new Payer("DFSP61"), new Payee("DFSP62"), "PUT", "/quotes/" + java.util.UUID.randomUUID() + "/error", "application/json",
-            Map.of(), Map.of(), "{}");
+        var txnType = new TransactionType().scenario(TransactionScenario.TRANSFER).subScenario("BILL").initiator(TransactionInitiator.PAYER)
+                                           .initiatorType(TransactionInitiatorType.CONSUMER);
 
-        var input = new PutQuotesErrorCommand.Input(httpReq, new UdfQuoteId(java.util.UUID.randomUUID().toString()), error);
+        var request = new io.mojaloop.fspiop.spec.core.QuotesPostRequest(quoteId, quoteId, payee, payer, AmountType.SEND, amount, txnType).fees(fees).expiration(expiration);
 
-        // Act
-        var output = this.putQuotesErrorCommand.execute(input);
+        var httpReq = new FspiopHttpRequest(new Payer(payerFsp), new Payee(payeeFsp), "POST", "/quotes", "application/json", Map.of(), Map.of(), "{}");
 
-        // Assert
-        Assertions.assertNotNull(output);
-        verify(this.forwardRequest, times(0)).forward(ArgumentMatchers.anyString(), ArgumentMatchers.any());
+        return new PostQuotesCommand.Input(httpReq, request);
     }
+
+    private FspData mockFsp(final String code, final long id, final String baseUrl) {
+
+        var fspId = new FspId(id);
+        var fspCode = new FspCode(code);
+        var endpoint = new FspEndpointData(new FspEndpointId(id * 10), EndpointType.QUOTES, baseUrl, Instant.now(), fspId);
+
+        var endpoints = new HashMap<EndpointType, FspEndpointData>();
+        endpoints.put(EndpointType.QUOTES, endpoint);
+
+        return new FspData(fspId, fspCode, code + " Name", new FspCurrencyData[]{}, endpoints, ActivationStatus.ACTIVE, TerminationStatus.ALIVE);
+    }
+
 }

@@ -49,8 +49,7 @@ public class TerminateAccountCommandHandler implements TerminateAccountCommand {
 
         LOGGER.info("Executing TerminateAccountCommand with input: {}", input);
 
-        var account = this.accountRepository.findById(input.accountId()).orElseThrow(
-            () -> new AccountIdNotFoundException(input.accountId()));
+        var account = this.accountRepository.findById(input.accountId()).orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
         account.terminate();

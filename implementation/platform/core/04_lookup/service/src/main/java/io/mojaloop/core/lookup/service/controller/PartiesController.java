@@ -59,8 +59,7 @@ public class PartiesController {
     }
 
     @GetMapping("/parties/{partyIdType}/{partyId}")
-    public ResponseEntity<?> getParties(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, HttpServletRequest request)
-        throws IOException {
+    public ResponseEntity<?> getParties(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received GET /parties/{}/{}", partyIdType, partyId);
 
@@ -77,10 +76,8 @@ public class PartiesController {
     }
 
     @GetMapping("/parties/{partyIdType}/{partyId}/{subId}")
-    public ResponseEntity<?> getPartiesWithSubId(@PathVariable PartyIdType partyIdType,
-                                                 @PathVariable String partyId,
-                                                 @PathVariable String subId,
-                                                 HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getPartiesWithSubId(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, @PathVariable String subId, HttpServletRequest request)
+        throws IOException {
 
         LOGGER.info("Received GET /parties/{}/{}/{}", partyIdType, partyId, subId);
 

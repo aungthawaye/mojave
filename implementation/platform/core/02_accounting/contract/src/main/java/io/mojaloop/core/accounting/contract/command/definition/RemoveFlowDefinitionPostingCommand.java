@@ -35,8 +35,7 @@ public interface RemoveFlowDefinitionPostingCommand {
     /**
      * Input for creating a Fund-In Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
-                 @JsonProperty(required = true) @NotNull PostingDefinitionId postingDefinitionId) {
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull PostingDefinitionId postingDefinitionId) {
 
     }
 

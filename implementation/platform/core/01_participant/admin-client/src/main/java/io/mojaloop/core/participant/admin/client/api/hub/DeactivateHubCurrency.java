@@ -52,9 +52,8 @@ public class DeactivateHubCurrency {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.hubCommands.deactivateCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.hubCommands.deactivateCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

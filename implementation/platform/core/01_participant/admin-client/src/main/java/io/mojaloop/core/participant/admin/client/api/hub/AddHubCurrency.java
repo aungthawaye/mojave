@@ -52,9 +52,8 @@ public class AddHubCurrency {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.hubCommands.addCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.hubCommands.addCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -40,7 +40,6 @@
 package io.mojaloop.core.participant.contract.query;
 
 import io.mojaloop.core.participant.contract.data.HubData;
-import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 
 import java.util.List;
 

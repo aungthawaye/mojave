@@ -52,9 +52,8 @@ public class DeactivateFsp {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.fspCommands.deactivateFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.fspCommands.deactivateFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -68,9 +68,7 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
 
         LOGGER.info("Executing DeactivateOracleCommand with input: {}", input);
 
-        var oracle = this.oracleRepository
-                         .findById(input.oracleId())
-                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+        var oracle = this.oracleRepository.findById(input.oracleId()).orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.deactivate();
         this.oracleRepository.save(oracle);

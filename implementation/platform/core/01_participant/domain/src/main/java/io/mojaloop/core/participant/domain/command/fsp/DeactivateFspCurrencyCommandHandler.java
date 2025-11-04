@@ -51,9 +51,7 @@ public class DeactivateFspCurrencyCommandHandler implements DeactivateFspCurrenc
 
         LOGGER.info("Executing DeactivateSupportedCurrencyCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspCurrency = fsp.deactivate(input.currency());
 

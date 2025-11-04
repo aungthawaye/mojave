@@ -66,45 +66,6 @@ public class RemoveFlowDefinitionPostingCommandIT extends BaseDomainIT {
     private RemoveFlowDefinitionPostingCommand removeFlowDefinitionPostingCommand;
 
     @Test
-    void should_remove_posting_definition_successfully() throws Exception {
-        // Arrange
-        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-
-        final var debitEntry = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc",
-                AccountType.ASSET));
-        final var creditEntry = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("LIAB"), "Liabilities", "Liab Desc",
-                AccountType.LIABILITY));
-
-        // Mature entries
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(debitEntry.chartEntryId(), new AccountOwnerId(3401L),
-            Currency.USD, new AccountCode("ACC_D"), "Debit Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(creditEntry.chartEntryId(), new AccountOwnerId(3401L),
-            Currency.USD, new AccountCode("ACC_C"), "Credit Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
-
-        final var postings = List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, debitEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP",
-                "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"),
-            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, creditEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP",
-                "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Liabilities")
-        );
-
-        final var created = this.createFlowDefinitionCommand.execute(
-            new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow F", "Desc", postings));
-
-        final var toRemovePostingId = created.postingDefinitionIds().get(0);
-        final var input = new RemoveFlowDefinitionPostingCommand.Input(created.flowDefinitionId(), toRemovePostingId);
-
-        // Act
-        final var output = this.removeFlowDefinitionPostingCommand.execute(input);
-
-        // Assert
-        assertNotNull(output);
-        assertNotNull(output.flowDefinitionId());
-    }
-
-    @Test
     void should_fail_when_flow_definition_not_found() {
         // Arrange
         final var invalidFlowId = new FlowDefinitionId(99999999L);
@@ -119,20 +80,96 @@ public class RemoveFlowDefinitionPostingCommandIT extends BaseDomainIT {
     void should_fail_when_posting_definition_not_found() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        final var entry = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc",
-                AccountType.ASSET));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(3402L),
-            Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+        final var entry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                 new ChartEntryCode("ASSETS"),
+                                                                                                 "Assets",
+                                                                                                 "Assets Desc",
+                                                                                                 AccountType.ASSET));
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(entry.chartEntryId(),
+                                                                         new AccountOwnerId(3402L),
+                                                                         Currency.USD,
+                                                                         new AccountCode("ACC_ASSET"),
+                                                                         "Asset Acc",
+                                                                         "Test",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
 
-        final var created = this.createFlowDefinitionCommand.execute(
-            new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow G", "Desc",
-                List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP",
-                    "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"))));
+        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN,
+                                                                                                           Currency.USD,
+                                                                                                           "Flow G",
+                                                                                                           "Desc",
+                                                                                                           List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
+                                                                                                                                                                 entry.chartEntryId()
+                                                                                                                                                                      .getId(),
+                                                                                                                                                                 "DEPOSIT_INTO_FSP",
+                                                                                                                                                                 "LIQUIDITY_AMOUNT",
+                                                                                                                                                                 Side.DEBIT,
+                                                                                                                                                                 "Debit Assets"))));
 
         final var input = new RemoveFlowDefinitionPostingCommand.Input(created.flowDefinitionId(), new PostingDefinitionId(123456789L));
 
         // Act & Assert
         assertThrows(PostingDefinitionNotFoundException.class, () -> this.removeFlowDefinitionPostingCommand.execute(input));
     }
+
+    @Test
+    void should_remove_posting_definition_successfully() throws Exception {
+        // Arrange
+        final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
+
+        final var debitEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                      new ChartEntryCode("ASSETS"),
+                                                                                                      "Assets",
+                                                                                                      "Assets Desc",
+                                                                                                      AccountType.ASSET));
+        final var creditEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                       new ChartEntryCode("LIAB"),
+                                                                                                       "Liabilities",
+                                                                                                       "Liab Desc",
+                                                                                                       AccountType.LIABILITY));
+
+        // Mature entries
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(debitEntry.chartEntryId(),
+                                                                         new AccountOwnerId(3401L),
+                                                                         Currency.USD,
+                                                                         new AccountCode("ACC_D"),
+                                                                         "Debit Acc",
+                                                                         "Test",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(creditEntry.chartEntryId(),
+                                                                         new AccountOwnerId(3401L),
+                                                                         Currency.USD,
+                                                                         new AccountCode("ACC_C"),
+                                                                         "Credit Acc",
+                                                                         "Test",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
+
+        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
+                                                                                   debitEntry.chartEntryId().getId(),
+                                                                                   "DEPOSIT_INTO_FSP",
+                                                                                   "LIQUIDITY_AMOUNT",
+                                                                                   Side.DEBIT,
+                                                                                   "Debit Assets"),
+                                     new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
+                                                                                   creditEntry.chartEntryId().getId(),
+                                                                                   "DEPOSIT_INTO_FSP",
+                                                                                   "LIQUIDITY_AMOUNT",
+                                                                                   Side.CREDIT,
+                                                                                   "Credit Liabilities"));
+
+        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow F", "Desc", postings));
+
+        final var toRemovePostingId = created.postingDefinitionIds().get(0);
+        final var input = new RemoveFlowDefinitionPostingCommand.Input(created.flowDefinitionId(), toRemovePostingId);
+
+        // Act
+        final var output = this.removeFlowDefinitionPostingCommand.execute(input);
+
+        // Assert
+        assertNotNull(output);
+        assertNotNull(output.flowDefinitionId());
+    }
+
 }

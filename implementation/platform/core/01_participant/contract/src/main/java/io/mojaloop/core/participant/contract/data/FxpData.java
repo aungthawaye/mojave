@@ -45,11 +45,7 @@ public record FxpData(FxpId fxpId, String name, String host, Map<String, FxRateP
         return Objects.hashCode(fxpId);
     }
 
-    public record FxRatePairData(FxRatePairId fxRatePairId,
-                                 Currency sourceCurrency,
-                                 Currency targetCurrency,
-                                 BigDecimal sourceAmount,
-                                 BigDecimal targetAmount) {
+    public record FxRatePairData(FxRatePairId fxRatePairId, Currency sourceCurrency, Currency targetCurrency, BigDecimal sourceAmount, BigDecimal targetAmount) {
 
         @Override
         public boolean equals(Object o) {

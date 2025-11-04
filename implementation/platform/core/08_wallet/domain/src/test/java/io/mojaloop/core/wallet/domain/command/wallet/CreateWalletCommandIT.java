@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.wallet.domain.command.wallet;
 
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.command.wallet.CreateWalletCommand;
 import io.mojaloop.core.wallet.contract.exception.wallet.WalletAlreadyExistsException;
 import io.mojaloop.core.wallet.domain.command.BaseDomainIT;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +60,5 @@ public class CreateWalletCommandIT extends BaseDomainIT {
         // Act & Assert
         assertThrows(WalletAlreadyExistsException.class, () -> this.createWalletCommand.execute(input));
     }
+
 }

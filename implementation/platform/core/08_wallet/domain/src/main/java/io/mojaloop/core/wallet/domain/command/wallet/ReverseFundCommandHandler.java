@@ -29,9 +29,16 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
 
             final var history = this.balanceUpdater.reverse(input.reversedId(), input.balanceUpdateId());
 
-            var output = new Output(history.balanceUpdateId(), history.walletId(), history.action(),
-                                    history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
-                                    history.newBalance(), history.transactionAt(), history.reversedId());
+            var output = new Output(history.balanceUpdateId(),
+                                    history.walletId(),
+                                    history.action(),
+                                    history.transactionId(),
+                                    history.currency(),
+                                    history.amount(),
+                                    history.oldBalance(),
+                                    history.newBalance(),
+                                    history.transactionAt(),
+                                    history.reversedId());
 
             LOGGER.info("ReverseFundCommand executed successfully with output: {}", output);
 

@@ -51,12 +51,9 @@ class ChangeEndpointCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP600"), "FSP-600",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP600"), "FSP-600", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new ChangeEndpointCommand.Input(created.fspId(), EndpointType.PARTIES, "http://fsp.example/updated");
@@ -75,12 +72,9 @@ class ChangeEndpointCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://fsp.example/transfers")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.TRANSFERS, "http://fsp.example/transfers")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP601"), "FSP-601",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP601"), "FSP-601", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new ChangeEndpointCommand.Input(created.fspId(), EndpointType.PARTIES, "http://fsp.example/updated");
@@ -101,4 +95,5 @@ class ChangeEndpointCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(FspIdNotFoundException.class, () -> this.changeEndpoint.execute(input));
     }
+
 }

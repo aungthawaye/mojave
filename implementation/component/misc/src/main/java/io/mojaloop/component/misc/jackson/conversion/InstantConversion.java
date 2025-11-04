@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.component.misc.jackson.conversion;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -89,8 +90,7 @@ public class InstantConversion {
                 try {
                     return Instant.parse(s);
                 } catch (DateTimeParseException ex) {
-                    throw ctx.weirdStringException(
-                        s, Instant.class, "Expected epoch millis (long) or ISO-8601 instant");
+                    throw ctx.weirdStringException(s, Instant.class, "Expected epoch millis (long) or ISO-8601 instant");
                 }
             }
 

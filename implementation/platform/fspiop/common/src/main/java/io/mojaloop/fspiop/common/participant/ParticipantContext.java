@@ -31,13 +31,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 
-public record ParticipantContext(String fspCode,
-                                 String fspName,
-                                 String ilpSecret,
-                                 boolean signJws,
-                                 boolean verifyJws,
-                                 PrivateKey signingKey,
-                                 Map<String, PublicKey> publicKeys) {
+public record ParticipantContext(String fspCode, String fspName, String ilpSecret, boolean signJws, boolean verifyJws, PrivateKey signingKey, Map<String, PublicKey> publicKeys) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantContext.class);
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,17 +70,14 @@ public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowD
 
         LOGGER.info("Executing ChangeFlowDefinitionPropertiesCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(
-            () -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
 
         final var newName = input.name();
 
         if (newName != null) {
 
-            final var conflict = this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters
-                                                                           .withNameEquals(newName)
-                                                                           .and(FlowDefinitionRepository.Filters.withIdNotEquals(
-                                                                               definition.getId())));
+            final var conflict = this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters.withNameEquals(newName)
+                                                                                                       .and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
 
             if (conflict.isPresent()) {
                 LOGGER.info("Flow Definition with name {} already exists", newName);

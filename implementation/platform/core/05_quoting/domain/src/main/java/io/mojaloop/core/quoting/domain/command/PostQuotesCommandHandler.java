@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
@@ -37,8 +38,8 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
+import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
-import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
@@ -113,6 +114,14 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             var postQuotesRequest = input.quotesPostRequest();
 
+            var payerFspInRequest = postQuotesRequest.getPayer().getPartyIdInfo().getFspId();
+            var payeeFspInRequest = postQuotesRequest.getPayee().getPartyIdInfo().getFspId();
+
+            if (!payeeFspInRequest.equals(payeeFspCode.value()) || !payerFspInRequest.equals(payerFspCode.value())) {
+
+                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "FSPs information in the request body and request header must be the same.");
+            }
+
             var amount = postQuotesRequest.getAmount();
             var fees = postQuotesRequest.getFees();
             var currency = amount.getCurrency();
@@ -160,11 +169,14 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                                           new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
                     if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
+
                         postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
                             LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
                             quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
                         });
+
                     }
+
                     // I don't use @Transactional and manually control the transaction scope because
                     // forwardRequest is the HTTP API call, and it has latency. To avoid holding the
                     // connection for a long period, I used manual transaction control.
@@ -189,7 +201,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
         } catch (Exception e) {
 
-            LOGGER.error("Exception occurred while executing PostQuotesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("({}) Exception occurred while executing PostQuotesCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
 
             if (payerFsp != null) {
 
@@ -199,7 +211,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 try {
 
-                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
 
                 } catch (Throwable ignored) {
                     LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
@@ -207,7 +219,8 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             }
         }
 
-        LOGGER.info("Returning from PostQuotesCommandHandler successfully.");
+        LOGGER.info("({}) Returning from PostQuotesCommandHandler successfully.", udfQuoteId.getId());
+
         return new Output();
     }
 

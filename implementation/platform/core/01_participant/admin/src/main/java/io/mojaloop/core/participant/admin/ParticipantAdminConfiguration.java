@@ -47,8 +47,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.participant.admin")
 @Import(value = {ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantAdminConfiguration extends JacksonWebMvcExtension
-    implements ParticipantDomainConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+    implements ParticipantDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
     public ParticipantAdminConfiguration(ObjectMapper objectMapper) {
 

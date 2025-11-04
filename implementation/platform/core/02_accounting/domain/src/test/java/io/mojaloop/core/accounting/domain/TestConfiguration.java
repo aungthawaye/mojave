@@ -20,18 +20,39 @@
 
 package io.mojaloop.core.accounting.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.flyway.FlywayMigration;
+import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
+import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @Import(value = {AccountingDomainConfiguration.class, TestSettings.class})
-public class TestConfiguration {
+public class TestConfiguration implements AccountingDomainConfiguration.RequiredBeans {
 
     static {
 
         var flywaySettings = new FlywayMigration.Settings(
             "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root", "password", "classpath:migration/accounting");
+            "root",
+            "password",
+            "classpath:migration/accounting");
 
         FlywayMigration.migrate(flywaySettings);
     }
+
+    private final Ledger ledger;
+
+    public TestConfiguration(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {
+
+        this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
+    }
+
+    @Bean
+    @Override
+    public Ledger ledger() {
+
+        return this.ledger;
+    }
+
 }

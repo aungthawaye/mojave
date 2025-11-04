@@ -26,8 +26,7 @@ import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
 public class FspEndpointBaseUrlTooLongException extends UncheckedDomainException {
 
-    private static final String TEMPLATE =
-        "Base URL of FSP Endpoint is too long. Must not exceed " + StringSizeConstraints.MAX_HTTP_URL_LENGTH + " characters.";
+    private static final String TEMPLATE = "Base URL of FSP Endpoint is too long. Must not exceed " + StringSizeConstraints.MAX_HTTP_URL_LENGTH + " characters.";
 
     public FspEndpointBaseUrlTooLongException() {
 

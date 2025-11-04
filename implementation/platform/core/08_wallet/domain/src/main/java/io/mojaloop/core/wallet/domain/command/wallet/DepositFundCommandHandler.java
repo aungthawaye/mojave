@@ -32,13 +32,17 @@ public class DepositFundCommandHandler implements DepositFundCommand {
 
         try {
 
-            final var history = this.balanceUpdater.deposit(input.transactionId(), input.transactionAt(),
-                                                            balanceUpdateId, input.walletId(), input.amount(),
-                                                            input.description());
+            final var history = this.balanceUpdater.deposit(input.transactionId(), input.transactionAt(), balanceUpdateId, input.walletId(), input.amount(), input.description());
 
-            var output = new Output(history.balanceUpdateId(), history.walletId(), history.action(),
-                                    history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
-                                    history.newBalance(), history.transactionAt());
+            var output = new Output(history.balanceUpdateId(),
+                                    history.walletId(),
+                                    history.action(),
+                                    history.transactionId(),
+                                    history.currency(),
+                                    history.amount(),
+                                    history.oldBalance(),
+                                    history.newBalance(),
+                                    history.transactionAt());
 
             LOGGER.info("DepositFundCommand executed successfully with output: {}", output);
 

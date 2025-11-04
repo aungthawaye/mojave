@@ -59,32 +59,17 @@ public class RedissonOpsClientConfigurer {
 
         if (!settings.cluster()) {
 
-            config
-                .useSingleServer()
-                .setAddress(settings.hosts()[0])
-                .setConnectTimeout(5000)
-                .setTimeout(3000)
-                .setIdleConnectionTimeout(10000)
-                .setRetryAttempts(3)
-                .setConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
-                .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
-                .setPingConnectionInterval(10000);
+            config.useSingleServer().setAddress(settings.hosts()[0]).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000).setRetryAttempts(3)
+                  .setConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+                  .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64).setPingConnectionInterval(10000);
 
         } else {
 
-            config
-                .useClusterServers()
-                .addNodeAddress(settings.hosts())
-                .setScanInterval(2000)
-                .setConnectTimeout(5000)
-                .setTimeout(3000)
-                .setIdleConnectionTimeout(10000)
-                .setRetryAttempts(3)
-                .setMasterConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
-                .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
-                .setSlaveConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
-                .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
-                .setPingConnectionInterval(10000);
+            config.useClusterServers().addNodeAddress(settings.hosts()).setScanInterval(2000).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3).setMasterConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+                  .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
+                  .setSlaveConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+                  .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64).setPingConnectionInterval(10000);
         }
 
         return new RedissonOpsClient(Redisson.create(config));
@@ -100,11 +85,6 @@ public class RedissonOpsClientConfigurer {
 
     }
 
-    public record Settings(String[] hosts,
-                           boolean cluster,
-                           String codec,
-                           int executorCount,
-                           int connectionPoolSize,
-                           int connectionMinimumIdleSize) { }
+    public record Settings(String[] hosts, boolean cluster, String codec, int executorCount, int connectionPoolSize, int connectionMinimumIdleSize) { }
 
 }

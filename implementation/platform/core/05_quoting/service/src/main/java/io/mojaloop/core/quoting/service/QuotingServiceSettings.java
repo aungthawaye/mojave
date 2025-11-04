@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.service;
 
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
@@ -26,6 +27,7 @@ import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomS
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
+import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
@@ -61,16 +63,9 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
 
     @Bean
     @Override
-    public QuotingServiceConfiguration.TomcatSettings quotingServiceTomcatSettings() {
-
-        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("QUOTING_SERVICE_PORT", "4503")));
-    }
-
-    @Bean
-    @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4202"));
+        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4102"));
     }
 
     @Bean
@@ -89,11 +84,17 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
 
     @Bean
     @Override
+    public QuotingServiceConfiguration.TomcatSettings quotingServiceTomcatSettings() {
+
+        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("QUOTING_SERVICE_PORT", "4603")));
+    }
+
+    @Bean
+    @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv()
-                                                                                       .getOrDefault("QOT_READ_DB_URL",
-                                                                                                     "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv().getOrDefault("QOT_READ_DB_URL",
+                                                                                                              "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
                                                                                  System.getenv().getOrDefault("QOT_READ_DB_USER", "root"),
                                                                                  System.getenv().getOrDefault("QOT_READ_DB_PASSWORD", "password"),
                                                                                  false);
@@ -109,9 +110,8 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv()
-                                                                                        .getOrDefault("QOT_WRITE_DB_URL",
-                                                                                                      "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv().getOrDefault("QOT_WRITE_DB_URL",
+                                                                                                               "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
                                                                                   System.getenv().getOrDefault("QOT_WRITE_DB_USER", "root"),
                                                                                   System.getenv().getOrDefault("QOT_WRITE_DB_PASSWORD", "password"),
                                                                                   false);
@@ -128,6 +128,14 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("quoting-service", false, false);
+    }
+
+    @Bean
+    @Override
+    public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
+
+        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
+                                                              Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
     }
 
     @Bean

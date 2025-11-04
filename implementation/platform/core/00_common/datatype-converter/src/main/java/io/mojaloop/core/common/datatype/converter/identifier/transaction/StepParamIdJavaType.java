@@ -21,7 +21,6 @@
 package io.mojaloop.core.common.datatype.converter.identifier.transaction;
 
 import io.mojaloop.core.common.datatype.identifier.transaction.StepParamId;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;

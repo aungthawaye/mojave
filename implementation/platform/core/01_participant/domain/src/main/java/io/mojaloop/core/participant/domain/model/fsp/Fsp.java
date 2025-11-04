@@ -35,10 +35,7 @@ import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.contract.data.FspCurrencyData;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.contract.data.FspEndpointData;
-import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
-import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCodeRequiredException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspNameRequiredException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspNameTooLongException;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
@@ -225,9 +222,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
                            this.getFspCode(),
                            this.getName(),
                            this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
-                           this.getEndpoints()
-                               .stream()
-                               .map(FspEndpoint::convert)
+                           this.getEndpoints().stream().map(FspEndpoint::convert)
                                .collect(Collectors.toMap(FspEndpointData::type, Function.identity(), (existing, replacement) -> replacement)),
                            this.activationStatus,
                            this.terminationStatus);

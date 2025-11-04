@@ -1,5 +1,6 @@
 package io.mojaloop.core.wallet.domain.model;
 
+import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
@@ -36,14 +37,12 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "wlt_position_update",
-    uniqueConstraints = {@UniqueConstraint(name = "wlt_position_update_position_id_action_transaction_id_UK",
-        columnNames = {"position_id", "action", "transaction_id"}), @UniqueConstraint(name = "wlt_balance_update_reversed_id_UK",
-        columnNames = {"reversed_id"})},
-    indexes = {@Index(name = "wlt_position_update_position_id_action_transaction_at_idx",
-        columnList = "position_id, action, transaction_at"), @Index(name = "wlt_position_update_transaction_at_idx",
-        columnList = "transaction_at")})
+       uniqueConstraints = {@UniqueConstraint(name = "wlt_position_update_position_id_action_transaction_id_UK", columnNames = {"position_id", "action", "transaction_id"}),
+                            @UniqueConstraint(name = "wlt_balance_update_reversed_id_UK", columnNames = {"reservation_id"})},
+       indexes = {@Index(name = "wlt_position_update_position_id_action_transaction_at_idx", columnList = "position_id, action, transaction_at"),
+                  @Index(name = "wlt_position_update_transaction_at_idx", columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PositionUpdate implements DataConversion<PositionUpdateData> {
+public class PositionUpdate extends JpaEntity<PositionUpdateId> implements DataConversion<PositionUpdateData> {
 
     @Id
     @JavaType(PositionUpdateIdJavaType.class)
@@ -96,16 +95,25 @@ public class PositionUpdate implements DataConversion<PositionUpdateData> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @Column(name = "reversed_id")
+    @Column(name = "reservation_id")
     @Convert(converter = PositionUpdateIdConverter.class)
-    protected PositionUpdateId reversedId;
+    protected PositionUpdateId reservationId;
 
     @Override
     public PositionUpdateData convert() {
 
-        return new PositionUpdateData(this.id, this.positionId, this.action, this.transactionId, this.currency,
-                                      this.amount, this.oldPosition, this.newPosition, this.description,
-                                      this.transactionAt, this.createdAt, this.reversedId);
+        return new PositionUpdateData(this.id,
+                                      this.positionId,
+                                      this.action,
+                                      this.transactionId,
+                                      this.currency,
+                                      this.amount,
+                                      this.oldPosition,
+                                      this.newPosition,
+                                      this.description,
+                                      this.transactionAt,
+                                      this.createdAt,
+                                      this.reservationId);
     }
 
 }

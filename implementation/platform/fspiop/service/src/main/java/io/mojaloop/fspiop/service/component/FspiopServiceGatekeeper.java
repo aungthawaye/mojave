@@ -32,8 +32,10 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.handy.FspiopSignature;
+import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -41,6 +43,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class FspiopServiceGatekeeper implements Authenticator {
@@ -53,18 +57,23 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
     private final ObjectMapper objectMapper;
 
+    private final FspiopServiceConfiguration.ServiceSettings serviceSettings;
+
     public FspiopServiceGatekeeper(SpringSecurityConfigurer.Settings settings,
                                    ParticipantContext participantContext,
                                    ParticipantVerifier participantVerifier,
-                                   ObjectMapper objectMapper) {
+                                   ObjectMapper objectMapper,
+                                   FspiopServiceConfiguration.ServiceSettings serviceSettings) {
 
         assert participantContext != null;
         assert participantVerifier != null;
         assert objectMapper != null;
+        assert serviceSettings != null;
 
         this.participantContext = participantContext;
         this.participantVerifier = participantVerifier;
         this.objectMapper = objectMapper;
+        this.serviceSettings = serviceSettings;
     }
 
     @Override
@@ -72,6 +81,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         try {
 
+            this.verifyRequestAge(cachedServletRequest);
             this.verifyFsps(cachedServletRequest);
 
             return this.authenticateUsingJws(cachedServletRequest);
@@ -204,6 +214,37 @@ public class FspiopServiceGatekeeper implements Authenticator {
                                                                      "Destination FSP (" + destination + ") must not be Hub (" + this.participantContext.fspCode() + ")."));
         }
 
+    }
+
+    private void verifyRequestAge(CachedServletRequest cachedServletRequest) {
+
+        var date = cachedServletRequest.getHeader(FspiopHeaders.Names.DATE);
+        LOGGER.debug("Date : [{}]", date);
+
+        if (date == null || date.isBlank()) {
+
+            LOGGER.error("The 'date' header is missing.");
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST,
+                                                 new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "The 'date' header or its value is missing."));
+        }
+
+        Instant sentAt = null;
+
+        try {
+
+            sentAt = FspiopDates.fromRequestHeader(date);
+            LOGGER.debug("Sent at : [{}]", sentAt);
+
+        } catch (FspiopException e) {
+
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST, e);
+
+        }
+
+        if (sentAt.plus(this.serviceSettings.requestAgeMs(), ChronoUnit.SECONDS).isBefore(Instant.now())) {
+
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST, new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The request is too old."));
+        }
     }
 
     public static class GatekeeperFailureException extends AuthenticationFailureException {

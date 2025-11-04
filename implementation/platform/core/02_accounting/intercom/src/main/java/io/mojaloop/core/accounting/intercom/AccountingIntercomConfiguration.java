@@ -28,6 +28,8 @@ import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
+import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
+import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import io.mojaloop.core.accounting.intercom.component.EmptyErrorWriter;
 import io.mojaloop.core.accounting.intercom.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -46,13 +48,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom")
 @Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-public class AccountingIntercomConfiguration extends JacksonWebMvcExtension implements AccountingDomainConfiguration.RequiredBeans,
-                                                                                       SpringSecurityConfiguration.RequiredBeans,
-                                                                                       SpringSecurityConfiguration.RequiredSettings {
+public class AccountingIntercomConfiguration extends JacksonWebMvcExtension
+    implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
-    public AccountingIntercomConfiguration(ObjectMapper objectMapper) {
+    private final Ledger ledger;
+
+    public AccountingIntercomConfiguration(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {
 
         super(objectMapper);
+        this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
     }
 
     @Bean
@@ -67,6 +71,13 @@ public class AccountingIntercomConfiguration extends JacksonWebMvcExtension impl
     public Authenticator authenticator() {
 
         return new EmptyGatekeeper();
+    }
+
+    @Bean
+    @Override
+    public Ledger ledger() {
+
+        return this.ledger;
     }
 
     @Bean

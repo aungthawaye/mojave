@@ -90,7 +90,7 @@ public class ConnectorOutboundConfiguration
 
             factory.addConnectorCustomizers(connector -> {
                 var protocol = (org.apache.coyote.http11.AbstractHttp11Protocol<?>) connector.getProtocolHandler();
-                protocol.setConnectionTimeout(outboundSettings.connectionTimeout());
+                protocol.setConnectionTimeout(outboundSettings.connectionTimeoutMs());
                 protocol.setMaxThreads(outboundSettings.maxThreads());
             });
         };
@@ -102,8 +102,7 @@ public class ConnectorOutboundConfiguration
 
     }
 
-    public interface RequiredSettings
-        extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
 
         OutboundSettings outboundSettings();
 
@@ -111,13 +110,7 @@ public class ConnectorOutboundConfiguration
 
     }
 
-    public record OutboundSettings(int portNo,
-                                   int maxThreads,
-                                   int connectionTimeout,
-                                   int putResultTimeout,
-                                   int pubSubTimeout,
-                                   String publicKeyPem,
-                                   boolean secured) { }
+    public record OutboundSettings(int portNo, int maxThreads, int connectionTimeoutMs, int putResultTimeoutMs, int pubSubTimeoutMs, String publicKeyPem, boolean secured) { }
 
     public record TransactionSettings(int expireAfterSeconds) { }
 

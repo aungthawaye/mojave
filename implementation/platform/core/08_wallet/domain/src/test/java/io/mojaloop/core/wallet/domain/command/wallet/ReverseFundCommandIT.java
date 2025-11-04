@@ -53,18 +53,42 @@ public class ReverseFundCommandIT extends BaseDomainIT {
     private ReverseFundCommand reverseFundCommand;
 
     @Test
-    void should_reverse_withdraw_successfully() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException, io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException, io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException {
+    void should_fail_to_reverse_deposit() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException {
         // Arrange
-        final var walletOut = this.createWalletCommand.execute(
-            new CreateWalletCommand.Input(new WalletOwnerId(84001L), Currency.USD, "Reverse Wallet"));
+        final var walletOut = this.createWalletCommand.execute(new CreateWalletCommand.Input(new WalletOwnerId(84002L), Currency.USD, "Reverse Fail Wallet"));
+
+        final var depositOut = this.depositFundCommand.execute(new DepositFundCommand.Input(walletOut.walletId(),
+                                                                                            new BigDecimal("15.00"),
+                                                                                            new TransactionId(8300000000003L),
+                                                                                            Instant.parse("2025-01-04T10:00:00Z"),
+                                                                                            "Deposit"));
+
+        final var input = new ReverseFundCommand.Input(depositOut.balanceUpdateId(), new BalanceUpdateId(8300000001000L), "Attempt reverse deposit");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> this.reverseFundCommand.execute(input));
+    }
+
+    @Test
+    void should_reverse_withdraw_successfully() throws
+                                                io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException,
+                                                io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException,
+                                                io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException {
+        // Arrange
+        final var walletOut = this.createWalletCommand.execute(new CreateWalletCommand.Input(new WalletOwnerId(84001L), Currency.USD, "Reverse Wallet"));
 
         // Deposit then withdraw to create a WITHDRAW update to reverse
-        this.depositFundCommand.execute(new DepositFundCommand.Input(walletOut.walletId(), new BigDecimal("100.00"),
-            new TransactionId(8300000000001L), Instant.parse("2025-01-04T08:00:00Z"), "Fund before reverse"));
+        this.depositFundCommand.execute(new DepositFundCommand.Input(walletOut.walletId(),
+                                                                     new BigDecimal("100.00"),
+                                                                     new TransactionId(8300000000001L),
+                                                                     Instant.parse("2025-01-04T08:00:00Z"),
+                                                                     "Fund before reverse"));
 
-        final var withdrawOut = this.withdrawFundCommand.execute(
-            new WithdrawFundCommand.Input(walletOut.walletId(), new BigDecimal("40.00"), new TransactionId(8300000000002L),
-                Instant.parse("2025-01-04T09:00:00Z"), "Withdraw to be reversed"));
+        final var withdrawOut = this.withdrawFundCommand.execute(new WithdrawFundCommand.Input(walletOut.walletId(),
+                                                                                               new BigDecimal("40.00"),
+                                                                                               new TransactionId(8300000000002L),
+                                                                                               Instant.parse("2025-01-04T09:00:00Z"),
+                                                                                               "Withdraw to be reversed"));
 
         final var reversedId = withdrawOut.balanceUpdateId();
         final var balanceUpdateId = new BalanceUpdateId(8300000000999L);
@@ -86,19 +110,4 @@ public class ReverseFundCommandIT extends BaseDomainIT {
         assertEquals(Currency.USD, output.currency());
     }
 
-    @Test
-    void should_fail_to_reverse_deposit() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException {
-        // Arrange
-        final var walletOut = this.createWalletCommand.execute(
-            new CreateWalletCommand.Input(new WalletOwnerId(84002L), Currency.USD, "Reverse Fail Wallet"));
-
-        final var depositOut = this.depositFundCommand.execute(new DepositFundCommand.Input(walletOut.walletId(),
-            new BigDecimal("15.00"), new TransactionId(8300000000003L), Instant.parse("2025-01-04T10:00:00Z"), "Deposit"));
-
-        final var input = new ReverseFundCommand.Input(depositOut.balanceUpdateId(), new BalanceUpdateId(8300000001000L),
-            "Attempt reverse deposit");
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> this.reverseFundCommand.execute(input));
-    }
 }

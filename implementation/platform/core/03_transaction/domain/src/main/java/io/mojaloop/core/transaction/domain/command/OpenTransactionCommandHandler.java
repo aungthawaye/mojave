@@ -62,4 +62,5 @@ public class OpenTransactionCommandHandler implements OpenTransactionCommand {
 
         return new Output(transaction.getId());
     }
+
 }

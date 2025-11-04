@@ -52,9 +52,8 @@ public class DeactivateEndpoint {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.fspCommands.deactivateEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.fspCommands.deactivateEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

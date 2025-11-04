@@ -68,9 +68,7 @@ public class TerminateOracleCommandHandler implements TerminateOracleCommand {
 
         LOGGER.info("Executing TerminateOracleCommand with input: {}", input);
 
-        var oracle = this.oracleRepository
-                         .findById(input.oracleId())
-                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+        var oracle = this.oracleRepository.findById(input.oracleId()).orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.terminate();
         this.oracleRepository.save(oracle);

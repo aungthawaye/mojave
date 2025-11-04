@@ -24,9 +24,6 @@ import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -34,24 +31,15 @@ import org.springframework.context.annotation.Import;
 @Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
 public class WalletDomainConfiguration {
 
-    @Bean
-    public BalanceUpdater balanceUpdater(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings) {
+    public interface RequiredBeans {
 
-        return new MySqlBalanceUpdater(balanceDbSettings);
+        BalanceUpdater balanceUpdater();
+
+        PositionUpdater positionUpdater();
+
     }
 
-    @Bean
-    public PositionUpdater positionUpdater(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings) {
-
-        return new MySqlPositionUpdater(balanceDbSettings);
-    }
-
-    public interface RequiredBeans { }
-
-    public interface RequiredSettings
-        extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
-
-        MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
 
     }
 

@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.common.datatype.converter.identifier.transfer;
 
-import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;

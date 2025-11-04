@@ -21,7 +21,6 @@
 package io.mojaloop.core.participant.admin.controller.fsp;
 
 import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

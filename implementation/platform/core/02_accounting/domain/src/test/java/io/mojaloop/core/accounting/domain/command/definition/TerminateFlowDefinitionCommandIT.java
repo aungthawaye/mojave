@@ -20,9 +20,9 @@
 
 package io.mojaloop.core.accounting.domain.command.definition;
 
+import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartCommand;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
-import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
 import io.mojaloop.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
@@ -64,25 +64,43 @@ public class TerminateFlowDefinitionCommandIT extends BaseDomainIT {
     private TerminateFlowDefinitionCommand terminateFlowDefinitionCommand;
 
     @Test
+    void should_fail_when_flow_definition_not_found() {
+        // Arrange
+        final var input = new TerminateFlowDefinitionCommand.Input(new FlowDefinitionId(99999999L));
+
+        // Act & Assert
+        assertThrows(FlowDefinitionNotFoundException.class, () -> this.terminateFlowDefinitionCommand.execute(input));
+    }
+
+    @Test
     void should_terminate_flow_definition_successfully() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
 
-        final var entry = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc",
-                AccountType.ASSET));
+        final var entry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
+                                                                                                 new ChartEntryCode("ASSETS"),
+                                                                                                 "Assets",
+                                                                                                 "Assets Desc",
+                                                                                                 AccountType.ASSET));
 
         // Mature entry
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(3201L),
-            Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+        this.createAccountCommand.execute(new CreateAccountCommand.Input(entry.chartEntryId(),
+                                                                         new AccountOwnerId(3201L),
+                                                                         Currency.USD,
+                                                                         new AccountCode("ACC_ASSET"),
+                                                                         "Asset Acc",
+                                                                         "Test",
+                                                                         OverdraftMode.FORBID,
+                                                                         BigDecimal.ZERO));
 
-        final var postings = List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP",
-                "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets")
-        );
+        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
+                                                                                   entry.chartEntryId().getId(),
+                                                                                   "DEPOSIT_INTO_FSP",
+                                                                                   "LIQUIDITY_AMOUNT",
+                                                                                   Side.DEBIT,
+                                                                                   "Debit Assets"));
 
-        final var created = this.createFlowDefinitionCommand.execute(
-            new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow C", "Desc", postings));
+        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow C", "Desc", postings));
 
         final var input = new TerminateFlowDefinitionCommand.Input(created.flowDefinitionId());
 
@@ -94,12 +112,4 @@ public class TerminateFlowDefinitionCommandIT extends BaseDomainIT {
         assertNotNull(output.flowDefinitionId());
     }
 
-    @Test
-    void should_fail_when_flow_definition_not_found() {
-        // Arrange
-        final var input = new TerminateFlowDefinitionCommand.Input(new FlowDefinitionId(99999999L));
-
-        // Act & Assert
-        assertThrows(FlowDefinitionNotFoundException.class, () -> this.terminateFlowDefinitionCommand.execute(input));
-    }
 }

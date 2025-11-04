@@ -49,8 +49,7 @@ public class CommitTransactionCommandHandler implements CommitTransactionCommand
 
         LOGGER.info("Executing CommitTransactionCommand with input: {}", input);
 
-        var transaction = this.transactionRepository.findById(input.transactionId())
-                                                    .orElseThrow(() -> new TransactionIdNotFoundException(input.transactionId()));
+        var transaction = this.transactionRepository.findById(input.transactionId()).orElseThrow(() -> new TransactionIdNotFoundException(input.transactionId()));
         LOGGER.info("Found Transaction with id: {}", input.transactionId());
 
         transaction.close(input.error());
@@ -63,4 +62,5 @@ public class CommitTransactionCommandHandler implements CommitTransactionCommand
 
         return new Output(transaction.getId());
     }
+
 }

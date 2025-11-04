@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.domain;
 
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
@@ -41,7 +42,7 @@ public class TestSettings implements QuotingDomainConfiguration.RequiredSettings
         var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
         var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
         var fspsEnv = System.getenv("FSPIOP_FSPS");
-                var fsps = (fspsEnv == null || fspsEnv.isBlank()) ? new String[0] : fspsEnv.split(",", -1);
+        var fsps = (fspsEnv == null || fspsEnv.isBlank()) ? new String[0] : fspsEnv.split(",", -1);
         var fspPublicKeyPem = new HashMap<String, String>();
 
         for (var fsp : fsps) {

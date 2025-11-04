@@ -24,7 +24,6 @@ import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.fspiop.spec.core.Currency;
 import lombok.Getter;
 
@@ -33,24 +32,13 @@ import java.time.Instant;
 
 public interface BalanceUpdater {
 
-    BalanceHistory deposit(TransactionId transactionId,
-                           Instant transactionAt,
-                           BalanceUpdateId balanceUpdateId,
-                           WalletId walletId,
-                           BigDecimal amount,
-                           String description) throws BalanceUpdater.NoBalanceUpdateException;
+    BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+        throws BalanceUpdater.NoBalanceUpdateException;
 
-    BalanceHistory withdraw(TransactionId transactionId,
-                            Instant transactionAt,
-                            BalanceUpdateId balanceUpdateId,
-                            WalletId walletId,
-                            BigDecimal amount,
-                            String description)
+    BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId) throws BalanceUpdater.ReversalFailedException;
+
+    BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
         throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
-
-    BalanceHistory reverse(BalanceUpdateId reversedId,
-                           BalanceUpdateId balanceUpdateId)
-        throws BalanceUpdater.ReversalFailedException;
 
     record BalanceHistory(BalanceUpdateId balanceUpdateId,
                           WalletId walletId,
@@ -88,13 +76,10 @@ public interface BalanceUpdater {
 
         private final BigDecimal oldBalance;
 
-        public InsufficientBalanceException(TransactionId transactionId,
-                                            WalletId walletId,
-                                            BigDecimal amount,
-                                            BigDecimal oldBalance) {
+        public InsufficientBalanceException(TransactionId transactionId, WalletId walletId, BigDecimal amount, BigDecimal oldBalance) {
 
-            super("Insufficient balance in walletId: " + walletId + " amount: " + amount + " transactionId: " +
-                      transactionId + " oldBalance: " + oldBalance.stripTrailingZeros().toPlainString());
+            super("Insufficient balance in walletId: " + walletId + " amount: " + amount + " transactionId: " + transactionId + " oldBalance: " +
+                      oldBalance.stripTrailingZeros().toPlainString());
 
             this.transactionId = transactionId;
             this.walletId = walletId;

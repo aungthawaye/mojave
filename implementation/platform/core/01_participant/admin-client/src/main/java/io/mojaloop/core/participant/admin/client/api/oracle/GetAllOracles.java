@@ -54,9 +54,8 @@ public class GetAllOracles {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.oracleCommands.getAllOracles(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(this.oracleCommands.getAllOracles(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -48,22 +48,35 @@ public class WithdrawFundCommandIT extends BaseDomainIT {
     private WithdrawFundCommand withdrawFundCommand;
 
     @Test
-    void should_withdraw_fund_successfully_when_sufficient_balance() throws io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException, io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException {
+    void should_fail_with_insufficient_balance_on_empty_wallet() {
         // Arrange
-        final var walletOut = this.createWalletCommand.execute(
-            new CreateWalletCommand.Input(new WalletOwnerId(83001L), Currency.USD, "Test Wallet"));
+        final var walletOut = this.createWalletCommand.execute(new CreateWalletCommand.Input(new WalletOwnerId(83002L), Currency.USD, "Empty Wallet"));
+
+        final var withdrawTxId = new TransactionId(8200000000003L);
+        final var withdrawTxAt = Instant.parse("2025-01-03T10:00:00Z");
+        final var withdrawAmount = new BigDecimal("10.00");
+        final var input = new WithdrawFundCommand.Input(walletOut.walletId(), withdrawAmount, withdrawTxId, withdrawTxAt, "Withdraw should fail");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> this.withdrawFundCommand.execute(input));
+    }
+
+    @Test
+    void should_withdraw_fund_successfully_when_sufficient_balance() throws
+                                                                     io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException,
+                                                                     io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException {
+        // Arrange
+        final var walletOut = this.createWalletCommand.execute(new CreateWalletCommand.Input(new WalletOwnerId(83001L), Currency.USD, "Test Wallet"));
 
         final var depositTxId = new TransactionId(8200000000001L);
         final var depositTxAt = Instant.parse("2025-01-03T08:00:00Z");
         final var depositAmount = new BigDecimal("200.00");
-        this.depositFundCommand.execute(
-            new DepositFundCommand.Input(walletOut.walletId(), depositAmount, depositTxId, depositTxAt, "Top up"));
+        this.depositFundCommand.execute(new DepositFundCommand.Input(walletOut.walletId(), depositAmount, depositTxId, depositTxAt, "Top up"));
 
         final var withdrawTxId = new TransactionId(8200000000002L);
         final var withdrawTxAt = Instant.parse("2025-01-03T09:00:00Z");
         final var withdrawAmount = new BigDecimal("20.00");
-        final var input = new WithdrawFundCommand.Input(walletOut.walletId(), withdrawAmount, withdrawTxId, withdrawTxAt,
-            "Withdraw for test");
+        final var input = new WithdrawFundCommand.Input(walletOut.walletId(), withdrawAmount, withdrawTxId, withdrawTxAt, "Withdraw for test");
 
         // Act
         final var output = this.withdrawFundCommand.execute(input);
@@ -81,19 +94,4 @@ public class WithdrawFundCommandIT extends BaseDomainIT {
         assertNotNull(output.balanceUpdateId());
     }
 
-    @Test
-    void should_fail_with_insufficient_balance_on_empty_wallet() {
-        // Arrange
-        final var walletOut = this.createWalletCommand.execute(
-            new CreateWalletCommand.Input(new WalletOwnerId(83002L), Currency.USD, "Empty Wallet"));
-
-        final var withdrawTxId = new TransactionId(8200000000003L);
-        final var withdrawTxAt = Instant.parse("2025-01-03T10:00:00Z");
-        final var withdrawAmount = new BigDecimal("10.00");
-        final var input = new WithdrawFundCommand.Input(walletOut.walletId(), withdrawAmount, withdrawTxId, withdrawTxAt,
-            "Withdraw should fail");
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> this.withdrawFundCommand.execute(input));
-    }
 }

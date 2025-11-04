@@ -156,8 +156,8 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
                 } else {
 
-                    var error = new ErrorInformationObject().errorInformation(
-                        new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(), FspiopErrors.GENERIC_CLIENT_ERROR.description()));
+                    var error = new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(),
+                                                                                                   FspiopErrors.GENERIC_CLIENT_ERROR.description()));
 
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     writer.write(this.objectMapper.writeValueAsString(error));

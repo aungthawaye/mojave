@@ -44,11 +44,31 @@ public class ReservePositionCommandIT extends BaseDomainIT {
     private ReservePositionCommand reservePositionCommand;
 
     @Test
+    void should_fail_when_reserve_exceeds_net_debit_cap() {
+        // Arrange
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(87002L),
+                                                                                                 Currency.USD,
+                                                                                                 "Position R2",
+                                                                                                 new BigDecimal("20.0000")));
+        final var positionId = createOut.positionId();
+
+        final var txId = new TransactionId(8700000001002L);
+        final var txAt = Instant.parse("2025-01-07T09:10:00Z");
+        final var amount = new BigDecimal("25.00");
+
+        final var input = new ReservePositionCommand.Input(positionId, amount, txId, txAt, "Reserve exceed");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> this.reservePositionCommand.execute(input));
+    }
+
+    @Test
     void should_reserve_position_successfully() {
         // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(87001L), Currency.USD, "Position R",
-                new BigDecimal("100.0000")));
+        final var createOut = this.createPositionCommand.execute(new CreatePositionCommand.Input(new WalletOwnerId(87001L),
+                                                                                                 Currency.USD,
+                                                                                                 "Position R",
+                                                                                                 new BigDecimal("100.0000")));
         final var positionId = createOut.positionId();
 
         final var txId = new TransactionId(8700000001001L);
@@ -75,21 +95,4 @@ public class ReservePositionCommandIT extends BaseDomainIT {
         assertNotNull(output.positionUpdateId());
     }
 
-    @Test
-    void should_fail_when_reserve_exceeds_net_debit_cap() {
-        // Arrange
-        final var createOut = this.createPositionCommand.execute(
-            new CreatePositionCommand.Input(new WalletOwnerId(87002L), Currency.USD, "Position R2",
-                new BigDecimal("20.0000")));
-        final var positionId = createOut.positionId();
-
-        final var txId = new TransactionId(8700000001002L);
-        final var txAt = Instant.parse("2025-01-07T09:10:00Z");
-        final var amount = new BigDecimal("25.00");
-
-        final var input = new ReservePositionCommand.Input(positionId, amount, txId, txAt, "Reserve exceed");
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> this.reservePositionCommand.execute(input));
-    }
 }

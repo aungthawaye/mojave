@@ -21,9 +21,6 @@
 package io.mojaloop.core.participant.admin.controller.hub;
 
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
-import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

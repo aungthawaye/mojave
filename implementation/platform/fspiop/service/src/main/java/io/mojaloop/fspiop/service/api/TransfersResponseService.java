@@ -35,18 +35,12 @@ import java.util.Map;
 public interface TransfersResponseService {
 
     @PATCH
-    Call<String> patchTransfers(@Url String url,
-                                @HeaderMap Map<String, String> fspiopHeaders,
-                                @Body TransfersIDPatchResponse transfersIDPatchResponse);
+    Call<String> patchTransfers(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, @Body TransfersIDPatchResponse transfersIDPatchResponse);
 
     @PUT
-    Call<String> putTransfers(@Url String url,
-                              @HeaderMap Map<String, String> fspiopHeaders,
-                              @Body TransfersIDPutResponse transfersIDPutResponse);
+    Call<String> putTransfers(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, @Body TransfersIDPutResponse transfersIDPutResponse);
 
     @PUT
-    Call<String> putTransfersError(@Url String url,
-                                   @HeaderMap Map<String, String> fspiopHeaders,
-                                   @Body ErrorInformationObject errorInformationObject);
+    Call<String> putTransfersError(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, @Body ErrorInformationObject errorInformationObject);
 
 }

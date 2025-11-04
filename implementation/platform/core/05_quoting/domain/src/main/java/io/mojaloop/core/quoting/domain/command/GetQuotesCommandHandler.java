@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.transaction.TransactionContext;
@@ -32,7 +33,7 @@ import io.mojaloop.fspiop.common.exception.FspiopCommunicationException;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
-import io.mojaloop.fspiop.component.handy.PayeeOrServerExceptionResponder;
+import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Service
 public class GetQuotesCommandHandler implements GetQuotesCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostQuotesCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetQuotesCommandHandler.class);
 
     private final ParticipantStore participantStore;
 
@@ -152,7 +153,7 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
                 try {
 
-                    PayeeOrServerExceptionResponder.respond(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
 
                 } catch (Throwable ignored) {
                     LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);

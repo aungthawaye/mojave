@@ -41,22 +41,16 @@ public interface TransfersService {
     Call<String> getTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId);
 
     @PATCH("transfers/{transferId}")
-    Call<String> patchTransfers(@HeaderMap Map<String, String> fspiopHeaders,
-                                @Path("transferId") String transferId,
-                                @Body TransfersIDPatchResponse transfersIDPatchResponse);
+    Call<String> patchTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId, @Body TransfersIDPatchResponse transfersIDPatchResponse);
 
     @POST("transfers")
     Call<String> postTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Body TransfersPostRequest transfersPostRequest);
 
     @PUT("transfers/{transferId}")
-    Call<String> putTransfers(@HeaderMap Map<String, String> fspiopHeaders,
-                              @Path("transferId") String transferId,
-                              @Body TransfersIDPutResponse transfersIDPutResponse);
+    Call<String> putTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId, @Body TransfersIDPutResponse transfersIDPutResponse);
 
     @PUT("transfers/{transferId}/error")
-    Call<String> putTransfersError(@HeaderMap Map<String, String> fspiopHeaders,
-                                   @Path("transferId") String transferId,
-                                   @Body ErrorInformationObject errorInformationObject);
+    Call<String> putTransfersError(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId, @Body ErrorInformationObject errorInformationObject);
 
     record Settings(String baseUrl) { }
 

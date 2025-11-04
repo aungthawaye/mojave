@@ -41,7 +41,6 @@ package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.hub.AddHubCurrencyCommand;
-import io.mojaloop.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;

@@ -51,12 +51,9 @@ class DeactivateEndpointCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP800"), "FSP-800",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP800"), "FSP-800", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new DeactivateEndpointCommand.Input(created.fspId(), EndpointType.PARTIES);
@@ -77,4 +74,5 @@ class DeactivateEndpointCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(FspIdNotFoundException.class, () -> this.deactivateEndpoint.execute(input));
     }
+
 }

@@ -22,10 +22,7 @@ package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
-import io.mojaloop.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
-import io.mojaloop.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.domain.model.fsp.FspCurrency;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
@@ -54,9 +51,7 @@ public class ActivateFspCurrencyCommandHandler implements ActivateFspCurrencyCom
 
         LOGGER.info("Executing ActivateSupportedCurrencyCommand with input: {}", input);
 
-        var fsp = this.fspRepository
-                      .findById(input.fspId())
-                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspCurrency = fsp.activate(input.currency());
 

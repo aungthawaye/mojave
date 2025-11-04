@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,8 +46,8 @@ import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.command.BaseDomainIT;
 import io.mojaloop.fspiop.spec.core.Currency;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class DeactivateFspCurrencyCommandIT extends BaseDomainIT {
@@ -68,8 +68,10 @@ class DeactivateFspCurrencyCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP30"), "FSP Thirty",
-            new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
+        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP30"),
+                                                                          "FSP Thirty",
+                                                                          new Currency[]{Currency.USD},
+                                                                          new CreateFspCommand.Input.Endpoint[]{}));
 
         var input = new DeactivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
 
@@ -86,4 +88,5 @@ class DeactivateFspCurrencyCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(FspIdNotFoundException.class, () -> this.deactivateCurrency.execute(input));
     }
+
 }

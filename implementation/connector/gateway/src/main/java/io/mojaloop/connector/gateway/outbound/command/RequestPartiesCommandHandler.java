@@ -25,18 +25,14 @@ import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.PartiesErrorResult;
 import io.mojaloop.connector.gateway.data.PartiesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
+import io.mojaloop.connector.gateway.outbound.component.FspiopResultListener;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.invoker.api.parties.GetParties;
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 class RequestPartiesCommandHandler implements RequestPartiesCommand {
@@ -72,79 +68,22 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         var errorTopic = PubSubKeys.forPartiesError(input.payee(), input.partyIdType(), input.partyId(), input.subId());
 
         // Listening to the pub/sub
-        var blocker = new CountDownLatch(1);
+        var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, PartiesResult.class, PartiesErrorResult.class);
+        resultListener.init(resultTopic, errorTopic);
 
-        AtomicReference<PartiesResult> responseRef = new AtomicReference<>();
-        AtomicReference<PartiesErrorResult> errorRef = new AtomicReference<>();
-
-        var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
-
-            @Override
-            public void handle(String channel, Object message) {
-
-                LOGGER.debug("Result message from channel : {}, message : {}", channel, message);
-
-                if (message instanceof PartiesResult result) {
-                    responseRef.set(result);
-                }
-
-                blocker.countDown();
-            }
-
-            @Override
-            public Class<PartiesResult> messageType() {
-
-                return PartiesResult.class;
-            }
-        }, this.outboundSettings.pubSubTimeout());
-
-        var errorSubscription = this.pubSubClient.subscribe(errorTopic, new PubSubClient.MessageHandler() {
-
-            @Override
-            public void handle(String channel, Object message) {
-
-                LOGGER.debug("Error message from channel : {}, message : {}", channel, message);
-
-                if (message instanceof PartiesErrorResult response) {
-                    errorRef.set(response);
-                }
-
-                blocker.countDown();
-            }
-
-            @Override
-            public Class<?> messageType() {
-
-                return ErrorInformationObject.class;
-            }
-        }, this.outboundSettings.pubSubTimeout());
-
-        try {
-
-            if (withSubId) {
-                this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
-            } else {
-                this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId());
-            }
-
-            var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
-
-            if (!ok) {
-                throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");
-            }
-
-        } catch (InterruptedException ignored) {
-            // Do nothing.
-        } finally {
-            this.pubSubClient.unsubscribe(resultSubscription);
-            this.pubSubClient.unsubscribe(errorSubscription);
+        if (withSubId) {
+            this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        } else {
+            this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId());
         }
 
-        if (responseRef.get() != null) {
-            return new Output(responseRef.get().response());
+        resultListener.await();
+
+        if (resultListener.getResponse() != null) {
+            return new Output(resultListener.getResponse().response());
         }
 
-        var error = errorRef.get();
+        var error = resultListener.getError();
         var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
         throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));

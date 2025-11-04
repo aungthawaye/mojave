@@ -38,14 +38,10 @@ public interface QuotesService {
     Call<String> postQuotes(@HeaderMap Map<String, String> fspiopHeaders, @Body QuotesPostRequest quotesPostRequest);
 
     @PUT("quotes/{quoteId}")
-    Call<String> putQuotes(@HeaderMap Map<String, String> fspiopHeaders,
-                           @Path("quoteId") String quoteId,
-                           @Body QuotesIDPutResponse quotesIDPutResponse);
+    Call<String> putQuotes(@HeaderMap Map<String, String> fspiopHeaders, @Path("quoteId") String quoteId, @Body QuotesIDPutResponse quotesIDPutResponse);
 
     @PUT("quotes/{quoteId}/error")
-    Call<String> putQuotesError(@HeaderMap Map<String, String> fspiopHeaders,
-                                @Path("quoteId") String quoteId,
-                                @Body ErrorInformationObject errorInformationObject);
+    Call<String> putQuotesError(@HeaderMap Map<String, String> fspiopHeaders, @Path("quoteId") String quoteId, @Body ErrorInformationObject errorInformationObject);
 
     record Settings(String baseUrl) { }
 

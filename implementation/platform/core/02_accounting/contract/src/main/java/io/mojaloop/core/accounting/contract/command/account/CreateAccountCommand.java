@@ -48,8 +48,7 @@ public interface CreateAccountCommand {
                  @JsonProperty(required = true) @NotNull @NotBlank Currency currency,
                  @JsonProperty(required = true) @NotNull AccountCode code,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull @NotBlank @Size(
-                     max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
                  @JsonProperty(required = true) @NotNull OverdraftMode overdraftMode,
                  @JsonProperty(required = true) @NotNull BigDecimal overdraftLimit) { }
 

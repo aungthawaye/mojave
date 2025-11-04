@@ -25,7 +25,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public MySqlPositionUpdater(MySqlBalanceUpdater.BalanceDbSettings settings) {
+    public MySqlPositionUpdater(PositionDbSettings settings) {
 
         assert settings != null;
 
@@ -67,16 +67,18 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                    new PositionId(rs.getLong("position_id")),
                                    PositionAction.valueOf(rs.getString("action")),
                                    new TransactionId(rs.getLong("transaction_id")),
-                                   Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
-                                   rs.getBigDecimal("old_position"), rs.getBigDecimal("new_position"),
-                                   rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"),
+                                   Currency.valueOf(rs.getString("currency")),
+                                   rs.getBigDecimal("amount"),
+                                   rs.getBigDecimal("old_position"),
+                                   rs.getBigDecimal("new_position"),
+                                   rs.getBigDecimal("old_reserved"),
+                                   rs.getBigDecimal("new_reserved"),
                                    rs.getBigDecimal("net_debit_cap"),
                                    Instant.ofEpochMilli(rs.getLong("transaction_at")));
     }
 
     @Override
-    public PositionHistory commit(final PositionUpdateId reservationId, final PositionUpdateId positionUpdateId)
-        throws CommitFailedException {
+    public PositionHistory commit(final PositionUpdateId reservationId, final PositionUpdateId positionUpdateId) throws CommitFailedException {
 
         LOGGER.info("Commit reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
 
@@ -209,9 +211,11 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"),
-                                                                   rs.getBigDecimal("net_debit_cap"), transactionId));
+                                    throw new RuntimeException(new LimitExceededException(positionId,
+                                                                                          amount,
+                                                                                          rs.getBigDecimal("old_position"),
+                                                                                          rs.getBigDecimal("net_debit_cap"),
+                                                                                          transactionId));
                                 }
                             }
                         }
@@ -267,9 +271,11 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"),
-                                                                   rs.getBigDecimal("net_debit_cap"), transactionId));
+                                    throw new RuntimeException(new LimitExceededException(positionId,
+                                                                                          amount,
+                                                                                          rs.getBigDecimal("old_position"),
+                                                                                          rs.getBigDecimal("net_debit_cap"),
+                                                                                          transactionId));
                                 }
                             }
                         }
@@ -292,8 +298,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
     }
 
     @Override
-    public PositionHistory rollback(final PositionUpdateId reservationId, final PositionUpdateId positionUpdateId)
-        throws RollbackFailedException {
+    public PositionHistory rollback(final PositionUpdateId reservationId, final PositionUpdateId positionUpdateId) throws RollbackFailedException {
 
         LOGGER.info("Rollback reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
 
@@ -307,12 +312,19 @@ public class MySqlPositionUpdater implements PositionUpdater {
                     var hasResults = stm.execute();
 
                     while (hasResults) {
+
                         try (var rs = stm.getResultSet()) {
+
                             if (rs != null && rs.next()) {
+
                                 var status = rs.getString("status");
+
                                 if ("SUCCESS".equals(status)) {
+
                                     return mapHistory(rs);
+
                                 } else if ("ROLLBACK_FAILED".equals(status)) {
+
                                     throw new RuntimeException(new RollbackFailedException(reservationId));
                                 }
                             }
@@ -331,6 +343,14 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
             throw e;
         }
+    }
+
+    public record PositionDbSettings(Connection connection, Pool pool) {
+
+        public record Connection(String url, String username, String password) { }
+
+        public record Pool(String name, int minPool, int maxPool) { }
+
     }
 
 }

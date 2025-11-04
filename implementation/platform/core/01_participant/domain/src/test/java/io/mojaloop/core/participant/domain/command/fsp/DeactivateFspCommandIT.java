@@ -23,8 +23,8 @@ package io.mojaloop.core.participant.domain.command.fsp;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
-import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
+import io.mojaloop.core.participant.contract.command.fsp.DeactivateFspCommand;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.command.BaseDomainIT;
@@ -51,12 +51,9 @@ class DeactivateFspCommandIT extends BaseDomainIT {
         var createHubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(createHubInput);
 
-        var endpoints = new CreateFspCommand.Input.Endpoint[]{
-            new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")
-        };
+        var endpoints = new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://fsp.example/parties")};
 
-        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP300"), "FSP-300",
-            new Currency[]{Currency.USD}, endpoints);
+        var createFspInput = new CreateFspCommand.Input(new FspCode("DFSP300"), "FSP-300", new Currency[]{Currency.USD}, endpoints);
         var created = this.createFsp.execute(createFspInput);
 
         var input = new DeactivateFspCommand.Input(created.fspId());
@@ -77,4 +74,5 @@ class DeactivateFspCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(FspIdNotFoundException.class, () -> this.deactivateFsp.execute(input));
     }
+
 }

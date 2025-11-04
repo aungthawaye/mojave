@@ -82,4 +82,5 @@ class DeactivateHubCurrencyCommandIT extends BaseDomainIT {
         // Act & Assert
         Assertions.assertThrows(HubNotFoundException.class, () -> this.deactivateCurrency.execute(input));
     }
+
 }

@@ -38,6 +38,8 @@ public class StringSizeConstraints {
 
     public static final int MAX_UDF_QUOTE_ID_LENGTH = 48;
 
+    public static final int MAX_UDF_TRANSFER_ID_LENGTH = 48;
+
     public static final int MAX_ILP_PACKET_LENGTH = 32768;
 
 }

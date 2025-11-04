@@ -25,20 +25,17 @@ import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.QuotesErrorResult;
 import io.mojaloop.connector.gateway.data.QuotesResult;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
+import io.mojaloop.connector.gateway.outbound.component.FspiopResultListener;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.invoker.api.quotes.PostQuotes;
-import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 class RequestQuotesCommandHandler implements RequestQuotesCommand {
@@ -96,71 +93,18 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         var errorTopic = PubSubKeys.forQuotes(quoteId);
 
         // Listening to the pub/sub
-        var blocker = new CountDownLatch(1);
+        var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, QuotesResult.class, QuotesErrorResult.class);
+        resultListener.init(resultTopic, errorTopic);
 
-        AtomicReference<QuotesResult> responseRef = new AtomicReference<>();
-        AtomicReference<QuotesErrorResult> errorRef = new AtomicReference<>();
+        this.postQuotes.postQuotes(input.payee(), input.request());
 
-        var resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
+        resultListener.await();
 
-            @Override
-            public void handle(String channel, Object message) {
-
-                if (message instanceof QuotesResult result) {
-                    responseRef.set(result);
-                }
-
-                blocker.countDown();
-            }
-
-            @Override
-            public Class<QuotesResult> messageType() {
-
-                return QuotesResult.class;
-            }
-        }, this.outboundSettings.pubSubTimeout());
-
-        var errorSubscription = this.pubSubClient.subscribe(errorTopic, new PubSubClient.MessageHandler() {
-
-            @Override
-            public void handle(String channel, Object message) {
-
-                if (message instanceof QuotesErrorResult response) {
-                    errorRef.set(response);
-                }
-
-                blocker.countDown();
-            }
-
-            @Override
-            public Class<?> messageType() {
-
-                return ErrorInformationObject.class;
-            }
-        }, 60_000);
-
-        try {
-
-            this.postQuotes.postQuotes(input.payee(), input.request());
-
-            var ok = blocker.await(this.outboundSettings.putResultTimeout(), TimeUnit.MILLISECONDS);
-
-            if (!ok) {
-                throw new FspiopException(FspiopErrors.SERVER_TIMED_OUT, "Timed out while waiting for response from the Hub.");
-            }
-
-        } catch (InterruptedException ignored) {
-            // Do nothing.
-        } finally {
-            this.pubSubClient.unsubscribe(resultSubscription);
-            this.pubSubClient.unsubscribe(errorSubscription);
+        if (resultListener.getResponse() != null) {
+            return new Output(resultListener.getResponse());
         }
 
-        if (responseRef.get() != null) {
-            return new Output(responseRef.get());
-        }
-
-        var error = errorRef.get();
+        var error = resultListener.getError();
         var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
 
         throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));

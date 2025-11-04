@@ -34,10 +34,10 @@ public interface CreateChartEntryCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull ChartId chartId, @JsonProperty(required = true) @NotNull ChartEntryCode code,
+    record Input(@JsonProperty(required = true) @NotNull ChartId chartId,
+                 @JsonProperty(required = true) @NotNull ChartEntryCode code,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull @NotBlank @Size(
-                     max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
                  @JsonProperty(required = true) @NotNull AccountType accountType) { }
 
     record Output(ChartEntryId chartEntryId) { }

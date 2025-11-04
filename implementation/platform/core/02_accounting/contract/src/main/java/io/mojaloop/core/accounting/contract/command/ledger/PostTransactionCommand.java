@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.contract.command.ledger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,11 +45,8 @@ import java.util.Map;
 
 public interface PostTransactionCommand {
 
-    Output execute(Input input) throws
-                                InsufficientBalanceInAccountException,
-                                OverdraftLimitReachedInAccountException,
-                                DuplicatePostingInLedgerException,
-                                RestoreFailedInAccountException;
+    Output execute(Input input)
+        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException;
 
     record Input(@JsonProperty(required = true) @NotNull TransactionType transactionType,
                  @JsonProperty(required = true) @NotNull Currency currency,
@@ -59,12 +57,20 @@ public interface PostTransactionCommand {
 
     }
 
-    record Output(TransactionId transactionId, Instant transactionAt, TransactionType transactionType, FlowDefinitionId flowDefinitionId,
-                  List<Movement> movements) {
+    record Output(TransactionId transactionId, Instant transactionAt, TransactionType transactionType, FlowDefinitionId flowDefinitionId, List<Movement> movements) {
 
-        public record Movement(LedgerMovementId ledgerMovementId, AccountId accountId, AccountOwnerId ownerId, ChartEntryId chartEntryId,
-                               Side side, Currency currency, BigDecimal amount, DrCr oldDrCr, DrCr newDrCr, MovementStage movementStage,
-                               MovementResult movementResult, Instant createdAt) {
+        public record Movement(LedgerMovementId ledgerMovementId,
+                               AccountId accountId,
+                               AccountOwnerId ownerId,
+                               ChartEntryId chartEntryId,
+                               Side side,
+                               Currency currency,
+                               BigDecimal amount,
+                               DrCr oldDrCr,
+                               DrCr newDrCr,
+                               MovementStage movementStage,
+                               MovementResult movementResult,
+                               Instant createdAt) {
 
         }
 

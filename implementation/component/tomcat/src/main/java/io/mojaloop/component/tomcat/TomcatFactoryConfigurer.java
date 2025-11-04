@@ -74,12 +74,7 @@ public class TomcatFactoryConfigurer {
                         LOGGER.info("Created connector: port [{}], host : [{}]", connectorDecorator.getPort(), hostSetting.host());
                         connectorDecorator.decorate(connector);
 
-                        TomcatFactoryConfigurer.configureContext(parentContext,
-                                                                 tomcat,
-                                                                 standardHost,
-                                                                 tempDir,
-                                                                 hostSetting.contextPath(),
-                                                                 hostSetting.configurations());
+                        TomcatFactoryConfigurer.configureContext(parentContext, tomcat, standardHost, tempDir, hostSetting.contextPath(), hostSetting.configurations());
                     }
 
                     return super.getTomcatWebServer(tomcat);
@@ -91,12 +86,7 @@ public class TomcatFactoryConfigurer {
         };
     }
 
-    private static void configureContext(ApplicationContext parentContext,
-                                         Tomcat tomcat,
-                                         StandardHost host,
-                                         File baseDir,
-                                         String contextPath,
-                                         Class<?>... configurations) {
+    private static void configureContext(ApplicationContext parentContext, Tomcat tomcat, StandardHost host, File baseDir, String contextPath, Class<?>... configurations) {
 
         try {
 

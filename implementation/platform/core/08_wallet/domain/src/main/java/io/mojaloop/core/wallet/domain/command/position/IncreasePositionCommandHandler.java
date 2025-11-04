@@ -24,8 +24,7 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input)
-        throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+    public Output execute(final Input input) throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
 
         LOGGER.info("Executing IncreasePositionCommand with input: {}", input);
 
@@ -33,14 +32,25 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
 
         try {
 
-            final var history = this.positionUpdater.increase(input.transactionId(), input.transactionAt(),
-                                                              positionUpdateId, input.positionId(), input.amount(),
+            final var history = this.positionUpdater.increase(input.transactionId(),
+                                                              input.transactionAt(),
+                                                              positionUpdateId,
+                                                              input.positionId(),
+                                                              input.amount(),
                                                               input.description());
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(),
-                                          history.transactionId(), history.currency(), history.amount(),
-                                          history.oldPosition(), history.newPosition(), history.oldReserved(),
-                                          history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(history.positionUpdateId(),
+                                          history.positionId(),
+                                          history.action(),
+                                          history.transactionId(),
+                                          history.currency(),
+                                          history.amount(),
+                                          history.oldPosition(),
+                                          history.newPosition(),
+                                          history.oldReserved(),
+                                          history.newReserved(),
+                                          history.netDebitCap(),
+                                          history.transactionAt());
 
             LOGGER.info("IncreasePositionCommand executed successfully with output: {}", output);
 
@@ -54,8 +64,7 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
         } catch (final PositionUpdater.LimitExceededException e) {
 
             LOGGER.error("Position limit exceeded for positionId: {} amount: {}", e.getPositionId(), e.getAmount());
-            throw new PositionLimitExceededException(e.getPositionId(), e.getAmount(), e.getOldPosition(),
-                                                     e.getNetDebitCap(), e.getTransactionId());
+            throw new PositionLimitExceededException(e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getNetDebitCap(), e.getTransactionId());
         }
     }
 

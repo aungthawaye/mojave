@@ -79,8 +79,7 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
         }
 
         // Check for conflict: any other oracle already holds this type
-        var existing = this.oracleRepository.findOne(
-            OracleRepository.Filters.withType(newType).and(Specification.not(OracleRepository.Filters.withId(oracle.getId()))));
+        var existing = this.oracleRepository.findOne(OracleRepository.Filters.withType(newType).and(Specification.not(OracleRepository.Filters.withId(oracle.getId()))));
 
         if (existing.isPresent()) {
 

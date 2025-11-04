@@ -8,12 +8,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
-public record WalletData(WalletId walletId,
-                         WalletOwnerId walletOwnerId,
-                         Currency currency,
-                         String name,
-                         BigDecimal balance,
-                         Instant createdAt) {
+public record WalletData(WalletId walletId, WalletOwnerId walletOwnerId, Currency currency, String name, BigDecimal balance, Instant createdAt) {
 
     @Override
     public boolean equals(Object o) {
@@ -29,4 +24,5 @@ public record WalletData(WalletId walletId,
 
         return Objects.hashCode(walletId);
     }
+
 }

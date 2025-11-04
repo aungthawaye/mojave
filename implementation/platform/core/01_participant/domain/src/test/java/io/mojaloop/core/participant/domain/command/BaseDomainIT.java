@@ -60,4 +60,5 @@ public abstract class BaseDomainIT {
         // Re-enable FK checks
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=1");
     }
+
 }

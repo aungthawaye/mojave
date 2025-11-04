@@ -31,7 +31,6 @@ public class ConnectorGatewayConfiguration {
 
     public interface RequiredBeans extends ConnectorInboundConfiguration.RequiredBeans, ConnectorOutboundConfiguration.RequiredBeans { }
 
-    public interface RequiredSettings
-        extends ConnectorInboundConfiguration.RequiredSettings, ConnectorOutboundConfiguration.RequiredSettings { }
+    public interface RequiredSettings extends ConnectorInboundConfiguration.RequiredSettings, ConnectorOutboundConfiguration.RequiredSettings { }
 
 }

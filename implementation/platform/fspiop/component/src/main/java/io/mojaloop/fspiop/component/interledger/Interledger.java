@@ -34,6 +34,9 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
@@ -127,17 +130,10 @@ public class Interledger {
         LOGGER.debug("preimage: {}", preimage);
         LOGGER.debug("fulfillment.preimage: {}", fulfillment.getPreimage());
 
-        InterledgerPreparePacket preparePacket = InterledgerPreparePacket
-                                                     .builder()
-                                                     .amount(amount)
-                                                     .destination(InterledgerAddress.of(peer))
-                                                     .executionCondition(condition)
-                                                     .expiresAt(Instant.now().plusSeconds(lifetimeSeconds))
-                                                     .data(data.getBytes(StandardCharsets.UTF_8))
-                                                     .build();
+        InterledgerPreparePacket preparePacket = InterledgerPreparePacket.builder().amount(amount).destination(InterledgerAddress.of(peer)).executionCondition(condition)
+                                                                         .expiresAt(Instant.now().plusSeconds(lifetimeSeconds)).data(data.getBytes(StandardCharsets.UTF_8)).build();
 
-        return new Prepare(base64Encode(serialize(preparePacket), true), base64Encode(fulfillment.getPreimage(), false),
-                           base64Encode(condition.getHash(), false));
+        return new Prepare(base64Encode(serialize(preparePacket), true), base64Encode(fulfillment.getPreimage(), false), base64Encode(condition.getHash(), false));
 
     }
 
@@ -166,5 +162,41 @@ public class Interledger {
     public record Prepare(String base64PreparePacket, String base64Fulfillment, String base64Condition) { }
 
     public record Fulfill(boolean valid, String base64Fulfillment) { }
+
+    public static class Amount {
+
+        private static final BigInteger UINT64_MAX = new BigInteger(UnsignedLong.MAX_VALUE.toString());
+
+        public static BigDecimal deserialize(UnsignedLong amount, int scale) {
+
+            assert amount != null;
+            assert scale >= 0;
+
+            BigInteger minor = new BigInteger(amount.toString());
+
+            return new BigDecimal(minor).movePointLeft(scale);
+        }
+
+        public static UnsignedLong serialize(BigDecimal amount, int scale, RoundingMode roundingMode) {
+
+            assert amount != null;
+            assert scale >= 0;
+            assert roundingMode != null;
+
+            BigDecimal minor = amount.movePointRight(scale);
+            BigInteger asInt = minor.setScale(0, roundingMode).toBigIntegerExact();
+
+            if (asInt.signum() < 0) {
+                throw new IllegalArgumentException("Negative ILP amount not allowed");
+            }
+
+            if (asInt.compareTo(UINT64_MAX) > 0) {
+                throw new IllegalArgumentException("Exceeds UInt64");
+            }
+
+            return UnsignedLong.valueOf(asInt.toString());
+        }
+
+    }
 
 }

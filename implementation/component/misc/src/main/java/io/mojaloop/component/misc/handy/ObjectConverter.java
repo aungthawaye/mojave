@@ -212,8 +212,8 @@ public class ObjectConverter {
 
     private static boolean isSimpleType(Class<?> clazz) {
 
-        return clazz.isPrimitive() || clazz.equals(String.class) || Number.class.isAssignableFrom(clazz) || clazz.equals(Boolean.class) ||
-                   clazz.equals(Character.class) || clazz.isEnum();
+        return clazz.isPrimitive() || clazz.equals(String.class) || Number.class.isAssignableFrom(clazz) || clazz.equals(Boolean.class) || clazz.equals(Character.class) ||
+                   clazz.isEnum();
     }
 
     private static List<Object> processArray(Object array, Set<Object> visited) throws IllegalAccessException {

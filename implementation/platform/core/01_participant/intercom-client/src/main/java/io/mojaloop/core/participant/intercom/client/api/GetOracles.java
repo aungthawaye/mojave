@@ -54,11 +54,8 @@ public class GetOracles {
 
         try {
 
-            return RetrofitService
-                       .invoke(this.participantIntercomService.getOracles(),
-                               (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)
-                              )
-                       .body();
+            return RetrofitService.invoke(this.participantIntercomService.getOracles(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -11,17 +11,17 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record BalanceUpdateData(BalanceUpdateId balanceUpdateId,
-                               WalletId walletId,
-                               BalanceAction action,
-                               TransactionId transactionId,
-                               Currency currency,
-                               BigDecimal amount,
-                               BigDecimal oldBalance,
-                               BigDecimal newBalance,
-                               String description,
-                               Instant transactionAt,
-                               Instant createdAt,
-                               BalanceUpdateId reversedId) {
+                                WalletId walletId,
+                                BalanceAction action,
+                                TransactionId transactionId,
+                                Currency currency,
+                                BigDecimal amount,
+                                BigDecimal oldBalance,
+                                BigDecimal newBalance,
+                                String description,
+                                Instant transactionAt,
+                                Instant createdAt,
+                                BalanceUpdateId reversedId) {
 
     @Override
     public boolean equals(Object o) {
@@ -37,4 +37,5 @@ public record BalanceUpdateData(BalanceUpdateId balanceUpdateId,
 
         return Objects.hashCode(balanceUpdateId);
     }
+
 }

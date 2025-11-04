@@ -71,8 +71,7 @@ public class DeactivateAccount {
 
         try {
 
-            RetrofitService.invoke(this.accountCommands.deactivateAccount(input),
-                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(this.accountCommands.deactivateAccount(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 
