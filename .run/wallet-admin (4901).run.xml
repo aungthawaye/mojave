@@ -1,6 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="wallet-admin (4901)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="09 wallet">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/08_wallet/admin/src/main/java/io/mojaloop/core/wallet/admin/.env" />
+    </option>
     <module name="mod-wallet-admin" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.wallet.admin.WalletAdminApplication" />
     <extension name="coverage">
       <pattern>

@@ -73,6 +73,7 @@ public class AccountingIntercomConfiguration extends JacksonWebMvcExtension
         return new EmptyGatekeeper();
     }
 
+    @Bean
     @Override
     public Ledger ledger() {
 

@@ -65,7 +65,7 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4202"));
+        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4102"));
     }
 
     @Bean
@@ -86,7 +86,7 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public QuotingServiceConfiguration.TomcatSettings quotingServiceTomcatSettings() {
 
-        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("QUOTING_SERVICE_PORT", "4503")));
+        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("QUOTING_SERVICE_PORT", "4603")));
     }
 
     @Bean
