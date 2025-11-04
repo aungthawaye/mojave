@@ -27,6 +27,7 @@
         <module name="mod-transaction-consumer" />
         <module name="mod-quoting-contract" />
         <module name="mod-transaction-intercom" />
+        <module name="mod-wallet-intercom" />
         <module name="mod-participant-store" />
         <module name="mod-transfer-domain" />
         <module name="mod-component-redis" />
@@ -180,6 +181,7 @@
       <module name="mod-wallet-admin" options="-parameters" />
       <module name="mod-wallet-contract" options="-parameters" />
       <module name="mod-wallet-domain" options="-parameters" />
+      <module name="mod-wallet-intercom" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />

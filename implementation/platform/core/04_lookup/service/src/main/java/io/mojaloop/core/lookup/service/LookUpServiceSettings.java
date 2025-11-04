@@ -69,7 +69,7 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4202"));
+        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4102"));
     }
 
     @Bean

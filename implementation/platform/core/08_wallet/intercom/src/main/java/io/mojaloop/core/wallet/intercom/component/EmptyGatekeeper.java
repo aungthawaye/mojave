@@ -18,22 +18,21 @@
  * ================================================================================
  */
 
-package io.mojaloop.platform.core.transfer;
+package io.mojaloop.core.wallet.intercom.component;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.Authenticator;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.util.ArrayList;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+public class EmptyGatekeeper implements Authenticator {
+
+    @Override
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest) throws AuthenticationFailureException {
+
+        return new UsernamePasswordAuthenticationToken("user", "password", new ArrayList<>());
     }
 
 }
