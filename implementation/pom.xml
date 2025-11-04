@@ -306,6 +306,11 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>io.mojaloop.platform.fspiop</groupId>
                 <artifactId>mod-fspiop-common</artifactId>
                 <version>1.0.0</version>
