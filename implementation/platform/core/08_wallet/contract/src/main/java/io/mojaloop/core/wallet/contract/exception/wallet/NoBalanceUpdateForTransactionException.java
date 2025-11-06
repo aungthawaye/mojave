@@ -45,7 +45,7 @@ import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 
 public class NoBalanceUpdateForTransactionException extends CheckedDomainException {
 
-    private static final String TEMPLATE = "No balance update for transaction : | transaction id: ({5}).";
+    private static final String TEMPLATE = "No balance update for transaction : transaction id: ({0}).";
 
     public NoBalanceUpdateForTransactionException(TransactionId transactionId) {
 

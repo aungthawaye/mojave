@@ -45,11 +45,11 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 
 public class ReversalFailedInWalletException extends CheckedDomainException {
 
-    private static final String TEMPLATE = "Reversal failed : reversedId ({0}).";
+    private static final String TEMPLATE = "Reversal failed : reversalId ({0}).";
 
-    public ReversalFailedInWalletException(BalanceUpdateId reversedId) {
+    public ReversalFailedInWalletException(BalanceUpdateId reversalId) {
 
-        super(new ErrorTemplate("REVERSAL_FAILED_IN_WALLET", TEMPLATE), reversedId.toString());
+        super(new ErrorTemplate("REVERSAL_FAILED_IN_WALLET", TEMPLATE), reversalId.toString());
     }
 
 }

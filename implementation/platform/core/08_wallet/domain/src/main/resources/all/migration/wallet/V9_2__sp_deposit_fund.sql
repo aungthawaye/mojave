@@ -9,12 +9,33 @@ CREATE PROCEDURE sp_deposit_fund(
     IN p_amount DECIMAL(34, 4),
     IN p_description VARCHAR(256)
 )
+proc_deposit:
 BEGIN
     /* -------- Variables -------- */
     DECLARE v_old_balance DECIMAL(34, 4);
     DECLARE v_new_balance DECIMAL(34, 4);
     DECLARE v_currency VARCHAR(3);
     DECLARE v_now BIGINT;
+
+    DECLARE v_not_found BOOLEAN DEFAULT FALSE;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            ROLLBACK;
+
+            SELECT 'ERROR'             AS result,
+                   p_balance_update_id AS balance_update_id,
+                   p_wallet_id         AS wallet_id,
+                   'DEPOSIT'           AS action,
+                   p_transaction_id    AS transaction_id,
+                   NULL                AS currency,
+                   p_amount            AS amount,
+                   0                   AS old_balance,
+                   0                   AS new_balance,
+                   p_transaction_at    AS transaction_at;
+        END;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
 
     /* Use epoch seconds for timestamps */
     SET v_now = UNIX_TIMESTAMP();
@@ -26,8 +47,26 @@ BEGIN
            w.currency
     INTO v_old_balance, v_currency
     FROM wlt_wallet w
-    WHERE w.wallet_id = p_wallet_id FOR
+    WHERE w.wallet_id = p_wallet_id
+        FOR
     UPDATE;
+
+    IF v_not_found THEN
+        ROLLBACK;
+
+        SELECT 'ERROR'             AS status,
+               p_balance_update_id AS balance_update_id,
+               p_wallet_id         AS wallet_id,
+               'DEPOSIT'           AS action,
+               p_transaction_id    AS transaction_id,
+               NULL                AS currency,
+               p_amount            AS amount,
+               0                   AS old_balance,
+               0                   AS new_balance,
+               p_transaction_at    AS transaction_at;
+
+        LEAVE proc_deposit;
+    END IF;
 
     /* 2) Compute and apply new balance */
     SET v_new_balance = v_old_balance + p_amount;

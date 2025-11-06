@@ -3,6 +3,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sp_withdraw_fund $$
 CREATE PROCEDURE sp_withdraw_fund(
     IN p_transaction_id BIGINT,
+    IN p_transaction_at BIGINT,
     IN p_balance_update_id BIGINT,
     IN p_wallet_id BIGINT,
     IN p_amount DECIMAL(34, 4),
@@ -16,6 +17,26 @@ BEGIN
     DECLARE v_currency VARCHAR(3);
     DECLARE v_now BIGINT;
 
+    DECLARE v_not_found BOOLEAN DEFAULT FALSE;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            ROLLBACK;
+
+            SELECT 'ERROR'             AS status,
+                   p_balance_update_id AS balance_update_id,
+                   p_wallet_id         AS wallet_id,
+                   'WITHDRAW'          AS action,
+                   p_transaction_id    AS transaction_id,
+                   NULL                AS currency,
+                   p_amount            AS amount,
+                   0                   AS old_balance,
+                   0                   AS new_balance,
+                   p_transaction_at    AS transaction_at;
+        END;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
+
     /* Use epoch seconds for timestamps */
     SET v_now = UNIX_TIMESTAMP();
 
@@ -26,7 +47,26 @@ BEGIN
            w.currency
     INTO v_old_balance, v_currency
     FROM wlt_wallet w
-    WHERE w.wallet_id = p_wallet_id FOR UPDATE;
+    WHERE w.wallet_id = p_wallet_id
+        FOR
+    UPDATE;
+
+    IF v_not_found THEN
+        ROLLBACK;
+
+        SELECT 'ERROR'             AS status,
+               p_balance_update_id AS balance_update_id,
+               p_wallet_id         AS wallet_id,
+               'WITHDRAW'          AS action,
+               p_transaction_id    AS transaction_id,
+               NULL                AS currency,
+               p_amount            AS amount,
+               0                   AS old_balance,
+               0                   AS new_balance,
+               p_transaction_at    AS transaction_at;
+
+        LEAVE proc_withdraw;
+    END IF;
 
     SET v_new_balance = v_old_balance - p_amount;
 
@@ -35,15 +75,15 @@ BEGIN
         /* Not enough balances */
         ROLLBACK;
         SELECT 'INSUFFICIENT_BALANCE' AS status,
-               p_balance_update_id AS balance_update_id,
-               p_wallet_id AS wallet_id,
-               'WITHDRAW' AS action,
-               p_transaction_id AS transaction_id,
-               v_currency AS currency,
-               p_amount AS amount,
-               v_old_balance AS old_balance,
-               v_new_balance AS new_balance,
-               v_now AS transaction_at;
+               p_balance_update_id    AS balance_update_id,
+               p_wallet_id            AS wallet_id,
+               'WITHDRAW'             AS action,
+               p_transaction_id       AS transaction_id,
+               v_currency             AS currency,
+               p_amount               AS amount,
+               v_old_balance          AS old_balance,
+               v_new_balance          AS new_balance,
+               v_now                  AS transaction_at;
         LEAVE proc_withdraw;
     END IF;
 

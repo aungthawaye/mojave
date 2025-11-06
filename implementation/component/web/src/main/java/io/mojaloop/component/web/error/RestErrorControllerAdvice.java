@@ -22,6 +22,7 @@ package io.mojaloop.component.web.error;
 
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.util.StringJoiner;
+
 @ControllerAdvice
 public class RestErrorControllerAdvice {
 
@@ -42,10 +45,22 @@ public class RestErrorControllerAdvice {
         return new ResponseEntity<>(new RestErrorResponse(e.getTemplate().code(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UncheckedDomainException.class)
+    public ResponseEntity<RestErrorResponse> handle(UncheckedDomainException e) {
+
+        return new ResponseEntity<>(new RestErrorResponse(e.getTemplate().code(), e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RestErrorResponse> handle(MethodArgumentNotValidException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("ARGUMENT_NOT_VALID", e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+        var errors = new StringJoiner(", ");
+
+        e.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            errors.add(fieldError.getDefaultMessage());
+        });
+
+        return new ResponseEntity<>(new RestErrorResponse("ARGUMENT_NOT_VALID", errors.toString()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

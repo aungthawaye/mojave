@@ -17,7 +17,7 @@ public class EmptyBalanceUpdater implements BalanceUpdater {
     }
 
     @Override
-    public BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId) {
+    public BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId) {
 
         throw new UnsupportedOperationException("Balance reversal operations are not supported in the empty implementation");
     }

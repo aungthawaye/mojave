@@ -39,24 +39,17 @@
 
 package io.mojaloop.core.wallet.contract.exception.wallet;
 
-import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 
-import java.math.BigDecimal;
+public class BalanceUpdateIdNotFoundException extends UncheckedDomainException {
 
-public class InsufficientBalanceInWalletException extends CheckedDomainException {
+    private static final String TEMPLATE = "Balance Update Id ({0}) cannot be found.";
 
-    private static final String TEMPLATE = "Insufficient Balance : wallet ({0}) | amount({1}) | current balance: ({2}) | transaction id: ({3}).";
+    public BalanceUpdateIdNotFoundException(BalanceUpdateId balanceUpdateId) {
 
-    public InsufficientBalanceInWalletException(WalletId walletId, BigDecimal amount, BigDecimal oldBalance, TransactionId transactionId) {
-
-        super(new ErrorTemplate("INSUFFICIENT_BALANCE_IN_WALLET", TEMPLATE),
-              walletId.toString(),
-              amount.toPlainString(),
-              oldBalance.toPlainString(),
-              transactionId.getId().toString());
+        super(new ErrorTemplate("BALANCE_UPDATE_ID_NOT_FOUND", TEMPLATE), balanceUpdateId.toString());
     }
 
 }

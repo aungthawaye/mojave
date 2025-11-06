@@ -1,0 +1,151 @@
+{
+  "info": {
+    "_postman_id": "8e3a4a8e-2a42-4a2f-9d9a-bf3f6b2e1c11",
+    "name": "Wallet Admin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for io.mojaloop.core.wallet.admin.controller endpoints."
+  },
+  "variable": [
+    {
+      "key": "walletAdminBaseUrl",
+      "value": "http://localhost:4901",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "create_wallet",
+      "item": [
+        {
+          "name": "POST /wallets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"walletOwnerId\": 81001,\n  \"currency\": \"USD\",\n  \"name\": \"Main Wallet\"\n}"
+            },
+            "url": {
+              "raw": "{{walletAdminBaseUrl}}/wallets",
+              "host": [
+                "{{walletAdminBaseUrl}}"
+              ],
+              "path": [
+                "wallets"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"walletOwnerId\": 81001,\n  \"currency\": \"USD\",\n  \"name\": \"Main Wallet\"\n}"
+                },
+                "url": {
+                  "raw": "{{walletAdminBaseUrl}}/wallets",
+                  "host": [
+                    "{{walletAdminBaseUrl}}"
+                  ],
+                  "path": [
+                    "wallets"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"walletId\": 500001\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "create_position",
+      "item": [
+        {
+          "name": "POST /positions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"walletOwnerId\": 91001,\n  \"currency\": \"USD\",\n  \"name\": \"Main Position\",\n  \"netDebitCap\": 1000.00\n}"
+            },
+            "url": {
+              "raw": "{{walletAdminBaseUrl}}/positions",
+              "host": [
+                "{{walletAdminBaseUrl}}"
+              ],
+              "path": [
+                "positions"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"walletOwnerId\": 91001,\n  \"currency\": \"USD\",\n  \"name\": \"Main Position\",\n  \"netDebitCap\": 1000.00\n}"
+                },
+                "url": {
+                  "raw": "{{walletAdminBaseUrl}}/positions",
+                  "host": [
+                    "{{walletAdminBaseUrl}}"
+                  ],
+                  "path": [
+                    "positions"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"positionId\": 700001\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -101,7 +101,7 @@ public class ReverseFundCommandIT extends BaseDomainIT {
         assertNotNull(output);
         assertEquals(walletOut.walletId(), output.walletId());
         assertEquals(BalanceAction.REVERSE, output.action());
-        assertEquals(reversedId, output.reversedId());
+        assertEquals(reversedId, output.reversalId());
         assertNotNull(output.balanceUpdateId());
         // 100 - 40 = 60, reversed adds back 40 → new balance should be 100 again
         assertEquals(0, output.oldBalance().compareTo(new BigDecimal("60.0000")));
