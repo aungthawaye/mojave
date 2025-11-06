@@ -22,7 +22,6 @@
         <module name="mod-wallet-admin" />
         <module name="mod-wallet-intercom-client" />
         <module name="mod-fspiop-component" />
-        <module name="mod-transaction-publisher" />
         <module name="mod-component-tomcat" />
         <module name="mod-lookup-service" />
         <module name="mod-transaction-consumer" />
@@ -43,6 +42,7 @@
         <module name="mod-wallet-contract" />
         <module name="mod-connector-sample" />
         <module name="mod-accounting-admin" />
+        <module name="mod-transaction-producer" />
         <module name="mod-quoting-service" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
@@ -175,7 +175,7 @@
       <module name="mod-transaction-domain" options="-parameters" />
       <module name="mod-transaction-intercom" options="-parameters" />
       <module name="mod-transaction-intercom-client" options="-parameters" />
-      <module name="mod-transaction-publisher" options="-parameters" />
+      <module name="mod-transaction-producer" options="-parameters" />
       <module name="mod-transfer-contract" options="-parameters" />
       <module name="mod-transfer-domain" options="-parameters" />
       <module name="mod-transfer-service" options="-parameters" />

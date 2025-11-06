@@ -6,11 +6,21 @@
         <artifactId>transaction-pom</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>mod-transaction-publisher</artifactId>
-    <name>Mojaloop - Platform - Core - Transaction - Publisher</name>
+    <artifactId>mod-transaction-producer</artifactId>
+    <name>Mojaloop - Platform - Core - Transaction - Producer</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-kafka</artifactId>
+        </dependency>
+    </dependencies>
 </project>
