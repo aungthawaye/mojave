@@ -5,7 +5,9 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.wallet.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException;
 import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.wallet.WalletIdNotFoundException;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
+import io.mojaloop.core.wallet.domain.repository.WalletRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,16 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WithdrawFundCommandHandler.class);
 
+    private final WalletRepository walletRepository;
+
     private final BalanceUpdater balanceUpdater;
 
-    public WithdrawFundCommandHandler(final BalanceUpdater balanceUpdater) {
+    public WithdrawFundCommandHandler(WalletRepository walletRepository, BalanceUpdater balanceUpdater) {
 
+        assert walletRepository != null;
         assert balanceUpdater != null;
+
+        this.walletRepository = walletRepository;
         this.balanceUpdater = balanceUpdater;
     }
 
@@ -27,6 +34,8 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
     public Output execute(final Input input) throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException {
 
         LOGGER.info("Executing WithdrawFundCommand with input: {}", input);
+
+        this.walletRepository.findById(input.walletId()).orElseThrow(() -> new WalletIdNotFoundException(input.walletId()));
 
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());
 

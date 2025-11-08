@@ -1,0 +1,68 @@
+package io.mojaloop.core.transaction.consumer.listener;
+
+import io.mojaloop.component.kafka.KafkaConsumerConfigurer;
+import io.mojaloop.core.transaction.contract.command.AddStepCommand;
+import io.mojaloop.core.transaction.contract.constant.TopicNames;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.stereotype.Component;
+
+@Component
+public class AddStepListener {
+
+    public static final String QUALIFIER = "addStep";
+
+    public static final String LISTENER_CONTAINER_FACTORY = "addStepListenerContainerFactory";
+
+    public static final String GROUP_ID = "primary-consumer";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddStepListener.class);
+
+    private final AddStepCommand addStepCommand;
+
+    public AddStepListener(AddStepCommand addStepCommand) {
+
+        assert addStepCommand != null;
+
+        this.addStepCommand = addStepCommand;
+    }
+
+    @KafkaListener(topics = TopicNames.ADD_STEP, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
+    public void handle(AddStepCommand.Input input, Acknowledgment ack) {
+
+        try {
+
+            LOGGER.info("Received AddStepCommand with input: {}", input);
+
+            this.addStepCommand.execute(input);
+
+            ack.acknowledge();
+
+            LOGGER.info("Acknowledged AddStepCommand with input: {}", input);
+
+        } catch (Exception e) {
+
+            LOGGER.error("Error handling AddStepCommand with input: {}", input, e);
+        }
+    }
+
+    public static class Settings extends KafkaConsumerConfigurer.ConsumerSettings {
+
+        public Settings(String bootstrapServers,
+                        String groupId,
+                        String clientId,
+                        String autoOffsetReset,
+                        int concurrency,
+                        int pollTimeoutMs,
+                        boolean autoCommit,
+                        ContainerProperties.AckMode ackMode) {
+
+            super(bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs, autoCommit, ackMode);
+        }
+
+    }
+
+}

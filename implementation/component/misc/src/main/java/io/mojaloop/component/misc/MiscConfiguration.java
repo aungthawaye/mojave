@@ -92,7 +92,8 @@ public class MiscConfiguration {
 
         objectMapper.findAndRegisterModules();
 
-        var module = new SimpleModule().addSerializer(Instant.class, new InstantConversion.Serializer()).addDeserializer(Instant.class, new InstantConversion.Deserializer())
+        var module = new SimpleModule().addSerializer(Instant.class, new InstantConversion.Serializer())
+                                       .addDeserializer(Instant.class, new InstantConversion.Deserializer())
                                        .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
                                        .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer()).addSerializer(Long.class, ToStringSerializer.instance)
                                        .addSerializer(Long.TYPE, ToStringSerializer.instance).addSerializer(Integer.class, ToStringSerializer.instance)

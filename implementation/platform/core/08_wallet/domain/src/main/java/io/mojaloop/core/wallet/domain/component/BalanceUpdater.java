@@ -35,7 +35,7 @@ public interface BalanceUpdater {
     BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
         throws BalanceUpdater.NoBalanceUpdateException;
 
-    BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId) throws BalanceUpdater.ReversalFailedException;
+    BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId) throws BalanceUpdater.ReversalFailedException;
 
     BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
         throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
@@ -49,7 +49,7 @@ public interface BalanceUpdater {
                           BigDecimal oldBalance,
                           BigDecimal newBalance,
                           Instant transactionAt,
-                          BalanceUpdateId reversedId) { }
+                          BalanceUpdateId reversalId) { }
 
     @Getter
     class NoBalanceUpdateException extends Exception {
@@ -92,13 +92,13 @@ public interface BalanceUpdater {
     @Getter
     class ReversalFailedException extends Exception {
 
-        private final BalanceUpdateId reversedId;
+        private final BalanceUpdateId reversalId;
 
-        public ReversalFailedException(BalanceUpdateId reversedId) {
+        public ReversalFailedException(BalanceUpdateId reversalId) {
 
-            super("Reversal failed for balance update id: " + reversedId);
+            super("Reversal failed for balance update id: " + reversalId);
 
-            this.reversedId = reversedId;
+            this.reversalId = reversalId;
         }
 
     }

@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.transaction.intercom.controller;
 
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -34,20 +34,20 @@ public class CommitTransactionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransactionController.class);
 
-    private final CommitTransactionCommand commitTransactionCommand;
+    private final CloseTransactionCommand closeTransactionCommand;
 
-    public CommitTransactionController(final CommitTransactionCommand commitTransactionCommand) {
+    public CommitTransactionController(final CloseTransactionCommand closeTransactionCommand) {
 
-        assert commitTransactionCommand != null;
-        this.commitTransactionCommand = commitTransactionCommand;
+        assert closeTransactionCommand != null;
+        this.closeTransactionCommand = closeTransactionCommand;
     }
 
     @PostMapping("/transactions/commit")
-    public CommitTransactionCommand.Output execute(@Valid @RequestBody final CommitTransactionCommand.Input input) throws TransactionIdNotFoundException {
+    public CloseTransactionCommand.Output execute(@Valid @RequestBody final CloseTransactionCommand.Input input) throws TransactionIdNotFoundException {
 
         LOGGER.info("Entering CommitTransactionCommand.execute: input : {}", input);
 
-        final var output = this.commitTransactionCommand.execute(input);
+        final var output = this.closeTransactionCommand.execute(input);
 
         LOGGER.info("Exiting CommitTransactionCommand.execute: {}", output);
 

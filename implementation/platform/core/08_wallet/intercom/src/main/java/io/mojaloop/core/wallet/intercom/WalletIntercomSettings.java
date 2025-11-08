@@ -94,7 +94,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     @Override
     public WalletIntercomConfiguration.TomcatSettings tomcatSettings() {
 
-        return new WalletIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("WALLET_INTERCOM_PORT", "4402")));
+        return new WalletIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("WALLET_INTERCOM_PORT", "4902")));
     }
 
 }

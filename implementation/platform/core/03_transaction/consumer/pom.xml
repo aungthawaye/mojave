@@ -13,4 +13,18 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-kafka</artifactId>
+        </dependency>
+    </dependencies>
 </project>

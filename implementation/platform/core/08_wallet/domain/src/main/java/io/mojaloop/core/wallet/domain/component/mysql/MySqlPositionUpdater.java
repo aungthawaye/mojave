@@ -74,7 +74,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                    rs.getBigDecimal("old_reserved"),
                                    rs.getBigDecimal("new_reserved"),
                                    rs.getBigDecimal("net_debit_cap"),
-                                   Instant.ofEpochMilli(rs.getLong("transaction_at")));
+                                   Instant.ofEpochSecond(rs.getLong("transaction_at")));
     }
 
     @Override

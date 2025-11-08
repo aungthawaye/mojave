@@ -50,12 +50,14 @@ public class InstantConversion {
                 return;
             }
 
-            gen.writeString(String.valueOf(value.getEpochSecond()));
+            var epochSeconds = value.getEpochSecond();
+
+            gen.writeString(String.valueOf(epochSeconds));
         }
 
     }
 
-    /** Deserialize epochMillis (Long or numeric string) OR ISO-8601 string -> Instant */
+    /** Deserialize epoch second (Long or numeric string) OR ISO-8601 string -> Instant */
     public static class Deserializer extends JsonDeserializer<Instant> {
 
         @Override
@@ -64,7 +66,7 @@ public class InstantConversion {
             JsonToken t = p.getCurrentToken();
 
             if (t == JsonToken.VALUE_NUMBER_INT) {
-                // direct number -> epoch millis
+                // direct number -> epoch seconds
                 return Instant.ofEpochSecond(p.getLongValue());
             }
 
@@ -90,7 +92,7 @@ public class InstantConversion {
                 try {
                     return Instant.parse(s);
                 } catch (DateTimeParseException ex) {
-                    throw ctx.weirdStringException(s, Instant.class, "Expected epoch millis (long) or ISO-8601 instant");
+                    throw ctx.weirdStringException(s, Instant.class, "Expected epoch seconds (long) or ISO-8601 instant");
                 }
             }
 

@@ -15,7 +15,7 @@
         <module>domain</module>
         <module>intercom</module>
         <module>intercom-client</module>
-        <module>publisher</module>
+        <module>producer</module>
         <module>consumer</module>
     </modules>
     <properties>

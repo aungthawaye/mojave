@@ -4,7 +4,9 @@ import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.wallet.DepositFundCommand;
 import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.wallet.WalletIdNotFoundException;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
+import io.mojaloop.core.wallet.domain.repository.WalletRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,16 @@ public class DepositFundCommandHandler implements DepositFundCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DepositFundCommandHandler.class);
 
+    private final WalletRepository walletRepository;
+
     private final BalanceUpdater balanceUpdater;
 
-    public DepositFundCommandHandler(final BalanceUpdater balanceUpdater) {
+    public DepositFundCommandHandler(WalletRepository walletRepository, BalanceUpdater balanceUpdater) {
 
+        assert walletRepository != null;
         assert balanceUpdater != null;
 
+        this.walletRepository = walletRepository;
         this.balanceUpdater = balanceUpdater;
     }
 
@@ -27,6 +33,8 @@ public class DepositFundCommandHandler implements DepositFundCommand {
     public Output execute(final Input input) throws NoBalanceUpdateForTransactionException {
 
         LOGGER.info("Executing DepositFundCommand with input: {}", input);
+
+        this.walletRepository.findById(input.walletId()).orElseThrow(() -> new WalletIdNotFoundException(input.walletId()));
 
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());
 

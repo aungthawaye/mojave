@@ -1,0 +1,267 @@
+{
+  "info": {
+    "_postman_id": "a3e6f3b8-1b52-4f4a-9c7b-7f1b8d6a9c22",
+    "name": "Wallet Intercom API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for io.mojaloop.core.wallet.intercom.controller endpoints."
+  },
+  "variable": [
+    {
+      "key": "walletIntercomBaseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "wallet",
+      "item": [
+        {
+          "name": "POST /wallets/deposit-fund",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"walletId\": 500001,\n  \"amount\": 125.50,\n  \"transactionId\": 9001001,\n  \"transactionAt\": 1730793600,\n  \"description\": \"Initial deposit\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/wallets/deposit-fund",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["wallets", "deposit-fund"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"balanceUpdateId\": 8100001,\n  \"walletId\": 500001,\n  \"action\": \"DEPOSIT\",\n  \"transactionId\": 9001001,\n  \"currency\": \"USD\",\n  \"amount\": 125.50,\n  \"oldBalance\": 0.00,\n  \"newBalance\": 125.50,\n  \"transactionAt\": 1730793600\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /wallets/withdraw-fund",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"walletId\": 500001,\n  \"amount\": 25.00,\n  \"transactionId\": 9001002,\n  \"transactionAt\": 1730797200,\n  \"description\": \"ATM withdraw\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/wallets/withdraw-fund",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["wallets", "withdraw-fund"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"balanceUpdateId\": 8100002,\n  \"walletId\": 500001,\n  \"action\": \"WITHDRAW\",\n  \"transactionId\": 9001002,\n  \"currency\": \"USD\",\n  \"amount\": 25.00,\n  \"oldBalance\": 125.50,\n  \"newBalance\": 100.50,\n  \"transactionAt\": 1730797200\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /wallets/reverse-fund",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reversedId\": 8100002,\n  \"balanceUpdateId\": 8100003,\n  \"description\": \"Reversing withdraw due to failure\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/wallets/reverse-fund",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["wallets", "reverse-fund"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"balanceUpdateId\": 8100003,\n  \"walletId\": 500001,\n  \"action\": \"REVERSE\",\n  \"transactionId\": 9001002,\n  \"currency\": \"USD\",\n  \"amount\": 25.00,\n  \"oldBalance\": 100.50,\n  \"newBalance\": 125.50,\n  \"transactionAt\": 1730799000,\n  \"reversedId\": 8100002\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "position",
+      "item": [
+        {
+          "name": "POST /positions/increase",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"positionId\": 700001,\n  \"amount\": 50.00,\n  \"transactionId\": 9101001,\n  \"transactionAt\": 1730793600,\n  \"description\": \"Increase position for transfer\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/positions/increase",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["positions", "increase"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"positionUpdateId\": 8200001,\n  \"positionId\": 700001,\n  \"action\": \"INCREASE\",\n  \"transactionId\": 9101001,\n  \"currency\": \"USD\",\n  \"amount\": 50.00,\n  \"oldPosition\": 0.00,\n  \"newPosition\": 50.00,\n  \"oldReserved\": 0.00,\n  \"newReserved\": 0.00,\n  \"netDebitCap\": 1000.00,\n  \"transactionAt\": 1730793600\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /positions/decrease",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"positionId\": 700001,\n  \"amount\": 25.00,\n  \"transactionId\": 9101002,\n  \"transactionAt\": 1730797200,\n  \"description\": \"Decrease after settlement\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/positions/decrease",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["positions", "decrease"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"positionUpdateId\": 8200002,\n  \"positionId\": 700001,\n  \"action\": \"DECREASE\",\n  \"transactionId\": 9101002,\n  \"currency\": \"USD\",\n  \"amount\": 25.00,\n  \"oldPosition\": 50.00,\n  \"newPosition\": 25.00,\n  \"oldReserved\": 0.00,\n  \"newReserved\": 0.00,\n  \"netDebitCap\": 1000.00,\n  \"transactionAt\": 1730797200\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /positions/reserve",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"positionId\": 700001,\n  \"amount\": 10.00,\n  \"transactionId\": 9101003,\n  \"transactionAt\": 1730799000,\n  \"description\": \"Reserve for transfer\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/positions/reserve",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["positions", "reserve"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"positionUpdateId\": 8200003,\n  \"positionId\": 700001,\n  \"action\": \"RESERVE\",\n  \"transactionId\": 9101003,\n  \"currency\": \"USD\",\n  \"amount\": 10.00,\n  \"oldPosition\": 25.00,\n  \"newPosition\": 25.00,\n  \"oldReserved\": 0.00,\n  \"newReserved\": 10.00,\n  \"netDebitCap\": 1000.00,\n  \"transactionAt\": 1730799000\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /positions/rollback",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservationId\": 8200003,\n  \"positionUpdateId\": 8200004,\n  \"description\": \"Rollback reservation due to failure\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/positions/rollback",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["positions", "rollback"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"positionUpdateId\": 8200004,\n  \"positionId\": 700001,\n  \"action\": \"ROLLBACK\",\n  \"transactionId\": 9101003,\n  \"currency\": \"USD\",\n  \"amount\": 10.00,\n  \"oldPosition\": 25.00,\n  \"newPosition\": 25.00,\n  \"oldReserved\": 10.00,\n  \"newReserved\": 0.00,\n  \"netDebitCap\": 1000.00,\n  \"transactionAt\": 1730799300\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /positions/commit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservationId\": 8200003,\n  \"positionUpdateId\": 8200005,\n  \"description\": \"Commit reservation after success\"\n}"
+            },
+            "url": {
+              "raw": "{{walletIntercomBaseUrl}}/positions/commit",
+              "host": ["{{walletIntercomBaseUrl}}"],
+              "path": ["positions", "commit"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"positionUpdateId\": 8200005,\n  \"positionId\": 700001,\n  \"action\": \"COMMIT\",\n  \"transactionId\": 9101003,\n  \"currency\": \"USD\",\n  \"amount\": 10.00,\n  \"oldPosition\": 25.00,\n  \"newPosition\": 15.00,\n  \"oldReserved\": 10.00,\n  \"newReserved\": 0.00,\n  \"netDebitCap\": 1000.00,\n  \"transactionAt\": 1730799300\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

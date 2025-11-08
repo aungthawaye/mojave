@@ -48,7 +48,7 @@ import java.math.BigDecimal;
 
 public class InsufficientBalanceInWalletException extends CheckedDomainException {
 
-    private static final String TEMPLATE = "Insufficient Balance : wallet ({0}) | amount({2}) | old balance: ({3}) | new balance: ({4}) | transaction id: ({5}).";
+    private static final String TEMPLATE = "Insufficient Balance : wallet ({0}) | amount({1}) | current balance: ({2}) | transaction id: ({3}).";
 
     public InsufficientBalanceInWalletException(WalletId walletId, BigDecimal amount, BigDecimal oldBalance, TransactionId transactionId) {
 

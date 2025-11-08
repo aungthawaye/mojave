@@ -72,7 +72,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                 try (var stm = con.prepareStatement("CALL sp_deposit_fund(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, balanceUpdateId.getId());
                     stm.setLong(4, walletId.getId());
                     stm.setBigDecimal(5, amount);
@@ -98,7 +98,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                                               rs.getBigDecimal("amount"),
                                                               rs.getBigDecimal("old_balance"),
                                                               rs.getBigDecimal("new_balance"),
-                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")),
+                                                              Instant.ofEpochSecond(rs.getLong("transaction_at")),
                                                               null);
                                 }
                             }
@@ -125,9 +125,9 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     }
 
     @Override
-    public BalanceHistory reverse(BalanceUpdateId reversedId, BalanceUpdateId balanceUpdateId) throws ReversalFailedException {
+    public BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId) throws ReversalFailedException {
 
-        LOGGER.info("Reverse reversedId: {}, balanceUpdateId: {}", reversedId, balanceUpdateId);
+        LOGGER.info("Reverse reversalId: {}, balanceUpdateId: {}", reversalId, balanceUpdateId);
 
         try {
 
@@ -135,7 +135,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                 try (var stm = con.prepareStatement("CALL sp_reverse_fund(?, ?)")) {
 
-                    stm.setLong(1, reversedId.getId());
+                    stm.setLong(1, reversalId.getId());
                     stm.setLong(2, balanceUpdateId.getId());
 
                     var hasResults = stm.execute();
@@ -171,13 +171,13 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                         hasResults = stm.getMoreResults();
                     }
 
-                    throw new RuntimeException(new ReversalFailedException(reversedId));
+                    throw new RuntimeException(new ReversalFailedException(reversalId));
                 }
 
             });
         } catch (RuntimeException e) {
 
-            LOGGER.error("Exception occurred while trying to reverse for reversedId : {}.", reversedId.getId(), e);
+            LOGGER.error("Exception occurred while trying to reverse for reversalId : {}.", reversalId.getId(), e);
 
             if (e.getCause() instanceof ReversalFailedException e1) {
                 throw e1;
@@ -197,13 +197,14 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
             return this.jdbcTemplate.execute((ConnectionCallback<BalanceHistory>) con -> {
 
-                try (var stm = con.prepareStatement("CALL sp_withdraw_fund(?, ?, ?, ?, ?)")) {
+                try (var stm = con.prepareStatement("CALL sp_withdraw_fund(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, balanceUpdateId.getId());
-                    stm.setLong(3, walletId.getId());
-                    stm.setBigDecimal(4, amount);
-                    stm.setString(5, description);
+                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(3, balanceUpdateId.getId());
+                    stm.setLong(4, walletId.getId());
+                    stm.setBigDecimal(5, amount);
+                    stm.setString(6, description);
 
                     var hasResults = stm.execute();
 
@@ -225,7 +226,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                                               rs.getBigDecimal("amount"),
                                                               rs.getBigDecimal("old_balance"),
                                                               rs.getBigDecimal("new_balance"),
-                                                              Instant.ofEpochMilli(rs.getLong("transaction_at")),
+                                                              Instant.ofEpochSecond(rs.getLong("transaction_at")),
                                                               null);
                                 } else if ("INSUFFICIENT_BALANCE".equals(status)) {
 

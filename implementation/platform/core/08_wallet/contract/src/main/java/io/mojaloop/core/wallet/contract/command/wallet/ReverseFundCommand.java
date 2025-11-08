@@ -19,7 +19,7 @@ public interface ReverseFundCommand {
 
     Output execute(Input input) throws ReversalFailedInWalletException;
 
-    record Input(@JsonProperty(required = true) @NotNull BalanceUpdateId reversedId,
+    record Input(@JsonProperty(required = true) @NotNull BalanceUpdateId reversalId,
                  @JsonProperty(required = true) @NotNull BalanceUpdateId balanceUpdateId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
@@ -32,6 +32,6 @@ public interface ReverseFundCommand {
                   BigDecimal oldBalance,
                   BigDecimal newBalance,
                   Instant transactionAt,
-                  BalanceUpdateId reversedId) { }
+                  BalanceUpdateId reversalId) { }
 
 }

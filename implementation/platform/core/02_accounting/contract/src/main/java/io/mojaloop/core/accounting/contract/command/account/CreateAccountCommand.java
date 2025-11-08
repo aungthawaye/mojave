@@ -45,7 +45,7 @@ public interface CreateAccountCommand {
      */
     record Input(@JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
                  @JsonProperty(required = true) @NotNull AccountOwnerId ownerId,
-                 @JsonProperty(required = true) @NotNull @NotBlank Currency currency,
+                 @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull AccountCode code,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,

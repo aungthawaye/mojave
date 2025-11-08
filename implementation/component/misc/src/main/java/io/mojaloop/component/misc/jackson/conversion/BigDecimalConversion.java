@@ -62,9 +62,14 @@ public class BigDecimalConversion {
 
             JsonToken t = p.getCurrentToken();
 
-            if (t == JsonToken.VALUE_NUMBER_INT || t == JsonToken.VALUE_NUMBER_FLOAT) {
+            if (t == JsonToken.VALUE_NUMBER_INT) {
                 // direct number -> epoch millis
                 return new BigDecimal(p.getLongValue());
+            }
+
+            if (t == JsonToken.VALUE_NUMBER_FLOAT) {
+
+                return new BigDecimal(p.getText());
             }
 
             if (t == JsonToken.VALUE_STRING) {

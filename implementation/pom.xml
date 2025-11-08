@@ -267,7 +267,7 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.transaction</groupId>
-                <artifactId>mod-transaction-publisher</artifactId>
+                <artifactId>mod-transaction-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
