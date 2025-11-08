@@ -54,7 +54,7 @@ public interface AccountingIntercomService {
     Call<List<AccountData>> getAccounts();
 
     @POST("/ledgers/post-transaction")
-    Call<PostTransactionCommand.Output> postLedgerFlow(@Body PostTransactionCommand.Input input);
+    Call<PostTransactionCommand.Output> postTransaction(@Body PostTransactionCommand.Input input);
 
     record Settings(String baseUrl) { }
 

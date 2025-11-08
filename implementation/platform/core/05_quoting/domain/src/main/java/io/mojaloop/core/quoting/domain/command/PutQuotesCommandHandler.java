@@ -29,6 +29,7 @@ import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PutQuotesCommand;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
+import io.mojaloop.core.quoting.contract.exception.QuoteRequestTimeoutException;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -191,7 +192,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
                         extensions.forEach(extension -> {
                             LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
-                            quote.addExtension(Direction.INBOUND, extension.getKey(), extension.getValue());
+                            quote.addExtension(Direction.TO_PAYEE, extension.getKey(), extension.getValue());
                         });
                     }
 
@@ -209,6 +210,19 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                     TransactionContext.commit();
 
                     throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
+
+                } catch (QuoteRequestTimeoutException e){
+
+                    LOGGER.error("({}) Payee FSP responded with a timeout quote.", udfQuoteId.getId(), e);
+
+                    var error = "Payee FSP responded only after the request expiration date/time.";
+
+                    quote.error(error);
+                    this.quoteRepository.save(quote);
+                    TransactionContext.commit();
+
+                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
+
                 }
 //                catch (TransferAmountMismatchException e) {
 //
@@ -248,6 +262,9 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 //
 //                }
 
+            } else {
+
+                LOGGER.warn("({}) Quoting is not stateful. Ignoring saving the quote.", udfQuoteId.getId());
             }
 
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();

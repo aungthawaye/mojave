@@ -83,22 +83,24 @@ public class TestSettings implements QuotingDomainConfiguration.RequiredSettings
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        return new RoutingDataSourceConfigurer.ReadSettings(new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            "jdbc:mysql://localhost:3306/ml_quoting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root",
-            "password",
-            false), new RoutingDataSourceConfigurer.ReadSettings.Pool("participant-read", 2, 4));
+        return new RoutingDataSourceConfigurer.ReadSettings(
+            new RoutingDataSourceConfigurer.ReadSettings.Connection("jdbc:mysql://localhost:3306/ml_quoting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
+                                                                    "root",
+                                                                    "password",
+                                                                    false),
+            new RoutingDataSourceConfigurer.ReadSettings.Pool("participant-read", 2, 4));
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        return new RoutingDataSourceConfigurer.WriteSettings(new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            "jdbc:mysql://localhost:3306/ml_quoting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root",
-            "password",
-            false), new RoutingDataSourceConfigurer.WriteSettings.Pool("participant-read", 2, 4));
+        return new RoutingDataSourceConfigurer.WriteSettings(
+            new RoutingDataSourceConfigurer.WriteSettings.Connection("jdbc:mysql://localhost:3306/ml_quoting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
+                                                                     "root",
+                                                                     "password",
+                                                                     false),
+            new RoutingDataSourceConfigurer.WriteSettings.Pool("participant-read", 2, 4));
     }
 
     @Bean

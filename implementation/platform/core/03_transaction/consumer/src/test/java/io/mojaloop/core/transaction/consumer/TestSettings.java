@@ -16,14 +16,8 @@ public class TestSettings implements TransactionConsumerConfiguration.RequiredSe
     public AddStepListener.Settings addStepListenerSettings() {
 
         return new AddStepListener.Settings(
-            "localhost:9092",
-                                            AddStepListener.GROUP_ID,
-                                            UUID.randomUUID().toString(),
-                                            "earliest",
-                                            1,
-                                            100,
-                                            false,
-                                            ContainerProperties.AckMode.MANUAL);
+            "localhost:9092", AddStepListener.GROUP_ID, UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -31,14 +25,8 @@ public class TestSettings implements TransactionConsumerConfiguration.RequiredSe
     public CloseTransactionListener.Settings closeTransactionListenerSettings() {
 
         return new CloseTransactionListener.Settings(
-            "localhost:9092",
-                                                     CloseTransactionListener.GROUP_ID,
-                                                     UUID.randomUUID().toString(),
-                                                     "earliest",
-                                                     1,
-                                                     100,
-                                                     false,
-                                                     ContainerProperties.AckMode.MANUAL);
+            "localhost:9092", CloseTransactionListener.GROUP_ID, UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -46,10 +34,8 @@ public class TestSettings implements TransactionConsumerConfiguration.RequiredSe
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         return new RoutingDataSourceConfigurer.ReadSettings(
-            new RoutingDataSourceConfigurer.ReadSettings.Connection("jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-                                                                    "root",
-                                                                    "password",
-                                                                    false),
+            new RoutingDataSourceConfigurer.ReadSettings.Connection(
+                "jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.ReadSettings.Pool("transaction-read", 2, 4));
     }
 
@@ -58,10 +44,8 @@ public class TestSettings implements TransactionConsumerConfiguration.RequiredSe
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         return new RoutingDataSourceConfigurer.WriteSettings(
-            new RoutingDataSourceConfigurer.WriteSettings.Connection("jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-                                                                     "root",
-                                                                     "password",
-                                                                     false),
+            new RoutingDataSourceConfigurer.WriteSettings.Connection(
+                "jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.WriteSettings.Pool("transaction-write", 2, 4));
     }
 

@@ -23,15 +23,20 @@ package io.mojaloop.core.wallet.intercom.controller;
 import io.mojaloop.core.wallet.contract.command.wallet.DepositFundCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.ReverseFundCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.WithdrawFundCommand;
+import io.mojaloop.core.wallet.contract.data.WalletData;
 import io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException;
 import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException;
+import io.mojaloop.core.wallet.contract.query.WalletQuery;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class WalletController {
@@ -44,15 +49,25 @@ public class WalletController {
 
     private final ReverseFundCommand reverseFundCommand;
 
-    public WalletController(DepositFundCommand depositFundCommand, WithdrawFundCommand withdrawFundCommand, ReverseFundCommand reverseFundCommand) {
+    private final WalletQuery walletQuery;
+
+    public WalletController(DepositFundCommand depositFundCommand, WithdrawFundCommand withdrawFundCommand, ReverseFundCommand reverseFundCommand, WalletQuery walletQuery) {
 
         assert depositFundCommand != null;
         assert withdrawFundCommand != null;
         assert reverseFundCommand != null;
+        assert walletQuery != null;
 
         this.depositFundCommand = depositFundCommand;
         this.withdrawFundCommand = withdrawFundCommand;
         this.reverseFundCommand = reverseFundCommand;
+        this.walletQuery = walletQuery;
+    }
+
+    @GetMapping("/wallets")
+    public List<WalletData> execute() {
+
+        return this.walletQuery.getAll();
     }
 
     @PostMapping("/wallets/deposit-fund")

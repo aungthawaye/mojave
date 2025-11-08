@@ -124,7 +124,7 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
                 if (error.getErrorInformation().getExtensionList() != null && error.getErrorInformation().getExtensionList().getExtension() != null) {
                     error.getErrorInformation().getExtensionList().getExtension().forEach(ext -> {
                         LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), ext);
-                        quote.addExtension(Direction.INBOUND, ext.getKey(), ext.getValue());
+                        quote.addExtension(Direction.TO_PAYEE, ext.getKey(), ext.getValue());
                     });
                 }
 

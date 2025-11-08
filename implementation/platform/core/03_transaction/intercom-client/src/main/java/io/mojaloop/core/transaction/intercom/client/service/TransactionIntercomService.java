@@ -47,8 +47,8 @@ import retrofit2.http.POST;
 
 public interface TransactionIntercomService {
 
-    @POST("/transactions/commit")
-    Call<CloseTransactionCommand.Output> commit(@Body CloseTransactionCommand.Input input);
+    @POST("/transactions/close")
+    Call<CloseTransactionCommand.Output> close(@Body CloseTransactionCommand.Input input);
 
     @POST("/transactions/open")
     Call<OpenTransactionCommand.Output> open(@Body OpenTransactionCommand.Input input);

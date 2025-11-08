@@ -35,5 +35,13 @@
             <groupId>io.mojaloop.platform.core.transfer</groupId>
             <artifactId>mod-transfer-contract</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-intercom-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-producer</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -42,4 +42,8 @@ public class StringSizeConstraints {
 
     public static final int MAX_ILP_PACKET_LENGTH = 32768;
 
+    public static final int MAX_ILP_PACKET_CONDITION_LENGTH = 43;
+
+    public static final int MAX_ILP_PACKET_FULFILMENT_LENGTH = 43;
+
 }

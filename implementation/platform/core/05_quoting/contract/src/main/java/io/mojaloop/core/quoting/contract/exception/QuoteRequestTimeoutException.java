@@ -18,25 +18,19 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.transaction.contract.command;
+package io.mojaloop.core.quoting.contract.exception;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
 
-import java.util.Map;
+public class QuoteRequestTimeoutException extends CheckedDomainException {
 
-public interface AddStepCommand {
+    private static final String TEMPLATE = "Payee responded only after the request expiration date/time.";
 
-    Output execute(Input input);
+    public QuoteRequestTimeoutException() {
 
-    record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
-                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull Map<String, String> params) { }
+        super(new ErrorTemplate("PAYEE_RESPONSE_AFTER_EXPIRATION", TEMPLATE));
 
-    record Output(TransactionId transactionId) { }
+    }
 
 }

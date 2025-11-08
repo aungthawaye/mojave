@@ -50,15 +50,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommitTransaction {
+public class CloseTransaction {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransaction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloseTransaction.class);
 
     private final TransactionIntercomService transactionIntercomService;
 
     private final ObjectMapper objectMapper;
 
-    public CommitTransaction(final TransactionIntercomService transactionIntercomService, final ObjectMapper objectMapper) {
+    public CloseTransaction(final TransactionIntercomService transactionIntercomService, final ObjectMapper objectMapper) {
 
         assert transactionIntercomService != null;
         assert objectMapper != null;
@@ -71,12 +71,12 @@ public class CommitTransaction {
 
         try {
 
-            return RetrofitService.invoke(this.transactionIntercomService.commit(input),
+            return RetrofitService.invoke(this.transactionIntercomService.close(input),
                                           (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
-            LOGGER.error("Error invoking commit transaction : {}", e.getMessage());
+            LOGGER.error("Error invoking close transaction : {}", e.getMessage());
 
             final var decodedErrorResponse = e.getDecodedErrorResponse();
 

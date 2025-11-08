@@ -153,26 +153,27 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 try {
 
-                    var quote = new Quote(payeeFsp.fspId(),
-                                          payeeFsp.fspId(),
-                                          udfQuoteId,
-                                          currency,
-                                          new BigDecimal(amount.getAmount()),
-                                          fees != null ? new BigDecimal(fees.getAmount()) : null,
-                                          postQuotesRequest.getAmountType(),
-                                          transactionType.getScenario(),
-                                          transactionType.getSubScenario(),
-                                          transactionType.getInitiator(),
-                                          transactionType.getInitiatorType(),
-                                          expireAt,
-                                          new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
-                                          new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
+                    var quote = new Quote(
+                        payeeFsp.fspId(),
+                        payeeFsp.fspId(),
+                        udfQuoteId,
+                        currency,
+                        new BigDecimal(amount.getAmount()),
+                        fees != null ? new BigDecimal(fees.getAmount()) : null,
+                        postQuotesRequest.getAmountType(),
+                        transactionType.getScenario(),
+                        transactionType.getSubScenario(),
+                        transactionType.getInitiator(),
+                        transactionType.getInitiatorType(),
+                        expireAt,
+                        new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
+                        new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
                     if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
 
                         postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
                             LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
-                            quote.addExtension(Direction.OUTBOUND, extension.getKey(), extension.getValue());
+                            quote.addExtension(Direction.FROM_PAYEE, extension.getKey(), extension.getValue());
                         });
 
                     }
@@ -191,6 +192,9 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                     LOGGER.error("({}) Exception in TransactionContext: [{}]", udfQuoteId.getId(), e);
                 }
 
+            } else {
+
+                LOGGER.warn("({}) Quoting is not stateful. Ignoring saving the quote.", udfQuoteId.getId());
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
