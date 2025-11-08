@@ -20,7 +20,10 @@ public class AddStepPublisherIT {
     @Test
     public void test() {
 
-        this.producer.publish(new AddStepCommand.Input(new TransactionId(Snowflake.get().nextId()), "step1", Map.of("k1", "v1", "k2", "v2")));
+        for (int i = 0; i < 1000; i++) {
+            this.producer.publish(new AddStepCommand.Input(new TransactionId(Snowflake.get().nextId()), "step" + i, Map.of("k1", "v1", "k2", "v2")));
+        }
+
     }
 
 }

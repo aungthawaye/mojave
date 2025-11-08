@@ -2,7 +2,7 @@ package io.mojaloop.core.transaction.producer.command;
 
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.producer.TestConfiguration;
 import io.mojaloop.core.transaction.producer.publisher.CommitTransactionPublisher;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ public class CommitTransactionPublisherIT {
     @Test
     public void test(){
 
-        this.producer.publish(new CommitTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), null));
-        this.producer.publish(new CommitTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), "Something went wrong."));
+        this.producer.publish(new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), null));
+        this.producer.publish(new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), "Something went wrong."));
     }
 }

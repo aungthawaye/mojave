@@ -42,7 +42,7 @@ package io.mojaloop.core.transaction.domain.command;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -60,7 +60,7 @@ class AddStepCommandIT extends BaseDomainIT {
     private AddStepCommand addStep;
 
     @Autowired
-    private CommitTransactionCommand commitTransaction;
+    private CloseTransactionCommand commitTransaction;
 
     @Test
     void add_step_after_close_phase_after() {
@@ -69,7 +69,7 @@ class AddStepCommandIT extends BaseDomainIT {
         var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_COMMIT);
         var openOutput = this.openTransaction.execute(openInput);
 
-        var commitInput = new CommitTransactionCommand.Input(openOutput.transactionId(), null);
+        var commitInput = new CloseTransactionCommand.Input(openOutput.transactionId(), null);
         this.commitTransaction.execute(commitInput);
 
         var params = Map.of("result", "ok");

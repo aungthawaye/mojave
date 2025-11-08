@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-kafka</artifactId>
         </dependency>
     </dependencies>

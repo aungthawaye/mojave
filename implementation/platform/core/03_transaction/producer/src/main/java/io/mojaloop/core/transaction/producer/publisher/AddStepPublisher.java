@@ -1,6 +1,7 @@
 package io.mojaloop.core.transaction.producer.publisher;
 
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
+import io.mojaloop.core.transaction.contract.constant.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +28,7 @@ public class AddStepPublisher {
 
         LOGGER.info("Publishing AddStepCommand with input: {}", input);
 
-        this.kafkaTemplate.send("add-step-command", input.transactionId().getId().toString(), input);
+        this.kafkaTemplate.send(TopicNames.ADD_STEP, input.transactionId().getId().toString(), input);
 
         LOGGER.info("Published AddStepCommand with input: {}", input);
 

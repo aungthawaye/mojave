@@ -39,7 +39,7 @@
 
 package io.mojaloop.core.transaction.intercom.client.service;
 
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -48,7 +48,7 @@ import retrofit2.http.POST;
 public interface TransactionIntercomService {
 
     @POST("/transactions/commit")
-    Call<CommitTransactionCommand.Output> commit(@Body CommitTransactionCommand.Input input);
+    Call<CloseTransactionCommand.Output> commit(@Body CloseTransactionCommand.Input input);
 
     @POST("/transactions/open")
     Call<OpenTransactionCommand.Output> open(@Body OpenTransactionCommand.Input input);

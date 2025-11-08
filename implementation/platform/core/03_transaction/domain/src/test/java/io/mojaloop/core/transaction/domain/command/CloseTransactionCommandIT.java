@@ -41,20 +41,20 @@ package io.mojaloop.core.transaction.domain.command;
 
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class CommitTransactionCommandIT extends BaseDomainIT {
+class CloseTransactionCommandIT extends BaseDomainIT {
 
     @Autowired
     private OpenTransactionCommand openTransaction;
 
     @Autowired
-    private CommitTransactionCommand commitTransaction;
+    private CloseTransactionCommand commitTransaction;
 
     @Test
     void commit_successful_transaction() {
@@ -63,7 +63,7 @@ class CommitTransactionCommandIT extends BaseDomainIT {
         var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_COMMIT);
         var openOutput = this.openTransaction.execute(openInput);
 
-        var input = new CommitTransactionCommand.Input(openOutput.transactionId(), null);
+        var input = new CloseTransactionCommand.Input(openOutput.transactionId(), null);
 
         // Act
         var output = this.commitTransaction.execute(input);
@@ -78,7 +78,7 @@ class CommitTransactionCommandIT extends BaseDomainIT {
 
         // Arrange
         var fakeId = new TransactionId(9876543210L);
-        var input = new CommitTransactionCommand.Input(fakeId, null);
+        var input = new CloseTransactionCommand.Input(fakeId, null);
 
         // Act & Assert
         Assertions.assertThrows(TransactionIdNotFoundException.class, () -> this.commitTransaction.execute(input));
@@ -91,7 +91,7 @@ class CommitTransactionCommandIT extends BaseDomainIT {
         var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_COMMIT);
         var openOutput = this.openTransaction.execute(openInput);
 
-        var input = new CommitTransactionCommand.Input(openOutput.transactionId(), "some error");
+        var input = new CloseTransactionCommand.Input(openOutput.transactionId(), "some error");
 
         // Act
         var output = this.commitTransaction.execute(input);

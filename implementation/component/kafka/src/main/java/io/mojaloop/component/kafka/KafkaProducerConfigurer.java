@@ -11,17 +11,27 @@ import java.util.Map;
 
 public class KafkaProducerConfigurer {
 
-    public static <K, V> ProducerFactory<K, V> configure(String bootstrapServers, String ack) {
+    public static <K, V> ProducerFactory<K, V> configure(String bootstrapServers, String ack, Serializer<K, V> serializer) {
 
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.ACKS_CONFIG, ack);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        props.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
 
-        return new DefaultKafkaProducerFactory<>(props);
+        var factory = new DefaultKafkaProducerFactory<K, V>(props);
+
+        factory.setValueSerializer(serializer.forValue());
+        factory.setKeySerializer(serializer.forKey());
+
+        return factory;
+    }
+
+    public interface Serializer<K, V> {
+
+        JsonSerializer<K> forKey();
+
+        JsonSerializer<V> forValue();
+
     }
 
     public record ProducerSettings(String bootstrapServers, String ack) { }

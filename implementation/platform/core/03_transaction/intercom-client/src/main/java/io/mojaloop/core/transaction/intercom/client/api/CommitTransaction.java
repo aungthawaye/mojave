@@ -42,7 +42,7 @@ package io.mojaloop.core.transaction.intercom.client.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.intercom.client.exception.TransactionIntercomClientException;
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class CommitTransaction {
         this.objectMapper = objectMapper;
     }
 
-    public CommitTransactionCommand.Output execute(final CommitTransactionCommand.Input input) throws TransactionIntercomClientException {
+    public CloseTransactionCommand.Output execute(final CloseTransactionCommand.Input input) throws TransactionIntercomClientException {
 
         try {
 

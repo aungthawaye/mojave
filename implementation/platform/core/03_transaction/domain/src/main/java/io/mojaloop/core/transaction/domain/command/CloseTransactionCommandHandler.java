@@ -21,7 +21,7 @@
 package io.mojaloop.core.transaction.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.transaction.contract.command.CommitTransactionCommand;
+import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import io.mojaloop.core.transaction.domain.repository.TransactionRepository;
 import org.slf4j.Logger;
@@ -30,13 +30,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CommitTransactionCommandHandler implements CommitTransactionCommand {
+public class CloseTransactionCommandHandler implements CloseTransactionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransactionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloseTransactionCommandHandler.class);
 
     private final TransactionRepository transactionRepository;
 
-    public CommitTransactionCommandHandler(TransactionRepository transactionRepository) {
+    public CloseTransactionCommandHandler(TransactionRepository transactionRepository) {
 
         assert transactionRepository != null;
         this.transactionRepository = transactionRepository;
@@ -47,7 +47,7 @@ public class CommitTransactionCommandHandler implements CommitTransactionCommand
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CommitTransactionCommand with input: {}", input);
+        LOGGER.info("Executing CloseTransactionCommand with input: {}", input);
 
         var transaction = this.transactionRepository.findById(input.transactionId()).orElseThrow(() -> new TransactionIdNotFoundException(input.transactionId()));
         LOGGER.info("Found Transaction with id: {}", input.transactionId());
@@ -58,7 +58,7 @@ public class CommitTransactionCommandHandler implements CommitTransactionCommand
         this.transactionRepository.save(transaction);
         LOGGER.info("Saved Transaction with id: {}", transaction.getId());
 
-        LOGGER.info("Completed CommitTransactionCommand with input: {}", input);
+        LOGGER.info("Completed CloseTransactionCommand with input: {}", input);
 
         return new Output(transaction.getId());
     }

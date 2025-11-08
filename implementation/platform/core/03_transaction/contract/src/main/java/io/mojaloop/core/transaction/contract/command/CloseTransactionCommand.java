@@ -22,7 +22,7 @@ package io.mojaloop.core.transaction.contract.command;
 
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 
-public interface CommitTransactionCommand {
+public interface CloseTransactionCommand {
 
     Output execute(Input input);
 
