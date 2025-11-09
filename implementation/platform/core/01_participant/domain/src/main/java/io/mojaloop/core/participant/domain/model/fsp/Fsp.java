@@ -218,14 +218,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     @Override
     public FspData convert() {
 
-        return new FspData(this.getId(),
-                           this.getFspCode(),
-                           this.getName(),
-                           this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
-                           this.getEndpoints().stream().map(FspEndpoint::convert)
-                               .collect(Collectors.toMap(FspEndpointData::type, Function.identity(), (existing, replacement) -> replacement)),
-                           this.activationStatus,
-                           this.terminationStatus);
+        return new FspData(
+            this.getId(), this.getFspCode(), this.getName(), this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
+            this.getEndpoints().stream().map(FspEndpoint::convert).collect(Collectors.toMap(FspEndpointData::type, Function.identity(), (existing, replacement) -> replacement)),
+            this.activationStatus, this.terminationStatus);
     }
 
     public void deactivate() {

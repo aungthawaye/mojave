@@ -64,11 +64,9 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
                  var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
 
-                builder.withMutualTLS(keyStoreInput,
-                                      transportSettings.keyStoreSettings.password,
-                                      trustStoreInput,
-                                      transportSettings.trustStoreSettings.password,
-                                      transportSettings.ignoreHostnameVerification);
+                builder.withMutualTLS(
+                    keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput, transportSettings.trustStoreSettings.password,
+                    transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to read key store.", e);
@@ -99,11 +97,9 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
                  var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
 
-                builder.withMutualTLS(keyStoreInput,
-                                      transportSettings.keyStoreSettings.password,
-                                      trustStoreInput,
-                                      transportSettings.trustStoreSettings.password,
-                                      transportSettings.ignoreHostnameVerification);
+                builder.withMutualTLS(
+                    keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput, transportSettings.trustStoreSettings.password,
+                    transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to read key store.", e);
@@ -133,11 +129,9 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
                  var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
 
-                builder.withMutualTLS(keyStoreInput,
-                                      transportSettings.keyStoreSettings.password,
-                                      trustStoreInput,
-                                      transportSettings.trustStoreSettings.password,
-                                      transportSettings.ignoreHostnameVerification);
+                builder.withMutualTLS(
+                    keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput, transportSettings.trustStoreSettings.password,
+                    transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to read key store.", e);

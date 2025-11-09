@@ -70,10 +70,8 @@ class ActivateFspCurrencyCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP20"),
-                                                                          "FSP Twenty",
-                                                                          new Currency[]{Currency.USD},
-                                                                          new CreateFspCommand.Input.Endpoint[]{}));
+        var fspOutput = this.createFsp.execute(
+            new CreateFspCommand.Input(new FspCode("DFSP20"), "FSP Twenty", new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
 
         var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
 
@@ -88,10 +86,8 @@ class ActivateFspCurrencyCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP21"),
-                                                                          "FSP Twenty One",
-                                                                          new Currency[]{Currency.USD},
-                                                                          new CreateFspCommand.Input.Endpoint[]{}));
+        var fspOutput = this.createFsp.execute(
+            new CreateFspCommand.Input(new FspCode("DFSP21"), "FSP Twenty One", new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
 
         var input = new ActivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.TZS);
 

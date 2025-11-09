@@ -58,13 +58,9 @@ public class InsufficientBalanceInAccountException extends CheckedDomainExceptio
                                                  BigDecimal postedCredits,
                                                  TransactionId transactionId) {
 
-        super(new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE),
-              accountCode.value(),
-              side.name(),
-              amount.toPlainString(),
-              postedDebits.toPlainString(),
-              postedCredits.toPlainString(),
-              transactionId.getId().toString());
+        super(
+            new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(), postedDebits.toPlainString(),
+            postedCredits.toPlainString(), transactionId.getId().toString());
     }
 
 }

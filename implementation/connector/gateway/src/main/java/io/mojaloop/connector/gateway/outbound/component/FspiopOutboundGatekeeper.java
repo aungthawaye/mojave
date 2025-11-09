@@ -84,9 +84,9 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
         if (authorization == null || SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
-                                                                          new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT,
-                                                                                              "Authorization header or its value is missing."));
+            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(
+                HttpServletResponse.SC_UNAUTHORIZED,
+                new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "Authorization header or its value is missing."));
         }
 
         var payload = cachedServletRequest.getCachedBodyAsString();
@@ -100,8 +100,8 @@ public class FspiopOutboundGatekeeper implements Authenticator {
         if (!verificationOk) {
 
             LOGGER.error("Signature verification failed when using FSP's public key.");
-            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
-                                                                          new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Invalid signature."));
+            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(
+                HttpServletResponse.SC_UNAUTHORIZED, new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Invalid signature."));
         }
 
         LOGGER.debug("Signature verification successful");
@@ -156,8 +156,8 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
                 } else {
 
-                    var error = new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(),
-                                                                                                   FspiopErrors.GENERIC_CLIENT_ERROR.description()));
+                    var error = new ErrorInformationObject().errorInformation(
+                        new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(), FspiopErrors.GENERIC_CLIENT_ERROR.description()));
 
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     writer.write(this.objectMapper.writeValueAsString(error));

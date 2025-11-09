@@ -59,9 +59,9 @@ public class FspiopInvocationExceptionHandler {
 
             // We cannot parse the error body into ErrorInformationObject. Must be some other JSON object, but we parsed it.
             // We don't know what had happened to the server side or connection issue.
-            return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR,
-                                       exception.getMessage() == null || exception.getMessage().isBlank() ? FspiopErrors.GENERIC_SERVER_ERROR.description() :
-                                           exception.getMessage());
+            return new FspiopException(
+                FspiopErrors.GENERIC_SERVER_ERROR,
+                exception.getMessage() == null || exception.getMessage().isBlank() ? FspiopErrors.GENERIC_SERVER_ERROR.description() : exception.getMessage());
 
         }
 
@@ -70,13 +70,14 @@ public class FspiopInvocationExceptionHandler {
         // Something went wrong while sending the request. Then the exception will have the cause.
         if (cause instanceof UnknownHostException || cause instanceof SocketTimeoutException || cause instanceof SocketException || cause instanceof SSLException) {
 
-            return new FspiopCommunicationException(FspiopErrors.DESTINATION_COMMUNICATION_ERROR,
-                                                    exception.getMessage() == null || exception.getMessage().isBlank() ?
-                                                        FspiopErrors.DESTINATION_COMMUNICATION_ERROR.description() : exception.getMessage());
+            return new FspiopCommunicationException(
+                FspiopErrors.DESTINATION_COMMUNICATION_ERROR,
+                exception.getMessage() == null || exception.getMessage().isBlank() ? FspiopErrors.DESTINATION_COMMUNICATION_ERROR.description() : exception.getMessage());
         }
 
-        return new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR,
-                                   exception.getMessage() == null || exception.getMessage().isBlank() ? FspiopErrors.GENERIC_SERVER_ERROR.description() : exception.getMessage());
+        return new FspiopException(
+            FspiopErrors.GENERIC_SERVER_ERROR,
+            exception.getMessage() == null || exception.getMessage().isBlank() ? FspiopErrors.GENERIC_SERVER_ERROR.description() : exception.getMessage());
     }
 
 }

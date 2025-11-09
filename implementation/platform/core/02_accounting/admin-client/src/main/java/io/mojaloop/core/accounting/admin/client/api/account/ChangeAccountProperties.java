@@ -71,8 +71,9 @@ public class ChangeAccountProperties {
 
         try {
 
-            RetrofitService.invoke(this.accountCommands.changeAccountProperties(input),
-                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(
+                this.accountCommands.changeAccountProperties(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 

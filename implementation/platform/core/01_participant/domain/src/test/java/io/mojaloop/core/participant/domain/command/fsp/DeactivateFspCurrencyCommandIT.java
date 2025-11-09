@@ -68,10 +68,8 @@ class DeactivateFspCurrencyCommandIT extends BaseDomainIT {
         var hubInput = new CreateHubCommand.Input("Hub", new Currency[]{Currency.USD});
         this.createHub.execute(hubInput);
 
-        var fspOutput = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("DFSP30"),
-                                                                          "FSP Thirty",
-                                                                          new Currency[]{Currency.USD},
-                                                                          new CreateFspCommand.Input.Endpoint[]{}));
+        var fspOutput = this.createFsp.execute(
+            new CreateFspCommand.Input(new FspCode("DFSP30"), "FSP Thirty", new Currency[]{Currency.USD}, new CreateFspCommand.Input.Endpoint[]{}));
 
         var input = new DeactivateFspCurrencyCommand.Input(fspOutput.fspId(), Currency.USD);
 

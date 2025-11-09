@@ -56,21 +56,13 @@ public class CreateAccountCommandIT extends BaseDomainIT {
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
         final var chartId = chartOut.chartId();
 
-        final var entryOut = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartId,
-                                                                                                    new ChartEntryCode("ASSETS"),
-                                                                                                    "Assets",
-                                                                                                    "Assets Desc",
-                                                                                                    AccountType.ASSET));
+        final var entryOut = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
         final var chartEntryId = entryOut.chartEntryId();
 
-        final var input = new CreateAccountCommand.Input(chartEntryId,
-                                                         new AccountOwnerId(1001L),
-                                                         Currency.USD,
-                                                         new AccountCode("ACC001"),
-                                                         "Cash Account",
-                                                         "Cash Account for tests",
-                                                         OverdraftMode.FORBID,
-                                                         BigDecimal.ZERO);
+        final var input = new CreateAccountCommand.Input(
+            chartEntryId, new AccountOwnerId(1001L), Currency.USD, new AccountCode("ACC001"), "Cash Account", "Cash Account for tests",
+            OverdraftMode.FORBID, BigDecimal.ZERO);
 
         // Act
         final var output = this.createAccountCommand.execute(input);
@@ -85,14 +77,9 @@ public class CreateAccountCommandIT extends BaseDomainIT {
         // Arrange
         final var invalidChartEntryId = new ChartEntryId(99999999L);
 
-        final var input = new CreateAccountCommand.Input(invalidChartEntryId,
-                                                         new AccountOwnerId(1002L),
-                                                         Currency.USD,
-                                                         new AccountCode("ACC002"),
-                                                         "Invalid Account",
-                                                         "Should fail due to missing chart entry",
-                                                         OverdraftMode.FORBID,
-                                                         BigDecimal.ZERO);
+        final var input = new CreateAccountCommand.Input(
+            invalidChartEntryId, new AccountOwnerId(1002L), Currency.USD, new AccountCode("ACC002"), "Invalid Account", "Should fail due to missing chart entry",
+            OverdraftMode.FORBID, BigDecimal.ZERO);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> this.createAccountCommand.execute(input));

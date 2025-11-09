@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.platform.core.common</groupId>
         <artifactId>common-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-common-datatype</artifactId>
     <name>Mojaloop - Platform - Core - Common - Datatype</name>

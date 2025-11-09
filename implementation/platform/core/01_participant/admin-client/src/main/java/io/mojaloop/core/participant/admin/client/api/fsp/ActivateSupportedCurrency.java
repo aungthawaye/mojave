@@ -52,8 +52,9 @@ public class ActivateSupportedCurrency {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommands.activateSupportedCurrency(input),
-                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService.invoke(
+                this.fspCommands.activateSupportedCurrency(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

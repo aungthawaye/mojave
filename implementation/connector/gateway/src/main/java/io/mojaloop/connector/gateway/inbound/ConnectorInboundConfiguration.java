@@ -129,16 +129,13 @@ public class ConnectorInboundConfiguration
 
                             var keystoreSettings = inboundSettings.keyStoreSettings();
                             var truststoreSettings = inboundSettings.trustStoreSettings();
-                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(),
-                                                                                             inboundSettings.maxThreads(),
-                                                                                             inboundSettings.connectionTimeout(),
-                                                                                             new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(truststoreSettings.contentType(),
-                                                                                                                                                         truststoreSettings.contentValue(),
-                                                                                                                                                         truststoreSettings.password),
-                                                                                             new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(keystoreSettings.contentType(),
-                                                                                                                                                       keystoreSettings.contentValue(),
-                                                                                                                                                       keystoreSettings.password,
-                                                                                                                                                       keystoreSettings.keyAlias()));
+                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(
+                                inboundSettings.portNo(), inboundSettings.maxThreads(), inboundSettings.connectionTimeout(),
+                                new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
+                                    truststoreSettings.contentType(), truststoreSettings.contentValue(),
+                                    truststoreSettings.password),
+                                new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
+                                    keystoreSettings.contentType(), keystoreSettings.contentValue(), keystoreSettings.password, keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
 

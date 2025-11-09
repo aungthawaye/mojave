@@ -5,9 +5,10 @@
         <groupId>io.mojaloop.platform.core.participant</groupId>
         <artifactId>participant-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-participant-store</artifactId>
-    <name>Mojaloop - Platform - Core - Participant - Cache</name>
+    <name>Mojaloop - Platform - Core - Participant - Store</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

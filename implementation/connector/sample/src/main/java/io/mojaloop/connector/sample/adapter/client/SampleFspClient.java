@@ -51,9 +51,9 @@ public class SampleFspClient implements FspClient {
             throw new FspiopException(FspiopErrors.PARTY_NOT_FOUND, request.partyIdType().name() + " with Party ID (" + partyId + ") not found.");
         }
 
-        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK),
-                                        "Nezuko Kamado",
-                                        new PartyPersonalInfo().complexName(new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
+        return new Parties.Get.Response(
+            List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko Kamado",
+            new PartyPersonalInfo().complexName(new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
     }
 
     @Override
@@ -88,12 +88,9 @@ public class SampleFspClient implements FspClient {
         var _15minsLater = new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli());
         var expiration = FspiopDates.forRequestBody(_15minsLater);
 
-        return new Quotes.Post.Response(new Money(currency, originalAmount.toPlainString()),
-                                        new Money(currency, payeeFspFee.toPlainString()),
-                                        new Money(currency, payeeFspCommission.toPlainString()),
-                                        new Money(currency, payeeReceiveAmount.toPlainString()),
-                                        new Money(currency, transferAmount.toPlainString()),
-                                        expiration);
+        return new Quotes.Post.Response(
+            new Money(currency, originalAmount.toPlainString()), new Money(currency, payeeFspFee.toPlainString()), new Money(currency, payeeFspCommission.toPlainString()),
+            new Money(currency, payeeReceiveAmount.toPlainString()), new Money(currency, transferAmount.toPlainString()), expiration);
     }
 
     @Override

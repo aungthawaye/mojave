@@ -54,11 +54,8 @@ public class PutPartiesEventListener {
 
         try {
 
-            this.handlePartiesResponse.execute(new HandlePutPartiesResponseCommand.Input(payload.payee(),
-                                                                                         payload.partyIdType(),
-                                                                                         payload.partyId(),
-                                                                                         payload.subId(),
-                                                                                         payload.response()));
+            this.handlePartiesResponse.execute(
+                new HandlePutPartiesResponseCommand.Input(payload.payee(), payload.partyIdType(), payload.partyId(), payload.subId(), payload.response()));
 
             LOGGER.info("Done handling PutPartiesEvent : {}", event);
 

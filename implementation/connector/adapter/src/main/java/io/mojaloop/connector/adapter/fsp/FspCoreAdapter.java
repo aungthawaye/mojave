@@ -115,8 +115,8 @@ public class FspCoreAdapter {
         try {
 
             LOGGER.info("Confirming transfer: {}", response);
-            this.fspClient.patchTransfers(payer,
-                                          new Transfers.Patch.Request(transferId, response.getTransferState(), response.getCompletedTimestamp(), response.getExtensionList()));
+            this.fspClient.patchTransfers(
+                payer, new Transfers.Patch.Request(transferId, response.getTransferState(), response.getCompletedTimestamp(), response.getExtensionList()));
             LOGGER.info("Confirmed transfer: {}", response);
 
         } catch (FspiopException e) {
@@ -156,13 +156,9 @@ public class FspCoreAdapter {
             var currency = request.getAmount().getCurrency();
 
             LOGGER.info("Getting quotes from FSP Core: {}", quoteId);
-            var result = fspClient.postQuotes(payer,
-                                              new Quotes.Post.Request(quoteId,
-                                                                      request.getPayer(),
-                                                                      request.getPayee(),
-                                                                      request.getAmountType(),
-                                                                      request.getAmount(),
-                                                                      request.getExpiration()));
+            var result = fspClient.postQuotes(
+                payer,
+                new Quotes.Post.Request(quoteId, request.getPayer(), request.getPayee(), request.getAmountType(), request.getAmount(), request.getExpiration()));
             LOGGER.info("Got quotes from FSP Core: {}", result);
 
             var originalAmount = new BigDecimal(result.originalAmount().getAmount());
@@ -171,23 +167,15 @@ public class FspCoreAdapter {
             var payeeReceiveAmount = new BigDecimal(result.payeeReceiveAmount().getAmount());
             var transferAmount = new BigDecimal(result.transferAmount().getAmount());
 
-            var agreement = new Agreement(quoteId,
-                                          request.getPayer().getPartyIdInfo(),
-                                          request.getPayee().getPartyIdInfo(),
-                                          request.getAmountType(),
-                                          new Money(currency, originalAmount.toPlainString()),
-                                          new Money(currency, payeeFspFee.toPlainString()),
-                                          new Money(currency, payeeFspCommission.toPlainString()),
-                                          new Money(currency, payeeReceiveAmount.toPlainString()),
-                                          new Money(currency, transferAmount.toPlainString()),
-                                          result.expiration());
+            var agreement = new Agreement(
+                quoteId, request.getPayer().getPartyIdInfo(), request.getPayee().getPartyIdInfo(), request.getAmountType(), new Money(currency, originalAmount.toPlainString()),
+                new Money(currency, payeeFspFee.toPlainString()), new Money(currency, payeeFspCommission.toPlainString()), new Money(currency, payeeReceiveAmount.toPlainString()),
+                new Money(currency, transferAmount.toPlainString()), result.expiration());
 
             var payload = this.objectMapper.writeValueAsString(agreement);
-            var preparePacket = Interledger.prepare(this.participantContext.ilpSecret(),
-                                                    Interledger.address(payer.fspCode()),
-                                                    Interledger.Amount.serialize(transferAmount, FspiopCurrencies.get(currency).scale(), RoundingMode.UNNECESSARY),
-                                                    payload,
-                                                    900);
+            var preparePacket = Interledger.prepare(
+                this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
+                Interledger.Amount.serialize(transferAmount, FspiopCurrencies.get(currency).scale(), RoundingMode.UNNECESSARY), payload, 900);
 
             var extensionList = new ExtensionList();
             // Payer related
@@ -253,13 +241,9 @@ public class FspCoreAdapter {
             LOGGER.debug("Prepare ILP Packet : [{}]", locallyRebuiltIlpPacket);
             LOGGER.debug("ILP Packet Data : [{}]", locallyRebuiltIlpPacketData);
 
-            var fulfillment = Interledger.fulfill(this.participantContext.ilpSecret(),
-                                                  Interledger.address(payer.fspCode()),
-                                                  UnsignedLong.valueOf(request.getAmount().getAmount()),
-                                                  locallyRebuiltIlpPacketData,
-                                                  ilpConditionFromRequest,
-                                                  ilpPacketFromRequest,
-                                                  900);
+            var fulfillment = Interledger.fulfill(
+                this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()), UnsignedLong.valueOf(request.getAmount().getAmount()), locallyRebuiltIlpPacketData,
+                ilpConditionFromRequest, ilpPacketFromRequest, 900);
             LOGGER.debug("Fulfillment : [{}]", fulfillment);
 
             if (!fulfillment.valid()) {
@@ -287,9 +271,8 @@ public class FspCoreAdapter {
 
             var response = new TransfersIDPutResponse();
 
-            response.fulfilment(fulfillment.base64Fulfillment()).transferState(TransferState.RESERVED).completedTimestamp(FspiopDates.forRequestBody())
-                    .extensionList(new ExtensionList().addExtensionItem(new Extension("homeTransactionId", UUID.randomUUID().toString()))
-                                                      .addExtensionItem(new Extension("transferId", transferId)));
+            response.fulfilment(fulfillment.base64Fulfillment()).transferState(TransferState.RESERVED).completedTimestamp(FspiopDates.forRequestBody()).extensionList(
+                new ExtensionList().addExtensionItem(new Extension("homeTransactionId", UUID.randomUUID().toString())).addExtensionItem(new Extension("transferId", transferId)));
 
             LOGGER.debug("Returning transfers: {}", response);
 

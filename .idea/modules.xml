@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/08_wallet/domain/mod-wallet-domain.iml" filepath="$PROJECT_DIR$/implementation/platform/core/08_wallet/domain/mod-wallet-domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/mojaloop-oss.iml" filepath="$PROJECT_DIR$/.idea/mojaloop-oss.iml" />
     </modules>
   </component>

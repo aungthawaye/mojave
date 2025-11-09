@@ -72,28 +72,24 @@ public class ForwardRequestHandler implements ForwardRequest {
                     RetrofitService.invoke(this.forwardingService.get(url, request.headers(), request.params()), this.fspiopErrorDecoder);
                     break;
                 case "POST":
-                    RetrofitService.invoke(this.forwardingService.post(url,
-                                                                       request.headers(),
-                                                                       request.params(),
-                                                                       RequestBody.create(request.payload(), MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                    RetrofitService.invoke(
+                        this.forwardingService.post(url, request.headers(), request.params(), RequestBody.create(request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 case "PUT":
-                    RetrofitService.invoke(this.forwardingService.put(url,
-                                                                      request.headers(),
-                                                                      request.params(),
-                                                                      RequestBody.create(request.payload(), MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                    RetrofitService.invoke(
+                        this.forwardingService.put(url, request.headers(), request.params(), RequestBody.create(request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 case "PATCH":
-                    RetrofitService.invoke(this.forwardingService.patch(url,
-                                                                        request.headers(),
-                                                                        request.params(),
-                                                                        RequestBody.create(request.payload(), MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                    RetrofitService.invoke(
+                        this.forwardingService.patch(url, request.headers(), request.params(), RequestBody.create(request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 case "DELETE":
-                    RetrofitService.invoke(this.forwardingService.delete(url,
-                                                                         request.headers(),
-                                                                         request.params(),
-                                                                         RequestBody.create(request.payload(), MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                    RetrofitService.invoke(
+                        this.forwardingService.delete(url, request.headers(), request.params(), RequestBody.create(request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 default:
                     throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);

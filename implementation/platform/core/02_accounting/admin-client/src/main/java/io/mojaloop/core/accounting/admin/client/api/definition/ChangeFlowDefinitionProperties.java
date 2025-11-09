@@ -90,8 +90,9 @@ public class ChangeFlowDefinitionProperties {
 
         try {
 
-            RetrofitService.invoke(this.definitionCommands.changeFlowDefinitionProperties(input),
-                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(
+                this.definitionCommands.changeFlowDefinitionProperties(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 

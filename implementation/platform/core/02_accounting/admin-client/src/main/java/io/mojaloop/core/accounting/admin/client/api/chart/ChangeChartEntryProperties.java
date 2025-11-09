@@ -71,8 +71,9 @@ public class ChangeChartEntryProperties {
 
         try {
 
-            RetrofitService.invoke(this.chartCommands.changeChartEntryProperties(input),
-                                   (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
+            RetrofitService.invoke(
+                this.chartCommands.changeChartEntryProperties(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {
 

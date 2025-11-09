@@ -63,48 +63,28 @@ public class CreateFlowDefinitionCommandIT extends BaseDomainIT {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
 
-        final var debitEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                      new ChartEntryCode("ASSETS"),
-                                                                                                      "Assets",
-                                                                                                      "Assets Desc",
-                                                                                                      AccountType.ASSET));
+        final var debitEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
 
-        final var creditEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                       new ChartEntryCode("LIAB"),
-                                                                                                       "Liabilities",
-                                                                                                       "Liabilities Desc",
-                                                                                                       AccountType.LIABILITY));
+        final var creditEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("LIAB"), "Liabilities", "Liabilities Desc", AccountType.LIABILITY));
 
         // Mature entries by creating accounts under them
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(debitEntry.chartEntryId(),
-                                                                         new AccountOwnerId(2001L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_D_ASSET"),
-                                                                         "Debit Asset Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(creditEntry.chartEntryId(),
-                                                                         new AccountOwnerId(2001L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_C_LIAB"),
-                                                                         "Credit Liab Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                debitEntry.chartEntryId(), new AccountOwnerId(2001L), Currency.USD, new AccountCode("ACC_D_ASSET"), "Debit Asset Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                creditEntry.chartEntryId(), new AccountOwnerId(2001L), Currency.USD, new AccountCode("ACC_C_LIAB"), "Credit Liab Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
 
-        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   debitEntry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.DEBIT,
-                                                                                   "Debit Assets"),
-                                     new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   creditEntry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.CREDIT,
-                                                                                   "Credit Liabilities"));
+        final var postings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, debitEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+                "Debit Assets"),
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, creditEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Liabilities"));
 
         final var input = new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "FundIn (USD)", "FSP FundIn USD", postings);
 
@@ -122,28 +102,17 @@ public class CreateFlowDefinitionCommandIT extends BaseDomainIT {
     void should_fail_when_flow_definition_currency_exists() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        final var entry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                 new ChartEntryCode("INC"),
-                                                                                                 "Income",
-                                                                                                 "Income Desc",
-                                                                                                 AccountType.REVENUE));
+        final var entry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("INC"), "Income", "Income Desc", AccountType.REVENUE));
 
         // Mature entry by creating an account under it
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(entry.chartEntryId(),
-                                                                         new AccountOwnerId(2002L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_REV"),
-                                                                         "Revenue Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                entry.chartEntryId(), new AccountOwnerId(2002L), Currency.USD, new AccountCode("ACC_REV"), "Revenue Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   entry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.CREDIT,
-                                                                                   "Credit Income"));
+        final var postings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Income"));
 
         final var first = new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "First (USD)", "First Desc", postings);
 
@@ -159,28 +128,17 @@ public class CreateFlowDefinitionCommandIT extends BaseDomainIT {
     void should_fail_when_flow_definition_name_taken() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        final var entry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                 new ChartEntryCode("EXP"),
-                                                                                                 "Expense",
-                                                                                                 "Expense Desc",
-                                                                                                 AccountType.EXPENSE));
+        final var entry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("EXP"), "Expense", "Expense Desc", AccountType.EXPENSE));
 
         // Mature entry by creating an account under it
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(entry.chartEntryId(),
-                                                                         new AccountOwnerId(2003L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_EXP"),
-                                                                         "Expense Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                entry.chartEntryId(), new AccountOwnerId(2003L), Currency.USD, new AccountCode("ACC_EXP"), "Expense Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   entry.chartEntryId().getId(),
-                                                                                   "WITHDRAW_FROM_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.DEBIT,
-                                                                                   "Debit Expense"));
+        final var postings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "WITHDRAW_FROM_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Expense"));
 
         final var name = "Common Name";
         final var first = new CreateFlowDefinitionCommand.Input(TransactionType.FUND_OUT, Currency.USD, name, "First Desc", postings);

@@ -74,9 +74,8 @@ public class RequestQuotesController {
 
         var quotesPostRequest = new QuotesPostRequest().quoteId(id).transactionId(id).payee(new Party().partyIdInfo(request.payee()))
                                                        .payer(new Party().partyIdInfo(request.payer())).amountType(request.amountType()).amount(request.amount())
-                                                       .fees(request.fees()).expiration(request.expiration())
-                                                       .transactionType(new TransactionType().scenario(TransactionScenario.TRANSFER).initiator(TransactionInitiator.PAYER)
-                                                                                             .initiatorType(TransactionInitiatorType.CONSUMER));
+                                                       .fees(request.fees()).expiration(request.expiration()).transactionType(
+                new TransactionType().scenario(TransactionScenario.TRANSFER).initiator(TransactionInitiator.PAYER).initiatorType(TransactionInitiatorType.CONSUMER));
 
         var input = new RequestQuotesCommand.Input(new Payee(request.destination), quotesPostRequest);
 

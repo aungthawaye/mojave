@@ -71,8 +71,9 @@ public class OpenTransaction {
 
         try {
 
-            return RetrofitService.invoke(this.transactionIntercomService.open(input),
-                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService.invoke(
+                this.transactionIntercomService.open(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -10,6 +10,7 @@
         <module name="mod-component-flyway" />
         <module name="mod-transfer-contract" />
         <module name="mod-component-vault" />
+        <module name="mod-settlement-domain" />
         <module name="mod-wallet-store" />
         <module name="mod-transaction-intercom-client" />
         <module name="mod-participant-intercom-client" />
@@ -19,6 +20,7 @@
         <module name="mod-common-datatype" />
         <module name="mod-participant-intercom" />
         <module name="mod-connector-adapter" />
+        <module name="mod-settlement-admin-client" />
         <module name="mod-fspiop-spec" />
         <module name="mod-wallet-admin" />
         <module name="mod-wallet-intercom-client" />
@@ -38,6 +40,7 @@
         <module name="mod-fspiop-service" />
         <module name="mod-accounting-intercom" />
         <module name="mod-common-datatype-converter" />
+        <module name="mod-settlement-producer" />
         <module name="mod-quoting-domain" />
         <module name="mod-accounting-store" />
         <module name="mod-participant-admin" />
@@ -46,21 +49,25 @@
         <module name="mod-accounting-admin" />
         <module name="mod-transaction-producer" />
         <module name="mod-quoting-service" />
+        <module name="mod-settlement-contract" />
         <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
         <module name="mod-accounting-domain" />
         <module name="mod-accounting-intercom-client" />
+        <module name="mod-accounting-consumer" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
         <module name="mod-wallet-domain" />
         <module name="mod-accounting-contract" />
         <module name="mod-component-retrofit" />
+        <module name="mod-settlement-consumer" />
         <module name="mod-transaction-contract" />
         <module name="mod-component-kafka" />
         <module name="mod-transaction-domain" />
         <module name="mod-participant-domain" />
+        <module name="mod-accounting-producer" />
+        <module name="mod-settlement-admin" />
         <module name="mod-fspiop-invoker" />
-        <module name="settlement-pom" />
         <module name="mod-participant-contract" />
       </profile>
     </annotationProcessing>
@@ -71,7 +78,6 @@
       <module name="mod-account-contract" target="21" />
       <module name="mod-account-domain" target="21" />
       <module name="mod-account-intercom" target="21" />
-      <module name="mod-accounting-consumer" target="21" />
       <module name="mod-accounting-publisher" target="21" />
       <module name="mod-central-cache" target="21" />
       <module name="mod-component" target="21" />
@@ -119,6 +125,7 @@
       <module name="mod-accounting-domain" options="-parameters" />
       <module name="mod-accounting-intercom" options="-parameters" />
       <module name="mod-accounting-intercom-client" options="-parameters" />
+      <module name="mod-accounting-producer" options="-parameters" />
       <module name="mod-accounting-publisher" options="-parameters" />
       <module name="mod-accounting-store" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
@@ -170,6 +177,12 @@
       <module name="mod-quoting-contract" options="-parameters" />
       <module name="mod-quoting-domain" options="-parameters" />
       <module name="mod-quoting-service" options="-parameters" />
+      <module name="mod-settlement-admin" options="-parameters" />
+      <module name="mod-settlement-admin-client" options="-parameters" />
+      <module name="mod-settlement-consumer" options="-parameters" />
+      <module name="mod-settlement-contract" options="-parameters" />
+      <module name="mod-settlement-domain" options="-parameters" />
+      <module name="mod-settlement-producer" options="-parameters" />
       <module name="mod-shared-security" options="-parameters" />
       <module name="mod-transaction-admin" options="-parameters" />
       <module name="mod-transaction-admin-client" options="-parameters" />

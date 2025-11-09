@@ -37,15 +37,15 @@ public enum TransactionType {
 
     FUND_OUT(new Participants(Set.of(FundOutDimension.Participants.WITHDRAW_FROM_FSP.name())), new Amounts(Set.of(FundOutDimension.Amounts.LIQUIDITY_AMOUNT.name()))),
 
-    FUND_TRANSFER_RESERVE(new Participants(Set.of(FundTransferReserveDimension.Participants.PAYER_FSP.name(), FundTransferReserveDimension.Participants.PAYEE_FSP.name())),
-                          new Amounts(Set.of(FundTransferReserveDimension.Amounts.TRANSFER_AMOUNT.name(),
-                                             FundTransferReserveDimension.Amounts.PAYEE_FSP_FEE.name(),
-                                             FundTransferReserveDimension.Amounts.PAYEE_FSP_COMMISSION.name()))),
+    FUND_TRANSFER_RESERVE(
+        new Participants(Set.of(FundTransferReserveDimension.Participants.PAYER_FSP.name(), FundTransferReserveDimension.Participants.PAYEE_FSP.name())), new Amounts(Set.of(
+        FundTransferReserveDimension.Amounts.TRANSFER_AMOUNT.name(), FundTransferReserveDimension.Amounts.PAYEE_FSP_FEE.name(),
+        FundTransferReserveDimension.Amounts.PAYEE_FSP_COMMISSION.name()))),
 
-    FUND_TRANSFER_COMMIT(new Participants(Set.of(FundTransferCommitDimension.Participants.PAYER_FSP.name(), FundTransferCommitDimension.Participants.PAYEE_FSP.name())),
-                         new Amounts(Set.of(FundTransferCommitDimension.Amounts.TRANSFER_AMOUNT.name(),
-                                            FundTransferCommitDimension.Amounts.PAYEE_FSP_FEE.name(),
-                                            FundTransferCommitDimension.Amounts.PAYEE_FSP_COMMISSION.name())));
+    FUND_TRANSFER_COMMIT(
+        new Participants(Set.of(FundTransferCommitDimension.Participants.PAYER_FSP.name(), FundTransferCommitDimension.Participants.PAYEE_FSP.name())), new Amounts(Set.of(
+        FundTransferCommitDimension.Amounts.TRANSFER_AMOUNT.name(), FundTransferCommitDimension.Amounts.PAYEE_FSP_FEE.name(),
+        FundTransferCommitDimension.Amounts.PAYEE_FSP_COMMISSION.name())));
 
     @Getter
     private final Participants participants;

@@ -67,55 +67,30 @@ public class AddPostingDefinitionCommandIT extends BaseDomainIT {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
 
-        final var debitEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                      new ChartEntryCode("ASSETS"),
-                                                                                                      "Assets",
-                                                                                                      "Assets Desc",
-                                                                                                      AccountType.ASSET));
-        final var creditEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                       new ChartEntryCode("LIAB"),
-                                                                                                       "Liabilities",
-                                                                                                       "Liab Desc",
-                                                                                                       AccountType.LIABILITY));
+        final var debitEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
+        final var creditEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("LIAB"), "Liabilities", "Liab Desc", AccountType.LIABILITY));
 
         // Mature entries
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(debitEntry.chartEntryId(),
-                                                                         new AccountOwnerId(3301L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_D"),
-                                                                         "Debit Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(creditEntry.chartEntryId(),
-                                                                         new AccountOwnerId(3301L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_C"),
-                                                                         "Credit Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                debitEntry.chartEntryId(), new AccountOwnerId(3301L), Currency.USD, new AccountCode("ACC_D"), "Debit Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                creditEntry.chartEntryId(), new AccountOwnerId(3301L), Currency.USD, new AccountCode("ACC_C"), "Credit Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var initialPostings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                          debitEntry.chartEntryId().getId(),
-                                                                                          "DEPOSIT_INTO_FSP",
-                                                                                          "LIQUIDITY_AMOUNT",
-                                                                                          Side.DEBIT,
-                                                                                          "Debit Assets"));
+        final var initialPostings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, debitEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"));
 
-        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN,
-                                                                                                           Currency.USD,
-                                                                                                           "Flow D",
-                                                                                                           "Desc",
-                                                                                                           initialPostings));
+        final var created = this.createFlowDefinitionCommand.execute(
+            new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow D", "Desc", initialPostings));
 
-        final var addPosting = new AddPostingDefinitionCommand.Input(created.flowDefinitionId(),
-                                                                     new AddPostingDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                                                   creditEntry.chartEntryId().getId(),
-                                                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                                                   Side.CREDIT,
-                                                                                                                   "Credit Liabilities"));
+        final var addPosting = new AddPostingDefinitionCommand.Input(
+            created.flowDefinitionId(),
+            new AddPostingDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, creditEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Liabilities"));
 
         // Act
         final var output = this.addPostingDefinitionCommand.execute(addPosting);
@@ -131,46 +106,25 @@ public class AddPostingDefinitionCommandIT extends BaseDomainIT {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
 
-        final var immatureEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                         new ChartEntryCode("REV"),
-                                                                                                         "Revenue",
-                                                                                                         "Revenue Desc",
-                                                                                                         AccountType.REVENUE));
+        final var immatureEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("REV"), "Revenue", "Revenue Desc", AccountType.REVENUE));
 
         // Create definition with a matured entry first
-        final var maturedEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                        new ChartEntryCode("EXP"),
-                                                                                                        "Expense",
-                                                                                                        "Expense Desc",
-                                                                                                        AccountType.EXPENSE));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(maturedEntry.chartEntryId(),
-                                                                         new AccountOwnerId(3302L),
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_EXP"),
-                                                                         "Expense Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        final var maturedEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("EXP"), "Expense", "Expense Desc", AccountType.EXPENSE));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                maturedEntry.chartEntryId(), new AccountOwnerId(3302L), Currency.USD, new AccountCode("ACC_EXP"), "Expense Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_OUT,
-                                                                                                           Currency.USD,
-                                                                                                           "Flow E",
-                                                                                                           "Desc",
-                                                                                                           List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                                                                                                 maturedEntry.chartEntryId()
-                                                                                                                                                                             .getId(),
-                                                                                                                                                                 "WITHDRAW_FROM_FSP",
-                                                                                                                                                                 "LIQUIDITY_AMOUNT",
-                                                                                                                                                                 Side.DEBIT,
-                                                                                                                                                                 "Debit Expense"))));
+        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
+            TransactionType.FUND_OUT, Currency.USD, "Flow E", "Desc", List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, maturedEntry.chartEntryId().getId(), "WITHDRAW_FROM_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Expense"))));
 
-        final var addPosting = new AddPostingDefinitionCommand.Input(created.flowDefinitionId(),
-                                                                     new AddPostingDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                                                   immatureEntry.chartEntryId().getId(),
-                                                                                                                   "WITHDRAW_FROM_FSP",
-                                                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                                                   Side.CREDIT,
-                                                                                                                   "Credit Revenue"));
+        final var addPosting = new AddPostingDefinitionCommand.Input(
+            created.flowDefinitionId(),
+            new AddPostingDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, immatureEntry.chartEntryId().getId(), "WITHDRAW_FROM_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Revenue"));
 
         // Act & Assert
         assertThrows(ImmatureChartEntryException.class, () -> this.addPostingDefinitionCommand.execute(addPosting));

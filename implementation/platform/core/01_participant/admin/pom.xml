@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.platform.core.participant</groupId>
         <artifactId>participant-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-participant-admin</artifactId>
     <name>Mojaloop - Platform - Core - Participant - Admin</name>
