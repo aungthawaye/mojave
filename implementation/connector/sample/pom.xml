@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.connector</groupId>
         <artifactId>connector-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-connector-sample</artifactId>
     <name>Mojaloop - Connector - Sample</name>

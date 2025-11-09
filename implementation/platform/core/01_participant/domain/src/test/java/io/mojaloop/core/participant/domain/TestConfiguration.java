@@ -29,9 +29,7 @@ public class TestConfiguration {
     static {
 
         var flywaySettings = new FlywayMigration.Settings(
-            "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true",
-            "root",
-            "password",
+            "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password",
             "classpath:migration/participant");
 
         FlywayMigration.migrate(flywaySettings);

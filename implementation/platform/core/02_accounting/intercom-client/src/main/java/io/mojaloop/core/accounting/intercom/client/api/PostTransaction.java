@@ -71,8 +71,9 @@ public class PostTransaction {
 
         try {
 
-            return RetrofitService.invoke(this.accountingIntercomService.postTransaction(input),
-                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)).body();
+            return RetrofitService.invoke(
+                this.accountingIntercomService.postTransaction(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

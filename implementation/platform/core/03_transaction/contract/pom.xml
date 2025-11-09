@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.platform.core.transaction</groupId>
         <artifactId>transaction-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-transaction-contract</artifactId>
     <name>Mojaloop - Platform - Core - Transaction - Contract</name>

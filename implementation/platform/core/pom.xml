@@ -16,11 +16,11 @@
         <module>01_participant</module>
         <module>02_accounting</module>
         <module>03_transaction</module>
-        <module>04_lookup</module>
-        <module>05_quoting</module>
-        <module>06_transfer</module>
-        <module>07_settlement</module>
-        <module>08_wallet</module>
+        <module>04_wallet</module>
+        <module>05_settlement</module>
+        <module>06_lookup</module>
+        <module>07_quoting</module>
+        <module>08_transfer</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

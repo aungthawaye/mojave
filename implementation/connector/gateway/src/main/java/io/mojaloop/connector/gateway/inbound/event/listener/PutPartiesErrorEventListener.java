@@ -54,11 +54,8 @@ public class PutPartiesErrorEventListener {
 
         try {
 
-            this.handlePartiesError.execute(new HandlePutPartiesErrorCommand.Input(payload.payee(),
-                                                                                   payload.partyIdType(),
-                                                                                   payload.partyId(),
-                                                                                   payload.subId(),
-                                                                                   payload.errorInformationObject()));
+            this.handlePartiesError.execute(
+                new HandlePutPartiesErrorCommand.Input(payload.payee(), payload.partyIdType(), payload.partyId(), payload.subId(), payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutPartiesErrorEvent : {}", event);
 

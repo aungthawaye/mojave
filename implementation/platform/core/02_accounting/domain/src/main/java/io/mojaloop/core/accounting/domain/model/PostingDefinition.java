@@ -184,8 +184,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         var existingAccountIds = this.definition.postings.stream().filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
                                                          .map(pd -> pd.receiveInId).collect(Collectors.toSet());
 
-        var existingChartEntryIds = this.definition.postings.stream().filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side &&
-                                                                                       pd.amountName.equals(_amountName)).map(pd -> pd.receiveInId).collect(Collectors.toSet());
+        var existingChartEntryIds = this.definition.postings.stream().filter(
+                                            pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side && pd.amountName.equals(_amountName)).map(pd -> pd.receiveInId)
+                                                            .collect(Collectors.toSet());
 
         if (receiveIn == ReceiveIn.CHART_ENTRY) {
 

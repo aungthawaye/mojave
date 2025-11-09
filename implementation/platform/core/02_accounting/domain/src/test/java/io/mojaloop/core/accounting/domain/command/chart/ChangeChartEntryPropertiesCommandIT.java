@@ -51,11 +51,8 @@ public class ChangeChartEntryPropertiesCommandIT extends BaseDomainIT {
         final var chartOutput = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
         final var chartId = chartOutput.chartId();
 
-        final var entryOutput = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartId,
-                                                                                                       new ChartEntryCode("ASSETS"),
-                                                                                                       "Assets",
-                                                                                                       "Assets Description",
-                                                                                                       AccountType.ASSET));
+        final var entryOutput = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartId, new ChartEntryCode("ASSETS"), "Assets", "Assets Description", AccountType.ASSET));
         final var entryId = entryOutput.chartEntryId();
 
         final var input = new ChangeChartEntryPropertiesCommand.Input(entryId, "Assets New", "Updated Description");

@@ -5,6 +5,7 @@
         <groupId>io.mojaloop</groupId>
         <artifactId>parent-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>io.mojaloop.operation</groupId>
     <artifactId>operation-pom</artifactId>

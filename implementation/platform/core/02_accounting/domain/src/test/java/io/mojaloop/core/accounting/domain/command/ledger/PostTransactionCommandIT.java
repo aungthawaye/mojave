@@ -83,27 +83,16 @@ public class PostTransactionCommandIT extends BaseDomainIT {
     void should_fail_when_required_amount_missing() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        final var assetsEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                       new ChartEntryCode("ASSETS"),
-                                                                                                       "Assets",
-                                                                                                       "Assets Desc",
-                                                                                                       AccountType.ASSET));
+        final var assetsEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
         final var ownerId = new AccountOwnerId(91003L);
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(assetsEntry.chartEntryId(),
-                                                                         ownerId,
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_ASSET_Y"),
-                                                                         "Asset Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                assetsEntry.chartEntryId(), ownerId, Currency.USD, new AccountCode("ACC_ASSET_Y"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   assetsEntry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.DEBIT,
-                                                                                   "Debit Assets"));
+        final var postings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, assetsEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"));
         this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "FundIn Missing A", "Desc", postings));
 
         final var txId = new TransactionId(7000000000003L);
@@ -120,27 +109,16 @@ public class PostTransactionCommandIT extends BaseDomainIT {
     void should_fail_when_required_participant_missing() throws Exception {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
-        final var assetsEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                       new ChartEntryCode("ASSETS"),
-                                                                                                       "Assets",
-                                                                                                       "Assets Desc",
-                                                                                                       AccountType.ASSET));
+        final var assetsEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
         final var ownerId = new AccountOwnerId(91002L);
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(assetsEntry.chartEntryId(),
-                                                                         ownerId,
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_ASSET_X"),
-                                                                         "Asset Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                assetsEntry.chartEntryId(), ownerId, Currency.USD, new AccountCode("ACC_ASSET_X"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   assetsEntry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.DEBIT,
-                                                                                   "Debit Assets"));
+        final var postings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, assetsEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"));
         this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "FundIn Missing P", "Desc", postings));
 
         final var txId = new TransactionId(7000000000002L);
@@ -158,49 +136,27 @@ public class PostTransactionCommandIT extends BaseDomainIT {
         // Arrange
         final var chartOut = this.createChartCommand.execute(new CreateChartCommand.Input("Main Chart"));
 
-        final var assetsEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                       new ChartEntryCode("ASSETS"),
-                                                                                                       "Assets",
-                                                                                                       "Assets Desc",
-                                                                                                       AccountType.ASSET));
-        final var liabilitiesEntry = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(chartOut.chartId(),
-                                                                                                            new ChartEntryCode("LIAB"),
-                                                                                                            "Liabilities",
-                                                                                                            "Liabilities Desc",
-                                                                                                            AccountType.LIABILITY));
+        final var assetsEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
+        final var liabilitiesEntry = this.createChartEntryCommand.execute(
+            new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("LIAB"), "Liabilities", "Liabilities Desc", AccountType.LIABILITY));
 
         final var ownerId = new AccountOwnerId(91001L);
 
         // Mature entries with accounts for the participant owner
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(assetsEntry.chartEntryId(),
-                                                                         ownerId,
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_ASSET_FI"),
-                                                                         "Asset Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
-        this.createAccountCommand.execute(new CreateAccountCommand.Input(liabilitiesEntry.chartEntryId(),
-                                                                         ownerId,
-                                                                         Currency.USD,
-                                                                         new AccountCode("ACC_LIAB_FI"),
-                                                                         "Liab Acc",
-                                                                         "Test",
-                                                                         OverdraftMode.FORBID,
-                                                                         BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                assetsEntry.chartEntryId(), ownerId, Currency.USD, new AccountCode("ACC_ASSET_FI"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+        this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(
+                liabilitiesEntry.chartEntryId(), ownerId, Currency.USD, new AccountCode("ACC_LIAB_FI"), "Liab Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        final var postings = List.of(new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   assetsEntry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.DEBIT,
-                                                                                   "Debit Assets"),
-                                     new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY,
-                                                                                   liabilitiesEntry.chartEntryId().getId(),
-                                                                                   "DEPOSIT_INTO_FSP",
-                                                                                   "LIQUIDITY_AMOUNT",
-                                                                                   Side.CREDIT,
-                                                                                   "Credit Liabilities"));
+        final var postings = List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, assetsEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+                "Debit Assets"),
+            new CreateFlowDefinitionCommand.Input.Posting(
+                ReceiveIn.CHART_ENTRY, liabilitiesEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Liabilities"));
 
         this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "FundIn (USD)", "Desc", postings));
 

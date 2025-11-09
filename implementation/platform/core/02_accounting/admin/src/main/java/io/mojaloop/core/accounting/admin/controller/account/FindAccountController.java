@@ -59,14 +59,9 @@ public class FindAccountController {
 
         var criteria = request.criteria;
 
-        return this.accountQuery.find(criteria.accountCode,
-                                      criteria.name,
-                                      criteria.ownerId,
-                                      criteria.chartEntryId,
-                                      criteria.currency,
-                                      request.pagedRequest,
-                                      request.sortBy.column,
-                                      request.sortBy.mode);
+        return this.accountQuery.find(
+            criteria.accountCode, criteria.name, criteria.ownerId, criteria.chartEntryId, criteria.currency, request.pagedRequest, request.sortBy.column,
+            request.sortBy.mode);
     }
 
     public record Request(Criteria criteria, SortBy sortBy, PagedRequest pagedRequest) {

@@ -47,11 +47,9 @@ public class DeactivateFspIT {
     @Test
     public void test_successfully_deactivate_fsp() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-deactivate"),
-                                                                       "FSP Deactivate",
-                                                                       new Currency[]{Currency.USD},
-                                                                       new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES,
-                                                                                                                                                 "http://localhost:7080")}));
+        var output = this.createFsp.execute(new CreateFspCommand.Input(
+            new FspCode("fsp-deactivate"), "FSP Deactivate", new Currency[]{Currency.USD},
+            new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")}));
 
         this.deactivateFsp.execute(new DeactivateFspCommand.Input(new FspId(output.fspId().getId())));
     }

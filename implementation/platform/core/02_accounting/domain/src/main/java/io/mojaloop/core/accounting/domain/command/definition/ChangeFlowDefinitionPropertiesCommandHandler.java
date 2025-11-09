@@ -76,8 +76,8 @@ public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowD
 
         if (newName != null) {
 
-            final var conflict = this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters.withNameEquals(newName)
-                                                                                                       .and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
+            final var conflict = this.flowDefinitionRepository.findOne(
+                FlowDefinitionRepository.Filters.withNameEquals(newName).and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
 
             if (conflict.isPresent()) {
                 LOGGER.info("Flow Definition with name {} already exists", newName);

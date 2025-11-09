@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.platform.core</groupId>
         <artifactId>core-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>io.mojaloop.platform.core.transaction</groupId>
     <artifactId>transaction-pom</artifactId>

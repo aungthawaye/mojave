@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.common.datatype.converter.identifier.wallet;
 
-import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.NetDebitCapUpdateId;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

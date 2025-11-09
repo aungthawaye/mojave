@@ -52,8 +52,9 @@ public class DeactivateOracle {
 
         try {
 
-            return RetrofitService.invoke(this.oracleCommands.deactivateOracle(input),
-                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService.invoke(
+                this.oracleCommands.deactivateOracle(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 

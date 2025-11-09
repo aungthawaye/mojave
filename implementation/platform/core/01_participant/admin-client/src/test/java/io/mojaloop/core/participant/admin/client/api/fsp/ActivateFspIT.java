@@ -47,11 +47,9 @@ public class ActivateFspIT {
     @Test
     public void test_successfully_activate_fsp() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-activate"),
-                                                                       "FSP Activate",
-                                                                       new Currency[]{Currency.USD},
-                                                                       new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES,
-                                                                                                                                                 "http://localhost:7080")}));
+        var output = this.createFsp.execute(new CreateFspCommand.Input(
+            new FspCode("fsp-activate"), "FSP Activate", new Currency[]{Currency.USD},
+            new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")}));
 
         this.activateFsp.execute(new ActivateFspCommand.Input(new FspId(output.fspId().getId())));
     }
