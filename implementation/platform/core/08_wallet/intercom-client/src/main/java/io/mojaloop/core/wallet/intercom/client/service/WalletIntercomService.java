@@ -28,11 +28,22 @@ import io.mojaloop.core.wallet.contract.command.position.RollbackPositionCommand
 import io.mojaloop.core.wallet.contract.command.wallet.DepositFundCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.ReverseFundCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.WithdrawFundCommand;
+import io.mojaloop.core.wallet.contract.data.PositionData;
+import io.mojaloop.core.wallet.contract.data.WalletData;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+import java.util.List;
+
 public interface WalletIntercomService {
+
+    @GET("/positions")
+    Call<List<PositionData>> getPositions();
+
+    @GET("/wallets")
+    Call<List<WalletData>> getWallets();
 
     @POST("/wallets/deposit-fund")
     Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);

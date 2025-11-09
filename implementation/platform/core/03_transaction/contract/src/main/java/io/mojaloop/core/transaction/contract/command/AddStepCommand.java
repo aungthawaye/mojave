@@ -20,7 +20,12 @@
 
 package io.mojaloop.core.transaction.contract.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Map;
 
@@ -28,7 +33,9 @@ public interface AddStepCommand {
 
     Output execute(Input input);
 
-    record Input(TransactionId transactionId, String name, Map<String, String> params) { }
+    record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
+                 @JsonProperty(required = true) @NotNull Map<String, String> params) { }
 
     record Output(TransactionId transactionId) { }
 

@@ -20,13 +20,15 @@
 
 package io.mojaloop.core.transaction.contract.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import jakarta.validation.constraints.NotNull;
 
 public interface CloseTransactionCommand {
 
     Output execute(Input input);
 
-    record Input(TransactionId transactionId, String error) { }
+    record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId, @JsonProperty String error) { }
 
     record Output(TransactionId transactionId) { }
 

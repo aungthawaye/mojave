@@ -18,6 +18,7 @@
         <module>intercom</module>
         <module>admin-client</module>
         <module>intercom-client</module>
+        <module>store</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

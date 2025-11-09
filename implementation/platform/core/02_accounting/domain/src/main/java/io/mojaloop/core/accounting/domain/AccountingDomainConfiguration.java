@@ -30,7 +30,7 @@ import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCa
 import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheAccountResolver;
+import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -51,7 +51,7 @@ public class AccountingDomainConfiguration {
     @Bean
     public AccountResolver accountResolver(AccountCache accountCache) {
 
-        return new CacheAccountResolver(accountCache);
+        return new CacheBasedAccountResolver(accountCache);
     }
 
     @Bean

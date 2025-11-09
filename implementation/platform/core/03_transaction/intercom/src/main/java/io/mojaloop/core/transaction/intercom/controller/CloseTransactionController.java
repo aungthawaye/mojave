@@ -30,26 +30,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CommitTransactionController {
+public class CloseTransactionController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransactionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloseTransactionController.class);
 
     private final CloseTransactionCommand closeTransactionCommand;
 
-    public CommitTransactionController(final CloseTransactionCommand closeTransactionCommand) {
+    public CloseTransactionController(final CloseTransactionCommand closeTransactionCommand) {
 
         assert closeTransactionCommand != null;
         this.closeTransactionCommand = closeTransactionCommand;
     }
 
-    @PostMapping("/transactions/commit")
+    @PostMapping("/transactions/close")
     public CloseTransactionCommand.Output execute(@Valid @RequestBody final CloseTransactionCommand.Input input) throws TransactionIdNotFoundException {
 
-        LOGGER.info("Entering CommitTransactionCommand.execute: input : {}", input);
+        LOGGER.info("Entering CloseTransactionCommand.execute: input : {}", input);
 
         final var output = this.closeTransactionCommand.execute(input);
 
-        LOGGER.info("Exiting CommitTransactionCommand.execute: {}", output);
+        LOGGER.info("Exiting CloseTransactionCommand.execute: {}", output);
 
         return output;
     }

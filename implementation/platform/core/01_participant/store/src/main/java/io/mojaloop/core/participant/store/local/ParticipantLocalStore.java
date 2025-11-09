@@ -40,7 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class ParticipantLocalStore implements ParticipantStore {
@@ -53,13 +55,7 @@ public class ParticipantLocalStore implements ParticipantStore {
 
     private final ParticipantStoreConfiguration.Settings participantStoreSettings;
 
-    private final Map<FspId, FspData> withFspId = new ConcurrentHashMap<>();
-
-    private final Map<FspCode, FspData> withFspCode = new ConcurrentHashMap<>();
-
-    private final Map<OracleId, OracleData> withOracleId = new ConcurrentHashMap<>();
-
-    private final Map<PartyIdType, OracleData> withPartyIdType = new ConcurrentHashMap<>();
+    private final AtomicReference<Snapshot> snapshotRef = new AtomicReference<>(Snapshot.empty());
 
     private final Timer timer = new Timer("ParticipantLocalStoreRefreshTimer", true);
 
@@ -84,14 +80,15 @@ public class ParticipantLocalStore implements ParticipantStore {
         this.refreshData();
 
         // Schedule a timer to refresh data every 30 seconds
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                ParticipantLocalStore.this.refreshData();
-            }
-        }, interval, interval); // 30 seconds in milliseconds
+                    ParticipantLocalStore.this.refreshData();
+                }
+            }, interval, interval); // 30 seconds in milliseconds
     }
 
     @Override
@@ -101,7 +98,7 @@ public class ParticipantLocalStore implements ParticipantStore {
             return null;
         }
 
-        return this.withFspId.get(fspId);
+        return this.snapshotRef.get().withFspId.get(fspId);
     }
 
     @Override
@@ -111,7 +108,7 @@ public class ParticipantLocalStore implements ParticipantStore {
             return null;
         }
 
-        return this.withFspCode.get(fspCode);
+        return this.snapshotRef.get().withFspCode.get(fspCode);
     }
 
     @Override
@@ -121,7 +118,7 @@ public class ParticipantLocalStore implements ParticipantStore {
             return null;
         }
 
-        return this.withOracleId.get(oracleId);
+        return this.snapshotRef.get().withOracleId.get(oracleId);
     }
 
     @Override
@@ -131,7 +128,7 @@ public class ParticipantLocalStore implements ParticipantStore {
             return null;
         }
 
-        return this.withPartyIdType.get(partyIdType);
+        return this.snapshotRef.get().withPartyIdType.get(partyIdType);
     }
 
     private void refreshData() {
@@ -142,35 +139,36 @@ public class ParticipantLocalStore implements ParticipantStore {
 
             // Fetch all FSPs and populate maps
             List<FspData> fsps = this.getFsps.execute();
-
-            // Clear existing maps before populating
-            this.withFspId.clear();
-            this.withFspCode.clear();
-
-            for (FspData fsp : fsps) {
-                this.withFspId.put(fsp.fspId(), fsp);
-                this.withFspCode.put(fsp.fspCode(), fsp);
-            }
-
-            LOGGER.info("Refreshed FSP data, count: {}", fsps.size());
-
             // Fetch all Oracles and populate maps
             List<OracleData> oracles = this.getOracles.execute();
 
-            // Clear existing maps before populating
-            this.withOracleId.clear();
-            this.withPartyIdType.clear();
+            var _withFspId = fsps.stream().collect(Collectors.toUnmodifiableMap(FspData::fspId, Function.identity(), (a, b) -> a));
 
-            for (OracleData oracle : oracles) {
-                this.withOracleId.put(oracle.oracleId(), oracle);
-                this.withPartyIdType.put(oracle.type(), oracle);
-            }
+            var _withFspCode = fsps.stream().collect(Collectors.toUnmodifiableMap(FspData::fspCode, Function.identity(), (a, b) -> a));
 
-            LOGGER.info("Refreshed Oracle data, count: {}", oracles.size());
+            var _withOracleId = oracles.stream().collect(Collectors.toUnmodifiableMap(OracleData::oracleId, Function.identity(), (a, b) -> a));
+
+            var _withPartyIdType = oracles.stream().collect(Collectors.toUnmodifiableMap(OracleData::type, Function.identity(), (a, b) -> a));
+
+            LOGGER.info("Refreshed FSP count: {} | Oracle count: {}", fsps.size(), oracles.size());
+
+            this.snapshotRef.set(new Snapshot(_withFspId, _withFspCode, _withOracleId, _withPartyIdType));
 
         } catch (ParticipantIntercomClientException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private record Snapshot(Map<FspId, FspData> withFspId,
+                            Map<FspCode, FspData> withFspCode,
+                            Map<OracleId, OracleData> withOracleId,
+                            Map<PartyIdType, OracleData> withPartyIdType) {
+
+        static Snapshot empty() {
+
+            return new Snapshot(Map.of(), Map.of(), Map.of(), Map.of());
+        }
+
     }
 
 }

@@ -20,15 +20,19 @@
 
 package io.mojaloop.core.transaction.contract.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.Instant;
 
 public interface OpenTransactionCommand {
 
     Output execute(Input input);
 
-    record Input(TransactionType type) { }
+    record Input(@JsonProperty(required = true) @NotNull TransactionType type) { }
 
-    record Output(TransactionId transactionId) { }
+    record Output(TransactionId transactionId, Instant transactionAt) { }
 
 }

@@ -15,16 +15,16 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-contract</artifactId>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-kafka</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-misc</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-kafka</artifactId>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-contract</artifactId>
         </dependency>
     </dependencies>
 </project>

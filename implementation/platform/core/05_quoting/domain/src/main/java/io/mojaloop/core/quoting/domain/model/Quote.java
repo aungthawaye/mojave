@@ -33,9 +33,7 @@ import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.identifier.quoting.QuoteId;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
 import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
-import io.mojaloop.core.quoting.contract.exception.ReceivingAmountLargerException;
-import io.mojaloop.core.quoting.contract.exception.ReceivingAmountMismatchException;
-import io.mojaloop.core.quoting.contract.exception.TransferAmountMismatchException;
+import io.mojaloop.core.quoting.contract.exception.QuoteRequestTimeoutException;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -277,8 +275,7 @@ public class Quote extends JpaEntity<QuoteId> {
                           BigDecimal payeeFspCommission,
                           BigDecimal payeeReceiveAmount,
                           String ilpPacket,
-                          String condition)
-        throws TransferAmountMismatchException, ReceivingAmountMismatchException, ExpirationNotInFutureException, ReceivingAmountLargerException {
+                          String condition) throws ExpirationNotInFutureException, QuoteRequestTimeoutException {
 
         assert transferAmount != null;
         assert payeeReceiveAmount != null;
@@ -290,6 +287,11 @@ public class Quote extends JpaEntity<QuoteId> {
         this.payeeReceiveAmount = payeeReceiveAmount;
         this.respondedAt = Instant.now();
         this.stage = QuotingStage.RESPONDED;
+
+        if (this.requestExpiration.isBefore(Instant.now())) {
+
+            throw new QuoteRequestTimeoutException();
+        }
 
         if (this.responseExpiration != null && this.responseExpiration.isBefore(Instant.now())) {
 
@@ -320,10 +322,11 @@ public class Quote extends JpaEntity<QuoteId> {
 
     public QuotesIDPutResponse toFspiopResponse() {
 
-        return new QuotesIDPutResponse(new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()),
-                                       FspiopDates.forRequestBody(Date.from(this.responseExpiration)),
-                                       this.ilpPacket.getIlpPacket(),
-                                       this.ilpPacket.getCondition());
+        return new QuotesIDPutResponse(
+            new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()),
+            FspiopDates.forRequestBody(Date.from(this.responseExpiration)),
+            this.ilpPacket.getIlpPacket(),
+            this.ilpPacket.getCondition());
     }
 
     List<QuoteExtension> getExtensions() {

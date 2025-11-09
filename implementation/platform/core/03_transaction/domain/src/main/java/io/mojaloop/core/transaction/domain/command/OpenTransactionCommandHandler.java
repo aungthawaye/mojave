@@ -60,7 +60,7 @@ public class OpenTransactionCommandHandler implements OpenTransactionCommand {
 
         LOGGER.info("Completed OpenTransactionCommand with input: {}", input);
 
-        return new Output(transaction.getId());
+        return new Output(transaction.getId(), transaction.getOpenAt());
     }
 
 }

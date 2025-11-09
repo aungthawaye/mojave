@@ -55,11 +55,8 @@ public class QuoteIlpPacket extends JpaEntity<QuoteId> {
     @Column(name = "ilp_packet", length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH)
     protected String ilpPacket;
 
-    @Column(name = "ilp_condition", length = 64)
+    @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String condition;
-
-    @Column(name = "ilp_fulfilment", length = 64)
-    protected String fulfilment;
 
     @MapsId
     @OneToOne
@@ -70,11 +67,6 @@ public class QuoteIlpPacket extends JpaEntity<QuoteId> {
 
         this.id = quote.getId();
         this.quote = quote;
-    }
-
-    public void fulfilled(String fulfilment) {
-
-        this.fulfilment = fulfilment;
     }
 
     @Override

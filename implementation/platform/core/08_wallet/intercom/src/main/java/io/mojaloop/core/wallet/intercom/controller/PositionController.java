@@ -5,14 +5,19 @@ import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.RollbackPositionCommand;
+import io.mojaloop.core.wallet.contract.data.PositionData;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.query.PositionQuery;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class PositionController {
@@ -29,23 +34,34 @@ public class PositionController {
 
     private final CommitPositionCommand commitPositionCommand;
 
+    private final PositionQuery positionQuery;
+
     public PositionController(IncreasePositionCommand increasePositionCommand,
                               DecreasePositionCommand decreasePositionCommand,
                               ReservePositionCommand reservePositionCommand,
                               RollbackPositionCommand rollbackPositionCommand,
-                              CommitPositionCommand commitPositionCommand) {
+                              CommitPositionCommand commitPositionCommand,
+                              PositionQuery positionQuery) {
 
         assert increasePositionCommand != null;
         assert decreasePositionCommand != null;
         assert reservePositionCommand != null;
         assert rollbackPositionCommand != null;
         assert commitPositionCommand != null;
+        assert positionQuery != null;
 
         this.increasePositionCommand = increasePositionCommand;
         this.decreasePositionCommand = decreasePositionCommand;
         this.reservePositionCommand = reservePositionCommand;
         this.rollbackPositionCommand = rollbackPositionCommand;
         this.commitPositionCommand = commitPositionCommand;
+        this.positionQuery = positionQuery;
+    }
+
+    @GetMapping("/positions")
+    public List<PositionData> execute() {
+
+        return this.positionQuery.getAll();
     }
 
     @PostMapping("/positions/increase")

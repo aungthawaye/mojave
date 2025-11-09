@@ -27,11 +27,11 @@ import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.fspiop.spec.core.Currency;
 
-public class CacheAccountResolver implements AccountResolver {
+public class CacheBasedAccountResolver implements AccountResolver {
 
     private final AccountCache accountCache;
 
-    public CacheAccountResolver(AccountCache accountCache) {
+    public CacheBasedAccountResolver(AccountCache accountCache) {
 
         assert accountCache != null;
 
