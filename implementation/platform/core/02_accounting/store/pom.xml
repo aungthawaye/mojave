@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.platform.core.transaction</groupId>
-        <artifactId>transaction-pom</artifactId>
+        <groupId>io.mojaloop.platform.core.accounting</groupId>
+        <artifactId>accounting-pom</artifactId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>mod-transaction-producer</artifactId>
-    <name>Mojaloop - Platform - Core - Transaction - Producer</name>
+    <artifactId>mod-accounting-store</artifactId>
+    <name>Mojaloop - Platform - Core - Accounting - Store</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -15,16 +15,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-kafka</artifactId>
+            <groupId>io.mojaloop.platform.core.accounting</groupId>
+            <artifactId>mod-accounting-contract</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-misc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-contract</artifactId>
+            <groupId>io.mojaloop.platform.core.accounting</groupId>
+            <artifactId>mod-accounting-intercom-client</artifactId>
         </dependency>
     </dependencies>
 </project>

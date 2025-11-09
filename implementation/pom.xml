@@ -161,6 +161,11 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-store</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>io.mojaloop.platform.core.common</groupId>
                 <artifactId>mod-common-datatype</artifactId>
                 <version>1.0.0</version>
@@ -308,6 +313,11 @@
             <dependency>
                 <groupId>io.mojaloop.platform.core.wallet</groupId>
                 <artifactId>mod-wallet-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-store</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

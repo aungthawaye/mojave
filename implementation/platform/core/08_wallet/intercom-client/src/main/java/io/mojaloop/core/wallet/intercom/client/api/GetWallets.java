@@ -34,8 +34,7 @@ public class GetWallets {
 
         try {
 
-            return RetrofitService.invoke(this.walletIntercomService.getWallets(),
-                                          (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+            return RetrofitService.invoke(this.walletIntercomService.getWallets(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
                                   .body();
 
         } catch (RetrofitService.InvocationException e) {
@@ -52,4 +51,5 @@ public class GetWallets {
             throw new WalletIntercomClientException("INTERNAL_SERVER_ERROR", e.getMessage());
         }
     }
+
 }

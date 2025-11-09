@@ -10,6 +10,7 @@
         <module name="mod-component-flyway" />
         <module name="mod-transfer-contract" />
         <module name="mod-component-vault" />
+        <module name="mod-wallet-store" />
         <module name="mod-transaction-intercom-client" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-component-web" />
@@ -38,6 +39,7 @@
         <module name="mod-accounting-intercom" />
         <module name="mod-common-datatype-converter" />
         <module name="mod-quoting-domain" />
+        <module name="mod-accounting-store" />
         <module name="mod-participant-admin" />
         <module name="mod-wallet-contract" />
         <module name="mod-connector-sample" />
@@ -118,6 +120,7 @@
       <module name="mod-accounting-intercom" options="-parameters" />
       <module name="mod-accounting-intercom-client" options="-parameters" />
       <module name="mod-accounting-publisher" options="-parameters" />
+      <module name="mod-accounting-store" options="-parameters" />
       <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-common-datatype-converter" options="-parameters" />
@@ -184,6 +187,7 @@
       <module name="mod-wallet-domain" options="-parameters" />
       <module name="mod-wallet-intercom" options="-parameters" />
       <module name="mod-wallet-intercom-client" options="-parameters" />
+      <module name="mod-wallet-store" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
