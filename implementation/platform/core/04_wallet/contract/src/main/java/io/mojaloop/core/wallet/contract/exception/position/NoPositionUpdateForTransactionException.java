@@ -45,11 +45,13 @@ import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 
 public class NoPositionUpdateForTransactionException extends CheckedDomainException {
 
-    private static final String TEMPLATE = "No position update for transaction : | transaction id: ({5}).";
+    public static final String CODE = "NO_POSITION_UPDATE_FOR_TRANSACTION";
+
+    private static final String TEMPLATE = "No position update for transaction: transaction id ({0}).";
 
     public NoPositionUpdateForTransactionException(TransactionId transactionId) {
 
-        super(new ErrorTemplate("NO_POSITION_UPDATE_FOR_TRANSACTION", TEMPLATE), transactionId.getId().toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), transactionId.getId().toString());
     }
 
 }

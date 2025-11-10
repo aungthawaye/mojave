@@ -90,6 +90,10 @@ public class Transfer extends JpaEntity<TransferId> {
     @Column(name = "transaction_id", nullable = false, updatable = false)
     protected TransactionId transactionId;
 
+    @Column(name = "transaction_at", nullable = false, updatable = false)
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant transactionAt;
+
     @Basic
     @JavaType(UdfTransferIdJavaType.class)
     @JdbcTypeCode(Types.VARCHAR)
@@ -160,6 +164,7 @@ public class Transfer extends JpaEntity<TransferId> {
     protected List<TransferExtension> extensions = new ArrayList<>();
 
     public Transfer(TransactionId transactionId,
+                    Instant transactionAt,
                     UdfTransferId udfTransferId,
                     FspCode payerFsp,
                     Party payer,
@@ -169,6 +174,7 @@ public class Transfer extends JpaEntity<TransferId> {
                     BigDecimal transferAmount) {
 
         assert transactionId != null;
+        assert transactionAt != null;
         assert udfTransferId != null;
         assert payerFsp != null;
         assert payer != null;
@@ -178,6 +184,7 @@ public class Transfer extends JpaEntity<TransferId> {
         assert transferAmount != null;
 
         this.transactionId = transactionId;
+        this.transactionAt = transactionAt;
         this.udfTransferId = udfTransferId;
         this.payerFsp = payerFsp;
         this.payer = payer;

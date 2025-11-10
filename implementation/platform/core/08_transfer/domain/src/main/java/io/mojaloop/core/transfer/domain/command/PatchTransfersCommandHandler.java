@@ -19,4 +19,16 @@
  */
 package io.mojaloop.core.transfer.domain.command;
 
-public class PatchTransfersCommandHandler { }
+import io.mojaloop.core.transfer.contract.command.PatchTransfersCommand;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PatchTransfersCommandHandler implements PatchTransfersCommand {
+
+    @Override
+    public Output execute(Input input) {
+
+        return new Output();
+    }
+
+}

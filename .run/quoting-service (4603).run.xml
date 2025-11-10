@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="quoting-service (4603)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="05 quoting">
+  <configuration default="false" name="quoting-service (4603)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="07 quoting">
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/05_quoting/service/src/main/java/io/mojaloop/core/quoting/service/.env" />
     </option>

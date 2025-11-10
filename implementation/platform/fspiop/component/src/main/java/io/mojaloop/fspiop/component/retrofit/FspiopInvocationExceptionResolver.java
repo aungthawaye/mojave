@@ -32,9 +32,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-public class FspiopInvocationExceptionHandler {
+public class FspiopInvocationExceptionResolver {
 
-    public FspiopException handle(RetrofitService.InvocationException exception) {
+    public FspiopException resolve(RetrofitService.InvocationException exception) {
 
         var decodedErrorResponse = exception.getDecodedErrorResponse();
 

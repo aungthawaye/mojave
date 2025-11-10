@@ -25,7 +25,7 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
-import io.mojaloop.core.transaction.producer.publisher.CommitTransactionPublisher;
+import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -71,14 +71,14 @@ public class TransactionProducerConfiguration {
     }
 
     @Bean
-    @Qualifier(CommitTransactionPublisher.QUALIFIER)
-    public KafkaTemplate<String, CloseTransactionCommand.Input> commitTransactionKafkaTemplate(@Qualifier(CommitTransactionPublisher.QUALIFIER) ProducerFactory<String, CloseTransactionCommand.Input> producerFactory) {
+    @Qualifier(CloseTransactionPublisher.QUALIFIER)
+    public KafkaTemplate<String, CloseTransactionCommand.Input> commitTransactionKafkaTemplate(@Qualifier(CloseTransactionPublisher.QUALIFIER) ProducerFactory<String, CloseTransactionCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
-    @Qualifier(CommitTransactionPublisher.QUALIFIER)
+    @Qualifier(CloseTransactionPublisher.QUALIFIER)
     public ProducerFactory<String, CloseTransactionCommand.Input> commitTransactionProducerFactory(KafkaProducerConfigurer.ProducerSettings settings, ObjectMapper objectMapper) {
 
         return KafkaProducerConfigurer.configure(

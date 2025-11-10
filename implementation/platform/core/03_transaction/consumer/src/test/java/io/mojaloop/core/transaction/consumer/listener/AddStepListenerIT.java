@@ -17,28 +17,23 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.transaction.producer.command;
+package io.mojaloop.core.transaction.consumer.listener;
 
-import io.mojaloop.component.misc.handy.Snowflake;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
-import io.mojaloop.core.transaction.producer.TestConfiguration;
-import io.mojaloop.core.transaction.producer.publisher.CommitTransactionPublisher;
+import io.mojaloop.core.transaction.consumer.TestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = TestConfiguration.class)
-public class CommitTransactionPublisherIT {
+public class AddStepListenerIT {
 
     @Autowired
-    private CommitTransactionPublisher producer;
+    private AddStepListener listener;
 
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
 
-        this.producer.publish(new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), null));
-        this.producer.publish(new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), "Something went wrong."));
+        Thread.sleep(600_000);
     }
 
 }

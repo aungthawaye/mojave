@@ -45,11 +45,13 @@ import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 
 public class WalletIdNotFoundException extends UncheckedDomainException {
 
+    public static final String CODE = "WALLET_ID_NOT_FOUND";
+
     private static final String TEMPLATE = "Wallet Id ({0}) cannot be found.";
 
     public WalletIdNotFoundException(WalletId walletId) {
 
-        super(new ErrorTemplate("WALLET_ID_NOT_FOUND", TEMPLATE), walletId.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), walletId.toString());
     }
 
 }

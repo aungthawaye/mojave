@@ -46,11 +46,13 @@ import io.mojaloop.fspiop.spec.core.Currency;
 
 public class PositionAlreadyExistsException extends UncheckedDomainException {
 
+    public static final String CODE = "POSITION_ALREADY_EXISTS";
+
     private static final String TEMPLATE = "Position already exists in for Owner Id ({0}) and Currency ({1}).";
 
     public PositionAlreadyExistsException(WalletOwnerId ownerId, Currency currency) {
 
-        super(new ErrorTemplate("POSITION_ALREADY_EXISTS", TEMPLATE), ownerId.toString(), currency.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), ownerId.toString(), currency.toString());
     }
 
 }

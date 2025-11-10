@@ -28,15 +28,15 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommitTransactionPublisher {
+public class CloseTransactionPublisher {
 
     public static final String QUALIFIER = "commitTransaction";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransactionPublisher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloseTransactionPublisher.class);
 
     private final KafkaTemplate<String, CloseTransactionCommand.Input> kafkaTemplate;
 
-    public CommitTransactionPublisher(@Qualifier(QUALIFIER) KafkaTemplate<String, CloseTransactionCommand.Input> kafkaTemplate) {
+    public CloseTransactionPublisher(@Qualifier(QUALIFIER) KafkaTemplate<String, CloseTransactionCommand.Input> kafkaTemplate) {
 
         assert kafkaTemplate != null;
 
@@ -47,7 +47,7 @@ public class CommitTransactionPublisher {
 
         LOGGER.info("Publishing CommitTransactionCommand with input: {}", input);
 
-        this.kafkaTemplate.send(TopicNames.COMMIT_TRANSACTION, input.transactionId().getId().toString(), input);
+        this.kafkaTemplate.send(TopicNames.CLOSE_TRANSACTION, input.transactionId().getId().toString(), input);
 
         LOGGER.info("Published CommitTransactionCommand with input: {}", input);
 

@@ -26,7 +26,7 @@ import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import io.mojaloop.fspiop.service.api.QuotesResponseService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
@@ -41,22 +41,22 @@ public class RespondQuotesHandler implements RespondQuotes {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
+    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
 
     public RespondQuotesHandler(ParticipantContext participantContext,
                                 QuotesResponseService quotesResponseService,
                                 FspiopErrorDecoder fspiopErrorDecoder,
-                                FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
+                                FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
 
         assert participantContext != null;
         assert quotesResponseService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionHandler != null;
+        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.quotesResponseService = quotesResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
+        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class RespondQuotesHandler implements RespondQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionHandler.handle(e);
+            throw this.fspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -85,7 +85,7 @@ public class RespondQuotesHandler implements RespondQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionHandler.handle(e);
+            throw this.fspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

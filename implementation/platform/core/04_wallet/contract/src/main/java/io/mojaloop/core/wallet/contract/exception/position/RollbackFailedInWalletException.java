@@ -45,11 +45,13 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 
 public class RollbackFailedInWalletException extends CheckedDomainException {
 
+    public static final String CODE = "ROLLBACK_FAILED_IN_WALLET";
+
     private static final String TEMPLATE = "Rollback failed : reservationId ({0}).";
 
     public RollbackFailedInWalletException(BalanceUpdateId reservationId) {
 
-        super(new ErrorTemplate("ROLLBACK_FAILED_IN_WALLET", TEMPLATE), reservationId.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), reservationId.toString());
     }
 
 }

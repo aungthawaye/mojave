@@ -45,11 +45,13 @@ import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 
 public class PositionIdNotFoundException extends UncheckedDomainException {
 
+    public static final String CODE = "POSITION_ID_NOT_FOUND";
+
     private static final String TEMPLATE = "Position Id ({0}) cannot be found.";
 
     public PositionIdNotFoundException(WalletId walletId) {
 
-        super(new ErrorTemplate("POSITION_ID_NOT_FOUND", TEMPLATE), walletId.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), walletId.toString());
     }
 
 }

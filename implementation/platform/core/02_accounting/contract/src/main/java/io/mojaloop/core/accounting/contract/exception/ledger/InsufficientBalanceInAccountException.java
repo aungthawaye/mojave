@@ -49,17 +49,19 @@ import java.math.BigDecimal;
 
 public class InsufficientBalanceInAccountException extends CheckedDomainException {
 
+    public static final String CODE = "INSUFFICIENT_BALANCE_IN_ACCOUNT";
+
     private static final String TEMPLATE = "Insufficient Balance : account ({0}) | side ({1}) | amount({2}) | posted debits: ({3}) | posted credits: ({4}) | transaction id: ({5}).";
 
     public InsufficientBalanceInAccountException(AccountCode accountCode,
-                                                 Side side,
-                                                 BigDecimal amount,
-                                                 BigDecimal postedDebits,
-                                                 BigDecimal postedCredits,
-                                                 TransactionId transactionId) {
+                                                Side side,
+                                                BigDecimal amount,
+                                                BigDecimal postedDebits,
+                                                BigDecimal postedCredits,
+                                                TransactionId transactionId) {
 
         super(
-            new ErrorTemplate("INSUFFICIENT_BALANCE_IN_ACCOUNT", TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(), postedDebits.toPlainString(),
+            new ErrorTemplate(CODE, TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(), postedDebits.toPlainString(),
             postedCredits.toPlainString(), transactionId.getId().toString());
     }
 
