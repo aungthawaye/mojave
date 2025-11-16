@@ -41,6 +41,7 @@ package io.mojaloop.core.wallet.contract.exception.position;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 
 public class PositionIdNotFoundException extends UncheckedDomainException {
@@ -49,9 +50,9 @@ public class PositionIdNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Position Id ({0}) cannot be found.";
 
-    public PositionIdNotFoundException(WalletId walletId) {
+    public PositionIdNotFoundException(PositionId positionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE), walletId.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), positionId.toString());
     }
 
 }

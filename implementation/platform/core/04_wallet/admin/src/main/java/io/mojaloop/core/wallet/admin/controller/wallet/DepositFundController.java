@@ -1,5 +1,7 @@
+package io.mojaloop.core.wallet.admin.controller.wallet;
+
 /*-
- * ================================================================================
+ * ==============================================================================
  * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
@@ -15,11 +17,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ==============================================================================
  */
-package io.mojaloop.core.wallet.admin.controller;
 
-import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
+import io.mojaloop.core.wallet.contract.command.wallet.DepositFundCommand;
+import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,31 +33,31 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CreatePositionController {
+public class DepositFundController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreatePositionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DepositFundController.class);
 
-    private final CreatePositionCommand createPositionCommand;
+    private final DepositFundCommand depositFundCommand;
 
-    public CreatePositionController(final CreatePositionCommand createPositionCommand) {
+    public DepositFundController(final DepositFundCommand depositFundCommand) {
 
-        assert createPositionCommand != null;
+        assert depositFundCommand != null;
 
-        this.createPositionCommand = createPositionCommand;
+        this.depositFundCommand = depositFundCommand;
     }
 
-    @PostMapping("/positions")
+    @PostMapping("/wallets/deposit-fund")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreatePositionCommand.Output execute(@Valid @RequestBody final CreatePositionCommand.Input input) {
+    public DepositFundCommand.Output execute(@Valid @RequestBody final DepositFundCommand.Input input)
+        throws NoBalanceUpdateForTransactionException {
 
-        LOGGER.info("Entering CreatePositionCommand.execute: input : {}", input);
+        LOGGER.info("Entering DepositFundCommand.execute: input : {}", input);
 
-        final var output = this.createPositionCommand.execute(input);
+        final var output = this.depositFundCommand.execute(input);
 
-        LOGGER.info("Exiting CreatePositionCommand.execute: {}", output);
+        LOGGER.info("Exiting DepositFundCommand.execute: {}", output);
 
         return output;
     }
-
 }

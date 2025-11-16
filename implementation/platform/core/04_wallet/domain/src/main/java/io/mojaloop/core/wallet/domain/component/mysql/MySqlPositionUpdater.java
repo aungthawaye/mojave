@@ -151,7 +151,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 try (var stm = con.prepareStatement("CALL sp_decrease_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, positionUpdateId.getId());
                     stm.setLong(4, positionId.getId());
                     stm.setBigDecimal(5, amount);
@@ -201,7 +201,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 try (var stm = con.prepareStatement("CALL sp_increase_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, positionUpdateId.getId());
                     stm.setLong(4, positionId.getId());
                     stm.setBigDecimal(5, amount);
@@ -260,7 +260,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 try (var stm = con.prepareStatement("CALL sp_reserve_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, positionUpdateId.getId());
                     stm.setLong(4, positionId.getId());
                     stm.setBigDecimal(5, amount);

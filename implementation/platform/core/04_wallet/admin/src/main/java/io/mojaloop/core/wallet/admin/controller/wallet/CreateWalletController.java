@@ -17,7 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.wallet.admin.controller;
+package io.mojaloop.core.wallet.admin.controller.wallet;
 
 import io.mojaloop.core.wallet.contract.command.wallet.CreateWalletCommand;
 import jakarta.validation.Valid;

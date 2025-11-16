@@ -48,7 +48,7 @@ public class PositionAlreadyExistsException extends UncheckedDomainException {
 
     public static final String CODE = "POSITION_ALREADY_EXISTS";
 
-    private static final String TEMPLATE = "Position already exists in for Owner Id ({0}) and Currency ({1}).";
+    private static final String TEMPLATE = "Position already exists for Owner Id ({0}) and Currency ({1}).";
 
     public PositionAlreadyExistsException(WalletOwnerId ownerId, Currency currency) {
 

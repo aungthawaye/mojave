@@ -24,7 +24,6 @@ import com.google.common.primitives.UnsignedLong;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.interledger.codecs.ilp.InterledgerCodecContextFactory;
 import org.interledger.core.InterledgerAddress;
-import org.interledger.core.InterledgerCondition;
 import org.interledger.core.InterledgerFulfillment;
 import org.interledger.core.InterledgerPreparePacket;
 import org.interledger.encoding.asn.framework.CodecContext;
@@ -40,6 +39,7 @@ import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Optional;
 
 public class Interledger {
 
@@ -77,36 +77,23 @@ public class Interledger {
         }
     }
 
-    public static Fulfill fulfill(String ilpSecret,
-                                  String peer,
-                                  UnsignedLong amount,
-                                  String data,
-                                  String comparingBase64Condition,
-                                  String comparingBase64Packet,
-                                  int lifetimeSeconds) {
+    public static Optional<String> fulfil(String ilpSecret, String peer, UnsignedLong amount, String data, String condition, int lifetimeSeconds) {
 
         assert ilpSecret != null;
         assert peer != null;
         assert amount != null;
-        assert comparingBase64Packet != null;
+        assert condition != null;
 
-        var createdPacket = Interledger.prepare(ilpSecret, peer, amount, data, lifetimeSeconds);
-        var createdCondition = createdPacket.base64Condition;
-        var createdFulfillment = createdPacket.base64Fulfillment;
+        var fulfilmentPacket = Interledger.prepare(ilpSecret, peer, amount, data, lifetimeSeconds);
+        var fulfilmentCondition = fulfilmentPacket.base64Condition;
+        var fulfilment = fulfilmentPacket.base64Fulfillment;
 
-        LOGGER.debug("createdFulfillment.preimage: {}", base64Decode(createdFulfillment));
+        LOGGER.debug("fulfilmentCondition: {}", fulfilmentCondition);
+        LOGGER.debug("condition: {}", condition);
 
-        var unwrappedPacket = Interledger.unwrap(comparingBase64Packet);
-        var unwrappedCondition = base64Encode(unwrappedPacket.getExecutionCondition().getHash(), false);
-        var comparingCondition = base64Encode(InterledgerCondition.of(base64Decode(comparingBase64Condition)).getHash(), false);
+        var valid = fulfilmentCondition.equals(condition);
 
-        LOGGER.debug("createdCondition: {}", createdCondition);
-        LOGGER.debug("unwrappedCondition: {}", unwrappedCondition);
-        LOGGER.debug("comparingCondition: {}", comparingCondition);
-
-        var valid = createdCondition.equals(unwrappedCondition) && comparingCondition.equals(unwrappedCondition);
-
-        return new Fulfill(valid, createdFulfillment);
+        return Optional.ofNullable(valid ? fulfilment : null);
 
     }
 

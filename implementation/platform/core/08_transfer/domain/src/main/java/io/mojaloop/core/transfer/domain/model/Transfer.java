@@ -23,8 +23,9 @@ package io.mojaloop.core.transfer.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
-import io.mojaloop.core.common.datatype.converter.identifier.transfer.TransferExtensionIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.transfer.TransferIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transfer.UdfTransferIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.fspiop.FspCodeConverter;
@@ -87,7 +88,7 @@ import static java.sql.Types.BIGINT;
 public class Transfer extends JpaEntity<TransferId> {
 
     @Id
-    @JavaType(TransferExtensionIdJavaType.class)
+    @JavaType(TransferIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(name = "transfer_id")
     protected TransferId id;
@@ -113,9 +114,8 @@ public class Transfer extends JpaEntity<TransferId> {
     protected FspCode payerFsp;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
-                                                    column = @Column(name = "payer_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", nullable = false, length = 48)),
+    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payer_party_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", length = 48)),
                                  @AttributeOverride(name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
     protected Party payer;
 
@@ -124,9 +124,8 @@ public class Transfer extends JpaEntity<TransferId> {
     protected FspCode payeeFsp;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
-                                                    column = @Column(name = "payee_party_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", nullable = false, length = 48)),
+    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payee_party_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", length = 48)),
                                  @AttributeOverride(name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
 
     protected Party payee;
@@ -151,7 +150,7 @@ public class Transfer extends JpaEntity<TransferId> {
     @Basic
     @JavaType(PositionUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "reservation_id", unique = true, nullable = false, updatable = false)
+    @Column(name = "reservation_id", unique = true, updatable = false)
     protected PositionUpdateId reservationId;
 
     @Basic
@@ -203,7 +202,8 @@ public class Transfer extends JpaEntity<TransferId> {
                     FspCode payeeFsp,
                     Party payee,
                     Currency currency,
-                    BigDecimal transferAmount) {
+                    BigDecimal transferAmount,
+                    Instant requestExpiration) {
 
         assert transactionId != null;
         assert transactionAt != null;
@@ -215,6 +215,7 @@ public class Transfer extends JpaEntity<TransferId> {
         assert currency != null;
         assert transferAmount != null;
 
+        this.id = new TransferId(Snowflake.get().nextId());
         this.transactionId = transactionId;
         this.transactionAt = transactionAt;
         this.udfTransferId = udfTransferId;
@@ -224,6 +225,7 @@ public class Transfer extends JpaEntity<TransferId> {
         this.payee = payee;
         this.currency = currency;
         this.transferAmount = transferAmount;
+        this.requestExpiration = requestExpiration;
         this.state = TransferState.RECEIVED;
         this.receivedAt = Instant.now();
     }

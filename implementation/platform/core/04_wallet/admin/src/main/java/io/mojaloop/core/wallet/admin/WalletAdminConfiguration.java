@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,8 +32,9 @@ import io.mojaloop.core.wallet.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import io.mojaloop.core.wallet.domain.component.empty.EmptyBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.empty.EmptyPositionUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -52,9 +54,18 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class WalletAdminConfiguration extends JacksonWebMvcExtension
     implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
-    public WalletAdminConfiguration(ObjectMapper objectMapper) {
+    private final BalanceUpdater balanceUpdater;
+
+    private final PositionUpdater positionUpdater;
+
+    public WalletAdminConfiguration(ObjectMapper objectMapper,
+                                    MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
+                                    MySqlPositionUpdater.PositionDbSettings positionDbSettings) {
 
         super(objectMapper);
+
+        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
+        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
     }
 
     @Bean
@@ -75,14 +86,14 @@ public class WalletAdminConfiguration extends JacksonWebMvcExtension
     @Override
     public BalanceUpdater balanceUpdater() {
 
-        return new EmptyBalanceUpdater();
+        return this.balanceUpdater;
     }
 
     @Bean
     @Override
     public PositionUpdater positionUpdater() {
 
-        return new EmptyPositionUpdater();
+        return this.positionUpdater;
     }
 
     @Bean
@@ -101,6 +112,10 @@ public class WalletAdminConfiguration extends JacksonWebMvcExtension
     public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
+
+        MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
+
+        MySqlPositionUpdater.PositionDbSettings positionDbSettings();
 
     }
 

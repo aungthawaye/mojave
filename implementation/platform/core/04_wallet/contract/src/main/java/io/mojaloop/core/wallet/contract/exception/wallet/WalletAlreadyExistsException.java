@@ -48,7 +48,7 @@ public class WalletAlreadyExistsException extends UncheckedDomainException {
 
     public static final String CODE = "WALLET_ALREADY_EXISTS";
 
-    private static final String TEMPLATE = "Wallet already exists in for Owner Id ({0}) and Currency ({1}).";
+    private static final String TEMPLATE = "Wallet already exists for Owner Id ({0}) and Currency ({1}).";
 
     public WalletAlreadyExistsException(WalletOwnerId ownerId, Currency currency) {
 

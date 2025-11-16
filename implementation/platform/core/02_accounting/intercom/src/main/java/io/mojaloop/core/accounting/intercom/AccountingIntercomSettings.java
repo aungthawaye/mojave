@@ -34,7 +34,9 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
             new MySqlLedger.LedgerDbSettings.Connection(
                 System.getenv().getOrDefault("ACC_LEDGER_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
                 System.getenv().getOrDefault("ACC_LEDGER_DB_USER", "root"), System.getenv().getOrDefault("ACC_LEDGER_DB_PASSWORD", "password")),
-            new MySqlLedger.LedgerDbSettings.Pool("accounting-ledger", 2, 12));
+            new MySqlLedger.LedgerDbSettings.Pool(
+                "accounting-ledger", Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MIN_POOL_SIZE", "2")),
+                Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MAX_POOL_SIZE", "10"))));
     }
 
     @Bean

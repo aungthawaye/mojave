@@ -75,7 +75,7 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
     @Enumerated(EnumType.STRING)
     protected TransactionType type;
 
-    @Column(name = "phase", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "phase", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionPhase phase;
 
@@ -87,7 +87,7 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
     @Convert(converter = JpaInstantConverter.class)
     protected Instant closeAt;
 
-    @Column(name = "error", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "error")
     protected String error;
 
     @Column(name = "success")

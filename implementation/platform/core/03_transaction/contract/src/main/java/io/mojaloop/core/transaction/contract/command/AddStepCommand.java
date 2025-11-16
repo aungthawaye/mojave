@@ -22,6 +22,7 @@ package io.mojaloop.core.transaction.contract.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +36,8 @@ public interface AddStepCommand {
 
     record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull Map<String, String> params) { }
+                 @JsonProperty(required = true) @NotNull Map<String, String> params,
+                 @JsonProperty(required = true) @NotNull StepPhase phase) { }
 
     record Output(TransactionId transactionId) { }
 

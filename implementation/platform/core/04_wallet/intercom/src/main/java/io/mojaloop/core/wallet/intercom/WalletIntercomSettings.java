@@ -35,7 +35,9 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
             new MySqlBalanceUpdater.BalanceDbSettings.Connection(
                 System.getenv().getOrDefault("WLT_BALANCE_DB_URL", "jdbc:mysql://localhost:3306/ml_wallet?createDatabaseIfNotExist=true"),
                 System.getenv().getOrDefault("WLT_BALANCE_DB_USER", "root"), System.getenv().getOrDefault("WLT_BALANCE_DB_PASSWORD", "password")),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool("wallet-balance", 2, 12));
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance", Integer.parseInt(System.getenv().getOrDefault("WLT_MYSQL_BALANCE_DB_MIN_POOL_SIZE", "2")),
+                Integer.parseInt(System.getenv().getOrDefault("WLT_MYSQL_BALANCE_DB_MAX_POOL_SIZE", "10"))));
     }
 
     @Bean
@@ -45,7 +47,9 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
             new MySqlPositionUpdater.PositionDbSettings.Connection(
                 System.getenv().getOrDefault("WLT_POSITION_DB_URL", "jdbc:mysql://localhost:3306/ml_wallet?createDatabaseIfNotExist=true"),
                 System.getenv().getOrDefault("WLT_POSITION_DB_USER", "root"), System.getenv().getOrDefault("WLT_POSITION_DB_PASSWORD", "password")),
-            new MySqlPositionUpdater.PositionDbSettings.Pool("wallet-position", 2, 12));
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position", Integer.parseInt(System.getenv().getOrDefault("WLT_MYSQL_POSITION_DB_MIN_POOL_SIZE", "2")),
+                Integer.parseInt(System.getenv().getOrDefault("WLT_MYSQL_POSITION_DB_MAX_POOL_SIZE", "10"))));
     }
 
     @Bean

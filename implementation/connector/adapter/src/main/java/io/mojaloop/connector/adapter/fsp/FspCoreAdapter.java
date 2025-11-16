@@ -21,7 +21,6 @@
 package io.mojaloop.connector.adapter.fsp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.primitives.UnsignedLong;
 import io.mojaloop.connector.adapter.fsp.client.FspClient;
 import io.mojaloop.connector.adapter.fsp.payload.Parties;
 import io.mojaloop.connector.adapter.fsp.payload.Quotes;
@@ -233,26 +232,32 @@ public class FspCoreAdapter {
 
             var ilpConditionFromRequest = request.getCondition();
             var ilpPacketFromRequest = request.getIlpPacket();
-            var locallyRebuiltIlpPacket = Interledger.unwrap(ilpPacketFromRequest);
-            var locallyRebuiltIlpPacketData = new String(locallyRebuiltIlpPacket.getData(), StandardCharsets.UTF_8);
+            var unwrappedIlpPacket = Interledger.unwrap(ilpPacketFromRequest);
+            var unwrappedIlpPacketData = new String(unwrappedIlpPacket.getData(), StandardCharsets.UTF_8);
 
             LOGGER.debug("Transfer Id : [{}]", transferId);
             LOGGER.debug("Request ILP Packet : [{}]", ilpPacketFromRequest);
-            LOGGER.debug("Prepare ILP Packet : [{}]", locallyRebuiltIlpPacket);
-            LOGGER.debug("ILP Packet Data : [{}]", locallyRebuiltIlpPacketData);
+            LOGGER.debug("Prepare ILP Packet : [{}]", unwrappedIlpPacket);
+            LOGGER.debug("ILP Packet Data : [{}]", unwrappedIlpPacketData);
 
-            var fulfillment = Interledger.fulfill(
-                this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()), UnsignedLong.valueOf(request.getAmount().getAmount()), locallyRebuiltIlpPacketData,
-                ilpConditionFromRequest, ilpPacketFromRequest, 900);
-            LOGGER.debug("Fulfillment : [{}]", fulfillment);
+            var currency = request.getAmount().getCurrency();
+            var transferAmount = new BigDecimal(request.getAmount().getAmount());
 
-            if (!fulfillment.valid()) {
+            var optFulfilment = Interledger.fulfil(
+                this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
+                Interledger.Amount.serialize(transferAmount, FspiopCurrencies.get(currency).scale(), RoundingMode.UNNECESSARY), unwrappedIlpPacketData, ilpConditionFromRequest,
+                900);
+
+            if (optFulfilment.isEmpty()) {
 
                 LOGGER.error("Fulfillment is not valid");
                 throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "ILP Fulfillment is not valid.");
             }
 
-            var agreement = this.objectMapper.readValue(locallyRebuiltIlpPacketData, Agreement.class);
+            var fulfilment = optFulfilment.get();
+            LOGGER.debug("Fulfilment : [{}]", fulfilment);
+
+            var agreement = this.objectMapper.readValue(unwrappedIlpPacketData, Agreement.class);
 
             if (agreement.expiration() != null) {
 
@@ -271,7 +276,7 @@ public class FspCoreAdapter {
 
             var response = new TransfersIDPutResponse();
 
-            response.fulfilment(fulfillment.base64Fulfillment()).transferState(TransferState.RESERVED).completedTimestamp(FspiopDates.forRequestBody()).extensionList(
+            response.fulfilment(fulfilment).transferState(TransferState.RESERVED).completedTimestamp(FspiopDates.forRequestBody()).extensionList(
                 new ExtensionList().addExtensionItem(new Extension("homeTransactionId", UUID.randomUUID().toString())).addExtensionItem(new Extension("transferId", transferId)));
 
             LOGGER.debug("Returning transfers: {}", response);

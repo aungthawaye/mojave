@@ -21,7 +21,6 @@
 package io.mojaloop.core.transaction.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
-import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import io.mojaloop.core.transaction.domain.repository.TransactionRepository;
@@ -57,11 +56,8 @@ public class AddStepCommandHandler implements AddStepCommand {
 
         Map<String, String> params = input.params() == null ? Map.of() : input.params();
 
-        // Determine step phase based on whether the transaction has been closed
-        var phase = (transaction.getCloseAt() == null) ? StepPhase.BEFORE : StepPhase.AFTER;
-
-        transaction.addStep(phase, input.name(), params);
-        LOGGER.info("Added step '{}' with phase {} to transaction {}", input.name(), phase, transaction.getId());
+        transaction.addStep(input.phase(), input.name(), params);
+        LOGGER.info("Added step '{}' with phase {} to transaction {}", input.name(), input.phase(), transaction.getId());
 
         this.transactionRepository.save(transaction);
         LOGGER.info("Saved Transaction with id: {}", transaction.getId());
