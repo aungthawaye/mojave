@@ -49,7 +49,7 @@ public class CloseTransactionListener {
         this.closeTransactionCommand = closeTransactionCommand;
     }
 
-    @KafkaListener(topics = TopicNames.COMMIT_TRANSACTION, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
+    @KafkaListener(topics = TopicNames.CLOSE_TRANSACTION, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
     public void handle(CloseTransactionCommand.Input input, Acknowledgment ack) {
 
         try {

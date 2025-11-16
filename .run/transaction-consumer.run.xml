@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="transaction-consumer" type="Application" factoryName="Application">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/03_transaction/consumer/src/main/java/io/mojaloop/core/transaction/consumer/.env" />
+    </option>
+    <option name="MAIN_CLASS_NAME" value="io.mojaloop.core.transaction.consumer.TransactionConsumerApplication" />
+    <module name="mod-transaction-consumer" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.mojaloop.core.transaction.consumer.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

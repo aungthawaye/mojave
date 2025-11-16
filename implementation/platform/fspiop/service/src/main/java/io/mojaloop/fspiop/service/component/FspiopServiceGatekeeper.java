@@ -217,7 +217,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
             LOGGER.error("Destination FSP ({}) must not be Hub ({}).", destination, this.participantContext.fspCode());
             throw new GatekeeperFailureException(
                 HttpServletResponse.SC_NOT_ACCEPTABLE,
-                new FspiopException(FspiopErrors.DESTINATION_FSP_ERROR, "Destination FSP (" + destination + ") must not be Hub (" + this.participantContext.fspCode() + ")."));
+                new FspiopException(FspiopErrors.DESTINATION_FSP_ERROR, "Destination FSP must not be Hub (" + this.participantContext.fspCode() + ")."));
         }
 
     }

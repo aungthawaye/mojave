@@ -48,12 +48,14 @@ import java.math.BigDecimal;
 
 public class PositionLimitExceededException extends CheckedDomainException {
 
-    private static final String TEMPLATE = "Position limit exceeded : position ({0}) | amount({2}) | position: ({3}) | netDebitCap: ({4}) | transaction id: ({5}).";
+    public static final String CODE = "POSITION_LIMIT_EXCEEDED";
+
+    private static final String TEMPLATE = "Position limit exceeded : positionId ({0}) | amount({1}) | position: ({2}) | netDebitCap: ({3}) | transaction id: ({4}).";
 
     public PositionLimitExceededException(PositionId positionId, BigDecimal amount, BigDecimal position, BigDecimal netDebitCap, TransactionId transactionId) {
 
         super(
-            new ErrorTemplate("POSITION_LIMIT_EXCEEDED", TEMPLATE), positionId.toString(), amount.stripTrailingZeros().toPlainString(),
+            new ErrorTemplate(CODE, TEMPLATE), positionId.getId().toString(), amount.stripTrailingZeros().toPlainString(),
             position.stripTrailingZeros().toPlainString(), netDebitCap.stripTrailingZeros().toPlainString(), transactionId.getId().toString());
     }
 

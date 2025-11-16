@@ -25,7 +25,7 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -42,19 +42,19 @@ public class ForwardRequestHandler implements ForwardRequest {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
+    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
 
     public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService,
                                  FspiopErrorDecoder fspiopErrorDecoder,
-                                 FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
+                                 FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
 
         assert forwardingService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionHandler != null;
+        assert fspiopInvocationExceptionResolver != null;
 
         this.forwardingService = forwardingService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
+        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ForwardRequestHandler implements ForwardRequest {
         } catch (RetrofitService.InvocationException e) {
 
             LOGGER.error("Error forwarding request to : {} {} - error {}", method, baseUrl, e.getMessage());
-            throw this.fspiopInvocationExceptionHandler.handle(e);
+            throw this.fspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

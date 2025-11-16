@@ -44,7 +44,7 @@ class HandlePutTransfersErrorCommandHandler implements HandlePutTransfersErrorCo
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forTransfers(input.transferId());
+        var channel = PubSubKeys.forTransfersError(input.transferId());
         LOGGER.info("Publishing transfers error result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new TransfersErrorResult(input.transferId(), input.errorInformationObject()));

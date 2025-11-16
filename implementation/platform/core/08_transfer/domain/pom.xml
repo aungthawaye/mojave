@@ -33,6 +33,10 @@
             <artifactId>mod-participant-store</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-store</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.platform.core.transaction</groupId>
             <artifactId>mod-transaction-intercom-client</artifactId>
         </dependency>

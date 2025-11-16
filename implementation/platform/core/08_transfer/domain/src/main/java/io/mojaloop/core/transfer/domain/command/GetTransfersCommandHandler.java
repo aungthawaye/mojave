@@ -76,7 +76,7 @@ public class GetTransfersCommandHandler implements GetTransfersCommand {
 
         LOGGER.info("Executing GetTransfersCommandHandler with input: {}", input);
 
-        return null;
+        return new Output();
     }
 
 }

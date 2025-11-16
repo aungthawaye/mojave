@@ -26,7 +26,7 @@ import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import io.mojaloop.fspiop.service.api.PartiesResponseService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
@@ -41,22 +41,22 @@ public class RespondPartiesHandler implements RespondParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler;
+    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
 
     public RespondPartiesHandler(ParticipantContext participantContext,
                                  PartiesResponseService partiesResponseService,
                                  FspiopErrorDecoder fspiopErrorDecoder,
-                                 FspiopInvocationExceptionHandler fspiopInvocationExceptionHandler) {
+                                 FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
 
         assert participantContext != null;
         assert partiesResponseService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionHandler != null;
+        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.partiesResponseService = partiesResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionHandler = fspiopInvocationExceptionHandler;
+        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class RespondPartiesHandler implements RespondParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionHandler.handle(e);
+            throw this.fspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -85,7 +85,7 @@ public class RespondPartiesHandler implements RespondParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionHandler.handle(e);
+            throw this.fspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

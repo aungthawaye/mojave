@@ -106,12 +106,12 @@ public class ConnectorOutboundConfiguration
 
         OutboundSettings outboundSettings();
 
-        TransactionSettings transactionSettings();
+        TransferSettings transactionSettings();
 
     }
 
     public record OutboundSettings(int portNo, int maxThreads, int connectionTimeoutMs, int putResultTimeoutMs, int pubSubTimeoutMs, String publicKeyPem, boolean secured) { }
 
-    public record TransactionSettings(int expireAfterSeconds) { }
+    public record TransferSettings(int transferRequestExpirySeconds) { }
 
 }

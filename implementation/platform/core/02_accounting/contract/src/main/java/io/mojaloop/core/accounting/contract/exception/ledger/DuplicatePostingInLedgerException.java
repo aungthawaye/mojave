@@ -47,11 +47,13 @@ import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
 
 public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
+    public static final String CODE = "DUPLICATE_POSTING_IN_LEDGER";
+
     private static final String TEMPLATE = "Duplicate Posting in Ledger : account ({0}) | side ({1}) | transaction Id : ({2}).";
 
     public DuplicatePostingInLedgerException(AccountCode accountCode, Side side, TransactionId transactionId) {
 
-        super(new ErrorTemplate("DUPLICATE_POSTING_IN_LEDGER", TEMPLATE), accountCode.value(), side.name(), transactionId.getId().toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), accountCode.value(), side.name(), transactionId.getId().toString());
     }
 
 }

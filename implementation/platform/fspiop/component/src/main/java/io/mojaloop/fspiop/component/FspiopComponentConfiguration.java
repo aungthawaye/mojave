@@ -25,7 +25,7 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionHandler;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -46,9 +46,9 @@ public class FspiopComponentConfiguration {
     }
 
     @Bean
-    public FspiopInvocationExceptionHandler fspiopInvocationErrorHandler() {
+    public FspiopInvocationExceptionResolver fspiopInvocationErrorHandler() {
 
-        return new FspiopInvocationExceptionHandler();
+        return new FspiopInvocationExceptionResolver();
     }
 
     public interface RequiredBeans extends FspiopCommonConfiguration.RequiredBeans, MiscConfiguration.RequiredBeans { }

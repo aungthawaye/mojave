@@ -35,5 +35,4 @@ public record Party(@Column(name = "party_id_type") @Enumerated(EnumType.STRING)
 
         return new Party(null, null, null);
     }
-
 }

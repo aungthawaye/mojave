@@ -45,11 +45,13 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 
 public class CommitFailedInWalletException extends CheckedDomainException {
 
+    public static final String CODE = "COMMIT_FAILED_IN_WALLET";
+
     private static final String TEMPLATE = "Commit failed : reservationId ({0}).";
 
     public CommitFailedInWalletException(BalanceUpdateId reservationId) {
 
-        super(new ErrorTemplate("COMMIT_FAILED_IN_WALLET", TEMPLATE), reservationId.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), reservationId.toString());
     }
 
 }

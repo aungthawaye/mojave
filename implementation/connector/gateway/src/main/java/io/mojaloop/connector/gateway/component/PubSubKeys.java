@@ -50,7 +50,7 @@ public class PubSubKeys {
         return "transfers:" + transferId;
     }
 
-    public static String forTransfersError(Payee payee, String transferId) {
+    public static String forTransfersError(String transferId) {
 
         return "transfers-error:" + transferId;
     }

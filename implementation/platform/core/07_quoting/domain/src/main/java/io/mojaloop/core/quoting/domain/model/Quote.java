@@ -288,16 +288,16 @@ public class Quote extends JpaEntity<QuoteId> {
         this.respondedAt = Instant.now();
         this.stage = QuotingStage.RESPONDED;
 
-        if (this.requestExpiration.isBefore(Instant.now())) {
-
-            throw new QuoteRequestTimeoutException();
-        }
-
-        if (this.responseExpiration != null && this.responseExpiration.isBefore(Instant.now())) {
-
-            throw new ExpirationNotInFutureException();
-        }
-
+//        if (this.requestExpiration != null && this.requestExpiration.isBefore(Instant.now())) {
+//
+//            throw new QuoteRequestTimeoutException();
+//        }
+//
+//        if (this.responseExpiration != null && this.responseExpiration.isBefore(Instant.now())) {
+//
+//            throw new ExpirationNotInFutureException();
+//        }
+//
 //        if (this.amountType == AmountType.SEND) {
 //
 //            if (transferAmount.subtract(this.amount).signum() != 0) {

@@ -78,7 +78,7 @@ public class FspiopDates {
 
         try {
             return FOR_BODY.get().parse(body).toInstant();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request body.");
         }
     }
@@ -87,7 +87,7 @@ public class FspiopDates {
 
         try {
             return FOR_HEADER.get().parse(header).toInstant();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request header.");
         }
     }

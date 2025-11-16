@@ -47,11 +47,13 @@ import io.mojaloop.fspiop.spec.core.Currency;
 
 public class PostingAccountNotFoundException extends CheckedDomainException {
 
+    public static final String CODE = "POSTING_ACCOUNT_NOT_FOUND";
+
     private static final String TEMPLATE = "Posting Account cannot be not found for Owner ID ({0}), Chart Entry ID ({1}) and Currency ({2}) combination.";
 
     public PostingAccountNotFoundException(AccountOwnerId ownerId, ChartEntryId chartEntryId, Currency currency) {
 
-        super(new ErrorTemplate("POSTING_ACCOUNT_NOT_FOUND", TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(), currency.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(), currency.toString());
     }
 
 }

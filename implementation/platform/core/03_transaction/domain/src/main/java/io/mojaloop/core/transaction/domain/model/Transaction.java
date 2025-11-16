@@ -122,6 +122,7 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
 
         this.closeAt = Instant.now();
         this.error = error;
+        this.phase = TransactionPhase.CLOSE;
         this.success = this.error == null;
     }
 

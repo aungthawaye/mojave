@@ -19,4 +19,16 @@
  */
 package io.mojaloop.core.transfer.domain.command;
 
-public class PutTransfersCommandHandler { }
+import io.mojaloop.core.transfer.contract.command.PutTransfersCommand;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PutTransfersCommandHandler implements PutTransfersCommand {
+
+    @Override
+    public Output execute(Input input) {
+
+        return new Output();
+    }
+
+}

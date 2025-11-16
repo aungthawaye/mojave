@@ -43,9 +43,6 @@ public class SpringContext implements ApplicationContextAware {
 
     public static <T> T getBean(Class<T> clazz, String qualifier) {
 
-//        return BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getAutowireCapableBeanFactory(), clazz,
-//                                                              qualifier);
-
         ApplicationContext context = SpringContext.applicationContext;
 
         Map<String, T> beansOfType = context.getBeansOfType(clazz);
@@ -62,7 +59,7 @@ public class SpringContext implements ApplicationContextAware {
             }
         }
 
-        throw new IllegalArgumentException("No bean of type [" + clazz.getName() + "] with qualifier [" + qualifier + "] found");
+        return null;
 
     }
 

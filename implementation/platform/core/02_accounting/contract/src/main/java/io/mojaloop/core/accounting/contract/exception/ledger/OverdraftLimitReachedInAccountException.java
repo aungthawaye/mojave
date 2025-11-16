@@ -49,6 +49,8 @@ import java.math.BigDecimal;
 
 public class OverdraftLimitReachedInAccountException extends CheckedDomainException {
 
+    public static final String CODE = "OVERDRAFT_LIMIT_REACHED_IN_ACCOUNT";
+
     private static final String TEMPLATE = "Overdraft limit reached : account ({0}) | side ({1}) | amount({2}) | posted debits: ({3}) | posted credits: ({4}) | transaction id: ({5}).";
 
     public OverdraftLimitReachedInAccountException(AccountCode accountCode,
@@ -59,7 +61,7 @@ public class OverdraftLimitReachedInAccountException extends CheckedDomainExcept
                                                    TransactionId transactionId) {
 
         super(
-            new ErrorTemplate("OVERDRAFT_LIMIT_REACHED_IN_ACCOUNT", TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(), postedDebits.toPlainString(),
+            new ErrorTemplate(CODE, TEMPLATE), accountCode.value(), side.name(), amount.toPlainString(), postedDebits.toPlainString(),
             postedCredits.toPlainString(), transactionId.getId().toString());
     }
 

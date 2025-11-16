@@ -45,11 +45,13 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 
 public class BalanceUpdateIdNotFoundException extends UncheckedDomainException {
 
+    public static final String CODE = "BALANCE_UPDATE_ID_NOT_FOUND";
+
     private static final String TEMPLATE = "Balance Update Id ({0}) cannot be found.";
 
     public BalanceUpdateIdNotFoundException(BalanceUpdateId balanceUpdateId) {
 
-        super(new ErrorTemplate("BALANCE_UPDATE_ID_NOT_FOUND", TEMPLATE), balanceUpdateId.toString());
+        super(new ErrorTemplate(CODE, TEMPLATE), balanceUpdateId.toString());
     }
 
 }

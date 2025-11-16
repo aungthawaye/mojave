@@ -131,7 +131,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             final var transactionType = postQuotesRequest.getTransactionType();
             final var expiration = postQuotesRequest.getExpiration();
 
-            Instant expireAt = null;
+            Instant requestExpiration = null;
 
             if (fees != null && fees.getCurrency() != currency) {
 
@@ -140,11 +140,11 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (expiration != null) {
 
-                expireAt = FspiopDates.fromRequestBody(expiration);
+                requestExpiration = FspiopDates.fromRequestBody(expiration);
 
-                if (expireAt.isBefore(Instant.now())) {
+                if (requestExpiration.isBefore(Instant.now())) {
 
-                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "The quote has expired. The expiration is : " + expiration);
+                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "The quote request from Payer FSP has expired. The expiration is : " + expiration);
                 }
 
             }
@@ -156,7 +156,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                     var quote = new Quote(
                         payeeFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency, new BigDecimal(amount.getAmount()), fees != null ? new BigDecimal(fees.getAmount()) : null,
                         postQuotesRequest.getAmountType(), transactionType.getScenario(), transactionType.getSubScenario(), transactionType.getInitiator(),
-                        transactionType.getInitiatorType(), expireAt, new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
+                        transactionType.getInitiatorType(), requestExpiration, new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
                         new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
                     if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
@@ -201,14 +201,14 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
                 final var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                final var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+                final var url = FspiopUrls.newUrl(baseUrl, "quotes/" + udfQuoteId.getId() + "/error");
 
                 try {
 
                     FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
 
-                } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                } catch (Throwable throwable) {
+                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", throwable);
                 }
             }
         }
