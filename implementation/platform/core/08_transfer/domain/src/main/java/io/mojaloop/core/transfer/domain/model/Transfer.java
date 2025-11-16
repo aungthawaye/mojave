@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -25,11 +26,13 @@ import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transfer.TransferExtensionIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transfer.UdfTransferIdJavaType;
+import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.fspiop.FspCodeConverter;
 import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.TransferState;
@@ -65,16 +68,21 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "tfr_transfers",
-       uniqueConstraints = {@UniqueConstraint(name = "tfr_transfers_transaction_id_UK", columnNames = {"transaction_id"}),
-                            @UniqueConstraint(name = "tfr_transfers_udf_transfer_id_UK", columnNames = {"udf_transfer_id"})},
-       indexes = {@Index(name = "tfr_transfers_payer_fsp_IDX", columnList = "payer_fsp"),
-                  @Index(name = "tfr_transfers_payer_fsp_transaction_id_IDX", columnList = "payer_fsp, transaction_id"),
-                  @Index(name = "tfr_transfers_payee_fsp_IDX", columnList = "payee_fsp"),
-                  @Index(name = "tfr_transfers_payee_fsp_transaction_IDX", columnList = "payee_fsp, transaction_id"),
-                  @Index(name = "tfr_transfers_payee_fsp_payer_fsp_IDX", columnList = "payee_fsp, payer_fsp"),
-                  @Index(name = "tfr_transfers_payer_party_id", columnList = "payer_party_id"),
-                  @Index(name = "tfr_transfers_payee_party_id", columnList = "payee_party_id")})
+@Table(name = "tfr_transfer",
+       uniqueConstraints = {@UniqueConstraint(name = "tfr_transfer_transaction_id_UK", columnNames = {"transaction_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_udf_transfer_id_UK", columnNames = {"udf_transfer_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_reservation_id_UK", columnNames = {"reservation_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_payer_commit_id_UK", columnNames = {"payer_commit_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_payee_commit_id_UK", columnNames = {"payee_commit_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_rollback_id_UK", columnNames = {"rollback_id"})},
+       indexes = {@Index(name = "tfr_transfer_payer_fsp_IDX", columnList = "payer_fsp"),
+                  @Index(name = "tfr_transfer_payer_fsp_transaction_id_IDX", columnList = "payer_fsp, transaction_id"),
+                  @Index(name = "tfr_transfer_payee_fsp_IDX", columnList = "payee_fsp"),
+                  @Index(name = "tfr_transfer_payee_fsp_transaction_IDX", columnList = "payee_fsp, transaction_id"),
+                  @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX", columnList = "payee_fsp, payer_fsp"),
+                  @Index(name = "tfr_transfer_transaction_at_IDX", columnList = "transaction_at"),
+                  @Index(name = "tfr_transfer_payer_party_id", columnList = "payer_party_id"),
+                  @Index(name = "tfr_transfer_payee_party_id", columnList = "payee_party_id")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Transfer extends JpaEntity<TransferId> {
 
@@ -134,11 +142,35 @@ public class Transfer extends JpaEntity<TransferId> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant requestExpiration;
 
-    @Column(name = "ilp_condition", length = 43)
+    @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String ilpCondition;
 
-    @Column(name = "ilp_fulfilment", length = 43)
+    @Column(name = "ilp_fulfilment", length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
     protected String ilpFulfilment;
+
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(name = "reservation_id", unique = true, nullable = false, updatable = false)
+    protected PositionUpdateId reservationId;
+
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(name = "payer_commit_id", unique = true, updatable = false)
+    protected PositionUpdateId payerCommitId;
+
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(name = "payee_commit_id", unique = true, updatable = false)
+    protected PositionUpdateId payeeCommitId;
+
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(name = "rollback_id", unique = true, updatable = false)
+    protected PositionUpdateId rollbackId;
 
     @Column(name = "state", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
@@ -210,11 +242,17 @@ public class Transfer extends JpaEntity<TransferId> {
         this.extensions.add(new TransferExtension(this, direction, key, value));
     }
 
-    public void committed(String ilpFulfilment) {
+    public void committed(String ilpFulfilment, PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) {
+
+        assert ilpFulfilment != null;
+        assert payerCommitId != null;
+        assert payeeCommitId != null;
 
         this.state = TransferState.COMMITTED;
         this.completedAt = Instant.now();
         this.ilpFulfilment = ilpFulfilment;
+        this.payerCommitId = payerCommitId;
+        this.payeeCommitId = payeeCommitId;
     }
 
     public List<TransferExtension> getExtensions() {
@@ -228,10 +266,19 @@ public class Transfer extends JpaEntity<TransferId> {
         return this.id;
     }
 
-    public void reserve() {
+    public void reserve(PositionUpdateId reservationId) {
 
         this.state = TransferState.RESERVED;
         this.reservedAt = Instant.now();
+    }
+
+    public void reserved(PositionUpdateId reservationId) {
+
+        assert reservationId != null;
+
+        this.state = TransferState.RESERVED;
+        this.reservedAt = Instant.now();
+        this.reservationId = reservationId;
     }
 
 }

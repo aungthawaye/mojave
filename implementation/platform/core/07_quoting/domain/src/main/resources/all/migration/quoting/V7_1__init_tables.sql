@@ -79,7 +79,7 @@ CREATE TABLE `qot_quote_ilp_packet`
 (
     `quote_id`       bigint NOT NULL,
     `ilp_packet`     MEDIUMTEXT  DEFAULT NULL,
-    `ilp_condition`  varchar(43) DEFAULT NULL,
+    `ilp_condition`  varchar(48) DEFAULT NULL,
 
     `rec_created_at` bigint      DEFAULT NULL,
     `rec_updated_at` bigint      DEFAULT NULL,

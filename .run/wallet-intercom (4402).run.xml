@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="wallet-intercom (4402)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="04 wallet">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/08_wallet/intercom/src/main/java/io/mojaloop/core/wallet/intercom/.env" />
+      <option value="$PROJECT_DIR$/implementation/platform/core/04_wallet/intercom/src/main/java/io/mojaloop/core/wallet/intercom/.env" />
     </option>
     <module name="mod-wallet-intercom" />
     <selectedOptions>

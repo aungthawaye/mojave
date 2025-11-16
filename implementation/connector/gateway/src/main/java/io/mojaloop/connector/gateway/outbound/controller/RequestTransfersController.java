@@ -53,24 +53,24 @@ public class RequestTransfersController {
 
     private final ParticipantContext participantContext;
 
-    private final ConnectorOutboundConfiguration.TransactionSettings transactionSettings;
+    private final ConnectorOutboundConfiguration.TransferSettings transferSettings;
 
     private final RequestTransfersCommand requestTransfersCommand;
 
     private final EventPublisher eventPublisher;
 
     public RequestTransfersController(ParticipantContext participantContext,
-                                      ConnectorOutboundConfiguration.TransactionSettings transactionSettings,
+                                      ConnectorOutboundConfiguration.TransferSettings transferSettings,
                                       RequestTransfersCommand requestTransfersCommand,
                                       EventPublisher eventPublisher) {
 
         assert participantContext != null;
-        assert transactionSettings != null;
+        assert transferSettings != null;
         assert requestTransfersCommand != null;
         assert eventPublisher != null;
 
         this.participantContext = participantContext;
-        this.transactionSettings = transactionSettings;
+        this.transferSettings = transferSettings;
         this.requestTransfersCommand = requestTransfersCommand;
         this.eventPublisher = eventPublisher;
     }
@@ -93,7 +93,7 @@ public class RequestTransfersController {
         extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
         extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
-        var expireAfterSeconds = new Date(Instant.now().plus(this.transactionSettings.expireAfterSeconds(), ChronoUnit.SECONDS).toEpochMilli());
+        var expireAfterSeconds = new Date(Instant.now().plus(this.transferSettings.transferRequestExpirySeconds(), ChronoUnit.SECONDS).toEpochMilli());
 
         transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination).amount(request.amount)
                             .ilpPacket(request.ilpPacket).condition(request.condition).expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);

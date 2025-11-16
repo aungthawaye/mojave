@@ -133,9 +133,9 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
 
     @Bean
     @Override
-    public ConnectorOutboundConfiguration.TransactionSettings transactionSettings() {
+    public ConnectorOutboundConfiguration.TransferSettings transactionSettings() {
 
-        return new ConnectorOutboundConfiguration.TransactionSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
+        return new ConnectorOutboundConfiguration.TransferSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
     }
 
     @Bean

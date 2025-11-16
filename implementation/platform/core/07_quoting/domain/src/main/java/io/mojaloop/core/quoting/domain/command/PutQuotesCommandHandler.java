@@ -176,50 +176,67 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 var payeeFspCommission = new BigDecimal(quoteIdPutResponse.getPayeeFspCommission().getAmount());
                 var payeeReceiveAmount = new BigDecimal(quoteIdPutResponse.getPayeeReceiveAmount().getAmount());
 
-                try {
+                quote.responded(
+                    responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
+                    quoteIdPutResponse.getCondition());
 
-                    quote.responded(
-                        responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
-                        quoteIdPutResponse.getCondition());
+                if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
 
-                    if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
+                    var extensions = quoteIdPutResponse.getExtensionList().getExtension();
 
-                        var extensions = quoteIdPutResponse.getExtensionList().getExtension();
-
-                        extensions.forEach(extension -> {
-                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
-                            quote.addExtension(Direction.TO_PAYEE, extension.getKey(), extension.getValue());
-                        });
-                    }
-
-                    this.quoteRepository.save(quote);
-                    TransactionContext.commit();
-
-                } catch (ExpirationNotInFutureException e) {
-
-                    LOGGER.error("({}) Payee FSP responded with an expired quote.", udfQuoteId.getId(), e);
-
-                    var error = "Payee FSP responded with an expired quote.";
-
-                    quote.error(error);
-                    this.quoteRepository.save(quote);
-                    TransactionContext.commit();
-
-                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-
-                } catch (QuoteRequestTimeoutException e) {
-
-                    LOGGER.error("({}) Payee FSP responded with a timeout quote.", udfQuoteId.getId(), e);
-
-                    var error = "Payee FSP responded only after the request expiration date/time.";
-
-                    quote.error(error);
-                    this.quoteRepository.save(quote);
-                    TransactionContext.commit();
-
-                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-
+                    extensions.forEach(extension -> {
+                        LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+                        quote.addExtension(Direction.TO_PAYEE, extension.getKey(), extension.getValue());
+                    });
                 }
+
+                this.quoteRepository.save(quote);
+                TransactionContext.commit();
+
+//                try {
+//
+//                    quote.responded(
+//                        responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
+//                        quoteIdPutResponse.getCondition());
+//
+//                    if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
+//
+//                        var extensions = quoteIdPutResponse.getExtensionList().getExtension();
+//
+//                        extensions.forEach(extension -> {
+//                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+//                            quote.addExtension(Direction.TO_PAYEE, extension.getKey(), extension.getValue());
+//                        });
+//                    }
+//
+//                    this.quoteRepository.save(quote);
+//                    TransactionContext.commit();
+//
+//                } catch (ExpirationNotInFutureException e) {
+//
+//                    LOGGER.error("({}) Payee FSP responded with an expired quote.", udfQuoteId.getId(), e);
+//
+//                    var error = "Payee FSP responded with an expired quote.";
+//
+//                    quote.error(error);
+//                    this.quoteRepository.save(quote);
+//                    TransactionContext.commit();
+//
+//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
+//
+//                } catch (QuoteRequestTimeoutException e) {
+//
+//                    LOGGER.error("({}) Payee FSP responded with a timeout quote.", udfQuoteId.getId(), e);
+//
+//                    var error = "Payee FSP responded only after the request expiration date/time.";
+//
+//                    quote.error(error);
+//                    this.quoteRepository.save(quote);
+//                    TransactionContext.commit();
+//
+//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
+//
+//                }
 //                catch (TransferAmountMismatchException e) {
 //
 //                    LOGGER.error("({}) Transfer amount mismatch.", udfQuoteId.getId(), e);

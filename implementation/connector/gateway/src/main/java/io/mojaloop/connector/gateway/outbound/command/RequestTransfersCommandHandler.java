@@ -66,7 +66,7 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
         var transferId = input.request().getTransferId();
         var resultTopic = PubSubKeys.forTransfers(transferId);
-        var errorTopic = PubSubKeys.forTransfersError(input.payee(), transferId);
+        var errorTopic = PubSubKeys.forTransfersError(transferId);
 
         // Listening to the pub/sub
         var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, TransfersResult.class, TransfersErrorResult.class);
