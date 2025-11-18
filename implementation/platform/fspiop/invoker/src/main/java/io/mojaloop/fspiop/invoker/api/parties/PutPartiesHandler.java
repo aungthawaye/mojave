@@ -42,8 +42,6 @@ class PutPartiesHandler implements PutParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
     public PutPartiesHandler(ParticipantContext participantContext,
                              PartiesService partiesService,
                              FspiopErrorDecoder fspiopErrorDecoder,
@@ -52,12 +50,11 @@ class PutPartiesHandler implements PutParties {
         assert participantContext != null;
         assert partiesService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.partiesService = partiesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
@@ -71,7 +68,7 @@ class PutPartiesHandler implements PutParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -86,7 +83,7 @@ class PutPartiesHandler implements PutParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -101,7 +98,7 @@ class PutPartiesHandler implements PutParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -116,7 +113,7 @@ class PutPartiesHandler implements PutParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

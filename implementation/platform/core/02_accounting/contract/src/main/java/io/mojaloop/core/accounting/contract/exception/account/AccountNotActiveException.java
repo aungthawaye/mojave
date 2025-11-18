@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.account;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class AccountNotActiveException extends UncheckedDomainException {
+
+    public static final String CODE = "ACCOUNT_NOT_ACTIVE";
 
     private static final String TEMPLATE = "Account with Code ({0}) is not active.";
 
+    private final AccountCode accountCode;
+
     public AccountNotActiveException(AccountCode accountCode) {
 
-        super(new ErrorTemplate("ACCOUNT_NOT_ACTIVE", TEMPLATE), accountCode.value());
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{accountCode.value()}));
+
+        this.accountCode = accountCode;
+    }
+
+    public static AccountNotActiveException from(final Map<String, String> extras) {
+
+        final var code = new AccountCode(extras.get(Keys.ACCOUNT_CODE));
+
+        return new AccountNotActiveException(code);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.ACCOUNT_CODE, this.accountCode.value());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String ACCOUNT_CODE = "accountCode";
+
     }
 
 }

@@ -23,14 +23,48 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FspEndpointAlreadyConfiguredException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_ENDPOINT_ALREADY_CONFIGURED";
 
     private static final String TEMPLATE = "Endpoint type ({0}) is already configured.";
 
-    public FspEndpointAlreadyConfiguredException(EndpointType endpointType) {
+    private final EndpointType endpointType;
 
-        super(new ErrorTemplate("FSP_ENDPOINT_ALREADY_CONFIGURED", TEMPLATE), endpointType.name());
+    public FspEndpointAlreadyConfiguredException(final EndpointType endpointType) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{endpointType.name()}));
+
+        this.endpointType = endpointType;
+
+    }
+
+    public static FspEndpointAlreadyConfiguredException from(final Map<String, String> extras) {
+
+        final var type = EndpointType.valueOf(extras.get(Keys.ENDPOINT_TYPE));
+
+        return new FspEndpointAlreadyConfiguredException(type);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.ENDPOINT_TYPE, this.endpointType.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String ENDPOINT_TYPE = "endpointType";
 
     }
 

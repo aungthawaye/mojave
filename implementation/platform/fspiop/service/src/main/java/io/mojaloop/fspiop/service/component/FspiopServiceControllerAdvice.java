@@ -58,8 +58,8 @@ public class FspiopServiceControllerAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorInformationObject> handle(NoHandlerFoundException e) {
 
-        return new ResponseEntity<>(
-            new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.UNKNOWN_URI.errorType().getCode(), e.getMessage())), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.UNKNOWN_URI.errorType().getCode(), e.getMessage())),
+            HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -78,8 +78,7 @@ public class FspiopServiceControllerAdvice {
             return new ResponseEntity<>(fspiopException.toErrorObject(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(
-            new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
+        return new ResponseEntity<>(new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -103,8 +102,7 @@ public class FspiopServiceControllerAdvice {
             return new ResponseEntity<>(fspiopException.toErrorObject(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(
-            new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
+        return new ResponseEntity<>(new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -119,8 +117,8 @@ public class FspiopServiceControllerAdvice {
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorInformationObject> handle(BindException e) {
 
-        return new ResponseEntity<>(
-            new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.UNKNOWN_URI.errorType().getCode(), e.getMessage())), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(new ErrorInformationObject().errorInformation(new ErrorInformation(FspiopErrors.UNKNOWN_URI.errorType().getCode(), e.getMessage())),
+            HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

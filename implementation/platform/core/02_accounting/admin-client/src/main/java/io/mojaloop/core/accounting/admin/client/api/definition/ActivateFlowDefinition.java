@@ -90,8 +90,7 @@ public class ActivateFlowDefinition {
 
         try {
 
-            RetrofitService.invoke(
-                this.definitionCommands.activateFlowDefinition(input),
+            RetrofitService.invoke(this.definitionCommands.activateFlowDefinition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {

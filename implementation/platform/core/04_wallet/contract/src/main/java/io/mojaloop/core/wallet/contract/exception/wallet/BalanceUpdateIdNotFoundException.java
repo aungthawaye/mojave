@@ -42,16 +42,48 @@ package io.mojaloop.core.wallet.contract.exception.wallet;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class BalanceUpdateIdNotFoundException extends UncheckedDomainException {
 
     public static final String CODE = "BALANCE_UPDATE_ID_NOT_FOUND";
 
     private static final String TEMPLATE = "Balance Update Id ({0}) cannot be found.";
 
-    public BalanceUpdateIdNotFoundException(BalanceUpdateId balanceUpdateId) {
+    private final BalanceUpdateId balanceUpdateId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), balanceUpdateId.toString());
+    public BalanceUpdateIdNotFoundException(final BalanceUpdateId balanceUpdateId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{balanceUpdateId.getId().toString()}));
+
+        this.balanceUpdateId = balanceUpdateId;
+    }
+
+    public static BalanceUpdateIdNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new BalanceUpdateId(Long.valueOf(extras.get(Keys.BALANCE_UPDATE_ID)));
+
+        return new BalanceUpdateIdNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.BALANCE_UPDATE_ID, this.balanceUpdateId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String BALANCE_UPDATE_ID = "balanceUpdateId";
+
     }
 
 }

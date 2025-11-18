@@ -44,6 +44,7 @@ import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -94,6 +95,8 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
     public Output execute(Input input) {
 
         var udfQuoteId = new UdfQuoteId(input.quotesPostRequest().getQuoteId());
+
+        MDC.put("requestId", udfQuoteId.getId());
 
         LOGGER.info("({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
@@ -153,10 +156,10 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 try {
 
-                    var quote = new Quote(
-                        payeeFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency, new BigDecimal(amount.getAmount()), fees != null ? new BigDecimal(fees.getAmount()) : null,
-                        postQuotesRequest.getAmountType(), transactionType.getScenario(), transactionType.getSubScenario(), transactionType.getInitiator(),
-                        transactionType.getInitiatorType(), requestExpiration, new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
+                    var quote = new Quote(payeeFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency, new BigDecimal(amount.getAmount()),
+                        fees != null ? new BigDecimal(fees.getAmount()) : null, postQuotesRequest.getAmountType(), transactionType.getScenario(), transactionType.getSubScenario(),
+                        transactionType.getInitiator(), transactionType.getInitiatorType(), requestExpiration,
+                        new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
                         new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
 
                     if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
@@ -211,9 +214,12 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                     LOGGER.error("Something went wrong while sending error response to payer FSP: ", throwable);
                 }
             }
+
         }
 
         LOGGER.info("({}) Returning from PostQuotesCommandHandler successfully.", udfQuoteId.getId());
+
+        MDC.remove("requestId");
 
         return new Output();
     }

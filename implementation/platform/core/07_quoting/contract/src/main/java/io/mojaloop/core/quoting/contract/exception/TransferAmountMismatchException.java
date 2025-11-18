@@ -23,18 +23,62 @@ package io.mojaloop.core.quoting.contract.exception;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.fspiop.spec.core.AmountType;
+import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
+@Getter
 public class TransferAmountMismatchException extends CheckedDomainException {
+
+    public static final String CODE = "TRANSFER_AMOUNT_MISMATCH";
 
     private static final String TEMPLATE = "Transfer Amount ({0}) must be same as the Amount ({1}) of Amount Type ({2}) .";
 
-    public TransferAmountMismatchException(BigDecimal transferAmount, BigDecimal amount, AmountType amountType) {
+    private final BigDecimal transferAmount;
 
-        super(
-            new ErrorTemplate("TRANSFER_AMOUNT_MISMATCH", TEMPLATE), transferAmount.stripTrailingZeros().toPlainString(), amount.stripTrailingZeros().toPlainString(),
-            amountType.name());
+    private final BigDecimal amount;
+
+    private final AmountType amountType;
+
+    public TransferAmountMismatchException(final BigDecimal transferAmount, final BigDecimal amount, final AmountType amountType) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transferAmount.stripTrailingZeros().toPlainString(), amount.stripTrailingZeros().toPlainString(), amountType.name()}));
+
+        this.transferAmount = transferAmount;
+        this.amount = amount;
+        this.amountType = amountType;
+    }
+
+    public static TransferAmountMismatchException from(final Map<String, String> extras) {
+
+        final var transferAmount = new BigDecimal(extras.get(Keys.TRANSFER_AMOUNT));
+        final var amount = new BigDecimal(extras.get(Keys.AMOUNT));
+        final var amountType = AmountType.valueOf(extras.get(Keys.AMOUNT_TYPE));
+
+        return new TransferAmountMismatchException(transferAmount, amount, amountType);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.TRANSFER_AMOUNT, this.transferAmount.stripTrailingZeros().toPlainString());
+        extras.put(Keys.AMOUNT, this.amount.stripTrailingZeros().toPlainString());
+        extras.put(Keys.AMOUNT_TYPE, this.amountType.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String TRANSFER_AMOUNT = "transferAmount";
+
+        public static final String AMOUNT = "amount";
+
+        public static final String AMOUNT_TYPE = "amountType";
 
     }
 

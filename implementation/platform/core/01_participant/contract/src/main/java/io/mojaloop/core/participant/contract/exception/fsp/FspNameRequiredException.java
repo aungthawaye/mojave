@@ -22,14 +22,31 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class FspNameRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_NAME_REQUIRED";
 
     private static final String TEMPLATE = "FSP Name is required.";
 
     public FspNameRequiredException() {
 
-        super(new ErrorTemplate("FSP_NAME_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static FspNameRequiredException from(final Map<String, String> extras) {
+
+        return new FspNameRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

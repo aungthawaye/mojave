@@ -44,16 +44,62 @@ import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.fspiop.spec.core.Currency;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class PostingAccountNotFoundException extends CheckedDomainException {
 
     public static final String CODE = "POSTING_ACCOUNT_NOT_FOUND";
 
     private static final String TEMPLATE = "Posting Account cannot be not found for Owner ID ({0}), Chart Entry ID ({1}) and Currency ({2}) combination.";
 
-    public PostingAccountNotFoundException(AccountOwnerId ownerId, ChartEntryId chartEntryId, Currency currency) {
+    private final AccountOwnerId ownerId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), ownerId.getId().toString(), chartEntryId.getId().toString(), currency.toString());
+    private final ChartEntryId chartEntryId;
+
+    private final Currency currency;
+
+    public PostingAccountNotFoundException(final AccountOwnerId ownerId, final ChartEntryId chartEntryId, final Currency currency) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{ownerId.getId().toString(), chartEntryId.getId().toString(), currency.name()}));
+
+        this.ownerId = ownerId;
+        this.chartEntryId = chartEntryId;
+        this.currency = currency;
+    }
+
+    public static PostingAccountNotFoundException from(final Map<String, String> extras) {
+
+        final var ownerId = new AccountOwnerId(Long.valueOf(extras.get(Keys.OWNER_ID)));
+        final var chartEntryId = new ChartEntryId(Long.valueOf(extras.get(Keys.CHART_ENTRY_ID)));
+        final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
+
+        return new PostingAccountNotFoundException(ownerId, chartEntryId, currency);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.OWNER_ID, this.ownerId.getId().toString());
+        extras.put(Keys.CHART_ENTRY_ID, this.chartEntryId.getId().toString());
+        extras.put(Keys.CURRENCY, this.currency.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String OWNER_ID = "ownerId";
+
+        public static final String CHART_ENTRY_ID = "chartEntryId";
+
+        public static final String CURRENCY = "currency";
+
     }
 
 }

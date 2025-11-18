@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.command.position;
 
+import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.CommitPositionCommand;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
@@ -45,11 +48,10 @@ public class CommitPositionCommandHandler implements CommitPositionCommand {
 
         try {
 
-            final var history = this.positionUpdater.commit(input.reservationId(), input.positionUpdateId());
+            final var history = this.positionUpdater.commit(input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
 
-            final var output = new Output(
-                history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(), history.oldPosition(),
-                history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
 
             LOGGER.info("CommitPositionCommand executed successfully with output: {}", output);
 

@@ -113,9 +113,8 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataCon
     @Override
     public BalanceUpdateData convert() {
 
-        return new BalanceUpdateData(
-            this.id, this.walletId, this.action, this.transactionId, this.currency, this.amount, this.oldBalance, this.newBalance, this.description, this.transactionAt,
-            this.createdAt, this.reversalId);
+        return new BalanceUpdateData(this.id, this.walletId, this.action, this.transactionId, this.currency, this.amount, this.oldBalance, this.newBalance, this.description,
+            this.transactionAt, this.createdAt, this.reversalId);
     }
 
     @Override

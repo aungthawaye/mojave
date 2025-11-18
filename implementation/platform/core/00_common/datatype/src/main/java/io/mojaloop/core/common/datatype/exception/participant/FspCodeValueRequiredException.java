@@ -23,13 +23,28 @@ package io.mojaloop.core.common.datatype.exception.participant;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
+import java.util.Map;
+
 public class FspCodeValueRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_CODE_VALUE_REQUIRED";
 
     private static final String TEMPLATE = "Value is required to create FSP Code.";
 
     public FspCodeValueRequiredException() {
 
-        super(new ErrorTemplate("FSP_CODE_VALUE_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static FspCodeValueRequiredException from(final Map<String, String> extras) {
+
+        return new FspCodeValueRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

@@ -121,8 +121,7 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     @Override
     public LedgerBalanceData convert() {
 
-        return new LedgerBalanceData(
-            this.getId(), this.currency, this.scale, this.nature, this.postedDebits, this.postedCredits, this.overdraftMode, this.overdraftLimit,
+        return new LedgerBalanceData(this.getId(), this.currency, this.scale, this.nature, this.postedDebits, this.postedCredits, this.overdraftMode, this.overdraftLimit,
             this.createdAt);
     }
 

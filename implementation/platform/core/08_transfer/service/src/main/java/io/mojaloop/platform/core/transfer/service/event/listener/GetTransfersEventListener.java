@@ -18,6 +18,7 @@ public class GetTransfersEventListener {
     public GetTransfersEventListener(GetTransfersCommand getTransfers) {
 
         assert getTransfers != null;
+
         this.getTransfers = getTransfers;
     }
 

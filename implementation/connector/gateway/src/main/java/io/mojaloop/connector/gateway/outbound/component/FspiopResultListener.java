@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.connector.gateway.outbound.component;
 
 import io.mojaloop.component.misc.pubsub.PubSubClient;
@@ -93,51 +94,49 @@ public class FspiopResultListener<R, E> {
 
         LOGGER.debug("Listening for results on channel {} and errors on channel {}", resultTopic, errorTopic);
 
-        this.resultSubscription = this.pubSubClient.subscribe(
-            resultTopic, new PubSubClient.MessageHandler() {
+        this.resultSubscription = this.pubSubClient.subscribe(resultTopic, new PubSubClient.MessageHandler() {
 
-                @Override
-                public void handle(String channel, Object message) {
+            @Override
+            public void handle(String channel, Object message) {
 
-                    LOGGER.debug("Result message from channel : {}, message : {}", channel, message);
+                LOGGER.debug("Result message from channel : {}, message : {}", channel, message);
 
-                    if (FspiopResultListener.this.resultClazz.isInstance(message)) {
-                        FspiopResultListener.this.responseRef.set(FspiopResultListener.this.resultClazz.cast(message));
-                    }
-
-                    FspiopResultListener.this.blocker.countDown();
+                if (FspiopResultListener.this.resultClazz.isInstance(message)) {
+                    FspiopResultListener.this.responseRef.set(FspiopResultListener.this.resultClazz.cast(message));
                 }
 
-                @Override
-                public Class<R> messageType() {
+                FspiopResultListener.this.blocker.countDown();
+            }
 
-                    return FspiopResultListener.this.resultClazz;
+            @Override
+            public Class<R> messageType() {
+
+                return FspiopResultListener.this.resultClazz;
+            }
+
+        }, this.outboundSettings.pubSubTimeoutMs());
+
+        this.errorSubscription = this.pubSubClient.subscribe(errorTopic, new PubSubClient.MessageHandler() {
+
+            @Override
+            public void handle(String channel, Object message) {
+
+                LOGGER.debug("Error message from channel : {}, message : {}", channel, message);
+
+                if (FspiopResultListener.this.errorClazz.isInstance(message)) {
+                    FspiopResultListener.this.errorRef.set(FspiopResultListener.this.errorClazz.cast(message));
                 }
 
-            }, this.outboundSettings.pubSubTimeoutMs());
+                FspiopResultListener.this.blocker.countDown();
+            }
 
-        this.errorSubscription = this.pubSubClient.subscribe(
-            errorTopic, new PubSubClient.MessageHandler() {
+            @Override
+            public Class<?> messageType() {
 
-                @Override
-                public void handle(String channel, Object message) {
+                return FspiopResultListener.this.errorClazz;
+            }
 
-                    LOGGER.debug("Error message from channel : {}, message : {}", channel, message);
-
-                    if (FspiopResultListener.this.errorClazz.isInstance(message)) {
-                        FspiopResultListener.this.errorRef.set(FspiopResultListener.this.errorClazz.cast(message));
-                    }
-
-                    FspiopResultListener.this.blocker.countDown();
-                }
-
-                @Override
-                public Class<?> messageType() {
-
-                    return FspiopResultListener.this.errorClazz;
-                }
-
-            }, this.outboundSettings.pubSubTimeoutMs());
+        }, this.outboundSettings.pubSubTimeoutMs());
     }
 
     public void unsubscribe() {

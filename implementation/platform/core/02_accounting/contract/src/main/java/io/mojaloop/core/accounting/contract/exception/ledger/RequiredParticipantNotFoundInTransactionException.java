@@ -42,16 +42,63 @@ package io.mojaloop.core.accounting.contract.exception.ledger;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+@Getter
 public class RequiredParticipantNotFoundInTransactionException extends UncheckedDomainException {
+
+    public static final String CODE = "REQUIRED_PARTICIPANT_NOT_FOUND_IN_TRANSACTION";
 
     private static final String TEMPLATE = "Required Participant ({0}) cannot be found in participants ({1}) of Transaction Id ({2}).";
 
-    public RequiredParticipantNotFoundInTransactionException(String participant, Set<String> participants, TransactionId transactionId) {
+    private final String participant;
 
-        super(new ErrorTemplate("REQUIRED_PARTICIPANT_NOT_FOUND_IN_TRANSACTION", TEMPLATE), participant, participants.toString(), transactionId.getId().toString());
+    private final Set<String> participants;
+
+    private final TransactionId transactionId;
+
+    public RequiredParticipantNotFoundInTransactionException(final String participant, final Set<String> participants, final TransactionId transactionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{participant, participants.toString(), transactionId.getId().toString()}));
+
+        this.participant = participant;
+        this.participants = participants;
+        this.transactionId = transactionId;
+    }
+
+    public static RequiredParticipantNotFoundInTransactionException from(final Map<String, String> extras) {
+
+        final var participant = extras.get(Keys.PARTICIPANT);
+        final var participants = Set.of(extras.get(Keys.PARTICIPANTS));
+        final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
+
+        return new RequiredParticipantNotFoundInTransactionException(participant, participants, transactionId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.PARTICIPANT, this.participant);
+        extras.put(Keys.PARTICIPANTS, this.participants.toString());
+        extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String PARTICIPANT = "participant";
+
+        public static final String PARTICIPANTS = "participants";
+
+        public static final String TRANSACTION_ID = "transactionId";
+
     }
 
 }

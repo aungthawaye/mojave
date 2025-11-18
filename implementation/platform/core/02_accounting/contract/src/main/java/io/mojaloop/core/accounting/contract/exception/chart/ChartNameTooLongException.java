@@ -42,14 +42,31 @@ package io.mojaloop.core.accounting.contract.exception.chart;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class ChartNameTooLongException extends UncheckedDomainException {
+
+    public static final String CODE = "CHART_NAME_TOO_LONG";
 
     private static final String TEMPLATE = "Chart Name is too long. Must not exceed " + StringSizeConstraints.MAX_NAME_TITLE_LENGTH + " characters.";
 
     public ChartNameTooLongException() {
 
-        super(new ErrorTemplate("CHART_NAME_TOO_LONG", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static ChartNameTooLongException from(final Map<String, String> extras) {
+
+        return new ChartNameTooLongException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

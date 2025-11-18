@@ -52,8 +52,7 @@ public class ReservePosition {
 
         try {
 
-            return RetrofitService.invoke(
-                this.walletIntercomService.reservePosition(input),
+            return RetrofitService.invoke(this.walletIntercomService.reservePosition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {

@@ -42,16 +42,48 @@ package io.mojaloop.core.wallet.contract.exception.position;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class RollbackFailedInWalletException extends CheckedDomainException {
 
     public static final String CODE = "ROLLBACK_FAILED_IN_WALLET";
 
     private static final String TEMPLATE = "Rollback failed : reservationId ({0}).";
 
-    public RollbackFailedInWalletException(BalanceUpdateId reservationId) {
+    private final BalanceUpdateId reservationId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), reservationId.toString());
+    public RollbackFailedInWalletException(final BalanceUpdateId reservationId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{reservationId.getId().toString()}));
+
+        this.reservationId = reservationId;
+    }
+
+    public static RollbackFailedInWalletException from(final Map<String, String> extras) {
+
+        final var reservationId = new BalanceUpdateId(Long.valueOf(extras.get(Keys.RESERVATION_ID)));
+
+        return new RollbackFailedInWalletException(reservationId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.RESERVATION_ID, this.reservationId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String RESERVATION_ID = "reservationId";
+
     }
 
 }

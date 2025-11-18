@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.quoting.domain.command;
 
+import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
@@ -38,6 +39,7 @@ import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -81,9 +83,12 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
     }
 
     @Override
+    @Read
     public Output execute(Input input) {
 
         var udfQuoteId = input.udfQuoteId();
+
+        MDC.put("requestId", udfQuoteId.getId());
 
         LOGGER.info("({}) Executing GetQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
@@ -120,13 +125,14 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
                 TransactionContext.commit();
 
-                var payerBaseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-                LOGGER.info("({}) Responding request to payer FSP (Url): [{}]", udfQuoteId.getId(), payerBaseUrl);
+                var payerBaseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
+                var finalUrl = FspiopUrls.newUrl(payerBaseUrl, input.request().uri());
+                LOGGER.info("({}) Responding request to payer FSP (Url): [{}]", udfQuoteId.getId(), finalUrl);
 
                 try {
 
-                    this.respondQuotes.putQuotes(new Payer(payeeFspCode.value()), payerBaseUrl, quoteIdPutResponse);
-                    LOGGER.info("({}) Done responding request to payer FSP (Url): [{}]", udfQuoteId.getId(), payerBaseUrl);
+                    this.respondQuotes.putQuotes(new Payer(payeeFspCode.value()), finalUrl, quoteIdPutResponse);
+                    LOGGER.info("({}) Done responding request to payer FSP (Url): [{}]", udfQuoteId.getId(), finalUrl);
 
                 } catch (FspiopCommunicationException ignored) {
                     // Do nothing. We are not able to respond to the payer.
@@ -135,10 +141,10 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
             } else {
 
                 var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                LOGGER.info("({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+                LOGGER.info("({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeBaseUrl);
 
                 this.forwardRequest.forward(payeeBaseUrl, input.request());
-                LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+                LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeBaseUrl);
             }
 
         } catch (Exception e) {
@@ -162,6 +168,8 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
         }
 
         LOGGER.info("Returning from GetQuotesCommandHandler successfully.");
+
+        MDC.remove("requestId");
 
         return new Output();
     }

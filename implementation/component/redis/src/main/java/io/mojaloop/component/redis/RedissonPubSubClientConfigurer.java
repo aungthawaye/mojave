@@ -59,17 +59,30 @@ public class RedissonPubSubClientConfigurer {
 
         if (!settings.cluster()) {
 
-            config.useSingleServer().setAddress(settings.hosts()[0]).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000).setRetryAttempts(3)
+            config.useSingleServer()
+                  .setAddress(settings.hosts()[0])
+                  .setConnectTimeout(5000)
+                  .setTimeout(3000)
+                  .setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3)
                   .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
                   .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() : 64)
-                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection()).setPingConnectionInterval(10000);
+                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
+                  .setPingConnectionInterval(10000);
 
         } else {
 
-            config.useClusterServers().addNodeAddress(settings.hosts()).setScanInterval(2000).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000)
-                  .setRetryAttempts(3).setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
+            config.useClusterServers()
+                  .addNodeAddress(settings.hosts())
+                  .setScanInterval(2000)
+                  .setConnectTimeout(5000)
+                  .setTimeout(3000)
+                  .setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3)
+                  .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
                   .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() : 64)
-                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection()).setPingConnectionInterval(10000);
+                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
+                  .setPingConnectionInterval(10000);
         }
 
         return new RedissonPubSubClient(Redisson.create(config));

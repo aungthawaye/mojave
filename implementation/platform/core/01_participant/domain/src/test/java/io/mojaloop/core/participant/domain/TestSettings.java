@@ -30,9 +30,8 @@ public class TestSettings implements ParticipantDomainConfiguration.RequiredSett
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        return new RoutingDataSourceConfigurer.ReadSettings(
-            new RoutingDataSourceConfigurer.ReadSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
+        return new RoutingDataSourceConfigurer.ReadSettings(new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.ReadSettings.Pool("participant-read", 2, 4));
     }
 
@@ -40,9 +39,8 @@ public class TestSettings implements ParticipantDomainConfiguration.RequiredSett
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        return new RoutingDataSourceConfigurer.WriteSettings(
-            new RoutingDataSourceConfigurer.WriteSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
+        return new RoutingDataSourceConfigurer.WriteSettings(new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.WriteSettings.Pool("participant-read", 2, 4));
     }
 

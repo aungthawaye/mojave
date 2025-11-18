@@ -90,8 +90,7 @@ public class RemoveFlowDefinitionPosting {
 
         try {
 
-            RetrofitService.invoke(
-                this.definitionCommands.removeFlowDefinitionPosting(input),
+            RetrofitService.invoke(this.definitionCommands.removeFlowDefinitionPosting(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {

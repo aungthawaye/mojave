@@ -41,14 +41,31 @@ package io.mojaloop.core.transaction.contract.exception;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class TransactionAlreadyCompletedException extends UncheckedDomainException {
+
+    public static final String CODE = "TRANSACTION_ALREADY_COMPLETED";
 
     private static final String TEMPLATE = "Transaction is already completed.";
 
     public TransactionAlreadyCompletedException() {
 
-        super(new ErrorTemplate("TRANSACTION_ALREADY_COMPLETED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static TransactionAlreadyCompletedException from(final Map<String, String> extras) {
+
+        return new TransactionAlreadyCompletedException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

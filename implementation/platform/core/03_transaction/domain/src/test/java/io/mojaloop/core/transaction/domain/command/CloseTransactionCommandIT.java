@@ -60,7 +60,7 @@ class CloseTransactionCommandIT extends BaseDomainIT {
     void commit_successful_transaction() {
 
         // Arrange
-        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_COMMIT);
+        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER);
         var openOutput = this.openTransaction.execute(openInput);
 
         var input = new CloseTransactionCommand.Input(openOutput.transactionId(), null);
@@ -88,7 +88,7 @@ class CloseTransactionCommandIT extends BaseDomainIT {
     void commit_with_error_sets_failure() {
 
         // Arrange
-        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_COMMIT);
+        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER);
         var openOutput = this.openTransaction.execute(openInput);
 
         var input = new CloseTransactionCommand.Input(openOutput.transactionId(), "some error");

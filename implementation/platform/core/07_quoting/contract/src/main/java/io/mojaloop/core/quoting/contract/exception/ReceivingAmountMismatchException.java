@@ -23,18 +23,63 @@ package io.mojaloop.core.quoting.contract.exception;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.fspiop.spec.core.AmountType;
+import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
+@Getter
 public class ReceivingAmountMismatchException extends CheckedDomainException {
+
+    public static final String CODE = "RECEIVING_AMOUNT_MISMATCH";
 
     private static final String TEMPLATE = "Payee Receiving Amount ({0}) must be same as the Amount ({1}) of Amount Type ({2}) .";
 
-    public ReceivingAmountMismatchException(BigDecimal receivingAmount, BigDecimal amount, AmountType amountType) {
+    private final BigDecimal receivingAmount;
+
+    private final BigDecimal amount;
+
+    private final AmountType amountType;
+
+    public ReceivingAmountMismatchException(final BigDecimal receivingAmount, final BigDecimal amount, final AmountType amountType) {
 
         super(
-            new ErrorTemplate("RECEIVING_AMOUNT_MISMATCH", TEMPLATE), receivingAmount.stripTrailingZeros().toPlainString(), amount.stripTrailingZeros().toPlainString(),
-            amountType.name());
+            new ErrorTemplate(CODE, TEMPLATE, new String[]{receivingAmount.stripTrailingZeros().toPlainString(), amount.stripTrailingZeros().toPlainString(), amountType.name()}));
+
+        this.receivingAmount = receivingAmount;
+        this.amount = amount;
+        this.amountType = amountType;
+    }
+
+    public static ReceivingAmountMismatchException from(final Map<String, String> extras) {
+
+        final var receivingAmount = new BigDecimal(extras.get(Keys.RECEIVING_AMOUNT));
+        final var amount = new BigDecimal(extras.get(Keys.AMOUNT));
+        final var amountType = AmountType.valueOf(extras.get(Keys.AMOUNT_TYPE));
+
+        return new ReceivingAmountMismatchException(receivingAmount, amount, amountType);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.RECEIVING_AMOUNT, this.receivingAmount.stripTrailingZeros().toPlainString());
+        extras.put(Keys.AMOUNT, this.amount.stripTrailingZeros().toPlainString());
+        extras.put(Keys.AMOUNT_TYPE, this.amountType.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String RECEIVING_AMOUNT = "receivingAmount";
+
+        public static final String AMOUNT = "amount";
+
+        public static final String AMOUNT_TYPE = "amountType";
 
     }
 

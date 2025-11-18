@@ -23,14 +23,29 @@ package io.mojaloop.core.quoting.contract.exception;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 
+import java.util.Map;
+
 public class QuoteRequestTimeoutException extends CheckedDomainException {
+
+    public static final String CODE = "PAYEE_RESPONSE_AFTER_EXPIRATION";
 
     private static final String TEMPLATE = "Payee responded only after the request expiration date/time.";
 
     public QuoteRequestTimeoutException() {
 
-        super(new ErrorTemplate("PAYEE_RESPONSE_AFTER_EXPIRATION", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
 
+    }
+
+    public static QuoteRequestTimeoutException from(final Map<String, String> extras) {
+
+        return new QuoteRequestTimeoutException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

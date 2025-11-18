@@ -322,9 +322,8 @@ public class Quote extends JpaEntity<QuoteId> {
 
     public QuotesIDPutResponse toFspiopResponse() {
 
-        return new QuotesIDPutResponse(
-            new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()), FspiopDates.forRequestBody(Date.from(this.responseExpiration)),
-            this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
+        return new QuotesIDPutResponse(new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()),
+            FspiopDates.forRequestBody(Date.from(this.responseExpiration)), this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
     }
 
     List<QuoteExtension> getExtensions() {

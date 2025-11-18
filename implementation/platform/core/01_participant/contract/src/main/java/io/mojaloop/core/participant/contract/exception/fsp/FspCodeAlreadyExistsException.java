@@ -23,14 +23,48 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FspCodeAlreadyExistsException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_CODE_ALREADY_EXISTS";
 
     private static final String TEMPLATE = "FSP Code ({0}) already exists.";
 
+    private final FspCode fspCode;
+
     public FspCodeAlreadyExistsException(FspCode fspCode) {
 
-        super(new ErrorTemplate("FSP_CODE_ALREADY_EXISTS", TEMPLATE), fspCode.value());
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{fspCode.value()}));
+
+        this.fspCode = fspCode;
+
+    }
+
+    public static FspCodeAlreadyExistsException from(final Map<String, String> extras) {
+
+        final var fspCode = new FspCode(extras.get(Keys.FSP_CODE));
+
+        return new FspCodeAlreadyExistsException(fspCode);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        var extras = new HashMap<String, String>();
+
+        extras.put(Keys.FSP_CODE, fspCode.value());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String FSP_CODE = "fspCode";
 
     }
 

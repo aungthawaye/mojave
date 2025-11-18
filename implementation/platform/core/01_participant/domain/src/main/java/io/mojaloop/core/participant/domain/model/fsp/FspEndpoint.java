@@ -143,7 +143,7 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateFspEndpointException(this.type);
+            throw new CannotActivateFspEndpointException(this.fsp.fspCode, this.type);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;

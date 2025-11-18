@@ -21,7 +21,6 @@
 package io.mojaloop.core.transaction.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
-import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.StepParamIdJavaType;
@@ -54,7 +53,7 @@ public class StepParam extends JpaEntity<StepParamId> implements DataConversion<
     @Column(name = "param_id", nullable = false, updatable = false)
     protected StepParamId id;
 
-    @Column(name = "param_name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(name = "param_name", nullable = false)
     protected String paramName;
 
     @Column(name = "param_value", nullable = false)

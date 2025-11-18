@@ -94,32 +94,40 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
     @Bean
     public RetrofitService.ForwardingService forwardingService(ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(RetrofitService.ForwardingService.class, "https://2ne1.com").withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper)).build();
+        return RetrofitService.newBuilder(RetrofitService.ForwardingService.class, "https://2ne1.com")
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper))
+                              .build();
     }
 
     @Bean
     public PartiesResponseService partiesResponseService(FspiopSigningInterceptor fspiopSigningInterceptor) {
 
-        return RetrofitService.newBuilder(PartiesResponseService.class, "https://2ne1.com").withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+        return RetrofitService.newBuilder(PartiesResponseService.class, "https://2ne1.com")
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                               .withInterceptors(fspiopSigningInterceptor)
-                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create()).build();
+                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create())
+                              .build();
     }
 
     @Bean
     public QuotesResponseService quotesResponseService(FspiopSigningInterceptor fspiopSigningInterceptor) {
 
-        return RetrofitService.newBuilder(QuotesResponseService.class, "https://2ne1.com").withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+        return RetrofitService.newBuilder(QuotesResponseService.class, "https://2ne1.com")
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                               .withInterceptors(fspiopSigningInterceptor)
-                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create()).build();
+                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create())
+                              .build();
     }
 
     @Bean
     public TransfersResponseService transfersResponseService(FspiopSigningInterceptor fspiopSigningInterceptor) {
 
-        return RetrofitService.newBuilder(TransfersResponseService.class, "https://2ne1.com").withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+        return RetrofitService.newBuilder(TransfersResponseService.class, "https://2ne1.com")
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                               .withInterceptors(fspiopSigningInterceptor)
-                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create()).build();
+                              .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create())
+                              .build();
     }
 
     public interface RequiredBeans {

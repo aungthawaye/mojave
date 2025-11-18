@@ -47,8 +47,7 @@ public class AddEndpointIT {
     @Test
     public void test_successfully_add_endpoint() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(new CreateFspCommand.Input(
-            new FspCode("fsp-add-endpoint"), "FSP Add Endpoint", new Currency[]{Currency.USD},
+        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-add-endpoint"), "FSP Add Endpoint", new Currency[]{Currency.USD},
             new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")}));
 
         this.addEndpoint.execute(new AddEndpointCommand.Input(new FspId(output.fspId().getId()), EndpointType.QUOTES, "http://localhost:7080"));

@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.accounting.PostingDefinitionId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class PostingDefinitionNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "POSTING_DEFINITION_NOT_FOUND";
 
     private static final String TEMPLATE = "Posting Definition Id ({0}) cannot be found.";
 
-    public PostingDefinitionNotFoundException(PostingDefinitionId postingDefinitionId) {
+    private final PostingDefinitionId postingDefinitionId;
 
-        super(new ErrorTemplate("POSTING_DEFINITION_NOT_FOUND", TEMPLATE), postingDefinitionId.getId().toString());
+    public PostingDefinitionNotFoundException(final PostingDefinitionId postingDefinitionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{postingDefinitionId.getId().toString()}));
+
+        this.postingDefinitionId = postingDefinitionId;
+    }
+
+    public static PostingDefinitionNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new PostingDefinitionId(Long.valueOf(extras.get(Keys.POSTING_DEFINITION_ID)));
+
+        return new PostingDefinitionNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.POSTING_DEFINITION_ID, this.postingDefinitionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String POSTING_DEFINITION_ID = "postingDefinitionId";
+
     }
 
 }

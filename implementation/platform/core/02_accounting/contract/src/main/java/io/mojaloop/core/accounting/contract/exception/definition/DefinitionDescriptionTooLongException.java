@@ -42,14 +42,31 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class DefinitionDescriptionTooLongException extends UncheckedDomainException {
+
+    public static final String CODE = "DEFINITION_DESCRIPTION_TOO_LONG";
 
     private static final String TEMPLATE = "Definition Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
 
     public DefinitionDescriptionTooLongException() {
 
-        super(new ErrorTemplate("DEFINITION_DESCRIPTION_TOO_LONG", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static DefinitionDescriptionTooLongException from(final Map<String, String> extras) {
+
+        return new DefinitionDescriptionTooLongException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

@@ -52,8 +52,7 @@ public class DepositFund {
 
         try {
 
-            return RetrofitService.invoke(
-                this.walletIntercomService.depositFund(input),
+            return RetrofitService.invoke(this.walletIntercomService.depositFund(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {

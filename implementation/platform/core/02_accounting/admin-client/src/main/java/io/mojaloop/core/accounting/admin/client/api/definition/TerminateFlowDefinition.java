@@ -90,8 +90,7 @@ public class TerminateFlowDefinition {
 
         try {
 
-            RetrofitService.invoke(
-                this.definitionCommands.terminateFlowDefinition(input),
+            RetrofitService.invoke(this.definitionCommands.terminateFlowDefinition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {

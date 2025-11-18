@@ -41,14 +41,31 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class RequireParticipantForReceiveInException extends UncheckedDomainException {
+
+    public static final String CODE = "REQUIRE_PARTICIPANT_FOR_RECEIVE_IN";
 
     private static final String TEMPLATE = "Participant is required to receive through Chart Entry.";
 
     public RequireParticipantForReceiveInException() {
 
-        super(new ErrorTemplate("REQUIRE_PARTICIPANT_FOR_RECEIVE_IN", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static RequireParticipantForReceiveInException from(final Map<String, String> extras) {
+
+        return new RequireParticipantForReceiveInException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

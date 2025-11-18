@@ -41,14 +41,55 @@ package io.mojaloop.core.accounting.contract.exception.chart;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class ChartEntryNameAlreadyExistsException extends UncheckedDomainException {
+
+    public static final String CODE = "CHART_ENTRY_NAME_ALREADY_EXISTS";
 
     private static final String TEMPLATE = "The Chart Entry Name ({0}) already exists in Chart ({1}).";
 
-    public ChartEntryNameAlreadyExistsException(String chartEntryName, String chartName) {
+    private final String chartEntryName;
 
-        super(new ErrorTemplate("CHART_ENTRY_NAME_ALREADY_EXISTS", TEMPLATE), chartEntryName, chartName);
+    private final String chartName;
+
+    public ChartEntryNameAlreadyExistsException(final String chartEntryName, final String chartName) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{chartEntryName, chartName}));
+
+        this.chartEntryName = chartEntryName;
+        this.chartName = chartName;
+    }
+
+    public static ChartEntryNameAlreadyExistsException from(final Map<String, String> extras) {
+
+        final var entryName = extras.get(Keys.CHART_ENTRY_NAME);
+        final var name = extras.get(Keys.CHART_NAME);
+
+        return new ChartEntryNameAlreadyExistsException(entryName, name);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.CHART_ENTRY_NAME, this.chartEntryName);
+        extras.put(Keys.CHART_NAME, this.chartName);
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String CHART_ENTRY_NAME = "chartEntryName";
+
+        public static final String CHART_NAME = "chartName";
+
     }
 
 }

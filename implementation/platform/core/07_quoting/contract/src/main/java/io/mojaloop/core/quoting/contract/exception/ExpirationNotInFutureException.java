@@ -23,14 +23,29 @@ package io.mojaloop.core.quoting.contract.exception;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 
+import java.util.Map;
+
 public class ExpirationNotInFutureException extends CheckedDomainException {
+
+    public static final String CODE = "EXPIRATION_NOT_IN_FUTURE";
 
     private static final String TEMPLATE = "Expiration date/time must be in the future.";
 
     public ExpirationNotInFutureException() {
 
-        super(new ErrorTemplate("EXPIRATION_NOT_IN_FUTURE", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
 
+    }
+
+    public static ExpirationNotInFutureException from(final Map<String, String> extras) {
+
+        return new ExpirationNotInFutureException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

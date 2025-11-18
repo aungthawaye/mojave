@@ -47,8 +47,7 @@ public class ActivateSupportedCurrencyIT {
     @Test
     public void test_successfully_activate_supported_currency() throws ParticipantAdminClientException {
 
-        var output = this.createFsp.execute(new CreateFspCommand.Input(
-            new FspCode("fsp-activate-currency"), "FSP Activate Currency", new Currency[]{Currency.USD},
+        var output = this.createFsp.execute(new CreateFspCommand.Input(new FspCode("fsp-activate-currency"), "FSP Activate Currency", new Currency[]{Currency.USD},
             new CreateFspCommand.Input.Endpoint[]{new CreateFspCommand.Input.Endpoint(EndpointType.PARTIES, "http://localhost:7080")}));
 
         this.activateSupportedCurrency.execute(new ActivateFspCurrencyCommand.Input(new FspId(output.fspId().getId()), Currency.USD));

@@ -23,14 +23,48 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FspCodeNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_CODE_NOT_FOUND";
 
     private static final String TEMPLATE = "FSP Code ({0}) cannot be not found.";
 
-    public FspCodeNotFoundException(FspCode fspCode) {
+    private final FspCode fspCode;
 
-        super(new ErrorTemplate("FSP_CODE_NOT_FOUND", TEMPLATE), fspCode.value());
+    public FspCodeNotFoundException(final FspCode fspCode) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{fspCode.value()}));
+
+        this.fspCode = fspCode;
+
+    }
+
+    public static FspCodeNotFoundException from(final Map<String, String> extras) {
+
+        final var fspCode = new FspCode(extras.get(Keys.FSP_CODE));
+
+        return new FspCodeNotFoundException(fspCode);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.FSP_CODE, this.fspCode.value());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String FSP_CODE = "fspCode";
 
     }
 

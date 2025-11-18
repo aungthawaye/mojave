@@ -71,20 +71,17 @@ public class CreateFlowDefinitionCommandIT extends BaseDomainIT {
 
         // Mature entries by creating accounts under them
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                debitEntry.chartEntryId(), new AccountOwnerId(2001L), Currency.USD, new AccountCode("ACC_D_ASSET"), "Debit Asset Acc", "Test", OverdraftMode.FORBID,
-                BigDecimal.ZERO));
+            new CreateAccountCommand.Input(debitEntry.chartEntryId(), new AccountOwnerId(2001L), Currency.USD, new AccountCode("ACC_D_ASSET"), "Debit Asset Acc", "Test",
+                OverdraftMode.FORBID, BigDecimal.ZERO));
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                creditEntry.chartEntryId(), new AccountOwnerId(2001L), Currency.USD, new AccountCode("ACC_C_LIAB"), "Credit Liab Acc", "Test", OverdraftMode.FORBID,
-                BigDecimal.ZERO));
+            new CreateAccountCommand.Input(creditEntry.chartEntryId(), new AccountOwnerId(2001L), Currency.USD, new AccountCode("ACC_C_LIAB"), "Credit Liab Acc", "Test",
+                OverdraftMode.FORBID, BigDecimal.ZERO));
 
         final var postings = List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, debitEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, debitEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
                 "Debit Assets"),
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, creditEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Liabilities"));
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, creditEntry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT,
+                "Credit Liabilities"));
 
         final var input = new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "FundIn (USD)", "FSP FundIn USD", postings);
 
@@ -107,12 +104,12 @@ public class CreateFlowDefinitionCommandIT extends BaseDomainIT {
 
         // Mature entry by creating an account under it
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                entry.chartEntryId(), new AccountOwnerId(2002L), Currency.USD, new AccountCode("ACC_REV"), "Revenue Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+            new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(2002L), Currency.USD, new AccountCode("ACC_REV"), "Revenue Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
 
         final var postings = List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT, "Credit Income"));
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.CREDIT,
+                "Credit Income"));
 
         final var first = new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "First (USD)", "First Desc", postings);
 
@@ -133,12 +130,12 @@ public class CreateFlowDefinitionCommandIT extends BaseDomainIT {
 
         // Mature entry by creating an account under it
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                entry.chartEntryId(), new AccountOwnerId(2003L), Currency.USD, new AccountCode("ACC_EXP"), "Expense Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+            new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(2003L), Currency.USD, new AccountCode("ACC_EXP"), "Expense Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
 
         final var postings = List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "WITHDRAW_FROM_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Expense"));
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "WITHDRAW_FROM_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+                "Debit Expense"));
 
         final var name = "Common Name";
         final var first = new CreateFlowDefinitionCommand.Input(TransactionType.FUND_OUT, Currency.USD, name, "First Desc", postings);

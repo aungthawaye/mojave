@@ -41,22 +41,16 @@ public class RespondPartiesHandler implements RespondParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
-    public RespondPartiesHandler(ParticipantContext participantContext,
-                                 PartiesResponseService partiesResponseService,
-                                 FspiopErrorDecoder fspiopErrorDecoder,
-                                 FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
+    public RespondPartiesHandler(ParticipantContext participantContext, PartiesResponseService partiesResponseService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert partiesResponseService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.partiesResponseService = partiesResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
@@ -70,7 +64,7 @@ public class RespondPartiesHandler implements RespondParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -85,7 +79,7 @@ public class RespondPartiesHandler implements RespondParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

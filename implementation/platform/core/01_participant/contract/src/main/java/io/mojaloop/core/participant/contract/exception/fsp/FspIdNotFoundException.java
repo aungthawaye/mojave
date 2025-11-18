@@ -23,14 +23,48 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FspIdNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_ID_NOT_FOUND";
 
     private static final String TEMPLATE = "FSP ID ({0}) cannot be not found.";
 
-    public FspIdNotFoundException(FspId fspId) {
+    private final FspId fspId;
 
-        super(new ErrorTemplate("FSP_ID_NOT_FOUND", TEMPLATE), fspId.getId().toString());
+    public FspIdNotFoundException(final FspId fspId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{fspId.getId().toString()}));
+
+        this.fspId = fspId;
+
+    }
+
+    public static FspIdNotFoundException from(final Map<String, String> extras) {
+
+        final var fspId = new FspId(Long.valueOf(extras.get(Keys.FSP_ID)));
+
+        return new FspIdNotFoundException(fspId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.FSP_ID, this.fspId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String FSP_ID = "fspId";
 
     }
 

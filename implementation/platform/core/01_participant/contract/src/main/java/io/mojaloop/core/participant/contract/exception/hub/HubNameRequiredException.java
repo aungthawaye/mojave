@@ -41,14 +41,31 @@ package io.mojaloop.core.participant.contract.exception.hub;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class HubNameRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "HUB_NAME_REQUIRED";
 
     private static final String TEMPLATE = "Hub Name is required.";
 
     public HubNameRequiredException() {
 
-        super(new ErrorTemplate("HUB_NAME_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static HubNameRequiredException from(final Map<String, String> extras) {
+
+        return new HubNameRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

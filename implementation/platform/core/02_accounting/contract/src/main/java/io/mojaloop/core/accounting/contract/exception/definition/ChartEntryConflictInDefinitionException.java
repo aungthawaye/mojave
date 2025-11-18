@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class ChartEntryConflictInDefinitionException extends UncheckedDomainException {
+
+    public static final String CODE = "CHART_ENTRY_CONFLICT_IN_DEFINITION";
 
     private static final String TEMPLATE = "Chart Entry ({0}) conflicts in Definition.";
 
-    public ChartEntryConflictInDefinitionException(ChartEntryCode chartEntryCode) {
+    private final ChartEntryCode chartEntryCode;
 
-        super(new ErrorTemplate("CHART_ENTRY_CONFLICT_IN_DEFINITION", TEMPLATE), chartEntryCode.value());
+    public ChartEntryConflictInDefinitionException(final ChartEntryCode chartEntryCode) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{chartEntryCode.value()}));
+
+        this.chartEntryCode = chartEntryCode;
+    }
+
+    public static ChartEntryConflictInDefinitionException from(final Map<String, String> extras) {
+
+        final var code = new ChartEntryCode(extras.get(Keys.CHART_ENTRY_CODE));
+
+        return new ChartEntryConflictInDefinitionException(code);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.CHART_ENTRY_CODE, this.chartEntryCode.value());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String CHART_ENTRY_CODE = "chartEntryCode";
+
     }
 
 }

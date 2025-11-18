@@ -52,8 +52,7 @@ public class RollbackPosition {
 
         try {
 
-            return RetrofitService.invoke(
-                this.walletIntercomService.rollbackPosition(input),
+            return RetrofitService.invoke(this.walletIntercomService.rollbackPosition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {

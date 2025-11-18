@@ -42,16 +42,48 @@ package io.mojaloop.core.wallet.contract.exception.position;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class NoPositionUpdateForTransactionException extends CheckedDomainException {
 
     public static final String CODE = "NO_POSITION_UPDATE_FOR_TRANSACTION";
 
     private static final String TEMPLATE = "No position update for transaction: transaction id ({0}).";
 
-    public NoPositionUpdateForTransactionException(TransactionId transactionId) {
+    private final TransactionId transactionId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), transactionId.getId().toString());
+    public NoPositionUpdateForTransactionException(final TransactionId transactionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transactionId.getId().toString()}));
+
+        this.transactionId = transactionId;
+    }
+
+    public static NoPositionUpdateForTransactionException from(final Map<String, String> extras) {
+
+        final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
+
+        return new NoPositionUpdateForTransactionException(transactionId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String TRANSACTION_ID = "transactionId";
+
     }
 
 }

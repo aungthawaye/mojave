@@ -42,16 +42,48 @@ package io.mojaloop.core.wallet.contract.exception.wallet;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class ReversalFailedInWalletException extends CheckedDomainException {
 
     public static final String CODE = "REVERSAL_FAILED_IN_WALLET";
 
     private static final String TEMPLATE = "Reversal failed : reversalId ({0}).";
 
-    public ReversalFailedInWalletException(BalanceUpdateId reversalId) {
+    private final BalanceUpdateId reversalId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), reversalId.toString());
+    public ReversalFailedInWalletException(final BalanceUpdateId reversalId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{reversalId.getId().toString()}));
+
+        this.reversalId = reversalId;
+    }
+
+    public static ReversalFailedInWalletException from(final Map<String, String> extras) {
+
+        final var reversalId = new BalanceUpdateId(Long.valueOf(extras.get(Keys.REVERSAL_ID)));
+
+        return new ReversalFailedInWalletException(reversalId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.REVERSAL_ID, this.reversalId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String REVERSAL_ID = "reversalId";
+
     }
 
 }

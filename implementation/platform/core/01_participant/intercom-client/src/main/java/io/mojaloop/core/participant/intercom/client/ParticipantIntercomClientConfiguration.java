@@ -36,8 +36,10 @@ public class ParticipantIntercomClientConfiguration implements MiscConfiguration
     @Bean
     public ParticipantIntercomService participantIntercomService(ParticipantIntercomService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantIntercomService.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(ParticipantIntercomService.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans {

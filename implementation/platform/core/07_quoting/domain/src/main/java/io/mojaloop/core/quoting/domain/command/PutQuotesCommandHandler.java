@@ -28,8 +28,6 @@ import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PutQuotesCommand;
-import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
-import io.mojaloop.core.quoting.contract.exception.QuoteRequestTimeoutException;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -43,6 +41,7 @@ import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -93,6 +92,8 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
     public Output execute(Input input) {
 
         var udfQuoteId = input.udfQuoteId();
+
+        MDC.put("requestId", udfQuoteId.getId());
 
         LOGGER.info("({}) Executing PutQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
@@ -176,8 +177,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 var payeeFspCommission = new BigDecimal(quoteIdPutResponse.getPayeeFspCommission().getAmount());
                 var payeeReceiveAmount = new BigDecimal(quoteIdPutResponse.getPayeeReceiveAmount().getAmount());
 
-                quote.responded(
-                    responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
+                quote.responded(responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
                     quoteIdPutResponse.getCondition());
 
                 if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
@@ -311,6 +311,9 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
         }
 
         LOGGER.info("Returning from PutQuotesCommandHandler successfully.");
+
+        MDC.remove("requestId");
+
         return new Output();
     }
 

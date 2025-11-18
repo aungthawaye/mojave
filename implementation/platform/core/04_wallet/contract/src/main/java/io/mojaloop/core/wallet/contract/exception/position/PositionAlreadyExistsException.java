@@ -43,16 +43,55 @@ import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.fspiop.spec.core.Currency;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class PositionAlreadyExistsException extends UncheckedDomainException {
 
     public static final String CODE = "POSITION_ALREADY_EXISTS";
 
     private static final String TEMPLATE = "Position already exists for Owner Id ({0}) and Currency ({1}).";
 
-    public PositionAlreadyExistsException(WalletOwnerId ownerId, Currency currency) {
+    private final WalletOwnerId ownerId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), ownerId.toString(), currency.toString());
+    private final Currency currency;
+
+    public PositionAlreadyExistsException(final WalletOwnerId ownerId, final Currency currency) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{ownerId.getId().toString(), currency.name()}));
+
+        this.ownerId = ownerId;
+        this.currency = currency;
+    }
+
+    public static PositionAlreadyExistsException from(final Map<String, String> extras) {
+
+        final var ownerId = new WalletOwnerId(Long.valueOf(extras.get(Keys.OWNER_ID)));
+        final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
+
+        return new PositionAlreadyExistsException(ownerId, currency);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.OWNER_ID, this.ownerId.getId().toString());
+        extras.put(Keys.CURRENCY, this.currency.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String OWNER_ID = "ownerId";
+
+        public static final String CURRENCY = "currency";
+
     }
 
 }

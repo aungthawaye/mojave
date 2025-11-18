@@ -22,9 +22,9 @@ package io.mojaloop.component.misc.exception;
 
 import java.text.MessageFormat;
 
-public record ErrorTemplate(String code, String template) {
+public record ErrorTemplate(String code, String template, String[] values) {
 
-    public String message(String... values) {
+    public String message() {
 
         return MessageFormat.format(template, (Object[]) values);
     }

@@ -82,9 +82,8 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
         final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
         final var posting = input.posting();
 
-        var pd = definition.addPosting(
-            posting.receiveIn(), posting.receiveInId(), posting.participant(), posting.amountName(), posting.side(), posting.description(), this.accountCache,
-            this.chartEntryCache);
+        var pd = definition.addPosting(posting.receiveIn(), posting.receiveInId(), posting.participant(), posting.amountName(), posting.side(), posting.description(),
+            this.accountCache, this.chartEntryCache);
 
         this.flowDefinitionRepository.save(definition);
 

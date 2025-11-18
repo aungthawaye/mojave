@@ -84,8 +84,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
         if (authorization == null || SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(
-                HttpServletResponse.SC_UNAUTHORIZED,
+            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
                 new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "Authorization header or its value is missing."));
         }
 
@@ -100,8 +99,8 @@ public class FspiopOutboundGatekeeper implements Authenticator {
         if (!verificationOk) {
 
             LOGGER.error("Signature verification failed when using FSP's public key.");
-            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(
-                HttpServletResponse.SC_UNAUTHORIZED, new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Invalid signature."));
+            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
+                new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Invalid signature."));
         }
 
         LOGGER.debug("Signature verification successful");

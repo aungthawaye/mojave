@@ -42,14 +42,48 @@ package io.mojaloop.core.transaction.contract.exception;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class TransactionIdNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "TRANSACTION_ID_NOT_FOUND";
 
     private static final String TEMPLATE = "Transaction ID ({0}) cannot be not found.";
 
-    public TransactionIdNotFoundException(TransactionId transactionId) {
+    private final TransactionId transactionId;
 
-        super(new ErrorTemplate("TRANSACTION_ID_NOT_FOUND", TEMPLATE), transactionId.getId().toString());
+    public TransactionIdNotFoundException(final TransactionId transactionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transactionId.getId().toString()}));
+
+        this.transactionId = transactionId;
+    }
+
+    public static TransactionIdNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
+
+        return new TransactionIdNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String TRANSACTION_ID = "transactionId";
+
     }
 
 }

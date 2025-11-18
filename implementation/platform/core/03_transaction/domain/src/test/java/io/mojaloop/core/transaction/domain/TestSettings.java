@@ -49,9 +49,8 @@ public class TestSettings implements TransactionDomainConfiguration.RequiredSett
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        return new RoutingDataSourceConfigurer.ReadSettings(
-            new RoutingDataSourceConfigurer.ReadSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
+        return new RoutingDataSourceConfigurer.ReadSettings(new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.ReadSettings.Pool("transaction-read", 2, 4));
     }
 
@@ -59,9 +58,8 @@ public class TestSettings implements TransactionDomainConfiguration.RequiredSett
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        return new RoutingDataSourceConfigurer.WriteSettings(
-            new RoutingDataSourceConfigurer.WriteSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
+        return new RoutingDataSourceConfigurer.WriteSettings(new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_transaction?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.WriteSettings.Pool("transaction-write", 2, 4));
     }
 

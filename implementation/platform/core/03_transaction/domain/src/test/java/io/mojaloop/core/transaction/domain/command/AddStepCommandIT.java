@@ -39,6 +39,7 @@
 
 package io.mojaloop.core.transaction.domain.command;
 
+import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
@@ -66,14 +67,14 @@ class AddStepCommandIT extends BaseDomainIT {
     void add_step_after_close_phase_after() {
 
         // Arrange
-        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_COMMIT);
+        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER);
         var openOutput = this.openTransaction.execute(openInput);
 
         var commitInput = new CloseTransactionCommand.Input(openOutput.transactionId(), null);
         this.commitTransaction.execute(commitInput);
 
         var params = Map.of("result", "ok");
-        var input = new AddStepCommand.Input(openOutput.transactionId(), "commit", params);
+        var input = new AddStepCommand.Input(openOutput.transactionId(), "commit", params, StepPhase.BEFORE);
 
         // Act
         var output = this.addStep.execute(input);
@@ -87,11 +88,11 @@ class AddStepCommandIT extends BaseDomainIT {
     void add_step_before_close_phase_before() {
 
         // Arrange
-        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER_RESERVE);
+        var openInput = new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER);
         var openOutput = this.openTransaction.execute(openInput);
 
         var params = Map.of("k1", "v1", "k2", "v2");
-        var input = new AddStepCommand.Input(openOutput.transactionId(), "reserve", params);
+        var input = new AddStepCommand.Input(openOutput.transactionId(), "reserve", params, StepPhase.BEFORE);
 
         // Act
         var output = this.addStep.execute(input);
@@ -106,7 +107,7 @@ class AddStepCommandIT extends BaseDomainIT {
 
         // Arrange
         var fakeId = new TransactionId(1234567890L);
-        var input = new AddStepCommand.Input(fakeId, "reserve", Map.of());
+        var input = new AddStepCommand.Input(fakeId, "reserve", Map.of(), StepPhase.BEFORE);
 
         // Act & Assert
         Assertions.assertThrows(TransactionIdNotFoundException.class, () -> this.addStep.execute(input));

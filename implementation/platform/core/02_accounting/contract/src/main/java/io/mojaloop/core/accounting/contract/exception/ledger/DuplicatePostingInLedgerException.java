@@ -44,16 +44,62 @@ import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
     public static final String CODE = "DUPLICATE_POSTING_IN_LEDGER";
 
     private static final String TEMPLATE = "Duplicate Posting in Ledger : account ({0}) | side ({1}) | transaction Id : ({2}).";
 
-    public DuplicatePostingInLedgerException(AccountCode accountCode, Side side, TransactionId transactionId) {
+    private final AccountCode accountCode;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), accountCode.value(), side.name(), transactionId.getId().toString());
+    private final Side side;
+
+    private final TransactionId transactionId;
+
+    public DuplicatePostingInLedgerException(final AccountCode accountCode, final Side side, final TransactionId transactionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{accountCode.value(), side.name(), transactionId.getId().toString()}));
+
+        this.accountCode = accountCode;
+        this.side = side;
+        this.transactionId = transactionId;
+    }
+
+    public static DuplicatePostingInLedgerException from(final Map<String, String> extras) {
+
+        final var accountCode = new AccountCode(extras.get(Keys.ACCOUNT_CODE));
+        final var side = Side.valueOf(extras.get(Keys.SIDE));
+        final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
+
+        return new DuplicatePostingInLedgerException(accountCode, side, transactionId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.ACCOUNT_CODE, this.accountCode.value());
+        extras.put(Keys.SIDE, this.side.name());
+        extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String ACCOUNT_CODE = "accountCode";
+
+        public static final String SIDE = "side";
+
+        public static final String TRANSACTION_ID = "transactionId";
+
     }
 
 }

@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.account;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class AccountIdNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "ACCOUNT_ID_NOT_FOUND";
 
     private static final String TEMPLATE = "Account ID ({0}) cannot be not found.";
 
-    public AccountIdNotFoundException(AccountId accountId) {
+    private final AccountId accountId;
 
-        super(new ErrorTemplate("ACCOUNT_ID_NOT_FOUND", TEMPLATE), accountId.getId().toString());
+    public AccountIdNotFoundException(final AccountId accountId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{accountId.getId().toString()}));
+
+        this.accountId = accountId;
+    }
+
+    public static AccountIdNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new AccountId(Long.valueOf(extras.get(Keys.ACCOUNT_ID)));
+
+        return new AccountIdNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.ACCOUNT_ID, this.accountId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String ACCOUNT_ID = "accountId";
+
     }
 
 }

@@ -83,8 +83,7 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(
-            Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
+        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
             Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
     }
 

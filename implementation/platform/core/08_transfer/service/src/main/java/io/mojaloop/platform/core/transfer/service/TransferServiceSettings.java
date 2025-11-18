@@ -111,8 +111,7 @@ public class TransferServiceSettings implements TransferServiceConfiguration.Req
             System.getenv().getOrDefault("TFR_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_transfer?createDatabaseIfNotExist=true"),
             System.getenv().getOrDefault("TFR_READ_DB_USER", "root"), System.getenv().getOrDefault("TFR_READ_DB_PASSWORD", "password"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "transfer-service-read", Integer.parseInt(System.getenv().getOrDefault("TFR_READ_DB_MIN_POOL_SIZE", "2")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("transfer-service-read", Integer.parseInt(System.getenv().getOrDefault("TFR_READ_DB_MIN_POOL_SIZE", "2")),
             Integer.parseInt(System.getenv().getOrDefault("TFR_READ_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -126,8 +125,7 @@ public class TransferServiceSettings implements TransferServiceConfiguration.Req
             System.getenv().getOrDefault("TFR_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_transfer?createDatabaseIfNotExist=true"),
             System.getenv().getOrDefault("TFR_WRITE_DB_USER", "root"), System.getenv().getOrDefault("TFR_WRITE_DB_PASSWORD", "password"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "transfer-service-write", Integer.parseInt(System.getenv().getOrDefault("TFR_WRITE_DB_MIN_POOL_SIZE", "2")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("transfer-service-write", Integer.parseInt(System.getenv().getOrDefault("TFR_WRITE_DB_MIN_POOL_SIZE", "2")),
             Integer.parseInt(System.getenv().getOrDefault("TFR_WRITE_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -144,8 +142,7 @@ public class TransferServiceSettings implements TransferServiceConfiguration.Req
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(
-            Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
+        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
             Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
     }
 
@@ -174,8 +171,7 @@ public class TransferServiceSettings implements TransferServiceConfiguration.Req
     @Override
     public TransferDomainConfiguration.TransferSettings transferSettings() {
 
-        return new TransferDomainConfiguration.TransferSettings(
-            Integer.parseInt(System.getenv().getOrDefault("TRANSFER_RESERVE_LIFETIME_MS", "300000")),
+        return new TransferDomainConfiguration.TransferSettings(Integer.parseInt(System.getenv().getOrDefault("TRANSFER_RESERVATION_TIMEOUT_MS", "300000")),
             Integer.parseInt(System.getenv().getOrDefault("TRANSFER_EXPIRY_TIMEOUT_MS", "60000")));
     }
 

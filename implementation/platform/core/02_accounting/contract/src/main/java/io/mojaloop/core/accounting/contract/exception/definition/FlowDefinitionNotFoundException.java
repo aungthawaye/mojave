@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FlowDefinitionNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "FLOW_DEFINITION_NOT_FOUND";
 
     private static final String TEMPLATE = "Flow Definition Id ({0}) cannot be not found.";
 
-    public FlowDefinitionNotFoundException(FlowDefinitionId flowDefinitionId) {
+    private final FlowDefinitionId flowDefinitionId;
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_FOUND", TEMPLATE), flowDefinitionId.getId().toString());
+    public FlowDefinitionNotFoundException(final FlowDefinitionId flowDefinitionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{flowDefinitionId.getId().toString()}));
+
+        this.flowDefinitionId = flowDefinitionId;
+    }
+
+    public static FlowDefinitionNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new FlowDefinitionId(Long.valueOf(extras.get(Keys.FLOW_DEFINITION_ID)));
+
+        return new FlowDefinitionNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.FLOW_DEFINITION_ID, this.flowDefinitionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String FLOW_DEFINITION_ID = "flowDefinitionId";
+
     }
 
 }

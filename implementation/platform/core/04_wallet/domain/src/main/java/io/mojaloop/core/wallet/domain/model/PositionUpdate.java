@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -121,9 +122,8 @@ public class PositionUpdate extends JpaEntity<PositionUpdateId> implements DataC
     @Override
     public PositionUpdateData convert() {
 
-        return new PositionUpdateData(
-            this.id, this.positionId, this.action, this.transactionId, this.currency, this.amount, this.oldPosition, this.newPosition, this.description, this.transactionAt,
-            this.createdAt, this.reservationId);
+        return new PositionUpdateData(this.id, this.positionId, this.action, this.transactionId, this.currency, this.amount, this.oldPosition, this.newPosition, this.description,
+            this.transactionAt, this.createdAt, this.reservationId);
     }
 
 }

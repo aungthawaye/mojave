@@ -83,7 +83,8 @@ import static java.sql.Types.BIGINT;
                   @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX", columnList = "payee_fsp, payer_fsp"),
                   @Index(name = "tfr_transfer_transaction_at_IDX", columnList = "transaction_at"),
                   @Index(name = "tfr_transfer_payer_party_id", columnList = "payer_party_id"),
-                  @Index(name = "tfr_transfer_payee_party_id", columnList = "payee_party_id")})
+                  @Index(name = "tfr_transfer_payee_party_id", columnList = "payee_party_id"),
+                  @Index(name = "tfr_transfer_reservation_timeout_at", columnList = "reservation_timeout_at")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Transfer extends JpaEntity<TransferId> {
 
@@ -183,12 +184,20 @@ public class Transfer extends JpaEntity<TransferId> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant reservedAt;
 
-    @Column(name = "completed_at")
+    @Column(name = "committed_at")
     @Convert(converter = JpaInstantConverter.class)
-    protected Instant completedAt;
+    protected Instant committedAt;
 
     @Column(name = "error")
     protected String error;
+
+    @Column(name = "reservation_timeout_at")
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant reservationTimeoutAt;
+
+    @Column(name = "payee_completed_at")
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant payeeCompletedAt;
 
     @Getter(AccessLevel.NONE)
     @OneToMany(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -203,7 +212,8 @@ public class Transfer extends JpaEntity<TransferId> {
                     Party payee,
                     Currency currency,
                     BigDecimal transferAmount,
-                    Instant requestExpiration) {
+                    Instant requestExpiration,
+                    Instant reservationTimeoutAt) {
 
         assert transactionId != null;
         assert transactionAt != null;
@@ -214,6 +224,7 @@ public class Transfer extends JpaEntity<TransferId> {
         assert payee != null;
         assert currency != null;
         assert transferAmount != null;
+        assert reservationTimeoutAt != null;
 
         this.id = new TransferId(Snowflake.get().nextId());
         this.transactionId = transactionId;
@@ -228,6 +239,7 @@ public class Transfer extends JpaEntity<TransferId> {
         this.requestExpiration = requestExpiration;
         this.state = TransferState.RECEIVED;
         this.receivedAt = Instant.now();
+        this.reservationTimeoutAt = reservationTimeoutAt;
     }
 
     public void aborted(String error) {
@@ -236,7 +248,7 @@ public class Transfer extends JpaEntity<TransferId> {
 
         this.state = TransferState.ABORTED;
         this.error = error;
-        this.completedAt = Instant.now();
+        this.payeeCompletedAt = Instant.now();
     }
 
     public void addExtension(Direction direction, String key, String value) {
@@ -244,15 +256,19 @@ public class Transfer extends JpaEntity<TransferId> {
         this.extensions.add(new TransferExtension(this, direction, key, value));
     }
 
-    public void committed(String ilpFulfilment, PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) {
+    public void committed(String ilpFulfilment, PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId, Instant completedAt) {
 
         assert ilpFulfilment != null;
         assert payerCommitId != null;
         assert payeeCommitId != null;
 
         this.state = TransferState.COMMITTED;
-        this.completedAt = Instant.now();
+
+        this.committedAt = Instant.now();
+        this.payeeCompletedAt = completedAt;
+
         this.ilpFulfilment = ilpFulfilment;
+
         this.payerCommitId = payerCommitId;
         this.payeeCommitId = payeeCommitId;
     }

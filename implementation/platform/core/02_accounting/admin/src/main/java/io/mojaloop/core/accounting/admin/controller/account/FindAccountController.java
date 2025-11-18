@@ -59,8 +59,7 @@ public class FindAccountController {
 
         var criteria = request.criteria;
 
-        return this.accountQuery.find(
-            criteria.accountCode, criteria.name, criteria.ownerId, criteria.chartEntryId, criteria.currency, request.pagedRequest, request.sortBy.column,
+        return this.accountQuery.find(criteria.accountCode, criteria.name, criteria.ownerId, criteria.chartEntryId, criteria.currency, request.pagedRequest, request.sortBy.column,
             request.sortBy.mode);
     }
 

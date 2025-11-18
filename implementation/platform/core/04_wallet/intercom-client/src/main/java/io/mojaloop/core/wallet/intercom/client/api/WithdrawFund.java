@@ -52,8 +52,7 @@ public class WithdrawFund {
 
         try {
 
-            return RetrofitService.invoke(
-                this.walletIntercomService.withdrawFund(input),
+            return RetrofitService.invoke(this.walletIntercomService.withdrawFund(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {

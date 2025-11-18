@@ -30,9 +30,8 @@ public class TestSettings implements AccountingDomainConfiguration.RequiredSetti
     @Bean
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
-        return new MySqlLedger.LedgerDbSettings(
-            new MySqlLedger.LedgerDbSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password"),
+        return new MySqlLedger.LedgerDbSettings(new MySqlLedger.LedgerDbSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password"),
             new MySqlLedger.LedgerDbSettings.Pool("account-ledger", 2, 12));
     }
 
@@ -40,9 +39,8 @@ public class TestSettings implements AccountingDomainConfiguration.RequiredSetti
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        return new RoutingDataSourceConfigurer.ReadSettings(
-            new RoutingDataSourceConfigurer.ReadSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
+        return new RoutingDataSourceConfigurer.ReadSettings(new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.ReadSettings.Pool("account-read", 2, 4));
     }
 
@@ -50,9 +48,8 @@ public class TestSettings implements AccountingDomainConfiguration.RequiredSetti
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        return new RoutingDataSourceConfigurer.WriteSettings(
-            new RoutingDataSourceConfigurer.WriteSettings.Connection(
-                "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
+        return new RoutingDataSourceConfigurer.WriteSettings(new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            "jdbc:mysql://localhost:3306/ml_accounting?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password", false),
             new RoutingDataSourceConfigurer.WriteSettings.Pool("account-write", 2, 4));
     }
 

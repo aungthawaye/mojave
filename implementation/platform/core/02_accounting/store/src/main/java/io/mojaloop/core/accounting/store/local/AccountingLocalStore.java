@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.store.local;
 
 import io.mojaloop.core.accounting.contract.data.AccountData;
@@ -74,15 +75,14 @@ public class AccountingLocalStore implements AccountingStore {
         LOGGER.info("Bootstrapping AccountingLocalStore");
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
+        this.timer.scheduleAtFixedRate(new TimerTask() {
 
-                @Override
-                public void run() {
+            @Override
+            public void run() {
 
-                    AccountingLocalStore.this.refreshData();
-                }
-            }, interval, interval);
+                AccountingLocalStore.this.refreshData();
+            }
+        }, interval, interval);
     }
 
     @Override
@@ -155,9 +155,10 @@ public class AccountingLocalStore implements AccountingStore {
             var _withChartEntryId = Collections.unmodifiableMap(
                 accounts.stream().collect(Collectors.groupingBy(AccountData::chartEntryId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-            var _withChartEntryOwnerCurrency = accounts.stream().collect(
-                Collectors.toUnmodifiableMap(
-                    acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() + ":" + acc.currency().name(), Function.identity(), (a, b) -> a));
+            var _withChartEntryOwnerCurrency = accounts.stream()
+                                                       .collect(Collectors.toUnmodifiableMap(
+                                                           acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() + ":" + acc.currency().name(),
+                                                           Function.identity(), (a, b) -> a));
 
             LOGGER.info("Refreshed Account data, count: {}", accounts.size());
 

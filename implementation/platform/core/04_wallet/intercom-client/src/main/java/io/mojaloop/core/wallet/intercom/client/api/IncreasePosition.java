@@ -52,8 +52,7 @@ public class IncreasePosition {
 
         try {
 
-            return RetrofitService.invoke(
-                this.walletIntercomService.increasePosition(input),
+            return RetrofitService.invoke(this.walletIntercomService.increasePosition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {

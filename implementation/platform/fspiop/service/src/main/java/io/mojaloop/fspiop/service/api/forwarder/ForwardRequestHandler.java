@@ -42,19 +42,14 @@ public class ForwardRequestHandler implements ForwardRequest {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
-    public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService,
-                                 FspiopErrorDecoder fspiopErrorDecoder,
-                                 FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
+    public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert forwardingService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.forwardingService = forwardingService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
@@ -100,7 +95,7 @@ public class ForwardRequestHandler implements ForwardRequest {
         } catch (RetrofitService.InvocationException e) {
 
             LOGGER.error("Error forwarding request to : {} {} - error {}", method, baseUrl, e.getMessage());
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

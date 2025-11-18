@@ -62,8 +62,7 @@ public class DeactivateAccountCommandIT extends BaseDomainIT {
         final var entryOut = this.createChartEntryCommand.execute(
             new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
 
-        final var createInput = new CreateAccountCommand.Input(
-            entryOut.chartEntryId(), new AccountOwnerId(2002L), Currency.USD, new AccountCode("ACC004"), "Account", "Desc",
+        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(), new AccountOwnerId(2002L), Currency.USD, new AccountCode("ACC004"), "Account", "Desc",
             OverdraftMode.FORBID, BigDecimal.ZERO);
         final var accountOut = this.createAccountCommand.execute(createInput);
 

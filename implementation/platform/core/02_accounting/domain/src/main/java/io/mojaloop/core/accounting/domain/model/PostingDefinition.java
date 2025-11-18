@@ -181,11 +181,15 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         // 2. When BY_ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
 
         // Find all the accounts, created under the same receiveInId in the accounting system, and previously added for the same Side and AmountName.
-        var existingAccountIds = this.definition.postings.stream().filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
-                                                         .map(pd -> pd.receiveInId).collect(Collectors.toSet());
+        var existingAccountIds = this.definition.postings.stream()
+                                                         .filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
+                                                         .map(pd -> pd.receiveInId)
+                                                         .collect(Collectors.toSet());
 
-        var existingChartEntryIds = this.definition.postings.stream().filter(
-                                            pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side && pd.amountName.equals(_amountName)).map(pd -> pd.receiveInId)
+        var existingChartEntryIds = this.definition.postings.stream()
+                                                            .filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side &&
+                                                                              pd.amountName.equals(_amountName))
+                                                            .map(pd -> pd.receiveInId)
                                                             .collect(Collectors.toSet());
 
         if (receiveIn == ReceiveIn.CHART_ENTRY) {

@@ -9,9 +9,9 @@ package io.mojaloop.core.wallet.admin.controller.wallet;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,8 +49,7 @@ public class DepositFundController {
     @PostMapping("/wallets/deposit-fund")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DepositFundCommand.Output execute(@Valid @RequestBody final DepositFundCommand.Input input)
-        throws NoBalanceUpdateForTransactionException {
+    public DepositFundCommand.Output execute(@Valid @RequestBody final DepositFundCommand.Input input) throws NoBalanceUpdateForTransactionException {
 
         LOGGER.info("Entering DepositFundCommand.execute: input : {}", input);
 
@@ -60,4 +59,5 @@ public class DepositFundController {
 
         return output;
     }
+
 }

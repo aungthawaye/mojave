@@ -36,22 +36,28 @@ public class AccountingAdminClientConfiguration {
     @Bean
     public AccountingAdminService.AccountCommands accountCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.AccountCommands.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(AccountingAdminService.AccountCommands.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     @Bean
     public AccountingAdminService.ChartCommands chartCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.ChartCommands.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(AccountingAdminService.ChartCommands.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     @Bean
     public AccountingAdminService.DefinitionCommands definitionCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.DefinitionCommands.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(AccountingAdminService.DefinitionCommands.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }

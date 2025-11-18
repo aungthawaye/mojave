@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.component;
 
 import io.mojaloop.core.common.datatype.enums.wallet.PositionAction;
@@ -79,18 +80,26 @@ public interface PositionUpdater {
 
         private final BigDecimal oldPosition;
 
+        private final BigDecimal oldReserved;
+
         private final BigDecimal netDebitCap;
 
         private final TransactionId transactionId;
 
-        public LimitExceededException(PositionId positionId, BigDecimal amount, BigDecimal oldPosition, BigDecimal netDebitCap, TransactionId transactionId) {
+        public LimitExceededException(PositionId positionId,
+                                      BigDecimal amount,
+                                      BigDecimal oldPosition,
+                                      BigDecimal oldReserved,
+                                      BigDecimal netDebitCap,
+                                      TransactionId transactionId) {
 
-            super("Position limit exceeded for positionId: " + positionId + ", amount: " + amount + ", oldPosition: " + oldPosition + ", netDebitCap: " +
-                      netDebitCap.stripTrailingZeros().toPlainString() + ", transactionId: " + transactionId);
+            super("Position limit exceeded for positionId: " + positionId + ", amount: " + amount + ", oldPosition: " + oldPosition + ", oldReserved: " + oldReserved +
+                      ", netDebitCap: " + netDebitCap.stripTrailingZeros().toPlainString() + ", transactionId: " + transactionId);
 
             this.positionId = positionId;
             this.amount = amount;
             this.oldPosition = oldPosition;
+            this.oldReserved = oldReserved;
             this.netDebitCap = netDebitCap;
             this.transactionId = transactionId;
         }

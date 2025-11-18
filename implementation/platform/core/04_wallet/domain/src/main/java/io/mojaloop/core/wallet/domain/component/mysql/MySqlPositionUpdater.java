@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.component.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -82,11 +83,10 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
     private static PositionHistory mapHistory(java.sql.ResultSet rs) throws java.sql.SQLException {
 
-        return new PositionHistory(
-            new PositionUpdateId(rs.getLong("position_update_id")), new PositionId(rs.getLong("position_id")), PositionAction.valueOf(rs.getString("action")),
-            new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"), rs.getBigDecimal("old_position"),
-            rs.getBigDecimal("new_position"), rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"), rs.getBigDecimal("net_debit_cap"),
-            Instant.ofEpochSecond(rs.getLong("transaction_at")));
+        return new PositionHistory(new PositionUpdateId(rs.getLong("position_update_id")), new PositionId(rs.getLong("position_id")),
+            PositionAction.valueOf(rs.getString("action")), new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
+            rs.getBigDecimal("old_position"), rs.getBigDecimal("new_position"), rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"),
+            rs.getBigDecimal("net_debit_cap"), Instant.ofEpochSecond(rs.getLong("transaction_at")));
     }
 
     @Override
@@ -223,8 +223,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("net_debit_cap"), transactionId));
+                                    throw new RuntimeException(new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("old_reserved"),
+                                        rs.getBigDecimal("net_debit_cap"), transactionId));
                                 }
                             }
                         }
@@ -280,8 +280,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("net_debit_cap"), transactionId));
+                                    throw new RuntimeException(new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("old_reserved"),
+                                        rs.getBigDecimal("net_debit_cap"), transactionId));
                                 }
                             }
                         }

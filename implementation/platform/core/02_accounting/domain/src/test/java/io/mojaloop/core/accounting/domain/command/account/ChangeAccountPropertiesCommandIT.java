@@ -62,8 +62,7 @@ public class ChangeAccountPropertiesCommandIT extends BaseDomainIT {
         final var entryOut = this.createChartEntryCommand.execute(
             new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
 
-        final var createInput = new CreateAccountCommand.Input(
-            entryOut.chartEntryId(), new AccountOwnerId(2004L), Currency.USD, new AccountCode("ACC006"), "Account", "Desc",
+        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(), new AccountOwnerId(2004L), Currency.USD, new AccountCode("ACC006"), "Account", "Desc",
             OverdraftMode.FORBID, BigDecimal.ZERO);
         final var accountOut = this.createAccountCommand.execute(createInput);
 

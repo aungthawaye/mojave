@@ -55,8 +55,10 @@ public class AccountingIntercomClientConfiguration implements MiscConfiguration.
     @Bean
     public AccountingIntercomService accountingIntercomService(AccountingIntercomService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingIntercomService.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(AccountingIntercomService.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans {

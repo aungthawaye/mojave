@@ -41,14 +41,31 @@ package io.mojaloop.core.accounting.contract.exception.chart;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class ChartEntryNameRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "CHART_ENTRY_NAME_REQUIRED";
 
     private static final String TEMPLATE = "Chart Entry Name is required.";
 
     public ChartEntryNameRequiredException() {
 
-        super(new ErrorTemplate("CHART_ENTRY_NAME_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static ChartEntryNameRequiredException from(final Map<String, String> extras) {
+
+        return new ChartEntryNameRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

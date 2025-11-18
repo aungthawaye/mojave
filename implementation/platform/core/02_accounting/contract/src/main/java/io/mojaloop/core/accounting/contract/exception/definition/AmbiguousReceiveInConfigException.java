@@ -41,14 +41,31 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class AmbiguousReceiveInConfigException extends UncheckedDomainException {
+
+    public static final String CODE = "AMBIGUOUS_RECEIVE_IN_CONFIG";
 
     private static final String TEMPLATE = "Receive In (ACCOUNT) and Participant cannot coexist.";
 
     public AmbiguousReceiveInConfigException() {
 
-        super(new ErrorTemplate("AMBIGUOUS_RECEIVE_IN_CONFIG", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static AmbiguousReceiveInConfigException from(final Map<String, String> extras) {
+
+        return new AmbiguousReceiveInConfigException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

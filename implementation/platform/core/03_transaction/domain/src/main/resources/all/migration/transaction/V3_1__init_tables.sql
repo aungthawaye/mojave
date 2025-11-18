@@ -28,11 +28,11 @@ CREATE TABLE `txn_transaction`
 
 CREATE TABLE `txn_transaction_step`
 (
-    `step_id`        bigint      NOT NULL,
-    `name`           varchar(64) NOT NULL,
-    `phase`          varchar(32) NOT NULL,
-    `created_at`     bigint      NOT NULL,
-    `transaction_id` bigint      NOT NULL,
+    `step_id`        bigint       NOT NULL,
+    `name`           varchar(255) NOT NULL,
+    `phase`          varchar(32)  NOT NULL,
+    `created_at`     bigint       NOT NULL,
+    `transaction_id` bigint       NOT NULL,
 
     `rec_created_at` bigint DEFAULT NULL,
     `rec_updated_at` bigint DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `txn_transaction_step`
 CREATE TABLE `txn_step_param`
 (
     `param_id`       bigint       NOT NULL,
-    `param_name`     varchar(64)  NOT NULL,
+    `param_name`     varchar(255) NOT NULL,
     `param_value`    varchar(255) NOT NULL,
     `step_id`        bigint       NOT NULL,
 

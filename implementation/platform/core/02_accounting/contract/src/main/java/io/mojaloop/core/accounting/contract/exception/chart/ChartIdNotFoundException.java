@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.chart;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class ChartIdNotFoundException extends UncheckedDomainException {
+
+    public static final String CODE = "CHART_ID_NOT_FOUND";
 
     private static final String TEMPLATE = "Chart ID ({0}) cannot be not found.";
 
-    public ChartIdNotFoundException(ChartId chartId) {
+    private final ChartId chartId;
 
-        super(new ErrorTemplate("CHART_ID_NOT_FOUND", TEMPLATE), chartId.getId().toString());
+    public ChartIdNotFoundException(final ChartId chartId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{chartId.getId().toString()}));
+
+        this.chartId = chartId;
+    }
+
+    public static ChartIdNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new ChartId(Long.valueOf(extras.get(Keys.CHART_ID)));
+
+        return new ChartIdNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.CHART_ID, this.chartId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String CHART_ID = "chartId";
+
     }
 
 }

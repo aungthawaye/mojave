@@ -43,14 +43,55 @@ import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.fspiop.spec.core.Currency;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FlowDefinitionNotConfiguredException extends UncheckedDomainException {
+
+    public static final String CODE = "FLOW_DEFINITION_NOT_CONFIGURED";
 
     private static final String TEMPLATE = "Flow Definition for Transaction Type ({0}) and Currency ({1}) is not yet configured.";
 
-    public FlowDefinitionNotConfiguredException(TransactionType transactionType, Currency currency) {
+    private final TransactionType transactionType;
 
-        super(new ErrorTemplate("FLOW_DEFINITION_NOT_CONFIGURED", TEMPLATE), transactionType.name(), currency.name());
+    private final Currency currency;
+
+    public FlowDefinitionNotConfiguredException(final TransactionType transactionType, final Currency currency) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transactionType.name(), currency.name()}));
+
+        this.transactionType = transactionType;
+        this.currency = currency;
+    }
+
+    public static FlowDefinitionNotConfiguredException from(final Map<String, String> extras) {
+
+        final var type = TransactionType.valueOf(extras.get(Keys.TRANSACTION_TYPE));
+        final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
+
+        return new FlowDefinitionNotConfiguredException(type, currency);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.TRANSACTION_TYPE, this.transactionType.name());
+        extras.put(Keys.CURRENCY, this.currency.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String TRANSACTION_TYPE = "transactionType";
+
+        public static final String CURRENCY = "currency";
+
     }
 
 }

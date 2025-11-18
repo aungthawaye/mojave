@@ -42,14 +42,48 @@ package io.mojaloop.core.participant.contract.exception.oracle;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class OracleAlreadyExistsException extends UncheckedDomainException {
+
+    public static final String CODE = "ORACLE_ALREADY_EXISTS";
 
     private static final String TEMPLATE = "Oracle for PartyIdType ({0}) already exists.";
 
-    public OracleAlreadyExistsException(PartyIdType type) {
+    private final PartyIdType type;
 
-        super(new ErrorTemplate("ORACLE_ALREADY_EXISTS", TEMPLATE), type.name());
+    public OracleAlreadyExistsException(final PartyIdType type) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{type.name()}));
+
+        this.type = type;
+
+    }
+
+    public static OracleAlreadyExistsException from(final Map<String, String> extras) {
+
+        final var type = PartyIdType.valueOf(extras.get(Keys.PARTY_ID_TYPE));
+
+        return new OracleAlreadyExistsException(type);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.PARTY_ID_TYPE, this.type.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String PARTY_ID_TYPE = "partyIdType";
 
     }
 

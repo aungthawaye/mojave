@@ -18,6 +18,7 @@ public class PutTransfersEventListener {
     public PutTransfersEventListener(PutTransfersCommand putTransfers) {
 
         assert putTransfers != null;
+
         this.putTransfers = putTransfers;
     }
 

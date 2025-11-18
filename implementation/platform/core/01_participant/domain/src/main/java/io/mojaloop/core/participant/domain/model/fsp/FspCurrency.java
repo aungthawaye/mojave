@@ -118,7 +118,7 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateFspCurrencyException(this.currency);
+            throw new CannotActivateFspCurrencyException(this.fsp.fspCode, this.currency);
         }
 
         if (!this.fsp.getHub().isCurrencySupported(this.currency)) {

@@ -25,7 +25,7 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
-import io.mojaloop.core.transfer.domain.component.interledger.PartyUnwrapperRegistry;
+import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
 import io.mojaloop.core.wallet.store.WalletStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -49,7 +49,7 @@ public class TransferDomainConfiguration {
                                            WalletStoreConfiguration.RequiredBeans,
                                            RoutingJpaConfiguration.RequiredBeans {
 
-        PartyUnwrapperRegistry partyUnwrapperRegistry();
+        PartyUnwrapper partyUnwrapper();
 
     }
 
@@ -65,6 +65,6 @@ public class TransferDomainConfiguration {
 
     }
 
-    public record TransferSettings(int reserveLifetimeMs, int expiryTimeoutMs) { }
+    public record TransferSettings(int reservationTimeoutMs, int expiryTimeoutMs) { }
 
 }

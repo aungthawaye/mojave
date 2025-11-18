@@ -42,14 +42,55 @@ package io.mojaloop.core.transaction.contract.exception;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionPhase;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class InvalidTransactionStageException extends UncheckedDomainException {
+
+    public static final String CODE = "INVALID_TRANSACTION_STAGE";
 
     private static final String TEMPLATE = "Transaction Stage ({0}) is not valid. Current stage is ({1}) stage.";
 
-    public InvalidTransactionStageException(TransactionPhase newStage, TransactionPhase expectedStage) {
+    private final TransactionPhase newStage;
 
-        super(new ErrorTemplate("INVALID_TRANSACTION_STAGE", TEMPLATE), newStage.toString(), expectedStage.toString());
+    private final TransactionPhase expectedStage;
+
+    public InvalidTransactionStageException(final TransactionPhase newStage, final TransactionPhase expectedStage) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{newStage.toString(), expectedStage.toString()}));
+
+        this.newStage = newStage;
+        this.expectedStage = expectedStage;
+    }
+
+    public static InvalidTransactionStageException from(final Map<String, String> extras) {
+
+        final var newStage = TransactionPhase.valueOf(extras.get(Keys.NEW_STAGE));
+        final var expected = TransactionPhase.valueOf(extras.get(Keys.EXPECTED_STAGE));
+
+        return new InvalidTransactionStageException(newStage, expected);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.NEW_STAGE, this.newStage.name());
+        extras.put(Keys.EXPECTED_STAGE, this.expectedStage.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String NEW_STAGE = "newStage";
+
+        public static final String EXPECTED_STAGE = "expectedStage";
+
     }
 
 }

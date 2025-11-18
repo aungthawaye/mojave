@@ -21,12 +21,12 @@
 package io.mojaloop.fspiop.invoker.api.quotes;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
+import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import io.mojaloop.fspiop.invoker.api.QuotesService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.QuotesIDPutResponse;
@@ -63,7 +63,7 @@ class PutQuotesHandler implements PutQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -78,7 +78,7 @@ class PutQuotesHandler implements PutQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

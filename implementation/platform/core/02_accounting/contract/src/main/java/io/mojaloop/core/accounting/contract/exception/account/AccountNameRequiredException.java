@@ -41,14 +41,31 @@ package io.mojaloop.core.accounting.contract.exception.account;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class AccountNameRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "ACCOUNT_NAME_REQUIRED";
 
     private static final String TEMPLATE = "Account Name is required.";
 
     public AccountNameRequiredException() {
 
-        super(new ErrorTemplate("ACCOUNT_NAME_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static AccountNameRequiredException from(final Map<String, String> extras) {
+
+        return new AccountNameRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

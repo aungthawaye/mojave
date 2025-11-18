@@ -90,8 +90,7 @@ public class DeactivateFlowDefinition {
 
         try {
 
-            RetrofitService.invoke(
-                this.definitionCommands.deactivateFlowDefinition(input),
+            RetrofitService.invoke(this.definitionCommands.deactivateFlowDefinition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {

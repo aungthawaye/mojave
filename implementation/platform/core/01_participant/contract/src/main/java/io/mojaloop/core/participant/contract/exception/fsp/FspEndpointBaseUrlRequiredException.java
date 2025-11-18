@@ -22,14 +22,31 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class FspEndpointBaseUrlRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_ENDPOINT_BASE_URL_REQUIRED";
 
     private static final String TEMPLATE = "Base URL of FSP Endpoint is required.";
 
     public FspEndpointBaseUrlRequiredException() {
 
-        super(new ErrorTemplate("FSP_ENDPOINT_BASE_URL_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static FspEndpointBaseUrlRequiredException from(final Map<String, String> extras) {
+
+        return new FspEndpointBaseUrlRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

@@ -21,14 +21,12 @@
 package io.mojaloop.fspiop.invoker.api;
 
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -39,9 +37,6 @@ public interface TransfersService {
 
     @GET("transfers/{transferId}")
     Call<String> getTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId);
-
-    @PATCH("transfers/{transferId}")
-    Call<String> patchTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId, @Body TransfersIDPatchResponse transfersIDPatchResponse);
 
     @POST("transfers")
     Call<String> postTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Body TransfersPostRequest transfersPostRequest);

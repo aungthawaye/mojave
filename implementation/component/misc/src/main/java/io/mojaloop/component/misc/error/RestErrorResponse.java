@@ -22,7 +22,9 @@ package io.mojaloop.component.misc.error;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public record RestErrorResponse(String code, String message) {
+import java.util.Map;
+
+public record RestErrorResponse(String code, String message, Map<String, String> extras) {
 
     public static RestErrorResponse decode(String payload, ObjectMapper objectMapper) {
 

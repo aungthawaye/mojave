@@ -90,8 +90,7 @@ public class ChangeFlowDefinitionCurrency {
 
         try {
 
-            RetrofitService.invoke(
-                this.definitionCommands.changeFlowDefinitionCurrency(input),
+            RetrofitService.invoke(this.definitionCommands.changeFlowDefinitionCurrency(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {

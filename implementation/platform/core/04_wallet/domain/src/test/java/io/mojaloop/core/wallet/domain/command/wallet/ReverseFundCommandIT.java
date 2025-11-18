@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -95,12 +95,12 @@ public class ReverseFundCommandIT extends BaseDomainIT {
 
         // Deposit then withdraw to create a WITHDRAW update to reverse
         this.depositFundCommand.execute(
-            new DepositFundCommand.Input(
-                walletOut.walletId(), new BigDecimal("100.00"), new TransactionId(8300000000001L), Instant.parse("2025-01-04T08:00:00Z"), "Fund before reverse"));
+            new DepositFundCommand.Input(walletOut.walletId(), new BigDecimal("100.00"), new TransactionId(8300000000001L), Instant.parse("2025-01-04T08:00:00Z"),
+                "Fund before reverse"));
 
         final var withdrawOut = this.withdrawFundCommand.execute(
-            new WithdrawFundCommand.Input(
-                walletOut.walletId(), new BigDecimal("40.00"), new TransactionId(8300000000002L), Instant.parse("2025-01-04T09:00:00Z"), "Withdraw to be reversed"));
+            new WithdrawFundCommand.Input(walletOut.walletId(), new BigDecimal("40.00"), new TransactionId(8300000000002L), Instant.parse("2025-01-04T09:00:00Z"),
+                "Withdraw to be reversed"));
 
         final var reversedId = withdrawOut.balanceUpdateId();
         final var balanceUpdateId = new BalanceUpdateId(8300000000999L);

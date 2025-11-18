@@ -90,8 +90,7 @@ public class AddFlowDefinitionPosting {
 
         try {
 
-            RetrofitService.invoke(
-                this.definitionCommands.addFlowDefinitionPostings(input),
+            RetrofitService.invoke(this.definitionCommands.addFlowDefinitionPostings(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper));
 
         } catch (RetrofitService.InvocationException e) {

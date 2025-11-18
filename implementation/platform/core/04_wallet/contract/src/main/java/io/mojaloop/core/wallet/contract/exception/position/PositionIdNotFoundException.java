@@ -42,17 +42,48 @@ package io.mojaloop.core.wallet.contract.exception.position;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class PositionIdNotFoundException extends UncheckedDomainException {
 
     public static final String CODE = "POSITION_ID_NOT_FOUND";
 
     private static final String TEMPLATE = "Position Id ({0}) cannot be found.";
 
-    public PositionIdNotFoundException(PositionId positionId) {
+    private final PositionId positionId;
 
-        super(new ErrorTemplate(CODE, TEMPLATE), positionId.toString());
+    public PositionIdNotFoundException(final PositionId positionId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{positionId.getId().toString()}));
+
+        this.positionId = positionId;
+    }
+
+    public static PositionIdNotFoundException from(final Map<String, String> extras) {
+
+        final var id = new PositionId(Long.valueOf(extras.get(Keys.POSITION_ID)));
+
+        return new PositionIdNotFoundException(id);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.POSITION_ID, this.positionId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String POSITION_ID = "positionId";
+
     }
 
 }

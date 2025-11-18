@@ -150,8 +150,8 @@ public interface Ledger {
 
         public RestoreFailedException(AccountId accountId, Side side, BigDecimal amount, Ledger.DrCr drCr, TransactionId transactionId) {
 
-            super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() + ") | amount (" + amount.toPlainString() + ") | posted debits: " + drCr.debits +
-                      " | posted credits: " + drCr.credits + " | transactionId: " + transactionId.getId().toString());
+            super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() + ") | amount (" + amount.stripTrailingZeros().toPlainString() +
+                      ") | posted debits: " + drCr.debits + " | posted credits: " + drCr.credits + " | transactionId: " + transactionId.getId().toString());
 
             this.accountId = accountId;
             this.side = side;

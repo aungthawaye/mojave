@@ -22,16 +22,20 @@ package io.mojaloop.component.misc.exception;
 
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
 public abstract class UncheckedDomainException extends RuntimeException {
 
     @Getter
     private final ErrorTemplate template;
 
-    public UncheckedDomainException(ErrorTemplate template, String... values) {
+    public UncheckedDomainException(ErrorTemplate template) {
 
-        super(template.message(values));
+        super(template.message());
         this.template = template;
     }
+
+    public abstract Map<String, String> extras();
 
 }

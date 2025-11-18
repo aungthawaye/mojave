@@ -82,8 +82,8 @@ public class TerminateFlowDefinitionCommandIT extends BaseDomainIT {
 
         // Mature entry
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                entry.chartEntryId(), new AccountOwnerId(3201L), Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+            new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(3201L), Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
 
         final var postings = List.of(
             new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"));

@@ -30,12 +30,10 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
     @Bean
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
-        return new MySqlLedger.LedgerDbSettings(
-            new MySqlLedger.LedgerDbSettings.Connection(
-                System.getenv().getOrDefault("ACC_LEDGER_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
-                System.getenv().getOrDefault("ACC_LEDGER_DB_USER", "root"), System.getenv().getOrDefault("ACC_LEDGER_DB_PASSWORD", "password")),
-            new MySqlLedger.LedgerDbSettings.Pool(
-                "accounting-ledger", Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MIN_POOL_SIZE", "2")),
+        return new MySqlLedger.LedgerDbSettings(new MySqlLedger.LedgerDbSettings.Connection(
+            System.getenv().getOrDefault("ACC_LEDGER_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
+            System.getenv().getOrDefault("ACC_LEDGER_DB_USER", "root"), System.getenv().getOrDefault("ACC_LEDGER_DB_PASSWORD", "password")),
+            new MySqlLedger.LedgerDbSettings.Pool("accounting-ledger", Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MIN_POOL_SIZE", "2")),
                 Integer.parseInt(System.getenv().getOrDefault("ACC_LEDGER_DB_MAX_POOL_SIZE", "10"))));
     }
 
@@ -47,8 +45,7 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
             System.getenv().getOrDefault("ACC_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
             System.getenv().getOrDefault("ACC_READ_DB_USER", "root"), System.getenv().getOrDefault("ACC_READ_DB_PASSWORD", "password"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "accounting-intercom-read", Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MIN_POOL_SIZE", "2")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-intercom-read", Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MIN_POOL_SIZE", "2")),
             Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -62,8 +59,7 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
             System.getenv().getOrDefault("ACC_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
             System.getenv().getOrDefault("ACC_WRITE_DB_USER", "root"), System.getenv().getOrDefault("ACC_WRITE_DB_PASSWORD", "password"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "accounting-intercom-write",
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-intercom-write",
             Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MIN_POOL_SIZE", "2")), Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);

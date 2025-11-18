@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transfer.domain.command;
 
+import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.transfer.contract.command.PutTransfersErrorCommand;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand {
 
     @Override
+    @Write
     public Output execute(Input input) {
 
         return new Output();

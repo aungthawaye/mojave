@@ -41,8 +41,7 @@ public class GetPositionController {
     @GetMapping("/positions/get-by-ownership")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<PositionData> byOwnership(@RequestParam(name = "currency") final Currency currency,
-                                          @RequestParam(name = "owner-id") final Long ownerId) {
+    public List<PositionData> byOwnership(@RequestParam(name = "currency") final Currency currency, @RequestParam(name = "owner-id") final Long ownerId) {
 
         return this.positionQuery.get(new WalletOwnerId(ownerId), currency);
     }
@@ -54,4 +53,5 @@ public class GetPositionController {
 
         return this.positionQuery.get(new PositionId(positionId));
     }
+
 }

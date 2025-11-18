@@ -90,8 +90,7 @@ public class CreateFlowDefinition {
 
         try {
 
-            return RetrofitService.invoke(
-                this.definitionCommands.createFlowDefinition(input),
+            return RetrofitService.invoke(this.definitionCommands.createFlowDefinition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {

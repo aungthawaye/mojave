@@ -143,9 +143,8 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
                                        .map(p -> new FlowDefinitionData.PostingDefinitionData(p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName, p.side, p.description))
                                        .toList();
 
-        return new FlowDefinitionData(
-            this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(), this.getDescription(), this.getActivationStatus(), this.getTerminationStatus(),
-            postingData);
+        return new FlowDefinitionData(this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(), this.getDescription(), this.getActivationStatus(),
+            this.getTerminationStatus(), postingData);
     }
 
     public FlowDefinition currency(Currency currency) {

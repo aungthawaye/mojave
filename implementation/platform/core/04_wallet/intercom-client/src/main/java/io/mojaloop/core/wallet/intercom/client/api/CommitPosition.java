@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class CommitPosition {
 
@@ -52,8 +54,7 @@ public class CommitPosition {
 
         try {
 
-            return RetrofitService.invoke(
-                this.walletIntercomService.commitPosition(input),
+            return RetrofitService.invoke(this.walletIntercomService.commitPosition(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
@@ -62,7 +63,7 @@ public class CommitPosition {
 
             var decodedErrorResponse = e.getDecodedErrorResponse();
 
-            if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
+            if (decodedErrorResponse instanceof RestErrorResponse(String code, String message, Map<String, String> extras)) {
 
                 throw new WalletIntercomClientException(code, message);
             }

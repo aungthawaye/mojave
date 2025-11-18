@@ -21,6 +21,7 @@
 package io.mojaloop.fspiop.service.api.transfers;
 
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
@@ -28,7 +29,7 @@ import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 
 public interface RespondTransfers {
 
-    void patchTransfers(Payer payer, String url, TransfersIDPatchResponse response) throws FspiopException;
+    void patchTransfers(Payee payee, String url, TransfersIDPatchResponse response) throws FspiopException;
 
     void putTransfers(Payer payer, String url, TransfersIDPutResponse response) throws FspiopException;
 

@@ -23,13 +23,28 @@ package io.mojaloop.core.common.datatype.exception.accounting;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 
+import java.util.Map;
+
 public class ChartEntryCodeValueRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "CHART_ENTRY_CODE_VALUE_REQUIRED";
 
     private static final String TEMPLATE = "Value is required to create Chart Entry Code.";
 
     public ChartEntryCodeValueRequiredException() {
 
-        super(new ErrorTemplate("CHART_ENTRY_CODE_VALUE_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static ChartEntryCodeValueRequiredException from(final Map<String, String> extras) {
+
+        return new ChartEntryCodeValueRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }

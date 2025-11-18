@@ -80,15 +80,14 @@ public class ParticipantLocalStore implements ParticipantStore {
         this.refreshData();
 
         // Schedule a timer to refresh data every 30 seconds
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
+        this.timer.scheduleAtFixedRate(new TimerTask() {
 
-                @Override
-                public void run() {
+            @Override
+            public void run() {
 
-                    ParticipantLocalStore.this.refreshData();
-                }
-            }, interval, interval); // 30 seconds in milliseconds
+                ParticipantLocalStore.this.refreshData();
+            }
+        }, interval, interval); // 30 seconds in milliseconds
     }
 
     @Override

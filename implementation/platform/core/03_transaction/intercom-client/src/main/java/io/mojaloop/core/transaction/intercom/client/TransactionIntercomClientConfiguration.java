@@ -55,8 +55,10 @@ public class TransactionIntercomClientConfiguration implements MiscConfiguration
     @Bean
     public TransactionIntercomService transactionIntercomService(TransactionIntercomService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(TransactionIntercomService.class, settings.baseUrl()).withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper).build();
+        return RetrofitService.newBuilder(TransactionIntercomService.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans {

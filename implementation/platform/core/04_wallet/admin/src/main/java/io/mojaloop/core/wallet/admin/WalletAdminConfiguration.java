@@ -32,7 +32,6 @@ import io.mojaloop.core.wallet.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import io.mojaloop.core.wallet.domain.component.empty.EmptyPositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -111,11 +110,11 @@ public class WalletAdminConfiguration extends JacksonWebMvcExtension
 
     public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings {
 
-        TomcatSettings tomcatSettings();
-
         MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
 
         MySqlPositionUpdater.PositionDbSettings positionDbSettings();
+
+        TomcatSettings tomcatSettings();
 
     }
 

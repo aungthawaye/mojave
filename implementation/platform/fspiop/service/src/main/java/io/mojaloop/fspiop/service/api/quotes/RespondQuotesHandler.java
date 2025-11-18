@@ -41,22 +41,16 @@ public class RespondQuotesHandler implements RespondQuotes {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
-    public RespondQuotesHandler(ParticipantContext participantContext,
-                                QuotesResponseService quotesResponseService,
-                                FspiopErrorDecoder fspiopErrorDecoder,
-                                FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
+    public RespondQuotesHandler(ParticipantContext participantContext, QuotesResponseService quotesResponseService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert quotesResponseService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.quotesResponseService = quotesResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
@@ -70,7 +64,7 @@ public class RespondQuotesHandler implements RespondQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -85,7 +79,7 @@ public class RespondQuotesHandler implements RespondQuotes {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

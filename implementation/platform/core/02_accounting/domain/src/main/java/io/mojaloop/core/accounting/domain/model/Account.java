@@ -178,9 +178,8 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Override
     public AccountData convert() {
 
-        return new AccountData(
-            this.getId(), this.ownerId, this.type, this.currency, this.code, this.name, this.description, this.createdAt, this.activationStatus, this.terminationStatus,
-            this.chartEntryId, this.ledgerBalance.convert());
+        return new AccountData(this.getId(), this.ownerId, this.type, this.currency, this.code, this.name, this.description, this.createdAt, this.activationStatus,
+            this.terminationStatus, this.chartEntryId, this.ledgerBalance.convert());
     }
 
     public void deactivate() {

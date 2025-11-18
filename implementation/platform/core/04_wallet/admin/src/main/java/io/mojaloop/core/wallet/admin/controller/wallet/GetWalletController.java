@@ -41,8 +41,7 @@ public class GetWalletController {
     @GetMapping("/wallets/get-by-ownership")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<WalletData> byOwnership(@RequestParam(name = "currency") final Currency currency,
-                                        @RequestParam(name = "owner-id") final Long ownerId) {
+    public List<WalletData> byOwnership(@RequestParam(name = "currency") final Currency currency, @RequestParam(name = "owner-id") final Long ownerId) {
 
         return this.walletQuery.get(new WalletOwnerId(ownerId), currency);
     }
@@ -54,4 +53,5 @@ public class GetWalletController {
 
         return this.walletQuery.get(new WalletId(walletId));
     }
+
 }

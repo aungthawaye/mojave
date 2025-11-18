@@ -22,16 +22,20 @@ package io.mojaloop.component.misc.exception;
 
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
 public abstract class CheckedDomainException extends Exception {
 
     @Getter
     private final ErrorTemplate template;
 
-    public CheckedDomainException(ErrorTemplate template, String... values) {
+    public CheckedDomainException(ErrorTemplate template) {
 
-        super(template.message(values));
+        super(template.message());
         this.template = template;
     }
+
+    public abstract Map<String, String> extras();
 
 }

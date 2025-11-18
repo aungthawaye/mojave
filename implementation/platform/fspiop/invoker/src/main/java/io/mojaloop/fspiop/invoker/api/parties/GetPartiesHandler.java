@@ -21,7 +21,6 @@
 package io.mojaloop.fspiop.invoker.api.parties;
 
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payee;
@@ -45,8 +44,6 @@ class GetPartiesHandler implements GetParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
     public GetPartiesHandler(ParticipantContext participantContext,
                              PartiesService partiesService,
                              FspiopErrorDecoder fspiopErrorDecoder,
@@ -55,12 +52,11 @@ class GetPartiesHandler implements GetParties {
         assert participantContext != null;
         assert partiesService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.partiesService = partiesService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
@@ -74,7 +70,7 @@ class GetPartiesHandler implements GetParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -89,7 +85,7 @@ class GetPartiesHandler implements GetParties {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

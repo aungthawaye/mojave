@@ -23,14 +23,48 @@ package io.mojaloop.core.participant.contract.exception.fsp;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.Currency;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FspCurrencyAlreadySupportedException extends UncheckedDomainException {
+
+    public static final String CODE = "FSP_CURRENCY_ALREADY_SUPPORTED";
 
     private static final String TEMPLATE = "Currency, {0}, is already supported for FSP.";
 
-    public FspCurrencyAlreadySupportedException(Currency currency) {
+    private final Currency currency;
 
-        super(new ErrorTemplate("FSP_CURRENCY_ALREADY_SUPPORTED", TEMPLATE), currency.name());
+    public FspCurrencyAlreadySupportedException(final Currency currency) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{currency.name()}));
+
+        this.currency = currency;
+
+    }
+
+    public static FspCurrencyAlreadySupportedException from(final Map<String, String> extras) {
+
+        final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
+
+        return new FspCurrencyAlreadySupportedException(currency);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.CURRENCY, this.currency.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String CURRENCY = "currency";
 
     }
 

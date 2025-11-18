@@ -22,14 +22,31 @@ package io.mojaloop.core.participant.contract.exception.oracle;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
+import java.util.Map;
+
+@Getter
 public class OracleBaseUrlRequiredException extends UncheckedDomainException {
+
+    public static final String CODE = "ORACLE_BASE_URL_REQUIRED";
 
     private static final String TEMPLATE = "Base URL of Oracle is required.";
 
     public OracleBaseUrlRequiredException() {
 
-        super(new ErrorTemplate("ORACLE_BASE_URL_REQUIRED", TEMPLATE));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    }
+
+    public static OracleBaseUrlRequiredException from(final Map<String, String> extras) {
+
+        return new OracleBaseUrlRequiredException();
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        return Map.of();
     }
 
 }
