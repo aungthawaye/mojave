@@ -66,16 +66,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
     private final ParticipantStore participantStore;
 
-    private final PositionStore positionStore;
-
-    private final OpenTransaction openTransaction;
-
-    private final ReservePosition reservePosition;
-
-    private final RollbackPosition rollbackPosition;
-
-    private final ReserveTransfer reserveTransfer;
-
     private final RespondTransfers respondTransfers;
 
     private final ForwardRequest forwardRequest;
@@ -83,10 +73,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     private final AddStepPublisher addStepPublisher;
 
     private final CloseTransactionPublisher closeTransactionPublisher;
-
-    private final PartyUnwrapper partyUnwrapper;
-
-    private final TransferDomainConfiguration.TransferSettings transferSettings;
 
     private final TransferRepository transferRepository;
 
@@ -97,11 +83,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     private final ReceiveTransfer receiveTransfer;
 
     public PostTransfersCommandHandler(ParticipantStore participantStore,
-                                       PositionStore positionStore,
-                                       OpenTransaction openTransaction,
-                                       ReservePosition reservePosition,
-                                       RollbackPosition rollbackPosition,
-                                       ReserveTransfer reserveTransfer,
                                        RespondTransfers respondTransfers,
                                        ForwardRequest forwardRequest,
                                        AddStepPublisher addStepPublisher,
@@ -114,11 +95,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
                                        ReceiveTransfer receiveTransfer) {
 
         assert participantStore != null;
-        assert positionStore != null;
-        assert openTransaction != null;
-        assert reservePosition != null;
-        assert rollbackPosition != null;
-        assert reserveTransfer != null;
         assert respondTransfers != null;
         assert forwardRequest != null;
         assert addStepPublisher != null;
@@ -131,17 +107,10 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         assert receiveTransfer != null;
 
         this.participantStore = participantStore;
-        this.positionStore = positionStore;
-        this.openTransaction = openTransaction;
-        this.reservePosition = reservePosition;
-        this.rollbackPosition = rollbackPosition;
-        this.reserveTransfer = reserveTransfer;
         this.respondTransfers = respondTransfers;
         this.forwardRequest = forwardRequest;
         this.addStepPublisher = addStepPublisher;
         this.closeTransactionPublisher = closeTransactionPublisher;
-        this.partyUnwrapper = partyUnwrapper;
-        this.transferSettings = transferSettings;
         this.transferRepository = transferRepository;
         this.transactionManager = transactionManager;
         this.unwrapRequest = unwrapRequest;

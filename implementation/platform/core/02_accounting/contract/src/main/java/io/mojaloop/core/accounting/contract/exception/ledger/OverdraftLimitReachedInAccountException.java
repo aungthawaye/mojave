@@ -95,9 +95,9 @@ public class OverdraftLimitReachedInAccountException extends CheckedDomainExcept
 
         final var accountCode = new AccountCode(extras.get(Keys.ACCOUNT_CODE));
         final var side = Side.valueOf(extras.get(Keys.SIDE));
-        final var amount = new java.math.BigDecimal(extras.get(Keys.AMOUNT));
-        final var postedDebits = new java.math.BigDecimal(extras.get(Keys.POSTED_DEBITS));
-        final var postedCredits = new java.math.BigDecimal(extras.get(Keys.POSTED_CREDITS));
+        final var amount = new BigDecimal(extras.get(Keys.AMOUNT));
+        final var postedDebits = new BigDecimal(extras.get(Keys.POSTED_DEBITS));
+        final var postedCredits = new BigDecimal(extras.get(Keys.POSTED_CREDITS));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
         return new OverdraftLimitReachedInAccountException(accountCode, side, amount, postedDebits, postedCredits, transactionId);

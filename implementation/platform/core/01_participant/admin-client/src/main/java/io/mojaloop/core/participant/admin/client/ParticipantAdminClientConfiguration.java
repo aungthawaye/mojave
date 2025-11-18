@@ -34,9 +34,36 @@ import org.springframework.context.annotation.Import;
 public class ParticipantAdminClientConfiguration {
 
     @Bean
-    public ParticipantAdminService.FspCommands fspCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.FspCommand fspCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.FspCommands.class, settings.baseUrl())
+        return RetrofitService.newBuilder(ParticipantAdminService.FspCommand.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
+    }
+
+    @Bean
+    public ParticipantAdminService.FspQuery fspQuery(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(ParticipantAdminService.FspQuery.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
+    }
+
+    @Bean
+    public ParticipantAdminService.HubQuery hubQuery(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(ParticipantAdminService.HubQuery.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
+    }
+
+    @Bean
+    public ParticipantAdminService.OracleQuery oracleQuery(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(ParticipantAdminService.OracleQuery.class, settings.baseUrl())
                               .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                               .withDefaultFactories(objectMapper)
                               .build();
@@ -64,7 +91,7 @@ public class ParticipantAdminClientConfiguration {
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {
 
-        ParticipantAdminService.Settings participantCommandServiceSettings();
+        ParticipantAdminService.Settings participantAdminServiceSettings();
 
     }
 

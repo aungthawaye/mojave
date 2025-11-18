@@ -26,10 +26,12 @@ import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundExceptio
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Primary
 public class ActivateFspCommandHandler implements ActivateFspCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateFspCommandHandler.class);

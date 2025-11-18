@@ -33,6 +33,8 @@ import io.mojaloop.core.common.datatype.exception.accounting.ChartEntryCodeValue
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -77,6 +79,17 @@ public record ChartEntryCode(@JsonValue @JsonProperty(required = true) @NotNull 
             }
 
             return new ChartEntryCode(text);
+        }
+
+    }
+
+    @Component
+    public static class ParamConverter implements Converter<String, ChartEntryCode> {
+
+        @Override
+        public ChartEntryCode convert(String source) {
+
+            return new ChartEntryCode(source);
         }
 
     }

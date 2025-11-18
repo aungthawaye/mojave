@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -58,6 +60,16 @@ public class FspEndpointId extends EntityId<Long> {
             }
         }
 
+    }
+
+    @Component
+    public static class ParamConverter implements Converter<String, FspEndpointId> {
+
+        @Override
+        public FspEndpointId convert(String source) {
+
+            return new FspEndpointId(Long.parseLong(source));
+        }
     }
 
 }

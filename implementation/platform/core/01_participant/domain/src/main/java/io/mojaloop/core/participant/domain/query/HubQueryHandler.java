@@ -28,11 +28,13 @@ import io.mojaloop.core.participant.domain.model.hub.Hub;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Primary
 public class HubQueryHandler implements HubQuery {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HubQueryHandler.class);

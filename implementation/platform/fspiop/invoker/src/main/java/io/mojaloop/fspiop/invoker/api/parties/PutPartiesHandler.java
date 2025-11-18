@@ -44,8 +44,7 @@ class PutPartiesHandler implements PutParties {
 
     public PutPartiesHandler(ParticipantContext participantContext,
                              PartiesService partiesService,
-                             FspiopErrorDecoder fspiopErrorDecoder,
-                             FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
+                             FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert partiesService != null;

@@ -39,13 +39,13 @@ public class WriteAspect {
 
         try {
 
-            RoutingDataSource.setDataSourceKey(RoutingDataSource.Keys.WRITE);
+            RoutingDataSource.Context.set(RoutingDataSource.Keys.WRITE);
             LOGGER.debug("WriteAspect : RoutingDataSource -> write");
             return joinPoint.proceed();
 
         } finally {
 
-            RoutingDataSource.clearDataSourceKey();
+            RoutingDataSource.Context.clear();
         }
 
     }

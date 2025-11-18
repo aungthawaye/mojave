@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -62,6 +64,21 @@ public class HubId extends EntityId<Long> {
             }
         }
 
+    }
+
+    @Component
+    public static class ParamConverter implements Converter<String, HubId> {
+
+        @Override
+        public HubId convert(final String source) {
+
+            var value = Long.parseLong(source);
+            if (value != 1L) {
+                throw new IllegalArgumentException("'hubId' has invalid value. Only '1' is accepted.");
+            }
+
+            return new HubId();
+        }
     }
 
 }

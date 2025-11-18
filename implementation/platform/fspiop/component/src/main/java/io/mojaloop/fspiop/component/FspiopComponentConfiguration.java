@@ -45,12 +45,6 @@ public class FspiopComponentConfiguration {
         return new FspiopErrorDecoder(objectMapper);
     }
 
-    @Bean
-    public FspiopInvocationExceptionResolver fspiopInvocationErrorHandler() {
-
-        return new FspiopInvocationExceptionResolver();
-    }
-
     public interface RequiredBeans extends FspiopCommonConfiguration.RequiredBeans, MiscConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends FspiopCommonConfiguration.RequiredSettings, MiscConfiguration.RequiredSettings { }

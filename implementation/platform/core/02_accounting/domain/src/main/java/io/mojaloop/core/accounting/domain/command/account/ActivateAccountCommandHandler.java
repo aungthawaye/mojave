@@ -26,10 +26,12 @@ import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundE
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Primary
 public class ActivateAccountCommandHandler implements ActivateAccountCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateAccountCommandHandler.class);

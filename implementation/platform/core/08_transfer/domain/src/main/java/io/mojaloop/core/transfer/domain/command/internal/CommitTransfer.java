@@ -17,7 +17,7 @@ import io.mojaloop.core.wallet.contract.command.position.CommitPositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
 import io.mojaloop.core.wallet.intercom.client.api.CommitPosition;
 import io.mojaloop.core.wallet.intercom.client.api.DecreasePosition;
-import io.mojaloop.core.wallet.intercom.client.api.IncreasePosition;
+import io.mojaloop.core.wallet.intercom.client.api.IncreasePositionInvoker;
 import io.mojaloop.core.wallet.intercom.client.api.RollbackPosition;
 import io.mojaloop.core.wallet.store.PositionStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -50,7 +50,7 @@ public class CommitTransfer {
 
     private final DecreasePosition decreasePosition;
 
-    private final IncreasePosition increasePosition;
+    private final IncreasePositionInvoker increasePositionInvoker;
 
     private final RespondTransfers respondTransfers;
 
@@ -69,7 +69,7 @@ public class CommitTransfer {
                           CommitPosition commitPosition,
                           RollbackPosition rollbackPosition,
                           DecreasePosition decreasePosition,
-                          IncreasePosition increasePosition,
+                          IncreasePositionInvoker increasePositionInvoker,
                           RespondTransfers respondTransfers,
                           ForwardRequest forwardRequest,
                           AddStepPublisher addStepPublisher,
@@ -82,7 +82,7 @@ public class CommitTransfer {
         assert commitPosition != null;
         assert rollbackPosition != null;
         assert decreasePosition != null;
-        assert increasePosition != null;
+        assert increasePositionInvoker != null;
         assert respondTransfers != null;
         assert forwardRequest != null;
         assert addStepPublisher != null;
@@ -95,7 +95,7 @@ public class CommitTransfer {
         this.commitPosition = commitPosition;
         this.rollbackPosition = rollbackPosition;
         this.decreasePosition = decreasePosition;
-        this.increasePosition = increasePosition;
+        this.increasePositionInvoker = increasePositionInvoker;
         this.respondTransfers = respondTransfers;
         this.forwardRequest = forwardRequest;
         this.addStepPublisher = addStepPublisher;

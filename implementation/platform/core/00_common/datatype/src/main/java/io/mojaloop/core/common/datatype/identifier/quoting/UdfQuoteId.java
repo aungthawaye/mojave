@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.mojaloop.component.misc.ddd.EntityId;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -52,6 +54,20 @@ public class UdfQuoteId extends EntityId<String> {
             return new UdfQuoteId(text);
         }
 
+    }
+
+    @Component
+    public static class ParamConverter implements Converter<String, UdfQuoteId> {
+
+        @Override
+        public UdfQuoteId convert(final String source) {
+
+            if (source == null || source.isBlank()) {
+                return null;
+            }
+
+            return new UdfQuoteId(source);
+        }
     }
 
 }

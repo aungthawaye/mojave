@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -56,6 +58,17 @@ public class ReservationId extends EntityId<Long> {
             } catch (NumberFormatException e) {
                 throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
             }
+        }
+
+    }
+
+    @Component
+    public static class ParamConverter implements Converter<String, ReservationId> {
+
+        @Override
+        public ReservationId convert(final String source) {
+
+            return new ReservationId(Long.parseLong(source));
         }
 
     }

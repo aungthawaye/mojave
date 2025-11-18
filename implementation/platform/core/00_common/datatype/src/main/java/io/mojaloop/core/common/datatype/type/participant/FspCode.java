@@ -33,6 +33,8 @@ import io.mojaloop.core.common.datatype.exception.participant.FspCodeValueTooLar
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -77,6 +79,17 @@ public record FspCode(@JsonValue @JsonProperty(required = true) @NotNull @NotBla
             }
 
             return new FspCode(text);
+        }
+
+    }
+
+    @Component
+    public static class ParamConverter implements Converter<String, FspCode> {
+
+        @Override
+        public FspCode convert(String source) {
+
+            return new FspCode(source);
         }
 
     }

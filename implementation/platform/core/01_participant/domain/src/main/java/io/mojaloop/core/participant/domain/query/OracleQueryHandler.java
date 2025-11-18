@@ -30,12 +30,14 @@ import io.mojaloop.core.participant.domain.repository.OracleRepository;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Primary
 public class OracleQueryHandler implements OracleQuery {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OracleQueryHandler.class);
