@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.transaction.intercom.controller;
+package io.mojaloop.core.transaction.intercom.controller.command;
 
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import jakarta.validation.Valid;

@@ -11,8 +11,7 @@ import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
-import io.mojaloop.core.transaction.intercom.client.api.CloseTransaction;
-import io.mojaloop.core.transaction.intercom.client.api.OpenTransaction;
+import io.mojaloop.core.transaction.intercom.client.api.command.OpenTransactionInvoker;
 import io.mojaloop.core.transaction.intercom.client.exception.TransactionIntercomClientException;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
@@ -37,7 +36,7 @@ public class ReceiveTransfer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReceiveTransfer.class);
 
-    private final OpenTransaction openTransaction;
+    private final OpenTransactionInvoker openTransactionInvoker;
 
     private final CloseTransaction closeTransaction;
 
@@ -47,19 +46,19 @@ public class ReceiveTransfer {
 
     private final TransferRepository transferRepository;
 
-    public ReceiveTransfer(OpenTransaction openTransaction,
+    public ReceiveTransfer(OpenTransactionInvoker openTransactionInvoker,
                            CloseTransaction closeTransaction,
                            TransferDomainConfiguration.TransferSettings transferSettings,
                            AddStepPublisher addStepPublisher,
                            TransferRepository transferRepository) {
 
-        assert openTransaction != null;
+        assert openTransactionInvoker != null;
         assert closeTransaction != null;
         assert transferSettings != null;
         assert addStepPublisher != null;
         assert transferRepository != null;
 
-        this.openTransaction = openTransaction;
+        this.openTransactionInvoker = openTransactionInvoker;
         this.closeTransaction = closeTransaction;
         this.transferSettings = transferSettings;
         this.addStepPublisher = addStepPublisher;
@@ -83,7 +82,7 @@ public class ReceiveTransfer {
             var payerPartyIdInfo = input.payerPartyIdInfo();
             var payeePartyIdInfo = input.payeePartyIdInfo();
 
-            var openTransactionOutput = this.openTransaction.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            var openTransactionOutput = this.openTransactionInvoker.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
 
             transactionId = openTransactionOutput.transactionId();
             var transactionIdString = transactionId.getId().toString();

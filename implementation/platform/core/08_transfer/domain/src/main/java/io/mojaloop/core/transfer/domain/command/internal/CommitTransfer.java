@@ -8,7 +8,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
-import io.mojaloop.core.transaction.intercom.client.api.OpenTransaction;
+import io.mojaloop.core.transaction.intercom.client.api.command.OpenTransactionInvoker;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import io.mojaloop.core.transfer.domain.model.Transfer;
@@ -38,7 +38,7 @@ public class CommitTransfer {
 
     private final PositionStore positionStore;
 
-    private final OpenTransaction openTransaction;
+    private final OpenTransactionInvoker openTransactionInvoker;
 
     private final CommitPosition commitPosition;
 
@@ -61,7 +61,7 @@ public class CommitTransfer {
     private final PlatformTransactionManager transactionManager;
 
     public CommitTransfer(PositionStore positionStore,
-                          OpenTransaction openTransaction,
+                          OpenTransactionInvoker openTransactionInvoker,
                           CommitPosition commitPosition,
                           RollbackPosition rollbackPosition,
                           DecreasePosition decreasePosition,
@@ -74,7 +74,7 @@ public class CommitTransfer {
                           PlatformTransactionManager transactionManager) {
 
         assert positionStore != null;
-        assert openTransaction != null;
+        assert openTransactionInvoker != null;
         assert commitPosition != null;
         assert rollbackPosition != null;
         assert decreasePosition != null;
@@ -87,7 +87,7 @@ public class CommitTransfer {
         assert transactionManager != null;
 
         this.positionStore = positionStore;
-        this.openTransaction = openTransaction;
+        this.openTransactionInvoker = openTransactionInvoker;
         this.commitPosition = commitPosition;
         this.rollbackPosition = rollbackPosition;
         this.decreasePosition = decreasePosition;

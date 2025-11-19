@@ -37,28 +37,29 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.transaction.intercom.client.api;
+package io.mojaloop.core.transaction.intercom.client.api.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
-import io.mojaloop.core.transaction.intercom.client.exception.TransactionIntercomClientException;
+import io.mojaloop.core.transaction.contract.exception.TransactionExceptionResolver;
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OpenTransaction {
+public class OpenTransactionInvoker implements OpenTransactionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OpenTransaction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpenTransactionInvoker.class);
 
     private final TransactionIntercomService transactionIntercomService;
 
     private final ObjectMapper objectMapper;
 
-    public OpenTransaction(final TransactionIntercomService transactionIntercomService, final ObjectMapper objectMapper) {
+    public OpenTransactionInvoker(final TransactionIntercomService transactionIntercomService, final ObjectMapper objectMapper) {
 
         assert transactionIntercomService != null;
         assert objectMapper != null;
@@ -67,7 +68,8 @@ public class OpenTransaction {
         this.objectMapper = objectMapper;
     }
 
-    public OpenTransactionCommand.Output execute(final OpenTransactionCommand.Input input) throws TransactionIntercomClientException {
+    @Override
+    public OpenTransactionCommand.Output execute(final OpenTransactionCommand.Input input) {
 
         try {
 
@@ -80,12 +82,16 @@ public class OpenTransaction {
 
             final var decodedErrorResponse = e.getDecodedErrorResponse();
 
-            if (decodedErrorResponse instanceof RestErrorResponse(String code, String message)) {
+            if (decodedErrorResponse instanceof RestErrorResponse errorResponse) {
 
-                throw new TransactionIntercomClientException(code, message);
+                var throwable = TransactionExceptionResolver.resolve(errorResponse);
+
+                if (throwable instanceof UncheckedDomainException ude) {
+                    throw ude;
+                }
             }
 
-            throw new TransactionIntercomClientException("INTERNAL_SERVER_ERROR", e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

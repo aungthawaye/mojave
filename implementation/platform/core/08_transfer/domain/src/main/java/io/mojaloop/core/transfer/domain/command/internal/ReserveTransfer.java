@@ -12,7 +12,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
-import io.mojaloop.core.transaction.intercom.client.api.OpenTransaction;
+import io.mojaloop.core.transaction.intercom.client.api.command.OpenTransactionInvoker;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.transfer.domain.model.Party;
@@ -48,7 +48,7 @@ public class ReserveTransfer {
 
     private final PositionStore positionStore;
 
-    private final OpenTransaction openTransaction;
+    private final OpenTransactionInvoker openTransactionInvoker;
 
     private final ReservePosition reservePosition;
 
@@ -65,7 +65,7 @@ public class ReserveTransfer {
     private final PlatformTransactionManager transactionManager;
 
     public ReserveTransfer(PositionStore positionStore,
-                           OpenTransaction openTransaction,
+                           OpenTransactionInvoker openTransactionInvoker,
                            ReservePosition reservePosition,
                            RollbackPosition rollbackPosition,
                            AddStepPublisher addStepPublisher,
@@ -75,7 +75,7 @@ public class ReserveTransfer {
                            PlatformTransactionManager transactionManager) {
 
         assert positionStore != null;
-        assert openTransaction != null;
+        assert openTransactionInvoker != null;
         assert reservePosition != null;
         assert rollbackPosition != null;
         assert addStepPublisher != null;
@@ -85,7 +85,7 @@ public class ReserveTransfer {
         assert transactionManager != null;
 
         this.positionStore = positionStore;
-        this.openTransaction = openTransaction;
+        this.openTransactionInvoker = openTransactionInvoker;
         this.reservePosition = reservePosition;
         this.rollbackPosition = rollbackPosition;
         this.addStepPublisher = addStepPublisher;
@@ -142,7 +142,7 @@ public class ReserveTransfer {
             }
 
             // Now start opening the transaction.
-            var output = this.openTransaction.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            var output = this.openTransactionInvoker.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
 
             transactionId = output.transactionId();
             transactionAt = output.transactionAt();
