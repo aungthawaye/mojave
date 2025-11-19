@@ -36,16 +36,16 @@ public class ChangeEndpointInvoker implements ChangeEndpointCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeEndpointInvoker.class);
 
-    private final ParticipantAdminService.FspCommand fspCommands;
+    private final ParticipantAdminService.FspCommand fspCommand;
 
     private final ObjectMapper objectMapper;
 
-    public ChangeEndpointInvoker(final ParticipantAdminService.FspCommand fspCommands, final ObjectMapper objectMapper) {
+    public ChangeEndpointInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
 
-        assert fspCommands != null;
+        assert fspCommand != null;
         assert objectMapper != null;
 
-        this.fspCommands = fspCommands;
+        this.fspCommand = fspCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -54,7 +54,7 @@ public class ChangeEndpointInvoker implements ChangeEndpointCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommands.changeEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+            return RetrofitService.invoke(this.fspCommand.changeEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
                                   .body();
 
         } catch (RetrofitService.InvocationException e) {

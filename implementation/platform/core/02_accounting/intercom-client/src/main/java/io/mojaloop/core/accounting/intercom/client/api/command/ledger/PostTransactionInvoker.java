@@ -1,0 +1,61 @@
+package io.mojaloop.core.accounting.intercom.client.api.command.ledger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.misc.error.RestErrorResponse;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.component.retrofit.RetrofitService;
+import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
+import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
+import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
+import io.mojaloop.core.accounting.intercom.client.service.AccountingIntercomService;
+
+public class PostTransactionInvoker implements PostTransactionCommand {
+
+    private final AccountingIntercomService.LedgerCommand ledgerCommand;
+
+    private final ObjectMapper objectMapper;
+
+    public PostTransactionInvoker(final AccountingIntercomService.LedgerCommand ledgerCommand, final ObjectMapper objectMapper) {
+
+        assert ledgerCommand != null;
+        assert objectMapper != null;
+
+        this.ledgerCommand = ledgerCommand;
+        this.objectMapper = objectMapper;
+    }
+
+    @Override
+    public Output execute(Input input)
+        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException {
+
+        try {
+
+            return RetrofitService.invoke(this.ledgerCommand.postTransaction(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
+
+        } catch (RetrofitService.InvocationException e) {
+
+            var decodedErrorResponse = e.getDecodedErrorResponse();
+
+            if (decodedErrorResponse instanceof RestErrorResponse errorResponse) {
+
+                var throwable = AccountingExceptionResolver.resolve(errorResponse);
+
+                switch (throwable) {
+                    case InsufficientBalanceInAccountException e1 -> throw e1;
+                    case OverdraftLimitReachedInAccountException e2 -> throw e2;
+                    case DuplicatePostingInLedgerException e3 -> throw e3;
+                    case RestoreFailedInAccountException e4 -> throw e4;
+                    case UncheckedDomainException ude -> throw ude;
+                    default -> throw new RuntimeException(e);
+                }
+            }
+
+            throw new RuntimeException(e);
+        }
+    }
+
+}

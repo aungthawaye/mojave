@@ -36,16 +36,16 @@ public class CreateFspInvoker implements CreateFspCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateFspInvoker.class);
 
-    private final ParticipantAdminService.FspCommand fspCommands;
+    private final ParticipantAdminService.FspCommand fspCommand;
 
     private final ObjectMapper objectMapper;
 
-    public CreateFspInvoker(final ParticipantAdminService.FspCommand fspCommands, final ObjectMapper objectMapper) {
+    public CreateFspInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
 
-        assert fspCommands != null;
+        assert fspCommand != null;
         assert objectMapper != null;
 
-        this.fspCommands = fspCommands;
+        this.fspCommand = fspCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -54,7 +54,7 @@ public class CreateFspInvoker implements CreateFspCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommands.createFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+            return RetrofitService.invoke(this.fspCommand.createFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
                                   .body();
 
         } catch (RetrofitService.InvocationException e) {

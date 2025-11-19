@@ -36,16 +36,16 @@ public class DeactivateEndpointInvoker implements DeactivateEndpointCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateEndpointInvoker.class);
 
-    private final ParticipantAdminService.FspCommand fspCommands;
+    private final ParticipantAdminService.FspCommand fspCommand;
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateEndpointInvoker(final ParticipantAdminService.FspCommand fspCommands, final ObjectMapper objectMapper) {
+    public DeactivateEndpointInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
 
-        assert fspCommands != null;
+        assert fspCommand != null;
         assert objectMapper != null;
 
-        this.fspCommands = fspCommands;
+        this.fspCommand = fspCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -54,7 +54,7 @@ public class DeactivateEndpointInvoker implements DeactivateEndpointCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommands.deactivateEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+            return RetrofitService.invoke(this.fspCommand.deactivateEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
                                   .body();
 
         } catch (RetrofitService.InvocationException e) {

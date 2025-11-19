@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 public class ParticipantAdminClientConfiguration {
 
     @Bean
-    public ParticipantAdminService.FspCommand fspCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.FspCommand fspCommand(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
 
         return RetrofitService.newBuilder(ParticipantAdminService.FspCommand.class, settings.baseUrl())
                               .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)

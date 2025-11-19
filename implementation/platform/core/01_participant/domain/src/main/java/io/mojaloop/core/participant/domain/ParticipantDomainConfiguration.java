@@ -22,23 +22,12 @@ package io.mojaloop.core.participant.domain;
 
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.core.participant.domain.cache.ParticipantCache;
-import io.mojaloop.core.participant.domain.cache.local.ParticipantLocalCache;
-import io.mojaloop.core.participant.domain.repository.FspRepository;
-import io.mojaloop.core.participant.domain.repository.OracleRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.participant.domain"})
 @Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
 public class ParticipantDomainConfiguration implements MiscConfiguration.RequiredBeans, RoutingJpaConfiguration.RequiredBeans {
-
-    @Bean
-    public ParticipantCache participantCache(FspRepository fspRepository, OracleRepository oracleRepository) {
-
-        return new ParticipantLocalCache(fspRepository, oracleRepository);
-    }
 
     public interface RequiredBeans extends RoutingJpaConfiguration.RequiredBeans { }
 

@@ -36,14 +36,7 @@ import java.util.List;
 
 public interface AccountQuery {
 
-    PagedResult<AccountData> find(AccountCode accountCode,
-                                  String name,
-                                  AccountOwnerId ownerId,
-                                  ChartEntryId chartEntryId,
-                                  Currency currency,
-                                  PagedRequest pagedRequest,
-                                  Sorting.Column sortingColumn,
-                                  SortingMode sortingMode);
+    PagedResult<AccountData> find(Criteria criteria);
 
     AccountData get(AccountCode accountCode) throws AccountCodeNotFoundException;
 
@@ -56,12 +49,19 @@ public interface AccountQuery {
     class Sorting {
 
         public enum Column {
+            ID,
             ACCOUNT_CODE,
             NAME,
             OWNER_ID,
             CHART_ENTRY_ID,
             CURRENCY
         }
+
+    }
+
+    record Criteria(Filter filter, PagedRequest pagedRequest, Sorting.Column sortingColumn, SortingMode sortingMode) {
+
+        public record Filter(AccountCode accountCode, String name, AccountOwnerId ownerId, ChartEntryId chartEntryId, Currency currency) { }
 
     }
 

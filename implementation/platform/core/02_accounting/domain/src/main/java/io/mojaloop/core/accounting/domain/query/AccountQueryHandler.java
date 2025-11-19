@@ -59,39 +59,37 @@ public class AccountQueryHandler implements AccountQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public PagedResult<AccountData> find(AccountCode accountCode,
-                                         String name,
-                                         AccountOwnerId ownerId,
-                                         ChartEntryId chartEntryId,
-                                         Currency currency,
-                                         PagedRequest pagedRequest,
-                                         Sorting.Column sortingColumn,
-                                         SortingMode sortingMode) {
+    public PagedResult<AccountData> find(Criteria criteria) {
 
         Specification<Account> spec = Specification.unrestricted();
 
+        var accountCode = criteria.filter().accountCode();
         if (accountCode != null) {
             spec = spec.and(AccountRepository.Filters.withCode(accountCode));
         }
 
+        var name = criteria.filter().name();
         if (name != null && !name.isBlank()) {
             final var like = "%" + name.trim() + "%";
             spec = spec.and((root, query, cb) -> cb.like(root.get("name"), like));
         }
 
+        var ownerId = criteria.filter().ownerId();
         if (ownerId != null) {
             spec = spec.and(AccountRepository.Filters.withOwnerId(ownerId));
         }
 
+        var chartEntryId = criteria.filter().chartEntryId();
         if (chartEntryId != null) {
             spec = spec.and(AccountRepository.Filters.withChartEntryId(chartEntryId));
         }
 
+        var currency = criteria.filter().currency();
         if (currency != null) {
             spec = spec.and(AccountRepository.Filters.withCurrency(currency));
         }
 
-        final var sortProperty = switch (sortingColumn) {
+        final var sortProperty = switch (criteria.sortingColumn()) {
             case ACCOUNT_CODE -> "code";
             case NAME -> "name";
             case OWNER_ID -> "ownerId";
@@ -100,10 +98,11 @@ public class AccountQueryHandler implements AccountQuery {
             default -> "id";
         };
 
-        final var direction = sortingMode == SortingMode.DESC ? Sort.Direction.DESC : Sort.Direction.ASC;
+        final var direction = criteria.sortingMode() == SortingMode.DESC ? Sort.Direction.DESC : Sort.Direction.ASC;
 
         final var sort = Sort.by(direction, sortProperty);
 
+        var pagedRequest = criteria.pagedRequest();
         final var page = PageRequest.of(Math.max(0, pagedRequest.pageNo() - 1), Math.max(1, pagedRequest.pageSize()), sort);
 
         final var resultPage = this.accountRepository.findAll(spec, page);

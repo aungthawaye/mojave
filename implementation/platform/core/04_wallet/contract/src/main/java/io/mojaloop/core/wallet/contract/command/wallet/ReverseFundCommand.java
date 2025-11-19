@@ -40,7 +40,6 @@ public interface ReverseFundCommand {
     Output execute(Input input) throws ReversalFailedInWalletException;
 
     record Input(@JsonProperty(required = true) @NotNull BalanceUpdateId reversalId,
-                 @JsonProperty(required = true) @NotNull BalanceUpdateId balanceUpdateId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(BalanceUpdateId balanceUpdateId,

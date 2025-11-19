@@ -36,16 +36,16 @@ public class AddEndpointInvoker implements AddEndpointCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AddEndpointInvoker.class);
 
-    private final ParticipantAdminService.FspCommand fspCommands;
+    private final ParticipantAdminService.FspCommand fspCommand;
 
     private final ObjectMapper objectMapper;
 
-    public AddEndpointInvoker(final ParticipantAdminService.FspCommand fspCommands, final ObjectMapper objectMapper) {
+    public AddEndpointInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
 
-        assert fspCommands != null;
+        assert fspCommand != null;
         assert objectMapper != null;
 
-        this.fspCommands = fspCommands;
+        this.fspCommand = fspCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -54,7 +54,7 @@ public class AddEndpointInvoker implements AddEndpointCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommands.addEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+            return RetrofitService.invoke(this.fspCommand.addEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
                                   .body();
 
         } catch (RetrofitService.InvocationException e) {

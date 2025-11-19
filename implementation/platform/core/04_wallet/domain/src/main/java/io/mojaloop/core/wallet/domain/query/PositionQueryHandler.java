@@ -51,7 +51,6 @@ public class PositionQueryHandler implements PositionQuery {
     @Override
     public PositionData get(final PositionId positionId) {
 
-        // NOTE: PositionIdNotFoundException currently expects WalletId; using IllegalArgumentException until fixed.
         return this.positionRepository.findById(positionId).orElseThrow(() -> new PositionIdNotFoundException(positionId)).convert();
     }
 

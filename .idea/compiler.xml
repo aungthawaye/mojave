@@ -38,6 +38,7 @@
         <module name="mod-transfer-service" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
+        <module name="mod-wallet-admin-client" />
         <module name="mod-accounting-intercom" />
         <module name="mod-common-datatype-converter" />
         <module name="mod-settlement-producer" />
@@ -196,6 +197,7 @@
       <module name="mod-transfer-domain" options="-parameters" />
       <module name="mod-transfer-service" options="-parameters" />
       <module name="mod-wallet-admin" options="-parameters" />
+      <module name="mod-wallet-admin-client" options="-parameters" />
       <module name="mod-wallet-contract" options="-parameters" />
       <module name="mod-wallet-domain" options="-parameters" />
       <module name="mod-wallet-intercom" options="-parameters" />

@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.domain.command.position;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
+import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +36,15 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
 
     private final PositionUpdater positionUpdater;
 
-    public ReservePositionCommandHandler(final PositionUpdater positionUpdater) {
+    private final PositionCache positionCache;
+
+    public ReservePositionCommandHandler(final PositionUpdater positionUpdater, final PositionCache positionCache) {
 
         assert positionUpdater != null;
+        assert positionCache != null;
+
         this.positionUpdater = positionUpdater;
+        this.positionCache = positionCache;
     }
 
     @Override
@@ -46,11 +52,19 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
 
         LOGGER.info("Executing ReservePositionCommand with input: {}", input);
 
+        var position = this.positionCache.get(input.walletOwnerId(), input.currency());
+
+        if (position == null) {
+
+            LOGGER.error("Position does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
+            throw new RuntimeException("Position does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+        }
+
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
 
-            final var history = this.positionUpdater.reserve(input.transactionId(), input.transactionAt(), positionUpdateId, input.positionId(), input.amount(),
+            final var history = this.positionUpdater.reserve(input.transactionId(), input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
                 input.description());
 
             final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),

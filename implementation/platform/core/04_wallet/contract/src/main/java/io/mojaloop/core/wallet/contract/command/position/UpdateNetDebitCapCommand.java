@@ -22,12 +22,20 @@ package io.mojaloop.core.wallet.contract.command.position;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
 public interface UpdateNetDebitCapCommand {
 
-    record Input(@JsonProperty(required = true) @NotNull PositionId positionId, @JsonProperty(required = true) @NotNull BigDecimal netDebitCap) { }
+    Output execute(Input input);
+
+    record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
+                 @JsonProperty(required = true) @NotNull Currency currency,
+                 @JsonProperty(required = true) @NotNull BigDecimal netDebitCap) { }
+
+    record Output(PositionId positionId) { }
 
 }

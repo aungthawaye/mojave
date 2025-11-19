@@ -40,9 +40,9 @@ import io.mojaloop.core.transfer.contract.command.PutTransfersCommand;
 import io.mojaloop.core.transfer.domain.command.internal.CommitTransfer;
 import io.mojaloop.core.transfer.domain.model.Transfer;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
-import io.mojaloop.core.wallet.contract.command.position.CommitPositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
-import io.mojaloop.core.wallet.contract.command.position.RollbackPositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.intercom.client.exception.WalletIntercomClientException;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
@@ -227,7 +227,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     }
 
-    private CommitPositionCommand.Output commitPayerPosition(Transfer transfer) throws FspiopException {
+    private CommitReservationCommand.Output commitPayerPosition(Transfer transfer) throws FspiopException {
 
         try {
 
@@ -237,7 +237,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 new AddStepCommand.Input(transfer.getTransactionId(), "put-transfer|commit-position", Map.of("reservationId", transfer.getReservationId().getId().toString()),
                     StepPhase.BEFORE));
 
-            var output = this.commitPosition.execute(new CommitPositionCommand.Input(transfer.getReservationId(), new PositionUpdateId(Snowflake.get().nextId()), null));
+            var output = this.commitPosition.execute(new CommitReservationCommand.Input(transfer.getReservationId(), new PositionUpdateId(Snowflake.get().nextId()), null));
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(transfer.getTransactionId(), "put-transfer|commit-position", Map.of("payerCommitId", output.positionUpdateId().getId().toString()),
@@ -341,7 +341,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
         try {
 
-            this.rollbackPosition.execute(new RollbackPositionCommand.Input(transfer.getReservationId(), new PositionUpdateId(Snowflake.get().nextId()), null));
+            this.rollbackPosition.execute(new RollbackReservationCommand.Input(transfer.getReservationId(), new PositionUpdateId(Snowflake.get().nextId()), null));
 
         } catch (WalletIntercomClientException e) {
 

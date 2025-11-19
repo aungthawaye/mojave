@@ -26,6 +26,7 @@ import io.mojaloop.core.common.datatype.enums.wallet.PositionAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +39,8 @@ public interface ReservePositionCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull PositionId positionId,
+    record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
+                 @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull BigDecimal amount,
                  @JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull Instant transactionAt,

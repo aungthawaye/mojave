@@ -19,10 +19,8 @@ import io.mojaloop.core.transfer.domain.model.Party;
 import io.mojaloop.core.transfer.domain.model.Transfer;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
-import io.mojaloop.core.wallet.contract.command.position.RollbackPositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
-import io.mojaloop.core.wallet.intercom.client.api.ReservePosition;
-import io.mojaloop.core.wallet.intercom.client.api.RollbackPosition;
 import io.mojaloop.core.wallet.intercom.client.exception.WalletIntercomClientException;
 import io.mojaloop.core.wallet.store.PositionStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -188,7 +186,7 @@ public class ReserveTransfer {
 
             this.addStepPublisher.publish(new AddStepCommand.Input(transactionId, "post-transfers|rollback-position", before, StepPhase.BEFORE));
 
-            var output = this.rollbackPosition.execute(new RollbackPositionCommand.Input(positionReservationId, null));
+            var output = this.rollbackPosition.execute(new RollbackReservationCommand.Input(positionReservationId, null));
 
             var after = Map.of("positionId", output.positionId().getId().toString(), "positionRollbackId", output.positionUpdateId().getId().toString(), "oldPosition",
                 output.oldPosition().stripTrailingZeros().toPlainString(), "newPosition", output.newPosition().stripTrailingZeros().toPlainString(), "oldReserved",

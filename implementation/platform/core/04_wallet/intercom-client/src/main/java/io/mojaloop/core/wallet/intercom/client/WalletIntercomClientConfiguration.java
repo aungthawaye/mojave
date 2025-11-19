@@ -53,9 +53,36 @@ import org.springframework.context.annotation.Import;
 public class WalletIntercomClientConfiguration implements MiscConfiguration.RequiredBeans {
 
     @Bean
-    public WalletIntercomService walletIntercomService(WalletIntercomService.Settings settings, ObjectMapper objectMapper) {
+    public WalletIntercomService.PositionCommand positionCommands(WalletIntercomService.Settings settings, ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(WalletIntercomService.class, settings.baseUrl())
+        return RetrofitService.newBuilder(WalletIntercomService.PositionCommand.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
+    }
+
+    @Bean
+    public WalletIntercomService.PositionQuery positionQuery(WalletIntercomService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(WalletIntercomService.PositionQuery.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
+    }
+
+    @Bean
+    public WalletIntercomService.WalletCommand walletCommands(WalletIntercomService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(WalletIntercomService.WalletCommand.class, settings.baseUrl())
+                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                              .withDefaultFactories(objectMapper)
+                              .build();
+    }
+
+    @Bean
+    public WalletIntercomService.WalletQuery walletQuery(WalletIntercomService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService.newBuilder(WalletIntercomService.WalletQuery.class, settings.baseUrl())
                               .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                               .withDefaultFactories(objectMapper)
                               .build();

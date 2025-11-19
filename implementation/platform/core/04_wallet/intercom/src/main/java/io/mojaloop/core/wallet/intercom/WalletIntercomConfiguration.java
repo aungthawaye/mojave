@@ -28,10 +28,16 @@ import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
+import io.mojaloop.core.wallet.domain.cache.PositionCache;
+import io.mojaloop.core.wallet.domain.cache.WalletCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.timer.PositionTimerCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.timer.WalletTimerCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import io.mojaloop.core.wallet.domain.repository.PositionRepository;
+import io.mojaloop.core.wallet.domain.repository.WalletRepository;
 import io.mojaloop.core.wallet.intercom.component.EmptyErrorWriter;
 import io.mojaloop.core.wallet.intercom.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -57,13 +63,22 @@ public class WalletIntercomConfiguration extends JacksonWebMvcExtension
 
     private final PositionUpdater positionUpdater;
 
-    public WalletIntercomConfiguration(MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
+    private final WalletCache walletCache;
+
+    private final PositionCache positionCache;
+
+    public WalletIntercomConfiguration(ObjectMapper objectMapper,
+                                       MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
                                        MySqlPositionUpdater.PositionDbSettings positionDbSettings,
-                                       ObjectMapper objectMapper) {
+                                       WalletRepository walletRepository,
+                                       PositionRepository positionRepository) {
 
         super(objectMapper);
         this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
         this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
+
+        this.walletCache = new WalletTimerCache(walletRepository, Integer.parseInt(System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.positionCache = new PositionTimerCache(positionRepository, Integer.parseInt(System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
     }
 
     @Bean
@@ -89,6 +104,13 @@ public class WalletIntercomConfiguration extends JacksonWebMvcExtension
 
     @Bean
     @Override
+    public PositionCache positionCache() {
+
+        return this.positionCache;
+    }
+
+    @Bean
+    @Override
     public PositionUpdater positionUpdater() {
 
         return this.positionUpdater;
@@ -99,6 +121,13 @@ public class WalletIntercomConfiguration extends JacksonWebMvcExtension
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
         return new SpringSecurityConfigurer.Settings(null);
+    }
+
+    @Bean
+    @Override
+    public WalletCache walletCache() {
+
+        return this.walletCache;
     }
 
     @Bean

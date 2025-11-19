@@ -8,7 +8,6 @@ import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
-import io.mojaloop.core.wallet.intercom.client.api.ReservePosition;
 import io.mojaloop.core.wallet.intercom.client.exception.WalletIntercomClientException;
 import io.mojaloop.core.wallet.store.PositionStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;

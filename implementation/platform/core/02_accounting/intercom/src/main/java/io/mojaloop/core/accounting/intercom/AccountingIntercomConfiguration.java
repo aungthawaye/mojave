@@ -28,8 +28,19 @@ import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
+import io.mojaloop.core.accounting.domain.cache.AccountCache;
+import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
+import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
+import io.mojaloop.core.accounting.domain.cache.strategy.timer.AccountTimerCache;
+import io.mojaloop.core.accounting.domain.cache.strategy.timer.ChartEntryTimerCache;
+import io.mojaloop.core.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
+import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
+import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
+import io.mojaloop.core.accounting.domain.repository.AccountRepository;
+import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
+import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import io.mojaloop.core.accounting.intercom.component.EmptyErrorWriter;
 import io.mojaloop.core.accounting.intercom.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -53,10 +64,53 @@ public class AccountingIntercomConfiguration extends JacksonWebMvcExtension
 
     private final Ledger ledger;
 
-    public AccountingIntercomConfiguration(MySqlLedger.LedgerDbSettings ledgerDbSettings, ObjectMapper objectMapper) {
+    private final AccountCache accountCache;
+
+    private final AccountResolver accountResolver;
+
+    private final ChartEntryCache chartEntryCache;
+
+    private final FlowDefinitionCache flowDefinitionCache;
+
+    public AccountingIntercomConfiguration(MySqlLedger.LedgerDbSettings ledgerDbSettings,
+                                           AccountRepository accountRepository,
+                                           ChartEntryRepository chartEntryRepository,
+                                           FlowDefinitionRepository flowDefinitionRepository,
+                                           ObjectMapper objectMapper) {
 
         super(objectMapper);
+
+        assert ledgerDbSettings != null;
+        assert accountRepository != null;
+        assert chartEntryRepository != null;
+        assert flowDefinitionRepository != null;
+
         this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
+
+        this.accountCache = new AccountTimerCache(accountRepository, Integer.parseInt(System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+
+        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
+
+        this.chartEntryCache = new ChartEntryTimerCache(chartEntryRepository,
+            Integer.parseInt(System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+
+        this.flowDefinitionCache = new FlowDefinitionTimerCache(flowDefinitionRepository,
+            Integer.parseInt(System.getenv().getOrDefault("FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+
+    }
+
+    @Bean
+    @Override
+    public AccountCache accountCache() {
+
+        return this.accountCache;
+    }
+
+    @Bean
+    @Override
+    public AccountResolver accountResolver() {
+
+        return this.accountResolver;
     }
 
     @Bean
@@ -71,6 +125,20 @@ public class AccountingIntercomConfiguration extends JacksonWebMvcExtension
     public Authenticator authenticator() {
 
         return new EmptyGatekeeper();
+    }
+
+    @Bean
+    @Override
+    public ChartEntryCache chartEntryCache() {
+
+        return this.chartEntryCache;
+    }
+
+    @Bean
+    @Override
+    public FlowDefinitionCache flowDefinitionCache() {
+
+        return this.flowDefinitionCache;
     }
 
     @Bean

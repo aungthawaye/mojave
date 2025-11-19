@@ -25,9 +25,8 @@ import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.wallet.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException;
 import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
-import io.mojaloop.core.wallet.contract.exception.wallet.WalletIdNotFoundException;
+import io.mojaloop.core.wallet.domain.cache.WalletCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
-import io.mojaloop.core.wallet.domain.repository.WalletRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,17 +36,17 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WithdrawFundCommandHandler.class);
 
-    private final WalletRepository walletRepository;
-
     private final BalanceUpdater balanceUpdater;
 
-    public WithdrawFundCommandHandler(WalletRepository walletRepository, BalanceUpdater balanceUpdater) {
+    private final WalletCache walletCache;
 
-        assert walletRepository != null;
+    public WithdrawFundCommandHandler(BalanceUpdater balanceUpdater, WalletCache walletCache) {
+
         assert balanceUpdater != null;
+        assert walletCache != null;
 
-        this.walletRepository = walletRepository;
         this.balanceUpdater = balanceUpdater;
+        this.walletCache = walletCache;
     }
 
     @Override
@@ -55,12 +54,19 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
 
         LOGGER.info("Executing WithdrawFundCommand with input: {}", input);
 
-        this.walletRepository.findById(input.walletId()).orElseThrow(() -> new WalletIdNotFoundException(input.walletId()));
+        var wallet = this.walletCache.get(input.walletOwnerId(), input.currency());
+
+        if (wallet == null) {
+
+            LOGGER.error("Wallet does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
+            throw new RuntimeException("Wallet does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+        }
 
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());
 
         try {
-            final var history = this.balanceUpdater.withdraw(input.transactionId(), input.transactionAt(), balanceUpdateId, input.walletId(), input.amount(), "Withdraw funds");
+
+            final var history = this.balanceUpdater.withdraw(input.transactionId(), input.transactionAt(), balanceUpdateId, wallet.walletId(), input.amount(), "Withdraw funds");
 
             var output = new Output(history.balanceUpdateId(), history.walletId(), history.action(), history.transactionId(), history.currency(), history.amount(),
                 history.oldBalance(), history.newBalance(), history.transactionAt());

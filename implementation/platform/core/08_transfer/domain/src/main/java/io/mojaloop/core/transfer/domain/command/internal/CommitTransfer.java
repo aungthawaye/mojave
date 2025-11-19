@@ -13,12 +13,8 @@ import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import io.mojaloop.core.transfer.domain.model.Transfer;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
-import io.mojaloop.core.wallet.contract.command.position.CommitPositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
-import io.mojaloop.core.wallet.intercom.client.api.CommitPosition;
-import io.mojaloop.core.wallet.intercom.client.api.DecreasePosition;
-import io.mojaloop.core.wallet.intercom.client.api.IncreasePositionInvoker;
-import io.mojaloop.core.wallet.intercom.client.api.RollbackPosition;
 import io.mojaloop.core.wallet.store.PositionStore;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
@@ -157,7 +153,7 @@ public class CommitTransfer {
         }
     }
 
-    private CommitPositionCommand.Output commitPayerPosition(Transfer transfer) throws FspiopException {
+    private CommitReservationCommand.Output commitPayerPosition(Transfer transfer) throws FspiopException {
 
         try {
 
@@ -167,7 +163,7 @@ public class CommitTransfer {
                 new AddStepCommand.Input(transfer.getTransactionId(), "put-transfer|commit-position", Map.of("reservationId", transfer.getReservationId().getId().toString()),
                     StepPhase.BEFORE));
 
-            var output = this.commitPosition.execute(new CommitPositionCommand.Input(transfer.getReservationId(), new PositionUpdateId(Snowflake.get().nextId()), null));
+            var output = this.commitPosition.execute(new CommitReservationCommand.Input(transfer.getReservationId(), new PositionUpdateId(Snowflake.get().nextId()), null));
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(transfer.getTransactionId(), "put-transfer|commit-position", Map.of("payerCommitId", output.positionUpdateId().getId().toString()),
@@ -229,7 +225,7 @@ public class CommitTransfer {
         LOGGER.info("Rolling back payee position : payeeCommitId : [{}]", payeeCommitId.getId().toString());
     }
 
-    private void rollbackPayerPosition(CommitPositionCommand.Output output) throws FspiopException {
+    private void rollbackPayerPosition(CommitReservationCommand.Output output) throws FspiopException {
 
         var payerPositionId = output.positionId();
         var payerCommitId = output.positionUpdateId();
