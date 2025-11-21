@@ -66,7 +66,7 @@ public class DecreasePayeePosition {
             var transactionAt = input.transactionAt();
             var transactionAtString = transactionAt.getEpochSecond() + "";
 
-            var walletOwnerId = new WalletOwnerId(payerFsp.fspId().getId());
+            var walletOwnerId = new WalletOwnerId(payeeFsp.fspId().getId());
             var description = "Transfer " + currency + " " + transferAmountString + " from " + payerFspCode.value() + " to " + payeeFspCode.value();
 
             var before = new HashMap<String, String>();
@@ -112,6 +112,6 @@ public class DecreasePayeePosition {
 
     public record Input(String context, TransactionId transactionId, Instant transactionAt, FspData payerFsp, FspData payeeFsp, Currency currency, BigDecimal transferAmount) { }
 
-    public record Output(PositionUpdateId positionReservationId) { }
+    public record Output(PositionUpdateId payeeCommitId) { }
 
 }

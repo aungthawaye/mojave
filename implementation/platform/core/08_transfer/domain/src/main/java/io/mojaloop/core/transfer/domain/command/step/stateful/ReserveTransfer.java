@@ -46,7 +46,7 @@ public class ReserveTransfer {
 
         try {
 
-            LOGGER.info("Reserve transfer : udfTransferId : [{}], positionReservationId : [{}]", input.transferId().getId(), input.positionReservationId().getId());
+            LOGGER.info("Reserve transfer : input : [{}]", input);
 
             var before = new HashMap<String, String>();
             var after = new HashMap<String, String>();
@@ -66,15 +66,17 @@ public class ReserveTransfer {
 
             this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, after, StepPhase.AFTER));
 
-            LOGGER.info("Reserved transfer successfully : udfTransferId [{}]", input.transferId().getId());
+            var output = new Output();
 
-            return new Output();
+            LOGGER.info("Reserved transfer : output : [{}]", output);
+
+            return output;
 
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

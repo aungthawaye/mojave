@@ -19,9 +19,5 @@
             <groupId>io.mojaloop.platform.core.wallet</groupId>
             <artifactId>mod-wallet-contract</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.core.wallet</groupId>
-            <artifactId>mod-wallet-intercom-client</artifactId>
-        </dependency>
     </dependencies>
 </project>

@@ -2,22 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.platform.core.participant</groupId>
-        <artifactId>participant-pom</artifactId>
+        <groupId>io.mojaloop.platform</groupId>
+        <artifactId>platform-pom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mod-participant-store</artifactId>
-    <name>Mojaloop - Platform - Core - Participant - Store</name>
+    <groupId>io.mojaloop.platform.mono</groupId>
+    <artifactId>mono-pom</artifactId>
+    <packaging>pom</packaging>
+    <name>Mojaloop - Platform - Mono</name>
+    <modules>
+        <module>admin</module>
+    </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-contract</artifactId>
-        </dependency>
-    </dependencies>
 </project>

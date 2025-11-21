@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Import;
 @Import(value = {MiscConfiguration.class, FspiopCommonConfiguration.class, ParticipantStoreConfiguration.class})
 public class LookUpDomainConfiguration {
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans, FspiopCommonConfiguration.RequiredBeans, ParticipantStoreConfiguration.RequiredBeans { }
+    public interface RequiredBeans extends MiscConfiguration.RequiredBeans, FspiopCommonConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends ParticipantStoreConfiguration.RequiredSettings, MiscConfiguration.RequiredSettings, FspiopCommonConfiguration.RequiredSettings { }
 

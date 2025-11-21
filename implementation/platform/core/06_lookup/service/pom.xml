@@ -28,6 +28,10 @@
             <artifactId>mod-lookup-domain</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-intercom-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.platform.fspiop</groupId>
             <artifactId>mod-fspiop-service</artifactId>
         </dependency>

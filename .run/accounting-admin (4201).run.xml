@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="accounting-admin (4201)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="02 accounting">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/02_accounting/admin/src/main/java/io/mojaloop/core/accounting/admin/.env" />
     </option>

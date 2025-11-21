@@ -22,10 +22,13 @@ package io.mojaloop.platform.core.transfer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStore;
+import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
 import io.mojaloop.core.transfer.domain.component.interledger.unwrapper.MojavePartyUnwrapper;
+import io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -46,7 +49,11 @@ import java.util.List;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service")
-@Import(value = {TransferDomainConfiguration.class, FspiopServiceConfiguration.class})
+@Import(value = {TransferDomainConfiguration.class,
+                 ParticipantIntercomClientConfiguration.class,
+                 WalletIntercomClientConfiguration.class,
+                 TransactionIntercomClientConfiguration.class,
+                 FspiopServiceConfiguration.class})
 public class TransferServiceConfiguration implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
@@ -83,7 +90,11 @@ public class TransferServiceConfiguration implements TransferDomainConfiguration
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends TransferDomainConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings extends TransferDomainConfiguration.RequiredSettings,
+                                              ParticipantIntercomClientConfiguration.RequiredSettings,
+                                              WalletIntercomClientConfiguration.RequiredSettings,
+                                              TransactionIntercomClientConfiguration.RequiredSettings,
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         FspCodeList fspCodeList();
 

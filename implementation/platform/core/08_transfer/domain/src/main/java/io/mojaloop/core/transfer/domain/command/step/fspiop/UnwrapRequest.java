@@ -36,11 +36,12 @@ public class UnwrapRequest {
 
         LOGGER.info("Unwrapping transfer request from Payer. input : [{}]", input);
 
+        var payerFspCode = input.payerFsp().fspCode();
         var payeeFspCode = input.payeeFsp().fspCode();
 
         var request = input.request();
 
-        if (!request.getPayerFsp().equals(payeeFspCode.value()) || !request.getPayeeFsp().equals(payeeFspCode.value())) {
+        if (!request.getPayerFsp().equals(payerFspCode.value()) || !request.getPayeeFsp().equals(payeeFspCode.value())) {
 
             LOGGER.info("FSPs information in the request body and request header must be the same.");
             throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "FSPs information in the request body and request header must be the same.");

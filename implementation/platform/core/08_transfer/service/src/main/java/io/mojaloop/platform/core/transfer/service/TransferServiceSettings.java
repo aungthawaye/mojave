@@ -30,7 +30,6 @@ import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
-import io.mojaloop.core.wallet.store.WalletStoreConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -181,13 +180,6 @@ public class TransferServiceSettings implements TransferServiceConfiguration.Req
 
         return new WalletIntercomService.Settings(System.getenv().getOrDefault("WALLET_INTERCOM_BASE_URL", "http://localhost:4402"));
 
-    }
-
-    @Bean
-    @Override
-    public WalletStoreConfiguration.Settings walletStoreSettings() {
-
-        return new WalletStoreConfiguration.Settings(Integer.parseInt(System.getenv().getOrDefault("WALLET_STORE_REFRESH_INTERVAL_MS", "300000")));
     }
 
 }

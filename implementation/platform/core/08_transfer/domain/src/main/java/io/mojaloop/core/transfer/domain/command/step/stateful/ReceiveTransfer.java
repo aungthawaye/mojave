@@ -10,7 +10,6 @@ import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
-import io.mojaloop.core.transaction.intercom.client.api.command.OpenTransactionInvoker;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.transfer.domain.model.Party;
@@ -37,7 +36,7 @@ public class ReceiveTransfer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReceiveTransfer.class);
 
-    private final OpenTransactionInvoker openTransactionInvoker;
+    private final OpenTransactionCommand openTransactionCommand;
 
     private final TransferDomainConfiguration.TransferSettings transferSettings;
 
@@ -45,17 +44,17 @@ public class ReceiveTransfer {
 
     private final TransferRepository transferRepository;
 
-    public ReceiveTransfer(OpenTransactionInvoker openTransactionInvoker,
+    public ReceiveTransfer(OpenTransactionCommand openTransactionCommand,
                            TransferDomainConfiguration.TransferSettings transferSettings,
                            AddStepPublisher addStepPublisher,
                            TransferRepository transferRepository) {
 
-        assert openTransactionInvoker != null;
+        assert openTransactionCommand != null;
         assert transferSettings != null;
         assert addStepPublisher != null;
         assert transferRepository != null;
 
-        this.openTransactionInvoker = openTransactionInvoker;
+        this.openTransactionCommand = openTransactionCommand;
         this.transferSettings = transferSettings;
         this.addStepPublisher = addStepPublisher;
         this.transferRepository = transferRepository;
@@ -81,7 +80,7 @@ public class ReceiveTransfer {
             var payerPartyIdInfo = input.payerPartyIdInfo();
             var payeePartyIdInfo = input.payeePartyIdInfo();
 
-            var openTransactionOutput = this.openTransactionInvoker.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            var openTransactionOutput = this.openTransactionCommand.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
 
             transactionId = openTransactionOutput.transactionId();
             var transactionIdString = transactionId.getId().toString();

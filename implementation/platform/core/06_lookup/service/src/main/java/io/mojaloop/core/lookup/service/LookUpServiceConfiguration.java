@@ -22,7 +22,9 @@ package io.mojaloop.core.lookup.service;
 
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
+import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStore;
+import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -41,7 +43,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
-@Import(value = {LookUpDomainConfiguration.class, FspiopServiceConfiguration.class})
+@Import(value = {LookUpDomainConfiguration.class, ParticipantIntercomClientConfiguration.class, FspiopServiceConfiguration.class})
 public class LookUpServiceConfiguration implements LookUpDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
@@ -66,7 +68,8 @@ public class LookUpServiceConfiguration implements LookUpDomainConfiguration.Req
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings
+        extends LookUpDomainConfiguration.RequiredSettings, ParticipantIntercomClientConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings lookUpServiceTomcatSettings();
 

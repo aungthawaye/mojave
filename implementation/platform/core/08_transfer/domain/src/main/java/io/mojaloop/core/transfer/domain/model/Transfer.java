@@ -151,32 +151,32 @@ public class Transfer extends JpaEntity<TransferId> {
     @Basic
     @JavaType(PositionUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "reservation_id", unique = true, updatable = false)
+    @Column(name = "reservation_id", unique = true)
     protected PositionUpdateId reservationId;
 
     @Basic
     @JavaType(PositionUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "payer_commit_id", unique = true, updatable = false)
+    @Column(name = "payer_commit_id", unique = true)
     protected PositionUpdateId payerCommitId;
 
     @Basic
     @JavaType(PositionUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "payee_commit_id", unique = true, updatable = false)
+    @Column(name = "payee_commit_id", unique = true)
     protected PositionUpdateId payeeCommitId;
 
     @Basic
     @JavaType(PositionUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "rollback_id", unique = true, updatable = false)
+    @Column(name = "rollback_id", unique = true)
     protected PositionUpdateId rollbackId;
 
-    @Column(name = "state", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "state", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransferState state;
 
-    @Column(name = "received_at", nullable = false, updatable = false)
+    @Column(name = "received_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant receivedAt;
 

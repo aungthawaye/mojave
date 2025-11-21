@@ -40,6 +40,7 @@ import io.mojaloop.core.transfer.domain.command.step.stateful.CommitTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.FetchTransfer;
 import io.mojaloop.core.transfer.domain.model.Transfer;
 import io.mojaloop.fspiop.spec.core.TransferState;
+import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -56,18 +57,25 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     // Stateful steps
     private final FetchTransfer fetchTransfer;
+
     private final AbortTransfer abortTransfer;
+
     private final CommitTransfer commitTransfer;
 
     // Financial steps
     private final CommitReservation commitReservation;
+
     private final DecreasePayeePosition decreasePayeePosition;
+
     private final RollbackReservation rollbackReservation;
 
     // FSPIOP steps
     private final UnwrapResponse unwrapResponse;
+
     private final RespondTransferToPayer respondTransferToPayer;
+
     private final ForwardToDestination forwardToDestination;
+
     private final PatchTransferToPayee patchTransferToPayee;
 
     private final CloseTransactionPublisher closeTransactionPublisher;
@@ -189,7 +197,10 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 throw e;
             }
 
-            // 3. Handle ABORTED state and RESERVED state.
+            // 3. Verify ILP. Do we need ?
+            // ? ? ?
+
+            // 4. Handle ABORTED state and RESERVED state.
             if (unwrapResponseOutput.state() == TransferState.ABORTED) {
 
                 LOGGER.info("Payee responded with the aborted transfer : udfTransferId : [{}].", udfTransferId.getId());
@@ -212,6 +223,25 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 // Upon receiving the reserved transfer from Payee, Hub will need to commit the payer position
                 // reservation, then give money to the Payee by decreasing its position. Then hub responds to the Payer
                 // with the committed transfer.
+                var commitReservationOutput = this.commitReservation.execute(new CommitReservation.Input(CONTEXT, transfer.getTransactionId(), transfer.getReservationId()));
+
+                var decreasePayeePositionOutput = this.decreasePayeePosition.execute(
+                    new DecreasePayeePosition.Input(CONTEXT, transfer.getTransactionId(), transfer.getTransactionAt(), payerFsp, payeeFsp, transfer.getCurrency(),
+                        transfer.getTransferAmount()));
+
+                var commitTransferOutput = this.commitTransfer.execute(
+                    new CommitTransfer.Input(CONTEXT, transfer.getTransactionId(), transfer.getId(), unwrapResponseOutput.ilpFulfilment(), commitReservationOutput.payerCommitId(),
+                        decreasePayeePositionOutput.payeeCommitId(), unwrapResponseOutput.completedAt()));
+
+                var committedResponse = new TransfersIDPutResponse();
+
+                committedResponse.setTransferState(TransferState.COMMITTED);
+                committedResponse.setCompletedTimestamp(putTransfersResponse.getCompletedTimestamp());
+                committedResponse.setFulfilment(putTransfersResponse.getFulfilment());
+                committedResponse.setExtensionList(putTransfersResponse.getExtensionList());
+
+                this.respondTransferToPayer.execute(new RespondTransferToPayer.Input(CONTEXT, transfer.getTransactionId(), udfTransferId, payerFsp, committedResponse));
+
             }
 
         } catch (Exception e) {

@@ -46,11 +46,11 @@ public class UnwrapResponse {
 
         LOGGER.info("Unwrapped transfer response from Payee. State : [{}], completedAt : [{}]", state, completedAt);
 
-        return new Output(state, completedAt);
+        return new Output(state, response.getFulfilment(), completedAt);
     }
 
     public record Input(TransfersIDPutResponse response) { }
 
-    public record Output(TransferState state, Instant completedAt) { }
+    public record Output(TransferState state, String ilpFulfilment, Instant completedAt) { }
 
 }
