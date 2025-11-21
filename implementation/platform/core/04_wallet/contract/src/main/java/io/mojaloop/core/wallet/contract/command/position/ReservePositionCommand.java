@@ -27,6 +27,8 @@ import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,7 +39,7 @@ import java.time.Instant;
 
 public interface ReservePositionCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws PositionLimitExceededException, NoPositionUpdateForTransactionException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
                  @JsonProperty(required = true) @NotNull Currency currency,

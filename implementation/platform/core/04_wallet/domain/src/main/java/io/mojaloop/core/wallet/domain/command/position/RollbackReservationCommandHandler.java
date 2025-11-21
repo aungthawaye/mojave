@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.domain.command.position;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
     }
 
     @Override
-    public Output execute(final Input input) {
+    public Output execute(final Input input) throws FailedToRollbackReservationException {
 
         LOGGER.info("Executing RollbackReservationCommand with input: {}", input);
 
@@ -60,7 +61,7 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
         } catch (final PositionUpdater.RollbackFailedException e) {
 
             LOGGER.error("Rollback failed for reservationId: {}", e.getReservationId());
-            throw new RuntimeException(e);
+            throw new FailedToRollbackReservationException(e.getReservationId());
         }
     }
 

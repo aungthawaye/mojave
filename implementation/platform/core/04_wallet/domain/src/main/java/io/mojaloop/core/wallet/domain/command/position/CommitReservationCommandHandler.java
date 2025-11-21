@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.domain.command.position;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
     }
 
     @Override
-    public Output execute(final Input input) {
+    public Output execute(final Input input) throws FailedToCommitReservationException {
 
         LOGGER.info("Executing CommitReservationCommand with input: {}", input);
 
@@ -60,7 +61,7 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
         } catch (final PositionUpdater.CommitFailedException e) {
 
             LOGGER.error("Commit failed for reservationId: {}", e.getReservationId());
-            throw new RuntimeException(e);
+            throw new FailedToCommitReservationException(e.getReservationId());
         }
     }
 

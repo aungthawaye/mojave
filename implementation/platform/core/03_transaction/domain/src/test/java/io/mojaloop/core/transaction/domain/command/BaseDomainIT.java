@@ -62,7 +62,7 @@ public abstract class BaseDomainIT {
     @BeforeEach
     void cleanup_db() {
 
-        RoutingDataSource.setDataSourceKey(RoutingDataSource.Keys.WRITE);
+        RoutingDataSource.Context.set(RoutingDataSource.Keys.WRITE);
 
         // Disable FK checks to truncate in any order
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=0");

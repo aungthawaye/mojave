@@ -50,6 +50,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -82,9 +84,13 @@ import static java.sql.Types.BIGINT;
                   @Index(name = "tfr_transfer_payee_fsp_transaction_IDX", columnList = "payee_fsp, transaction_id"),
                   @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX", columnList = "payee_fsp, payer_fsp"),
                   @Index(name = "tfr_transfer_transaction_at_IDX", columnList = "transaction_at"),
-                  @Index(name = "tfr_transfer_payer_party_id", columnList = "payer_party_id"),
-                  @Index(name = "tfr_transfer_payee_party_id", columnList = "payee_party_id"),
-                  @Index(name = "tfr_transfer_reservation_timeout_at", columnList = "reservation_timeout_at")})
+                  @Index(name = "tfr_transfer_payer_party_id_IDX", columnList = "payer_party_id"),
+                  @Index(name = "tfr_transfer_payee_party_id_IDX", columnList = "payee_party_id"),
+                  @Index(name = "tfr_transfer_reservation_timeout_at_IDX", columnList = "reservation_timeout_at"),
+                  @Index(name = "tfr_transfer_reserved_at_IDX", columnList = "reserved_at"),
+                  @Index(name = "tfr_transfer_committed_at_IDX", columnList = "committed_at"),
+                  @Index(name = "tfr_transfer_aborted_at_IDX", columnList = "aborted_at"),
+                  @Index(name = "tfr_transfer_state_IDX", columnList = "state")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Transfer extends JpaEntity<TransferId> {
 
@@ -142,12 +148,6 @@ public class Transfer extends JpaEntity<TransferId> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant requestExpiration;
 
-    @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
-    protected String ilpCondition;
-
-    @Column(name = "ilp_fulfilment", length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
-    protected String ilpFulfilment;
-
     @Basic
     @JavaType(PositionUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
@@ -188,6 +188,10 @@ public class Transfer extends JpaEntity<TransferId> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant committedAt;
 
+    @Column(name = "aborted_at")
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant abortedAt;
+
     @Column(name = "error")
     protected String error;
 
@@ -203,6 +207,10 @@ public class Transfer extends JpaEntity<TransferId> {
     @OneToMany(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<TransferExtension> extensions = new ArrayList<>();
 
+    @OneToOne(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    protected TransferIlpPacket ilpPacket;
+
     public Transfer(TransactionId transactionId,
                     Instant transactionAt,
                     UdfTransferId udfTransferId,
@@ -212,6 +220,8 @@ public class Transfer extends JpaEntity<TransferId> {
                     Party payee,
                     Currency currency,
                     BigDecimal transferAmount,
+                    String ilpPacket,
+                    String ilpCondition,
                     Instant requestExpiration,
                     Instant reservationTimeoutAt) {
 
@@ -224,6 +234,8 @@ public class Transfer extends JpaEntity<TransferId> {
         assert payee != null;
         assert currency != null;
         assert transferAmount != null;
+        assert ilpPacket != null;
+        assert ilpCondition != null;
         assert reservationTimeoutAt != null;
 
         this.id = new TransferId(Snowflake.get().nextId());
@@ -240,15 +252,16 @@ public class Transfer extends JpaEntity<TransferId> {
         this.state = TransferState.RECEIVED;
         this.receivedAt = Instant.now();
         this.reservationTimeoutAt = reservationTimeoutAt;
+
+        this.ilpPacket = new TransferIlpPacket(this, ilpPacket, ilpCondition);
     }
 
-    public void aborted(String error) {
+    public void aborted(PositionUpdateId rollbackId, String error) {
 
-        assert state != null;
-
+        this.rollbackId = rollbackId;
         this.state = TransferState.ABORTED;
+        this.abortedAt = Instant.now();
         this.error = error;
-        this.payeeCompletedAt = Instant.now();
     }
 
     public void addExtension(Direction direction, String key, String value) {
@@ -267,7 +280,7 @@ public class Transfer extends JpaEntity<TransferId> {
         this.committedAt = Instant.now();
         this.payeeCompletedAt = completedAt;
 
-        this.ilpFulfilment = ilpFulfilment;
+        this.ilpPacket.fulfil(ilpFulfilment);
 
         this.payerCommitId = payerCommitId;
         this.payeeCommitId = payeeCommitId;
@@ -282,12 +295,6 @@ public class Transfer extends JpaEntity<TransferId> {
     public TransferId getId() {
 
         return this.id;
-    }
-
-    public void reserve(PositionUpdateId reservationId) {
-
-        this.state = TransferState.RESERVED;
-        this.reservedAt = Instant.now();
     }
 
     public void reserved(PositionUpdateId reservationId) {

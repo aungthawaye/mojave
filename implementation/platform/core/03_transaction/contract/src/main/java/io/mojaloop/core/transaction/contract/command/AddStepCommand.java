@@ -35,7 +35,8 @@ public interface AddStepCommand {
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
-                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
+                 @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String name,
+                 @JsonProperty @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String context,
                  @JsonProperty(required = true) @NotNull Map<String, String> params,
                  @JsonProperty(required = true) @NotNull StepPhase phase) { }
 

@@ -27,6 +27,9 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
+import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,7 +49,7 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
     }
 
     @Override
-    public Output execute(final Input input) {
+    public Output execute(final Input input) throws FailedToRollbackReservationException {
 
         try {
 
@@ -61,8 +64,11 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
 
                 final var throwable = WalletExceptionResolver.resolve(errorResponse);
 
-                if (throwable instanceof UncheckedDomainException ude) {
-                    throw ude;
+                switch (throwable) {
+                    case FailedToRollbackReservationException e1 -> throw e1;
+                    case UncheckedDomainException ude -> throw ude;
+                    default -> {
+                    }
                 }
             }
 

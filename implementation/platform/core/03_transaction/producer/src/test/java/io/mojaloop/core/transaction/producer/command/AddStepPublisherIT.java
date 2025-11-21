@@ -25,8 +25,6 @@ import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
-import io.mojaloop.core.transaction.intercom.client.api.command.OpenTransactionInvoker;
-import io.mojaloop.core.transaction.intercom.client.exception.TransactionIntercomClientException;
 import io.mojaloop.core.transaction.producer.TestConfiguration;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
@@ -46,15 +44,15 @@ public class AddStepPublisherIT {
     private CloseTransactionPublisher closeTransactionPublisher;
 
     @Autowired
-    private OpenTransactionInvoker openTransactionInvoker;
+    private OpenTransactionCommand openTransactionCommand;
 
     @Test
-    public void test() throws TransactionIntercomClientException {
+    public void test() {
 
         for (int i = 0; i < 1000; i++) {
 
-            var output = this.openTransactionInvoker.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
-            this.addStepPublisher.publish(new AddStepCommand.Input(output.transactionId(), "step" + i, Map.of("k1", "v1", "k2", "v2"), StepPhase.BEFORE));
+            var output = this.openTransactionCommand.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            this.addStepPublisher.publish(new AddStepCommand.Input(output.transactionId(), "step" + i, "c", Map.of("k1", "v1", "k2", "v2"), StepPhase.BEFORE));
             this.closeTransactionPublisher.publish(new CloseTransactionCommand.Input(output.transactionId(), null));
         }
 

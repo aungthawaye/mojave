@@ -21,6 +21,7 @@ package io.mojaloop.core.wallet.intercom.controller.command.position;
  */
 
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class RollbackPositionController {
     @PostMapping("/positions/rollback")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public RollbackReservationCommand.Output execute(@Valid @RequestBody final RollbackReservationCommand.Input input) {
+    public RollbackReservationCommand.Output execute(@Valid @RequestBody final RollbackReservationCommand.Input input) throws FailedToRollbackReservationException {
 
         LOGGER.info("Entering RollbackReservationCommand.execute: input : {}", input);
 

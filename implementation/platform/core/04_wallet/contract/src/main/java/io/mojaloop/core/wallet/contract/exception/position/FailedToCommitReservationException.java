@@ -37,31 +37,54 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.transaction.domain.command;
+package io.mojaloop.core.wallet.contract.exception.position;
 
-import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
-import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.mojaloop.component.misc.exception.CheckedDomainException;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
+import lombok.Getter;
 
-class OpenTransactionCommandIT extends BaseDomainIT {
+import java.util.HashMap;
+import java.util.Map;
 
-    @Autowired
-    private OpenTransactionCommand openTransaction;
+@Getter
+public class FailedToCommitReservationException extends CheckedDomainException {
 
-    @Test
-    void open_transaction_returns_transaction_id() {
+    public static final String CODE = "FAILED_TO_COMMIT_RESERVATION";
 
-        // Arrange
-        var input = new OpenTransactionCommand.Input(TransactionType.FUND_IN);
+    private static final String TEMPLATE = "Commit failed : reservationId ({0}).";
 
-        // Act
-        var output = this.openTransaction.execute(input);
+    private final PositionUpdateId reservationId;
 
-        // Assert
-        Assertions.assertNotNull(output);
-        Assertions.assertNotNull(output.transactionId());
+    public FailedToCommitReservationException(final PositionUpdateId reservationId) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{reservationId.getId().toString()}));
+
+        this.reservationId = reservationId;
+    }
+
+    public static FailedToCommitReservationException from(final Map<String, String> extras) {
+
+        final var reservationId = new PositionUpdateId(Long.valueOf(extras.get(Keys.RESERVATION_ID)));
+
+        return new FailedToCommitReservationException(reservationId);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.RESERVATION_ID, this.reservationId.getId().toString());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String RESERVATION_ID = "reservationId";
+
     }
 
 }
+

@@ -27,6 +27,8 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,7 +48,7 @@ public class CommitReservationInvoker implements CommitReservationCommand {
     }
 
     @Override
-    public Output execute(final Input input) {
+    public Output execute(final Input input) throws FailedToCommitReservationException {
 
         try {
 
@@ -61,8 +63,11 @@ public class CommitReservationInvoker implements CommitReservationCommand {
 
                 final var throwable = WalletExceptionResolver.resolve(errorResponse);
 
-                if (throwable instanceof UncheckedDomainException ude) {
-                    throw ude;
+                switch (throwable) {
+                    case FailedToCommitReservationException e1 -> throw e1;
+                    case UncheckedDomainException ude -> throw ude;
+                    default -> {
+                    }
                 }
             }
 

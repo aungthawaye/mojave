@@ -21,6 +21,8 @@
 package io.mojaloop.core.wallet.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
+import io.mojaloop.core.wallet.domain.cache.PositionCache;
+import io.mojaloop.core.wallet.domain.cache.WalletCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
@@ -62,6 +64,18 @@ public class TestConfiguration implements WalletDomainConfiguration.RequiredBean
     public PositionUpdater positionUpdater() {
 
         return this.positionUpdater;
+    }
+
+    @Override
+    public WalletCache walletCache() {
+
+        return null;
+    }
+
+    @Override
+    public PositionCache positionCache() {
+
+        return null;
     }
 
 }

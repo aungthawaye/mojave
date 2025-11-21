@@ -26,6 +26,7 @@ import io.mojaloop.core.common.datatype.enums.wallet.PositionAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,7 +37,7 @@ import java.time.Instant;
 
 public interface CommitReservationCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws FailedToCommitReservationException;
 
     record Input(@JsonProperty(required = true) @NotNull PositionUpdateId reservationId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }

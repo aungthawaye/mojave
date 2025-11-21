@@ -21,6 +21,7 @@ package io.mojaloop.core.wallet.admin.controller.command.position;
  */
 
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class CommitPositionController {
     @PostMapping("/positions/commit")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CommitReservationCommand.Output execute(@Valid @RequestBody final CommitReservationCommand.Input input) {
+    public CommitReservationCommand.Output execute(@Valid @RequestBody final CommitReservationCommand.Input input) throws FailedToCommitReservationException {
 
         LOGGER.info("Entering CommitReservationCommand.execute: input : {}", input);
 
@@ -58,4 +59,5 @@ public class CommitPositionController {
 
         return output;
     }
+
 }

@@ -69,6 +69,9 @@ public class TransactionStep extends JpaEntity<TransactionStepId> implements Dat
     @Column(name = "name", nullable = false)
     protected String name;
 
+    @Column(name = "context")
+    protected String context;
+
     @Column(name = "phase", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected StepPhase phase;

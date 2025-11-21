@@ -28,7 +28,7 @@ import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 
 public class FspiopErrorResponder {
 
-    public static void toPayer(Payer payer, Exception exception, ActionToPayer action) throws Throwable {
+    public static void toPayer(Payer payer, Exception exception, ActionToPayer action) throws Exception {
 
         if (payer == null || payer.isEmpty()) {
 
@@ -57,7 +57,7 @@ public class FspiopErrorResponder {
 
     public interface ActionToPayer {
 
-        void execute(Payer payer, ErrorInformationObject errorInformationObject) throws Throwable;
+        void execute(Payer payer, ErrorInformationObject errorInformationObject) throws Exception;
 
     }
 

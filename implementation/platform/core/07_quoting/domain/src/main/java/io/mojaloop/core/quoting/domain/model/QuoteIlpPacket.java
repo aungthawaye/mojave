@@ -75,7 +75,7 @@ public class QuoteIlpPacket extends JpaEntity<QuoteId> {
         return this.id;
     }
 
-    public void responded(String ilpPacket, String condition) {
+    public void prepared(String ilpPacket, String condition) {
 
         this.ilpPacket = ilpPacket;
         this.condition = condition;
