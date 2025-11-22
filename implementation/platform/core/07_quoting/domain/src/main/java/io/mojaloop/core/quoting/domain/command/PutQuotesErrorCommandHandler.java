@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.quoting.domain.command;
 
+import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
 import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
@@ -37,6 +38,7 @@ import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -79,10 +81,14 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
         this.quoteSettings = quoteSettings;
     }
 
+    @Write
     @Override
     public Output execute(Input input) {
 
         var udfQuoteId = input.udfQuoteId();
+
+        MDC.put("requestId", udfQuoteId.getId());
+
         LOGGER.info("({}) Executing PutQuotesErrorCommandHandler with input: [{}].", udfQuoteId.getId(), input);
 
         FspCode payerFspCode = null;
@@ -165,6 +171,9 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
         }
 
         LOGGER.info("Returning from PutQuotesErrorCommandHandler successfully.");
+
+        MDC.remove("requestId");
+
         return new Output();
     }
 

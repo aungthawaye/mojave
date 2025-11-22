@@ -28,6 +28,10 @@
             <artifactId>mod-component-flyway</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-intercom-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.platform.core.quoting</groupId>
             <artifactId>mod-quoting-domain</artifactId>
         </dependency>

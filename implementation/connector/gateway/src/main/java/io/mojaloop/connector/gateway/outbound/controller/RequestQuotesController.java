@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -72,10 +72,17 @@ public class RequestQuotesController {
 
         var id = UUID.randomUUID().toString();
 
-        var quotesPostRequest = new QuotesPostRequest().quoteId(id).transactionId(id).payee(new Party().partyIdInfo(request.payee()))
-                                                       .payer(new Party().partyIdInfo(request.payer())).amountType(request.amountType()).amount(request.amount())
-                                                       .fees(request.fees()).expiration(request.expiration()).transactionType(
-                new TransactionType().scenario(TransactionScenario.TRANSFER).initiator(TransactionInitiator.PAYER).initiatorType(TransactionInitiatorType.CONSUMER));
+        var quotesPostRequest = new QuotesPostRequest().quoteId(id)
+                                                       .transactionId(id)
+                                                       .payee(new Party().partyIdInfo(request.payee()))
+                                                       .payer(new Party().partyIdInfo(request.payer()))
+                                                       .amountType(request.amountType())
+                                                       .amount(request.amount())
+                                                       .fees(request.fees())
+                                                       .expiration(request.expiration())
+                                                       .transactionType(new TransactionType().scenario(TransactionScenario.TRANSFER)
+                                                                                             .initiator(TransactionInitiator.PAYER)
+                                                                                             .initiatorType(TransactionInitiatorType.CONSUMER));
 
         var input = new RequestQuotesCommand.Input(new Payee(request.destination), quotesPostRequest);
 

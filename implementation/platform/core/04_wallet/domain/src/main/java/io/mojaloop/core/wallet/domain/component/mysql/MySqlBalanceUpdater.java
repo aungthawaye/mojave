@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.component.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -109,10 +110,10 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                 if ("SUCCESS".equals(status)) {
 
-                                    return new BalanceHistory(
-                                        new BalanceUpdateId(rs.getLong("balance_update_id")), new WalletId(rs.getLong("wallet_id")), BalanceAction.valueOf(rs.getString("action")),
-                                        new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
-                                        rs.getBigDecimal("old_balance"), rs.getBigDecimal("new_balance"), Instant.ofEpochSecond(rs.getLong("transaction_at")), null);
+                                    return new BalanceHistory(new BalanceUpdateId(rs.getLong("balance_update_id")), new WalletId(rs.getLong("wallet_id")),
+                                        BalanceAction.valueOf(rs.getString("action")), new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")),
+                                        rs.getBigDecimal("amount"), rs.getBigDecimal("old_balance"), rs.getBigDecimal("new_balance"),
+                                        Instant.ofEpochSecond(rs.getLong("transaction_at")), null);
                                 }
                             }
 
@@ -127,7 +128,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
             });
         } catch (RuntimeException e) {
 
-            LOGGER.error("Exception occurred while trying to deposit for transactionId : {}, amount : {}.", transactionId.getId(), amount.toPlainString(), e);
+            LOGGER.error("Exception occurred while trying to deposit for transactionId : {}, amount : {}.", transactionId.getId(), amount.stripTrailingZeros().toPlainString(), e);
 
             if (e.getCause() instanceof NoBalanceUpdateException e1) {
                 throw e1;
@@ -163,11 +164,10 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                 if ("SUCCESS".equals(status)) {
 
-                                    return new BalanceHistory(
-                                        new BalanceUpdateId(rs.getLong("balance_update_id")), new WalletId(rs.getLong("wallet_id")), BalanceAction.valueOf(rs.getString("action")),
-                                        new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
-                                        rs.getBigDecimal("old_balance"), rs.getBigDecimal("new_balance"), Instant.ofEpochSecond(rs.getLong("transaction_at")),
-                                        new BalanceUpdateId(rs.getLong("reversal_id")));
+                                    return new BalanceHistory(new BalanceUpdateId(rs.getLong("balance_update_id")), new WalletId(rs.getLong("wallet_id")),
+                                        BalanceAction.valueOf(rs.getString("action")), new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")),
+                                        rs.getBigDecimal("amount"), rs.getBigDecimal("old_balance"), rs.getBigDecimal("new_balance"),
+                                        Instant.ofEpochSecond(rs.getLong("transaction_at")), new BalanceUpdateId(rs.getLong("reversal_id")));
                                 } else if ("REVERSAL_FAILED".equals(status)) {
 
                                     throw new RuntimeException(new ReversalFailedException(new BalanceUpdateId(rs.getLong("reversal_id"))));
@@ -226,10 +226,10 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                 if ("SUCCESS".equals(status)) {
 
-                                    return new BalanceHistory(
-                                        new BalanceUpdateId(rs.getLong("balance_update_id")), new WalletId(rs.getLong("wallet_id")), BalanceAction.valueOf(rs.getString("action")),
-                                        new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
-                                        rs.getBigDecimal("old_balance"), rs.getBigDecimal("new_balance"), Instant.ofEpochSecond(rs.getLong("transaction_at")), null);
+                                    return new BalanceHistory(new BalanceUpdateId(rs.getLong("balance_update_id")), new WalletId(rs.getLong("wallet_id")),
+                                        BalanceAction.valueOf(rs.getString("action")), new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")),
+                                        rs.getBigDecimal("amount"), rs.getBigDecimal("old_balance"), rs.getBigDecimal("new_balance"),
+                                        Instant.ofEpochSecond(rs.getLong("transaction_at")), null);
                                 } else if ("INSUFFICIENT_BALANCE".equals(status)) {
 
                                     var balance = rs.getBigDecimal("old_balance");
@@ -249,7 +249,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
             });
         } catch (RuntimeException e) {
 
-            LOGGER.error("Exception occurred while trying to withdraw for transactionId : {}, amount : {}.", transactionId.getId(), amount.toPlainString(), e);
+            LOGGER.error("Exception occurred while trying to withdraw for transactionId : {}, amount : {}.", transactionId.getId(), amount.stripTrailingZeros().toPlainString(), e);
 
             if (e.getCause() instanceof NoBalanceUpdateException e1) {
                 throw e1;

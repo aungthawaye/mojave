@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,10 +22,13 @@ package io.mojaloop.platform.core.transfer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStore;
+import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
-import io.mojaloop.core.transfer.domain.component.interledger.PartyUnwrapperRegistry;
+import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
 import io.mojaloop.core.transfer.domain.component.interledger.unwrapper.MojavePartyUnwrapper;
+import io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -46,12 +49,16 @@ import java.util.List;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service")
-@Import(value = {TransferDomainConfiguration.class, FspiopServiceConfiguration.class})
+@Import(value = {TransferDomainConfiguration.class,
+                 ParticipantIntercomClientConfiguration.class,
+                 WalletIntercomClientConfiguration.class,
+                 TransactionIntercomClientConfiguration.class,
+                 FspiopServiceConfiguration.class})
 public class TransferServiceConfiguration implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
-    private final PartyUnwrapperRegistry partyUnwrapperRegistry;
+    private final ObjectMapper objectMapper;
 
     public TransferServiceConfiguration(ParticipantStore participantStore, FspCodeList fspCodeList, ObjectMapper objectMapper) {
 
@@ -60,9 +67,7 @@ public class TransferServiceConfiguration implements TransferDomainConfiguration
         assert objectMapper != null;
 
         this.participantStore = participantStore;
-
-        this.partyUnwrapperRegistry = new PartyUnwrapperRegistry();
-        fspCodeList.fspCodes().forEach(this.partyUnwrapperRegistry::register);
+        this.objectMapper = objectMapper;
     }
 
     @Bean
@@ -74,9 +79,9 @@ public class TransferServiceConfiguration implements TransferDomainConfiguration
 
     @Bean
     @Override
-    public PartyUnwrapperRegistry partyUnwrapperRegistry() {
+    public PartyUnwrapper partyUnwrapper() {
 
-        return this.partyUnwrapperRegistry;
+        return new MojavePartyUnwrapper(this.objectMapper);
     }
 
     @Bean
@@ -85,7 +90,11 @@ public class TransferServiceConfiguration implements TransferDomainConfiguration
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends TransferDomainConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings extends TransferDomainConfiguration.RequiredSettings,
+                                              ParticipantIntercomClientConfiguration.RequiredSettings,
+                                              WalletIntercomClientConfiguration.RequiredSettings,
+                                              TransactionIntercomClientConfiguration.RequiredSettings,
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         FspCodeList fspCodeList();
 

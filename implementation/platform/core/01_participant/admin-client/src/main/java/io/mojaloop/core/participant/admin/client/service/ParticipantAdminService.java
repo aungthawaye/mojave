@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,7 +54,7 @@ import java.util.List;
 
 public interface ParticipantAdminService {
 
-    interface FspCommands {
+    interface FspCommand {
 
         @POST("fsps/activate-endpoint")
         Call<ActivateEndpointCommand.Output> activateEndpoint(@Body ActivateEndpointCommand.Input input);
@@ -62,19 +62,19 @@ public interface ParticipantAdminService {
         @POST("fsps/activate-fsp")
         Call<ActivateFspCommand.Output> activateFsp(@Body ActivateFspCommand.Input input);
 
-        @POST("fsps/activate-supported-currency")
-        Call<ActivateFspCurrencyCommand.Output> activateSupportedCurrency(@Body ActivateFspCurrencyCommand.Input input);
+        @POST("fsps/activate-currency")
+        Call<ActivateFspCurrencyCommand.Output> activateFspCurrency(@Body ActivateFspCurrencyCommand.Input input);
 
         @POST("fsps/add-endpoint")
         Call<AddEndpointCommand.Output> addEndpoint(@Body AddEndpointCommand.Input input);
 
-        @POST("fsps/add-supported-currency")
-        Call<AddFspCurrencyCommand.Output> addSupportedCurrency(@Body AddFspCurrencyCommand.Input input);
+        @POST("fsps/add-currency")
+        Call<AddFspCurrencyCommand.Output> addFspCurrency(@Body AddFspCurrencyCommand.Input input);
 
         @POST("fsps/change-endpoint")
         Call<ChangeEndpointCommand.Output> changeEndpoint(@Body ChangeEndpointCommand.Input input);
 
-        @POST("fsps/change-fsp-name")
+        @POST("fsps/change-name")
         Call<ChangeFspNameCommand.Output> changeFspName(@Body ChangeFspNameCommand.Input input);
 
         @POST("fsps/create-fsp")
@@ -86,14 +86,34 @@ public interface ParticipantAdminService {
         @POST("fsps/deactivate-fsp")
         Call<DeactivateFspCommand.Output> deactivateFsp(@Body DeactivateFspCommand.Input input);
 
-        @POST("fsps/deactivate-supported-currency")
-        Call<DeactivateFspCurrencyCommand.Output> deactivateSupportedCurrency(@Body DeactivateFspCurrencyCommand.Input input);
+        @POST("fsps/deactivate-currency")
+        Call<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(@Body DeactivateFspCurrencyCommand.Input input);
+
+    }
+
+    interface OracleQuery {
+
+        @GET("oracles/get-all-oracles")
+        Call<List<OracleData>> getAllOracles();
+
+        @GET("oracles/get-by-oracle-id")
+        Call<OracleData> getByOracleId(@Query("oracleId") String oracleId);
+
+        @GET("oracles/get-by-party-id-type")
+        Call<OracleData> getByPartyIdType(@Query("partyIdType") String partyIdType);
+
+    }
+
+    interface FspQuery {
 
         @GET("fsps/get-all-fsps")
         Call<List<FspData>> getAllFsps();
 
-        @GET("fsps/get-fsp")
-        Call<FspData> getFsp(@Query("fspId") Long fspId);
+        @GET("fsps/get-by-fsp-code")
+        Call<FspData> getByFspCode(@Query("fspCode") String fspCode);
+
+        @GET("fsps/get-by-fsp-id")
+        Call<FspData> getByFspId(@Query("fspId") String fspId);
 
     }
 
@@ -103,10 +123,10 @@ public interface ParticipantAdminService {
         Call<ActivateOracleCommand.Output> activateOracle(@Body ActivateOracleCommand.Input input);
 
         @POST("oracles/change-name")
-        Call<ChangeOracleNameCommand.Output> changeName(@Body ChangeOracleNameCommand.Input input);
+        Call<ChangeOracleNameCommand.Output> changeOracleName(@Body ChangeOracleNameCommand.Input input);
 
         @POST("oracles/change-type")
-        Call<ChangeOracleTypeCommand.Output> changeType(@Body ChangeOracleTypeCommand.Input input);
+        Call<ChangeOracleTypeCommand.Output> changeOracleType(@Body ChangeOracleTypeCommand.Input input);
 
         @POST("oracles/create-oracle")
         Call<CreateOracleCommand.Output> createOracle(@Body CreateOracleCommand.Input input);
@@ -114,36 +134,37 @@ public interface ParticipantAdminService {
         @POST("oracles/deactivate-oracle")
         Call<DeactivateOracleCommand.Output> deactivateOracle(@Body DeactivateOracleCommand.Input input);
 
-        @GET("oracles/get-all-oracles")
-        Call<List<OracleData>> getAllOracles();
-
-        @GET("oracles/get-oracle")
-        Call<OracleData> getOracle(@Query("oracleId") Long oracleId);
-
     }
 
     interface HubCommands {
 
         @POST("hubs/activate-currency")
-        Call<ActivateHubCurrencyCommand.Output> activateCurrency(@Body ActivateHubCurrencyCommand.Input input);
+        Call<ActivateHubCurrencyCommand.Output> activateHubCurrency(@Body ActivateHubCurrencyCommand.Input input);
 
         @POST("hubs/add-currency")
-        Call<AddHubCurrencyCommand.Output> addCurrency(@Body AddHubCurrencyCommand.Input input);
+        Call<AddHubCurrencyCommand.Output> addHubCurrency(@Body AddHubCurrencyCommand.Input input);
 
         @POST("hubs/change-name")
-        Call<ChangeHubNameCommand.Output> changeName(@Body ChangeHubNameCommand.Input input);
+        Call<ChangeHubNameCommand.Output> changeHubName(@Body ChangeHubNameCommand.Input input);
 
         @POST("hubs/create-hub")
         Call<CreateHubCommand.Output> createHub(@Body CreateHubCommand.Input input);
 
         @POST("hubs/deactivate-currency")
-        Call<DeactivateHubCurrencyCommand.Output> deactivateCurrency(@Body DeactivateHubCurrencyCommand.Input input);
+        Call<DeactivateHubCurrencyCommand.Output> deactivateHubCurrency(@Body DeactivateHubCurrencyCommand.Input input);
 
-        @GET("hubs/get-all-hubs")
-        Call<List<HubData>> getAllHubs();
+    }
+
+    interface HubQuery {
+
+        @GET("hubs/count")
+        Call<Long> count();
 
         @GET("hubs/get-hub")
-        Call<HubData> getHub(@Query("hubId") Long hubId);
+        Call<HubData> get();
+
+        @GET("hubs/get-all-hubs")
+        Call<List<HubData>> getAll();
 
     }
 

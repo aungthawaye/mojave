@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.contract.command.position;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

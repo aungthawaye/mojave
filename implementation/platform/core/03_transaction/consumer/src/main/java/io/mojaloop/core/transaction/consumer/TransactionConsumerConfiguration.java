@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,29 +44,28 @@ public class TransactionConsumerConfiguration {
     @Qualifier(AddStepListener.QUALIFIER)
     public ConcurrentKafkaListenerContainerFactory<String, AddStepCommand.Input> addStepListenerContainerFactory(AddStepListener.Settings settings, ObjectMapper objectMapper) {
 
-        return KafkaConsumerConfigurer.configure(
-            settings, new KafkaConsumerConfigurer.Deserializer<>() {
+        return KafkaConsumerConfigurer.configure(settings, new KafkaConsumerConfigurer.Deserializer<>() {
 
-                @Override
-                public JsonDeserializer<String> forKey() {
+            @Override
+            public JsonDeserializer<String> forKey() {
 
-                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                var deserializer = new JsonDeserializer<>(String.class, objectMapper);
 
-                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                    return deserializer;
-                }
+                return deserializer;
+            }
 
-                @Override
-                public JsonDeserializer<AddStepCommand.Input> forValue() {
+            @Override
+            public JsonDeserializer<AddStepCommand.Input> forValue() {
 
-                    var deserializer = new JsonDeserializer<>(AddStepCommand.Input.class, objectMapper);
+                var deserializer = new JsonDeserializer<>(AddStepCommand.Input.class, objectMapper);
 
-                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                    return deserializer;
-                }
-            });
+                return deserializer;
+            }
+        });
     }
 
     @Bean(name = CloseTransactionListener.LISTENER_CONTAINER_FACTORY)
@@ -73,29 +73,28 @@ public class TransactionConsumerConfiguration {
     public ConcurrentKafkaListenerContainerFactory<String, CloseTransactionCommand.Input> closeTransactionListenerContainerFactory(CloseTransactionListener.Settings settings,
                                                                                                                                    ObjectMapper objectMapper) {
 
-        return KafkaConsumerConfigurer.configure(
-            settings, new KafkaConsumerConfigurer.Deserializer<>() {
+        return KafkaConsumerConfigurer.configure(settings, new KafkaConsumerConfigurer.Deserializer<>() {
 
-                @Override
-                public JsonDeserializer<String> forKey() {
+            @Override
+            public JsonDeserializer<String> forKey() {
 
-                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                var deserializer = new JsonDeserializer<>(String.class, objectMapper);
 
-                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                    return deserializer;
-                }
+                return deserializer;
+            }
 
-                @Override
-                public JsonDeserializer<CloseTransactionCommand.Input> forValue() {
+            @Override
+            public JsonDeserializer<CloseTransactionCommand.Input> forValue() {
 
-                    var deserializer = new JsonDeserializer<>(CloseTransactionCommand.Input.class, objectMapper);
+                var deserializer = new JsonDeserializer<>(CloseTransactionCommand.Input.class, objectMapper);
 
-                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                    return deserializer;
-                }
-            });
+                return deserializer;
+            }
+        });
     }
 
     public interface RequiredBeans extends TransactionDomainConfiguration.RequiredBeans { }

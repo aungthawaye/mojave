@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,54 +20,87 @@
 
 package io.mojaloop.core.wallet.intercom.client.service;
 
-import io.mojaloop.core.wallet.contract.command.position.CommitPositionCommand;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
-import io.mojaloop.core.wallet.contract.command.position.RollbackPositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.DepositFundCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.ReverseFundCommand;
 import io.mojaloop.core.wallet.contract.command.wallet.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.data.PositionData;
 import io.mojaloop.core.wallet.contract.data.WalletData;
+import io.mojaloop.fspiop.spec.core.Currency;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 import java.util.List;
 
 public interface WalletIntercomService {
 
-    @POST("/positions/commit")
-    Call<CommitPositionCommand.Output> commitPosition(@Body CommitPositionCommand.Input input);
+    interface WalletCommand {
 
-    @POST("/positions/decrease")
-    Call<DecreasePositionCommand.Output> decreasePosition(@Body DecreasePositionCommand.Input input);
+        @POST("/wallets/deposit-fund")
+        Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);
 
-    @POST("/wallets/deposit-fund")
-    Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);
+        @POST("/wallets/reverse-fund")
+        Call<ReverseFundCommand.Output> reverseFund(@Body ReverseFundCommand.Input input);
 
-    @GET("/positions")
-    Call<List<PositionData>> getPositions();
+        @POST("/wallets/withdraw-fund")
+        Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);
 
-    @GET("/wallets")
-    Call<List<WalletData>> getWallets();
+    }
 
-    @POST("/positions/increase")
-    Call<IncreasePositionCommand.Output> increasePosition(@Body IncreasePositionCommand.Input input);
+    interface WalletQuery {
 
-    @POST("/positions/reserve")
-    Call<ReservePositionCommand.Output> reservePosition(@Body ReservePositionCommand.Input input);
+        @GET("/wallets/get-all-wallets")
+        Call<List<WalletData>> getAll();
 
-    @POST("/wallets/reverse-fund")
-    Call<ReverseFundCommand.Output> reverseFund(@Body ReverseFundCommand.Input input);
+        @GET("/wallets/get-by-owner-id-currency")
+        Call<List<WalletData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId, @Query("currency") Currency currency);
 
-    @POST("/positions/rollback")
-    Call<RollbackPositionCommand.Output> rollbackPosition(@Body RollbackPositionCommand.Input input);
+        @GET("/wallets/get-by-wallet-id")
+        Call<WalletData> getByWalletId(@Query("walletId") WalletId walletId);
 
-    @POST("/wallets/withdraw-fund")
-    Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);
+    }
+
+    interface PositionCommand {
+
+        @POST("/positions/commit")
+        Call<CommitReservationCommand.Output> commit(@Body CommitReservationCommand.Input input);
+
+        @POST("/positions/decrease")
+        Call<DecreasePositionCommand.Output> decrease(@Body DecreasePositionCommand.Input input);
+
+        @POST("/positions/increase")
+        Call<IncreasePositionCommand.Output> increase(@Body IncreasePositionCommand.Input input);
+
+        @POST("/positions/reserve")
+        Call<ReservePositionCommand.Output> reserve(@Body ReservePositionCommand.Input input);
+
+        @POST("/positions/rollback")
+        Call<RollbackReservationCommand.Output> rollback(@Body RollbackReservationCommand.Input input);
+
+    }
+
+    interface PositionQuery {
+
+        @GET("/positions/get-all-positions")
+        Call<List<PositionData>> getAll();
+
+        @GET("/positions/get-by-owner-id-currency")
+        Call<List<PositionData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId, @Query("currency") Currency currency);
+
+        @GET("/positions/get-by-position-id")
+        Call<PositionData> getByPositionId(@Query("positionId") PositionId positionId);
+
+    }
 
     record Settings(String baseUrl) { }
 

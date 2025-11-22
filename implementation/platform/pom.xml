@@ -15,6 +15,7 @@
     <modules>
         <module>fspiop</module>
         <module>core</module>
+        <module>mono</module>
     </modules>
     <properties>
         <java.version>21</java.version>

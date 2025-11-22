@@ -568,7 +568,7 @@
       "name": "Definitions",
       "item": [
         {
-          "name": "POST /definitions/flows",
+          "name": "POST /flow-definitions",
           "request": {
             "method": "POST",
             "header": [
@@ -582,7 +582,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows",
+              "raw": "{{baseUrl}}/flow-definitions",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -595,7 +595,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/activate",
+          "name": "POST /flow-definitions/activate",
           "request": {
             "method": "POST",
             "header": [
@@ -609,7 +609,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/activate",
+              "raw": "{{baseUrl}}/flow-definitions/activate",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -623,7 +623,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/deactivate",
+          "name": "POST /flow-definitions/deactivate",
           "request": {
             "method": "POST",
             "header": [
@@ -637,7 +637,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/deactivate",
+              "raw": "{{baseUrl}}/flow-definitions/deactivate",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -651,7 +651,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/terminate",
+          "name": "POST /flow-definitions/terminate",
           "request": {
             "method": "POST",
             "header": [
@@ -665,7 +665,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/terminate",
+              "raw": "{{baseUrl}}/flow-definitions/terminate",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -679,7 +679,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/change-currency",
+          "name": "POST /flow-definitions/change-currency",
           "request": {
             "method": "POST",
             "header": [
@@ -693,7 +693,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/change-currency",
+              "raw": "{{baseUrl}}/flow-definitions/change-currency",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -707,7 +707,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/change-properties",
+          "name": "POST /flow-definitions/change-properties",
           "request": {
             "method": "POST",
             "header": [
@@ -721,7 +721,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/change-properties",
+              "raw": "{{baseUrl}}/flow-definitions/change-properties",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -735,7 +735,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/add-postings",
+          "name": "POST /flow-definitions/add-postings",
           "request": {
             "method": "POST",
             "header": [
@@ -749,7 +749,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/add-postings",
+              "raw": "{{baseUrl}}/flow-definitions/add-postings",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -763,7 +763,7 @@
           "response": []
         },
         {
-          "name": "POST /definitions/flows/remove-posting",
+          "name": "POST /flow-definitions/remove-posting",
           "request": {
             "method": "POST",
             "header": [
@@ -777,7 +777,7 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/remove-posting",
+              "raw": "{{baseUrl}}/flow-definitions/remove-posting",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -791,12 +791,12 @@
           "response": []
         },
         {
-          "name": "GET /definitions/flows/get-all-definitions",
+          "name": "GET /flow-definitions/get-all-definitions",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/get-all-definitions",
+              "raw": "{{baseUrl}}/flow-definitions/get-all-definitions",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -810,12 +810,12 @@
           "response": []
         },
         {
-          "name": "GET /definitions/flows/get-by-id",
+          "name": "GET /flow-definitions/get-by-id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/get-by-id?flowDefinitionId=1",
+              "raw": "{{baseUrl}}/flow-definitions/get-by-id?flowDefinitionId=1",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -835,12 +835,12 @@
           "response": []
         },
         {
-          "name": "GET /definitions/flows/get-by-name-contains",
+          "name": "GET /flow-definitions/get-by-name-contains",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/definitions/flows/get-by-name-contains?name=P2P",
+              "raw": "{{baseUrl}}/flow-definitions/get-by-name-contains?name=P2P",
               "host": [
                 "{{baseUrl}}"
               ],

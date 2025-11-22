@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.producer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,21 +54,20 @@ public class TransactionProducerConfiguration {
     @Qualifier(AddStepPublisher.QUALIFIER)
     public ProducerFactory<String, AddStepCommand.Input> addStepProducerFactory(KafkaProducerConfigurer.ProducerSettings settings, ObjectMapper objectMapper) {
 
-        return KafkaProducerConfigurer.configure(
-            settings.bootstrapServers(), settings.ack(), new KafkaProducerConfigurer.Serializer<>() {
+        return KafkaProducerConfigurer.configure(settings.bootstrapServers(), settings.ack(), new KafkaProducerConfigurer.Serializer<>() {
 
-                @Override
-                public JsonSerializer<String> forKey() {
+            @Override
+            public JsonSerializer<String> forKey() {
 
-                    return new JsonSerializer<>(objectMapper);
-                }
+                return new JsonSerializer<>(objectMapper);
+            }
 
-                @Override
-                public JsonSerializer<AddStepCommand.Input> forValue() {
+            @Override
+            public JsonSerializer<AddStepCommand.Input> forValue() {
 
-                    return new JsonSerializer<>(objectMapper);
-                }
-            });
+                return new JsonSerializer<>(objectMapper);
+            }
+        });
     }
 
     @Bean
@@ -81,21 +81,20 @@ public class TransactionProducerConfiguration {
     @Qualifier(CloseTransactionPublisher.QUALIFIER)
     public ProducerFactory<String, CloseTransactionCommand.Input> commitTransactionProducerFactory(KafkaProducerConfigurer.ProducerSettings settings, ObjectMapper objectMapper) {
 
-        return KafkaProducerConfigurer.configure(
-            settings.bootstrapServers(), settings.ack(), new KafkaProducerConfigurer.Serializer<>() {
+        return KafkaProducerConfigurer.configure(settings.bootstrapServers(), settings.ack(), new KafkaProducerConfigurer.Serializer<>() {
 
-                @Override
-                public JsonSerializer<String> forKey() {
+            @Override
+            public JsonSerializer<String> forKey() {
 
-                    return new JsonSerializer<>(objectMapper);
-                }
+                return new JsonSerializer<>(objectMapper);
+            }
 
-                @Override
-                public JsonSerializer<CloseTransactionCommand.Input> forValue() {
+            @Override
+            public JsonSerializer<CloseTransactionCommand.Input> forValue() {
 
-                    return new JsonSerializer<>(objectMapper);
-                }
-            });
+                return new JsonSerializer<>(objectMapper);
+            }
+        });
     }
 
     @Bean

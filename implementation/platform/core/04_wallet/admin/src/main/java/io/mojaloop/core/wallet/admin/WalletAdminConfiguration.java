@@ -17,9 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
@@ -29,10 +31,16 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.wallet.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.wallet.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
+import io.mojaloop.core.wallet.domain.cache.PositionCache;
+import io.mojaloop.core.wallet.domain.cache.WalletCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.local.PositionLocalCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.local.WalletLocalCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import io.mojaloop.core.wallet.domain.component.empty.EmptyBalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.empty.EmptyPositionUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
+import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import io.mojaloop.core.wallet.domain.repository.PositionRepository;
+import io.mojaloop.core.wallet.domain.repository.WalletRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -48,13 +56,31 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.admin")
-@Import(value = {WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
+@Import(value = {OpenApiConfiguration.class, WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class WalletAdminConfiguration extends JacksonWebMvcExtension
     implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
-    public WalletAdminConfiguration(ObjectMapper objectMapper) {
+    private final BalanceUpdater balanceUpdater;
+
+    private final PositionUpdater positionUpdater;
+
+    private final WalletCache walletCache;
+
+    private final PositionCache positionCache;
+
+    public WalletAdminConfiguration(ObjectMapper objectMapper,
+                                    MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
+                                    MySqlPositionUpdater.PositionDbSettings positionDbSettings,
+                                    WalletRepository walletRepository,
+                                    PositionRepository positionRepository) {
 
         super(objectMapper);
+
+        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
+        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
+
+        this.walletCache = new WalletLocalCache(walletRepository);
+        this.positionCache = new PositionLocalCache(positionRepository);
     }
 
     @Bean
@@ -75,14 +101,21 @@ public class WalletAdminConfiguration extends JacksonWebMvcExtension
     @Override
     public BalanceUpdater balanceUpdater() {
 
-        return new EmptyBalanceUpdater();
+        return this.balanceUpdater;
+    }
+
+    @Bean
+    @Override
+    public PositionCache positionCache() {
+
+        return this.positionCache;
     }
 
     @Bean
     @Override
     public PositionUpdater positionUpdater() {
 
-        return new EmptyPositionUpdater();
+        return this.positionUpdater;
     }
 
     @Bean
@@ -93,12 +126,23 @@ public class WalletAdminConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
+    @Override
+    public WalletCache walletCache() {
+
+        return this.walletCache;
+    }
+
+    @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings {
+    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+
+        MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
+
+        MySqlPositionUpdater.PositionDbSettings positionDbSettings();
 
         TomcatSettings tomcatSettings();
 

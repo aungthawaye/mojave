@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -141,15 +141,15 @@ public class LedgerIT {
                     try {
 
                         index.incrementAndGet();
-                        this.postTransactionCommand.execute(new PostTransactionCommand.Input(
-                            TransactionType.FUND_IN, Currency.USD, new TransactionId(Snowflake.get().nextId()), Instant.now(),
-                            Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(), new AccountOwnerId(fsp1.getId())),
-                            Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1))));
+                        this.postTransactionCommand.execute(
+                            new PostTransactionCommand.Input(TransactionType.FUND_IN, Currency.USD, new TransactionId(Snowflake.get().nextId()), Instant.now(),
+                                Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(), new AccountOwnerId(fsp1.getId())),
+                                Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1))));
 
-                        this.postTransactionCommand.execute(new PostTransactionCommand.Input(
-                            TransactionType.FUND_IN, Currency.USD, new TransactionId(Snowflake.get().nextId()), Instant.now(),
-                            Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(), new AccountOwnerId(fsp2.getId())),
-                            Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1))));
+                        this.postTransactionCommand.execute(
+                            new PostTransactionCommand.Input(TransactionType.FUND_IN, Currency.USD, new TransactionId(Snowflake.get().nextId()), Instant.now(),
+                                Map.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name(), new AccountOwnerId(fsp2.getId())),
+                                Map.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), new BigDecimal(1))));
 
                     } catch (OverdraftLimitReachedInAccountException | DuplicatePostingInLedgerException | InsufficientBalanceInAccountException |
                              RestoreFailedInAccountException e) {
@@ -188,40 +188,28 @@ public class LedgerIT {
                     index.incrementAndGet();
                     var requests = new ArrayList<Ledger.Request>();
 
-                    requests.add(
-                        new Ledger.Request(
-                            new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(4L), new FlowDefinitionId(1L),
-                            new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubLiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(4L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
                     // Hub -> Fsp1
-                    requests.add(new Ledger.Request(
-                        new LedgerMovementId(Snowflake.get().nextId()), hubFsp1LiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L), new FlowDefinitionId(1L),
-                        new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubFsp1LiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
-                    requests.add(
-                        new Ledger.Request(
-                            new LedgerMovementId(Snowflake.get().nextId()), hubFsp1LiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(1L), new FlowDefinitionId(1L),
-                            new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubFsp1LiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(1L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
-                    requests.add(
-                        new Ledger.Request(
-                            new LedgerMovementId(Snowflake.get().nextId()), hubFsp1PositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L), new FlowDefinitionId(1L),
-                            new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubFsp1PositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
                     // Hub -> Fsp2
-                    requests.add(new Ledger.Request(
-                        new LedgerMovementId(Snowflake.get().nextId()), hubFsp2LiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L), new FlowDefinitionId(1L),
-                        new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubFsp2LiquidityAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(2L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
-                    requests.add(
-                        new Ledger.Request(
-                            new LedgerMovementId(Snowflake.get().nextId()), hubFsp2LiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(1L), new FlowDefinitionId(1L),
-                            new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubFsp2LiquidityAcc.accountId(), Side.DEBIT, Currency.USD, new BigDecimal(1L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
-                    requests.add(
-                        new Ledger.Request(
-                            new LedgerMovementId(Snowflake.get().nextId()), hubFsp2PositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L), new FlowDefinitionId(1L),
-                            new PostingDefinitionId(1L)));
+                    requests.add(new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), hubFsp2PositionAcc.accountId(), Side.CREDIT, Currency.USD, new BigDecimal(1L),
+                        new FlowDefinitionId(1L), new PostingDefinitionId(1L)));
 
                     try {
 
@@ -258,7 +246,7 @@ public class LedgerIT {
     @BeforeEach
     void cleanupDb() {
 
-        RoutingDataSource.setDataSourceKey(RoutingDataSource.Keys.WRITE);
+        RoutingDataSource.Context.set(RoutingDataSource.Keys.WRITE);
 
         // Disable FK checks to truncate in any order
         this.jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS=0");
@@ -282,27 +270,25 @@ public class LedgerIT {
 
     private void setupAccounts() {
 
-        hubLiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            hubLiquidity.chartEntryId(), new AccountOwnerId(new HubId().getId()), Currency.USD, new AccountCode("HUB_1000_USD"), "Hub Liquidity", "Hub Liquidity (USD)",
-            OverdraftMode.FORBID, BigDecimal.ZERO));
+        hubLiquidityAcc = this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(hubLiquidity.chartEntryId(), new AccountOwnerId(new HubId().getId()), Currency.USD, new AccountCode("HUB_1000_USD"), "Hub Liquidity",
+                "Hub Liquidity (USD)", OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        hubFsp1LiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            hubFspLiquidity.chartEntryId(), fsp1, Currency.USD, new AccountCode("HUB_2000_FSP1_USD"), "FSP1 Liquidity (USD)", "FSP1 Liquidity (USD)", OverdraftMode.FORBID,
-            BigDecimal.ZERO));
+        hubFsp1LiquidityAcc = this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(hubFspLiquidity.chartEntryId(), fsp1, Currency.USD, new AccountCode("HUB_2000_FSP1_USD"), "FSP1 Liquidity (USD)", "FSP1 Liquidity (USD)",
+                OverdraftMode.FORBID, BigDecimal.ZERO));
 
         hubFsp1PositionAcc = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                hubFspPosition.chartEntryId(), fsp1, Currency.USD, new AccountCode("HUB_3000_FSP1_USD"), "FSP1 Position (USD)", "FSP1 Position (USD)", OverdraftMode.FORBID,
-                BigDecimal.ZERO));
+            new CreateAccountCommand.Input(hubFspPosition.chartEntryId(), fsp1, Currency.USD, new AccountCode("HUB_3000_FSP1_USD"), "FSP1 Position (USD)", "FSP1 Position (USD)",
+                OverdraftMode.FORBID, BigDecimal.ZERO));
 
-        hubFsp2LiquidityAcc = this.createAccountCommand.execute(new CreateAccountCommand.Input(
-            hubFspLiquidity.chartEntryId(), fsp2, Currency.USD, new AccountCode("HUB_2000_FSP2_USD"), "FSP2 Liquidity (USD)", "FSP2 Liquidity (USD)", OverdraftMode.FORBID,
-            BigDecimal.ZERO));
+        hubFsp2LiquidityAcc = this.createAccountCommand.execute(
+            new CreateAccountCommand.Input(hubFspLiquidity.chartEntryId(), fsp2, Currency.USD, new AccountCode("HUB_2000_FSP2_USD"), "FSP2 Liquidity (USD)", "FSP2 Liquidity (USD)",
+                OverdraftMode.FORBID, BigDecimal.ZERO));
 
         hubFsp2PositionAcc = this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                hubFspPosition.chartEntryId(), fsp2, Currency.USD, new AccountCode("HUB_3000_FSP2_USD"), "FSP2 Position (USD)", "FSP2 Position (USD)", OverdraftMode.FORBID,
-                BigDecimal.ZERO));
+            new CreateAccountCommand.Input(hubFspPosition.chartEntryId(), fsp2, Currency.USD, new AccountCode("HUB_3000_FSP2_USD"), "FSP2 Position (USD)", "FSP2 Position (USD)",
+                OverdraftMode.FORBID, BigDecimal.ZERO));
     }
 
     private void setupCoA() {
@@ -312,23 +298,20 @@ public class LedgerIT {
         hubLiquidity = this.createChartEntryCommand.execute(
             new CreateChartEntryCommand.Input(hubChart.chartId(), new ChartEntryCode("HUB_1000"), "Hub Liquidity", "Hub Liquidity (Central Bank Trust AC)", AccountType.ASSET));
 
-        hubFspLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(
-            hubChart.chartId(), new ChartEntryCode("HUB_2000"), "FSP Liability – Liquidity",
+        hubFspLiquidity = this.createChartEntryCommand.execute(new CreateChartEntryCommand.Input(hubChart.chartId(), new ChartEntryCode("HUB_2000"), "FSP Liability – Liquidity",
             "FSP Liability – Liquidity from Hub to FSP in Hub PoV", AccountType.LIABILITY));
 
         hubFspPosition = this.createChartEntryCommand.execute(
-            new CreateChartEntryCommand.Input(
-                hubChart.chartId(), new ChartEntryCode("HUB_3000"), "FSP Liability – Position", "FSP Liability – Position from Hub to FSP in Hub PoV", AccountType.LIABILITY));
+            new CreateChartEntryCommand.Input(hubChart.chartId(), new ChartEntryCode("HUB_3000"), "FSP Liability – Position", "FSP Liability – Position from Hub to FSP in Hub PoV",
+                AccountType.LIABILITY));
     }
 
     private void setupFundInDefinition() {
 
-        this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-            TransactionType.FUND_IN, Currency.USD, "FundIn (USD)", "FSP Fund In (USD).", List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.ACCOUNT, hubLiquidityAcc.accountId().getId(), null, FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), Side.DEBIT,
-                ""), new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, hubFspLiquidity.chartEntryId().getId(), FundInDimension.Participants.DEPOSIT_INTO_FSP.name(),
+        this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "FundIn (USD)", "FSP Fund In (USD).", List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.ACCOUNT, hubLiquidityAcc.accountId().getId(), null, FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), Side.DEBIT,
+                ""),
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, hubFspLiquidity.chartEntryId().getId(), FundInDimension.Participants.DEPOSIT_INTO_FSP.name(),
                 FundInDimension.Amounts.LIQUIDITY_AMOUNT.name(), Side.CREDIT, ""))));
     }
 

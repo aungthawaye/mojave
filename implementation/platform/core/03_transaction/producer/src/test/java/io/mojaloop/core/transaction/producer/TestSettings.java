@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.producer;
 
 import io.mojaloop.component.kafka.KafkaProducerConfigurer;

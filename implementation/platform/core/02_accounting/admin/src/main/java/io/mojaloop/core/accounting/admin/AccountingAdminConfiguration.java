@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
@@ -30,8 +31,19 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.admin.component.EmptyErrorWriter;
 import io.mojaloop.core.accounting.admin.component.EmptyGatekeeper;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
+import io.mojaloop.core.accounting.domain.cache.AccountCache;
+import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
+import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
+import io.mojaloop.core.accounting.domain.cache.strategy.local.AccountLocalCache;
+import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCache;
+import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.EmptyLedger;
+import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
+import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
+import io.mojaloop.core.accounting.domain.repository.AccountRepository;
+import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
+import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -47,13 +59,48 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
-@Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
+@Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
 public class AccountingAdminConfiguration extends JacksonWebMvcExtension
     implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
-    public AccountingAdminConfiguration(ObjectMapper objectMapper) {
+    private final AccountCache accountCache;
+
+    private final AccountResolver accountResolver;
+
+    private final ChartEntryCache chartEntryCache;
+
+    private final FlowDefinitionCache flowDefinitionCache;
+
+    public AccountingAdminConfiguration(ObjectMapper objectMapper,
+                                        AccountRepository accountRepository,
+                                        ChartEntryRepository chartEntryRepository,
+                                        FlowDefinitionRepository flowDefinitionRepository) {
 
         super(objectMapper);
+
+        assert accountRepository != null;
+        assert chartEntryRepository != null;
+        assert flowDefinitionRepository != null;
+
+        this.accountCache = new AccountLocalCache(accountRepository);
+        this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);
+        this.flowDefinitionCache = new FlowDefinitionLocalCache(flowDefinitionRepository);
+
+        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
+    }
+
+    @Bean
+    @Override
+    public AccountCache accountCache() {
+
+        return this.accountCache;
+    }
+
+    @Bean
+    @Override
+    public AccountResolver accountResolver() {
+
+        return this.accountResolver;
     }
 
     @Bean
@@ -70,6 +117,21 @@ public class AccountingAdminConfiguration extends JacksonWebMvcExtension
         return new EmptyGatekeeper();
     }
 
+    @Bean
+    @Override
+    public ChartEntryCache chartEntryCache() {
+
+        return this.chartEntryCache;
+    }
+
+    @Bean
+    @Override
+    public FlowDefinitionCache flowDefinitionCache() {
+
+        return this.flowDefinitionCache;
+    }
+
+    @Bean
     @Override
     public Ledger ledger() {
 
@@ -89,7 +151,7 @@ public class AccountingAdminConfiguration extends JacksonWebMvcExtension
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings {
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

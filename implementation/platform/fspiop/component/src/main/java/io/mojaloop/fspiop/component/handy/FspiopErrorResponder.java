@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@ import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 
 public class FspiopErrorResponder {
 
-    public static void toPayer(Payer payer, Exception exception, ActionToPayer action) throws Throwable {
+    public static void toPayer(Payer payer, Exception exception, ActionToPayer action) throws Exception {
 
         if (payer == null || payer.isEmpty()) {
 
@@ -57,7 +57,7 @@ public class FspiopErrorResponder {
 
     public interface ActionToPayer {
 
-        void execute(Payer payer, ErrorInformationObject errorInformationObject) throws Throwable;
+        void execute(Payer payer, ErrorInformationObject errorInformationObject) throws Exception;
 
     }
 

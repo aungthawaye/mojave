@@ -17,14 +17,18 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.query;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.data.PositionData;
+import io.mojaloop.core.wallet.contract.exception.position.PositionIdNotFoundException;
 import io.mojaloop.core.wallet.contract.query.PositionQuery;
 import io.mojaloop.core.wallet.domain.model.Position;
 import io.mojaloop.core.wallet.domain.repository.PositionRepository;
+import io.mojaloop.fspiop.spec.core.Currency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +51,17 @@ public class PositionQueryHandler implements PositionQuery {
     @Override
     public PositionData get(final PositionId positionId) {
 
-        // NOTE: PositionIdNotFoundException currently expects WalletId; using IllegalArgumentException until fixed.
-        return this.positionRepository.findById(positionId).orElseThrow(() -> new IllegalArgumentException("Position not found: " + positionId)).convert();
+        return this.positionRepository.findById(positionId).orElseThrow(() -> new PositionIdNotFoundException(positionId)).convert();
+    }
+
+    @Transactional(readOnly = true)
+    @Read
+    @Override
+    public List<PositionData> get(final WalletOwnerId ownerId, final Currency currency) {
+
+        var spec = PositionRepository.Filters.withOwnerId(ownerId).and(PositionRepository.Filters.withCurrency(currency));
+
+        return this.positionRepository.findAll(spec).stream().map(Position::convert).toList();
     }
 
     @Transactional(readOnly = true)

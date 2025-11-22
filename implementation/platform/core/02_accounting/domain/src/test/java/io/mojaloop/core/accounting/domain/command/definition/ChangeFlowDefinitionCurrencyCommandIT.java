@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -69,13 +69,12 @@ public class ChangeFlowDefinitionCurrencyCommandIT extends BaseDomainIT {
         final var entry = this.createChartEntryCommand.execute(
             new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                entry.chartEntryId(), new AccountOwnerId(3501L), Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+            new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(3501L), Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
 
-        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-            TransactionType.FUND_IN, Currency.USD, "Flow H", "Desc", List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"))));
+        final var created = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow H", "Desc", List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+                "Debit Assets"))));
 
         final var input = new ChangeFlowDefinitionCurrencyCommand.Input(created.flowDefinitionId(), Currency.EUR);
 
@@ -95,19 +94,17 @@ public class ChangeFlowDefinitionCurrencyCommandIT extends BaseDomainIT {
         final var entry = this.createChartEntryCommand.execute(
             new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
         this.createAccountCommand.execute(
-            new CreateAccountCommand.Input(
-                entry.chartEntryId(), new AccountOwnerId(3502L), Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID, BigDecimal.ZERO));
+            new CreateAccountCommand.Input(entry.chartEntryId(), new AccountOwnerId(3502L), Currency.USD, new AccountCode("ACC_ASSET"), "Asset Acc", "Test", OverdraftMode.FORBID,
+                BigDecimal.ZERO));
 
-        final var flowA = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-            TransactionType.FUND_IN, Currency.USD, "Flow I", "Desc", List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"))));
+        final var flowA = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.USD, "Flow I", "Desc", List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+                "Debit Assets"))));
 
         // Create flow B in EUR
-        final var flowB = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-            TransactionType.FUND_IN, Currency.EUR, "Flow J", "Desc", List.of(
-            new CreateFlowDefinitionCommand.Input.Posting(
-                ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT, "Debit Assets"))));
+        final var flowB = this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(TransactionType.FUND_IN, Currency.EUR, "Flow J", "Desc", List.of(
+            new CreateFlowDefinitionCommand.Input.Posting(ReceiveIn.CHART_ENTRY, entry.chartEntryId().getId(), "DEPOSIT_INTO_FSP", "LIQUIDITY_AMOUNT", Side.DEBIT,
+                "Debit Assets"))));
 
         // Try to change flow A currency to EUR which is already used by flow B
         final var input = new ChangeFlowDefinitionCurrencyCommand.Input(flowA.flowDefinitionId(), Currency.EUR);

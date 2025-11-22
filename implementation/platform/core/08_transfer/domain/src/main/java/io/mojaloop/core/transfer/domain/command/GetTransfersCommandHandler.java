@@ -17,8 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.command;
 
+import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.transfer.contract.command.GetTransfersCommand;
@@ -70,6 +72,7 @@ public class GetTransfersCommandHandler implements GetTransfersCommand {
     }
 
     @Override
+    @Read
     public Output execute(Input input) {
 
         var udfTransferId = input.udfTransferId();

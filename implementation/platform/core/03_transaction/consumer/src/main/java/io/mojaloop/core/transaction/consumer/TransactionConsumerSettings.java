@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.consumer;
 
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
@@ -34,18 +35,16 @@ public class TransactionConsumerSettings implements TransactionConsumerConfigura
     @Override
     public AddStepListener.Settings addStepListenerSettings() {
 
-        return new AddStepListener.Settings(
-            System.getenv().getOrDefault("KAFKA_BROKER_URL", "localhost:9092"), AddStepListener.GROUP_ID, UUID.randomUUID().toString(), "earliest", 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
+        return new AddStepListener.Settings(System.getenv().getOrDefault("KAFKA_BROKER_URL", "localhost:9092"), AddStepListener.GROUP_ID, UUID.randomUUID().toString(), "earliest",
+            1, 100, false, ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
     @Override
     public CloseTransactionListener.Settings closeTransactionListenerSettings() {
 
-        return new CloseTransactionListener.Settings(
-            System.getenv().getOrDefault("KAFKA_BROKER_URL", "localhost:9092"), CloseTransactionListener.GROUP_ID, UUID.randomUUID().toString(), "earliest", 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
+        return new CloseTransactionListener.Settings(System.getenv().getOrDefault("KAFKA_BROKER_URL", "localhost:9092"), CloseTransactionListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false, ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -56,8 +55,7 @@ public class TransactionConsumerSettings implements TransactionConsumerConfigura
             System.getenv().getOrDefault("TXN_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_transaction?createDatabaseIfNotExist=true"),
             System.getenv().getOrDefault("TXN_READ_DB_USER", "root"), System.getenv().getOrDefault("TXN_READ_DB_PASSWORD", "password"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "accounting-admin-read", Integer.parseInt(System.getenv().getOrDefault("TXN_READ_DB_MIN_POOL_SIZE", "2")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-admin-read", Integer.parseInt(System.getenv().getOrDefault("TXN_READ_DB_MIN_POOL_SIZE", "2")),
             Integer.parseInt(System.getenv().getOrDefault("TXN_READ_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -71,8 +69,7 @@ public class TransactionConsumerSettings implements TransactionConsumerConfigura
             System.getenv().getOrDefault("TXN_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_transaction?createDatabaseIfNotExist=true"),
             System.getenv().getOrDefault("TXN_WRITE_DB_USER", "root"), System.getenv().getOrDefault("TXN_WRITE_DB_PASSWORD", "password"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "accounting-admin-write", Integer.parseInt(System.getenv().getOrDefault("TXN_WRITE_DB_MIN_POOL_SIZE", "2")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-admin-write", Integer.parseInt(System.getenv().getOrDefault("TXN_WRITE_DB_MIN_POOL_SIZE", "2")),
             Integer.parseInt(System.getenv().getOrDefault("TXN_WRITE_DB_MAX_POOL_SIZE", "10")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);

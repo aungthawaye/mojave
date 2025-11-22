@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;

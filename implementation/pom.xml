@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
+        <version>3.5.7</version>
     </parent>
     <groupId>io.mojaloop</groupId>
     <artifactId>parent-pom</artifactId>
@@ -92,6 +92,11 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.component</groupId>
+                <artifactId>mod-component-openapi</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.component</groupId>
                 <artifactId>mod-component-redis</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -142,6 +147,11 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-consumer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
                 <artifactId>mod-accounting-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -158,6 +168,11 @@
             <dependency>
                 <groupId>io.mojaloop.platform.core.accounting</groupId>
                 <artifactId>mod-accounting-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -242,7 +257,32 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.settlement</groupId>
-                <artifactId>settlement-pom</artifactId>
+                <artifactId>mod-settlement-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-admin-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-consumer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -297,6 +337,11 @@
             </dependency>
             <dependency>
                 <groupId>io.mojaloop.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-admin-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mojaloop.platform.core.wallet</groupId>
                 <artifactId>mod-wallet-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -346,6 +391,16 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>io.mojaloop.platform.mono</groupId>
+                <artifactId>mod-mono-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.20.0</version>
+            </dependency>
+            <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk18on</artifactId>
                 <version>1.81</version>
@@ -379,6 +434,11 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>3.50.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>2.8.14</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.vault</groupId>

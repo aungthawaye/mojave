@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,6 @@
 package io.mojaloop.core.transaction.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
-import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.StepParamIdJavaType;
@@ -54,7 +53,7 @@ public class StepParam extends JpaEntity<StepParamId> implements DataConversion<
     @Column(name = "param_id", nullable = false, updatable = false)
     protected StepParamId id;
 
-    @Column(name = "param_name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(name = "param_name", nullable = false)
     protected String paramName;
 
     @Column(name = "param_value", nullable = false)

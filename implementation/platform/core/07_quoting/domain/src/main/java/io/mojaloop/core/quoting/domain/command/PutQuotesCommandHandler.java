@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,8 +28,6 @@ import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.contract.command.PutQuotesCommand;
-import io.mojaloop.core.quoting.contract.exception.ExpirationNotInFutureException;
-import io.mojaloop.core.quoting.contract.exception.QuoteRequestTimeoutException;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.quoting.domain.repository.QuoteRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -43,6 +41,7 @@ import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -93,6 +92,8 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
     public Output execute(Input input) {
 
         var udfQuoteId = input.udfQuoteId();
+
+        MDC.put("requestId", udfQuoteId.getId());
 
         LOGGER.info("({}) Executing PutQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
@@ -176,8 +177,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 var payeeFspCommission = new BigDecimal(quoteIdPutResponse.getPayeeFspCommission().getAmount());
                 var payeeReceiveAmount = new BigDecimal(quoteIdPutResponse.getPayeeReceiveAmount().getAmount());
 
-                quote.responded(
-                    responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
+                quote.responded(responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
                     quoteIdPutResponse.getCondition());
 
                 if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
@@ -192,88 +192,6 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
                 this.quoteRepository.save(quote);
                 TransactionContext.commit();
-
-//                try {
-//
-//                    quote.responded(
-//                        responseExpiration, transferAmount, payeeFspFee, payeeFspCommission, payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
-//                        quoteIdPutResponse.getCondition());
-//
-//                    if (quoteIdPutResponse.getExtensionList() != null && quoteIdPutResponse.getExtensionList().getExtension() != null) {
-//
-//                        var extensions = quoteIdPutResponse.getExtensionList().getExtension();
-//
-//                        extensions.forEach(extension -> {
-//                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
-//                            quote.addExtension(Direction.TO_PAYEE, extension.getKey(), extension.getValue());
-//                        });
-//                    }
-//
-//                    this.quoteRepository.save(quote);
-//                    TransactionContext.commit();
-//
-//                } catch (ExpirationNotInFutureException e) {
-//
-//                    LOGGER.error("({}) Payee FSP responded with an expired quote.", udfQuoteId.getId(), e);
-//
-//                    var error = "Payee FSP responded with an expired quote.";
-//
-//                    quote.error(error);
-//                    this.quoteRepository.save(quote);
-//                    TransactionContext.commit();
-//
-//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-//
-//                } catch (QuoteRequestTimeoutException e) {
-//
-//                    LOGGER.error("({}) Payee FSP responded with a timeout quote.", udfQuoteId.getId(), e);
-//
-//                    var error = "Payee FSP responded only after the request expiration date/time.";
-//
-//                    quote.error(error);
-//                    this.quoteRepository.save(quote);
-//                    TransactionContext.commit();
-//
-//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-//
-//                }
-//                catch (TransferAmountMismatchException e) {
-//
-//                    LOGGER.error("({}) Transfer amount mismatch.", udfQuoteId.getId(), e);
-//
-//                    var error = "Payee FSP responded with the wrong transfer amount for amount type (SEND). It must be same as the amount of Quoting request.";
-//
-//                    quote.error(error);
-//                    this.quoteRepository.save(quote);
-//                    TransactionContext.commit();
-//
-//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-//
-//                } catch (ReceivingAmountMismatchException e) {
-//
-//                    LOGGER.error("({}) Receiving amount mismatch.", udfQuoteId.getId(), e);
-//
-//                    var error = "Payee FSP responded with the wrong payee receiving amount for amount type (RECEIVE). It must be same as the amount of Quoting request.";
-//
-//                    quote.error(error);
-//                    this.quoteRepository.save(quote);
-//                    TransactionContext.commit();
-//
-//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-//
-//                } catch (ReceivingAmountLargerException e) {
-//
-//                    LOGGER.error("({}) Receiving amount larger.", udfQuoteId.getId(), e);
-//
-//                    var error = "Payee FSP responded with the payee receiving amount which is larger than the transfer amount for amount type (RECEIVE). It must be same or smaller than the transfer amount.";
-//
-//                    quote.error(error);
-//                    this.quoteRepository.save(quote);
-//                    TransactionContext.commit();
-//
-//                    throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
-//
-//                }
 
             } else {
 
@@ -311,6 +229,9 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
         }
 
         LOGGER.info("Returning from PutQuotesCommandHandler successfully.");
+
+        MDC.remove("requestId");
+
         return new Output();
     }
 

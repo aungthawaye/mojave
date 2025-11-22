@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,17 +59,30 @@ public class RedissonPubSubClientConfigurer {
 
         if (!settings.cluster()) {
 
-            config.useSingleServer().setAddress(settings.hosts()[0]).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000).setRetryAttempts(3)
+            config.useSingleServer()
+                  .setAddress(settings.hosts()[0])
+                  .setConnectTimeout(5000)
+                  .setTimeout(3000)
+                  .setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3)
                   .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
                   .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() : 64)
-                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection()).setPingConnectionInterval(10000);
+                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
+                  .setPingConnectionInterval(10000);
 
         } else {
 
-            config.useClusterServers().addNodeAddress(settings.hosts()).setScanInterval(2000).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000)
-                  .setRetryAttempts(3).setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
+            config.useClusterServers()
+                  .addNodeAddress(settings.hosts())
+                  .setScanInterval(2000)
+                  .setConnectTimeout(5000)
+                  .setTimeout(3000)
+                  .setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3)
+                  .setSubscriptionConnectionPoolSize(settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
                   .setSubscriptionConnectionMinimumIdleSize(settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() : 64)
-                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection()).setPingConnectionInterval(10000);
+                  .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
+                  .setPingConnectionInterval(10000);
         }
 
         return new RedissonPubSubClient(Redisson.create(config));

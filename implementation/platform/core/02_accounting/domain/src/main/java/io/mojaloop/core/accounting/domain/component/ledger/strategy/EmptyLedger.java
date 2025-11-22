@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.domain.component.ledger.strategy;
 
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;

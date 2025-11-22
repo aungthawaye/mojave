@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,6 @@ import com.google.common.primitives.UnsignedLong;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.interledger.codecs.ilp.InterledgerCodecContextFactory;
 import org.interledger.core.InterledgerAddress;
-import org.interledger.core.InterledgerCondition;
 import org.interledger.core.InterledgerFulfillment;
 import org.interledger.core.InterledgerPreparePacket;
 import org.interledger.encoding.asn.framework.CodecContext;
@@ -40,6 +39,7 @@ import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Optional;
 
 public class Interledger {
 
@@ -77,36 +77,23 @@ public class Interledger {
         }
     }
 
-    public static Fulfill fulfill(String ilpSecret,
-                                  String peer,
-                                  UnsignedLong amount,
-                                  String data,
-                                  String comparingBase64Condition,
-                                  String comparingBase64Packet,
-                                  int lifetimeSeconds) {
+    public static Optional<String> fulfil(String ilpSecret, String peer, UnsignedLong amount, String data, String condition, int lifetimeSeconds) {
 
         assert ilpSecret != null;
         assert peer != null;
         assert amount != null;
-        assert comparingBase64Packet != null;
+        assert condition != null;
 
-        var createdPacket = Interledger.prepare(ilpSecret, peer, amount, data, lifetimeSeconds);
-        var createdCondition = createdPacket.base64Condition;
-        var createdFulfillment = createdPacket.base64Fulfillment;
+        var fulfilmentPacket = Interledger.prepare(ilpSecret, peer, amount, data, lifetimeSeconds);
+        var fulfilmentCondition = fulfilmentPacket.base64Condition;
+        var fulfilment = fulfilmentPacket.base64Fulfillment;
 
-        LOGGER.debug("createdFulfillment.preimage: {}", base64Decode(createdFulfillment));
+        LOGGER.debug("fulfilmentCondition: {}", fulfilmentCondition);
+        LOGGER.debug("condition: {}", condition);
 
-        var unwrappedPacket = Interledger.unwrap(comparingBase64Packet);
-        var unwrappedCondition = base64Encode(unwrappedPacket.getExecutionCondition().getHash(), false);
-        var comparingCondition = base64Encode(InterledgerCondition.of(base64Decode(comparingBase64Condition)).getHash(), false);
+        var valid = fulfilmentCondition.equals(condition);
 
-        LOGGER.debug("createdCondition: {}", createdCondition);
-        LOGGER.debug("unwrappedCondition: {}", unwrappedCondition);
-        LOGGER.debug("comparingCondition: {}", comparingCondition);
-
-        var valid = createdCondition.equals(unwrappedCondition) && comparingCondition.equals(unwrappedCondition);
-
-        return new Fulfill(valid, createdFulfillment);
+        return Optional.ofNullable(valid ? fulfilment : null);
 
     }
 
@@ -130,8 +117,13 @@ public class Interledger {
         LOGGER.debug("preimage: {}", preimage);
         LOGGER.debug("fulfillment.preimage: {}", fulfillment.getPreimage());
 
-        InterledgerPreparePacket preparePacket = InterledgerPreparePacket.builder().amount(amount).destination(InterledgerAddress.of(peer)).executionCondition(condition)
-                                                                         .expiresAt(Instant.now().plusSeconds(lifetimeSeconds)).data(data.getBytes(StandardCharsets.UTF_8)).build();
+        InterledgerPreparePacket preparePacket = InterledgerPreparePacket.builder()
+                                                                         .amount(amount)
+                                                                         .destination(InterledgerAddress.of(peer))
+                                                                         .executionCondition(condition)
+                                                                         .expiresAt(Instant.now().plusSeconds(lifetimeSeconds))
+                                                                         .data(data.getBytes(StandardCharsets.UTF_8))
+                                                                         .build();
 
         return new Prepare(base64Encode(serialize(preparePacket), true), base64Encode(fulfillment.getPreimage(), false), base64Encode(condition.getHash(), false));
 

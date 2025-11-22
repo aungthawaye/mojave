@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,23 +29,6 @@ public class RoutingDataSource extends AbstractRoutingDataSource implements Infr
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoutingDataSource.class);
 
-    private static final ThreadLocal<String> CONTEXT_HOLDER = new ThreadLocal<>();
-
-    public static void clearDataSourceKey() {
-
-        CONTEXT_HOLDER.remove();
-    }
-
-    public static String getDataSourceKey() {
-
-        return CONTEXT_HOLDER.get();
-    }
-
-    public static void setDataSourceKey(String key) {
-
-        CONTEXT_HOLDER.set(key);
-    }
-
     @Override
     public Object getWrappedObject() {
 
@@ -55,11 +38,32 @@ public class RoutingDataSource extends AbstractRoutingDataSource implements Infr
     @Override
     protected Object determineCurrentLookupKey() {
 
-        Object key = CONTEXT_HOLDER.get();
+        Object key = Context.get();
 
         LOGGER.debug("determineCurrentLookupKey - key : [{}]", key);
 
-        return CONTEXT_HOLDER.get();
+        return key;
+    }
+
+    public static class Context {
+
+        private static final ThreadLocal<String> CONTEXT_HOLDER = new ThreadLocal<>();
+
+        public static void clear() {
+
+            CONTEXT_HOLDER.remove();
+        }
+
+        public static String get() {
+
+            return CONTEXT_HOLDER.get();
+        }
+
+        public static void set(String key) {
+
+            CONTEXT_HOLDER.set(key);
+        }
+
     }
 
     public static class Keys {

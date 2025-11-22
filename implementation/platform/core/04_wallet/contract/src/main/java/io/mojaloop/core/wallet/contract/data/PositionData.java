@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.contract.data;
 
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;

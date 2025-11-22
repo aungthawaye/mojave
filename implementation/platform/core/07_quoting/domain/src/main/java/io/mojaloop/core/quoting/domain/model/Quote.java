@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -288,46 +288,17 @@ public class Quote extends JpaEntity<QuoteId> {
         this.respondedAt = Instant.now();
         this.stage = QuotingStage.RESPONDED;
 
-//        if (this.requestExpiration != null && this.requestExpiration.isBefore(Instant.now())) {
-//
-//            throw new QuoteRequestTimeoutException();
-//        }
-//
-//        if (this.responseExpiration != null && this.responseExpiration.isBefore(Instant.now())) {
-//
-//            throw new ExpirationNotInFutureException();
-//        }
-//
-//        if (this.amountType == AmountType.SEND) {
-//
-//            if (transferAmount.subtract(this.amount).signum() != 0) {
-//                throw new TransferAmountMismatchException(transferAmount, this.amount, this.amountType);
-//            }
-//
-//        } else if (this.amountType == AmountType.RECEIVE) {
-//
-//            if (payeeReceiveAmount.subtract(this.amount).signum() != 0) {
-//                throw new ReceivingAmountMismatchException(payeeReceiveAmount, this.amount, this.amountType);
-//            }
-//        }
-//
-//        if (transferAmount.subtract(payeeReceiveAmount).signum() < 0) {
-//
-//            throw new ReceivingAmountLargerException(payeeReceiveAmount, transferAmount);
-//        }
-
-        this.ilpPacket.responded(ilpPacket, condition);
+        this.ilpPacket.prepared(ilpPacket, condition);
 
     }
 
     public QuotesIDPutResponse toFspiopResponse() {
 
-        return new QuotesIDPutResponse(
-            new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()), FspiopDates.forRequestBody(Date.from(this.responseExpiration)),
-            this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
+        return new QuotesIDPutResponse(new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()),
+            FspiopDates.forRequestBody(Date.from(this.responseExpiration)), this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
     }
 
-    List<QuoteExtension> getExtensions() {
+    public List<QuoteExtension> getExtensions() {
 
         return Collections.unmodifiableList(this.extensions);
     }

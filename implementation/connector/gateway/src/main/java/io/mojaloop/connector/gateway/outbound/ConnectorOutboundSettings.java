@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -72,23 +72,21 @@ class ConnectorOutboundSettings implements ConnectorOutboundConfiguration.Requir
             return new FspiopInvokerConfiguration.TransportSettings(false, null, null, true);
         }
 
-        return new FspiopInvokerConfiguration.TransportSettings(
-            true, new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
-            P12Reader.ContentType.valueOf(System.getenv("INVOKER_KEYSTORE_CONTENT_TYPE")), System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"),
-            System.getenv("INVOKER_KEYSTORE_PASSWORD")), new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(
-            P12Reader.ContentType.valueOf(System.getenv("INVOKER_TRUSTSTORE_CONTENT_TYPE")), System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"),
-            System.getenv("INVOKER_TRUSTSTORE_PASSWORD")), true);
+        return new FspiopInvokerConfiguration.TransportSettings(true,
+            new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(P12Reader.ContentType.valueOf(System.getenv("INVOKER_KEYSTORE_CONTENT_TYPE")),
+                System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"), System.getenv("INVOKER_KEYSTORE_PASSWORD")),
+            new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(P12Reader.ContentType.valueOf(System.getenv("INVOKER_TRUSTSTORE_CONTENT_TYPE")),
+                System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"), System.getenv("INVOKER_TRUSTSTORE_PASSWORD")), true);
     }
 
     @Bean
     @Override
     public ConnectorOutboundConfiguration.OutboundSettings outboundSettings() {
 
-        return new ConnectorOutboundConfiguration.OutboundSettings(
-            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")),
-            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")),
-            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")), System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"),
-            Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_OUTBOUND_SECURED", "true")));
+        return new ConnectorOutboundConfiguration.OutboundSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")),
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")),
+            System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"), Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_OUTBOUND_SECURED", "true")));
     }
 
     @Bean

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.misc.handy.Snowflake;
@@ -24,6 +25,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +38,15 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
 
     private final PositionUpdater positionUpdater;
 
-    public IncreasePositionCommandHandler(final PositionUpdater positionUpdater) {
+    private final PositionCache positionCache;
+
+    public IncreasePositionCommandHandler(final PositionUpdater positionUpdater, final PositionCache positionCache) {
 
         assert positionUpdater != null;
+        assert positionCache != null;
+
         this.positionUpdater = positionUpdater;
+        this.positionCache = positionCache;
     }
 
     @Override
@@ -47,17 +54,23 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
 
         LOGGER.info("Executing IncreasePositionCommand with input: {}", input);
 
+        var position = this.positionCache.get(input.walletOwnerId(), input.currency());
+
+        if (position == null) {
+
+            LOGGER.error("Position does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
+            throw new RuntimeException("Position does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+        }
+
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
 
-            final var history = this.positionUpdater.increase(
-                input.transactionId(), input.transactionAt(), positionUpdateId, input.positionId(), input.amount(),
+            final var history = this.positionUpdater.increase(input.transactionId(), input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
                 input.description());
 
-            final var output = new Output(
-                history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(), history.oldPosition(),
-                history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
 
             LOGGER.info("IncreasePositionCommand executed successfully with output: {}", output);
 
@@ -71,7 +84,7 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
         } catch (final PositionUpdater.LimitExceededException e) {
 
             LOGGER.error("Position limit exceeded for positionId: {} amount: {}", e.getPositionId(), e.getAmount());
-            throw new PositionLimitExceededException(e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getNetDebitCap(), e.getTransactionId());
+            throw new PositionLimitExceededException(e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getOldReserved(), e.getNetDebitCap(), e.getTransactionId());
         }
     }
 

@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="transaction-intercom (4302)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="03 transaction">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/03_transaction/intercom/src/main/java/io/mojaloop/core/transaction/intercom/.env" />
     </option>

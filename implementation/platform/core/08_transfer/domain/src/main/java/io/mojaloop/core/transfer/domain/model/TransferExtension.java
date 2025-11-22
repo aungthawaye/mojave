@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -61,7 +62,7 @@ public class TransferExtension extends JpaEntity<TransferExtensionId> {
     @Column(name = "x_key", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String key;
 
-    @Column(name = "x_value", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "x_value")
     protected String value;
 
     @ManyToOne

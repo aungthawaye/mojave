@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.producer.publisher;
 
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
@@ -45,11 +46,11 @@ public class CloseTransactionPublisher {
 
     public void publish(CloseTransactionCommand.Input input) {
 
-        LOGGER.info("Publishing CommitTransactionCommand with input: {}", input);
+        LOGGER.info("Publishing CloseTransactionCommand with input: {}", input);
 
         this.kafkaTemplate.send(TopicNames.CLOSE_TRANSACTION, input.transactionId().getId().toString(), input);
 
-        LOGGER.info("Published CommitTransactionCommand with input: {}", input);
+        LOGGER.info("Published CloseTransactionCommand with input: {}", input);
 
     }
 

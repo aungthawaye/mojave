@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,14 +42,48 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.fspiop.spec.core.Currency;
+import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public class FlowDefinitionWithCurrencyExistsException extends UncheckedDomainException {
+
+    public static final String CODE = "FLOW_DEFINITION_WITH_CURRENCY_EXISTS";
 
     private static final String TEMPLATE = "Flow Definition with currency ({0}) already exists.";
 
-    public FlowDefinitionWithCurrencyExistsException(Currency currency) {
+    private final Currency currency;
 
-        super(new ErrorTemplate("FLOW_DEFINITION_WITH_CURRENCY_EXISTS", TEMPLATE), currency.toString());
+    public FlowDefinitionWithCurrencyExistsException(final Currency currency) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{currency.toString()}));
+
+        this.currency = currency;
+    }
+
+    public static FlowDefinitionWithCurrencyExistsException from(final Map<String, String> extras) {
+
+        final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
+
+        return new FlowDefinitionWithCurrencyExistsException(currency);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.CURRENCY, this.currency.name());
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String CURRENCY = "currency";
+
     }
 
 }

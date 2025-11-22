@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -92,12 +92,17 @@ public class MiscConfiguration {
 
         objectMapper.findAndRegisterModules();
 
-        var module = new SimpleModule().addSerializer(Instant.class, new InstantConversion.Serializer()).addDeserializer(Instant.class, new InstantConversion.Deserializer())
+        var module = new SimpleModule().addSerializer(Instant.class, new InstantConversion.Serializer())
+                                       .addDeserializer(Instant.class, new InstantConversion.Deserializer())
                                        .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
-                                       .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer()).addSerializer(Long.class, ToStringSerializer.instance)
-                                       .addSerializer(Long.TYPE, ToStringSerializer.instance).addSerializer(Integer.class, ToStringSerializer.instance)
-                                       .addSerializer(Integer.TYPE, ToStringSerializer.instance).addSerializer(Boolean.class, ToStringSerializer.instance)
-                                       .addSerializer(Boolean.TYPE, ToStringSerializer.instance).addSerializer(BigInteger.class, ToStringSerializer.instance);
+                                       .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer())
+                                       .addSerializer(Long.class, ToStringSerializer.instance)
+                                       .addSerializer(Long.TYPE, ToStringSerializer.instance)
+                                       .addSerializer(Integer.class, ToStringSerializer.instance)
+                                       .addSerializer(Integer.TYPE, ToStringSerializer.instance)
+                                       .addSerializer(Boolean.class, ToStringSerializer.instance)
+                                       .addSerializer(Boolean.TYPE, ToStringSerializer.instance)
+                                       .addSerializer(BigInteger.class, ToStringSerializer.instance);
 
         objectMapper.registerModule(module);
 

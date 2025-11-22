@@ -17,8 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.command.wallet;
 
+import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.wallet.ReverseFundCommand;
 import io.mojaloop.core.wallet.contract.exception.wallet.BalanceUpdateIdNotFoundException;
 import io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException;
@@ -63,11 +66,10 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
 
         try {
 
-            final var history = this.balanceUpdater.reverse(input.reversalId(), input.balanceUpdateId());
+            final var history = this.balanceUpdater.reverse(input.reversalId(), new BalanceUpdateId(Snowflake.get().nextId()));
 
-            var output = new Output(
-                history.balanceUpdateId(), history.walletId(), history.action(), history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
-                history.newBalance(), history.transactionAt(), history.reversalId());
+            var output = new Output(history.balanceUpdateId(), history.walletId(), history.action(), history.transactionId(), history.currency(), history.amount(),
+                history.oldBalance(), history.newBalance(), history.transactionAt(), history.reversalId());
 
             LOGGER.info("ReverseFundCommand executed successfully with output: {}", output);
 
@@ -75,7 +77,7 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
 
         } catch (BalanceUpdater.ReversalFailedException e) {
 
-            LOGGER.error("Failed to reverse funds for balanceUpdateId: {}", input.balanceUpdateId());
+            LOGGER.error("Failed to reverse funds for reversalId: {}", input.reversalId());
             throw new ReversalFailedInWalletException(e.getReversalId());
         }
     }

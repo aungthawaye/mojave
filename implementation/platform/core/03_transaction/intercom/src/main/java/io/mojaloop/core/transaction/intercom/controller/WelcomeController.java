@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.intercom.controller;
 
 import org.springframework.http.ResponseEntity;

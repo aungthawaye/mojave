@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.component.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
@@ -42,9 +43,12 @@ public class KafkaTopicConfigurer {
                 continue;
             }
 
-            newTopics[i] = TopicBuilder.name(topicSettingsItem.name).partitions(topicSettingsItem.partitions).replicas(topicSettingsItem.replicationFactor)
+            newTopics[i] = TopicBuilder.name(topicSettingsItem.name)
+                                       .partitions(topicSettingsItem.partitions)
+                                       .replicas(topicSettingsItem.replicationFactor)
                                        .config(TopicConfig.RETENTION_MS_CONFIG, String.valueOf(topicSettingsItem.retentionMs))
-                                       .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE).build();
+                                       .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE)
+                                       .build();
         }
 
         return new KafkaAdmin.NewTopics(newTopics);

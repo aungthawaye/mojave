@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.component.kafka;
 
 import lombok.AllArgsConstructor;

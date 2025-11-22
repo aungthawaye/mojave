@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.producer.command;
 
 import io.mojaloop.component.misc.handy.Snowflake;

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.consumer.listener;
 
 import io.mojaloop.core.transaction.consumer.TestConfiguration;

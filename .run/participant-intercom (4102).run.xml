@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="participant-intercom (4102)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="01 participant">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/01_participant/intercom/src/main/java/io/mojaloop/core/participant/intercom/.env" />
     </option>

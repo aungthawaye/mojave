@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ package io.mojaloop.fspiop.service.api.transfers;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
@@ -42,36 +43,30 @@ public class RespondTransfersHandler implements RespondTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
-    public RespondTransfersHandler(ParticipantContext participantContext,
-                                   TransfersResponseService transfersResponseService,
-                                   FspiopErrorDecoder fspiopErrorDecoder,
-                                   FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
+    public RespondTransfersHandler(ParticipantContext participantContext, TransfersResponseService transfersResponseService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersResponseService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.participantContext = participantContext;
         this.transfersResponseService = transfersResponseService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
-    public void patchTransfers(Payer payer, String url, TransfersIDPatchResponse response) throws FspiopException {
+    public void patchTransfers(Payee payee, String url, TransfersIDPatchResponse response) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payee.fspCode());
 
             RetrofitService.invoke(this.transfersResponseService.patchTransfers(url, fspiopHeaders, response), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -86,7 +81,7 @@ public class RespondTransfersHandler implements RespondTransfers {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 
@@ -101,7 +96,7 @@ public class RespondTransfersHandler implements RespondTransfers {
 
         } catch (RetrofitService.InvocationException e) {
 
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

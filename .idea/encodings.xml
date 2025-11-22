@@ -7,6 +7,7 @@
     <file url="file://$PROJECT_DIR$/implementation/component/jpa/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/kafka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/misc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/openapi/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/redis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/retrofit/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/src/main/java" charset="UTF-8" />
@@ -96,6 +97,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/03_transaction/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/core/04_wallet/admin-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/04_wallet/admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/04_wallet/contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/04_wallet/domain/src/main/java" charset="UTF-8" />
@@ -172,6 +174,13 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/intercom/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/generated" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/src/main/java" charset="UTF-8" />

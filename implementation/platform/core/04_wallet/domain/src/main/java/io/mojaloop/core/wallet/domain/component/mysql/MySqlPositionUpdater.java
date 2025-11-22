@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.component.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -82,11 +83,10 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
     private static PositionHistory mapHistory(java.sql.ResultSet rs) throws java.sql.SQLException {
 
-        return new PositionHistory(
-            new PositionUpdateId(rs.getLong("position_update_id")), new PositionId(rs.getLong("position_id")), PositionAction.valueOf(rs.getString("action")),
-            new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"), rs.getBigDecimal("old_position"),
-            rs.getBigDecimal("new_position"), rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"), rs.getBigDecimal("net_debit_cap"),
-            Instant.ofEpochSecond(rs.getLong("transaction_at")));
+        return new PositionHistory(new PositionUpdateId(rs.getLong("position_update_id")), new PositionId(rs.getLong("position_id")),
+            PositionAction.valueOf(rs.getString("action")), new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
+            rs.getBigDecimal("old_position"), rs.getBigDecimal("new_position"), rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"),
+            rs.getBigDecimal("net_debit_cap"), Instant.ofEpochSecond(rs.getLong("transaction_at")));
     }
 
     @Override
@@ -151,7 +151,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 try (var stm = con.prepareStatement("CALL sp_decrease_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, positionUpdateId.getId());
                     stm.setLong(4, positionId.getId());
                     stm.setBigDecimal(5, amount);
@@ -201,7 +201,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 try (var stm = con.prepareStatement("CALL sp_increase_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, positionUpdateId.getId());
                     stm.setLong(4, positionId.getId());
                     stm.setBigDecimal(5, amount);
@@ -223,8 +223,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("net_debit_cap"), transactionId));
+                                    throw new RuntimeException(new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("old_reserved"),
+                                        rs.getBigDecimal("net_debit_cap"), transactionId));
                                 }
                             }
                         }
@@ -260,7 +260,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 try (var stm = con.prepareStatement("CALL sp_reserve_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
-                    stm.setLong(2, transactionAt.toEpochMilli());
+                    stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, positionUpdateId.getId());
                     stm.setLong(4, positionId.getId());
                     stm.setBigDecimal(5, amount);
@@ -280,8 +280,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(
-                                        new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("net_debit_cap"), transactionId));
+                                    throw new RuntimeException(new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("old_reserved"),
+                                        rs.getBigDecimal("net_debit_cap"), transactionId));
                                 }
                             }
                         }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -95,8 +95,14 @@ public class RequestTransfersController {
 
         var expireAfterSeconds = new Date(Instant.now().plus(this.transferSettings.transferRequestExpirySeconds(), ChronoUnit.SECONDS).toEpochMilli());
 
-        transfersPostRequest.transferId(request.transferId()).payerFsp(this.participantContext.fspCode()).payeeFsp(request.destination).amount(request.amount)
-                            .ilpPacket(request.ilpPacket).condition(request.condition).expiration(FspiopDates.forRequestBody(expireAfterSeconds)).extensionList(extensionList);
+        transfersPostRequest.transferId(request.transferId())
+                            .payerFsp(this.participantContext.fspCode())
+                            .payeeFsp(request.destination)
+                            .amount(request.amount)
+                            .ilpPacket(request.ilpPacket)
+                            .condition(request.condition)
+                            .expiration(FspiopDates.forRequestBody(expireAfterSeconds))
+                            .extensionList(extensionList);
 
         var input = new RequestTransfersCommand.Input(new Payee(request.destination()), transfersPostRequest);
         var output = this.requestTransfersCommand.execute(input);

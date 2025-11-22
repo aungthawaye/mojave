@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,7 +75,7 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
     @Enumerated(EnumType.STRING)
     protected TransactionType type;
 
-    @Column(name = "phase", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "phase", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionPhase phase;
 
@@ -87,7 +87,7 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
     @Convert(converter = JpaInstantConverter.class)
     protected Instant closeAt;
 
-    @Column(name = "error", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "error")
     protected String error;
 
     @Column(name = "success")

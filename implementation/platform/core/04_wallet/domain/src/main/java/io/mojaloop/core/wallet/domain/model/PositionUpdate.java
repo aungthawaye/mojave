@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;
@@ -121,9 +122,8 @@ public class PositionUpdate extends JpaEntity<PositionUpdateId> implements DataC
     @Override
     public PositionUpdateData convert() {
 
-        return new PositionUpdateData(
-            this.id, this.positionId, this.action, this.transactionId, this.currency, this.amount, this.oldPosition, this.newPosition, this.description, this.transactionAt,
-            this.createdAt, this.reservationId);
+        return new PositionUpdateData(this.id, this.positionId, this.action, this.transactionId, this.currency, this.amount, this.oldPosition, this.newPosition, this.description,
+            this.transactionAt, this.createdAt, this.reservationId);
     }
 
 }

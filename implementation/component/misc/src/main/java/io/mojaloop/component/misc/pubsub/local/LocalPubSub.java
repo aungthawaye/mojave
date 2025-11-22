@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -94,24 +94,23 @@ public class LocalPubSub {
 
         AtomicReference<Disposable> ref = new AtomicReference<>();
 
-        Disposable disposable = flux.subscribe(
-            handler, error -> LOGGER.error("Error in subscriber of channel {}", channelName, error), () -> {
+        Disposable disposable = flux.subscribe(handler, error -> LOGGER.error("Error in subscriber of channel {}", channelName, error), () -> {
 
-                LOGGER.debug("Subscriber timeout/completed on channel {}", channelName);
+            LOGGER.debug("Subscriber timeout/completed on channel {}", channelName);
 
-                Disposable removing = ref.get();
+            Disposable removing = ref.get();
 
-                channel.subscriptions.remove(removing);
+            channel.subscriptions.remove(removing);
 
-                if (channel.subscriptions.isEmpty()) {
+            if (channel.subscriptions.isEmpty()) {
 
-                    LOGGER.debug("No more subscribers on channel {}, removing channel", channelName);
+                LOGGER.debug("No more subscribers on channel {}, removing channel", channelName);
 
-                    channel.sink.tryEmitComplete();
+                channel.sink.tryEmitComplete();
 
-                    channels.remove(channelName);
-                }
-            });
+                channels.remove(channelName);
+            }
+        });
 
         ref.set(disposable);
 

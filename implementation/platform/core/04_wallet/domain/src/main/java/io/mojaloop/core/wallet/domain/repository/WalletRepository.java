@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.repository;
 
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;

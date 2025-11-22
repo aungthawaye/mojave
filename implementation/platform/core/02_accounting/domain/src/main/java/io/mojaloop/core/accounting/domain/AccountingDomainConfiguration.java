@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,16 +25,8 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
-import io.mojaloop.core.accounting.domain.cache.strategy.local.AccountLocalCache;
-import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCache;
-import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
-import io.mojaloop.core.accounting.domain.repository.AccountRepository;
-import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
-import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -42,31 +34,15 @@ import org.springframework.context.annotation.Import;
 @Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
 public class AccountingDomainConfiguration {
 
-    @Bean
-    public AccountCache accountCache(AccountRepository accountRepository) {
-
-        return new AccountLocalCache(accountRepository);
-    }
-
-    @Bean
-    public AccountResolver accountResolver(AccountCache accountCache) {
-
-        return new CacheBasedAccountResolver(accountCache);
-    }
-
-    @Bean
-    public ChartEntryCache chartEntryCache(ChartEntryRepository chartEntryRepository) {
-
-        return new ChartEntryLocalCache(chartEntryRepository);
-    }
-
-    @Bean
-    public FlowDefinitionCache flowDefinitionCache(FlowDefinitionRepository flowDefinitionRepository) {
-
-        return new FlowDefinitionLocalCache(flowDefinitionRepository);
-    }
-
     public interface RequiredBeans {
+
+        AccountCache accountCache();
+
+        AccountResolver accountResolver();
+
+        ChartEntryCache chartEntryCache();
+
+        FlowDefinitionCache flowDefinitionCache();
 
         Ledger ledger();
 

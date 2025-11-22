@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,17 +59,30 @@ public class RedissonOpsClientConfigurer {
 
         if (!settings.cluster()) {
 
-            config.useSingleServer().setAddress(settings.hosts()[0]).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000).setRetryAttempts(3)
+            config.useSingleServer()
+                  .setAddress(settings.hosts()[0])
+                  .setConnectTimeout(5000)
+                  .setTimeout(3000)
+                  .setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3)
                   .setConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
-                  .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64).setPingConnectionInterval(10000);
+                  .setConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
+                  .setPingConnectionInterval(10000);
 
         } else {
 
-            config.useClusterServers().addNodeAddress(settings.hosts()).setScanInterval(2000).setConnectTimeout(5000).setTimeout(3000).setIdleConnectionTimeout(10000)
-                  .setRetryAttempts(3).setMasterConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
+            config.useClusterServers()
+                  .addNodeAddress(settings.hosts())
+                  .setScanInterval(2000)
+                  .setConnectTimeout(5000)
+                  .setTimeout(3000)
+                  .setIdleConnectionTimeout(10000)
+                  .setRetryAttempts(3)
+                  .setMasterConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
                   .setMasterConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
                   .setSlaveConnectionPoolSize(settings.connectionPoolSize() != 0 ? settings.connectionPoolSize() : 64)
-                  .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64).setPingConnectionInterval(10000);
+                  .setSlaveConnectionMinimumIdleSize(settings.connectionMinimumIdleSize() != 0 ? settings.connectionMinimumIdleSize() : 64)
+                  .setPingConnectionInterval(10000);
         }
 
         return new RedissonOpsClient(Redisson.create(config));

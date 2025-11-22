@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-intercom-client</artifactId>
+            <artifactId>mod-participant-contract</artifactId>
         </dependency>
     </dependencies>
 </project>

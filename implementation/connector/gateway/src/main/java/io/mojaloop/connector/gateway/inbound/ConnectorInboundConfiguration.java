@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -129,13 +129,12 @@ public class ConnectorInboundConfiguration
 
                             var keystoreSettings = inboundSettings.keyStoreSettings();
                             var truststoreSettings = inboundSettings.trustStoreSettings();
-                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(
-                                inboundSettings.portNo(), inboundSettings.maxThreads(), inboundSettings.connectionTimeout(),
-                                new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
-                                    truststoreSettings.contentType(), truststoreSettings.contentValue(),
+                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
+                                inboundSettings.connectionTimeout(),
+                                new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(truststoreSettings.contentType(), truststoreSettings.contentValue(),
                                     truststoreSettings.password),
-                                new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
-                                    keystoreSettings.contentType(), keystoreSettings.contentValue(), keystoreSettings.password, keystoreSettings.keyAlias()));
+                                new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(keystoreSettings.contentType(), keystoreSettings.contentValue(),
+                                    keystoreSettings.password, keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
 

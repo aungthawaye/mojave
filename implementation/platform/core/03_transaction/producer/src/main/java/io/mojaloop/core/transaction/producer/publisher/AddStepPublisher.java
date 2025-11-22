@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.producer.publisher;
 
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;

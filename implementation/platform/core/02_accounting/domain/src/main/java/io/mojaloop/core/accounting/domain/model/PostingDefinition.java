@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -181,11 +181,15 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         // 2. When BY_ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
 
         // Find all the accounts, created under the same receiveInId in the accounting system, and previously added for the same Side and AmountName.
-        var existingAccountIds = this.definition.postings.stream().filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
-                                                         .map(pd -> pd.receiveInId).collect(Collectors.toSet());
+        var existingAccountIds = this.definition.postings.stream()
+                                                         .filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
+                                                         .map(pd -> pd.receiveInId)
+                                                         .collect(Collectors.toSet());
 
-        var existingChartEntryIds = this.definition.postings.stream().filter(
-                                            pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side && pd.amountName.equals(_amountName)).map(pd -> pd.receiveInId)
+        var existingChartEntryIds = this.definition.postings.stream()
+                                                            .filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side &&
+                                                                              pd.amountName.equals(_amountName))
+                                                            .map(pd -> pd.receiveInId)
                                                             .collect(Collectors.toSet());
 
         if (receiveIn == ReceiveIn.CHART_ENTRY) {

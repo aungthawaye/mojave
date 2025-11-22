@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,19 +42,14 @@ public class ForwardRequestHandler implements ForwardRequest {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    private final FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver;
-
-    public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService,
-                                 FspiopErrorDecoder fspiopErrorDecoder,
-                                 FspiopInvocationExceptionResolver fspiopInvocationExceptionResolver) {
+    public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService, FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert forwardingService != null;
         assert fspiopErrorDecoder != null;
-        assert fspiopInvocationExceptionResolver != null;
 
         this.forwardingService = forwardingService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;
-        this.fspiopInvocationExceptionResolver = fspiopInvocationExceptionResolver;
+
     }
 
     @Override
@@ -100,7 +95,7 @@ public class ForwardRequestHandler implements ForwardRequest {
         } catch (RetrofitService.InvocationException e) {
 
             LOGGER.error("Error forwarding request to : {} {} - error {}", method, baseUrl, e.getMessage());
-            throw this.fspiopInvocationExceptionResolver.resolve(e);
+            throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }
 

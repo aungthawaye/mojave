@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,8 +76,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         } catch (JsonProcessingException e) {
 
             LOGGER.error("Error : ", e);
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, "Unable to parse the 'fspiop-signature' header."));
 
         } catch (GatekeeperFailureException e) {
@@ -88,8 +87,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         } catch (Exception e) {
 
             LOGGER.error("Error : ", e);
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, "An unexpected error occurred while authenticating the request."));
         }
     }
@@ -109,8 +107,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         if (signatureHeader == null || signatureHeader.isBlank()) {
 
             LOGGER.error("The 'fspiop-signature' header is missing.");
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST,
                 new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "The 'fspiop-signature' header is missing."));
         }
 
@@ -122,8 +119,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         if (publicKey == null) {
 
             LOGGER.error("No public key found for Source FSP ({}).", payer);
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_UNAUTHORIZED,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
                 new FspiopException(FspiopErrors.INVALID_SIGNATURE, "No public key found for Source FSP (" + payer + ")."));
         }
 
@@ -138,8 +134,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         if (!verificationOk) {
 
             LOGGER.error("Signature verification failed when using Source FSP ({})'s public key.", payer);
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_UNAUTHORIZED,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
                 new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Signature verification failed when using Source FSP (" + payer + ")'s public key."));
         }
 
@@ -160,8 +155,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         if (payer == null || payer.isBlank()) {
 
             LOGGER.error("The 'fspiop-payer' header is missing.");
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST,
                 new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "The 'fspiop-payer' header or its value is missing."));
         }
 
@@ -171,25 +165,21 @@ public class FspiopInboundGatekeeper implements Authenticator {
         if (destination == null || destination.isBlank()) {
 
             LOGGER.error("The 'fspiop-destination' header is missing.");
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_BAD_REQUEST,
                 new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "The 'fspiop-destination' header or its value is missing."));
         }
 
         if (!this.participantContext.fspCode().equalsIgnoreCase(destination)) {
 
             LOGGER.error("The Destination FSP ({}) is not valid.", payer);
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_NOT_ACCEPTABLE, new FspiopException(
-                FspiopErrors.GENERIC_PAYEE_REJECTION,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE, new FspiopException(FspiopErrors.GENERIC_PAYEE_REJECTION,
                 "Destination FSP (" + destination + ") is different from the current FSP (" + this.participantContext.fspCode() + ")."));
         }
 
         if (payer.equals(destination)) {
 
             LOGGER.error("The Source FSP ({}) and the destination FSP ({}) must not be the same.", payer, destination);
-            throw new GatekeeperFailureException(
-                HttpServletResponse.SC_NOT_ACCEPTABLE,
+            throw new GatekeeperFailureException(HttpServletResponse.SC_NOT_ACCEPTABLE,
                 new FspiopException(FspiopErrors.DESTINATION_FSP_ERROR, "Source FSP (" + payer + ") and Destination FSP (" + destination + ") must not be the same."));
         }
     }

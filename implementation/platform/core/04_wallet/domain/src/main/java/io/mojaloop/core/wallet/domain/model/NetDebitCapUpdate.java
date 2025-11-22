@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.model;
 
 import io.mojaloop.component.jpa.JpaEntity;

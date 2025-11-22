@@ -19,148 +19,22 @@
  */
 package io.mojaloop.fspiop.spec.core;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.mojaloop.fspiop.spec.core.Money;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
-
-/**
- * An FXP will be able to specify a charge which it proposes to levy on the currency conversion operation using a FxCharge object.
- **/
-
-@JsonTypeName("FxCharge")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
-public class FxCharge {
-
-    private String chargeType;
-
-    private Money sourceAmount;
-
-    private Money targetAmount;
-
-    public FxCharge() {
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
     }
+    return o.toString().replace("\n", "\n    ");
+  }
 
-    @JsonCreator
-    public FxCharge(@JsonProperty(required = true, value = "chargeType") String chargeType) {
-
-        this.chargeType = chargeType;
-    }
-
-    /**
-     * A description of the charge which is being levied.
-     **/
-    public FxCharge chargeType(String chargeType) {
-
-        this.chargeType = chargeType;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        FxCharge fxCharge = (FxCharge) o;
-        return Objects.equals(this.chargeType, fxCharge.chargeType) && Objects.equals(this.sourceAmount, fxCharge.sourceAmount) &&
-                   Objects.equals(this.targetAmount, fxCharge.targetAmount);
-    }
-
-    @JsonProperty(required = true, value = "chargeType")
-    @NotNull
-    @Size(min = 1, max = 32)
-    public String getChargeType() {
-
-        return chargeType;
-    }
-
-    @JsonProperty(required = true, value = "chargeType")
-    public void setChargeType(String chargeType) {
-
-        this.chargeType = chargeType;
-    }
-
-    @JsonProperty("sourceAmount")
-    @Valid
-    public Money getSourceAmount() {
-
-        return sourceAmount;
-    }
-
-    @JsonProperty("sourceAmount")
-    public void setSourceAmount(Money sourceAmount) {
-
-        this.sourceAmount = sourceAmount;
-    }
-
-    @JsonProperty("targetAmount")
-    @Valid
-    public Money getTargetAmount() {
-
-        return targetAmount;
-    }
-
-    @JsonProperty("targetAmount")
-    public void setTargetAmount(Money targetAmount) {
-
-        this.targetAmount = targetAmount;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(chargeType, sourceAmount, targetAmount);
-    }
-
-    /**
-     **/
-    public FxCharge sourceAmount(Money sourceAmount) {
-
-        this.sourceAmount = sourceAmount;
-        return this;
-    }
-
-    /**
-     **/
-    public FxCharge targetAmount(Money targetAmount) {
-
-        this.targetAmount = targetAmount;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("class FxCharge {\n");
-
-        sb.append("    chargeType: ").append(toIndentedString(chargeType)).append("\n");
-        sb.append("    sourceAmount: ").append(toIndentedString(sourceAmount)).append("\n");
-        sb.append("    targetAmount: ").append(toIndentedString(targetAmount)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
-    }
 
 }
 

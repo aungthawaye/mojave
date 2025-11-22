@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,8 +62,7 @@ public class ChangeAccountPropertiesCommandIT extends BaseDomainIT {
         final var entryOut = this.createChartEntryCommand.execute(
             new CreateChartEntryCommand.Input(chartOut.chartId(), new ChartEntryCode("ASSETS"), "Assets", "Assets Desc", AccountType.ASSET));
 
-        final var createInput = new CreateAccountCommand.Input(
-            entryOut.chartEntryId(), new AccountOwnerId(2004L), Currency.USD, new AccountCode("ACC006"), "Account", "Desc",
+        final var createInput = new CreateAccountCommand.Input(entryOut.chartEntryId(), new AccountOwnerId(2004L), Currency.USD, new AccountCode("ACC006"), "Account", "Desc",
             OverdraftMode.FORBID, BigDecimal.ZERO);
         final var accountOut = this.createAccountCommand.execute(createInput);
 

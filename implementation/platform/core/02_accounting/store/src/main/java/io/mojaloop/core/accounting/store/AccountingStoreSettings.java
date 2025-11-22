@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.store;
 
 import io.mojaloop.core.accounting.intercom.client.service.AccountingIntercomService;

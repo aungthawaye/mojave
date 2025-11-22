@@ -17,11 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.store.local;
 
 import io.mojaloop.core.accounting.contract.data.AccountData;
-import io.mojaloop.core.accounting.intercom.client.api.GetAccounts;
-import io.mojaloop.core.accounting.intercom.client.exception.AccountingIntercomClientException;
+import io.mojaloop.core.accounting.contract.query.AccountQuery;
 import io.mojaloop.core.accounting.store.AccountingStore;
 import io.mojaloop.core.accounting.store.AccountingStoreConfiguration;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
@@ -49,7 +49,7 @@ public class AccountingLocalStore implements AccountingStore {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountingLocalStore.class);
 
-    private final GetAccounts getAccounts;
+    private final AccountQuery accountQuery;
 
     private final AccountingStoreConfiguration.Settings accountingStoreSettings;
 
@@ -57,12 +57,12 @@ public class AccountingLocalStore implements AccountingStore {
 
     private final Timer timer = new Timer("AccountingLocalStoreRefreshTimer", true);
 
-    public AccountingLocalStore(GetAccounts getAccounts, AccountingStoreConfiguration.Settings accountingStoreSettings) {
+    public AccountingLocalStore(AccountQuery accountQuery, AccountingStoreConfiguration.Settings accountingStoreSettings) {
 
-        assert getAccounts != null;
+        assert accountQuery != null;
         assert accountingStoreSettings != null;
 
-        this.getAccounts = getAccounts;
+        this.accountQuery = accountQuery;
         this.accountingStoreSettings = accountingStoreSettings;
     }
 
@@ -74,15 +74,14 @@ public class AccountingLocalStore implements AccountingStore {
         LOGGER.info("Bootstrapping AccountingLocalStore");
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
+        this.timer.scheduleAtFixedRate(new TimerTask() {
 
-                @Override
-                public void run() {
+            @Override
+            public void run() {
 
-                    AccountingLocalStore.this.refreshData();
-                }
-            }, interval, interval);
+                AccountingLocalStore.this.refreshData();
+            }
+        }, interval, interval);
     }
 
     @Override
@@ -139,33 +138,29 @@ public class AccountingLocalStore implements AccountingStore {
 
     private void refreshData() {
 
-        try {
+        LOGGER.info("Start refreshing accounting data");
 
-            LOGGER.info("Start refreshing accounting data");
+        List<AccountData> accounts = this.accountQuery.getAll();
 
-            List<AccountData> accounts = this.getAccounts.execute();
+        var _withAccountId = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::accountId, Function.identity(), (a, b) -> a));
 
-            var _withAccountId = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::accountId, Function.identity(), (a, b) -> a));
+        var _withAccountCode = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::code, Function.identity(), (a, b) -> a));
 
-            var _withAccountCode = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::code, Function.identity(), (a, b) -> a));
+        var _withOwnerId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(AccountData::ownerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-            var _withOwnerId = Collections.unmodifiableMap(
-                accounts.stream().collect(Collectors.groupingBy(AccountData::ownerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withChartEntryId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(AccountData::chartEntryId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-            var _withChartEntryId = Collections.unmodifiableMap(
-                accounts.stream().collect(Collectors.groupingBy(AccountData::chartEntryId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withChartEntryOwnerCurrency = accounts.stream()
+                                                   .collect(Collectors.toUnmodifiableMap(
+                                                       acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() + ":" + acc.currency().name(),
+                                                       Function.identity(), (a, b) -> a));
 
-            var _withChartEntryOwnerCurrency = accounts.stream().collect(
-                Collectors.toUnmodifiableMap(
-                    acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() + ":" + acc.currency().name(), Function.identity(), (a, b) -> a));
+        LOGGER.info("Refreshed Account data, count: {}", accounts.size());
 
-            LOGGER.info("Refreshed Account data, count: {}", accounts.size());
+        this.snapshotRef.set(new Snapshot(_withAccountId, _withAccountCode, _withOwnerId, _withChartEntryOwnerCurrency, _withChartEntryId));
 
-            this.snapshotRef.set(new Snapshot(_withAccountId, _withAccountCode, _withOwnerId, _withChartEntryOwnerCurrency, _withChartEntryId));
-
-        } catch (AccountingIntercomClientException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private record Snapshot(Map<AccountId, AccountData> withAccountId,

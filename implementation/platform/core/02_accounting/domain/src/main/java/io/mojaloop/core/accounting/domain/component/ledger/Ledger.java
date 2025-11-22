@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -150,8 +150,8 @@ public interface Ledger {
 
         public RestoreFailedException(AccountId accountId, Side side, BigDecimal amount, Ledger.DrCr drCr, TransactionId transactionId) {
 
-            super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() + ") | amount (" + amount.toPlainString() + ") | posted debits: " + drCr.debits +
-                      " | posted credits: " + drCr.credits + " | transactionId: " + transactionId.getId().toString());
+            super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() + ") | amount (" + amount.stripTrailingZeros().toPlainString() +
+                      ") | posted debits: " + drCr.debits + " | posted credits: " + drCr.credits + " | transactionId: " + transactionId.getId().toString());
 
             this.accountId = accountId;
             this.side = side;

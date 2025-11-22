@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -111,9 +111,11 @@ public class MySqlLedger implements Ledger {
                 }
             });
 
-            var posting = requests.stream().map(request -> new Posting(
-                request.ledgerMovementId().getId(), request.accountId().getId(), request.side().name(), request.currency().name(), request.amount().toPlainString(),
-                transactionId.getId(), transactionAt.getEpochSecond(), transactionType.name(), request.flowDefinitionId().getId(), request.postingDefinitionId().getId())).toList();
+            var posting = requests.stream()
+                                  .map(request -> new Posting(request.ledgerMovementId().getId(), request.accountId().getId(), request.side().name(), request.currency().name(),
+                                      request.amount().toPlainString(), transactionId.getId(), transactionAt.getEpochSecond(), transactionType.name(),
+                                      request.flowDefinitionId().getId(), request.postingDefinitionId().getId()))
+                                  .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
@@ -246,8 +248,7 @@ public class MySqlLedger implements Ledger {
             var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
             var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
 
-            var movement = new Movement(
-                new LedgerMovementId(ledgerMovementId), new AccountId(accountId), Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
+            var movement = new Movement(new LedgerMovementId(ledgerMovementId), new AccountId(accountId), Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
                 new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId, postingDefinitionId, movementStage, movementResult, createdAt);
             movements.add(movement);
 

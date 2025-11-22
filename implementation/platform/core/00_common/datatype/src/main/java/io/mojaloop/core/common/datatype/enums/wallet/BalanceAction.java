@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.common.datatype.enums.wallet;
 
 public enum BalanceAction {

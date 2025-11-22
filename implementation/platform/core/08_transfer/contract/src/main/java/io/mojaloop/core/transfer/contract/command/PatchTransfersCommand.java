@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.contract.command;
 
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;

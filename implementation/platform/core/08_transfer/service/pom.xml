@@ -28,8 +28,20 @@
             <artifactId>mod-component-flyway</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-intercom-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <artifactId>mod-transaction-intercom-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.mojaloop.platform.core.transfer</groupId>
             <artifactId>mod-transfer-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-intercom-client</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.fspiop</groupId>

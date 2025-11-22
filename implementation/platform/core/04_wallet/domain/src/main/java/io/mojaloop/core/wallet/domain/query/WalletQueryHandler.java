@@ -17,15 +17,18 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.query;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.data.WalletData;
 import io.mojaloop.core.wallet.contract.exception.wallet.WalletIdNotFoundException;
 import io.mojaloop.core.wallet.contract.query.WalletQuery;
 import io.mojaloop.core.wallet.domain.model.Wallet;
 import io.mojaloop.core.wallet.domain.repository.WalletRepository;
+import io.mojaloop.fspiop.spec.core.Currency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +52,16 @@ public class WalletQueryHandler implements WalletQuery {
     public WalletData get(final WalletId walletId) {
 
         return this.walletRepository.findById(walletId).orElseThrow(() -> new WalletIdNotFoundException(walletId)).convert();
+    }
+
+    @Transactional(readOnly = true)
+    @Read
+    @Override
+    public List<WalletData> get(final WalletOwnerId ownerId, final Currency currency) {
+
+        var spec = WalletRepository.Filters.withOwnerId(ownerId).and(WalletRepository.Filters.withCurrency(currency));
+
+        return this.walletRepository.findAll(spec).stream().map(Wallet::convert).toList();
     }
 
     @Transactional(readOnly = true)

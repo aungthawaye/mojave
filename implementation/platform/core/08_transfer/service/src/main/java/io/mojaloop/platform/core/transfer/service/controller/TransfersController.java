@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,17 +24,14 @@ import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import io.mojaloop.core.transfer.contract.command.GetTransfersCommand;
-import io.mojaloop.core.transfer.contract.command.PatchTransfersCommand;
 import io.mojaloop.core.transfer.contract.command.PostTransfersCommand;
 import io.mojaloop.core.transfer.contract.command.PutTransfersCommand;
 import io.mojaloop.core.transfer.contract.command.PutTransfersErrorCommand;
 import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
-import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 import io.mojaloop.platform.core.transfer.service.event.GetTransfersEvent;
-import io.mojaloop.platform.core.transfer.service.event.PatchTransfersEvent;
 import io.mojaloop.platform.core.transfer.service.event.PostTransfersEvent;
 import io.mojaloop.platform.core.transfer.service.event.PutTransfersErrorEvent;
 import io.mojaloop.platform.core.transfer.service.event.PutTransfersEvent;
@@ -43,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,6 +58,7 @@ public class TransfersController {
     public TransfersController(EventPublisher eventPublisher) {
 
         assert eventPublisher != null;
+
         this.eventPublisher = eventPublisher;
     }
 
@@ -78,23 +75,6 @@ public class TransfersController {
         LOGGER.info("Publishing GetTransfersEvent : [{}]", event);
         this.eventPublisher.publish(event);
         LOGGER.info("Published GetTransfersEvent : [{}]", event);
-
-        return ResponseEntity.accepted().build();
-    }
-
-    @PatchMapping("/transfers/{transferId}")
-    public ResponseEntity<?> patchTransfers(@PathVariable UdfTransferId transferId, @RequestBody TransfersIDPatchResponse response, HttpServletRequest request) throws IOException {
-
-        LOGGER.info("Received PATCH /transfers/{}", transferId);
-
-        var cachedBodyRequest = new CachedServletRequest(request);
-        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
-
-        var event = new PatchTransfersEvent(new PatchTransfersCommand.Input(fspiopHttpRequest, transferId, response));
-
-        LOGGER.info("Publishing PatchTransfersEvent : [{}]", event);
-        this.eventPublisher.publish(event);
-        LOGGER.info("Published PatchTransfersEvent : [{}]", event);
 
         return ResponseEntity.accepted().build();
     }
