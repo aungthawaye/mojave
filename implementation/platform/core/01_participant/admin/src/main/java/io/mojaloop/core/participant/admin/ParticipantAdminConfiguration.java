@@ -29,8 +29,8 @@ import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
-import io.mojaloop.core.participant.admin.component.EmptyErrorWriter;
-import io.mojaloop.core.participant.admin.component.EmptyGatekeeper;
+import io.mojaloop.core.participant.admin.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.participant.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
@@ -46,7 +46,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.participant.admin")
+@ComponentScan(basePackages = "io.mojaloop.core.participant.admin.controller")
 @Import(value = {OpenApiConfiguration.class, DatatypeConfiguration.class, ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantAdminConfiguration extends JacksonWebMvcExtension
     implements ParticipantDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {

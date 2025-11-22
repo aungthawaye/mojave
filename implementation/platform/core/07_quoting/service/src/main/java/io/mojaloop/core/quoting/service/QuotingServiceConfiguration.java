@@ -41,7 +41,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.quoting.service")
+@ComponentScan(basePackages = "io.mojaloop.core.quoting.service.controller")
 @Import(value = {QuotingDomainConfiguration.class, ParticipantIntercomClientConfiguration.class, FspiopServiceConfiguration.class})
 public class QuotingServiceConfiguration implements QuotingDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 

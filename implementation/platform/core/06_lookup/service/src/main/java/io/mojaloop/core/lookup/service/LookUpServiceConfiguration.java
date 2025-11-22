@@ -42,7 +42,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.lookup.service")
+@ComponentScan(basePackages = "io.mojaloop.core.lookup.service.controller")
 @Import(value = {LookUpDomainConfiguration.class, ParticipantIntercomClientConfiguration.class, FspiopServiceConfiguration.class})
 public class LookUpServiceConfiguration implements LookUpDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 

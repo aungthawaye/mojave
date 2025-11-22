@@ -42,8 +42,8 @@ import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBased
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
-import io.mojaloop.core.accounting.intercom.component.EmptyErrorWriter;
-import io.mojaloop.core.accounting.intercom.component.EmptyGatekeeper;
+import io.mojaloop.core.accounting.intercom.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.accounting.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -58,7 +58,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom")
+@ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom.controller")
 @Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class AccountingIntercomConfiguration extends JacksonWebMvcExtension
     implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {

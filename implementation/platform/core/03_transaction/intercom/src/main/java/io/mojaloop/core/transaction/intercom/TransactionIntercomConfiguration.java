@@ -29,8 +29,8 @@ import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.transaction.domain.TransactionDomainConfiguration;
-import io.mojaloop.core.transaction.intercom.component.EmptyErrorWriter;
-import io.mojaloop.core.transaction.intercom.component.EmptyGatekeeper;
+import io.mojaloop.core.transaction.intercom.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.transaction.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -45,7 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.transaction.intercom")
+@ComponentScan(basePackages = "io.mojaloop.core.transaction.intercom.controller")
 @Import(value = {OpenApiConfiguration.class, TransactionDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class TransactionIntercomConfiguration extends JacksonWebMvcExtension
     implements TransactionDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {

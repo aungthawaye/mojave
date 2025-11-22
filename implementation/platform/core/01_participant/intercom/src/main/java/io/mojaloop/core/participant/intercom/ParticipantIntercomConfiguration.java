@@ -30,8 +30,8 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
-import io.mojaloop.core.participant.intercom.component.EmptyErrorWriter;
-import io.mojaloop.core.participant.intercom.component.EmptyGatekeeper;
+import io.mojaloop.core.participant.intercom.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.participant.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -46,7 +46,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.participant.intercom")
+@ComponentScan(basePackages = "io.mojaloop.core.participant.intercom.controller")
 @Import(value = {OpenApiConfiguration.class, DatatypeConfiguration.class, ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class ParticipantIntercomConfiguration extends JacksonWebMvcExtension
     implements ParticipantDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {

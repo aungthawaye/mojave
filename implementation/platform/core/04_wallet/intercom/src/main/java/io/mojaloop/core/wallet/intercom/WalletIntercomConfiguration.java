@@ -39,8 +39,8 @@ import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import io.mojaloop.core.wallet.domain.repository.PositionRepository;
 import io.mojaloop.core.wallet.domain.repository.WalletRepository;
-import io.mojaloop.core.wallet.intercom.component.EmptyErrorWriter;
-import io.mojaloop.core.wallet.intercom.component.EmptyGatekeeper;
+import io.mojaloop.core.wallet.intercom.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.wallet.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -55,7 +55,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom")
+@ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom.controller")
 @Import(value = {OpenApiConfiguration.class, WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class WalletIntercomConfiguration extends JacksonWebMvcExtension
     implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {

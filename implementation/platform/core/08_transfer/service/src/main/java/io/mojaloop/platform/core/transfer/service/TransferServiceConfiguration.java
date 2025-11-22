@@ -48,7 +48,7 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service")
+@ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service.controller")
 @Import(value = {TransferDomainConfiguration.class,
                  ParticipantIntercomClientConfiguration.class,
                  WalletIntercomClientConfiguration.class,

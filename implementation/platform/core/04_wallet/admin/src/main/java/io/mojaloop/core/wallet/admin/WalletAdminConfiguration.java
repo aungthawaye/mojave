@@ -28,8 +28,8 @@ import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.wallet.admin.component.EmptyErrorWriter;
-import io.mojaloop.core.wallet.admin.component.EmptyGatekeeper;
+import io.mojaloop.core.wallet.admin.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.wallet.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.cache.WalletCache;
@@ -55,7 +55,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.wallet.admin")
+@ComponentScan(basePackages = "io.mojaloop.core.wallet.admin.controller")
 @Import(value = {OpenApiConfiguration.class, WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
 public class WalletAdminConfiguration extends JacksonWebMvcExtension
     implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {

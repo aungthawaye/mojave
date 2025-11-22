@@ -28,8 +28,8 @@ import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.accounting.admin.component.EmptyErrorWriter;
-import io.mojaloop.core.accounting.admin.component.EmptyGatekeeper;
+import io.mojaloop.core.accounting.admin.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.accounting.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
@@ -58,7 +58,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration(proxyBeanMethods = false)
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
+@ComponentScan(basePackages = "io.mojaloop.core.accounting.admin.controller")
 @Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
 public class AccountingAdminConfiguration extends JacksonWebMvcExtension
     implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
