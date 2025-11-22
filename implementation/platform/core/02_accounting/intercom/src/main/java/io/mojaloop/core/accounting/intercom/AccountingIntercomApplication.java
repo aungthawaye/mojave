@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.accounting.intercom;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -37,17 +36,6 @@ public class AccountingIntercomApplication {
     private final static Logger LOGGER = LoggerFactory.getLogger(AccountingIntercomApplication.class.getName());
 
     public static void main(String[] args) {
-
-        LOGGER.info("Starting accounting intercom application");
-
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("ACC_FLYWAY_DB_URL",
-                                                                    "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("ACC_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("ACC_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/accounting");
-
-        LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
-        LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(AccountingIntercomApplication.class).web(WebApplicationType.SERVLET)
                                                                          .properties("spring.application.name=accounting-intercom", "spring.jmx.enabled=true",

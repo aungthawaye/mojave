@@ -32,7 +32,7 @@ public class TestConfiguration {
             "jdbc:mysql://localhost:3306/ml_participant?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true", "root", "password",
             "classpath:migration/participant");
 
-        FlywayMigration.migrate(flywaySettings);
+        FlywayMigration.configure(flywaySettings);
     }
 
 }

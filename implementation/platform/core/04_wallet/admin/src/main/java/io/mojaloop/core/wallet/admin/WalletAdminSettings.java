@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.wallet.admin;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
@@ -94,6 +95,16 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     public WalletAdminConfiguration.TomcatSettings tomcatSettings() {
 
         return new WalletAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv("WALLET_ADMIN_PORT")));
+    }
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings walletFlywaySettings() {
+
+        return new FlywayMigration.Settings(System.getenv()
+                                                  .getOrDefault("WLT_FLYWAY_DB_URL",
+                                                      "jdbc:mysql://localhost:3306/ml_wallet?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
+            System.getenv().getOrDefault("WLT_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("WLT_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/wallet");
     }
 
 }

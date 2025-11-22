@@ -65,7 +65,7 @@ class ConnectorOutboundSettings implements ConnectorOutboundConfiguration.Requir
     @ConditionalOnMissingBean(FspiopInvokerConfiguration.TransportSettings.class)
     public FspiopInvokerConfiguration.TransportSettings fspiopInvokerTransportSettings() {
 
-        var useMutualTls = Boolean.parseBoolean(System.getenv().getOrDefault("INVOKER_USE_MUTUAL_TLS", "false"));
+        var useMutualTls = Boolean.parseBoolean(System.getenv("INVOKER_USE_MUTUAL_TLS"));
 
         if (!useMutualTls) {
 
@@ -86,7 +86,7 @@ class ConnectorOutboundSettings implements ConnectorOutboundConfiguration.Requir
         return new ConnectorOutboundConfiguration.OutboundSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")),
             Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
             Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")),
-            System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"), Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_OUTBOUND_SECURED", "true")));
+            System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"), Boolean.parseBoolean(System.getenv("FSPIOP_OUTBOUND_SECURED")));
     }
 
     @Bean

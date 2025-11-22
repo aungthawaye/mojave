@@ -46,7 +46,7 @@ public class QuotingServiceApplication {
             System.getenv().getOrDefault("QOT_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("QOT_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/quoting");
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
+        FlywayMigration.configure(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(QuotingServiceApplication.class).web(WebApplicationType.SERVLET)

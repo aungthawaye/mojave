@@ -46,7 +46,7 @@ public class TransferServiceApplication {
             System.getenv().getOrDefault("TFR_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("TFR_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/transfer");
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
+        FlywayMigration.configure(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(TransferServiceApplication.class).web(WebApplicationType.SERVLET)

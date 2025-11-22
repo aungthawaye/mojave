@@ -65,7 +65,7 @@ class ConnectorInboundSettings implements ConnectorInboundConfiguration.Required
     @ConditionalOnMissingBean(FspiopInvokerConfiguration.TransportSettings.class)
     public FspiopInvokerConfiguration.TransportSettings fspiopInvokerTransportSettings() {
 
-        var useMutualTls = Boolean.parseBoolean(System.getenv().getOrDefault("INVOKER_USE_MUTUAL_TLS", "false"));
+        var useMutualTls = Boolean.parseBoolean(System.getenv("INVOKER_USE_MUTUAL_TLS"));
 
         if (!useMutualTls) {
 
@@ -83,7 +83,7 @@ class ConnectorInboundSettings implements ConnectorInboundConfiguration.Required
     @Override
     public ConnectorInboundConfiguration.InboundSettings inboundSettings() {
 
-        var useMutualTls = Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_INBOUND_USE_MUTUAL_TLS", "false"));
+        var useMutualTls = Boolean.parseBoolean(System.getenv("FSPIOP_INBOUND_USE_MUTUAL_TLS"));
 
         if (!useMutualTls) {
 

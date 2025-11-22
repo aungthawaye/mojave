@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.participant.intercom;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
@@ -32,6 +33,15 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
         return new OpenApiConfiguration.ApiSettings("Mojave - Participant - Intercom", "1.0.0");
+    }
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings participantFlywaySettings() {
+
+        return new FlywayMigration.Settings(System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"), System.getenv("PCP_FLYWAY_DB_PASSWORD"),
+            "flyway_participant_history", "classpath:migration/participant");
+
     }
 
     @Bean

@@ -20,11 +20,20 @@
 
 package io.mojaloop.core.participant.domain;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.springframework.context.annotation.Bean;
 
 public class TestSettings implements ParticipantDomainConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings participantFlywaySettings() {
+
+        return new FlywayMigration.Settings("jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
+            "root", "password", "classpath:migration/participant");
+    }
 
     @Bean
     @Override

@@ -46,7 +46,7 @@ public class WalletAdminApplication {
             System.getenv().getOrDefault("WLT_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("WLT_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/wallet");
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
+        FlywayMigration.configure(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(WalletAdminApplication.class).web(WebApplicationType.SERVLET)

@@ -38,7 +38,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.transaction.consumer"})
 @Import(value = {TransactionDomainConfiguration.class})
-public class TransactionConsumerConfiguration {
+final class TransactionConsumerConfiguration {
 
     @Bean(name = AddStepListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(AddStepListener.QUALIFIER)

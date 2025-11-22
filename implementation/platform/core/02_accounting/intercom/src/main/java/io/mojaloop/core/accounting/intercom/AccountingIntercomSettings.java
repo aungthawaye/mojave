@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.accounting.intercom;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
@@ -27,6 +28,15 @@ import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 
 final class AccountingIntercomSettings implements AccountingIntercomConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings accountingFlywaySettings() {
+
+        return new FlywayMigration.Settings(System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"), System.getenv("ACC_FLYWAY_DB_PASSWORD"),
+            "flyway_accounting_history", "classpath:migration/accounting");
+
+    }
 
     @Bean
     @Override

@@ -27,7 +27,7 @@ public class MonoIntercomApplication {
             "classpath:migration/accounting", "classpath:migration/wallet", "classpath:migration/transaction");
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
+        FlywayMigration.configure(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(MonoIntercomApplication.class).web(WebApplicationType.SERVLET)

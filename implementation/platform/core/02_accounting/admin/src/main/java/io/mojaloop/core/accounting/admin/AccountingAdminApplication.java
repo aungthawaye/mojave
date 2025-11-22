@@ -45,7 +45,7 @@ public class AccountingAdminApplication {
             System.getenv().getOrDefault("ACC_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("ACC_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/accounting");
 
         LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
+        FlywayMigration.configure(flywaySettings);
         LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(AccountingAdminApplication.class).web(WebApplicationType.SERVLET)

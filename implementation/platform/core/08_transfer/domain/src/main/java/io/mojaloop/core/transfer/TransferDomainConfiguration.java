@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.transfer.domain"})
 @Import(value = {MiscConfiguration.class,
+                 TransferFlywayConfiguration.class,
                  FspiopCommonConfiguration.class,
                  TransactionProducerConfiguration.class,
                  ParticipantStoreConfiguration.class,
@@ -45,6 +46,7 @@ public class TransferDomainConfiguration {
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              TransferFlywayConfiguration.RequiredSettings,
                                               FspiopCommonConfiguration.RequiredSettings,
                                               TransactionProducerConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,

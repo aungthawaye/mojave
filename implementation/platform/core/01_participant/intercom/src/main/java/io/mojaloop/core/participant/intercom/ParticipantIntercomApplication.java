@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.participant.intercom;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -37,17 +36,6 @@ public class ParticipantIntercomApplication {
     private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantIntercomApplication.class.getName());
 
     public static void main(String[] args) {
-
-        LOGGER.info("Starting participant intercom application");
-
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("PCP_FLYWAY_DB_URL",
-                                                                    "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("PCP_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("PCP_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/participant");
-
-        LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
-        LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(ParticipantIntercomApplication.class).web(WebApplicationType.SERVLET)
                                                                           .properties("spring.application.name=participant-intercom", "spring.jmx.enabled=true",

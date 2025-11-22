@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.transaction.intercom;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -37,17 +36,6 @@ public class TransactionIntercomApplication {
     private final static Logger LOGGER = LoggerFactory.getLogger(TransactionIntercomApplication.class.getName());
 
     public static void main(String[] args) {
-
-        LOGGER.info("Starting transaction intercom application");
-
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("TXN_FLYWAY_DB_URL",
-                                                                    "jdbc:mysql://localhost:3306/ml_transaction?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("TXN_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("TXN_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/transaction");
-
-        LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.migrate(flywaySettings);
-        LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(TransactionIntercomApplication.class).web(WebApplicationType.SERVLET)
                                                                           .properties("spring.application.name=transaction-intercom", "spring.jmx.enabled=true",

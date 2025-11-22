@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transaction.intercom;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
@@ -72,6 +73,14 @@ final class TransactionIntercomSettings implements TransactionIntercomConfigurat
     public TransactionIntercomConfiguration.TomcatSettings tomcatSettings() {
 
         return new TransactionIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv("TRANSACTION_INTERCOM_PORT")));
+    }
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings transactionFlywaySettings() {
+
+        return new FlywayMigration.Settings(System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"), System.getenv("TXN_WRITE_DB_PASSWORD"),
+            "flyway_transaction_history", "classpath:migration/transaction");
     }
 
 }

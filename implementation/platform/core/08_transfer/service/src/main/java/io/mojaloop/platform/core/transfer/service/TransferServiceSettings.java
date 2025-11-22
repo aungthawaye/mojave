@@ -20,6 +20,7 @@
 
 package io.mojaloop.platform.core.transfer.service;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.kafka.KafkaProducerConfigurer;
@@ -155,6 +156,14 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     public TransactionIntercomService.Settings transactionIntercomServiceSettings() {
 
         return new TransactionIntercomService.Settings(System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
+    }
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings transferFlywaySettings() {
+
+        return new FlywayMigration.Settings(System.getenv("TFR_FLYWAY_DB_URL"), System.getenv("TFR_FLYWAY_DB_USER"), System.getenv("TFR_FLYWAY_DB_PASSWORD"),
+            "classpath:migration/transfer");
     }
 
     @Bean

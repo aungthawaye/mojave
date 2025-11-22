@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.quoting.service;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
@@ -80,6 +81,14 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     public QuotingDomainConfiguration.QuoteSettings quoteSettings() {
 
         return new QuotingDomainConfiguration.QuoteSettings(Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
+    }
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings quotingFlywaySettings() {
+
+        return new FlywayMigration.Settings(System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"), System.getenv("QOT_FLYWAY_DB_PASSWORD"),
+            "classpath:migration/quoting");
     }
 
     @Bean
