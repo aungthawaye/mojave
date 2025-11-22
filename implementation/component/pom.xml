@@ -21,6 +21,7 @@
         <module>jpa</module>
         <module>flyway</module>
         <module>kafka</module>
+        <module>openapi</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mojaloop.platform.core.transfer</groupId>
@@ -29,16 +28,16 @@
             <artifactId>mod-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.transfer</groupId>
-            <artifactId>mod-transfer-domain</artifactId>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-intercom-client</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.transaction</groupId>
             <artifactId>mod-transaction-intercom-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-intercom-client</artifactId>
+            <groupId>io.mojaloop.platform.core.transfer</groupId>
+            <artifactId>mod-transfer-domain</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.wallet</groupId>

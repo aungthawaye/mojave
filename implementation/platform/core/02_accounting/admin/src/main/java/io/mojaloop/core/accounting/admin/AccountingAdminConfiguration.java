@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
@@ -58,7 +59,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
-@Import(value = {AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
+@Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
 public class AccountingAdminConfiguration extends JacksonWebMvcExtension
     implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
 
@@ -150,7 +151,7 @@ public class AccountingAdminConfiguration extends JacksonWebMvcExtension
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings {
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 
