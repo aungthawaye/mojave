@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.cache.strategy.local;
 
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
@@ -53,34 +54,9 @@ public class WalletLocalCache implements WalletCache {
         this.withOwnerId = new ConcurrentHashMap<>();
     }
 
-    @PostConstruct
-    public void postConstruct() {
+    private static String key(final WalletOwnerId walletOwnerId, final Currency currency) {
 
-        this.clear();
-
-        final var wallets = this.walletRepository.findAll();
-
-        for (final var wallet : wallets) {
-            this.save(wallet.convert());
-        }
-    }
-
-    private void clear() {
-
-        this.withId.clear();
-        this.withOwnerCurrency.clear();
-        this.withOwnerId.clear();
-    }
-
-    private void save(final WalletData wallet) {
-
-        this.withId.put(wallet.walletId().getId(), wallet);
-
-        final var key = key(wallet.walletOwnerId(), wallet.currency());
-        this.withOwnerCurrency.put(key, wallet);
-
-        final var set = this.withOwnerId.computeIfAbsent(wallet.walletOwnerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
-        set.add(wallet);
+        return walletOwnerId.getId().toString() + ":" + currency.name();
     }
 
     @Override
@@ -115,8 +91,34 @@ public class WalletLocalCache implements WalletCache {
         return set == null ? Set.of() : Set.copyOf(set);
     }
 
-    private static String key(final WalletOwnerId walletOwnerId, final Currency currency) {
+    @PostConstruct
+    public void postConstruct() {
 
-        return walletOwnerId.getId().toString() + ":" + currency.name();
+        this.clear();
+
+        final var wallets = this.walletRepository.findAll();
+
+        for (final var wallet : wallets) {
+            this.save(wallet.convert());
+        }
     }
+
+    private void clear() {
+
+        this.withId.clear();
+        this.withOwnerCurrency.clear();
+        this.withOwnerId.clear();
+    }
+
+    private void save(final WalletData wallet) {
+
+        this.withId.put(wallet.walletId().getId(), wallet);
+
+        final var key = key(wallet.walletOwnerId(), wallet.currency());
+        this.withOwnerCurrency.put(key, wallet);
+
+        final var set = this.withOwnerId.computeIfAbsent(wallet.walletOwnerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        set.add(wallet);
+    }
+
 }

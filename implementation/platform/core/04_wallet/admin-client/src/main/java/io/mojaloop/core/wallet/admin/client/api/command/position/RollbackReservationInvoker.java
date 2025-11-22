@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +28,6 @@ import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
-import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
-import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -52,8 +51,8 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.rollback(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService.invoke(this.positionCommand.rollback(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
+                                  .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -74,4 +73,5 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

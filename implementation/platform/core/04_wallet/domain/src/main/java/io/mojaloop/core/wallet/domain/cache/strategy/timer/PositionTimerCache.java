@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.cache.strategy.timer;
 
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
@@ -59,21 +60,9 @@ public class PositionTimerCache implements PositionCache {
         this.interval = interval;
     }
 
-    @PostConstruct
-    public void postConstruct() {
+    private static String key(final WalletOwnerId walletOwnerId, final Currency currency) {
 
-        LOGGER.info("Bootstrapping PositionTimerCache");
-
-        this.refreshData();
-
-        this.timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-
-                PositionTimerCache.this.refreshData();
-            }
-        }, this.interval, this.interval);
+        return walletOwnerId.getId().toString() + ":" + currency.name();
     }
 
     @Override
@@ -107,6 +96,23 @@ public class PositionTimerCache implements PositionCache {
         return this.snapshotRef.get().withOwnerId.getOrDefault(walletOwnerId, Set.of());
     }
 
+    @PostConstruct
+    public void postConstruct() {
+
+        LOGGER.info("Bootstrapping PositionTimerCache");
+
+        this.refreshData();
+
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                PositionTimerCache.this.refreshData();
+            }
+        }, this.interval, this.interval);
+    }
+
     private void refreshData() {
 
         LOGGER.info("Start refreshing position cache data");
@@ -116,8 +122,7 @@ public class PositionTimerCache implements PositionCache {
 
         var _withId = entries.stream().collect(Collectors.toUnmodifiableMap(PositionData::positionId, Function.identity(), (a, b) -> a));
 
-        var _withOwnerCurrency = entries.stream()
-                                        .collect(Collectors.toUnmodifiableMap(e -> key(e.walletOwnerId(), e.currency()), Function.identity(), (a, b) -> a));
+        var _withOwnerCurrency = entries.stream().collect(Collectors.toUnmodifiableMap(e -> key(e.walletOwnerId(), e.currency()), Function.identity(), (a, b) -> a));
 
         var _withOwnerId = Collections.unmodifiableMap(
             entries.stream().collect(Collectors.groupingBy(PositionData::walletOwnerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
@@ -127,14 +132,7 @@ public class PositionTimerCache implements PositionCache {
         this.snapshotRef.set(new Snapshot(_withId, _withOwnerCurrency, _withOwnerId));
     }
 
-    private static String key(final WalletOwnerId walletOwnerId, final Currency currency) {
-
-        return walletOwnerId.getId().toString() + ":" + currency.name();
-    }
-
-    private record Snapshot(Map<PositionId, PositionData> withId,
-                            Map<String, PositionData> withOwnerCurrency,
-                            Map<WalletOwnerId, Set<PositionData>> withOwnerId) {
+    private record Snapshot(Map<PositionId, PositionData> withId, Map<String, PositionData> withOwnerCurrency, Map<WalletOwnerId, Set<PositionData>> withOwnerId) {
 
         static Snapshot empty() {
 
@@ -142,4 +140,5 @@ public class PositionTimerCache implements PositionCache {
         }
 
     }
+
 }

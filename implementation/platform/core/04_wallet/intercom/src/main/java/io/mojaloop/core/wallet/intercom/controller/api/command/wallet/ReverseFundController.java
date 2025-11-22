@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.intercom.controller.api.command.wallet;
 
 import io.mojaloop.core.wallet.contract.command.wallet.ReverseFundCommand;
@@ -48,8 +49,7 @@ public class ReverseFundController {
     @PostMapping("/wallets/reverse-fund")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ReverseFundCommand.Output execute(@Valid @RequestBody final ReverseFundCommand.Input input)
-        throws ReversalFailedInWalletException {
+    public ReverseFundCommand.Output execute(@Valid @RequestBody final ReverseFundCommand.Input input) throws ReversalFailedInWalletException {
 
         LOGGER.info("Entering ReverseFundCommand.execute: input : {}", input);
 
@@ -59,4 +59,5 @@ public class ReverseFundController {
 
         return output;
     }
+
 }

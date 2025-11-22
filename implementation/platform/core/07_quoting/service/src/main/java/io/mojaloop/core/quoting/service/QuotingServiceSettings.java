@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
 
-public class QuotingServiceSettings implements QuotingServiceConfiguration.RequiredSettings {
+final class QuotingServiceSettings implements QuotingServiceConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -65,40 +65,39 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4102"));
+        return new ParticipantIntercomService.Settings(System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
     @Override
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "300000")));
+        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
     }
 
     @Bean
     @Override
     public QuotingDomainConfiguration.QuoteSettings quoteSettings() {
 
-        return new QuotingDomainConfiguration.QuoteSettings(Boolean.parseBoolean(System.getenv().getOrDefault("QUOTING_STATEFUL", "true")));
+        return new QuotingDomainConfiguration.QuoteSettings(Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
     }
 
     @Bean
     @Override
     public QuotingServiceConfiguration.TomcatSettings quotingServiceTomcatSettings() {
 
-        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("QUOTING_SERVICE_PORT", "4703")));
+        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv("QUOTING_SERVICE_PORT")));
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv().getOrDefault("QOT_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("QOT_READ_DB_USER", "root"), System.getenv().getOrDefault("QOT_READ_DB_PASSWORD", "password"), false);
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("QOT_READ_DB_URL"), System.getenv("QOT_READ_DB_USER"),
+            System.getenv("QOT_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("quoting-service-read", Integer.parseInt(System.getenv().getOrDefault("QOT_READ_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("QOT_READ_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("quoting-service-read", Integer.parseInt(System.getenv("QOT_READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("QOT_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -107,12 +106,11 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv().getOrDefault("QOT_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("QOT_WRITE_DB_USER", "root"), System.getenv().getOrDefault("QOT_WRITE_DB_PASSWORD", "password"), false);
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("QOT_WRITE_DB_URL"), System.getenv("QOT_WRITE_DB_USER"),
+            System.getenv("QOT_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("quoting-service-write", Integer.parseInt(System.getenv().getOrDefault("QOT_WRITE_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("QOT_WRITE_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("quoting-service-write", Integer.parseInt(System.getenv("QOT_WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("QOT_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -128,8 +126,8 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
-            Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
+        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
+            Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
     }
 
     @Bean

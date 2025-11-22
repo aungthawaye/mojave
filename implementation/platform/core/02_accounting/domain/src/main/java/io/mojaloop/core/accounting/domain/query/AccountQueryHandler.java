@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,6 @@
 package io.mojaloop.core.accounting.domain.query;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
-import io.mojaloop.component.misc.query.PagedRequest;
 import io.mojaloop.component.misc.query.PagedResult;
 import io.mojaloop.component.misc.query.SortingMode;
 import io.mojaloop.core.accounting.contract.data.AccountData;
@@ -32,9 +31,7 @@ import io.mojaloop.core.accounting.domain.model.Account;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
-import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
-import io.mojaloop.fspiop.spec.core.Currency;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
