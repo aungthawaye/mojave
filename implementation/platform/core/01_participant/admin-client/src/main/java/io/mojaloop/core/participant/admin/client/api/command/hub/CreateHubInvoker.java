@@ -40,7 +40,8 @@ public class CreateHubInvoker implements CreateHubCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateHubInvoker(final ParticipantAdminService.HubCommands hubCommands, final ObjectMapper objectMapper) {
+    public CreateHubInvoker(final ParticipantAdminService.HubCommands hubCommands,
+                            final ObjectMapper objectMapper) {
 
         assert hubCommands != null;
         assert objectMapper != null;
@@ -54,7 +55,12 @@ public class CreateHubInvoker implements CreateHubCommand {
 
         try {
 
-            return RetrofitService.invoke(this.hubCommands.createHub(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.hubCommands.createHub(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

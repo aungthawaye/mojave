@@ -50,7 +50,9 @@ public class CloseTransactionListener {
         this.closeTransactionCommand = closeTransactionCommand;
     }
 
-    @KafkaListener(topics = TopicNames.CLOSE_TRANSACTION, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
+    @KafkaListener(topics = TopicNames.CLOSE_TRANSACTION,
+                   containerFactory = LISTENER_CONTAINER_FACTORY,
+                   groupId = GROUP_ID)
     public void handle(CloseTransactionCommand.Input input, Acknowledgment ack) {
 
         try {
@@ -80,7 +82,9 @@ public class CloseTransactionListener {
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
-            super(bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs, autoCommit, ackMode);
+            super(
+                bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs,
+                autoCommit, ackMode);
         }
 
     }

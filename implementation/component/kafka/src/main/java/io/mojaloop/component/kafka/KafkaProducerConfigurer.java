@@ -30,7 +30,9 @@ import java.util.Map;
 
 public class KafkaProducerConfigurer {
 
-    public static <K, V> ProducerFactory<K, V> configure(String bootstrapServers, String ack, Serializer<K, V> serializer) {
+    public static <K, V> ProducerFactory<K, V> configure(String bootstrapServers,
+                                                         String ack,
+                                                         Serializer<K, V> serializer) {
 
         Map<String, Object> props = new HashMap<>();
 

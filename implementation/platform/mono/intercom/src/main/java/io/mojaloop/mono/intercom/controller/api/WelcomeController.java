@@ -10,7 +10,8 @@ public class WelcomeController {
     @GetMapping("/**")
     public ResponseEntity<WelcomeController.Response> welcome() {
 
-        return ResponseEntity.ok(new WelcomeController.Response("1.0", "Welcome to the Mojave Intercom API."));
+        return ResponseEntity.ok(
+            new WelcomeController.Response("1.0", "Welcome to the Mojave Intercom API."));
     }
 
     public record Response(String version, String message) { }

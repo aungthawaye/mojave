@@ -43,7 +43,8 @@ public class HubQueryInvoker implements HubQuery {
 
     private final ObjectMapper objectMapper;
 
-    public HubQueryInvoker(final ParticipantAdminService.HubQuery hubQuery, final ObjectMapper objectMapper) {
+    public HubQueryInvoker(final ParticipantAdminService.HubQuery hubQuery,
+                           final ObjectMapper objectMapper) {
 
         assert hubQuery != null;
         assert objectMapper != null;
@@ -57,7 +58,12 @@ public class HubQueryInvoker implements HubQuery {
 
         try {
 
-            return RetrofitService.invoke(this.hubQuery.count(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.hubQuery.count(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -81,7 +87,12 @@ public class HubQueryInvoker implements HubQuery {
 
         try {
 
-            return RetrofitService.invoke(this.hubQuery.get(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.hubQuery.get(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -105,7 +116,12 @@ public class HubQueryInvoker implements HubQuery {
 
         try {
 
-            return RetrofitService.invoke(this.hubQuery.getAll(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.hubQuery.getAll(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

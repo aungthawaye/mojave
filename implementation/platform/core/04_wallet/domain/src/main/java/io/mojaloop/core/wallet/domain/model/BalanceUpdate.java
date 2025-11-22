@@ -57,12 +57,19 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "wlt_balance_update",
-       uniqueConstraints = {@UniqueConstraint(name = "wlt_balance_update_wallet_id_action_transaction_id_UK", columnNames = {"wallet_id", "action", "transaction_id"}),
-                            @UniqueConstraint(name = "wlt_balance_update_reversal_id_UK", columnNames = {"reversal_id"})},
-       indexes = {@Index(name = "wlt_balance_update_wallet_id_action_transaction_at_idx", columnList = "wallet_id, action, transaction_at"),
-                  @Index(name = "wlt_balance_update_transaction_at_idx", columnList = "transaction_at")})
+       uniqueConstraints = {@UniqueConstraint(name = "wlt_balance_update_wallet_id_action_transaction_id_UK",
+                                              columnNames = {"wallet_id",
+                                                             "action",
+                                                             "transaction_id"}),
+                            @UniqueConstraint(name = "wlt_balance_update_reversal_id_UK",
+                                              columnNames = {"reversal_id"})},
+       indexes = {@Index(name = "wlt_balance_update_wallet_id_action_transaction_at_idx",
+                         columnList = "wallet_id, action, transaction_at"),
+                  @Index(name = "wlt_balance_update_transaction_at_idx",
+                         columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataConversion<BalanceUpdateData> {
+public class BalanceUpdate extends JpaEntity<BalanceUpdateId>
+    implements DataConversion<BalanceUpdateData> {
 
     @Id
     @JavaType(BalanceUpdateIdJavaType.class)
@@ -113,8 +120,10 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataCon
     @Override
     public BalanceUpdateData convert() {
 
-        return new BalanceUpdateData(this.id, this.walletId, this.action, this.transactionId, this.currency, this.amount, this.oldBalance, this.newBalance, this.description,
-            this.transactionAt, this.createdAt, this.reversalId);
+        return new BalanceUpdateData(
+            this.id, this.walletId, this.action, this.transactionId, this.currency, this.amount,
+            this.oldBalance, this.newBalance, this.description, this.transactionAt, this.createdAt,
+            this.reversalId);
     }
 
     @Override

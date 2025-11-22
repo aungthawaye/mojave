@@ -32,7 +32,9 @@ public class OracleBaseUrlTooLongException extends UncheckedDomainException {
 
     public static final String CODE = "ORACLE_BASE_URL_TOO_LONG";
 
-    private static final String TEMPLATE = "Base URL of Oracle is too long. Must not exceed " + StringSizeConstraints.MAX_HTTP_URL_LENGTH + " characters.";
+    private static final String TEMPLATE = "Base URL of Oracle is too long. Must not exceed " +
+                                               StringSizeConstraints.MAX_HTTP_URL_LENGTH +
+                                               " characters.";
 
     public OracleBaseUrlTooLongException() {
 

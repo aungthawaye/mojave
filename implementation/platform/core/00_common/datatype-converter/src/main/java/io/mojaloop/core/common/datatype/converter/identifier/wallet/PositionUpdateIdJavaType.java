@@ -83,7 +83,8 @@ public class PositionUpdateIdJavaType extends AbstractClassJavaType<PositionUpda
             case null -> null;
             case PositionUpdateId positionUpdateId -> positionUpdateId;
             case Number n -> new PositionUpdateId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

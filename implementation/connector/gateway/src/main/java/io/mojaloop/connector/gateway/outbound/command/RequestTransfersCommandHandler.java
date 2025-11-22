@@ -37,7 +37,8 @@ import org.springframework.stereotype.Service;
 @Service
 class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestTransfersCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestTransfersCommandHandler.class.getName());
 
     private final PostTransfers postTransfers;
 
@@ -45,7 +46,9 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
     private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
-    public RequestTransfersCommandHandler(PostTransfers postTransfers, PubSubClient pubSubClient, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public RequestTransfersCommandHandler(PostTransfers postTransfers,
+                                          PubSubClient pubSubClient,
+                                          ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != postTransfers;
         assert null != pubSubClient;
@@ -69,7 +72,9 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         var errorTopic = PubSubKeys.forTransfersError(transferId);
 
         // Listening to the pub/sub
-        var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, TransfersResult.class, TransfersErrorResult.class);
+        var resultListener = new FspiopResultListener<>(
+            this.pubSubClient, this.outboundSettings, TransfersResult.class,
+            TransfersErrorResult.class);
         resultListener.init(resultTopic, errorTopic);
 
         this.postTransfers.postTransfers(input.payee(), input.request());
@@ -81,9 +86,12 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
         }
 
         var error = resultListener.getError();
-        var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
+        var errorDefinition = FspiopErrors.find(
+            error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));
+        throw new FspiopException(new ErrorDefinition(
+            errorDefinition.errorType(),
+            error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

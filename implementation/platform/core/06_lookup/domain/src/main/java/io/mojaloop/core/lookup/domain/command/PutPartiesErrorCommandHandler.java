@@ -38,7 +38,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutPartiesErrorCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PutPartiesErrorCommandHandler.class);
 
     private final ParticipantStore participantStore;
 
@@ -46,7 +47,9 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
     private final ForwardRequest forwardRequest;
 
-    public PutPartiesErrorCommandHandler(ParticipantStore participantStore, RespondParties respondParties, ForwardRequest forwardRequest) {
+    public PutPartiesErrorCommandHandler(ParticipantStore participantStore,
+                                         RespondParties respondParties,
+                                         ForwardRequest forwardRequest) {
 
         assert participantStore != null;
         assert respondParties != null;
@@ -85,7 +88,9 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
         } catch (FspiopCommunicationException e) {
 
-            LOGGER.error("(FspiopCommunicationException) Exception occurred while executing PutPartiesErrorCommandHandler: [{}]", e.getMessage());
+            LOGGER.error(
+                "(FspiopCommunicationException) Exception occurred while executing PutPartiesErrorCommandHandler: [{}]",
+                e.getMessage());
 
         } catch (Exception e) {
 
@@ -97,10 +102,15 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondParties.putPartiesError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    LOGGER.error(
+                        "Something went wrong while sending error response to payer FSP: ", e);
                 }
             }
         }

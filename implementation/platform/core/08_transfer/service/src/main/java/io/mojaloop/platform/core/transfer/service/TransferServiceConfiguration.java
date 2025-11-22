@@ -53,13 +53,16 @@ import java.util.List;
                  WalletIntercomClientConfiguration.class,
                  TransactionIntercomClientConfiguration.class,
                  FspiopServiceConfiguration.class})
-final class TransferServiceConfiguration implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
+final class TransferServiceConfiguration
+    implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
     private final ObjectMapper objectMapper;
 
-    public TransferServiceConfiguration(ParticipantStore participantStore, FspCodeList fspCodeList, ObjectMapper objectMapper) {
+    public TransferServiceConfiguration(ParticipantStore participantStore,
+                                        FspCodeList fspCodeList,
+                                        ObjectMapper objectMapper) {
 
         assert participantStore != null;
         assert fspCodeList != null;
@@ -84,7 +87,8 @@ final class TransferServiceConfiguration implements TransferDomainConfiguration.
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }

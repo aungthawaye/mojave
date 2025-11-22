@@ -53,7 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChangeFlowDefinitionCurrencyController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFlowDefinitionCurrencyController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeFlowDefinitionCurrencyController.class);
 
     private final ChangeFlowDefinitionCurrencyCommand changeFlowDefinitionCurrencyCommand;
 

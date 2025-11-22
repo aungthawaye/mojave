@@ -16,7 +16,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ExtensionList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ExtensionList {
 
     private @Valid List<@Valid Extension> extension = new ArrayList<>();
@@ -26,7 +27,8 @@ public class ExtensionList {
     }
 
     @JsonCreator
-    public ExtensionList(@JsonProperty(required = true, value = "extension") List<@Valid Extension> extension) {
+    public ExtensionList(@JsonProperty(required = true,
+                                       value = "extension") List<@Valid Extension> extension) {
 
         this.extension = extension;
     }

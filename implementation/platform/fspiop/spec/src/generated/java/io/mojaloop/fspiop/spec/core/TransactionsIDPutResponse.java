@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransactionsIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransactionsIDPutResponse {
 
     private String completedTimestamp;
@@ -30,7 +31,8 @@ public class TransactionsIDPutResponse {
     }
 
     @JsonCreator
-    public TransactionsIDPutResponse(@JsonProperty(required = true, value = "transactionState") TransactionState transactionState) {
+    public TransactionsIDPutResponse(@JsonProperty(required = true,
+                                                   value = "transactionState") TransactionState transactionState) {
 
         this.transactionState = transactionState;
     }
@@ -63,9 +65,11 @@ public class TransactionsIDPutResponse {
             return false;
         }
         TransactionsIDPutResponse transactionsIDPutResponse = (TransactionsIDPutResponse) o;
-        return Objects.equals(this.completedTimestamp, transactionsIDPutResponse.completedTimestamp) &&
-                   Objects.equals(this.transactionState, transactionsIDPutResponse.transactionState) && Objects.equals(this.code, transactionsIDPutResponse.code) &&
-                   Objects.equals(this.extensionList, transactionsIDPutResponse.extensionList);
+        return
+            Objects.equals(this.completedTimestamp, transactionsIDPutResponse.completedTimestamp) &&
+                Objects.equals(this.transactionState, transactionsIDPutResponse.transactionState) &&
+                Objects.equals(this.code, transactionsIDPutResponse.code) &&
+                Objects.equals(this.extensionList, transactionsIDPutResponse.extensionList);
     }
 
     /**
@@ -140,7 +144,10 @@ public class TransactionsIDPutResponse {
         StringBuilder sb = new StringBuilder();
         sb.append("class TransactionsIDPutResponse {\n");
 
-        sb.append("    completedTimestamp: ").append(toIndentedString(completedTimestamp)).append("\n");
+        sb
+            .append("    completedTimestamp: ")
+            .append(toIndentedString(completedTimestamp))
+            .append("\n");
         sb.append("    transactionState: ").append(toIndentedString(transactionState)).append("\n");
         sb.append("    code: ").append(toIndentedString(code)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");

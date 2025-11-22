@@ -26,7 +26,8 @@ import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 public interface GetParties {
 
-    void getParties(Payee payee, PartyIdType partyIdType, String partyId, String subId) throws FspiopException;
+    void getParties(Payee payee, PartyIdType partyIdType, String partyId, String subId)
+        throws FspiopException;
 
     void getParties(Payee payee, PartyIdType partyIdType, String partyId) throws FspiopException;
 

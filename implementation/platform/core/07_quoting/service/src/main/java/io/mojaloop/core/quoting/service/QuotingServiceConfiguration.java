@@ -41,8 +41,11 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.quoting.service.controller")
-@Import(value = {QuotingDomainConfiguration.class, ParticipantIntercomClientConfiguration.class, FspiopServiceConfiguration.class})
-final class QuotingServiceConfiguration implements QuotingDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
+@Import(value = {QuotingDomainConfiguration.class,
+                 ParticipantIntercomClientConfiguration.class,
+                 FspiopServiceConfiguration.class})
+final class QuotingServiceConfiguration
+    implements QuotingDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
@@ -61,13 +64,15 @@ final class QuotingServiceConfiguration implements QuotingDomainConfiguration.Re
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings
-        extends QuotingDomainConfiguration.RequiredSettings, ParticipantIntercomClientConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings extends QuotingDomainConfiguration.RequiredSettings,
+                                              ParticipantIntercomClientConfiguration.RequiredSettings,
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings quotingServiceTomcatSettings();
 

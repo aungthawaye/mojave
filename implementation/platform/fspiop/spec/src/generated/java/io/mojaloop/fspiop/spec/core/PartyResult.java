@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("PartyResult")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class PartyResult {
 
     private PartyIdInfo partyId;
@@ -40,7 +41,8 @@ public class PartyResult {
             return false;
         }
         PartyResult partyResult = (PartyResult) o;
-        return Objects.equals(this.partyId, partyResult.partyId) && Objects.equals(this.errorInformation, partyResult.errorInformation);
+        return Objects.equals(this.partyId, partyResult.partyId) &&
+                   Objects.equals(this.errorInformation, partyResult.errorInformation);
     }
 
     /**

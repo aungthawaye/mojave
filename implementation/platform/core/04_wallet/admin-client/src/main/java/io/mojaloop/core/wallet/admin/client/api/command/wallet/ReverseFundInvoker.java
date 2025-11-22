@@ -37,7 +37,8 @@ public class ReverseFundInvoker implements ReverseFundCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ReverseFundInvoker(final WalletAdminService.WalletCommand walletCommand, final ObjectMapper objectMapper) {
+    public ReverseFundInvoker(final WalletAdminService.WalletCommand walletCommand,
+                              final ObjectMapper objectMapper) {
 
         assert walletCommand != null;
         assert objectMapper != null;
@@ -51,8 +52,12 @@ public class ReverseFundInvoker implements ReverseFundCommand {
 
         try {
 
-            return RetrofitService.invoke(this.walletCommand.reverseFund(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.walletCommand.reverseFund(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

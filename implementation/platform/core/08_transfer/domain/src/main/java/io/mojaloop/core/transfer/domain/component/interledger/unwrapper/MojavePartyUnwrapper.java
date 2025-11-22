@@ -54,7 +54,8 @@ public class MojavePartyUnwrapper implements PartyUnwrapper {
             var agreement = this.objectMapper.readValue(json, Agreement.class);
             LOGGER.debug("Unwrapped Agreement: {}", agreement);
 
-            return new Parties(Optional.ofNullable(agreement.payer()), Optional.ofNullable(agreement.payee()));
+            return new Parties(
+                Optional.ofNullable(agreement.payer()), Optional.ofNullable(agreement.payee()));
 
         } catch (JsonProcessingException e) {
 

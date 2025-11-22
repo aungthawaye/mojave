@@ -40,7 +40,8 @@ public class ChangeEndpointInvoker implements ChangeEndpointCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ChangeEndpointInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
+    public ChangeEndpointInvoker(final ParticipantAdminService.FspCommand fspCommand,
+                                 final ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ChangeEndpointInvoker implements ChangeEndpointCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.changeEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.changeEndpoint(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

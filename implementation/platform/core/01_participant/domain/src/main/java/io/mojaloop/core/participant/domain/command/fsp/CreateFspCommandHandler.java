@@ -70,7 +70,9 @@ public class CreateFspCommandHandler implements CreateFspCommand {
 
         var hub = this.hubRepository.findById(new HubId()).orElseThrow(HubNotFoundException::new);
 
-        if (this.fspRepository.findOne(FspRepository.Filters.withFspCode(input.fspCode())).isPresent()) {
+        if (this.fspRepository
+                .findOne(FspRepository.Filters.withFspCode(input.fspCode()))
+                .isPresent()) {
             LOGGER.info("FSP with FSP Code {} already exists", input.fspCode().value());
             throw new FspCodeAlreadyExistsException(input.fspCode());
         }

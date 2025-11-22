@@ -40,7 +40,8 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
 
     private final BalanceUpdater balanceUpdater;
 
-    public ReverseFundCommandHandler(BalanceUpdateRepository balanceUpdateRepository, BalanceUpdater balanceUpdater) {
+    public ReverseFundCommandHandler(BalanceUpdateRepository balanceUpdateRepository,
+                                     BalanceUpdater balanceUpdater) {
 
         assert balanceUpdateRepository != null;
         assert balanceUpdater != null;
@@ -54,9 +55,14 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
 
         LOGGER.info("Executing ReverseFundCommand with input: {}", input);
 
-        this.balanceUpdateRepository.findById(input.reversalId()).orElseThrow(() -> new BalanceUpdateIdNotFoundException(input.reversalId()));
+        this.balanceUpdateRepository
+            .findById(input.reversalId())
+            .orElseThrow(() -> new BalanceUpdateIdNotFoundException(input.reversalId()));
 
-        var alreadyReversed = this.balanceUpdateRepository.findOne(BalanceUpdateRepository.Filters.withReversalId(input.reversalId())).isPresent();
+        var alreadyReversed = this.balanceUpdateRepository
+                                  .findOne(BalanceUpdateRepository.Filters.withReversalId(
+                                      input.reversalId()))
+                                  .isPresent();
 
         if (alreadyReversed) {
 
@@ -66,10 +72,13 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
 
         try {
 
-            final var history = this.balanceUpdater.reverse(input.reversalId(), new BalanceUpdateId(Snowflake.get().nextId()));
+            final var history = this.balanceUpdater.reverse(
+                input.reversalId(), new BalanceUpdateId(Snowflake.get().nextId()));
 
-            var output = new Output(history.balanceUpdateId(), history.walletId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldBalance(), history.newBalance(), history.transactionAt(), history.reversalId());
+            var output = new Output(
+                history.balanceUpdateId(), history.walletId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
+                history.newBalance(), history.transactionAt(), history.reversalId());
 
             LOGGER.info("ReverseFundCommand executed successfully with output: {}", output);
 

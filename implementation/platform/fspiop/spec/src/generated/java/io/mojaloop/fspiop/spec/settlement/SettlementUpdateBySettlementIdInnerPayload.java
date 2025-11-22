@@ -35,9 +35,12 @@ public class SettlementUpdateBySettlementIdInnerPayload {
             return false;
         }
         SettlementUpdateBySettlementIdInnerPayload settlementUpdateBySettlementIdInnerPayload = (SettlementUpdateBySettlementIdInnerPayload) o;
-        return Objects.equals(this.id, settlementUpdateBySettlementIdInnerPayload.id) && Objects.equals(this.reason, settlementUpdateBySettlementIdInnerPayload.reason) &&
+        return Objects.equals(this.id, settlementUpdateBySettlementIdInnerPayload.id) &&
+                   Objects.equals(this.reason, settlementUpdateBySettlementIdInnerPayload.reason) &&
                    Objects.equals(this.state, settlementUpdateBySettlementIdInnerPayload.state) &&
-                   Objects.equals(this.externalReference, settlementUpdateBySettlementIdInnerPayload.externalReference);
+                   Objects.equals(
+                       this.externalReference,
+                       settlementUpdateBySettlementIdInnerPayload.externalReference);
     }
 
     /**
@@ -136,7 +139,10 @@ public class SettlementUpdateBySettlementIdInnerPayload {
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
         sb.append("    state: ").append(toIndentedString(state)).append("\n");
-        sb.append("    externalReference: ").append(toIndentedString(externalReference)).append("\n");
+        sb
+            .append("    externalReference: ")
+            .append(toIndentedString(externalReference))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

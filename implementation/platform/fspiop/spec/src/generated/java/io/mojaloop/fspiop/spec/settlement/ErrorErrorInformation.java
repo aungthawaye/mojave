@@ -32,7 +32,8 @@ public class ErrorErrorInformation {
             return false;
         }
         ErrorErrorInformation errorErrorInformation = (ErrorErrorInformation) o;
-        return Objects.equals(this.errorCode, errorErrorInformation.errorCode) && Objects.equals(this.errorDescription, errorErrorInformation.errorDescription) &&
+        return Objects.equals(this.errorCode, errorErrorInformation.errorCode) &&
+                   Objects.equals(this.errorDescription, errorErrorInformation.errorDescription) &&
                    Objects.equals(this.extensionList, errorErrorInformation.extensionList);
     }
 

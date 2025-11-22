@@ -38,7 +38,8 @@ import java.util.List;
 @RestController
 public class FspQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FspQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        FspQueryController.class.getName());
 
     private final FspQuery fspQuery;
 

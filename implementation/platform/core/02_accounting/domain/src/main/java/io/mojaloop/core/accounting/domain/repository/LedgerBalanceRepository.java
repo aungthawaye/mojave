@@ -29,7 +29,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LedgerBalanceRepository extends JpaRepository<LedgerBalance, LedgerBalanceId>, JpaSpecificationExecutor<LedgerBalance> {
+public interface LedgerBalanceRepository
+    extends JpaRepository<LedgerBalance, LedgerBalanceId>, JpaSpecificationExecutor<LedgerBalance> {
 
     class Filters {
 

@@ -28,7 +28,11 @@ public interface PutPartiesCommand {
 
     Output execute(Input input);
 
-    record Input(FspiopHttpRequest request, PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse response) { }
+    record Input(FspiopHttpRequest request,
+                 PartyIdType partyIdType,
+                 String partyId,
+                 String subId,
+                 PartiesTypeIDPutResponse response) { }
 
     record Output() { }
 

@@ -58,7 +58,8 @@ import java.util.ArrayList;
 @Service
 public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateFlowDefinitionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CreateFlowDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -66,7 +67,9 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
     private final ChartEntryCache chartEntryCache;
 
-    public CreateFlowDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository, final AccountCache accountCache, final ChartEntryCache chartEntryCache) {
+    public CreateFlowDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
+                                              final AccountCache accountCache,
+                                              final ChartEntryCache chartEntryCache) {
 
         assert flowDefinitionRepository != null;
         assert accountCache != null;
@@ -86,17 +89,22 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
         final var currency = input.currency();
 
-        if (this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters.withCurrency(currency)).isPresent()) {
+        if (this.flowDefinitionRepository
+                .findOne(FlowDefinitionRepository.Filters.withCurrency(currency))
+                .isPresent()) {
             LOGGER.info("Flow Definition with currency {} already exists", currency);
             throw new FlowDefinitionWithCurrencyExistsException(currency);
         }
 
-        if (this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters.withNameEquals(input.name())).isPresent()) {
+        if (this.flowDefinitionRepository
+                .findOne(FlowDefinitionRepository.Filters.withNameEquals(input.name()))
+                .isPresent()) {
             LOGGER.info("Flow Definition with name {} already exists", input.name());
             throw new FlowDefinitionNameTakenException(input.name());
         }
 
-        var definition = new FlowDefinition(input.transactionType(), currency, input.name(), input.description());
+        var definition = new FlowDefinition(
+            input.transactionType(), currency, input.name(), input.description());
         LOGGER.info("Created Flow Definition: {}", definition);
 
         final var postingIds = new ArrayList<PostingDefinitionId>();
@@ -105,8 +113,10 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
             LOGGER.info("Adding posting: {}", posting);
 
-            final var pd = definition.addPosting(posting.receiveIn(), posting.receiveInId(), posting.participant(), posting.amountName(), posting.side(), posting.description(),
-                this.accountCache, this.chartEntryCache);
+            final var pd = definition.addPosting(
+                posting.receiveIn(), posting.receiveInId(), posting.participant(),
+                posting.amountName(), posting.side(), posting.description(), this.accountCache,
+                this.chartEntryCache);
             postingIds.add(pd.getId());
         }
 

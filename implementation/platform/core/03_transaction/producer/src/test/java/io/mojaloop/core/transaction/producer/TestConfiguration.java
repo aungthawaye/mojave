@@ -23,5 +23,7 @@ package io.mojaloop.core.transaction.producer;
 import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import org.springframework.context.annotation.Import;
 
-@Import(value = {TransactionProducerConfiguration.class, TransactionIntercomClientConfiguration.class, TestSettings.class})
+@Import(value = {TransactionProducerConfiguration.class,
+                 TransactionIntercomClientConfiguration.class,
+                 TestSettings.class})
 public class TestConfiguration { }

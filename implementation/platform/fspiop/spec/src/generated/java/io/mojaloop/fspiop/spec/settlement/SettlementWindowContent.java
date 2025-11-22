@@ -34,9 +34,12 @@ public class SettlementWindowContent {
     @JsonCreator
     public SettlementWindowContent(@JsonProperty(required = true, value = "id") Integer id,
                                    @JsonProperty(required = true, value = "state") String state,
-                                   @JsonProperty(required = true, value = "ledgerAccountType") String ledgerAccountType,
-                                   @JsonProperty(required = true, value = "currencyId") String currencyId,
-                                   @JsonProperty(required = true, value = "createdDate") String createdDate) {
+                                   @JsonProperty(required = true,
+                                                 value = "ledgerAccountType") String ledgerAccountType,
+                                   @JsonProperty(required = true,
+                                                 value = "currencyId") String currencyId,
+                                   @JsonProperty(required = true,
+                                                 value = "createdDate") String createdDate) {
 
         this.id = id;
         this.state = state;
@@ -79,9 +82,14 @@ public class SettlementWindowContent {
             return false;
         }
         SettlementWindowContent settlementWindowContent = (SettlementWindowContent) o;
-        return Objects.equals(this.id, settlementWindowContent.id) && Objects.equals(this.state, settlementWindowContent.state) &&
-                   Objects.equals(this.ledgerAccountType, settlementWindowContent.ledgerAccountType) && Objects.equals(this.currencyId, settlementWindowContent.currencyId) &&
-                   Objects.equals(this.createdDate, settlementWindowContent.createdDate) && Objects.equals(this.changedDate, settlementWindowContent.changedDate) &&
+        return Objects.equals(this.id, settlementWindowContent.id) &&
+                   Objects.equals(this.state, settlementWindowContent.state) &&
+                   Objects.equals(
+                       this.ledgerAccountType,
+                       settlementWindowContent.ledgerAccountType) &&
+                   Objects.equals(this.currencyId, settlementWindowContent.currencyId) &&
+                   Objects.equals(this.createdDate, settlementWindowContent.createdDate) &&
+                   Objects.equals(this.changedDate, settlementWindowContent.changedDate) &&
                    Objects.equals(this.settlementId, settlementWindowContent.settlementId);
     }
 
@@ -177,7 +185,8 @@ public class SettlementWindowContent {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, state, ledgerAccountType, currencyId, createdDate, changedDate, settlementId);
+        return Objects.hash(
+            id, state, ledgerAccountType, currencyId, createdDate, changedDate, settlementId);
     }
 
     /**
@@ -220,7 +229,10 @@ public class SettlementWindowContent {
 
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    state: ").append(toIndentedString(state)).append("\n");
-        sb.append("    ledgerAccountType: ").append(toIndentedString(ledgerAccountType)).append("\n");
+        sb
+            .append("    ledgerAccountType: ")
+            .append(toIndentedString(ledgerAccountType))
+            .append("\n");
         sb.append("    currencyId: ").append(toIndentedString(currencyId)).append("\n");
         sb.append("    createdDate: ").append(toIndentedString(createdDate)).append("\n");
         sb.append("    changedDate: ").append(toIndentedString(changedDate)).append("\n");

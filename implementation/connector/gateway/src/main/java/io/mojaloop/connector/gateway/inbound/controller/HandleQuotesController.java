@@ -48,7 +48,8 @@ import java.util.Map;
 @RestController
 public class HandleQuotesController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleQuotesController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandleQuotesController.class.getName());
 
     private final EventPublisher eventPublisher;
 
@@ -59,34 +60,43 @@ public class HandleQuotesController {
     }
 
     @PostMapping("/quotes")
-    public ResponseEntity<?> postQuotes(@RequestHeader Map<String, String> headers, @RequestBody QuotesPostRequest request) {
+    public ResponseEntity<?> postQuotes(@RequestHeader Map<String, String> headers,
+                                        @RequestBody QuotesPostRequest request) {
 
         LOGGER.debug("Received POST /quotes : request : {}", request);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PostQuotesEvent(new HandlePostQuotesRequestCommand.Input(payer, request.getQuoteId(), request)));
+        this.eventPublisher.publish(new PostQuotesEvent(
+            new HandlePostQuotesRequestCommand.Input(payer, request.getQuoteId(), request)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/quotes/{quoteId}")
-    public ResponseEntity<?> putQuotes(@RequestHeader Map<String, String> headers, @PathVariable String quoteId, @RequestBody QuotesIDPutResponse response) {
+    public ResponseEntity<?> putQuotes(@RequestHeader Map<String, String> headers,
+                                       @PathVariable String quoteId,
+                                       @RequestBody QuotesIDPutResponse response) {
 
         LOGGER.debug("Received PUT /quotes/{} : response : {}", quoteId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutQuotesEvent(new HandlePutQuotesResponseCommand.Input(payee, quoteId, response)));
+        this.eventPublisher.publish(
+            new PutQuotesEvent(new HandlePutQuotesResponseCommand.Input(payee, quoteId, response)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/quotes/{quoteId}/error")
-    public ResponseEntity<?> putQuotesError(@RequestHeader Map<String, String> headers, @PathVariable String quoteId, @RequestBody ErrorInformationObject errorInformation) {
+    public ResponseEntity<?> putQuotesError(@RequestHeader Map<String, String> headers,
+                                            @PathVariable String quoteId,
+                                            @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug("Received PUT /quotes/{}/error : errorInformation : {}", quoteId, errorInformation);
+        LOGGER.debug(
+            "Received PUT /quotes/{}/error : errorInformation : {}", quoteId, errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutQuotesErrorEvent(new HandlePutQuotesErrorCommand.Input(payee, quoteId, errorInformation)));
+        this.eventPublisher.publish(new PutQuotesErrorEvent(
+            new HandlePutQuotesErrorCommand.Input(payee, quoteId, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }

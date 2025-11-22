@@ -58,7 +58,8 @@ import static java.sql.Types.BIGINT;
 @Table(name = "acc_ledger_balance")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LedgerBalance extends JpaEntity<AccountId> implements DataConversion<LedgerBalanceData> {
+public class LedgerBalance extends JpaEntity<AccountId>
+    implements DataConversion<LedgerBalanceData> {
 
     @Id
     @JavaType(AccountIdJavaType.class)
@@ -83,7 +84,9 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     @Column(name = "posted_credits", precision = 34, scale = 4)
     protected BigDecimal postedCredits;
 
-    @Column(name = "overdraft_mode", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "overdraft_mode",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected OverdraftMode overdraftMode;
 
@@ -96,10 +99,15 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "ledger_balance_id", nullable = false, foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
+    @JoinColumn(name = "ledger_balance_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "ledger_balance_account_FK"))
     protected Account account;
 
-    public LedgerBalance(Account account, Side nature, OverdraftMode overdraftMode, BigDecimal overdraftLimit) {
+    public LedgerBalance(Account account,
+                         Side nature,
+                         OverdraftMode overdraftMode,
+                         BigDecimal overdraftLimit) {
 
         assert account != null;
         assert nature != null;
@@ -121,8 +129,9 @@ public class LedgerBalance extends JpaEntity<AccountId> implements DataConversio
     @Override
     public LedgerBalanceData convert() {
 
-        return new LedgerBalanceData(this.getId(), this.currency, this.scale, this.nature, this.postedDebits, this.postedCredits, this.overdraftMode, this.overdraftLimit,
-            this.createdAt);
+        return new LedgerBalanceData(
+            this.getId(), this.currency, this.scale, this.nature, this.postedDebits,
+            this.postedCredits, this.overdraftMode, this.overdraftLimit, this.createdAt);
     }
 
     public DrCr getDrCr() {

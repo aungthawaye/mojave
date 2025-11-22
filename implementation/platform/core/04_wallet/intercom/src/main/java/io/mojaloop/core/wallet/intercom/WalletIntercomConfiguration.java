@@ -55,9 +55,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom.controller")
-@Import(value = {OpenApiConfiguration.class, WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-final class WalletIntercomConfiguration extends JacksonWebMvcExtension
-    implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@Import(value = {OpenApiConfiguration.class,
+                 WalletDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class})
+final class WalletIntercomConfiguration extends JacksonWebMvcExtension implements
+                                                                       WalletDomainConfiguration.RequiredBeans,
+                                                                       SpringSecurityConfiguration.RequiredBeans,
+                                                                       SpringSecurityConfiguration.RequiredSettings {
 
     private final BalanceUpdater balanceUpdater;
 
@@ -77,8 +82,10 @@ final class WalletIntercomConfiguration extends JacksonWebMvcExtension
         this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
         this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
 
-        this.walletCache = new WalletTimerCache(walletRepository, Integer.parseInt(System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-        this.positionCache = new PositionTimerCache(positionRepository, Integer.parseInt(System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.walletCache = new WalletTimerCache(walletRepository, Integer.parseInt(
+            System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.positionCache = new PositionTimerCache(positionRepository, Integer.parseInt(
+            System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
     }
 
     @Bean
@@ -131,12 +138,14 @@ final class WalletIntercomConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings
+        extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

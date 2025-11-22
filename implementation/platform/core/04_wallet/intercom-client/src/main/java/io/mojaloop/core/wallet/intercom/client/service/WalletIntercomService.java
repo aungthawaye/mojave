@@ -63,7 +63,8 @@ public interface WalletIntercomService {
         Call<List<WalletData>> getAll();
 
         @GET("/wallets/get-by-owner-id-currency")
-        Call<List<WalletData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId, @Query("currency") Currency currency);
+        Call<List<WalletData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
+                                                       @Query("currency") Currency currency);
 
         @GET("/wallets/get-by-wallet-id")
         Call<WalletData> getByWalletId(@Query("walletId") WalletId walletId);
@@ -95,7 +96,8 @@ public interface WalletIntercomService {
         Call<List<PositionData>> getAll();
 
         @GET("/positions/get-by-owner-id-currency")
-        Call<List<PositionData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId, @Query("currency") Currency currency);
+        Call<List<PositionData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
+                                                         @Query("currency") Currency currency);
 
         @GET("/positions/get-by-position-id")
         Call<PositionData> getByPositionId(@Query("positionId") PositionId positionId);

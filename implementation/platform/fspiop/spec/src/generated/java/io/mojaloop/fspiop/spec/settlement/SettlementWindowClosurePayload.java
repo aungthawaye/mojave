@@ -23,7 +23,10 @@ public class SettlementWindowClosurePayload {
     }
 
     @JsonCreator
-    public SettlementWindowClosurePayload(@JsonProperty(required = true, value = "state") StateEnum state, @JsonProperty(required = true, value = "reason") String reason) {
+    public SettlementWindowClosurePayload(@JsonProperty(required = true,
+                                                        value = "state") StateEnum state,
+                                          @JsonProperty(required = true,
+                                                        value = "reason") String reason) {
 
         this.state = state;
         this.reason = reason;
@@ -39,7 +42,8 @@ public class SettlementWindowClosurePayload {
             return false;
         }
         SettlementWindowClosurePayload settlementWindowClosurePayload = (SettlementWindowClosurePayload) o;
-        return Objects.equals(this.state, settlementWindowClosurePayload.state) && Objects.equals(this.reason, settlementWindowClosurePayload.reason);
+        return Objects.equals(this.state, settlementWindowClosurePayload.state) &&
+                   Objects.equals(this.reason, settlementWindowClosurePayload.reason);
     }
 
     @JsonProperty(required = true, value = "reason")

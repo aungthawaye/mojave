@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxQuotesPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxQuotesPostRequest {
 
     private String conversionRequestId;
@@ -26,8 +27,10 @@ public class FxQuotesPostRequest {
     }
 
     @JsonCreator
-    public FxQuotesPostRequest(@JsonProperty(required = true, value = "conversionRequestId") String conversionRequestId,
-                               @JsonProperty(required = true, value = "conversionTerms") FxConversion conversionTerms) {
+    public FxQuotesPostRequest(@JsonProperty(required = true,
+                                             value = "conversionRequestId") String conversionRequestId,
+                               @JsonProperty(required = true,
+                                             value = "conversionTerms") FxConversion conversionTerms) {
 
         this.conversionRequestId = conversionRequestId;
         this.conversionTerms = conversionTerms;
@@ -60,7 +63,8 @@ public class FxQuotesPostRequest {
             return false;
         }
         FxQuotesPostRequest fxQuotesPostRequest = (FxQuotesPostRequest) o;
-        return Objects.equals(this.conversionRequestId, fxQuotesPostRequest.conversionRequestId) && Objects.equals(this.conversionTerms, fxQuotesPostRequest.conversionTerms);
+        return Objects.equals(this.conversionRequestId, fxQuotesPostRequest.conversionRequestId) &&
+                   Objects.equals(this.conversionTerms, fxQuotesPostRequest.conversionTerms);
     }
 
     @JsonProperty(required = true, value = "conversionRequestId")
@@ -103,7 +107,10 @@ public class FxQuotesPostRequest {
         StringBuilder sb = new StringBuilder();
         sb.append("class FxQuotesPostRequest {\n");
 
-        sb.append("    conversionRequestId: ").append(toIndentedString(conversionRequestId)).append("\n");
+        sb
+            .append("    conversionRequestId: ")
+            .append(toIndentedString(conversionRequestId))
+            .append("\n");
         sb.append("    conversionTerms: ").append(toIndentedString(conversionTerms)).append("\n");
         sb.append("}");
         return sb.toString();

@@ -34,7 +34,8 @@ public class Account {
             return false;
         }
         Account account = (Account) o;
-        return Objects.equals(this.id, account.id) && Objects.equals(this.reason, account.reason) && Objects.equals(this.state, account.state) &&
+        return Objects.equals(this.id, account.id) && Objects.equals(this.reason, account.reason) &&
+                   Objects.equals(this.state, account.state) &&
                    Objects.equals(this.netSettlementAmount, account.netSettlementAmount);
     }
 
@@ -136,7 +137,10 @@ public class Account {
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
         sb.append("    state: ").append(toIndentedString(state)).append("\n");
-        sb.append("    netSettlementAmount: ").append(toIndentedString(netSettlementAmount)).append("\n");
+        sb
+            .append("    netSettlementAmount: ")
+            .append(toIndentedString(netSettlementAmount))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

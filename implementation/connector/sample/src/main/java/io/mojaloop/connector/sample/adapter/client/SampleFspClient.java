@@ -43,25 +43,32 @@ import java.util.List;
 public class SampleFspClient implements FspClient {
 
     @Override
-    public Parties.Get.Response getParties(Payer payer, Parties.Get.Request request) throws FspiopException {
+    public Parties.Get.Response getParties(Payer payer, Parties.Get.Request request)
+        throws FspiopException {
 
         var partyId = request.partyId();
 
         if (Long.parseLong(partyId) % 2 == 0) {
-            throw new FspiopException(FspiopErrors.PARTY_NOT_FOUND, request.partyIdType().name() + " with Party ID (" + partyId + ") not found.");
+            throw new FspiopException(
+                FspiopErrors.PARTY_NOT_FOUND,
+                request.partyIdType().name() + " with Party ID (" + partyId + ") not found.");
         }
 
-        return new Parties.Get.Response(List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko Kamado",
-            new PartyPersonalInfo().complexName(new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
+        return new Parties.Get.Response(
+            List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko Kamado",
+            new PartyPersonalInfo().complexName(
+                new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
     }
 
     @Override
-    public void patchTransfers(Payer payer, Transfers.Patch.Request request) throws FspiopException {
+    public void patchTransfers(Payer payer, Transfers.Patch.Request request)
+        throws FspiopException {
 
     }
 
     @Override
-    public Quotes.Post.Response postQuotes(Payer payer, Quotes.Post.Request request) throws FspiopException {
+    public Quotes.Post.Response postQuotes(Payer payer, Quotes.Post.Request request)
+        throws FspiopException {
 
         var currency = request.originalAmount().getCurrency();
         var originalAmount = new BigDecimal(request.originalAmount().getAmount());
@@ -87,13 +94,17 @@ public class SampleFspClient implements FspClient {
         var _15minsLater = new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli());
         var expiration = FspiopDates.forRequestBody(_15minsLater);
 
-        return new Quotes.Post.Response(new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),
-            new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()), new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()),
-            new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()), new Money(currency, transferAmount.stripTrailingZeros().toPlainString()), expiration);
+        return new Quotes.Post.Response(
+            new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),
+            new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()),
+            new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()),
+            new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()),
+            new Money(currency, transferAmount.stripTrailingZeros().toPlainString()), expiration);
     }
 
     @Override
-    public Transfers.Post.Response postTransfers(Payer payer, Transfers.Post.Request request) throws FspiopException {
+    public Transfers.Post.Response postTransfers(Payer payer, Transfers.Post.Request request)
+        throws FspiopException {
 
         return null;
     }

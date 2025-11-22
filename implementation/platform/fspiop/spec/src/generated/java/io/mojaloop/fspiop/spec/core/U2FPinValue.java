@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("U2FPinValue")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class U2FPinValue {
 
     private String pinValue;
@@ -26,7 +27,8 @@ public class U2FPinValue {
     }
 
     @JsonCreator
-    public U2FPinValue(@JsonProperty(required = true, value = "pinValue") String pinValue, @JsonProperty(required = true, value = "counter") String counter) {
+    public U2FPinValue(@JsonProperty(required = true, value = "pinValue") String pinValue,
+                       @JsonProperty(required = true, value = "counter") String counter) {
 
         this.pinValue = pinValue;
         this.counter = counter;
@@ -51,7 +53,8 @@ public class U2FPinValue {
             return false;
         }
         U2FPinValue u2FPinValue = (U2FPinValue) o;
-        return Objects.equals(this.pinValue, u2FPinValue.pinValue) && Objects.equals(this.counter, u2FPinValue.counter);
+        return Objects.equals(this.pinValue, u2FPinValue.pinValue) &&
+                   Objects.equals(this.counter, u2FPinValue.counter);
     }
 
     @JsonProperty(required = true, value = "counter")

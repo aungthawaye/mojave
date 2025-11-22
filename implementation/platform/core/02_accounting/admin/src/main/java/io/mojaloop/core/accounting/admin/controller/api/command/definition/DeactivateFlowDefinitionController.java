@@ -53,7 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DeactivateFlowDefinitionController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateFlowDefinitionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateFlowDefinitionController.class);
 
     private final DeactivateFlowDefinitionCommand deactivateFlowDefinitionCommand;
 

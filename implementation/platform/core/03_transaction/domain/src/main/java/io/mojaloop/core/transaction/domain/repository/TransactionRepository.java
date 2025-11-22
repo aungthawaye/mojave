@@ -31,7 +31,8 @@ import org.springframework.stereotype.Repository;
 import java.time.Instant;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, TransactionId>, JpaSpecificationExecutor<Transaction> {
+public interface TransactionRepository
+    extends JpaRepository<Transaction, TransactionId>, JpaSpecificationExecutor<Transaction> {
 
     class Filters {
 

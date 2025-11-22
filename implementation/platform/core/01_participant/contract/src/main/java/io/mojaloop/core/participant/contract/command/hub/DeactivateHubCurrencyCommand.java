@@ -49,7 +49,8 @@ public interface DeactivateHubCurrencyCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull HubId hubId, @JsonProperty(required = true) @NotNull Currency currency) { }
+    record Input(@JsonProperty(required = true) @NotNull HubId hubId,
+                 @JsonProperty(required = true) @NotNull Currency currency) { }
 
     record Output(HubCurrencyId hubCurrencyId, boolean deactivated) { }
 

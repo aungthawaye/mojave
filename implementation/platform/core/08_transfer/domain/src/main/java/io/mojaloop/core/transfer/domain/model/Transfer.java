@@ -72,21 +72,31 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "tfr_transfer",
-       uniqueConstraints = {@UniqueConstraint(name = "tfr_transfer_transaction_id_UK", columnNames = {"transaction_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_udf_transfer_id_UK", columnNames = {"udf_transfer_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_reservation_id_UK", columnNames = {"reservation_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_payer_commit_id_UK", columnNames = {"payer_commit_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_payee_commit_id_UK", columnNames = {"payee_commit_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_rollback_id_UK", columnNames = {"rollback_id"})},
+       uniqueConstraints = {@UniqueConstraint(name = "tfr_transfer_transaction_id_UK",
+                                              columnNames = {"transaction_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_udf_transfer_id_UK",
+                                              columnNames = {"udf_transfer_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_reservation_id_UK",
+                                              columnNames = {"reservation_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_payer_commit_id_UK",
+                                              columnNames = {"payer_commit_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_payee_commit_id_UK",
+                                              columnNames = {"payee_commit_id"}),
+                            @UniqueConstraint(name = "tfr_transfer_rollback_id_UK",
+                                              columnNames = {"rollback_id"})},
        indexes = {@Index(name = "tfr_transfer_payer_fsp_IDX", columnList = "payer_fsp"),
-                  @Index(name = "tfr_transfer_payer_fsp_transaction_id_IDX", columnList = "payer_fsp, transaction_id"),
+                  @Index(name = "tfr_transfer_payer_fsp_transaction_id_IDX",
+                         columnList = "payer_fsp, transaction_id"),
                   @Index(name = "tfr_transfer_payee_fsp_IDX", columnList = "payee_fsp"),
-                  @Index(name = "tfr_transfer_payee_fsp_transaction_IDX", columnList = "payee_fsp, transaction_id"),
-                  @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX", columnList = "payee_fsp, payer_fsp"),
+                  @Index(name = "tfr_transfer_payee_fsp_transaction_IDX",
+                         columnList = "payee_fsp, transaction_id"),
+                  @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX",
+                         columnList = "payee_fsp, payer_fsp"),
                   @Index(name = "tfr_transfer_transaction_at_IDX", columnList = "transaction_at"),
                   @Index(name = "tfr_transfer_payer_party_id_IDX", columnList = "payer_party_id"),
                   @Index(name = "tfr_transfer_payee_party_id_IDX", columnList = "payee_party_id"),
-                  @Index(name = "tfr_transfer_reservation_timeout_at_IDX", columnList = "reservation_timeout_at"),
+                  @Index(name = "tfr_transfer_reservation_timeout_at_IDX",
+                         columnList = "reservation_timeout_at"),
                   @Index(name = "tfr_transfer_reserved_at_IDX", columnList = "reserved_at"),
                   @Index(name = "tfr_transfer_committed_at_IDX", columnList = "committed_at"),
                   @Index(name = "tfr_transfer_aborted_at_IDX", columnList = "aborted_at"),
@@ -113,35 +123,63 @@ public class Transfer extends JpaEntity<TransferId> {
     @Basic
     @JavaType(UdfTransferIdJavaType.class)
     @JdbcTypeCode(Types.VARCHAR)
-    @Column(name = "udf_transfer_id", nullable = false, updatable = false, length = StringSizeConstraints.MAX_UDF_TRANSFER_ID_LENGTH)
+    @Column(name = "udf_transfer_id",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_UDF_TRANSFER_ID_LENGTH)
     protected UdfTransferId udfTransferId;
 
-    @Column(name = "payer_fsp", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(name = "payer_fsp",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = FspCodeConverter.class)
     protected FspCode payerFsp;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payer_party_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId", column = @Column(name = "payer_party_id", length = 48)),
-                                 @AttributeOverride(name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
+    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
+                                                    column = @Column(name = "payer_party_type",
+                                                                     length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                                 @AttributeOverride(name = "partyId",
+                                                    column = @Column(name = "payer_party_id",
+                                                                     length = 48)),
+                                 @AttributeOverride(name = "subId",
+                                                    column = @Column(name = "payer_sub_id",
+                                                                     length = 48))})
     protected Party payer;
 
-    @Column(name = "payee_fsp", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(name = "payee_fsp",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = FspCodeConverter.class)
     protected FspCode payeeFsp;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType", column = @Column(name = "payee_party_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId", column = @Column(name = "payee_party_id", length = 48)),
-                                 @AttributeOverride(name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
+    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
+                                                    column = @Column(name = "payee_party_type",
+                                                                     length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+                                 @AttributeOverride(name = "partyId",
+                                                    column = @Column(name = "payee_party_id",
+                                                                     length = 48)),
+                                 @AttributeOverride(name = "subId",
+                                                    column = @Column(name = "payee_sub_id",
+                                                                     length = 48))})
 
     protected Party payee;
 
-    @Column(name = "currency", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(name = "currency",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "transfer_amount", nullable = false, updatable = false, precision = 34, scale = 4)
+    @Column(name = "transfer_amount",
+            nullable = false,
+            updatable = false,
+            precision = 34,
+            scale = 4)
     protected BigDecimal transferAmount;
 
     @Column(name = "request_expiration")
@@ -269,7 +307,10 @@ public class Transfer extends JpaEntity<TransferId> {
         this.extensions.add(new TransferExtension(this, direction, key, value));
     }
 
-    public void committed(String ilpFulfilment, PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId, Instant completedAt) {
+    public void committed(String ilpFulfilment,
+                          PositionUpdateId payerCommitId,
+                          PositionUpdateId payeeCommitId,
+                          Instant completedAt) {
 
         assert ilpFulfilment != null;
         assert payerCommitId != null;

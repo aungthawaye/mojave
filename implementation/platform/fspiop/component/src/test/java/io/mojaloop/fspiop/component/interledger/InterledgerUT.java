@@ -28,7 +28,8 @@ public class InterledgerUT {
     @Test
     public void test_unwrap() {
 
-        var prepare = Interledger.prepare("53cr3t", Interledger.address("test"), UnsignedLong.valueOf(100), "data", 100);
+        var prepare = Interledger.prepare(
+            "53cr3t", Interledger.address("test"), UnsignedLong.valueOf(100), "data", 100);
 
         System.out.println("package : " + prepare.base64PreparePacket());
         System.out.println("fulfillment : " + prepare.base64Fulfillment());

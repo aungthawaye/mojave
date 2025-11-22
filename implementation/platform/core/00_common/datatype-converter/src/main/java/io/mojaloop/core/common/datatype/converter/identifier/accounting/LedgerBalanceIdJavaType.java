@@ -83,7 +83,8 @@ public class LedgerBalanceIdJavaType extends AbstractClassJavaType<LedgerBalance
             case null -> null;
             case LedgerBalanceId id -> id;
             case Number n -> new LedgerBalanceId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

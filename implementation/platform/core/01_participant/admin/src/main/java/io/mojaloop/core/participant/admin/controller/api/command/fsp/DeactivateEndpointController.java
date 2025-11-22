@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DeactivateEndpointController implements DeactivateEndpointCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateEndpointController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateEndpointController.class);
 
     private final DeactivateEndpointCommand deactivateEndpointCommand;
 

@@ -62,9 +62,14 @@ public class PostingAccountNotFoundException extends CheckedDomainException {
 
     private final Currency currency;
 
-    public PostingAccountNotFoundException(final AccountOwnerId ownerId, final ChartEntryId chartEntryId, final Currency currency) {
+    public PostingAccountNotFoundException(final AccountOwnerId ownerId,
+                                           final ChartEntryId chartEntryId,
+                                           final Currency currency) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{ownerId.getId().toString(), chartEntryId.getId().toString(), currency.name()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{ownerId.getId().toString(),
+                                         chartEntryId.getId().toString(),
+                                         currency.name()}));
 
         this.ownerId = ownerId;
         this.chartEntryId = chartEntryId;

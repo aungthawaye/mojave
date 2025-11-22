@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransfersPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransfersPostRequest {
 
     private String transferId;
@@ -39,13 +40,17 @@ public class TransfersPostRequest {
     }
 
     @JsonCreator
-    public TransfersPostRequest(@JsonProperty(required = true, value = "transferId") String transferId,
+    public TransfersPostRequest(@JsonProperty(required = true,
+                                              value = "transferId") String transferId,
                                 @JsonProperty(required = true, value = "payeeFsp") String payeeFsp,
                                 @JsonProperty(required = true, value = "payerFsp") String payerFsp,
                                 @JsonProperty(required = true, value = "amount") Money amount,
-                                @JsonProperty(required = true, value = "ilpPacket") String ilpPacket,
-                                @JsonProperty(required = true, value = "condition") String condition,
-                                @JsonProperty(required = true, value = "expiration") String expiration) {
+                                @JsonProperty(required = true,
+                                              value = "ilpPacket") String ilpPacket,
+                                @JsonProperty(required = true,
+                                              value = "condition") String condition,
+                                @JsonProperty(required = true,
+                                              value = "expiration") String expiration) {
 
         this.transferId = transferId;
         this.payeeFsp = payeeFsp;
@@ -83,10 +88,14 @@ public class TransfersPostRequest {
             return false;
         }
         TransfersPostRequest transfersPostRequest = (TransfersPostRequest) o;
-        return Objects.equals(this.transferId, transfersPostRequest.transferId) && Objects.equals(this.payeeFsp, transfersPostRequest.payeeFsp) &&
-                   Objects.equals(this.payerFsp, transfersPostRequest.payerFsp) && Objects.equals(this.amount, transfersPostRequest.amount) &&
-                   Objects.equals(this.ilpPacket, transfersPostRequest.ilpPacket) && Objects.equals(this.condition, transfersPostRequest.condition) &&
-                   Objects.equals(this.expiration, transfersPostRequest.expiration) && Objects.equals(this.extensionList, transfersPostRequest.extensionList);
+        return Objects.equals(this.transferId, transfersPostRequest.transferId) &&
+                   Objects.equals(this.payeeFsp, transfersPostRequest.payeeFsp) &&
+                   Objects.equals(this.payerFsp, transfersPostRequest.payerFsp) &&
+                   Objects.equals(this.amount, transfersPostRequest.amount) &&
+                   Objects.equals(this.ilpPacket, transfersPostRequest.ilpPacket) &&
+                   Objects.equals(this.condition, transfersPostRequest.condition) &&
+                   Objects.equals(this.expiration, transfersPostRequest.expiration) &&
+                   Objects.equals(this.extensionList, transfersPostRequest.extensionList);
     }
 
     /**
@@ -222,7 +231,9 @@ public class TransfersPostRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash(transferId, payeeFsp, payerFsp, amount, ilpPacket, condition, expiration, extensionList);
+        return Objects.hash(
+            transferId, payeeFsp, payerFsp, amount, ilpPacket, condition, expiration,
+            extensionList);
     }
 
     /**

@@ -31,10 +31,14 @@ import java.lang.reflect.Type;
 public class NullOrEmptyConverterFactory extends Converter.Factory {
 
     @Override
-    public Converter<ResponseBody, ?> responseBodyConverter(@NotNull Type type, @NotNull Annotation[] annotations, Retrofit retrofit) {
+    public Converter<ResponseBody, ?> responseBodyConverter(@NotNull Type type,
+                                                            @NotNull Annotation[] annotations,
+                                                            Retrofit retrofit) {
 
-        final Converter<ResponseBody, ?> delegate = retrofit.nextResponseBodyConverter(this, type, annotations);
-        return (Converter<ResponseBody, Object>) body -> body.contentLength() == 0 ? null : delegate.convert(body);
+        final Converter<ResponseBody, ?> delegate = retrofit.nextResponseBodyConverter(
+            this, type, annotations);
+        return (Converter<ResponseBody, Object>) body -> body.contentLength() == 0 ? null :
+                                                             delegate.convert(body);
 
     }
 

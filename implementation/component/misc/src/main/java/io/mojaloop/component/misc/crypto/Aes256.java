@@ -33,8 +33,12 @@ import java.util.Base64;
 
 public class Aes256 {
 
-    public static byte[] decrypt(byte[] message, SecretKey secretKey)
-        throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public static byte[] decrypt(byte[] message, SecretKey secretKey) throws
+                                                                      NoSuchPaddingException,
+                                                                      NoSuchAlgorithmException,
+                                                                      InvalidKeyException,
+                                                                      IllegalBlockSizeException,
+                                                                      BadPaddingException {
 
         Cipher cipher = Cipher.getInstance("AES");
 
@@ -43,8 +47,12 @@ public class Aes256 {
         return cipher.doFinal(message);
     }
 
-    public static byte[] encrypt(byte[] message, SecretKey secretKey)
-        throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public static byte[] encrypt(byte[] message, SecretKey secretKey) throws
+                                                                      NoSuchPaddingException,
+                                                                      NoSuchAlgorithmException,
+                                                                      InvalidKeyException,
+                                                                      IllegalBlockSizeException,
+                                                                      BadPaddingException {
 
         Cipher cipher = Cipher.getInstance("AES");
 

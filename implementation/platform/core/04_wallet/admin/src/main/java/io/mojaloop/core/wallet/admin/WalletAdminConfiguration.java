@@ -55,9 +55,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.admin.controller")
-@Import(value = {OpenApiConfiguration.class, WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-final class WalletAdminConfiguration extends JacksonWebMvcExtension
-    implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@Import(value = {OpenApiConfiguration.class,
+                 WalletDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class})
+final class WalletAdminConfiguration extends JacksonWebMvcExtension implements
+                                                                    WalletDomainConfiguration.RequiredBeans,
+                                                                    SpringSecurityConfiguration.RequiredBeans,
+                                                                    SpringSecurityConfiguration.RequiredSettings {
 
     private final BalanceUpdater balanceUpdater;
 
@@ -132,12 +137,14 @@ final class WalletAdminConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings
+        extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
 
         MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
 

@@ -38,7 +38,8 @@ public class IncreasePositionInvoker implements IncreasePositionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public IncreasePositionInvoker(final WalletAdminService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public IncreasePositionInvoker(final WalletAdminService.PositionCommand positionCommand,
+                                   final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -48,12 +49,17 @@ public class IncreasePositionInvoker implements IncreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+    public Output execute(final Input input)
+        throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.increase(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.increase(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

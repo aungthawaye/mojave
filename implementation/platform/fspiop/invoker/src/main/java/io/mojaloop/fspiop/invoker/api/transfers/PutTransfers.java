@@ -27,8 +27,11 @@ import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 
 public interface PutTransfers {
 
-    void putTransfers(Payer payer, String transferId, TransfersIDPutResponse transfersIDPutResponse) throws FspiopException;
+    void putTransfers(Payer payer, String transferId, TransfersIDPutResponse transfersIDPutResponse)
+        throws FspiopException;
 
-    void putTransfersError(Payer payer, String transferId, ErrorInformationObject errorInformationObject) throws FspiopException;
+    void putTransfersError(Payer payer,
+                           String transferId,
+                           ErrorInformationObject errorInformationObject) throws FspiopException;
 
 }

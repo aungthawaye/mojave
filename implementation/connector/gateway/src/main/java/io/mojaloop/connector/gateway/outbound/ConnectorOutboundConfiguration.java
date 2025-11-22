@@ -41,16 +41,21 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAutoConfiguration
 @EnableAsync
 @EnableWebMvc
-@Import(value = {MiscConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class})
+@Import(value = {MiscConfiguration.class,
+                 FspiopInvokerConfiguration.class,
+                 SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.outbound"})
-public class ConnectorOutboundConfiguration
-    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+public class ConnectorOutboundConfiguration implements MiscConfiguration.RequiredBeans,
+                                                       FspiopInvokerConfiguration.RequiredBeans,
+                                                       SpringSecurityConfiguration.RequiredBeans,
+                                                       SpringSecurityConfiguration.RequiredSettings {
 
     private final OutboundSettings outboundSettings;
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorOutboundConfiguration(OutboundSettings outboundSettings, ObjectMapper objectMapper) {
+    public ConnectorOutboundConfiguration(OutboundSettings outboundSettings,
+                                          ObjectMapper objectMapper) {
 
         assert outboundSettings != null;
         assert objectMapper != null;
@@ -78,11 +83,13 @@ public class ConnectorOutboundConfiguration
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(new String[]{"/lookup", "/quote", "/transfer"});
+        return new SpringSecurityConfigurer.Settings(
+            new String[]{"/lookup", "/quote", "/transfer"});
     }
 
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(OutboundSettings outboundSettings) {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(
+        OutboundSettings outboundSettings) {
 
         return factory -> {
 
@@ -102,7 +109,8 @@ public class ConnectorOutboundConfiguration
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
+    public interface RequiredSettings
+        extends MiscConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
 
         OutboundSettings outboundSettings();
 
@@ -110,7 +118,13 @@ public class ConnectorOutboundConfiguration
 
     }
 
-    public record OutboundSettings(int portNo, int maxThreads, int connectionTimeoutMs, int putResultTimeoutMs, int pubSubTimeoutMs, String publicKeyPem, boolean secured) { }
+    public record OutboundSettings(int portNo,
+                                   int maxThreads,
+                                   int connectionTimeoutMs,
+                                   int putResultTimeoutMs,
+                                   int pubSubTimeoutMs,
+                                   String publicKeyPem,
+                                   boolean secured) { }
 
     public record TransferSettings(int transferRequestExpirySeconds) { }
 

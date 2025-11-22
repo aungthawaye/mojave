@@ -42,9 +42,14 @@ public class TransferAmountMismatchException extends CheckedDomainException {
 
     private final AmountType amountType;
 
-    public TransferAmountMismatchException(final BigDecimal transferAmount, final BigDecimal amount, final AmountType amountType) {
+    public TransferAmountMismatchException(final BigDecimal transferAmount,
+                                           final BigDecimal amount,
+                                           final AmountType amountType) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transferAmount.stripTrailingZeros().toPlainString(), amount.stripTrailingZeros().toPlainString(), amountType.name()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{transferAmount.stripTrailingZeros().toPlainString(),
+                                         amount.stripTrailingZeros().toPlainString(),
+                                         amountType.name()}));
 
         this.transferAmount = transferAmount;
         this.amount = amount;

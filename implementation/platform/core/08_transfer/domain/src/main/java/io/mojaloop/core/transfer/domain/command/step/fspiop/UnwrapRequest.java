@@ -61,10 +61,14 @@ public class UnwrapRequest {
 
         var request = input.request();
 
-        if (!request.getPayerFsp().equals(payerFspCode.value()) || !request.getPayeeFsp().equals(payeeFspCode.value())) {
+        if (!request.getPayerFsp().equals(payerFspCode.value()) ||
+                !request.getPayeeFsp().equals(payeeFspCode.value())) {
 
-            LOGGER.info("FSPs information in the request body and request header must be the same.");
-            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "FSPs information in the request body and request header must be the same.");
+            LOGGER.info(
+                "FSPs information in the request body and request header must be the same.");
+            throw new FspiopException(
+                FspiopErrors.GENERIC_VALIDATION_ERROR,
+                "FSPs information in the request body and request header must be the same.");
         }
 
         var currency = request.getAmount().getCurrency();
@@ -74,12 +78,15 @@ public class UnwrapRequest {
         var ilpCondition = request.getCondition();
 
         var ilpPacket = Interledger.unwrap(ilpPacketString);
-        var ilpTransferAmount = Interledger.Amount.deserialize(ilpPacket.getAmount(), FspiopCurrencies.get(currency).scale());
+        var ilpTransferAmount = Interledger.Amount.deserialize(
+            ilpPacket.getAmount(), FspiopCurrencies.get(currency).scale());
 
         if (ilpTransferAmount.subtract(transferAmount).signum() != 0) {
 
             LOGGER.info("The amount from ILP packet must be equal to the transfer amount.");
-            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The amount from ILP packet must be equal to the transfer amount.");
+            throw new FspiopException(
+                FspiopErrors.GENERIC_VALIDATION_ERROR,
+                "The amount from ILP packet must be equal to the transfer amount.");
         }
 
         var expiration = request.getExpiration();
@@ -91,25 +98,44 @@ public class UnwrapRequest {
 
             if (requestExpiration.isBefore(Instant.now())) {
 
-                LOGGER.info("The transfer request from Payer FSP has expired. The expiration is : [{}]", expiration);
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The transfer request from Payer FSP has expired. The expiration is : " + expiration);
+                LOGGER.info(
+                    "The transfer request from Payer FSP has expired. The expiration is : [{}]",
+                    expiration);
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+                    "The transfer request from Payer FSP has expired. The expiration is : " +
+                        expiration);
             }
 
         }
 
         var parties = this.partyUnwrapper.unwrap(ilpPacket.getData());
 
-        var payerPartyIdInfo = parties.payer().orElseThrow(() -> new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Payer information is missing in the ILP packet."));
-        var payeePartyIdInfo = parties.payee().orElseThrow(() -> new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Payee information is missing in the ILP packet."));
+        var payerPartyIdInfo = parties
+                                   .payer()
+                                   .orElseThrow(() -> new FspiopException(
+                                       FspiopErrors.GENERIC_VALIDATION_ERROR,
+                                       "Payer information is missing in the ILP packet."));
+        var payeePartyIdInfo = parties
+                                   .payee()
+                                   .orElseThrow(() -> new FspiopException(
+                                       FspiopErrors.GENERIC_VALIDATION_ERROR,
+                                       "Payee information is missing in the ILP packet."));
 
-        var output = new Output(payerPartyIdInfo, payeePartyIdInfo, currency, transferAmount, ilpPacketString, ilpCondition, requestExpiration);
+        var output = new Output(
+            payerPartyIdInfo, payeePartyIdInfo, currency, transferAmount, ilpPacketString,
+            ilpCondition, requestExpiration);
 
         LOGGER.info("Unwrapped transfer request from Payer. output : [{}]", output);
 
         return output;
     }
 
-    public record Input(String context, UdfTransferId udfTransferId, FspData payerFsp, FspData payeeFsp, TransfersPostRequest request) { }
+    public record Input(String context,
+                        UdfTransferId udfTransferId,
+                        FspData payerFsp,
+                        FspData payeeFsp,
+                        TransfersPostRequest request) { }
 
     public record Output(PartyIdInfo payerPartyIdInfo,
                          PartyIdInfo payeePartyIdInfo,

@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreateOracleController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateOracleController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CreateOracleController.class.getName());
 
     private final CreateOracleCommand createOracleCommand;
 

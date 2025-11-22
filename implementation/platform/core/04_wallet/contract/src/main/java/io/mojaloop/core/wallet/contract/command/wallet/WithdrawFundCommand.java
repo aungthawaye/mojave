@@ -39,7 +39,8 @@ import java.time.Instant;
 
 public interface WithdrawFundCommand {
 
-    Output execute(Input input) throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException;
+    Output execute(Input input)
+        throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
                  @JsonProperty(required = true) @NotNull Currency currency,

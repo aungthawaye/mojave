@@ -71,7 +71,9 @@ public final class HandshakeLoggingInterceptor implements Interceptor {
 
         if (hs != null) {
 
-            LOGGER.info("TLS-HS end  host(SNI)={} version={} cipher={}", host, hs.tlsVersion(), hs.cipherSuite());
+            LOGGER.info(
+                "TLS-HS end  host(SNI)={} version={} cipher={}", host, hs.tlsVersion(),
+                hs.cipherSuite());
             logPeerCerts(hs.peerCertificates());
 
         } else {
@@ -95,7 +97,9 @@ public final class HandshakeLoggingInterceptor implements Interceptor {
 
         if (hs != null) {
 
-            LOGGER.info("TLS-HS {pre}  host(SNI)={} version={} cipher={}", host, hs.tlsVersion(), hs.cipherSuite());
+            LOGGER.info(
+                "TLS-HS {pre}  host(SNI)={} version={} cipher={}", host, hs.tlsVersion(),
+                hs.cipherSuite());
 
         } else {
 
@@ -113,7 +117,9 @@ public final class HandshakeLoggingInterceptor implements Interceptor {
                 String subj = x.getSubjectX500Principal().getName();
                 String issuer = x.getIssuerX500Principal().getName();
 
-                LOGGER.info("TLS-PEER[{}] subject='{}' issuer='{}' notBefore={} notAfter={}", i, subj, issuer, x.getNotBefore(), x.getNotAfter());
+                LOGGER.info(
+                    "TLS-PEER[{}] subject='{}' issuer='{}' notBefore={} notAfter={}", i, subj,
+                    issuer, x.getNotBefore(), x.getNotAfter());
 
                 try {
 

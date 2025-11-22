@@ -49,7 +49,8 @@ public class RespondTransferToPayer {
 
     private final AddStepPublisher addStepPublisher;
 
-    public RespondTransferToPayer(RespondTransfers respondTransfers, AddStepPublisher addStepPublisher) {
+    public RespondTransferToPayer(RespondTransfers respondTransfers,
+                                  AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -74,15 +75,22 @@ public class RespondTransferToPayer {
             before.put("competedTimestamp", input.response.getCompletedTimestamp());
             before.put("payer", payerFsp.fspCode().value());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             var sendBackTo = new Payer(input.payerFsp.fspCode().value());
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-            var url = FspiopUrls.Transfers.putTransfers(payerBaseUrl, input.udfTransferId().getId());
+            var url = FspiopUrls.Transfers.putTransfers(
+                payerBaseUrl, input.udfTransferId().getId());
 
             this.respondTransfers.putTransfers(sendBackTo, url, input.response);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
+                    StepPhase.AFTER));
 
         } catch (FspiopException e) {
 
@@ -94,14 +102,21 @@ public class RespondTransferToPayer {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 
     }
 
-    public record Input(String context, TransactionId transactionId, UdfTransferId udfTransferId, FspData payerFsp, TransfersIDPutResponse response) {
+    public record Input(String context,
+                        TransactionId transactionId,
+                        UdfTransferId udfTransferId,
+                        FspData payerFsp,
+                        TransfersIDPutResponse response) {
 
     }
 

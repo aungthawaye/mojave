@@ -42,7 +42,8 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
 
     private final RMap<String, FlowDefinitionData> withTxnTypeCurrency;
 
-    public FlowDefinitionRedisCache(final FlowDefinitionRepository flowDefinitionRepository, final RedissonOpsClient redissonOpsClient) {
+    public FlowDefinitionRedisCache(final FlowDefinitionRepository flowDefinitionRepository,
+                                    final RedissonOpsClient redissonOpsClient) {
 
         assert flowDefinitionRepository != null;
         assert redissonOpsClient != null;
@@ -50,7 +51,9 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
         this.flowDefinitionRepository = flowDefinitionRepository;
 
         this.withId = redissonOpsClient.getRedissonClient().getMap(Names.WITH_ID);
-        this.withTxnTypeCurrency = redissonOpsClient.getRedissonClient().getMap(Names.WITH_TXN_TYPE_CURRENCY);
+        this.withTxnTypeCurrency = redissonOpsClient
+                                       .getRedissonClient()
+                                       .getMap(Names.WITH_TXN_TYPE_CURRENCY);
     }
 
     @Override
@@ -66,7 +69,8 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
         final var removed = this.withId.remove(flowDefinitionId.getId());
 
         if (removed != null) {
-            final var key = FlowDefinitionCache.Keys.forTransaction(removed.transactionType(), removed.currency());
+            final var key = FlowDefinitionCache.Keys.forTransaction(
+                removed.transactionType(), removed.currency());
             this.withTxnTypeCurrency.remove(key);
         }
     }
@@ -101,7 +105,8 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
 
         this.withId.put(flowDefinition.flowDefinitionId().getId(), flowDefinition);
 
-        final var key = FlowDefinitionCache.Keys.forTransaction(flowDefinition.transactionType(), flowDefinition.currency());
+        final var key = FlowDefinitionCache.Keys.forTransaction(
+            flowDefinition.transactionType(), flowDefinition.currency());
         this.withTxnTypeCurrency.put(key, flowDefinition);
     }
 

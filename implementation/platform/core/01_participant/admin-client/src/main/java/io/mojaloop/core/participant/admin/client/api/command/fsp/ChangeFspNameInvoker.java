@@ -40,7 +40,8 @@ public class ChangeFspNameInvoker implements ChangeFspNameCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ChangeFspNameInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
+    public ChangeFspNameInvoker(final ParticipantAdminService.FspCommand fspCommand,
+                                final ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ChangeFspNameInvoker implements ChangeFspNameCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.changeFspName(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.changeFspName(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

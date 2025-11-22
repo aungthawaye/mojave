@@ -44,7 +44,8 @@ public class RollbackReservation {
 
     private final AddStepPublisher addStepPublisher;
 
-    public RollbackReservation(RollbackReservationCommand rollbackReservationCommand, AddStepPublisher addStepPublisher) {
+    public RollbackReservation(RollbackReservationCommand rollbackReservationCommand,
+                               AddStepPublisher addStepPublisher) {
 
         assert rollbackReservationCommand != null;
         assert addStepPublisher != null;
@@ -60,7 +61,9 @@ public class RollbackReservation {
 
         try {
 
-            LOGGER.info("Roll back reservation  : transactionId : [{}], reservationId : [{}]", input.transactionId.getId(), input.positionReservationId.getId());
+            LOGGER.info(
+                "Roll back reservation  : transactionId : [{}], reservationId : [{}]",
+                input.transactionId.getId(), input.positionReservationId.getId());
 
             var before = new HashMap<String, String>();
             var after = new HashMap<String, String>();
@@ -68,14 +71,23 @@ public class RollbackReservation {
             before.put("transactionId", input.transactionId().getId().toString());
             before.put("positionReservationId", input.positionReservationId().getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             var rollbackReservationOutput = this.rollbackReservationCommand.execute(
-                new RollbackReservationCommand.Input(input.positionReservationId(), "Roll back due to : " + input.error()));
+                new RollbackReservationCommand.Input(
+                    input.positionReservationId(),
+                    "Roll back due to : " + input.error()));
 
-            after.put("rollbackId", rollbackReservationOutput.positionUpdateId().getId().toString());
+            after.put(
+                "rollbackId", rollbackReservationOutput.positionUpdateId().getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, after, StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, after,
+                    StepPhase.AFTER));
 
             var output = new Output(rollbackReservationOutput.positionUpdateId());
 
@@ -87,13 +99,19 @@ public class RollbackReservation {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context, TransactionId transactionId, PositionUpdateId positionReservationId, String error) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        PositionUpdateId positionReservationId,
+                        String error) { }
 
     public record Output(PositionUpdateId rollbackId) { }
 

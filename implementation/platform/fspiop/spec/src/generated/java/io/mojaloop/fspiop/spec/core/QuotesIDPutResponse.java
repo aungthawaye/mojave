@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("QuotesIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class QuotesIDPutResponse {
 
     private Money transferAmount;
@@ -41,10 +42,13 @@ public class QuotesIDPutResponse {
     }
 
     @JsonCreator
-    public QuotesIDPutResponse(@JsonProperty(required = true, value = "transferAmount") Money transferAmount,
-                               @JsonProperty(required = true, value = "expiration") String expiration,
+    public QuotesIDPutResponse(@JsonProperty(required = true,
+                                             value = "transferAmount") Money transferAmount,
+                               @JsonProperty(required = true,
+                                             value = "expiration") String expiration,
                                @JsonProperty(required = true, value = "ilpPacket") String ilpPacket,
-                               @JsonProperty(required = true, value = "condition") String condition) {
+                               @JsonProperty(required = true,
+                                             value = "condition") String condition) {
 
         this.transferAmount = transferAmount;
         this.expiration = expiration;
@@ -71,10 +75,18 @@ public class QuotesIDPutResponse {
             return false;
         }
         QuotesIDPutResponse quotesIDPutResponse = (QuotesIDPutResponse) o;
-        return Objects.equals(this.transferAmount, quotesIDPutResponse.transferAmount) && Objects.equals(this.payeeReceiveAmount, quotesIDPutResponse.payeeReceiveAmount) &&
-                   Objects.equals(this.payeeFspFee, quotesIDPutResponse.payeeFspFee) && Objects.equals(this.payeeFspCommission, quotesIDPutResponse.payeeFspCommission) &&
-                   Objects.equals(this.expiration, quotesIDPutResponse.expiration) && Objects.equals(this.geoCode, quotesIDPutResponse.geoCode) &&
-                   Objects.equals(this.ilpPacket, quotesIDPutResponse.ilpPacket) && Objects.equals(this.condition, quotesIDPutResponse.condition) &&
+        return Objects.equals(this.transferAmount, quotesIDPutResponse.transferAmount) &&
+                   Objects.equals(
+                       this.payeeReceiveAmount,
+                       quotesIDPutResponse.payeeReceiveAmount) &&
+                   Objects.equals(this.payeeFspFee, quotesIDPutResponse.payeeFspFee) &&
+                   Objects.equals(
+                       this.payeeFspCommission,
+                       quotesIDPutResponse.payeeFspCommission) &&
+                   Objects.equals(this.expiration, quotesIDPutResponse.expiration) &&
+                   Objects.equals(this.geoCode, quotesIDPutResponse.geoCode) &&
+                   Objects.equals(this.ilpPacket, quotesIDPutResponse.ilpPacket) &&
+                   Objects.equals(this.condition, quotesIDPutResponse.condition) &&
                    Objects.equals(this.extensionList, quotesIDPutResponse.extensionList);
     }
 
@@ -229,7 +241,9 @@ public class QuotesIDPutResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash(transferAmount, payeeReceiveAmount, payeeFspFee, payeeFspCommission, expiration, geoCode, ilpPacket, condition, extensionList);
+        return Objects.hash(
+            transferAmount, payeeReceiveAmount, payeeFspFee, payeeFspCommission, expiration,
+            geoCode, ilpPacket, condition, extensionList);
     }
 
     /**
@@ -272,9 +286,15 @@ public class QuotesIDPutResponse {
         sb.append("class QuotesIDPutResponse {\n");
 
         sb.append("    transferAmount: ").append(toIndentedString(transferAmount)).append("\n");
-        sb.append("    payeeReceiveAmount: ").append(toIndentedString(payeeReceiveAmount)).append("\n");
+        sb
+            .append("    payeeReceiveAmount: ")
+            .append(toIndentedString(payeeReceiveAmount))
+            .append("\n");
         sb.append("    payeeFspFee: ").append(toIndentedString(payeeFspFee)).append("\n");
-        sb.append("    payeeFspCommission: ").append(toIndentedString(payeeFspCommission)).append("\n");
+        sb
+            .append("    payeeFspCommission: ")
+            .append(toIndentedString(payeeFspCommission))
+            .append("\n");
         sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
         sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
         sb.append("    ilpPacket: ").append(toIndentedString(ilpPacket)).append("\n");

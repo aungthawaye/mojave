@@ -50,10 +50,14 @@ public class CreateWalletCommandHandler implements CreateWalletCommand {
 
         LOGGER.info("Executing CreateWalletCommand with input: {}", input);
 
-        var spec = WalletRepository.Filters.withOwnerId(input.walletOwnerId()).and(WalletRepository.Filters.withCurrency(input.currency()));
+        var spec = WalletRepository.Filters
+                       .withOwnerId(input.walletOwnerId())
+                       .and(WalletRepository.Filters.withCurrency(input.currency()));
 
         if (this.walletRepository.findOne(spec).isPresent()) {
-            LOGGER.info("Wallet already exists for ownerId: {} and currency: {}", input.walletOwnerId(), input.currency());
+            LOGGER.info(
+                "Wallet already exists for ownerId: {} and currency: {}", input.walletOwnerId(),
+                input.currency());
             throw new WalletAlreadyExistsException(input.walletOwnerId(), input.currency());
         }
 

@@ -39,7 +39,8 @@ import java.time.Instant;
 
 public interface ReservePositionCommand {
 
-    Output execute(Input input) throws PositionLimitExceededException, NoPositionUpdateForTransactionException;
+    Output execute(Input input)
+        throws PositionLimitExceededException, NoPositionUpdateForTransactionException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
                  @JsonProperty(required = true) @NotNull Currency currency,

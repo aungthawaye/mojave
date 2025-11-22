@@ -98,7 +98,8 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
         MDC.put("requestId", udfQuoteId.getId());
 
-        LOGGER.info("({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
+        LOGGER.info(
+            "({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -120,9 +121,12 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             var payerFspInRequest = postQuotesRequest.getPayer().getPartyIdInfo().getFspId();
             var payeeFspInRequest = postQuotesRequest.getPayee().getPartyIdInfo().getFspId();
 
-            if (!payeeFspInRequest.equals(payeeFspCode.value()) || !payerFspInRequest.equals(payerFspCode.value())) {
+            if (!payeeFspInRequest.equals(payeeFspCode.value()) ||
+                    !payerFspInRequest.equals(payerFspCode.value())) {
 
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "FSPs information in the request body and request header must be the same.");
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+                    "FSPs information in the request body and request header must be the same.");
             }
 
             var amount = postQuotesRequest.getAmount();
@@ -138,7 +142,9 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (fees != null && fees.getCurrency() != currency) {
 
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "The currency of amount and fees must be the same.");
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+                    "The currency of amount and fees must be the same.");
             }
 
             if (expiration != null) {
@@ -147,7 +153,10 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 if (requestExpiration.isBefore(Instant.now())) {
 
-                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "The quote request from Payer FSP has expired. The expiration is : " + expiration);
+                    throw new FspiopException(
+                        FspiopErrors.QUOTE_EXPIRED,
+                        "The quote request from Payer FSP has expired. The expiration is : " +
+                            expiration);
                 }
 
             }
@@ -156,17 +165,27 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 try {
 
-                    var quote = new Quote(payeeFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency, new BigDecimal(amount.getAmount()),
-                        fees != null ? new BigDecimal(fees.getAmount()) : null, postQuotesRequest.getAmountType(), transactionType.getScenario(), transactionType.getSubScenario(),
-                        transactionType.getInitiator(), transactionType.getInitiatorType(), requestExpiration,
-                        new Party(payer.getPartyIdType(), payer.getPartyIdentifier(), payer.getPartySubIdOrType()),
-                        new Party(payee.getPartyIdType(), payee.getPartyIdentifier(), payee.getPartySubIdOrType()));
+                    var quote = new Quote(
+                        payeeFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
+                        new BigDecimal(amount.getAmount()),
+                        fees != null ? new BigDecimal(fees.getAmount()) : null,
+                        postQuotesRequest.getAmountType(), transactionType.getScenario(),
+                        transactionType.getSubScenario(), transactionType.getInitiator(),
+                        transactionType.getInitiatorType(), requestExpiration,
+                        new Party(
+                            payer.getPartyIdType(), payer.getPartyIdentifier(),
+                            payer.getPartySubIdOrType()),
+                        new Party(
+                            payee.getPartyIdType(), payee.getPartyIdentifier(),
+                            payee.getPartySubIdOrType()));
 
-                    if (postQuotesRequest.getExtensionList() != null && postQuotesRequest.getExtensionList().getExtension() != null) {
+                    if (postQuotesRequest.getExtensionList() != null &&
+                            postQuotesRequest.getExtensionList().getExtension() != null) {
 
                         postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
                             LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
-                            quote.addExtension(Direction.FROM_PAYEE, extension.getKey(), extension.getValue());
+                            quote.addExtension(
+                                Direction.FROM_PAYEE, extension.getKey(), extension.getValue());
                         });
 
                     }
@@ -182,42 +201,57 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
                 } catch (Throwable e) {
                     TransactionContext.rollback();
-                    LOGGER.error("({}) Exception in TransactionContext: [{}]", udfQuoteId.getId(), e);
+                    LOGGER.error(
+                        "({}) Exception in TransactionContext: [{}]", udfQuoteId.getId(), e);
                 }
 
             } else {
 
-                LOGGER.warn("({}) Quoting is not stateful. Ignoring saving the quote.", udfQuoteId.getId());
+                LOGGER.warn(
+                    "({}) Quoting is not stateful. Ignoring saving the quote.", udfQuoteId.getId());
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            LOGGER.info("({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+            LOGGER.info(
+                "({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
 
             this.forwardRequest.forward(payeeBaseUrl, input.request());
-            LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+            LOGGER.info(
+                "({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(),
+                payeeFsp);
 
         } catch (Exception e) {
 
-            LOGGER.error("({}) Exception occurred while executing PostQuotesCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
+            LOGGER.error(
+                "({}) Exception occurred while executing PostQuotesCommandHandler: [{}]",
+                udfQuoteId.getId(), e.getMessage());
 
             if (payerFsp != null) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
                 final var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                final var url = FspiopUrls.newUrl(baseUrl, "quotes/" + udfQuoteId.getId() + "/error");
+                final var url = FspiopUrls.newUrl(
+                    baseUrl, "quotes/" + udfQuoteId.getId() + "/error");
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondQuotes.putQuotesError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Throwable throwable) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", throwable);
+                    LOGGER.error(
+                        "Something went wrong while sending error response to payer FSP: ",
+                        throwable);
                 }
             }
 
         }
 
-        LOGGER.info("({}) Returning from PostQuotesCommandHandler successfully.", udfQuoteId.getId());
+        LOGGER.info(
+            "({}) Returning from PostQuotesCommandHandler successfully.", udfQuoteId.getId());
 
         MDC.remove("requestId");
 

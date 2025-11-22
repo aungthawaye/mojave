@@ -40,7 +40,8 @@ public class Vault {
         try {
 
             VaultEndpoint vaultEndpoint = VaultEndpoint.from(new URI(vaultAddress));
-            this.vaultTemplate = new VaultTemplate(vaultEndpoint, new TokenAuthentication(vaultToken));
+            this.vaultTemplate = new VaultTemplate(
+                vaultEndpoint, new TokenAuthentication(vaultToken));
             this.enginePath = enginePath;
 
         } catch (Exception e) {
@@ -51,7 +52,8 @@ public class Vault {
 
     public <T> T get(String path, Class<T> template) {
 
-        VaultKeyValueOperations keyValueOperations = this.vaultTemplate.opsForKeyValue(this.enginePath, VaultKeyValueOperationsSupport.KeyValueBackend.KV_2);
+        VaultKeyValueOperations keyValueOperations = this.vaultTemplate.opsForKeyValue(
+            this.enginePath, VaultKeyValueOperationsSupport.KeyValueBackend.KV_2);
 
         return Objects.requireNonNull(keyValueOperations.get(path, template)).getData();
     }

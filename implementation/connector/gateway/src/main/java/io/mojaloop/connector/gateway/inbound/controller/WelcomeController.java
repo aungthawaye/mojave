@@ -35,7 +35,8 @@ public class WelcomeController {
     public ResponseEntity<WelcomeController.Response> welcome() {
 
         LOGGER.debug("Received GET /** (welcome)");
-        return ResponseEntity.ok(new Response("1.0", "Welcome to the Mojaloop Connector Inbound Service."));
+        return ResponseEntity.ok(
+            new Response("1.0", "Welcome to the Mojaloop Connector Inbound Service."));
     }
 
     public record Response(String version, String message) { }

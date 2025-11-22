@@ -53,7 +53,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddPostingDefinitionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        AddPostingDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -61,7 +62,9 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
 
     private final ChartEntryCache chartEntryCache;
 
-    public AddPostingDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository, final AccountCache accountCache, final ChartEntryCache chartEntryCache) {
+    public AddPostingDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
+                                              final AccountCache accountCache,
+                                              final ChartEntryCache chartEntryCache) {
 
         assert flowDefinitionRepository != null;
         assert accountCache != null;
@@ -79,11 +82,15 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
 
         LOGGER.info("Executing AddPostingDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
         final var posting = input.posting();
 
-        var pd = definition.addPosting(posting.receiveIn(), posting.receiveInId(), posting.participant(), posting.amountName(), posting.side(), posting.description(),
-            this.accountCache, this.chartEntryCache);
+        var pd = definition.addPosting(
+            posting.receiveIn(), posting.receiveInId(), posting.participant(), posting.amountName(),
+            posting.side(), posting.description(), this.accountCache, this.chartEntryCache);
 
         this.flowDefinitionRepository.save(definition);
 

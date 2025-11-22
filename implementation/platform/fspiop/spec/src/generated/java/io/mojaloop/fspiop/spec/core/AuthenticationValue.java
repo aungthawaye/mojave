@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("AuthenticationValue")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class AuthenticationValue {
 
     private String pinValue;
@@ -26,7 +27,8 @@ public class AuthenticationValue {
     }
 
     @JsonCreator
-    public AuthenticationValue(@JsonProperty(required = true, value = "pinValue") String pinValue, @JsonProperty(required = true, value = "counter") String counter) {
+    public AuthenticationValue(@JsonProperty(required = true, value = "pinValue") String pinValue,
+                               @JsonProperty(required = true, value = "counter") String counter) {
 
         this.pinValue = pinValue;
         this.counter = counter;
@@ -51,7 +53,8 @@ public class AuthenticationValue {
             return false;
         }
         AuthenticationValue authenticationValue = (AuthenticationValue) o;
-        return Objects.equals(this.pinValue, authenticationValue.pinValue) && Objects.equals(this.counter, authenticationValue.counter);
+        return Objects.equals(this.pinValue, authenticationValue.pinValue) &&
+                   Objects.equals(this.counter, authenticationValue.counter);
     }
 
     @JsonProperty(required = true, value = "counter")

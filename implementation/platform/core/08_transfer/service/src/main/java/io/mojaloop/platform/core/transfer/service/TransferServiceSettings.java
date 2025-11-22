@@ -49,7 +49,11 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
         var fspsEnv = System.getenv("FSPIOP_FSPS");
 
         if (fspsEnv != null && !fspsEnv.isEmpty()) {
-            return new TransferServiceConfiguration.FspCodeList(Arrays.stream(fspsEnv.split(",")).map(String::trim).map(FspCode::new).collect(Collectors.toList()));
+            return new TransferServiceConfiguration.FspCodeList(Arrays
+                                                                    .stream(fspsEnv.split(","))
+                                                                    .map(String::trim)
+                                                                    .map(FspCode::new)
+                                                                    .collect(Collectors.toList()));
         }
 
         return new TransferServiceConfiguration.FspCodeList(List.of());
@@ -79,38 +83,44 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.ParticipantSettings(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
     }
 
     @Bean
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+        return new ParticipantIntercomService.Settings(
+            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
     @Override
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
+        return new ParticipantStoreConfiguration.Settings(
+            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
     }
 
     @Bean
     @Override
     public KafkaProducerConfigurer.ProducerSettings producerSettings() {
 
-        return new KafkaProducerConfigurer.ProducerSettings(System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
+        return new KafkaProducerConfigurer.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("TFR_READ_DB_URL"), System.getenv("TFR_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("TFR_READ_DB_URL"), System.getenv("TFR_READ_DB_USER"),
             System.getenv("TFR_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("transfer-service-read", Integer.parseInt(System.getenv("TFR_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "transfer-service-read", Integer.parseInt(System.getenv("TFR_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("TFR_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -120,10 +130,12 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("TFR_WRITE_DB_URL"), System.getenv("TFR_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("TFR_WRITE_DB_URL"), System.getenv("TFR_WRITE_DB_USER"),
             System.getenv("TFR_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("transfer-service-write", Integer.parseInt(System.getenv("TFR_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "transfer-service-write", Integer.parseInt(System.getenv("TFR_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("TFR_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -140,7 +152,8 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
+        return new FspiopServiceConfiguration.ServiceSettings(
+            Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
             Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
     }
 
@@ -155,29 +168,34 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     @Override
     public TransactionIntercomService.Settings transactionIntercomServiceSettings() {
 
-        return new TransactionIntercomService.Settings(System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
+        return new TransactionIntercomService.Settings(
+            System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
     }
 
     @Bean
     @Override
     public FlywayMigration.Settings transferFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("TFR_FLYWAY_DB_URL"), System.getenv("TFR_FLYWAY_DB_USER"), System.getenv("TFR_FLYWAY_DB_PASSWORD"),
-            "flyway_transfer_history", new String[]{"classpath:migration/transfer"});
+        return new FlywayMigration.Settings(
+            System.getenv("TFR_FLYWAY_DB_URL"), System.getenv("TFR_FLYWAY_DB_USER"),
+            System.getenv("TFR_FLYWAY_DB_PASSWORD"), "flyway_transfer_history",
+            new String[]{"classpath:migration/transfer"});
     }
 
     @Bean
     @Override
     public TransferServiceConfiguration.TomcatSettings transferServiceTomcatSettings() {
 
-        return new TransferServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv("TRANSFER_SERVICE_PORT")));
+        return new TransferServiceConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("TRANSFER_SERVICE_PORT")));
     }
 
     @Bean
     @Override
     public TransferDomainConfiguration.TransferSettings transferSettings() {
 
-        return new TransferDomainConfiguration.TransferSettings(Integer.parseInt(System.getenv("TRANSFER_RESERVATION_TIMEOUT_MS")),
+        return new TransferDomainConfiguration.TransferSettings(
+            Integer.parseInt(System.getenv("TRANSFER_RESERVATION_TIMEOUT_MS")),
             Integer.parseInt(System.getenv("TRANSFER_EXPIRY_TIMEOUT_MS")));
     }
 

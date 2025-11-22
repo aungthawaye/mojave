@@ -61,9 +61,13 @@ public class RequiredParticipantNotFoundInTransactionException extends Unchecked
 
     private final TransactionId transactionId;
 
-    public RequiredParticipantNotFoundInTransactionException(final String participant, final Set<String> participants, final TransactionId transactionId) {
+    public RequiredParticipantNotFoundInTransactionException(final String participant,
+                                                             final Set<String> participants,
+                                                             final TransactionId transactionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{participant, participants.toString(), transactionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{participant, participants.toString(), transactionId.getId().toString()}));
 
         this.participant = participant;
         this.participants = participants;
@@ -76,7 +80,8 @@ public class RequiredParticipantNotFoundInTransactionException extends Unchecked
         final var participants = Set.of(extras.get(Keys.PARTICIPANTS));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
-        return new RequiredParticipantNotFoundInTransactionException(participant, participants, transactionId);
+        return new RequiredParticipantNotFoundInTransactionException(
+            participant, participants, transactionId);
     }
 
     @Override

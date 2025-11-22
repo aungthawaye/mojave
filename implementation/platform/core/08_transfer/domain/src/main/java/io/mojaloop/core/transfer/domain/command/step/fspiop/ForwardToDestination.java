@@ -67,11 +67,17 @@ public class ForwardToDestination {
             before.put("payee", input.payeeFspCode());
             before.put("url", input.baseUrl());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             this.forwardRequest.forward(input.baseUrl(), input.request());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT,
+                    Map.of("-", "-"), StepPhase.AFTER));
 
             LOGGER.info("Forwarded request to destination FSP successfully");
 
@@ -85,12 +91,19 @@ public class ForwardToDestination {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context, TransactionId transactionId, String payeeFspCode, String baseUrl, FspiopHttpRequest request) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        String payeeFspCode,
+                        String baseUrl,
+                        FspiopHttpRequest request) { }
 
 }

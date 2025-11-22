@@ -58,9 +58,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin.controller")
-@Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
-final class AccountingAdminConfiguration extends JacksonWebMvcExtension
-    implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@Import(value = {OpenApiConfiguration.class,
+                 AccountingDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class,})
+final class AccountingAdminConfiguration extends JacksonWebMvcExtension implements
+                                                                        AccountingDomainConfiguration.RequiredBeans,
+                                                                        SpringSecurityConfiguration.RequiredBeans,
+                                                                        SpringSecurityConfiguration.RequiredSettings {
 
     private final AccountCache accountCache;
 
@@ -145,12 +150,14 @@ final class AccountingAdminConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

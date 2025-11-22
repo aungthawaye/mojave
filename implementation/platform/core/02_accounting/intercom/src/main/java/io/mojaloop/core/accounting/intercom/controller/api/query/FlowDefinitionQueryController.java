@@ -37,7 +37,8 @@ import java.util.List;
 @RestController
 public class FlowDefinitionQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlowDefinitionQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        FlowDefinitionQueryController.class.getName());
 
     private final FlowDefinitionQuery flowDefinitionQuery;
 

@@ -53,7 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AddPostingDefinitionController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddPostingDefinitionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        AddPostingDefinitionController.class);
 
     private final AddPostingDefinitionCommand addPostingDefinitionCommand;
 

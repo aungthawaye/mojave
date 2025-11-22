@@ -53,7 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RemovePostingDefinitionController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RemovePostingDefinitionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RemovePostingDefinitionController.class);
 
     private final RemovePostingDefinitionCommand removePostingDefinitionCommand;
 

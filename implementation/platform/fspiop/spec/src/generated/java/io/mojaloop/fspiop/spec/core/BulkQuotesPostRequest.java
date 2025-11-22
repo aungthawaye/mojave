@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("BulkQuotesPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class BulkQuotesPostRequest {
 
     private String bulkQuoteId;
@@ -37,9 +38,11 @@ public class BulkQuotesPostRequest {
     }
 
     @JsonCreator
-    public BulkQuotesPostRequest(@JsonProperty(required = true, value = "bulkQuoteId") String bulkQuoteId,
+    public BulkQuotesPostRequest(@JsonProperty(required = true,
+                                               value = "bulkQuoteId") String bulkQuoteId,
                                  @JsonProperty(required = true, value = "payer") Party payer,
-                                 @JsonProperty(required = true, value = "individualQuotes") List<@Valid IndividualQuote> individualQuotes) {
+                                 @JsonProperty(required = true,
+                                               value = "individualQuotes") List<@Valid IndividualQuote> individualQuotes) {
 
         this.bulkQuoteId = bulkQuoteId;
         this.payer = payer;
@@ -75,9 +78,12 @@ public class BulkQuotesPostRequest {
             return false;
         }
         BulkQuotesPostRequest bulkQuotesPostRequest = (BulkQuotesPostRequest) o;
-        return Objects.equals(this.bulkQuoteId, bulkQuotesPostRequest.bulkQuoteId) && Objects.equals(this.payer, bulkQuotesPostRequest.payer) &&
-                   Objects.equals(this.geoCode, bulkQuotesPostRequest.geoCode) && Objects.equals(this.expiration, bulkQuotesPostRequest.expiration) &&
-                   Objects.equals(this.individualQuotes, bulkQuotesPostRequest.individualQuotes) && Objects.equals(this.extensionList, bulkQuotesPostRequest.extensionList);
+        return Objects.equals(this.bulkQuoteId, bulkQuotesPostRequest.bulkQuoteId) &&
+                   Objects.equals(this.payer, bulkQuotesPostRequest.payer) &&
+                   Objects.equals(this.geoCode, bulkQuotesPostRequest.geoCode) &&
+                   Objects.equals(this.expiration, bulkQuotesPostRequest.expiration) &&
+                   Objects.equals(this.individualQuotes, bulkQuotesPostRequest.individualQuotes) &&
+                   Objects.equals(this.extensionList, bulkQuotesPostRequest.extensionList);
     }
 
     /**
@@ -190,7 +196,8 @@ public class BulkQuotesPostRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash(bulkQuoteId, payer, geoCode, expiration, individualQuotes, extensionList);
+        return Objects.hash(
+            bulkQuoteId, payer, geoCode, expiration, individualQuotes, extensionList);
     }
 
     /**

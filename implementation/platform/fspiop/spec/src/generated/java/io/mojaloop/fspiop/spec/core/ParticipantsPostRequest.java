@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ParticipantsPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ParticipantsPostRequest {
 
     private String requestId;
@@ -31,8 +32,10 @@ public class ParticipantsPostRequest {
     }
 
     @JsonCreator
-    public ParticipantsPostRequest(@JsonProperty(required = true, value = "requestId") String requestId,
-                                   @JsonProperty(required = true, value = "partyList") List<@Valid PartyIdInfo> partyList) {
+    public ParticipantsPostRequest(@JsonProperty(required = true,
+                                                 value = "requestId") String requestId,
+                                   @JsonProperty(required = true,
+                                                 value = "partyList") List<@Valid PartyIdInfo> partyList) {
 
         this.requestId = requestId;
         this.partyList = partyList;
@@ -66,7 +69,8 @@ public class ParticipantsPostRequest {
             return false;
         }
         ParticipantsPostRequest participantsPostRequest = (ParticipantsPostRequest) o;
-        return Objects.equals(this.requestId, participantsPostRequest.requestId) && Objects.equals(this.partyList, participantsPostRequest.partyList) &&
+        return Objects.equals(this.requestId, participantsPostRequest.requestId) &&
+                   Objects.equals(this.partyList, participantsPostRequest.partyList) &&
                    Objects.equals(this.currency, participantsPostRequest.currency);
     }
 

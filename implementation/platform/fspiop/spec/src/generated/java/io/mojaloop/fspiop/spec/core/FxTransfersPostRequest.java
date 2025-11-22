@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxTransfersPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxTransfersPostRequest {
 
     private String commitRequestId;
@@ -39,12 +40,18 @@ public class FxTransfersPostRequest {
     }
 
     @JsonCreator
-    public FxTransfersPostRequest(@JsonProperty(required = true, value = "commitRequestId") String commitRequestId,
-                                  @JsonProperty(required = true, value = "initiatingFsp") String initiatingFsp,
-                                  @JsonProperty(required = true, value = "counterPartyFsp") String counterPartyFsp,
-                                  @JsonProperty(required = true, value = "sourceAmount") Money sourceAmount,
-                                  @JsonProperty(required = true, value = "targetAmount") Money targetAmount,
-                                  @JsonProperty(required = true, value = "condition") String condition) {
+    public FxTransfersPostRequest(@JsonProperty(required = true,
+                                                value = "commitRequestId") String commitRequestId,
+                                  @JsonProperty(required = true,
+                                                value = "initiatingFsp") String initiatingFsp,
+                                  @JsonProperty(required = true,
+                                                value = "counterPartyFsp") String counterPartyFsp,
+                                  @JsonProperty(required = true,
+                                                value = "sourceAmount") Money sourceAmount,
+                                  @JsonProperty(required = true,
+                                                value = "targetAmount") Money targetAmount,
+                                  @JsonProperty(required = true,
+                                                value = "condition") String condition) {
 
         this.commitRequestId = commitRequestId;
         this.initiatingFsp = initiatingFsp;
@@ -101,10 +108,15 @@ public class FxTransfersPostRequest {
         }
         FxTransfersPostRequest fxTransfersPostRequest = (FxTransfersPostRequest) o;
         return Objects.equals(this.commitRequestId, fxTransfersPostRequest.commitRequestId) &&
-                   Objects.equals(this.determiningTransferId, fxTransfersPostRequest.determiningTransferId) &&
-                   Objects.equals(this.initiatingFsp, fxTransfersPostRequest.initiatingFsp) && Objects.equals(this.counterPartyFsp, fxTransfersPostRequest.counterPartyFsp) &&
-                   Objects.equals(this.sourceAmount, fxTransfersPostRequest.sourceAmount) && Objects.equals(this.targetAmount, fxTransfersPostRequest.targetAmount) &&
-                   Objects.equals(this.condition, fxTransfersPostRequest.condition) && Objects.equals(this.expiration, fxTransfersPostRequest.expiration);
+                   Objects.equals(
+                       this.determiningTransferId,
+                       fxTransfersPostRequest.determiningTransferId) &&
+                   Objects.equals(this.initiatingFsp, fxTransfersPostRequest.initiatingFsp) &&
+                   Objects.equals(this.counterPartyFsp, fxTransfersPostRequest.counterPartyFsp) &&
+                   Objects.equals(this.sourceAmount, fxTransfersPostRequest.sourceAmount) &&
+                   Objects.equals(this.targetAmount, fxTransfersPostRequest.targetAmount) &&
+                   Objects.equals(this.condition, fxTransfersPostRequest.condition) &&
+                   Objects.equals(this.expiration, fxTransfersPostRequest.expiration);
     }
 
     /**
@@ -230,7 +242,9 @@ public class FxTransfersPostRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash(commitRequestId, determiningTransferId, initiatingFsp, counterPartyFsp, sourceAmount, targetAmount, condition, expiration);
+        return Objects.hash(
+            commitRequestId, determiningTransferId, initiatingFsp, counterPartyFsp, sourceAmount,
+            targetAmount, condition, expiration);
     }
 
     /**
@@ -265,7 +279,10 @@ public class FxTransfersPostRequest {
         sb.append("class FxTransfersPostRequest {\n");
 
         sb.append("    commitRequestId: ").append(toIndentedString(commitRequestId)).append("\n");
-        sb.append("    determiningTransferId: ").append(toIndentedString(determiningTransferId)).append("\n");
+        sb
+            .append("    determiningTransferId: ")
+            .append(toIndentedString(determiningTransferId))
+            .append("\n");
         sb.append("    initiatingFsp: ").append(toIndentedString(initiatingFsp)).append("\n");
         sb.append("    counterPartyFsp: ").append(toIndentedString(counterPartyFsp)).append("\n");
         sb.append("    sourceAmount: ").append(toIndentedString(sourceAmount)).append("\n");

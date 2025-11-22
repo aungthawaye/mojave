@@ -40,7 +40,8 @@ public class ActivateEndpointInvoker implements ActivateEndpointCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ActivateEndpointInvoker(ParticipantAdminService.FspCommand fspCommand, ObjectMapper objectMapper) {
+    public ActivateEndpointInvoker(ParticipantAdminService.FspCommand fspCommand,
+                                   ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -53,8 +54,12 @@ public class ActivateEndpointInvoker implements ActivateEndpointCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.activateEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.activateEndpoint(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

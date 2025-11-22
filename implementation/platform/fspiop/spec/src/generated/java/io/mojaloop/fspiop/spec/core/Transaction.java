@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("Transaction")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class Transaction {
 
     private String transactionId;
@@ -50,7 +51,8 @@ public class Transaction {
                        @JsonProperty(required = true, value = "payee") Party payee,
                        @JsonProperty(required = true, value = "payer") Party payer,
                        @JsonProperty(required = true, value = "amount") Money amount,
-                       @JsonProperty(required = true, value = "transactionType") TransactionType transactionType) {
+                       @JsonProperty(required = true,
+                                     value = "transactionType") TransactionType transactionType) {
 
         this.transactionId = transactionId;
         this.quoteId = quoteId;
@@ -94,11 +96,17 @@ public class Transaction {
             return false;
         }
         Transaction transaction = (Transaction) o;
-        return Objects.equals(this.transactionId, transaction.transactionId) && Objects.equals(this.quoteId, transaction.quoteId) &&
-                   Objects.equals(this.payee, transaction.payee) && Objects.equals(this.payer, transaction.payer) && Objects.equals(this.amount, transaction.amount) &&
-                   Objects.equals(this.payeeReceiveAmount, transaction.payeeReceiveAmount) && Objects.equals(this.converter, transaction.converter) &&
-                   Objects.equals(this.currencyConversion, transaction.currencyConversion) && Objects.equals(this.transactionType, transaction.transactionType) &&
-                   Objects.equals(this.note, transaction.note) && Objects.equals(this.extensionList, transaction.extensionList);
+        return Objects.equals(this.transactionId, transaction.transactionId) &&
+                   Objects.equals(this.quoteId, transaction.quoteId) &&
+                   Objects.equals(this.payee, transaction.payee) &&
+                   Objects.equals(this.payer, transaction.payer) &&
+                   Objects.equals(this.amount, transaction.amount) &&
+                   Objects.equals(this.payeeReceiveAmount, transaction.payeeReceiveAmount) &&
+                   Objects.equals(this.converter, transaction.converter) &&
+                   Objects.equals(this.currencyConversion, transaction.currencyConversion) &&
+                   Objects.equals(this.transactionType, transaction.transactionType) &&
+                   Objects.equals(this.note, transaction.note) &&
+                   Objects.equals(this.extensionList, transaction.extensionList);
     }
 
     /**
@@ -260,7 +268,9 @@ public class Transaction {
     @Override
     public int hashCode() {
 
-        return Objects.hash(transactionId, quoteId, payee, payer, amount, payeeReceiveAmount, converter, currencyConversion, transactionType, note, extensionList);
+        return Objects.hash(
+            transactionId, quoteId, payee, payer, amount, payeeReceiveAmount, converter,
+            currencyConversion, transactionType, note, extensionList);
     }
 
     /**
@@ -316,9 +326,15 @@ public class Transaction {
         sb.append("    payee: ").append(toIndentedString(payee)).append("\n");
         sb.append("    payer: ").append(toIndentedString(payer)).append("\n");
         sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
-        sb.append("    payeeReceiveAmount: ").append(toIndentedString(payeeReceiveAmount)).append("\n");
+        sb
+            .append("    payeeReceiveAmount: ")
+            .append(toIndentedString(payeeReceiveAmount))
+            .append("\n");
         sb.append("    converter: ").append(toIndentedString(converter)).append("\n");
-        sb.append("    currencyConversion: ").append(toIndentedString(currencyConversion)).append("\n");
+        sb
+            .append("    currencyConversion: ")
+            .append(toIndentedString(currencyConversion))
+            .append("\n");
         sb.append("    transactionType: ").append(toIndentedString(transactionType)).append("\n");
         sb.append("    note: ").append(toIndentedString(note)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");

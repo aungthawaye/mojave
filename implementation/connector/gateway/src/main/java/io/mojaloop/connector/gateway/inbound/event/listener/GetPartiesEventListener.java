@@ -54,7 +54,10 @@ public class GetPartiesEventListener {
 
         try {
 
-            this.handlePartiesRequest.execute(new HandleGetPartiesRequestCommand.Input(payload.payer(), payload.partyIdType(), payload.partyId(), payload.subId()));
+            this.handlePartiesRequest.execute(
+                new HandleGetPartiesRequestCommand.Input(
+                    payload.payer(), payload.partyIdType(),
+                    payload.partyId(), payload.subId()));
 
             LOGGER.info("Done handling GetPartiesEvent : {}", event);
 

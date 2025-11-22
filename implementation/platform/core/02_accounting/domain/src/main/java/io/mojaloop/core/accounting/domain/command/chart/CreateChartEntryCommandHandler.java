@@ -32,7 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateChartEntryCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CreateChartEntryCommandHandler.class);
 
     private final ChartRepository chartRepository;
 
@@ -50,14 +51,18 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
 
         LOGGER.info("Executing CreateChartEntryCommand with input: {}", input);
 
-        var chart = this.chartRepository.findById(input.chartId()).orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
+        var chart = this.chartRepository
+                        .findById(input.chartId())
+                        .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
         LOGGER.info("Found Chart with id: {}", input.chartId());
 
-        var entry = chart.addEntry(input.code(), input.name(), input.description(), input.accountType());
+        var entry = chart.addEntry(
+            input.code(), input.name(), input.description(), input.accountType());
         LOGGER.info("Created ChartEntry: {}", entry);
 
         this.chartRepository.save(chart);
-        LOGGER.info("Saved Chart with id: {} (persisted new ChartEntry {})", chart.getId(), entry.getId());
+        LOGGER.info(
+            "Saved Chart with id: {} (persisted new ChartEntry {})", chart.getId(), entry.getId());
 
         LOGGER.info("Completed CreateChartEntryCommand with input: {}", input);
 

@@ -29,8 +29,10 @@ import org.springframework.context.annotation.Import;
 @Import(value = {MiscConfiguration.class, FspiopCommonConfiguration.class})
 public class ConnectorGatewayConfiguration {
 
-    public interface RequiredBeans extends ConnectorInboundConfiguration.RequiredBeans, ConnectorOutboundConfiguration.RequiredBeans { }
+    public interface RequiredBeans extends ConnectorInboundConfiguration.RequiredBeans,
+                                           ConnectorOutboundConfiguration.RequiredBeans { }
 
-    public interface RequiredSettings extends ConnectorInboundConfiguration.RequiredSettings, ConnectorOutboundConfiguration.RequiredSettings { }
+    public interface RequiredSettings extends ConnectorInboundConfiguration.RequiredSettings,
+                                              ConnectorOutboundConfiguration.RequiredSettings { }
 
 }

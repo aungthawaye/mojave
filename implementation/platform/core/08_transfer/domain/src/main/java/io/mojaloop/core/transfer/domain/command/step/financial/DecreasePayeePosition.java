@@ -51,7 +51,8 @@ public class DecreasePayeePosition {
 
     private final AddStepPublisher addStepPublisher;
 
-    public DecreasePayeePosition(DecreasePositionCommand decreasePositionCommand, AddStepPublisher addStepPublisher) {
+    public DecreasePayeePosition(DecreasePositionCommand decreasePositionCommand,
+                                 AddStepPublisher addStepPublisher) {
 
         assert decreasePositionCommand != null;
         assert addStepPublisher != null;
@@ -60,7 +61,10 @@ public class DecreasePayeePosition {
         this.addStepPublisher = addStepPublisher;
     }
 
-    public Output execute(Input input) throws FspiopException, NoPositionUpdateForTransactionException, PositionLimitExceededException {
+    public Output execute(Input input) throws
+                                       FspiopException,
+                                       NoPositionUpdateForTransactionException,
+                                       PositionLimitExceededException {
 
         LOGGER.info("Decreasing payee position : input : [{}]", input);
 
@@ -87,7 +91,8 @@ public class DecreasePayeePosition {
             var transactionAtString = transactionAt.getEpochSecond() + "";
 
             var walletOwnerId = new WalletOwnerId(payeeFsp.fspId().getId());
-            var description = "Transfer " + currency + " " + transferAmountString + " from " + payerFspCode.value() + " to " + payeeFspCode.value();
+            var description = "Transfer " + currency + " " + transferAmountString + " from " +
+                                  payerFspCode.value() + " to " + payeeFspCode.value();
 
             var before = new HashMap<String, String>();
 
@@ -98,20 +103,37 @@ public class DecreasePayeePosition {
             before.put("transactionAt", transactionAtString);
             before.put("description", description);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    transactionId, STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             var decreasePositionOutput = this.decreasePositionCommand.execute(
-                new DecreasePositionCommand.Input(walletOwnerId, currency, transferAmount, transactionId, transactionAt, description));
+                new DecreasePositionCommand.Input(
+                    walletOwnerId, currency, transferAmount,
+                    transactionId, transactionAt, description));
 
             var after = new HashMap<String, String>();
 
-            after.put("positionUpdateId", decreasePositionOutput.positionUpdateId().getId().toString());
-            after.put("oldPosition", decreasePositionOutput.oldPosition().stripTrailingZeros().toPlainString());
-            after.put("newPosition", decreasePositionOutput.newPosition().stripTrailingZeros().toPlainString());
-            after.put("oldReserved", decreasePositionOutput.oldReserved().stripTrailingZeros().toPlainString());
-            after.put("newReserved", decreasePositionOutput.newReserved().stripTrailingZeros().toPlainString());
+            after.put(
+                "positionUpdateId", decreasePositionOutput.positionUpdateId().getId().toString());
+            after.put(
+                "oldPosition",
+                decreasePositionOutput.oldPosition().stripTrailingZeros().toPlainString());
+            after.put(
+                "newPosition",
+                decreasePositionOutput.newPosition().stripTrailingZeros().toPlainString());
+            after.put(
+                "oldReserved",
+                decreasePositionOutput.oldReserved().stripTrailingZeros().toPlainString());
+            after.put(
+                "newReserved",
+                decreasePositionOutput.newReserved().stripTrailingZeros().toPlainString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(transactionId, STEP_NAME, CONTEXT, after, StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    transactionId, STEP_NAME, CONTEXT, after,
+                    StepPhase.AFTER));
 
             var output = new Output(decreasePositionOutput.positionUpdateId());
 
@@ -123,14 +145,23 @@ public class DecreasePayeePosition {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 
     }
 
-    public record Input(String context, TransactionId transactionId, Instant transactionAt, FspData payerFsp, FspData payeeFsp, Currency currency, BigDecimal transferAmount) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        Instant transactionAt,
+                        FspData payerFsp,
+                        FspData payeeFsp,
+                        Currency currency,
+                        BigDecimal transferAmount) { }
 
     public record Output(PositionUpdateId payeeCommitId) { }
 

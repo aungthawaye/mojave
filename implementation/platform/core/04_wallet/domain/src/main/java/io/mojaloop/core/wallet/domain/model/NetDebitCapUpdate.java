@@ -49,8 +49,10 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "wlt_net_debit_cap_update",
-       uniqueConstraints = {@UniqueConstraint(name = "wlt_net_debit_cap_update_transaction_id_UK", columnNames = {"transaction_id"})},
-       indexes = {@Index(name = "wlt_net_debit_cap_update_position_id_transaction_at_IDX", columnList = "position_id, transaction_at")})
+       uniqueConstraints = {@UniqueConstraint(name = "wlt_net_debit_cap_update_transaction_id_UK",
+                                              columnNames = {"transaction_id"})},
+       indexes = {@Index(name = "wlt_net_debit_cap_update_position_id_transaction_at_IDX",
+                         columnList = "position_id, transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {
 
@@ -68,7 +70,11 @@ public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {
     @Convert(converter = TransactionIdConverter.class)
     protected TransactionId transactionId;
 
-    @Column(name = "old_net_debit_cap", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(name = "old_net_debit_cap",
+            precision = 34,
+            scale = 4,
+            nullable = false,
+            updatable = false)
     protected BigDecimal oldNetDebitCap;
 
     @Column(name = "new_net_debit_cap", precision = 34, scale = 4, nullable = false)

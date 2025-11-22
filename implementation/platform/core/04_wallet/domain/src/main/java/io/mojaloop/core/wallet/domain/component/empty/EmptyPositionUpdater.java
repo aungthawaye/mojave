@@ -31,9 +31,11 @@ import java.time.Instant;
 public class EmptyPositionUpdater implements PositionUpdater {
 
     @Override
-    public PositionHistory commit(PositionUpdateId reservationId, PositionUpdateId positionUpdateId) throws CommitFailedException {
+    public PositionHistory commit(PositionUpdateId reservationId, PositionUpdateId positionUpdateId)
+        throws CommitFailedException {
 
-        throw new UnsupportedOperationException("EmptyPositionUpdater does not support commit operation");
+        throw new UnsupportedOperationException(
+            "EmptyPositionUpdater does not support commit operation");
     }
 
     @Override
@@ -44,7 +46,8 @@ public class EmptyPositionUpdater implements PositionUpdater {
                                     BigDecimal amount,
                                     String description) throws NoPositionUpdateException {
 
-        throw new UnsupportedOperationException("EmptyPositionUpdater does not support decrease operation");
+        throw new UnsupportedOperationException(
+            "EmptyPositionUpdater does not support decrease operation");
     }
 
     @Override
@@ -53,9 +56,11 @@ public class EmptyPositionUpdater implements PositionUpdater {
                                     PositionUpdateId positionUpdateId,
                                     PositionId positionId,
                                     BigDecimal amount,
-                                    String description) throws NoPositionUpdateException, LimitExceededException {
+                                    String description)
+        throws NoPositionUpdateException, LimitExceededException {
 
-        throw new UnsupportedOperationException("EmptyPositionUpdater does not support increase operation");
+        throw new UnsupportedOperationException(
+            "EmptyPositionUpdater does not support increase operation");
     }
 
     @Override
@@ -64,15 +69,20 @@ public class EmptyPositionUpdater implements PositionUpdater {
                                    PositionUpdateId positionUpdateId,
                                    PositionId positionId,
                                    BigDecimal amount,
-                                   String description) throws NoPositionUpdateException, LimitExceededException {
+                                   String description)
+        throws NoPositionUpdateException, LimitExceededException {
 
-        throw new UnsupportedOperationException("EmptyPositionUpdater does not support reserve operation");
+        throw new UnsupportedOperationException(
+            "EmptyPositionUpdater does not support reserve operation");
     }
 
     @Override
-    public PositionHistory rollback(PositionUpdateId reservationId, PositionUpdateId positionUpdateId) throws RollbackFailedException {
+    public PositionHistory rollback(PositionUpdateId reservationId,
+                                    PositionUpdateId positionUpdateId)
+        throws RollbackFailedException {
 
-        throw new UnsupportedOperationException("EmptyPositionUpdater does not support rollback operation");
+        throw new UnsupportedOperationException(
+            "EmptyPositionUpdater does not support rollback operation");
     }
 
 }

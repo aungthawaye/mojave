@@ -41,7 +41,9 @@ public class RespondPartiesHandler implements RespondParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public RespondPartiesHandler(ParticipantContext participantContext, PartiesResponseService partiesResponseService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public RespondPartiesHandler(ParticipantContext participantContext,
+                                 PartiesResponseService partiesResponseService,
+                                 FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert partiesResponseService != null;
@@ -54,13 +56,17 @@ public class RespondPartiesHandler implements RespondParties {
     }
 
     @Override
-    public void putParties(Payer payer, String url, PartiesTypeIDPutResponse response) throws FspiopException {
+    public void putParties(Payer payer, String url, PartiesTypeIDPutResponse response)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.partiesResponseService.putParties(url, fspiopHeaders, response), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesResponseService.putParties(url, fspiopHeaders, response),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -69,13 +75,17 @@ public class RespondPartiesHandler implements RespondParties {
     }
 
     @Override
-    public void putPartiesError(Payer payer, String url, ErrorInformationObject error) throws FspiopException {
+    public void putPartiesError(Payer payer, String url, ErrorInformationObject error)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.partiesResponseService.putPartiesError(url, fspiopHeaders, error), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesResponseService.putPartiesError(url, fspiopHeaders, error),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

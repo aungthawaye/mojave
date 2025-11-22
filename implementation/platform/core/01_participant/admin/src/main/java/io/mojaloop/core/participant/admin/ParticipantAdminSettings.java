@@ -39,8 +39,10 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
     @Override
     public FlywayMigration.Settings participantFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"), System.getenv("PCP_FLYWAY_DB_PASSWORD"),
-            "flyway_participant_history", new String[]{"classpath:migration/participant"});
+        return new FlywayMigration.Settings(
+            System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
+            System.getenv("PCP_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
+            new String[]{"classpath:migration/participant"});
 
     }
 
@@ -48,10 +50,12 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("PCP_READ_DB_URL"), System.getenv("PCP_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("PCP_READ_DB_URL"), System.getenv("PCP_READ_DB_USER"),
             System.getenv("PCP_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("participant-admin-read", Integer.parseInt(System.getenv("PCP_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "participant-admin-read", Integer.parseInt(System.getenv("PCP_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("PCP_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -61,10 +65,13 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("PCP_WRITE_DB_URL"), System.getenv("PCP_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("PCP_WRITE_DB_URL"), System.getenv("PCP_WRITE_DB_USER"),
             System.getenv("PCP_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("participant-admin-write", Integer.parseInt(System.getenv("PCP_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "participant-admin-write",
+            Integer.parseInt(System.getenv("PCP_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("PCP_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -81,7 +88,8 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
     @Override
     public ParticipantAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new ParticipantAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv("PARTICIPANT_ADMIN_PORT")));
+        return new ParticipantAdminConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("PARTICIPANT_ADMIN_PORT")));
     }
 
 }

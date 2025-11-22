@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxTransfersIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxTransfersIDPutResponse {
 
     private String fulfilment;
@@ -31,7 +32,8 @@ public class FxTransfersIDPutResponse {
     }
 
     @JsonCreator
-    public FxTransfersIDPutResponse(@JsonProperty(required = true, value = "conversionState") TransferState conversionState) {
+    public FxTransfersIDPutResponse(@JsonProperty(required = true,
+                                                  value = "conversionState") TransferState conversionState) {
 
         this.conversionState = conversionState;
     }
@@ -63,8 +65,12 @@ public class FxTransfersIDPutResponse {
             return false;
         }
         FxTransfersIDPutResponse fxTransfersIDPutResponse = (FxTransfersIDPutResponse) o;
-        return Objects.equals(this.fulfilment, fxTransfersIDPutResponse.fulfilment) && Objects.equals(this.completedTimestamp, fxTransfersIDPutResponse.completedTimestamp) &&
-                   Objects.equals(this.conversionState, fxTransfersIDPutResponse.conversionState) && Objects.equals(this.extensionList, fxTransfersIDPutResponse.extensionList);
+        return Objects.equals(this.fulfilment, fxTransfersIDPutResponse.fulfilment) &&
+                   Objects.equals(
+                       this.completedTimestamp,
+                       fxTransfersIDPutResponse.completedTimestamp) &&
+                   Objects.equals(this.conversionState, fxTransfersIDPutResponse.conversionState) &&
+                   Objects.equals(this.extensionList, fxTransfersIDPutResponse.extensionList);
     }
 
     /**
@@ -150,7 +156,10 @@ public class FxTransfersIDPutResponse {
         sb.append("class FxTransfersIDPutResponse {\n");
 
         sb.append("    fulfilment: ").append(toIndentedString(fulfilment)).append("\n");
-        sb.append("    completedTimestamp: ").append(toIndentedString(completedTimestamp)).append("\n");
+        sb
+            .append("    completedTimestamp: ")
+            .append(toIndentedString(completedTimestamp))
+            .append("\n");
         sb.append("    conversionState: ").append(toIndentedString(conversionState)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

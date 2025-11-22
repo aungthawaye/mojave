@@ -58,12 +58,15 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "txn_transaction",
-       indexes = {@Index(name = "txn_transaction_type_phase_open_at_IDX", columnList = "type, phase, open_at"),
-                  @Index(name = "txn_transaction_type_phase_close_at_IDX", columnList = "type, phase, close_at"),
+       indexes = {@Index(name = "txn_transaction_type_phase_open_at_IDX",
+                         columnList = "type, phase, open_at"),
+                  @Index(name = "txn_transaction_type_phase_close_at_IDX",
+                         columnList = "type, phase, close_at"),
                   @Index(name = "txn_transaction_open_at_IDX", columnList = "open_at"),
                   @Index(name = "txn_transaction_close_at_IDX", columnList = "close_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Transaction extends JpaEntity<TransactionId> implements DataConversion<TransactionData> {
+public class Transaction extends JpaEntity<TransactionId>
+    implements DataConversion<TransactionData> {
 
     @Id
     @JavaType(TransactionIdJavaType.class)
@@ -71,7 +74,10 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
     @Column(name = "transaction_id", nullable = false, updatable = false)
     protected TransactionId id;
 
-    @Column(name = "type", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "type",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionType type;
 
@@ -93,7 +99,10 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
     @Column(name = "success")
     protected Boolean success = true;
 
-    @OneToMany(mappedBy = "transaction", orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "transaction",
+               orphanRemoval = true,
+               cascade = {CascadeType.ALL},
+               fetch = FetchType.EAGER)
     protected List<TransactionStep> steps = new ArrayList<>();
 
     public Transaction(TransactionId transactionId, TransactionType type) {
@@ -130,7 +139,9 @@ public class Transaction extends JpaEntity<TransactionId> implements DataConvers
 
         var stepData = this.steps.stream().map(TransactionStep::convert).toList();
 
-        return new TransactionData(this.id, this.type, this.phase, this.openAt, this.closeAt, this.error, this.success, stepData);
+        return new TransactionData(
+            this.id, this.type, this.phase, this.openAt, this.closeAt, this.error, this.success,
+            stepData);
     }
 
     public List<TransactionStep> getSteps() {

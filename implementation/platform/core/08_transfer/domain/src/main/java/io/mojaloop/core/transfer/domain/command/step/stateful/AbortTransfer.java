@@ -75,7 +75,10 @@ public class AbortTransfer {
             before.put("rollbackId", input.rollbackId.getId().toString());
             before.put("error", input.error);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             transfer.aborted(input.rollbackId, input.error);
 
@@ -83,7 +86,10 @@ public class AbortTransfer {
 
             LOGGER.info("Aborted transfer successfully : transferId [{}]", transfer.getId());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
+                    StepPhase.AFTER));
 
             return new Output();
 
@@ -91,13 +97,20 @@ public class AbortTransfer {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context, TransactionId transactionId, TransferId transferId, PositionUpdateId rollbackId, String error) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        TransferId transferId,
+                        PositionUpdateId rollbackId,
+                        String error) { }
 
     public record Output() { }
 

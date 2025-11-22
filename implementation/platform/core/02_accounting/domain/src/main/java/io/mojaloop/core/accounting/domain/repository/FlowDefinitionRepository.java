@@ -50,7 +50,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, FlowDefinitionId>, JpaSpecificationExecutor<FlowDefinition> {
+public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, FlowDefinitionId>,
+                                                  JpaSpecificationExecutor<FlowDefinition> {
 
     class Filters {
 

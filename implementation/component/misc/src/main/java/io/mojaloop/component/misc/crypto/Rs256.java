@@ -68,7 +68,12 @@ public class Rs256 {
     private static String extractBase64FromPem(String pem) {
         // Remove begin and end markers, newlines, and any whitespace
 
-        return pem.replace(BEGIN_PRIVATE_KEY, "").replace(END_PRIVATE_KEY, "").replace(BEGIN_PUBLIC_KEY, "").replace(END_PUBLIC_KEY, "").replaceAll("\\s", "");
+        return pem
+                   .replace(BEGIN_PRIVATE_KEY, "")
+                   .replace(END_PRIVATE_KEY, "")
+                   .replace(BEGIN_PUBLIC_KEY, "")
+                   .replace(END_PUBLIC_KEY, "")
+                   .replaceAll("\\s", "");
     }
 
     // Helper method to format a Base64 string as PEM
@@ -97,7 +102,8 @@ public class Rs256 {
             case 4096:
                 break;
             default:
-                throw new NoSuchAlgorithmException("RSA key size must be 1024, 2048, 3072, or 4096");
+                throw new NoSuchAlgorithmException(
+                    "RSA key size must be 1024, 2048, 3072, or 4096");
         }
 
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
@@ -106,7 +112,8 @@ public class Rs256 {
         return keyGen.generateKeyPair();
     }
 
-    public static PrivateKey privateKeyFromBase64(String base64PrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PrivateKey privateKeyFromBase64(String base64PrivateKey)
+        throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         byte[] decodedKey = Base64.getDecoder().decode(base64PrivateKey);
 
@@ -117,7 +124,8 @@ public class Rs256 {
     }
 
     // Convert a PEM string to a PrivateKey
-    public static PrivateKey privateKeyFromPem(String pem) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PrivateKey privateKeyFromPem(String pem)
+        throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         String base64Key = extractBase64FromPem(pem);
         byte[] decodedKey = Base64.getDecoder().decode(base64Key);
@@ -141,7 +149,8 @@ public class Rs256 {
         return formatPem(base64Key, BEGIN_PRIVATE_KEY, END_PRIVATE_KEY);
     }
 
-    public static PublicKey publicKeyFromBase64(String base64PublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PublicKey publicKeyFromBase64(String base64PublicKey)
+        throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         byte[] decodedKey = Base64.getDecoder().decode(base64PublicKey);
 
@@ -152,7 +161,8 @@ public class Rs256 {
     }
 
     // Convert a PEM string to a PublicKey
-    public static PublicKey publicKeyFromPem(String pem) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PublicKey publicKeyFromPem(String pem)
+        throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         String base64Key = extractBase64FromPem(pem);
         byte[] decodedKey = Base64.getDecoder().decode(base64Key);
@@ -189,7 +199,8 @@ public class Rs256 {
     }
 
     // Verify the signature with a public key
-    public static boolean verify(PublicKey publicKey, String message, String sha256Signature) throws Exception {
+    public static boolean verify(PublicKey publicKey, String message, String sha256Signature)
+        throws Exception {
 
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initVerify(publicKey);

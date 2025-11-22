@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransactionRequestsPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransactionRequestsPostRequest {
 
     private String transactionRequestId;
@@ -43,11 +44,16 @@ public class TransactionRequestsPostRequest {
     }
 
     @JsonCreator
-    public TransactionRequestsPostRequest(@JsonProperty(required = true, value = "transactionRequestId") String transactionRequestId,
-                                          @JsonProperty(required = true, value = "payee") Party payee,
-                                          @JsonProperty(required = true, value = "payer") PartyIdInfo payer,
-                                          @JsonProperty(required = true, value = "amount") Money amount,
-                                          @JsonProperty(required = true, value = "transactionType") TransactionType transactionType) {
+    public TransactionRequestsPostRequest(@JsonProperty(required = true,
+                                                        value = "transactionRequestId") String transactionRequestId,
+                                          @JsonProperty(required = true,
+                                                        value = "payee") Party payee,
+                                          @JsonProperty(required = true,
+                                                        value = "payer") PartyIdInfo payer,
+                                          @JsonProperty(required = true,
+                                                        value = "amount") Money amount,
+                                          @JsonProperty(required = true,
+                                                        value = "transactionType") TransactionType transactionType) {
 
         this.transactionRequestId = transactionRequestId;
         this.payee = payee;
@@ -82,12 +88,22 @@ public class TransactionRequestsPostRequest {
             return false;
         }
         TransactionRequestsPostRequest transactionRequestsPostRequest = (TransactionRequestsPostRequest) o;
-        return Objects.equals(this.transactionRequestId, transactionRequestsPostRequest.transactionRequestId) && Objects.equals(this.payee, transactionRequestsPostRequest.payee) &&
-                   Objects.equals(this.payer, transactionRequestsPostRequest.payer) && Objects.equals(this.amount, transactionRequestsPostRequest.amount) &&
-                   Objects.equals(this.transactionType, transactionRequestsPostRequest.transactionType) && Objects.equals(this.note, transactionRequestsPostRequest.note) &&
+        return Objects.equals(
+            this.transactionRequestId,
+            transactionRequestsPostRequest.transactionRequestId) &&
+                   Objects.equals(this.payee, transactionRequestsPostRequest.payee) &&
+                   Objects.equals(this.payer, transactionRequestsPostRequest.payer) &&
+                   Objects.equals(this.amount, transactionRequestsPostRequest.amount) &&
+                   Objects.equals(
+                       this.transactionType,
+                       transactionRequestsPostRequest.transactionType) &&
+                   Objects.equals(this.note, transactionRequestsPostRequest.note) &&
                    Objects.equals(this.geoCode, transactionRequestsPostRequest.geoCode) &&
-                   Objects.equals(this.authenticationType, transactionRequestsPostRequest.authenticationType) &&
-                   Objects.equals(this.expiration, transactionRequestsPostRequest.expiration) && Objects.equals(this.extensionList, transactionRequestsPostRequest.extensionList);
+                   Objects.equals(
+                       this.authenticationType,
+                       transactionRequestsPostRequest.authenticationType) &&
+                   Objects.equals(this.expiration, transactionRequestsPostRequest.expiration) &&
+                   Objects.equals(this.extensionList, transactionRequestsPostRequest.extensionList);
     }
 
     /**
@@ -252,7 +268,9 @@ public class TransactionRequestsPostRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash(transactionRequestId, payee, payer, amount, transactionType, note, geoCode, authenticationType, expiration, extensionList);
+        return Objects.hash(
+            transactionRequestId, payee, payer, amount, transactionType, note, geoCode,
+            authenticationType, expiration, extensionList);
     }
 
     /**
@@ -286,14 +304,20 @@ public class TransactionRequestsPostRequest {
         StringBuilder sb = new StringBuilder();
         sb.append("class TransactionRequestsPostRequest {\n");
 
-        sb.append("    transactionRequestId: ").append(toIndentedString(transactionRequestId)).append("\n");
+        sb
+            .append("    transactionRequestId: ")
+            .append(toIndentedString(transactionRequestId))
+            .append("\n");
         sb.append("    payee: ").append(toIndentedString(payee)).append("\n");
         sb.append("    payer: ").append(toIndentedString(payer)).append("\n");
         sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
         sb.append("    transactionType: ").append(toIndentedString(transactionType)).append("\n");
         sb.append("    note: ").append(toIndentedString(note)).append("\n");
         sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
-        sb.append("    authenticationType: ").append(toIndentedString(authenticationType)).append("\n");
+        sb
+            .append("    authenticationType: ")
+            .append(toIndentedString(authenticationType))
+            .append("\n");
         sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

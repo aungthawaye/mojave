@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransfersIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransfersIDPutResponse {
 
     private String fulfilment;
@@ -31,7 +32,8 @@ public class TransfersIDPutResponse {
     }
 
     @JsonCreator
-    public TransfersIDPutResponse(@JsonProperty(required = true, value = "transferState") TransferState transferState) {
+    public TransfersIDPutResponse(@JsonProperty(required = true,
+                                                value = "transferState") TransferState transferState) {
 
         this.transferState = transferState;
     }
@@ -55,8 +57,12 @@ public class TransfersIDPutResponse {
             return false;
         }
         TransfersIDPutResponse transfersIDPutResponse = (TransfersIDPutResponse) o;
-        return Objects.equals(this.fulfilment, transfersIDPutResponse.fulfilment) && Objects.equals(this.completedTimestamp, transfersIDPutResponse.completedTimestamp) &&
-                   Objects.equals(this.transferState, transfersIDPutResponse.transferState) && Objects.equals(this.extensionList, transfersIDPutResponse.extensionList);
+        return Objects.equals(this.fulfilment, transfersIDPutResponse.fulfilment) &&
+                   Objects.equals(
+                       this.completedTimestamp,
+                       transfersIDPutResponse.completedTimestamp) &&
+                   Objects.equals(this.transferState, transfersIDPutResponse.transferState) &&
+                   Objects.equals(this.extensionList, transfersIDPutResponse.extensionList);
     }
 
     /**
@@ -142,7 +148,10 @@ public class TransfersIDPutResponse {
         sb.append("class TransfersIDPutResponse {\n");
 
         sb.append("    fulfilment: ").append(toIndentedString(fulfilment)).append("\n");
-        sb.append("    completedTimestamp: ").append(toIndentedString(completedTimestamp)).append("\n");
+        sb
+            .append("    completedTimestamp: ")
+            .append(toIndentedString(completedTimestamp))
+            .append("\n");
         sb.append("    transferState: ").append(toIndentedString(transferState)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

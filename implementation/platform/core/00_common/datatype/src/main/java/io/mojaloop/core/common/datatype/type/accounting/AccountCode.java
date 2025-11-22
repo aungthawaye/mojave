@@ -70,7 +70,8 @@ public record AccountCode(@JsonValue @JsonProperty(required = true) @NotNull @No
     public static class Deserializer extends JsonDeserializer<AccountCode> {
 
         @Override
-        public AccountCode deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public AccountCode deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var text = p.getValueAsString();
 

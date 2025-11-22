@@ -54,7 +54,10 @@ public class PostQuotesEventListener {
 
         try {
 
-            this.handleQuotesRequest.execute(new HandlePostQuotesRequestCommand.Input(payload.payer(), payload.quoteId(), payload.request()));
+            this.handleQuotesRequest.execute(
+                new HandlePostQuotesRequestCommand.Input(
+                    payload.payer(), payload.quoteId(),
+                    payload.request()));
 
             LOGGER.info("Done handling PostQuotesEvent : {}", event);
 

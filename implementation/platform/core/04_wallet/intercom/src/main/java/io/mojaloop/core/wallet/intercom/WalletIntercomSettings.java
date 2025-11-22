@@ -41,9 +41,11 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     public MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings() {
 
         return new MySqlBalanceUpdater.BalanceDbSettings(
-            new MySqlBalanceUpdater.BalanceDbSettings.Connection(System.getenv("WLT_BALANCE_DB_URL"), System.getenv("WLT_BALANCE_DB_USER"),
+            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
+                System.getenv("WLT_BALANCE_DB_URL"), System.getenv("WLT_BALANCE_DB_USER"),
                 System.getenv("WLT_BALANCE_DB_PASSWORD")),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool("wallet-balance", Integer.parseInt(System.getenv("WLT_BALANCE_DB_MIN_POOL_SIZE")),
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance", Integer.parseInt(System.getenv("WLT_BALANCE_DB_MIN_POOL_SIZE")),
                 Integer.parseInt(System.getenv("WLT_BALANCE_DB_MAX_POOL_SIZE"))));
     }
 
@@ -51,9 +53,11 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     public MySqlPositionUpdater.PositionDbSettings positionDbSettings() {
 
         return new MySqlPositionUpdater.PositionDbSettings(
-            new MySqlPositionUpdater.PositionDbSettings.Connection(System.getenv("WLT_POSITION_DB_URL"), System.getenv("WLT_POSITION_DB_USER"),
+            new MySqlPositionUpdater.PositionDbSettings.Connection(
+                System.getenv("WLT_POSITION_DB_URL"), System.getenv("WLT_POSITION_DB_USER"),
                 System.getenv("WLT_POSITION_DB_PASSWORD")),
-            new MySqlPositionUpdater.PositionDbSettings.Pool("wallet-position", Integer.parseInt(System.getenv("WLT_POSITION_DB_MIN_POOL_SIZE")),
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position", Integer.parseInt(System.getenv("WLT_POSITION_DB_MIN_POOL_SIZE")),
                 Integer.parseInt(System.getenv("WLT_POSITION_DB_MAX_POOL_SIZE"))));
     }
 
@@ -61,10 +65,12 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("WLT_READ_DB_URL"), System.getenv("WLT_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("WLT_READ_DB_URL"), System.getenv("WLT_READ_DB_USER"),
             System.getenv("WLT_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("wallet-intercom-read", Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "wallet-intercom-read", Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WLT_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -74,10 +80,12 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("WLT_WRITE_DB_URL"), System.getenv("WLT_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("WLT_WRITE_DB_URL"), System.getenv("WLT_WRITE_DB_USER"),
             System.getenv("WLT_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("wallet-intercom-write", Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "wallet-intercom-write", Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WLT_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -94,15 +102,18 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     @Override
     public WalletIntercomConfiguration.TomcatSettings tomcatSettings() {
 
-        return new WalletIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv("WALLET_INTERCOM_PORT")));
+        return new WalletIntercomConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("WALLET_INTERCOM_PORT")));
     }
 
     @Bean
     @Override
     public FlywayMigration.Settings walletFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"), System.getenv("WLT_FLYWAY_DB_PASSWORD"),
-            "flyway_wallet_history", new String[]{"classpath:migration/wallet"});
+        return new FlywayMigration.Settings(
+            System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
+            System.getenv("WLT_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
+            new String[]{"classpath:migration/wallet"});
     }
 
 }

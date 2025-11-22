@@ -36,7 +36,8 @@ public class CreateWalletInvoker implements CreateWalletCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateWalletInvoker(final WalletAdminService.WalletCommand walletCommand, final ObjectMapper objectMapper) {
+    public CreateWalletInvoker(final WalletAdminService.WalletCommand walletCommand,
+                               final ObjectMapper objectMapper) {
 
         assert walletCommand != null;
         assert objectMapper != null;
@@ -50,7 +51,12 @@ public class CreateWalletInvoker implements CreateWalletCommand {
 
         try {
 
-            return RetrofitService.invoke(this.walletCommand.create(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.walletCommand.create(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ErrorInformation")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ErrorInformation {
 
     private String errorCode;
@@ -30,7 +31,8 @@ public class ErrorInformation {
 
     @JsonCreator
     public ErrorInformation(@JsonProperty(required = true, value = "errorCode") String errorCode,
-                            @JsonProperty(required = true, value = "errorDescription") String errorDescription) {
+                            @JsonProperty(required = true,
+                                          value = "errorDescription") String errorDescription) {
 
         this.errorCode = errorCode;
         this.errorDescription = errorDescription;
@@ -46,7 +48,8 @@ public class ErrorInformation {
             return false;
         }
         ErrorInformation errorInformation = (ErrorInformation) o;
-        return Objects.equals(this.errorCode, errorInformation.errorCode) && Objects.equals(this.errorDescription, errorInformation.errorDescription) &&
+        return Objects.equals(this.errorCode, errorInformation.errorCode) &&
+                   Objects.equals(this.errorDescription, errorInformation.errorDescription) &&
                    Objects.equals(this.extensionList, errorInformation.extensionList);
     }
 

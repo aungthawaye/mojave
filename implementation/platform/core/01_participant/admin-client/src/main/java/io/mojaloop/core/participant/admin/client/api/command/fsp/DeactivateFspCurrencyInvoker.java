@@ -34,13 +34,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeactivateFspCurrencyInvoker implements DeactivateFspCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateFspCurrencyInvoker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateFspCurrencyInvoker.class);
 
     private final ParticipantAdminService.FspCommand fspCommand;
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateFspCurrencyInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
+    public DeactivateFspCurrencyInvoker(final ParticipantAdminService.FspCommand fspCommand,
+                                        final ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -54,8 +56,12 @@ public class DeactivateFspCurrencyInvoker implements DeactivateFspCurrencyComman
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.deactivateFspCurrency(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.deactivateFspCurrency(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

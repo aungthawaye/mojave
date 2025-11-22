@@ -33,9 +33,13 @@ import java.util.Map;
 public interface PartiesResponseService {
 
     @PUT
-    Call<String> putParties(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, @Body PartiesTypeIDPutResponse partiesTypeIDPutResponse);
+    Call<String> putParties(@Url String url,
+                            @HeaderMap Map<String, String> fspiopHeaders,
+                            @Body PartiesTypeIDPutResponse partiesTypeIDPutResponse);
 
     @PUT
-    Call<String> putPartiesError(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, ErrorInformationObject errorInformationObject);
+    Call<String> putPartiesError(@Url String url,
+                                 @HeaderMap Map<String, String> fspiopHeaders,
+                                 ErrorInformationObject errorInformationObject);
 
 }

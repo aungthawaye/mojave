@@ -29,7 +29,8 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Import;
 
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class,
+                                    UserDetailsServiceAutoConfiguration.class})
 @Import(value = {AccountingAdminConfiguration.class, AccountingAdminSettings.class})
 public class AccountingAdminApplication {
 
@@ -37,21 +38,24 @@ public class AccountingAdminApplication {
 
     public static void main(String[] args) {
 
-        new SpringApplicationBuilder(AccountingAdminApplication.class).web(WebApplicationType.SERVLET)
-                                                                      .properties("spring.application.name=accounting-admin", "spring.jmx.enabled=true",
-                                                                          "spring.jmx.unique-types=true", "spring.jmx.default-domain=accounting-admin",
-                                                                          "spring.application.admin.enabled=true", "management.endpoints.web.base-path=/actuator",
-                                                                          "management.endpoint.health.show-details=always",
-                                                                          "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
-                                                                          "management.endpoint.health.group.liveness.include=db,diskSpace,process,throttling",
-                                                                          "management.endpoint.health.group.throttling.include=throttling",
-                                                                          "management.endpoint.throttling.enabled=true",
-                                                                          "management.endpoint.health.validate-group-membership=false",
-                                                                          "management.endpoint.health.probes.enabled=true",
-                                                                          "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                                                                          "management.endpoint.health.show-details=always",
-                                                                          "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=AccountingAdminApplication,context=accounting-admin")
-                                                                      .run(args);
+        new SpringApplicationBuilder(AccountingAdminApplication.class)
+            .web(WebApplicationType.SERVLET)
+            .properties(
+                "spring.application.name=accounting-admin", "spring.jmx.enabled=true",
+                "spring.jmx.unique-types=true", "spring.jmx.default-domain=accounting-admin",
+                "spring.application.admin.enabled=true",
+                "management.endpoints.web.base-path=/actuator",
+                "management.endpoint.health.show-details=always",
+                "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
+                "management.endpoint.health.group.liveness.include=db,diskSpace,process,throttling",
+                "management.endpoint.health.group.throttling.include=throttling",
+                "management.endpoint.throttling.enabled=true",
+                "management.endpoint.health.validate-group-membership=false",
+                "management.endpoint.health.probes.enabled=true",
+                "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
+                "management.endpoint.health.show-details=always",
+                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=AccountingAdminApplication,context=accounting-admin")
+            .run(args);
     }
 
 }

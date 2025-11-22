@@ -144,13 +144,16 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             var request = input.transfersPostRequest();
 
             // 1. Unwrap the request.
-            var unwrapRequestOutput = this.unwrapRequest.execute(new UnwrapRequest.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, request));
+            var unwrapRequestOutput = this.unwrapRequest.execute(
+                new UnwrapRequest.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, request));
 
             // 2. Open a transaction. And receive the Transfer.
-            var receiveTransferOutput = this.receiveTransfer.execute(
-                new ReceiveTransfer.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, unwrapRequestOutput.payerPartyIdInfo(), unwrapRequestOutput.payeePartyIdInfo(),
-                    unwrapRequestOutput.currency(), unwrapRequestOutput.transferAmount(), unwrapRequestOutput.ilpPacket(), unwrapRequestOutput.ilpCondition(),
-                    unwrapRequestOutput.requestExpiration(), request.getExtensionList()));
+            var receiveTransferOutput = this.receiveTransfer.execute(new ReceiveTransfer.Input(
+                CONTEXT, udfTransferId, payerFsp, payeeFsp, unwrapRequestOutput.payerPartyIdInfo(),
+                unwrapRequestOutput.payeePartyIdInfo(), unwrapRequestOutput.currency(),
+                unwrapRequestOutput.transferAmount(), unwrapRequestOutput.ilpPacket(),
+                unwrapRequestOutput.ilpCondition(), unwrapRequestOutput.requestExpiration(),
+                request.getExtensionList()));
 
             transactionId = receiveTransferOutput.transactionId();
             transactionAt = receiveTransferOutput.transactionAt();
@@ -159,8 +162,9 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             // 3. Reserve a position of Payer.
             try {
                 var reservePayerPositionOutput = this.reservePayerPosition.execute(
-                    new ReservePayerPosition.Input(CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp, unwrapRequestOutput.currency(),
-                        unwrapRequestOutput.transferAmount()));
+                    new ReservePayerPosition.Input(
+                        CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp,
+                        unwrapRequestOutput.currency(), unwrapRequestOutput.transferAmount()));
 
                 positionReservationId = reservePayerPositionOutput.positionReservationId();
 
@@ -180,13 +184,19 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             // 4. Update the Transfer as RESERVED
             try {
 
-                this.reserveTransfer.execute(new ReserveTransfer.Input(CONTEXT, transactionId, transferId, positionReservationId));
+                this.reserveTransfer.execute(
+                    new ReserveTransfer.Input(
+                        CONTEXT, transactionId, transferId,
+                        positionReservationId));
 
             } catch (Exception e) {
 
                 LOGGER.error("Error:", e);
 
-                this.rollbackReservation.execute(new RollbackReservation.Input(CONTEXT, transactionId, positionReservationId, "Failed to reserve position"));
+                this.rollbackReservation.execute(
+                    new RollbackReservation.Input(
+                        CONTEXT, transactionId, positionReservationId,
+                        "Failed to reserve position"));
 
                 throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
             }
@@ -196,13 +206,18 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
 
-                this.forwardToDestination.execute(new ForwardToDestination.Input(CONTEXT, transactionId, payeeFspCode.value(), payeeBaseUrl, input.request()));
+                this.forwardToDestination.execute(
+                    new ForwardToDestination.Input(
+                        CONTEXT, transactionId, payeeFspCode.value(),
+                        payeeBaseUrl, input.request()));
 
             } catch (Exception e) {
 
                 LOGGER.error("Error:", e);
 
-                this.rollbackReservation.execute(new RollbackReservation.Input(CONTEXT, transactionId, positionReservationId, "Failed to forward request to payee"));
+                this.rollbackReservation.execute(new RollbackReservation.Input(
+                    CONTEXT, transactionId, positionReservationId,
+                    "Failed to forward request to payee"));
 
                 throw e;
             }
@@ -217,11 +232,13 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
                 final var baseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-                final var url = FspiopUrls.Transfers.putTransfersError(baseUrl, udfTransferId.getId());
+                final var url = FspiopUrls.Transfers.putTransfersError(
+                    baseUrl, udfTransferId.getId());
 
                 try {
 
-                    this.respondErrorToPayer.execute(new RespondErrorToPayer.Input(CONTEXT, transactionId, sendBackTo, url, e));
+                    this.respondErrorToPayer.execute(
+                        new RespondErrorToPayer.Input(CONTEXT, transactionId, sendBackTo, url, e));
 
                 } catch (Exception e1) {
 
@@ -238,7 +255,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.info("Closing transaction : udfTransferId : [{}]", udfTransferId.getId());
 
-                this.closeTransactionPublisher.publish(new CloseTransactionCommand.Input(transactionId, errorOccurred.getMessage()));
+                this.closeTransactionPublisher.publish(
+                    new CloseTransactionCommand.Input(transactionId, errorOccurred.getMessage()));
 
             }
         }

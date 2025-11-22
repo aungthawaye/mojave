@@ -38,8 +38,12 @@ public class CloseTransactionPublisherIT {
     @Test
     public void test() {
 
-        this.producer.publish(new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), null));
-        this.producer.publish(new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), "Something went wrong."));
+        this.producer.publish(
+            new CloseTransactionCommand.Input(new TransactionId(Snowflake.get().nextId()), null));
+        this.producer.publish(
+            new CloseTransactionCommand.Input(
+                new TransactionId(Snowflake.get().nextId()),
+                "Something went wrong."));
     }
 
 }

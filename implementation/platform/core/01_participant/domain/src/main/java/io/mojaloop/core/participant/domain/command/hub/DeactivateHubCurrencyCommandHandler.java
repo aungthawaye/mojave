@@ -55,13 +55,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateHubCurrencyCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateHubCurrencyCommandHandler.class);
 
     private final HubRepository hubRepository;
 
     private final FspRepository fspRepository;
 
-    public DeactivateHubCurrencyCommandHandler(HubRepository hubRepository, FspRepository fspRepository) {
+    public DeactivateHubCurrencyCommandHandler(HubRepository hubRepository,
+                                               FspRepository fspRepository) {
 
         assert hubRepository != null;
         assert fspRepository != null;
@@ -85,7 +87,9 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
 
         for (var fsp : fsps) {
 
-            LOGGER.info("Deactivating currency of FSP: fspId : [{}], currency : [{}]", fsp.getId(), input.currency());
+            LOGGER.info(
+                "Deactivating currency of FSP: fspId : [{}], currency : [{}]", fsp.getId(),
+                input.currency());
 
             fsp.deactivate(input.currency());
 
@@ -94,10 +98,14 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
 
         this.hubRepository.save(hub);
 
-        LOGGER.info("Completed DeactivateHubCurrencyCommand with input: {} -> deactivated={} ", input, optHubCurrency);
+        LOGGER.info(
+            "Completed DeactivateHubCurrencyCommand with input: {} -> deactivated={} ", input,
+            optHubCurrency);
 
         if (optHubCurrency.isPresent()) {
-            return new Output(optHubCurrency.map(HubCurrency::getId).orElse(null), !optHubCurrency.get().isActive());
+            return new Output(
+                optHubCurrency.map(HubCurrency::getId).orElse(null),
+                !optHubCurrency.get().isActive());
         }
 
         return new Output(null, false);

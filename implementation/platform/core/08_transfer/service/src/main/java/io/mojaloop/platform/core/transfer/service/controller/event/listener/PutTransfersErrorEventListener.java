@@ -31,7 +31,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PutTransfersErrorEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersErrorEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PutTransfersErrorEventListener.class);
 
     private final PutTransfersErrorCommand putTransfersError;
 

@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ActivateFspCurrencyController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateFspCurrencyController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateFspCurrencyController.class);
 
     private final ActivateFspCurrencyCommand activateFspCurrencyCommand;
 

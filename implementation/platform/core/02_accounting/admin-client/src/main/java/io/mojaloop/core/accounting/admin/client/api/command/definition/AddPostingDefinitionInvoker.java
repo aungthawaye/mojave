@@ -34,7 +34,8 @@ public class AddPostingDefinitionInvoker implements AddPostingDefinitionCommand 
 
     private final ObjectMapper objectMapper;
 
-    public AddPostingDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public AddPostingDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                       final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class AddPostingDefinitionInvoker implements AddPostingDefinitionCommand 
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.addPosting(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.addPosting(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

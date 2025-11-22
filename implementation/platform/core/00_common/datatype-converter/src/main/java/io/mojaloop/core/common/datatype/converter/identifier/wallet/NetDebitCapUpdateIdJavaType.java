@@ -83,7 +83,8 @@ public class NetDebitCapUpdateIdJavaType extends AbstractClassJavaType<NetDebitC
             case null -> null;
             case NetDebitCapUpdateId netDebitCapUpdateId -> netDebitCapUpdateId;
             case Number n -> new NetDebitCapUpdateId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

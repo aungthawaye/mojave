@@ -79,7 +79,8 @@ public class HubIdJavaType extends AbstractClassJavaType<HubId> {
             case null -> null;
             case HubId hubId -> hubId;
             case Number n -> new HubId();
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
     }
 

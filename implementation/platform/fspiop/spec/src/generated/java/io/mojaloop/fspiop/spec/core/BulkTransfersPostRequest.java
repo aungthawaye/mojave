@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("BulkTransfersPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class BulkTransfersPostRequest {
 
     private String bulkTransferId;
@@ -39,12 +40,18 @@ public class BulkTransfersPostRequest {
     }
 
     @JsonCreator
-    public BulkTransfersPostRequest(@JsonProperty(required = true, value = "bulkTransferId") String bulkTransferId,
-                                    @JsonProperty(required = true, value = "bulkQuoteId") String bulkQuoteId,
-                                    @JsonProperty(required = true, value = "payerFsp") String payerFsp,
-                                    @JsonProperty(required = true, value = "payeeFsp") String payeeFsp,
-                                    @JsonProperty(required = true, value = "individualTransfers") List<@Valid IndividualTransfer> individualTransfers,
-                                    @JsonProperty(required = true, value = "expiration") String expiration) {
+    public BulkTransfersPostRequest(@JsonProperty(required = true,
+                                                  value = "bulkTransferId") String bulkTransferId,
+                                    @JsonProperty(required = true,
+                                                  value = "bulkQuoteId") String bulkQuoteId,
+                                    @JsonProperty(required = true,
+                                                  value = "payerFsp") String payerFsp,
+                                    @JsonProperty(required = true,
+                                                  value = "payeeFsp") String payeeFsp,
+                                    @JsonProperty(required = true,
+                                                  value = "individualTransfers") List<@Valid IndividualTransfer> individualTransfers,
+                                    @JsonProperty(required = true,
+                                                  value = "expiration") String expiration) {
 
         this.bulkTransferId = bulkTransferId;
         this.bulkQuoteId = bulkQuoteId;
@@ -92,9 +99,14 @@ public class BulkTransfersPostRequest {
             return false;
         }
         BulkTransfersPostRequest bulkTransfersPostRequest = (BulkTransfersPostRequest) o;
-        return Objects.equals(this.bulkTransferId, bulkTransfersPostRequest.bulkTransferId) && Objects.equals(this.bulkQuoteId, bulkTransfersPostRequest.bulkQuoteId) &&
-                   Objects.equals(this.payerFsp, bulkTransfersPostRequest.payerFsp) && Objects.equals(this.payeeFsp, bulkTransfersPostRequest.payeeFsp) &&
-                   Objects.equals(this.individualTransfers, bulkTransfersPostRequest.individualTransfers) && Objects.equals(this.expiration, bulkTransfersPostRequest.expiration) &&
+        return Objects.equals(this.bulkTransferId, bulkTransfersPostRequest.bulkTransferId) &&
+                   Objects.equals(this.bulkQuoteId, bulkTransfersPostRequest.bulkQuoteId) &&
+                   Objects.equals(this.payerFsp, bulkTransfersPostRequest.payerFsp) &&
+                   Objects.equals(this.payeeFsp, bulkTransfersPostRequest.payeeFsp) &&
+                   Objects.equals(
+                       this.individualTransfers,
+                       bulkTransfersPostRequest.individualTransfers) &&
+                   Objects.equals(this.expiration, bulkTransfersPostRequest.expiration) &&
                    Objects.equals(this.extensionList, bulkTransfersPostRequest.extensionList);
     }
 
@@ -216,7 +228,9 @@ public class BulkTransfersPostRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash(bulkTransferId, bulkQuoteId, payerFsp, payeeFsp, individualTransfers, expiration, extensionList);
+        return Objects.hash(
+            bulkTransferId, bulkQuoteId, payerFsp, payeeFsp, individualTransfers, expiration,
+            extensionList);
     }
 
     /**
@@ -265,7 +279,10 @@ public class BulkTransfersPostRequest {
         sb.append("    bulkQuoteId: ").append(toIndentedString(bulkQuoteId)).append("\n");
         sb.append("    payerFsp: ").append(toIndentedString(payerFsp)).append("\n");
         sb.append("    payeeFsp: ").append(toIndentedString(payeeFsp)).append("\n");
-        sb.append("    individualTransfers: ").append(toIndentedString(individualTransfers)).append("\n");
+        sb
+            .append("    individualTransfers: ")
+            .append(toIndentedString(individualTransfers))
+            .append("\n");
         sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

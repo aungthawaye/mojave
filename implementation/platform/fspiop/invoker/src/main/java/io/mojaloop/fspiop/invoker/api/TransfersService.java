@@ -36,16 +36,22 @@ import java.util.Map;
 public interface TransfersService {
 
     @GET("transfers/{transferId}")
-    Call<String> getTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId);
+    Call<String> getTransfers(@HeaderMap Map<String, String> fspiopHeaders,
+                              @Path("transferId") String transferId);
 
     @POST("transfers")
-    Call<String> postTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Body TransfersPostRequest transfersPostRequest);
+    Call<String> postTransfers(@HeaderMap Map<String, String> fspiopHeaders,
+                               @Body TransfersPostRequest transfersPostRequest);
 
     @PUT("transfers/{transferId}")
-    Call<String> putTransfers(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId, @Body TransfersIDPutResponse transfersIDPutResponse);
+    Call<String> putTransfers(@HeaderMap Map<String, String> fspiopHeaders,
+                              @Path("transferId") String transferId,
+                              @Body TransfersIDPutResponse transfersIDPutResponse);
 
     @PUT("transfers/{transferId}/error")
-    Call<String> putTransfersError(@HeaderMap Map<String, String> fspiopHeaders, @Path("transferId") String transferId, @Body ErrorInformationObject errorInformationObject);
+    Call<String> putTransfersError(@HeaderMap Map<String, String> fspiopHeaders,
+                                   @Path("transferId") String transferId,
+                                   @Body ErrorInformationObject errorInformationObject);
 
     record Settings(String baseUrl) { }
 

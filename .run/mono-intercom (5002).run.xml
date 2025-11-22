@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="mono-intercom (5002)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="00 mono">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/mono/intercom/src/main/java/io/mojaloop/mono/intercom/.env" />
+    </option>
+    <module name="mod-mono-intercom" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.mono.intercom.MonoIntercomApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.mojaloop.mono.intercom.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

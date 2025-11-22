@@ -32,7 +32,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, AccountId>, JpaSpecificationExecutor<Account> {
+public interface AccountRepository
+    extends JpaRepository<Account, AccountId>, JpaSpecificationExecutor<Account> {
 
     class Filters {
 

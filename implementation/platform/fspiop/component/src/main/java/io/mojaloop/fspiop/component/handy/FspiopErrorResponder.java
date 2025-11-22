@@ -28,7 +28,8 @@ import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
 
 public class FspiopErrorResponder {
 
-    public static void toPayer(Payer payer, Exception exception, ActionToPayer action) throws Exception {
+    public static void toPayer(Payer payer, Exception exception, ActionToPayer action)
+        throws Exception {
 
         if (payer == null || payer.isEmpty()) {
 

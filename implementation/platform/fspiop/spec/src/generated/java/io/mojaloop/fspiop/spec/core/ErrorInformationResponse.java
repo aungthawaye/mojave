@@ -11,7 +11,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ErrorInformationResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ErrorInformationResponse {
 
     private ErrorInformation errorInformation;

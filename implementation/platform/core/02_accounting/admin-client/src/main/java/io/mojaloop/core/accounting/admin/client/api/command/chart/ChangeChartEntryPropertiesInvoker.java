@@ -34,7 +34,8 @@ public class ChangeChartEntryPropertiesInvoker implements ChangeChartEntryProper
 
     private final ObjectMapper objectMapper;
 
-    public ChangeChartEntryPropertiesInvoker(final AccountingAdminService.ChartCommand chartCommand, final ObjectMapper objectMapper) {
+    public ChangeChartEntryPropertiesInvoker(final AccountingAdminService.ChartCommand chartCommand,
+                                             final ObjectMapper objectMapper) {
 
         assert chartCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class ChangeChartEntryPropertiesInvoker implements ChangeChartEntryProper
 
         try {
 
-            return RetrofitService.invoke(this.chartCommand.changeEntryProperties(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartCommand.changeEntryProperties(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

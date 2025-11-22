@@ -58,9 +58,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom.controller")
-@Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-final class AccountingIntercomConfiguration extends JacksonWebMvcExtension
-    implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@Import(value = {OpenApiConfiguration.class,
+                 AccountingDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class})
+final class AccountingIntercomConfiguration extends JacksonWebMvcExtension implements
+                                                                           AccountingDomainConfiguration.RequiredBeans,
+                                                                           SpringSecurityConfiguration.RequiredBeans,
+                                                                           SpringSecurityConfiguration.RequiredSettings {
 
     private final Ledger ledger;
 
@@ -87,15 +92,22 @@ final class AccountingIntercomConfiguration extends JacksonWebMvcExtension
 
         this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
 
-        this.accountCache = new AccountTimerCache(accountRepository, Integer.parseInt(System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.accountCache = new AccountTimerCache(
+            accountRepository, Integer.parseInt(
+            System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
         this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
 
-        this.chartEntryCache = new ChartEntryTimerCache(chartEntryRepository,
-            Integer.parseInt(System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.chartEntryCache = new ChartEntryTimerCache(
+            chartEntryRepository, Integer.parseInt(
+            System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
-        this.flowDefinitionCache = new FlowDefinitionTimerCache(flowDefinitionRepository,
-            Integer.parseInt(System.getenv().getOrDefault("FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.flowDefinitionCache = new FlowDefinitionTimerCache(
+            flowDefinitionRepository,
+            Integer.parseInt(System
+                                 .getenv()
+                                 .getOrDefault(
+                                     "FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
     }
 
@@ -156,12 +168,14 @@ final class AccountingIntercomConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

@@ -45,7 +45,8 @@ public class RespondErrorToPayer {
 
     private final AddStepPublisher addStepPublisher;
 
-    public RespondErrorToPayer(RespondTransfers respondTransfers, AddStepPublisher addStepPublisher) {
+    public RespondErrorToPayer(RespondTransfers respondTransfers,
+                               AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -67,11 +68,21 @@ public class RespondErrorToPayer {
             errors.put("sendBackTo", input.sendBackTo.fspCode());
             errors.put("url", input.url);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, errors, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, errors,
+                    StepPhase.BEFORE));
 
-            FspiopErrorResponder.toPayer(input.sendBackTo, input.exception, (payer, error) -> this.respondTransfers.putTransfersError(input.sendBackTo, input.url, error));
+            FspiopErrorResponder.toPayer(
+                input.sendBackTo, input.exception,
+                (payer, error) -> this.respondTransfers.putTransfersError(
+                    input.sendBackTo,
+                    input.url, error));
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
+                    StepPhase.AFTER));
 
         } catch (FspiopException e) {
 
@@ -83,14 +94,21 @@ public class RespondErrorToPayer {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 
     }
 
-    public record Input(String context, TransactionId transactionId, Payer sendBackTo, String url, Exception exception) {
+    public record Input(String context,
+                        TransactionId transactionId,
+                        Payer sendBackTo,
+                        String url,
+                        Exception exception) {
 
     }
 

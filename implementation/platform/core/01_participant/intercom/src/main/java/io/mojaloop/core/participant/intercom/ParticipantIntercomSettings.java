@@ -26,7 +26,8 @@ import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import org.springframework.context.annotation.Bean;
 
-final class ParticipantIntercomSettings implements ParticipantIntercomConfiguration.RequiredSettings {
+final class ParticipantIntercomSettings
+    implements ParticipantIntercomConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -39,8 +40,10 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     @Override
     public FlywayMigration.Settings participantFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"), System.getenv("PCP_FLYWAY_DB_PASSWORD"),
-            "flyway_participant_history", new String[]{"classpath:migration/participant"});
+        return new FlywayMigration.Settings(
+            System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
+            System.getenv("PCP_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
+            new String[]{"classpath:migration/participant"});
 
     }
 
@@ -48,10 +51,13 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("PCP_READ_DB_URL"), System.getenv("PCP_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("PCP_READ_DB_URL"), System.getenv("PCP_READ_DB_USER"),
             System.getenv("PCP_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("participant-intercom-read", Integer.parseInt(System.getenv("PCP_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "participant-intercom-read",
+            Integer.parseInt(System.getenv("PCP_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("PCP_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -61,10 +67,13 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("PCP_WRITE_DB_URL"), System.getenv("PCP_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("PCP_WRITE_DB_URL"), System.getenv("PCP_WRITE_DB_USER"),
             System.getenv("PCP_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("participant-intercom-write", Integer.parseInt(System.getenv("PCP_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "participant-intercom-write",
+            Integer.parseInt(System.getenv("PCP_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("PCP_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -81,7 +90,8 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     @Override
     public ParticipantIntercomConfiguration.TomcatSettings tomcatSettings() {
 
-        return new ParticipantIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv("PARTICIPANT_INTERCOM_PORT")));
+        return new ParticipantIntercomConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("PARTICIPANT_INTERCOM_PORT")));
     }
 
 }

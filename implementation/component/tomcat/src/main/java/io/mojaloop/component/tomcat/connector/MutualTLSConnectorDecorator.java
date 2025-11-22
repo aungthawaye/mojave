@@ -93,14 +93,18 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
         return this.settings.port();
     }
 
-    private void addKeyStore(SSLHostConfig sslHostConfig, Settings.KeyStoreSettings keyStoreSettings) {
+    private void addKeyStore(SSLHostConfig sslHostConfig,
+                             Settings.KeyStoreSettings keyStoreSettings) {
 
-        try (var in = P12Reader.read(keyStoreSettings.contentType(), keyStoreSettings.contentValue())) {
+        try (var in = P12Reader.read(
+            keyStoreSettings.contentType(),
+            keyStoreSettings.contentValue())) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, keyStoreSettings.storePassword().toCharArray());
 
-            var certificate = new SSLHostConfigCertificate(sslHostConfig, SSLHostConfigCertificate.Type.RSA);
+            var certificate = new SSLHostConfigCertificate(
+                sslHostConfig, SSLHostConfigCertificate.Type.RSA);
 
             certificate.setCertificateKeystore(keyStore);
 
@@ -111,32 +115,46 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
 
             sslHostConfig.addCertificate(certificate);
 
-        } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException e) {
+        } catch (IOException | KeyStoreException | CertificateException |
+                 NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void setTrustStore(SSLHostConfig sslHostConfig, Settings.TrustStoreSettings trustStoreSettings) {
+    private void setTrustStore(SSLHostConfig sslHostConfig,
+                               Settings.TrustStoreSettings trustStoreSettings) {
 
-        try (var in = P12Reader.read(trustStoreSettings.contentType(), trustStoreSettings.contentValue())) {
+        try (var in = P12Reader.read(
+            trustStoreSettings.contentType(),
+            trustStoreSettings.contentValue())) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, trustStoreSettings.storePassword().toCharArray());
 
             sslHostConfig.setTrustStore(keyStore);
 
-        } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException e) {
+        } catch (IOException | KeyStoreException | CertificateException |
+                 NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public record Settings(int port, int maxThreads, int connectionTimeout, TrustStoreSettings trustStoreSettings, KeyStoreSettings... keyStoreSettings) {
+    public record Settings(int port,
+                           int maxThreads,
+                           int connectionTimeout,
+                           TrustStoreSettings trustStoreSettings,
+                           KeyStoreSettings... keyStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String storePassword, String keyAlias) {
+        public record KeyStoreSettings(P12Reader.ContentType contentType,
+                                       String contentValue,
+                                       String storePassword,
+                                       String keyAlias) {
 
         }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String storePassword) { }
+        public record TrustStoreSettings(P12Reader.ContentType contentType,
+                                         String contentValue,
+                                         String storePassword) { }
 
     }
 

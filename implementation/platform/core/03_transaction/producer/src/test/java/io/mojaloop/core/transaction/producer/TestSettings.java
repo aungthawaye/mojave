@@ -25,7 +25,8 @@ import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientCon
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
 import org.springframework.context.annotation.Bean;
 
-public class TestSettings implements TransactionProducerConfiguration.RequiredSettings, TransactionIntercomClientConfiguration.RequiredSettings {
+public class TestSettings implements TransactionProducerConfiguration.RequiredSettings,
+                                     TransactionIntercomClientConfiguration.RequiredSettings {
 
     @Bean
     @Override

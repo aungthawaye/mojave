@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransactionType")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransactionType {
 
     private TransactionScenario scenario;
@@ -34,9 +35,12 @@ public class TransactionType {
     }
 
     @JsonCreator
-    public TransactionType(@JsonProperty(required = true, value = "scenario") TransactionScenario scenario,
-                           @JsonProperty(required = true, value = "initiator") TransactionInitiator initiator,
-                           @JsonProperty(required = true, value = "initiatorType") TransactionInitiatorType initiatorType) {
+    public TransactionType(@JsonProperty(required = true,
+                                         value = "scenario") TransactionScenario scenario,
+                           @JsonProperty(required = true,
+                                         value = "initiator") TransactionInitiator initiator,
+                           @JsonProperty(required = true,
+                                         value = "initiatorType") TransactionInitiatorType initiatorType) {
 
         this.scenario = scenario;
         this.initiator = initiator;
@@ -62,9 +66,12 @@ public class TransactionType {
             return false;
         }
         TransactionType transactionType = (TransactionType) o;
-        return Objects.equals(this.scenario, transactionType.scenario) && Objects.equals(this.subScenario, transactionType.subScenario) &&
-                   Objects.equals(this.initiator, transactionType.initiator) && Objects.equals(this.initiatorType, transactionType.initiatorType) &&
-                   Objects.equals(this.refundInfo, transactionType.refundInfo) && Objects.equals(this.balanceOfPayments, transactionType.balanceOfPayments);
+        return Objects.equals(this.scenario, transactionType.scenario) &&
+                   Objects.equals(this.subScenario, transactionType.subScenario) &&
+                   Objects.equals(this.initiator, transactionType.initiator) &&
+                   Objects.equals(this.initiatorType, transactionType.initiatorType) &&
+                   Objects.equals(this.refundInfo, transactionType.refundInfo) &&
+                   Objects.equals(this.balanceOfPayments, transactionType.balanceOfPayments);
     }
 
     @JsonProperty("balanceOfPayments")
@@ -148,7 +155,8 @@ public class TransactionType {
     @Override
     public int hashCode() {
 
-        return Objects.hash(scenario, subScenario, initiator, initiatorType, refundInfo, balanceOfPayments);
+        return Objects.hash(
+            scenario, subScenario, initiator, initiatorType, refundInfo, balanceOfPayments);
     }
 
     /**
@@ -203,7 +211,10 @@ public class TransactionType {
         sb.append("    initiator: ").append(toIndentedString(initiator)).append("\n");
         sb.append("    initiatorType: ").append(toIndentedString(initiatorType)).append("\n");
         sb.append("    refundInfo: ").append(toIndentedString(refundInfo)).append("\n");
-        sb.append("    balanceOfPayments: ").append(toIndentedString(balanceOfPayments)).append("\n");
+        sb
+            .append("    balanceOfPayments: ")
+            .append(toIndentedString(balanceOfPayments))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -59,14 +59,17 @@ public class PartiesController {
     }
 
     @GetMapping("/parties/{partyIdType}/{partyId}")
-    public ResponseEntity<?> getParties(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getParties(@PathVariable PartyIdType partyIdType,
+                                        @PathVariable String partyId,
+                                        HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received GET /parties/{}/{}", partyIdType, partyId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new GetPartiesEvent(new GetPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, null));
+        var event = new GetPartiesEvent(
+            new GetPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, null));
 
         LOGGER.info("Publishing GetPartiesEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -76,15 +79,18 @@ public class PartiesController {
     }
 
     @GetMapping("/parties/{partyIdType}/{partyId}/{subId}")
-    public ResponseEntity<?> getPartiesWithSubId(@PathVariable PartyIdType partyIdType, @PathVariable String partyId, @PathVariable String subId, HttpServletRequest request)
-        throws IOException {
+    public ResponseEntity<?> getPartiesWithSubId(@PathVariable PartyIdType partyIdType,
+                                                 @PathVariable String partyId,
+                                                 @PathVariable String subId,
+                                                 HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received GET /parties/{}/{}/{}", partyIdType, partyId, subId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new GetPartiesEvent(new GetPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId));
+        var event = new GetPartiesEvent(
+            new GetPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId));
 
         LOGGER.info("Publishing GetPartiesEvent (subId) : [{}]", event);
         this.eventPublisher.publish(event);
@@ -104,7 +110,8 @@ public class PartiesController {
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutPartiesEvent(new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, null, response));
+        var event = new PutPartiesEvent(
+            new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, null, response));
 
         LOGGER.info("Publishing PutPartiesEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -124,7 +131,8 @@ public class PartiesController {
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutPartiesErrorEvent(new PutPartiesErrorCommand.Input(fspiopHttpRequest, partyIdType, partyId, null, error));
+        var event = new PutPartiesErrorEvent(
+            new PutPartiesErrorCommand.Input(fspiopHttpRequest, partyIdType, partyId, null, error));
 
         LOGGER.info("Publishing PutPartiesErrorEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -138,14 +146,18 @@ public class PartiesController {
                                                       @PathVariable String partyId,
                                                       @PathVariable String subId,
                                                       @RequestBody ErrorInformationObject error,
-                                                      HttpServletRequest request) throws IOException {
+                                                      HttpServletRequest request)
+        throws IOException {
 
         LOGGER.info("Received PUT /parties/{}/{}/{}/error", partyIdType, partyId, subId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutPartiesErrorEvent(new PutPartiesErrorCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId, error));
+        var event = new PutPartiesErrorEvent(
+            new PutPartiesErrorCommand.Input(
+                fspiopHttpRequest, partyIdType, partyId, subId,
+                error));
 
         LOGGER.info("Publishing PutPartiesErrorEvent (subId) : [{}]", event);
         this.eventPublisher.publish(event);
@@ -166,7 +178,8 @@ public class PartiesController {
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutPartiesEvent(new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId, response));
+        var event = new PutPartiesEvent(
+            new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId, response));
 
         LOGGER.info("Publishing PutPartiesEvent (subId) : [{}]", event);
         this.eventPublisher.publish(event);

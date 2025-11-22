@@ -25,8 +25,10 @@ public class SettlementUpdateBySettlementParticipantAccount {
     }
 
     @JsonCreator
-    public SettlementUpdateBySettlementParticipantAccount(@JsonProperty(required = true, value = "state") StateEnum state,
-                                                          @JsonProperty(required = true, value = "reason") String reason) {
+    public SettlementUpdateBySettlementParticipantAccount(@JsonProperty(required = true,
+                                                                        value = "state") StateEnum state,
+                                                          @JsonProperty(required = true,
+                                                                        value = "reason") String reason) {
 
         this.state = state;
         this.reason = reason;
@@ -43,8 +45,12 @@ public class SettlementUpdateBySettlementParticipantAccount {
         }
         SettlementUpdateBySettlementParticipantAccount settlementUpdateBySettlementParticipantAccount = (SettlementUpdateBySettlementParticipantAccount) o;
         return Objects.equals(this.state, settlementUpdateBySettlementParticipantAccount.state) &&
-                   Objects.equals(this.reason, settlementUpdateBySettlementParticipantAccount.reason) &&
-                   Objects.equals(this.externalReference, settlementUpdateBySettlementParticipantAccount.externalReference);
+                   Objects.equals(
+                       this.reason,
+                       settlementUpdateBySettlementParticipantAccount.reason) &&
+                   Objects.equals(
+                       this.externalReference,
+                       settlementUpdateBySettlementParticipantAccount.externalReference);
     }
 
     /**
@@ -123,7 +129,10 @@ public class SettlementUpdateBySettlementParticipantAccount {
 
         sb.append("    state: ").append(toIndentedString(state)).append("\n");
         sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
-        sb.append("    externalReference: ").append(toIndentedString(externalReference)).append("\n");
+        sb
+            .append("    externalReference: ")
+            .append(toIndentedString(externalReference))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

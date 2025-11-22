@@ -28,7 +28,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ChartRepository extends JpaRepository<Chart, ChartId>, JpaSpecificationExecutor<Chart> {
+public interface ChartRepository
+    extends JpaRepository<Chart, ChartId>, JpaSpecificationExecutor<Chart> {
 
     class Filters {
 

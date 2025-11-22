@@ -37,7 +37,8 @@ public class CommitReservationInvoker implements CommitReservationCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CommitReservationInvoker(final WalletIntercomService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public CommitReservationInvoker(final WalletIntercomService.PositionCommand positionCommand,
+                                    final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -51,7 +52,12 @@ public class CommitReservationInvoker implements CommitReservationCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.commit(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.commit(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

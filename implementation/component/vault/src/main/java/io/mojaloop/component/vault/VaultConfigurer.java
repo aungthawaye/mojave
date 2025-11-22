@@ -49,9 +49,13 @@ public class VaultConfigurer {
 
         public static Settings withPropertyOrEnv() {
 
-            var address = System.getenv("VAULT_ADDR") == null ? System.getProperty("VAULT_ADDR") : System.getenv("VAULT_ADDR");
-            var token = System.getenv("VAULT_TOKEN") == null ? System.getProperty("VAULT_TOKEN") : System.getenv("VAULT_TOKEN");
-            var enginePath = System.getenv("VAULT_SECRET_PATH") == null ? System.getProperty("VAULT_SECRET_PATH") : System.getenv("VAULT_SECRET_PATH");
+            var address = System.getenv("VAULT_ADDR") == null ? System.getProperty("VAULT_ADDR") :
+                              System.getenv("VAULT_ADDR");
+            var token = System.getenv("VAULT_TOKEN") == null ? System.getProperty("VAULT_TOKEN") :
+                            System.getenv("VAULT_TOKEN");
+            var enginePath = System.getenv("VAULT_SECRET_PATH") == null ?
+                                 System.getProperty("VAULT_SECRET_PATH") :
+                                 System.getenv("VAULT_SECRET_PATH");
 
             return new Settings(address, token, enginePath);
         }

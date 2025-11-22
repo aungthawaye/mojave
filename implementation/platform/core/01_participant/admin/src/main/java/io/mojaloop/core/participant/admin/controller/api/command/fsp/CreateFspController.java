@@ -39,7 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreateFspController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateFspController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CreateFspController.class.getName());
 
     private final CreateFspCommand createFspCommand;
 

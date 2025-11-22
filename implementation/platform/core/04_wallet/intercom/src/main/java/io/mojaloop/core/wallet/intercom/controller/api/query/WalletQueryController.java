@@ -39,7 +39,8 @@ import java.util.List;
 @RestController
 public class WalletQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WalletQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        WalletQueryController.class.getName());
 
     private final WalletQuery walletQuery;
 
@@ -61,7 +62,8 @@ public class WalletQueryController {
     @GetMapping("/wallets/get-by-owner-id-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<WalletData> get(@RequestParam final WalletOwnerId ownerId, @RequestParam final Currency currency) {
+    public List<WalletData> get(@RequestParam final WalletOwnerId ownerId,
+                                @RequestParam final Currency currency) {
 
         return this.walletQuery.get(ownerId, currency);
     }

@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransfersIDPatchResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransfersIDPatchResponse {
 
     private String completedTimestamp;
@@ -28,8 +29,10 @@ public class TransfersIDPatchResponse {
     }
 
     @JsonCreator
-    public TransfersIDPatchResponse(@JsonProperty(required = true, value = "completedTimestamp") String completedTimestamp,
-                                    @JsonProperty(required = true, value = "transferState") TransferState transferState) {
+    public TransfersIDPatchResponse(@JsonProperty(required = true,
+                                                  value = "completedTimestamp") String completedTimestamp,
+                                    @JsonProperty(required = true,
+                                                  value = "transferState") TransferState transferState) {
 
         this.completedTimestamp = completedTimestamp;
         this.transferState = transferState;
@@ -54,8 +57,10 @@ public class TransfersIDPatchResponse {
             return false;
         }
         TransfersIDPatchResponse transfersIDPatchResponse = (TransfersIDPatchResponse) o;
-        return Objects.equals(this.completedTimestamp, transfersIDPatchResponse.completedTimestamp) && Objects.equals(this.transferState, transfersIDPatchResponse.transferState) &&
-                   Objects.equals(this.extensionList, transfersIDPatchResponse.extensionList);
+        return
+            Objects.equals(this.completedTimestamp, transfersIDPatchResponse.completedTimestamp) &&
+                Objects.equals(this.transferState, transfersIDPatchResponse.transferState) &&
+                Objects.equals(this.extensionList, transfersIDPatchResponse.extensionList);
     }
 
     /**
@@ -118,7 +123,10 @@ public class TransfersIDPatchResponse {
         StringBuilder sb = new StringBuilder();
         sb.append("class TransfersIDPatchResponse {\n");
 
-        sb.append("    completedTimestamp: ").append(toIndentedString(completedTimestamp)).append("\n");
+        sb
+            .append("    completedTimestamp: ")
+            .append(toIndentedString(completedTimestamp))
+            .append("\n");
         sb.append("    transferState: ").append(toIndentedString(transferState)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

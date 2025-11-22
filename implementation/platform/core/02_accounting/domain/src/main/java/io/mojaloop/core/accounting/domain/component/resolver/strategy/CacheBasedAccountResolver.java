@@ -39,7 +39,9 @@ public class CacheBasedAccountResolver implements AccountResolver {
     }
 
     @Override
-    public AccountData resolve(ChartEntryId chartEntryId, AccountOwnerId accountOwnerId, Currency currency) {
+    public AccountData resolve(ChartEntryId chartEntryId,
+                               AccountOwnerId accountOwnerId,
+                               Currency currency) {
 
         return this.accountCache.get(chartEntryId, accountOwnerId, currency);
     }

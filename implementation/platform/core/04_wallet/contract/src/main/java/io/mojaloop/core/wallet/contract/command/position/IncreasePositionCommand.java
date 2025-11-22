@@ -39,7 +39,8 @@ import java.time.Instant;
 
 public interface IncreasePositionCommand {
 
-    Output execute(Input input) throws NoPositionUpdateForTransactionException, PositionLimitExceededException;
+    Output execute(Input input)
+        throws NoPositionUpdateForTransactionException, PositionLimitExceededException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
                  @JsonProperty(required = true) @NotNull Currency currency,

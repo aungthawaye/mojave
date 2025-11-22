@@ -30,7 +30,8 @@ public class SettlementUpdateBySettlementIDOuterPayload {
         return this;
     }
 
-    public SettlementUpdateBySettlementIDOuterPayload addAccountsItem(SettlementUpdateBySettlementIdInnerPayload accountsItem) {
+    public SettlementUpdateBySettlementIDOuterPayload addAccountsItem(
+        SettlementUpdateBySettlementIdInnerPayload accountsItem) {
 
         if (this.accounts == null) {
             this.accounts = new ArrayList<>();
@@ -50,7 +51,10 @@ public class SettlementUpdateBySettlementIDOuterPayload {
             return false;
         }
         SettlementUpdateBySettlementIDOuterPayload settlementUpdateBySettlementIDOuterPayload = (SettlementUpdateBySettlementIDOuterPayload) o;
-        return Objects.equals(this.id, settlementUpdateBySettlementIDOuterPayload.id) && Objects.equals(this.accounts, settlementUpdateBySettlementIDOuterPayload.accounts);
+        return Objects.equals(this.id, settlementUpdateBySettlementIDOuterPayload.id) &&
+                   Objects.equals(
+                       this.accounts,
+                       settlementUpdateBySettlementIDOuterPayload.accounts);
     }
 
     @JsonProperty("accounts")
@@ -93,7 +97,8 @@ public class SettlementUpdateBySettlementIDOuterPayload {
         return this;
     }
 
-    public SettlementUpdateBySettlementIDOuterPayload removeAccountsItem(SettlementUpdateBySettlementIdInnerPayload accountsItem) {
+    public SettlementUpdateBySettlementIDOuterPayload removeAccountsItem(
+        SettlementUpdateBySettlementIdInnerPayload accountsItem) {
 
         if (accountsItem != null && this.accounts != null) {
             this.accounts.remove(accountsItem);

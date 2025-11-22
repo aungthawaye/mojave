@@ -76,7 +76,8 @@ public class CreateHubCommandHandler implements CreateHubCommand {
 
         if (existing >= 1) {
 
-            LOGGER.info("Hub limit reached. existing={} -> throwing HubLimitReachedException", existing);
+            LOGGER.info(
+                "Hub limit reached. existing={} -> throwing HubLimitReachedException", existing);
             throw new HubCountLimitReachedException();
         }
 

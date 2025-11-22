@@ -39,7 +39,8 @@ import java.util.List;
 @RestController
 public class PositionQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PositionQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PositionQueryController.class.getName());
 
     private final PositionQuery positionQuery;
 
@@ -61,7 +62,8 @@ public class PositionQueryController {
     @GetMapping("/positions/get-by-owner-id-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<PositionData> get(@RequestParam final WalletOwnerId ownerId, @RequestParam final Currency currency) {
+    public List<PositionData> get(@RequestParam final WalletOwnerId ownerId,
+                                  @RequestParam final Currency currency) {
 
         return this.positionQuery.get(ownerId, currency);
     }

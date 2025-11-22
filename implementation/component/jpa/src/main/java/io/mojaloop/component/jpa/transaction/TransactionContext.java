@@ -97,7 +97,11 @@ public final class TransactionContext {
         }
     }
 
-    private static void start(PlatformTransactionManager txManager, String name, String routingKey, int propagation, int isolation) {
+    private static void start(PlatformTransactionManager txManager,
+                              String name,
+                              String routingKey,
+                              int propagation,
+                              int isolation) {
 
         if (CURRENT.get() != null) {
             LOGGER.warn("Transaction already started for this thread.");
@@ -123,22 +127,32 @@ public final class TransactionContext {
 
     public static void start(PlatformTransactionManager txManager, String name) {
 
-        start(txManager, name, null, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED);
+        start(
+            txManager, name, null, TransactionDefinition.PROPAGATION_REQUIRED,
+            TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
 
     public static void start(PlatformTransactionManager txManager, String name, String routingKey) {
 
-        start(txManager, name, routingKey, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED);
+        start(
+            txManager, name, routingKey, TransactionDefinition.PROPAGATION_REQUIRED,
+            TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
 
     public static void startNew(PlatformTransactionManager txManager, String name) {
 
-        start(txManager, name, null, TransactionDefinition.PROPAGATION_REQUIRES_NEW, TransactionDefinition.ISOLATION_READ_COMMITTED);
+        start(
+            txManager, name, null, TransactionDefinition.PROPAGATION_REQUIRES_NEW,
+            TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
 
-    public static void startNew(PlatformTransactionManager txManager, String name, String routingKey) {
+    public static void startNew(PlatformTransactionManager txManager,
+                                String name,
+                                String routingKey) {
 
-        start(txManager, name, routingKey, TransactionDefinition.PROPAGATION_REQUIRES_NEW, TransactionDefinition.ISOLATION_READ_COMMITTED);
+        start(
+            txManager, name, routingKey, TransactionDefinition.PROPAGATION_REQUIRES_NEW,
+            TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
 
 }

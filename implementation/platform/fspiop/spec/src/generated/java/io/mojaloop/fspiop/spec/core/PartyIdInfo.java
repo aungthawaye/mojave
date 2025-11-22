@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("PartyIdInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class PartyIdInfo {
 
     private PartyIdType partyIdType;
@@ -32,8 +33,10 @@ public class PartyIdInfo {
     }
 
     @JsonCreator
-    public PartyIdInfo(@JsonProperty(required = true, value = "partyIdType") PartyIdType partyIdType,
-                       @JsonProperty(required = true, value = "partyIdentifier") String partyIdentifier) {
+    public PartyIdInfo(@JsonProperty(required = true,
+                                     value = "partyIdType") PartyIdType partyIdType,
+                       @JsonProperty(required = true,
+                                     value = "partyIdentifier") String partyIdentifier) {
 
         this.partyIdType = partyIdType;
         this.partyIdentifier = partyIdentifier;
@@ -49,8 +52,10 @@ public class PartyIdInfo {
             return false;
         }
         PartyIdInfo partyIdInfo = (PartyIdInfo) o;
-        return Objects.equals(this.partyIdType, partyIdInfo.partyIdType) && Objects.equals(this.partyIdentifier, partyIdInfo.partyIdentifier) &&
-                   Objects.equals(this.partySubIdOrType, partyIdInfo.partySubIdOrType) && Objects.equals(this.fspId, partyIdInfo.fspId) &&
+        return Objects.equals(this.partyIdType, partyIdInfo.partyIdType) &&
+                   Objects.equals(this.partyIdentifier, partyIdInfo.partyIdentifier) &&
+                   Objects.equals(this.partySubIdOrType, partyIdInfo.partySubIdOrType) &&
+                   Objects.equals(this.fspId, partyIdInfo.fspId) &&
                    Objects.equals(this.extensionList, partyIdInfo.extensionList);
     }
 

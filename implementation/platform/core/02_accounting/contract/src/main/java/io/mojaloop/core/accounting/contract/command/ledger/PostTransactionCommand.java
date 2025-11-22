@@ -45,8 +45,11 @@ import java.util.Map;
 
 public interface PostTransactionCommand {
 
-    Output execute(Input input)
-        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException;
+    Output execute(Input input) throws
+                                InsufficientBalanceInAccountException,
+                                OverdraftLimitReachedInAccountException,
+                                DuplicatePostingInLedgerException,
+                                RestoreFailedInAccountException;
 
     record Input(@JsonProperty(required = true) @NotNull TransactionType transactionType,
                  @JsonProperty(required = true) @NotNull Currency currency,
@@ -57,7 +60,11 @@ public interface PostTransactionCommand {
 
     }
 
-    record Output(TransactionId transactionId, Instant transactionAt, TransactionType transactionType, FlowDefinitionId flowDefinitionId, List<Movement> movements) {
+    record Output(TransactionId transactionId,
+                  Instant transactionAt,
+                  TransactionType transactionType,
+                  FlowDefinitionId flowDefinitionId,
+                  List<Movement> movements) {
 
         public record Movement(LedgerMovementId ledgerMovementId,
                                AccountId accountId,

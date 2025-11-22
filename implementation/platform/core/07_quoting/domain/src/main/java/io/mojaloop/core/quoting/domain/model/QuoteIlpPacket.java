@@ -60,7 +60,10 @@ public class QuoteIlpPacket extends JpaEntity<QuoteId> {
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "quote_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "quote_ilp_packet_quote_FK"))
+    @JoinColumn(name = "quote_id",
+                nullable = false,
+                updatable = false,
+                foreignKey = @ForeignKey(name = "quote_ilp_packet_quote_FK"))
     protected Quote quote;
 
     public QuoteIlpPacket(Quote quote) {

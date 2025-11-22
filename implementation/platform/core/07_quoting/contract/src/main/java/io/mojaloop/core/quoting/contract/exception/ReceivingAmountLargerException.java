@@ -39,9 +39,13 @@ public class ReceivingAmountLargerException extends CheckedDomainException {
 
     private final BigDecimal transferAmount;
 
-    public ReceivingAmountLargerException(final BigDecimal receivingAmount, final BigDecimal transferAmount) {
+    public ReceivingAmountLargerException(final BigDecimal receivingAmount,
+                                          final BigDecimal transferAmount) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{receivingAmount.stripTrailingZeros().toPlainString(), transferAmount.stripTrailingZeros().toPlainString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{receivingAmount.stripTrailingZeros().toPlainString(),
+                         transferAmount.stripTrailingZeros().toPlainString()}));
 
         this.receivingAmount = receivingAmount;
         this.transferAmount = transferAmount;
@@ -60,7 +64,8 @@ public class ReceivingAmountLargerException extends CheckedDomainException {
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.RECEIVING_AMOUNT, this.receivingAmount.stripTrailingZeros().toPlainString());
+        extras.put(
+            Keys.RECEIVING_AMOUNT, this.receivingAmount.stripTrailingZeros().toPlainString());
         extras.put(Keys.TRANSFER_AMOUNT, this.transferAmount.stripTrailingZeros().toPlainString());
 
         return extras;

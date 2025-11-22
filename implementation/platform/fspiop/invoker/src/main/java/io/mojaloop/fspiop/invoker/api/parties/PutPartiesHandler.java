@@ -42,7 +42,9 @@ class PutPartiesHandler implements PutParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PutPartiesHandler(ParticipantContext participantContext, PartiesService partiesService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public PutPartiesHandler(ParticipantContext participantContext,
+                             PartiesService partiesService,
+                             FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert partiesService != null;
@@ -55,13 +57,21 @@ class PutPartiesHandler implements PutParties {
     }
 
     @Override
-    public void putParties(Payer payer, PartyIdType partyIdType, String partyId, PartiesTypeIDPutResponse partiesTypeIDPutResponse) throws FspiopException {
+    public void putParties(Payer payer,
+                           PartyIdType partyIdType,
+                           String partyId,
+                           PartiesTypeIDPutResponse partiesTypeIDPutResponse)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.partiesService.putParties(fspiopHeaders, partyIdType, partyId, partiesTypeIDPutResponse), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesService.putParties(
+                    fspiopHeaders, partyIdType, partyId,
+                    partiesTypeIDPutResponse), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -70,13 +80,22 @@ class PutPartiesHandler implements PutParties {
     }
 
     @Override
-    public void putParties(Payer payer, PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse partiesTypeIDPutResponse) throws FspiopException {
+    public void putParties(Payer payer,
+                           PartyIdType partyIdType,
+                           String partyId,
+                           String subId,
+                           PartiesTypeIDPutResponse partiesTypeIDPutResponse)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.partiesService.putParties(fspiopHeaders, partyIdType, partyId, subId, partiesTypeIDPutResponse), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesService.putParties(
+                    fspiopHeaders, partyIdType, partyId, subId,
+                    partiesTypeIDPutResponse), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -85,13 +104,21 @@ class PutPartiesHandler implements PutParties {
     }
 
     @Override
-    public void putPartiesError(Payer payer, PartyIdType partyIdType, String partyId, ErrorInformationObject errorInformationObject) throws FspiopException {
+    public void putPartiesError(Payer payer,
+                                PartyIdType partyIdType,
+                                String partyId,
+                                ErrorInformationObject errorInformationObject)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.partiesService.putPartiesError(fspiopHeaders, partyIdType, partyId, errorInformationObject), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesService.putPartiesError(
+                    fspiopHeaders, partyIdType, partyId,
+                    errorInformationObject), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -100,13 +127,22 @@ class PutPartiesHandler implements PutParties {
     }
 
     @Override
-    public void putPartiesError(Payer payer, PartyIdType partyIdType, String partyId, String subId, ErrorInformationObject errorInformationObject) throws FspiopException {
+    public void putPartiesError(Payer payer,
+                                PartyIdType partyIdType,
+                                String partyId,
+                                String subId,
+                                ErrorInformationObject errorInformationObject)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.partiesService.putPartiesError(fspiopHeaders, partyIdType, partyId, subId, errorInformationObject), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesService.putPartiesError(
+                    fspiopHeaders, partyIdType, partyId, subId,
+                    errorInformationObject), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

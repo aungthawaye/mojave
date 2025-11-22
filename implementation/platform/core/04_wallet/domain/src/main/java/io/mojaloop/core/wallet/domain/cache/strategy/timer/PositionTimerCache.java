@@ -103,14 +103,15 @@ public class PositionTimerCache implements PositionCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                PositionTimerCache.this.refreshData();
-            }
-        }, this.interval, this.interval);
+                    PositionTimerCache.this.refreshData();
+                }
+            }, this.interval, this.interval);
     }
 
     private void refreshData() {
@@ -118,21 +119,39 @@ public class PositionTimerCache implements PositionCache {
         LOGGER.info("Start refreshing position cache data");
 
         final var positions = this.positionRepository.findAll();
-        final var entries = positions.stream().map(p -> p.convert()).collect(Collectors.toUnmodifiableList());
+        final var entries = positions
+                                .stream()
+                                .map(p -> p.convert())
+                                .collect(Collectors.toUnmodifiableList());
 
-        var _withId = entries.stream().collect(Collectors.toUnmodifiableMap(PositionData::positionId, Function.identity(), (a, b) -> a));
+        var _withId = entries
+                          .stream()
+                          .collect(Collectors.toUnmodifiableMap(
+                              PositionData::positionId,
+                              Function.identity(), (a, b) -> a));
 
-        var _withOwnerCurrency = entries.stream().collect(Collectors.toUnmodifiableMap(e -> key(e.walletOwnerId(), e.currency()), Function.identity(), (a, b) -> a));
+        var _withOwnerCurrency = entries
+                                     .stream()
+                                     .collect(Collectors.toUnmodifiableMap(
+                                         e -> key(e.walletOwnerId(), e.currency()),
+                                         Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(
-            entries.stream().collect(Collectors.groupingBy(PositionData::walletOwnerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(entries
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               PositionData::walletOwnerId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
         LOGGER.info("Refreshed Position cache data, count: {}", entries.size());
 
         this.snapshotRef.set(new Snapshot(_withId, _withOwnerCurrency, _withOwnerId));
     }
 
-    private record Snapshot(Map<PositionId, PositionData> withId, Map<String, PositionData> withOwnerCurrency, Map<WalletOwnerId, Set<PositionData>> withOwnerId) {
+    private record Snapshot(Map<PositionId, PositionData> withId,
+                            Map<String, PositionData> withOwnerCurrency,
+                            Map<WalletOwnerId, Set<PositionData>> withOwnerId) {
 
         static Snapshot empty() {
 

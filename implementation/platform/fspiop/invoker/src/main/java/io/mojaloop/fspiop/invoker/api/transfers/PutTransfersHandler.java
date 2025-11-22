@@ -41,7 +41,9 @@ class PutTransfersHandler implements PutTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PutTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public PutTransfersHandler(ParticipantContext participantContext,
+                               TransfersService transfersService,
+                               FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -53,13 +55,18 @@ class PutTransfersHandler implements PutTransfers {
     }
 
     @Override
-    public void putTransfers(Payer payer, String transferId, TransfersIDPutResponse transfersIDPutResponse) throws FspiopException {
+    public void putTransfers(Payer payer,
+                             String transferId,
+                             TransfersIDPutResponse transfersIDPutResponse) throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.transfersService.putTransfers(fspiopHeaders, transferId, transfersIDPutResponse), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersService.putTransfers(
+                    fspiopHeaders, transferId, transfersIDPutResponse), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -68,12 +75,18 @@ class PutTransfersHandler implements PutTransfers {
     }
 
     @Override
-    public void putTransfersError(Payer payer, String transferId, ErrorInformationObject errorInformationObject) throws FspiopException {
+    public void putTransfersError(Payer payer,
+                                  String transferId,
+                                  ErrorInformationObject errorInformationObject)
+        throws FspiopException {
 
         try {
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.transfersService.putTransfersError(fspiopHeaders, transferId, errorInformationObject), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersService.putTransfersError(
+                    fspiopHeaders, transferId, errorInformationObject), this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

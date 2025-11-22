@@ -41,7 +41,9 @@ class PutQuotesHandler implements PutQuotes {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PutQuotesHandler(ParticipantContext participantContext, QuotesService quotesService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public PutQuotesHandler(ParticipantContext participantContext,
+                            QuotesService quotesService,
+                            FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert quotesService != null;
@@ -53,13 +55,17 @@ class PutQuotesHandler implements PutQuotes {
     }
 
     @Override
-    public void putQuotes(Payer payer, String quoteId, QuotesIDPutResponse quotesIDPutResponse) throws FspiopException {
+    public void putQuotes(Payer payer, String quoteId, QuotesIDPutResponse quotesIDPutResponse)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.quotesService.putQuotes(fspiopHeaders, quoteId, quotesIDPutResponse), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.quotesService.putQuotes(fspiopHeaders, quoteId, quotesIDPutResponse),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -68,13 +74,19 @@ class PutQuotesHandler implements PutQuotes {
     }
 
     @Override
-    public void putQuotesError(Payer payer, String quoteId, ErrorInformationObject errorInformationObject) throws FspiopException {
+    public void putQuotesError(Payer payer,
+                               String quoteId,
+                               ErrorInformationObject errorInformationObject)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.quotesService.putQuotesError(fspiopHeaders, quoteId, errorInformationObject), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.quotesService.putQuotesError(fspiopHeaders, quoteId, errorInformationObject),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

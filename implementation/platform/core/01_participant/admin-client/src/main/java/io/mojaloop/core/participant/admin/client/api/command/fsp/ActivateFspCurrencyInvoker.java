@@ -40,7 +40,8 @@ public class ActivateFspCurrencyInvoker implements ActivateFspCurrencyCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ActivateFspCurrencyInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
+    public ActivateFspCurrencyInvoker(final ParticipantAdminService.FspCommand fspCommand,
+                                      final ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ActivateFspCurrencyInvoker implements ActivateFspCurrencyCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.activateFspCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.activateFspCurrency(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

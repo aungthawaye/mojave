@@ -48,7 +48,8 @@ import java.util.Map;
 @RestController
 public class HandleTransfersController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandleTransfersController.class.getName());
 
     private final EventPublisher eventPublisher;
 
@@ -59,34 +60,44 @@ public class HandleTransfersController {
     }
 
     @PostMapping("/transfers")
-    public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers, @RequestBody TransfersPostRequest request) {
+    public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers,
+                                           @RequestBody TransfersPostRequest request) {
 
         LOGGER.debug("Received POST /transfers : request : {}", request);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PostTransfersEvent(new HandlePostTransfersRequestCommand.Input(payer, request.getTransferId(), request)));
+        this.eventPublisher.publish(new PostTransfersEvent(
+            new HandlePostTransfersRequestCommand.Input(payer, request.getTransferId(), request)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/transfers/{transferId}")
-    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers, @PathVariable String transferId, @RequestBody TransfersIDPutResponse response) {
+    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers,
+                                          @PathVariable String transferId,
+                                          @RequestBody TransfersIDPutResponse response) {
 
         LOGGER.debug("Received PUT /transfers/{} : response : {}", transferId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutTransfersEvent(new HandlePutTransfersResponseCommand.Input(payee, transferId, response)));
+        this.eventPublisher.publish(new PutTransfersEvent(
+            new HandlePutTransfersResponseCommand.Input(payee, transferId, response)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/transfers/{transferId}/error")
-    public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers, @PathVariable String transferId, @RequestBody ErrorInformationObject errorInformation) {
+    public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers,
+                                               @PathVariable String transferId,
+                                               @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug("Received PUT /transfers/{}/error : errorInformation : {}", transferId, errorInformation);
+        LOGGER.debug(
+            "Received PUT /transfers/{}/error : errorInformation : {}", transferId,
+            errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutTransfersErrorEvent(new HandlePutTransfersErrorCommand.Input(payee, transferId, errorInformation)));
+        this.eventPublisher.publish(new PutTransfersErrorEvent(
+            new HandlePutTransfersErrorCommand.Input(payee, transferId, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }

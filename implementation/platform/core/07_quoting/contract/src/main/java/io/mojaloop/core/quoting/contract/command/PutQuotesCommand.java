@@ -28,7 +28,9 @@ public interface PutQuotesCommand {
 
     Output execute(Input input);
 
-    record Input(FspiopHttpRequest request, UdfQuoteId udfQuoteId, QuotesIDPutResponse quotesIDPutResponse) { }
+    record Input(FspiopHttpRequest request,
+                 UdfQuoteId udfQuoteId,
+                 QuotesIDPutResponse quotesIDPutResponse) { }
 
     record Output() { }
 

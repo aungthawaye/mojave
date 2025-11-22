@@ -26,6 +26,7 @@ import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 
 public interface PostTransfers {
 
-    void postTransfers(Payee payee, TransfersPostRequest transfersPostRequest) throws FspiopException;
+    void postTransfers(Payee payee, TransfersPostRequest transfersPostRequest)
+        throws FspiopException;
 
 }

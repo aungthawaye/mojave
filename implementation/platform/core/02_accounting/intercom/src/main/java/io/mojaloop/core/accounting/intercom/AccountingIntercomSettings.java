@@ -33,8 +33,10 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
     @Override
     public FlywayMigration.Settings accountingFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"), System.getenv("ACC_FLYWAY_DB_PASSWORD"),
-            "flyway_accounting_history", new String[]{"classpath:migration/accounting"});
+        return new FlywayMigration.Settings(
+            System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
+            System.getenv("ACC_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"});
 
     }
 
@@ -49,19 +51,24 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
         return new MySqlLedger.LedgerDbSettings(
-            new MySqlLedger.LedgerDbSettings.Connection(System.getenv("ACC_LEDGER_DB_URL"), System.getenv("ACC_LEDGER_DB_USER"), System.getenv("ACC_LEDGER_DB_PASSWORD")),
-            new MySqlLedger.LedgerDbSettings.Pool("accounting-ledger", Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE"))));
+            new MySqlLedger.LedgerDbSettings.Connection(
+                System.getenv("ACC_LEDGER_DB_URL"), System.getenv("ACC_LEDGER_DB_USER"),
+                System.getenv("ACC_LEDGER_DB_PASSWORD")), new MySqlLedger.LedgerDbSettings.Pool(
+            "accounting-ledger", Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE"))));
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
             System.getenv("ACC_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-intercom-read", Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "accounting-intercom-read",
+            Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("ACC_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -71,10 +78,13 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
             System.getenv("ACC_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-intercom-write", Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "accounting-intercom-write",
+            Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("ACC_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -91,7 +101,8 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
     @Override
     public AccountingIntercomConfiguration.TomcatSettings tomcatSettings() {
 
-        return new AccountingIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv("ACCOUNTING_INTERCOM_PORT")));
+        return new AccountingIntercomConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("ACCOUNTING_INTERCOM_PORT")));
     }
 
 }

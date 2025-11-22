@@ -34,7 +34,8 @@ public class ChangeChartNameInvoker implements ChangeChartNameCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ChangeChartNameInvoker(final AccountingAdminService.ChartCommand chartCommand, final ObjectMapper objectMapper) {
+    public ChangeChartNameInvoker(final AccountingAdminService.ChartCommand chartCommand,
+                                  final ObjectMapper objectMapper) {
 
         assert chartCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class ChangeChartNameInvoker implements ChangeChartNameCommand {
 
         try {
 
-            return RetrofitService.invoke(this.chartCommand.changeName(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.chartCommand.changeName(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

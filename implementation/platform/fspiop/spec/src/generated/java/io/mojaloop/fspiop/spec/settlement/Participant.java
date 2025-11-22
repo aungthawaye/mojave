@@ -50,7 +50,8 @@ public class Participant {
             return false;
         }
         Participant participant = (Participant) o;
-        return Objects.equals(this.id, participant.id) && Objects.equals(this.accounts, participant.accounts);
+        return Objects.equals(this.id, participant.id) &&
+                   Objects.equals(this.accounts, participant.accounts);
     }
 
     @JsonProperty("accounts")

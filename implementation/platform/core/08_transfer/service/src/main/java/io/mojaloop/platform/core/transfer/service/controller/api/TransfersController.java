@@ -63,14 +63,16 @@ public class TransfersController {
     }
 
     @GetMapping("/transfers/{transferId}")
-    public ResponseEntity<?> getTransfers(@PathVariable UdfTransferId transferId, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getTransfers(@PathVariable UdfTransferId transferId,
+                                          HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received GET /transfers/{}", transferId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new GetTransfersEvent(new GetTransfersCommand.Input(fspiopHttpRequest, transferId));
+        var event = new GetTransfersEvent(
+            new GetTransfersCommand.Input(fspiopHttpRequest, transferId));
 
         LOGGER.info("Publishing GetTransfersEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -80,14 +82,16 @@ public class TransfersController {
     }
 
     @PostMapping("/transfers")
-    public ResponseEntity<?> postTransfers(@RequestBody TransfersPostRequest requestBody, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> postTransfers(@RequestBody TransfersPostRequest requestBody,
+                                           HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received POST /transfers");
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PostTransfersEvent(new PostTransfersCommand.Input(fspiopHttpRequest, requestBody));
+        var event = new PostTransfersEvent(
+            new PostTransfersCommand.Input(fspiopHttpRequest, requestBody));
 
         LOGGER.info("Publishing PostTransfersEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -97,14 +101,17 @@ public class TransfersController {
     }
 
     @PutMapping("/transfers/{transferId}")
-    public ResponseEntity<?> putTransfers(@PathVariable UdfTransferId transferId, @RequestBody TransfersIDPutResponse response, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> putTransfers(@PathVariable UdfTransferId transferId,
+                                          @RequestBody TransfersIDPutResponse response,
+                                          HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /transfers/{}", transferId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutTransfersEvent(new PutTransfersCommand.Input(fspiopHttpRequest, transferId, response));
+        var event = new PutTransfersEvent(
+            new PutTransfersCommand.Input(fspiopHttpRequest, transferId, response));
 
         LOGGER.info("Publishing PutTransfersEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -114,14 +121,17 @@ public class TransfersController {
     }
 
     @PutMapping("/transfers/{transferId}/error")
-    public ResponseEntity<?> putTransfersError(@PathVariable UdfTransferId transferId, @RequestBody ErrorInformationObject error, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> putTransfersError(@PathVariable UdfTransferId transferId,
+                                               @RequestBody ErrorInformationObject error,
+                                               HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /transfers/{}/error", transferId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutTransfersErrorEvent(new PutTransfersErrorCommand.Input(fspiopHttpRequest, transferId, error));
+        var event = new PutTransfersErrorEvent(
+            new PutTransfersErrorCommand.Input(fspiopHttpRequest, transferId, error));
 
         LOGGER.info("Publishing PutTransfersErrorEvent : [{}]", event);
         this.eventPublisher.publish(event);

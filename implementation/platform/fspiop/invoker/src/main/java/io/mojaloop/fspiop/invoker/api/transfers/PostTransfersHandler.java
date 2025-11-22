@@ -40,7 +40,9 @@ class PostTransfersHandler implements PostTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PostTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public PostTransfersHandler(ParticipantContext participantContext,
+                                TransfersService transfersService,
+                                FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -52,13 +54,17 @@ class PostTransfersHandler implements PostTransfers {
     }
 
     @Override
-    public void postTransfers(Payee payee, TransfersPostRequest transfersPostRequest) throws FspiopException {
+    public void postTransfers(Payee payee, TransfersPostRequest transfersPostRequest)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(), payee.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(
+                this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.transfersService.postTransfers(fspiopHeaders, transfersPostRequest), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersService.postTransfers(fspiopHeaders, transfersPostRequest),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

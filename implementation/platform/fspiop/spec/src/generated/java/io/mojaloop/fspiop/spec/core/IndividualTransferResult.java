@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("IndividualTransferResult")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class IndividualTransferResult {
 
     private String transferId;
@@ -31,7 +32,8 @@ public class IndividualTransferResult {
     }
 
     @JsonCreator
-    public IndividualTransferResult(@JsonProperty(required = true, value = "transferId") String transferId) {
+    public IndividualTransferResult(@JsonProperty(required = true,
+                                                  value = "transferId") String transferId) {
 
         this.transferId = transferId;
     }
@@ -46,8 +48,12 @@ public class IndividualTransferResult {
             return false;
         }
         IndividualTransferResult individualTransferResult = (IndividualTransferResult) o;
-        return Objects.equals(this.transferId, individualTransferResult.transferId) && Objects.equals(this.fulfilment, individualTransferResult.fulfilment) &&
-                   Objects.equals(this.errorInformation, individualTransferResult.errorInformation) && Objects.equals(this.extensionList, individualTransferResult.extensionList);
+        return Objects.equals(this.transferId, individualTransferResult.transferId) &&
+                   Objects.equals(this.fulfilment, individualTransferResult.fulfilment) &&
+                   Objects.equals(
+                       this.errorInformation,
+                       individualTransferResult.errorInformation) &&
+                   Objects.equals(this.extensionList, individualTransferResult.extensionList);
     }
 
     /**

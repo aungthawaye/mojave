@@ -16,7 +16,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ServicesFXPSourceCurrencyTargetCurrencyPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ServicesFXPSourceCurrencyTargetCurrencyPutResponse {
 
     private @Valid List<@Size(min = 1, max = 32) String> providers = new ArrayList<>();
@@ -26,7 +27,10 @@ public class ServicesFXPSourceCurrencyTargetCurrencyPutResponse {
     }
 
     @JsonCreator
-    public ServicesFXPSourceCurrencyTargetCurrencyPutResponse(@JsonProperty(required = true, value = "providers") List<@Size(min = 1, max = 32) String> providers) {
+    public ServicesFXPSourceCurrencyTargetCurrencyPutResponse(@JsonProperty(required = true,
+                                                                            value = "providers") List<@Size(
+        min = 1,
+        max = 32) String> providers) {
 
         this.providers = providers;
     }
@@ -51,7 +55,8 @@ public class ServicesFXPSourceCurrencyTargetCurrencyPutResponse {
             return false;
         }
         ServicesFXPSourceCurrencyTargetCurrencyPutResponse servicesFXPSourceCurrencyTargetCurrencyPutResponse = (ServicesFXPSourceCurrencyTargetCurrencyPutResponse) o;
-        return Objects.equals(this.providers, servicesFXPSourceCurrencyTargetCurrencyPutResponse.providers);
+        return Objects.equals(
+            this.providers, servicesFXPSourceCurrencyTargetCurrencyPutResponse.providers);
     }
 
     @JsonProperty(required = true, value = "providers")
@@ -77,7 +82,8 @@ public class ServicesFXPSourceCurrencyTargetCurrencyPutResponse {
     /**
      * The FSP Id(s) of the participant(s) who offer currency conversion services.
      **/
-    public ServicesFXPSourceCurrencyTargetCurrencyPutResponse providers(List<@Size(min = 1, max = 32) String> providers) {
+    public ServicesFXPSourceCurrencyTargetCurrencyPutResponse providers(List<@Size(min = 1,
+                                                                                   max = 32) String> providers) {
 
         this.providers = providers;
         return this;

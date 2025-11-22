@@ -67,12 +67,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                  AccountingDomainConfiguration.class,
                  WalletDomainConfiguration.class,
                  TransactionDomainConfiguration.class})
-public class MonoIntercomConfiguration extends JacksonWebMvcExtension implements SpringSecurityConfiguration.RequiredBeans,
-                                                                                 ParticipantDomainConfiguration.RequiredBeans,
-                                                                                 AccountingDomainConfiguration.RequiredBeans,
-                                                                                 WalletDomainConfiguration.RequiredBeans,
-                                                                                 TransactionDomainConfiguration.RequiredBeans,
-                                                                                 SpringSecurityConfiguration.RequiredSettings {
+public class MonoIntercomConfiguration extends JacksonWebMvcExtension implements
+                                                                      SpringSecurityConfiguration.RequiredBeans,
+                                                                      ParticipantDomainConfiguration.RequiredBeans,
+                                                                      AccountingDomainConfiguration.RequiredBeans,
+                                                                      WalletDomainConfiguration.RequiredBeans,
+                                                                      TransactionDomainConfiguration.RequiredBeans,
+                                                                      SpringSecurityConfiguration.RequiredSettings {
 
     private final AccountCache accountCache;
 
@@ -211,7 +212,8 @@ public class MonoIntercomConfiguration extends JacksonWebMvcExtension implements
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }

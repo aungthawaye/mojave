@@ -27,7 +27,8 @@ import org.springframework.kafka.core.KafkaAdmin;
 
 public class KafkaTopicConfigurer {
 
-    public static KafkaAdmin.NewTopics newTopics(KafkaAdmin kafkaAdmin, TopicSettings[] topicSettings) {
+    public static KafkaAdmin.NewTopics newTopics(KafkaAdmin kafkaAdmin,
+                                                 TopicSettings[] topicSettings) {
 
         if (topicSettings == null || topicSettings.length == 0) {
             return new KafkaAdmin.NewTopics();
@@ -43,17 +44,25 @@ public class KafkaTopicConfigurer {
                 continue;
             }
 
-            newTopics[i] = TopicBuilder.name(topicSettingsItem.name)
-                                       .partitions(topicSettingsItem.partitions)
-                                       .replicas(topicSettingsItem.replicationFactor)
-                                       .config(TopicConfig.RETENTION_MS_CONFIG, String.valueOf(topicSettingsItem.retentionMs))
-                                       .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE)
-                                       .build();
+            newTopics[i] = TopicBuilder
+                               .name(topicSettingsItem.name)
+                               .partitions(topicSettingsItem.partitions)
+                               .replicas(topicSettingsItem.replicationFactor)
+                               .config(
+                                   TopicConfig.RETENTION_MS_CONFIG,
+                                   String.valueOf(topicSettingsItem.retentionMs))
+                               .config(
+                                   TopicConfig.CLEANUP_POLICY_CONFIG,
+                                   TopicConfig.CLEANUP_POLICY_DELETE)
+                               .build();
         }
 
         return new KafkaAdmin.NewTopics(newTopics);
     }
 
-    public record TopicSettings(String name, int retentionMs, int partitions, short replicationFactor) { }
+    public record TopicSettings(String name,
+                                int retentionMs,
+                                int partitions,
+                                short replicationFactor) { }
 
 }

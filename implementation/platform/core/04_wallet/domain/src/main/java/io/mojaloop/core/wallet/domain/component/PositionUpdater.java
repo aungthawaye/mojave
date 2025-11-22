@@ -32,18 +32,34 @@ import java.time.Instant;
 
 public interface PositionUpdater {
 
-    PositionHistory commit(PositionUpdateId reservationId, PositionUpdateId positionUpdateId) throws CommitFailedException;
+    PositionHistory commit(PositionUpdateId reservationId, PositionUpdateId positionUpdateId)
+        throws CommitFailedException;
 
-    PositionHistory decrease(TransactionId transactionId, Instant transactionAt, PositionUpdateId positionUpdateId, PositionId positionId, BigDecimal amount, String description)
-        throws NoPositionUpdateException;
+    PositionHistory decrease(TransactionId transactionId,
+                             Instant transactionAt,
+                             PositionUpdateId positionUpdateId,
+                             PositionId positionId,
+                             BigDecimal amount,
+                             String description) throws NoPositionUpdateException;
 
-    PositionHistory increase(TransactionId transactionId, Instant transactionAt, PositionUpdateId positionUpdateId, PositionId positionId, BigDecimal amount, String description)
+    PositionHistory increase(TransactionId transactionId,
+                             Instant transactionAt,
+                             PositionUpdateId positionUpdateId,
+                             PositionId positionId,
+                             BigDecimal amount,
+                             String description)
         throws NoPositionUpdateException, LimitExceededException;
 
-    PositionHistory reserve(TransactionId transactionId, Instant transactionAt, PositionUpdateId positionUpdateId, PositionId positionId, BigDecimal amount, String description)
+    PositionHistory reserve(TransactionId transactionId,
+                            Instant transactionAt,
+                            PositionUpdateId positionUpdateId,
+                            PositionId positionId,
+                            BigDecimal amount,
+                            String description)
         throws NoPositionUpdateException, LimitExceededException;
 
-    PositionHistory rollback(PositionUpdateId reservationId, PositionUpdateId positionUpdateId) throws RollbackFailedException;
+    PositionHistory rollback(PositionUpdateId reservationId, PositionUpdateId positionUpdateId)
+        throws RollbackFailedException;
 
     record PositionHistory(PositionUpdateId positionUpdateId,
                            PositionId positionId,
@@ -93,8 +109,10 @@ public interface PositionUpdater {
                                       BigDecimal netDebitCap,
                                       TransactionId transactionId) {
 
-            super("Position limit exceeded for positionId: " + positionId + ", amount: " + amount + ", oldPosition: " + oldPosition + ", oldReserved: " + oldReserved +
-                      ", netDebitCap: " + netDebitCap.stripTrailingZeros().toPlainString() + ", transactionId: " + transactionId);
+            super("Position limit exceeded for positionId: " + positionId + ", amount: " + amount +
+                      ", oldPosition: " + oldPosition + ", oldReserved: " + oldReserved +
+                      ", netDebitCap: " + netDebitCap.stripTrailingZeros().toPlainString() +
+                      ", transactionId: " + transactionId);
 
             this.positionId = positionId;
             this.amount = amount;

@@ -31,7 +31,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PutPartiesErrorEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutPartiesErrorEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PutPartiesErrorEventListener.class);
 
     private final HandlePutPartiesErrorCommand handlePartiesError;
 
@@ -55,7 +56,9 @@ public class PutPartiesErrorEventListener {
         try {
 
             this.handlePartiesError.execute(
-                new HandlePutPartiesErrorCommand.Input(payload.payee(), payload.partyIdType(), payload.partyId(), payload.subId(), payload.errorInformationObject()));
+                new HandlePutPartiesErrorCommand.Input(
+                    payload.payee(), payload.partyIdType(), payload.partyId(), payload.subId(),
+                    payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutPartiesErrorEvent : {}", event);
 

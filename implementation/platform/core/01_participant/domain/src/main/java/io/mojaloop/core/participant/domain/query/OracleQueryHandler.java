@@ -67,13 +67,19 @@ public class OracleQueryHandler implements OracleQuery {
     @Override
     public OracleData get(PartyIdType type) {
 
-        return this.oracleRepository.findOne(OracleRepository.Filters.withType(type)).orElseThrow(() -> new OracleTypeNotFoundException(type)).convert();
+        return this.oracleRepository
+                   .findOne(OracleRepository.Filters.withType(type))
+                   .orElseThrow(() -> new OracleTypeNotFoundException(type))
+                   .convert();
     }
 
     @Override
     public OracleData get(OracleId oracleId) {
 
-        return this.oracleRepository.findById(oracleId).orElseThrow(() -> new OracleIdNotFoundException(oracleId)).convert();
+        return this.oracleRepository
+                   .findById(oracleId)
+                   .orElseThrow(() -> new OracleIdNotFoundException(oracleId))
+                   .convert();
     }
 
     @Override

@@ -58,7 +58,8 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.ParticipantSettings(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
 
     }
 
@@ -66,46 +67,54 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+        return new ParticipantIntercomService.Settings(
+            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
     @Override
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
+        return new ParticipantStoreConfiguration.Settings(
+            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
     }
 
     @Bean
     @Override
     public QuotingDomainConfiguration.QuoteSettings quoteSettings() {
 
-        return new QuotingDomainConfiguration.QuoteSettings(Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
+        return new QuotingDomainConfiguration.QuoteSettings(
+            Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
     }
 
     @Bean
     @Override
     public FlywayMigration.Settings quotingFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"), System.getenv("QOT_FLYWAY_DB_PASSWORD"),
-            "flyway_quoting_history", new String[]{"classpath:migration/quoting"});
+        return new FlywayMigration.Settings(
+            System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"),
+            System.getenv("QOT_FLYWAY_DB_PASSWORD"), "flyway_quoting_history",
+            new String[]{"classpath:migration/quoting"});
     }
 
     @Bean
     @Override
     public QuotingServiceConfiguration.TomcatSettings quotingServiceTomcatSettings() {
 
-        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv("QUOTING_SERVICE_PORT")));
+        return new QuotingServiceConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("QUOTING_SERVICE_PORT")));
     }
 
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("QOT_READ_DB_URL"), System.getenv("QOT_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("QOT_READ_DB_URL"), System.getenv("QOT_READ_DB_USER"),
             System.getenv("QOT_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("quoting-service-read", Integer.parseInt(System.getenv("QOT_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "quoting-service-read", Integer.parseInt(System.getenv("QOT_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("QOT_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -115,10 +124,12 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("QOT_WRITE_DB_URL"), System.getenv("QOT_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("QOT_WRITE_DB_URL"), System.getenv("QOT_WRITE_DB_USER"),
             System.getenv("QOT_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("quoting-service-write", Integer.parseInt(System.getenv("QOT_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "quoting-service-write", Integer.parseInt(System.getenv("QOT_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("QOT_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -135,7 +146,8 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
+        return new FspiopServiceConfiguration.ServiceSettings(
+            Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
             Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
     }
 

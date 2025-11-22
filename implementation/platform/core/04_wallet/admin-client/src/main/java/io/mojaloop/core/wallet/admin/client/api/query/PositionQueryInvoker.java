@@ -40,7 +40,8 @@ public class PositionQueryInvoker implements PositionQuery {
 
     private final ObjectMapper objectMapper;
 
-    public PositionQueryInvoker(final WalletAdminService.PositionQuery positionQuery, final ObjectMapper objectMapper) {
+    public PositionQueryInvoker(final WalletAdminService.PositionQuery positionQuery,
+                                final ObjectMapper objectMapper) {
 
         assert positionQuery != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class PositionQueryInvoker implements PositionQuery {
 
         try {
 
-            return RetrofitService.invoke(this.positionQuery.getByPositionId(positionId),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionQuery.getByPositionId(positionId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -68,8 +73,12 @@ public class PositionQueryInvoker implements PositionQuery {
 
         try {
 
-            return RetrofitService.invoke(this.positionQuery.getByOwnerIdAndCurrency(ownerId, currency),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionQuery.getByOwnerIdAndCurrency(ownerId, currency),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -82,7 +91,12 @@ public class PositionQueryInvoker implements PositionQuery {
 
         try {
 
-            return RetrofitService.invoke(this.positionQuery.getAll(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionQuery.getAll(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

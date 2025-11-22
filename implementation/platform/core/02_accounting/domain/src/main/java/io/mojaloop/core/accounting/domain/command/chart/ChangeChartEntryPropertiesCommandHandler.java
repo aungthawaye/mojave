@@ -51,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChangeChartEntryPropertiesCommandHandler implements ChangeChartEntryPropertiesCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeChartEntryPropertiesCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeChartEntryPropertiesCommandHandler.class);
 
     private final ChartEntryRepository chartEntryRepository;
 
@@ -68,7 +69,9 @@ public class ChangeChartEntryPropertiesCommandHandler implements ChangeChartEntr
 
         LOGGER.info("Executing ChangeChartEntryPropertiesCommand with input: {}", input);
 
-        var entry = this.chartEntryRepository.findById(input.chartEntryId()).orElseThrow(() -> new ChartEntryIdNotFoundException(input.chartEntryId()));
+        var entry = this.chartEntryRepository
+                        .findById(input.chartEntryId())
+                        .orElseThrow(() -> new ChartEntryIdNotFoundException(input.chartEntryId()));
         LOGGER.info("Found ChartEntry with id: {}", input.chartEntryId());
 
         if (input.name() != null) {

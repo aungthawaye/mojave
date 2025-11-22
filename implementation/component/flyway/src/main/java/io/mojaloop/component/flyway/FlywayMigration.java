@@ -26,16 +26,21 @@ public class FlywayMigration {
 
     public static Flyway configure(Settings settings) {
 
-        return Flyway.configure()
-                     .dataSource(settings.url(), settings.username(), settings.password())
-                     .table(settings.table())
-                     .locations(settings.locations())
-                     .validateMigrationNaming(true)
-                     .validateOnMigrate(true)
-                     .baselineOnMigrate(true)
-                     .load();
+        return Flyway
+                   .configure()
+                   .dataSource(settings.url(), settings.username(), settings.password())
+                   .table(settings.table())
+                   .locations(settings.locations())
+                   .validateMigrationNaming(true)
+                   .validateOnMigrate(true)
+                   .baselineOnMigrate(true)
+                   .load();
     }
 
-    public record Settings(String url, String username, String password, String table, String[] locations) { }
+    public record Settings(String url,
+                           String username,
+                           String password,
+                           String table,
+                           String[] locations) { }
 
 }

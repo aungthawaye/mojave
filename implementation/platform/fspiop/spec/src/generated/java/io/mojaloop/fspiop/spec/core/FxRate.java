@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxRate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxRate {
 
     private Money sourceAmount;
@@ -25,7 +26,8 @@ public class FxRate {
     }
 
     @JsonCreator
-    public FxRate(@JsonProperty(required = true, value = "sourceAmount") Money sourceAmount, @JsonProperty(required = true, value = "targetAmount") Money targetAmount) {
+    public FxRate(@JsonProperty(required = true, value = "sourceAmount") Money sourceAmount,
+                  @JsonProperty(required = true, value = "targetAmount") Money targetAmount) {
 
         this.sourceAmount = sourceAmount;
         this.targetAmount = targetAmount;
@@ -41,7 +43,8 @@ public class FxRate {
             return false;
         }
         FxRate fxRate = (FxRate) o;
-        return Objects.equals(this.sourceAmount, fxRate.sourceAmount) && Objects.equals(this.targetAmount, fxRate.targetAmount);
+        return Objects.equals(this.sourceAmount, fxRate.sourceAmount) &&
+                   Objects.equals(this.targetAmount, fxRate.targetAmount);
     }
 
     @JsonProperty(required = true, value = "sourceAmount")

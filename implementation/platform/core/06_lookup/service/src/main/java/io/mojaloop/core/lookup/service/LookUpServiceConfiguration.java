@@ -41,8 +41,11 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service.controller")
-@Import(value = {LookUpDomainConfiguration.class, ParticipantIntercomClientConfiguration.class, FspiopServiceConfiguration.class})
-final class LookUpServiceConfiguration implements LookUpDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
+@Import(value = {LookUpDomainConfiguration.class,
+                 ParticipantIntercomClientConfiguration.class,
+                 FspiopServiceConfiguration.class})
+final class LookUpServiceConfiguration
+    implements LookUpDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
@@ -61,13 +64,15 @@ final class LookUpServiceConfiguration implements LookUpDomainConfiguration.Requ
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings
-        extends LookUpDomainConfiguration.RequiredSettings, ParticipantIntercomClientConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings,
+                                              ParticipantIntercomClientConfiguration.RequiredSettings,
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings lookUpServiceTomcatSettings();
 

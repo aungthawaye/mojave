@@ -30,7 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutPartiesErrorCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePutPartiesErrorCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
@@ -44,10 +45,14 @@ class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorComman
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forPartiesError(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var channel = PubSubKeys.forPartiesError(
+            input.payee(), input.partyIdType(), input.partyId(), input.subId());
         LOGGER.info("Publishing parties error result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new PartiesErrorResult(input.partyIdType(), input.partyId(), input.subId(), input.errorInformationObject()));
+        this.pubSubClient.publish(
+            channel, new PartiesErrorResult(
+                input.partyIdType(), input.partyId(), input.subId(),
+                input.errorInformationObject()));
         LOGGER.info("Published parties error result to channel : {}", channel);
 
         return new Output();

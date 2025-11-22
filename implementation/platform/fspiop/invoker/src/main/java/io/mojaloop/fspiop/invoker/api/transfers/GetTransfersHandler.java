@@ -39,7 +39,9 @@ class GetTransfersHandler implements GetTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public GetTransfersHandler(ParticipantContext participantContext, TransfersService transfersService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public GetTransfersHandler(ParticipantContext participantContext,
+                               TransfersService transfersService,
+                               FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersService != null;
@@ -55,9 +57,12 @@ class GetTransfersHandler implements GetTransfers {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(this.participantContext.fspCode(), payee.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forRequest(
+                this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.transfersService.getTransfers(fspiopHeaders, transferId), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersService.getTransfers(fspiopHeaders, transferId),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

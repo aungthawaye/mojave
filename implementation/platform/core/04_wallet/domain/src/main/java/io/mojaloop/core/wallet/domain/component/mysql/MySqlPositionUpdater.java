@@ -83,16 +83,24 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
     private static PositionHistory mapHistory(java.sql.ResultSet rs) throws java.sql.SQLException {
 
-        return new PositionHistory(new PositionUpdateId(rs.getLong("position_update_id")), new PositionId(rs.getLong("position_id")),
-            PositionAction.valueOf(rs.getString("action")), new TransactionId(rs.getLong("transaction_id")), Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
-            rs.getBigDecimal("old_position"), rs.getBigDecimal("new_position"), rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"),
+        return new PositionHistory(
+            new PositionUpdateId(rs.getLong("position_update_id")),
+            new PositionId(rs.getLong("position_id")),
+            PositionAction.valueOf(rs.getString("action")),
+            new TransactionId(rs.getLong("transaction_id")),
+            Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
+            rs.getBigDecimal("old_position"), rs.getBigDecimal("new_position"),
+            rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"),
             rs.getBigDecimal("net_debit_cap"), Instant.ofEpochSecond(rs.getLong("transaction_at")));
     }
 
     @Override
-    public PositionHistory commit(final PositionUpdateId reservationId, final PositionUpdateId positionUpdateId) throws CommitFailedException {
+    public PositionHistory commit(final PositionUpdateId reservationId,
+                                  final PositionUpdateId positionUpdateId)
+        throws CommitFailedException {
 
-        LOGGER.info("Commit reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
+        LOGGER.info(
+            "Commit reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
@@ -116,7 +124,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     return mapHistory(rs);
 
                                 } else if ("COMMIT_FAILED".equals(status)) {
-                                    throw new RuntimeException(new CommitFailedException(reservationId));
+                                    throw new RuntimeException(
+                                        new CommitFailedException(reservationId));
                                 }
                             }
                         }
@@ -144,11 +153,14 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     final BigDecimal amount,
                                     final String description) throws NoPositionUpdateException {
 
-        LOGGER.info("Decrease positionId: {}, amount: {}, transactionId: {}", positionId, amount, transactionId);
+        LOGGER.info(
+            "Decrease positionId: {}, amount: {}, transactionId: {}", positionId, amount,
+            transactionId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
-                try (var stm = con.prepareStatement("CALL sp_decrease_position(?, ?, ?, ?, ?, ?)")) {
+                try (
+                    var stm = con.prepareStatement("CALL sp_decrease_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
                     stm.setLong(2, transactionAt.getEpochSecond());
@@ -192,13 +204,17 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     final PositionUpdateId positionUpdateId,
                                     final PositionId positionId,
                                     final BigDecimal amount,
-                                    final String description) throws NoPositionUpdateException, LimitExceededException {
+                                    final String description)
+        throws NoPositionUpdateException, LimitExceededException {
 
-        LOGGER.info("Increase positionId: {}, amount: {}, transactionId: {}", positionId, amount, transactionId);
+        LOGGER.info(
+            "Increase positionId: {}, amount: {}, transactionId: {}", positionId, amount,
+            transactionId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
-                try (var stm = con.prepareStatement("CALL sp_increase_position(?, ?, ?, ?, ?, ?)")) {
+                try (
+                    var stm = con.prepareStatement("CALL sp_increase_position(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
                     stm.setLong(2, transactionAt.getEpochSecond());
@@ -223,7 +239,9 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("old_reserved"),
+                                    throw new RuntimeException(new LimitExceededException(
+                                        positionId, amount, rs.getBigDecimal("old_position"),
+                                        rs.getBigDecimal("old_reserved"),
                                         rs.getBigDecimal("net_debit_cap"), transactionId));
                                 }
                             }
@@ -251,9 +269,12 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                    final PositionUpdateId positionUpdateId,
                                    final PositionId positionId,
                                    final BigDecimal amount,
-                                   final String description) throws NoPositionUpdateException, LimitExceededException {
+                                   final String description)
+        throws NoPositionUpdateException, LimitExceededException {
 
-        LOGGER.info("Reserve positionId: {}, amount: {}, transactionId: {}", positionId, amount, transactionId);
+        LOGGER.info(
+            "Reserve positionId: {}, amount: {}, transactionId: {}", positionId, amount,
+            transactionId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
@@ -280,7 +301,9 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("LIMIT_EXCEEDED".equals(status)) {
 
-                                    throw new RuntimeException(new LimitExceededException(positionId, amount, rs.getBigDecimal("old_position"), rs.getBigDecimal("old_reserved"),
+                                    throw new RuntimeException(new LimitExceededException(
+                                        positionId, amount, rs.getBigDecimal("old_position"),
+                                        rs.getBigDecimal("old_reserved"),
                                         rs.getBigDecimal("net_debit_cap"), transactionId));
                                 }
                             }
@@ -304,9 +327,12 @@ public class MySqlPositionUpdater implements PositionUpdater {
     }
 
     @Override
-    public PositionHistory rollback(final PositionUpdateId reservationId, final PositionUpdateId positionUpdateId) throws RollbackFailedException {
+    public PositionHistory rollback(final PositionUpdateId reservationId,
+                                    final PositionUpdateId positionUpdateId)
+        throws RollbackFailedException {
 
-        LOGGER.info("Rollback reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
+        LOGGER.info(
+            "Rollback reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
@@ -331,7 +357,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                 } else if ("ROLLBACK_FAILED".equals(status)) {
 
-                                    throw new RuntimeException(new RollbackFailedException(reservationId));
+                                    throw new RuntimeException(
+                                        new RollbackFailedException(reservationId));
                                 }
                             }
                         }

@@ -46,7 +46,9 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    public PutPartiesCommandHandler(ParticipantStore participantStore, RespondParties respondParties, ForwardRequest forwardRequest) {
+    public PutPartiesCommandHandler(ParticipantStore participantStore,
+                                    RespondParties respondParties,
+                                    ForwardRequest forwardRequest) {
 
         assert participantStore != null;
         assert respondParties != null;
@@ -85,7 +87,9 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
 
         } catch (FspiopCommunicationException e) {
 
-            LOGGER.error("(FspiopCommunicationException) Exception occurred while executing PutPartiesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error(
+                "(FspiopCommunicationException) Exception occurred while executing PutPartiesCommandHandler: [{}]",
+                e.getMessage());
 
         } catch (Exception e) {
 
@@ -99,10 +103,15 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondParties.putPartiesError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    LOGGER.error(
+                        "Something went wrong while sending error response to payer FSP: ", e);
                 }
             }
 

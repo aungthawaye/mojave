@@ -59,8 +59,12 @@ public class FspQueryInvoker implements FspQuery {
 
         try {
 
-            return RetrofitService.invoke(this.fspQuery.getByFspId(fspId.getId().toString()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspQuery.getByFspId(fspId.getId().toString()),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -84,8 +88,12 @@ public class FspQueryInvoker implements FspQuery {
 
         try {
 
-            return RetrofitService.invoke(this.fspQuery.getByFspCode(fspCode.value()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspQuery.getByFspCode(fspCode.value()),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -109,7 +117,12 @@ public class FspQueryInvoker implements FspQuery {
 
         try {
 
-            return RetrofitService.invoke(this.fspQuery.getAllFsps(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspQuery.getAllFsps(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

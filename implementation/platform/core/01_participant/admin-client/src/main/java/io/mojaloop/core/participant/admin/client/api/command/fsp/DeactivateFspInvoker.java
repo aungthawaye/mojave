@@ -40,7 +40,8 @@ public class DeactivateFspInvoker implements DeactivateFspCommand {
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateFspInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
+    public DeactivateFspInvoker(final ParticipantAdminService.FspCommand fspCommand,
+                                final ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class DeactivateFspInvoker implements DeactivateFspCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.deactivateFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.deactivateFsp(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -36,7 +36,8 @@ public class CreatePositionInvoker implements CreatePositionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreatePositionInvoker(final WalletAdminService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public CreatePositionInvoker(final WalletAdminService.PositionCommand positionCommand,
+                                 final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -50,7 +51,12 @@ public class CreatePositionInvoker implements CreatePositionCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.create(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.create(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

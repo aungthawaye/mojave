@@ -43,20 +43,27 @@ public class WalletExceptionResolver {
 
         return switch (code) {
             // wallet package
-            case BalanceUpdateIdNotFoundException.CODE -> BalanceUpdateIdNotFoundException.from(extras);
-            case InsufficientBalanceInWalletException.CODE -> InsufficientBalanceInWalletException.from(extras);
-            case NoBalanceUpdateForTransactionException.CODE -> NoBalanceUpdateForTransactionException.from(extras);
-            case ReversalFailedInWalletException.CODE -> ReversalFailedInWalletException.from(extras);
+            case BalanceUpdateIdNotFoundException.CODE ->
+                BalanceUpdateIdNotFoundException.from(extras);
+            case InsufficientBalanceInWalletException.CODE ->
+                InsufficientBalanceInWalletException.from(extras);
+            case NoBalanceUpdateForTransactionException.CODE ->
+                NoBalanceUpdateForTransactionException.from(extras);
+            case ReversalFailedInWalletException.CODE ->
+                ReversalFailedInWalletException.from(extras);
             case WalletAlreadyExistsException.CODE -> WalletAlreadyExistsException.from(extras);
             case WalletIdNotFoundException.CODE -> WalletIdNotFoundException.from(extras);
 
             // position package
-            case FailedToCommitReservationException.CODE -> FailedToCommitReservationException.from(extras);
-            case NoPositionUpdateForTransactionException.CODE -> NoPositionUpdateForTransactionException.from(extras);
+            case FailedToCommitReservationException.CODE ->
+                FailedToCommitReservationException.from(extras);
+            case NoPositionUpdateForTransactionException.CODE ->
+                NoPositionUpdateForTransactionException.from(extras);
             case PositionAlreadyExistsException.CODE -> PositionAlreadyExistsException.from(extras);
             case PositionIdNotFoundException.CODE -> PositionIdNotFoundException.from(extras);
             case PositionLimitExceededException.CODE -> PositionLimitExceededException.from(extras);
-            case FailedToRollbackReservationException.CODE -> FailedToRollbackReservationException.from(extras);
+            case FailedToRollbackReservationException.CODE ->
+                FailedToRollbackReservationException.from(extras);
 
             default -> throw new RuntimeException("Unknown exception code: " + code);
         };

@@ -53,7 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChangeFlowDefinitionPropertiesController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFlowDefinitionPropertiesController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeFlowDefinitionPropertiesController.class);
 
     private final ChangeFlowDefinitionPropertiesCommand changeFlowDefinitionPropertiesCommand;
 

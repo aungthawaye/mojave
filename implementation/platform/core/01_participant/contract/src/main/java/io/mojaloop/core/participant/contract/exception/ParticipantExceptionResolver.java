@@ -57,23 +57,31 @@ public class ParticipantExceptionResolver {
         return switch (code) {
 
             // fsp
-            case CannotActivateFspCurrencyException.CODE -> CannotActivateFspCurrencyException.from(extra);
-            case CannotActivateFspEndpointException.CODE -> CannotActivateFspEndpointException.from(extra);
+            case CannotActivateFspCurrencyException.CODE ->
+                CannotActivateFspCurrencyException.from(extra);
+            case CannotActivateFspEndpointException.CODE ->
+                CannotActivateFspEndpointException.from(extra);
             case FspCodeAlreadyExistsException.CODE -> FspCodeAlreadyExistsException.from(extra);
             case FspCodeNotFoundException.CODE -> FspCodeNotFoundException.from(extra);
             case FspCodeRequiredException.CODE -> FspCodeRequiredException.from(extra);
-            case FspCurrencyAlreadySupportedException.CODE -> FspCurrencyAlreadySupportedException.from(extra);
-            case FspCurrencyNotSupportedByHubException.CODE -> FspCurrencyNotSupportedByHubException.from(extra);
-            case FspEndpointAlreadyConfiguredException.CODE -> FspEndpointAlreadyConfiguredException.from(extra);
-            case FspEndpointBaseUrlRequiredException.CODE -> FspEndpointBaseUrlRequiredException.from(extra);
-            case FspEndpointBaseUrlTooLongException.CODE -> FspEndpointBaseUrlTooLongException.from(extra);
+            case FspCurrencyAlreadySupportedException.CODE ->
+                FspCurrencyAlreadySupportedException.from(extra);
+            case FspCurrencyNotSupportedByHubException.CODE ->
+                FspCurrencyNotSupportedByHubException.from(extra);
+            case FspEndpointAlreadyConfiguredException.CODE ->
+                FspEndpointAlreadyConfiguredException.from(extra);
+            case FspEndpointBaseUrlRequiredException.CODE ->
+                FspEndpointBaseUrlRequiredException.from(extra);
+            case FspEndpointBaseUrlTooLongException.CODE ->
+                FspEndpointBaseUrlTooLongException.from(extra);
             case FspIdNotFoundException.CODE -> FspIdNotFoundException.from(extra);
             case FspNameRequiredException.CODE -> FspNameRequiredException.from(extra);
             case FspNameTooLongException.CODE -> FspNameTooLongException.from(extra);
 
             // hub
             case HubCountLimitReachedException.CODE -> HubCountLimitReachedException.from(extra);
-            case HubCurrencyAlreadySupportedException.CODE -> HubCurrencyAlreadySupportedException.from(extra);
+            case HubCurrencyAlreadySupportedException.CODE ->
+                HubCurrencyAlreadySupportedException.from(extra);
             case HubNameRequiredException.CODE -> HubNameRequiredException.from(extra);
             case HubNameTooLongException.CODE -> HubNameTooLongException.from(extra);
             case HubNotFoundException.CODE -> HubNotFoundException.from(extra);

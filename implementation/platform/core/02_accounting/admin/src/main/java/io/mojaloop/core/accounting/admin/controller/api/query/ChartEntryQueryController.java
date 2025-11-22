@@ -38,7 +38,8 @@ import java.util.List;
 @RestController
 public class ChartEntryQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChartEntryQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChartEntryQueryController.class.getName());
 
     private final ChartEntryQuery chartEntryQuery;
 

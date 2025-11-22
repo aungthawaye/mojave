@@ -63,7 +63,8 @@ public class QuotesController {
     }
 
     @GetMapping("/quotes/{quoteId}")
-    public ResponseEntity<?> getQuotes(@PathVariable UdfQuoteId quoteId, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getQuotes(@PathVariable UdfQuoteId quoteId, HttpServletRequest request)
+        throws IOException {
 
         LOGGER.info("Received GET /quotes/{}", quoteId);
 
@@ -80,14 +81,16 @@ public class QuotesController {
     }
 
     @PostMapping("/quotes")
-    public ResponseEntity<?> postQuotes(@RequestBody QuotesPostRequest requestBody, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> postQuotes(@RequestBody QuotesPostRequest requestBody,
+                                        HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received POST /quotes");
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PostQuotesEvent(new PostQuotesCommand.Input(fspiopHttpRequest, requestBody));
+        var event = new PostQuotesEvent(
+            new PostQuotesCommand.Input(fspiopHttpRequest, requestBody));
 
         LOGGER.info("Publishing PostQuotesEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -97,14 +100,17 @@ public class QuotesController {
     }
 
     @PutMapping("/quotes/{quoteId}")
-    public ResponseEntity<?> putQuotes(@PathVariable UdfQuoteId quoteId, @RequestBody QuotesIDPutResponse response, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> putQuotes(@PathVariable UdfQuoteId quoteId,
+                                       @RequestBody QuotesIDPutResponse response,
+                                       HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /quotes/{}", quoteId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutQuotesEvent(new PutQuotesCommand.Input(fspiopHttpRequest, quoteId, response));
+        var event = new PutQuotesEvent(
+            new PutQuotesCommand.Input(fspiopHttpRequest, quoteId, response));
 
         LOGGER.info("Publishing PutQuotesEvent : [{}]", event);
         this.eventPublisher.publish(event);
@@ -114,14 +120,17 @@ public class QuotesController {
     }
 
     @PutMapping("/quotes/{quoteId}/error")
-    public ResponseEntity<?> putQuotesError(@PathVariable UdfQuoteId quoteId, @RequestBody ErrorInformationObject error, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> putQuotesError(@PathVariable UdfQuoteId quoteId,
+                                            @RequestBody ErrorInformationObject error,
+                                            HttpServletRequest request) throws IOException {
 
         LOGGER.info("Received PUT /quotes/{}/error", quoteId);
 
         var cachedBodyRequest = new CachedServletRequest(request);
         var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutQuotesErrorEvent(new PutQuotesErrorCommand.Input(fspiopHttpRequest, quoteId, error));
+        var event = new PutQuotesErrorEvent(
+            new PutQuotesErrorCommand.Input(fspiopHttpRequest, quoteId, error));
 
         LOGGER.info("Publishing PutQuotesErrorEvent : [{}]", event);
         this.eventPublisher.publish(event);

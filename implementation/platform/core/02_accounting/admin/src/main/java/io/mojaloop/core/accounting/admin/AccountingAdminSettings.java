@@ -32,8 +32,10 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     @Override
     public FlywayMigration.Settings accountingFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"), System.getenv("ACC_FLYWAY_DB_PASSWORD"),
-            "flyway_accounting_history", new String[]{"classpath:migration/accounting"});
+        return new FlywayMigration.Settings(
+            System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
+            System.getenv("ACC_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"});
 
     }
 
@@ -48,10 +50,12 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
             System.getenv("ACC_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-admin-read", Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "accounting-admin-read", Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("ACC_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -61,10 +65,12 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
             System.getenv("ACC_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-admin-write", Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "accounting-admin-write", Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("ACC_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -81,7 +87,8 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     @Override
     public AccountingAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new AccountingAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv("ACCOUNTING_ADMIN_PORT")));
+        return new AccountingAdminConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("ACCOUNTING_ADMIN_PORT")));
     }
 
 }

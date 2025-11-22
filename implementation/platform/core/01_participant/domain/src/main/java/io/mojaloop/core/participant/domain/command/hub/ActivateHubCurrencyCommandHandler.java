@@ -53,7 +53,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class ActivateHubCurrencyCommandHandler implements ActivateHubCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateHubCurrencyCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateHubCurrencyCommandHandler.class);
 
     private final HubRepository hubRepository;
 
@@ -77,7 +78,9 @@ public class ActivateHubCurrencyCommandHandler implements ActivateHubCurrencyCom
 
         this.hubRepository.save(hub);
 
-        LOGGER.info("Completed ActivateHubCurrencyCommand with input: {} -> activated={} ", input, activated);
+        LOGGER.info(
+            "Completed ActivateHubCurrencyCommand with input: {} -> activated={} ", input,
+            activated);
 
         return new Output(activated);
     }

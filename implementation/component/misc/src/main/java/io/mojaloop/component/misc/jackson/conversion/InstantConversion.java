@@ -43,7 +43,8 @@ public class InstantConversion {
         }
 
         @Override
-        public void serialize(Instant value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(Instant value, JsonGenerator gen, SerializerProvider provider)
+            throws IOException {
 
             if (value == null) {
                 gen.writeNull();
@@ -92,7 +93,8 @@ public class InstantConversion {
                 try {
                     return Instant.parse(s);
                 } catch (DateTimeParseException ex) {
-                    throw ctx.weirdStringException(s, Instant.class, "Expected epoch seconds (long) or ISO-8601 instant");
+                    throw ctx.weirdStringException(
+                        s, Instant.class, "Expected epoch seconds (long) or ISO-8601 instant");
                 }
             }
 

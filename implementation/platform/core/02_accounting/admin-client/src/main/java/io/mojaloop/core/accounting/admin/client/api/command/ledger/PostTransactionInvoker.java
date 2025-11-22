@@ -38,7 +38,8 @@ public class PostTransactionInvoker implements PostTransactionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public PostTransactionInvoker(final AccountingAdminService.LedgerCommand ledgerCommand, final ObjectMapper objectMapper) {
+    public PostTransactionInvoker(final AccountingAdminService.LedgerCommand ledgerCommand,
+                                  final ObjectMapper objectMapper) {
 
         assert ledgerCommand != null;
         assert objectMapper != null;
@@ -48,13 +49,20 @@ public class PostTransactionInvoker implements PostTransactionCommand {
     }
 
     @Override
-    public Output execute(Input input)
-        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException {
+    public Output execute(Input input) throws
+                                       InsufficientBalanceInAccountException,
+                                       OverdraftLimitReachedInAccountException,
+                                       DuplicatePostingInLedgerException,
+                                       RestoreFailedInAccountException {
 
         try {
 
-            return RetrofitService.invoke(this.ledgerCommand.postTransaction(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.ledgerCommand.postTransaction(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

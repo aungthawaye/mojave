@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxConversion")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxConversion {
 
     private String conversionId;
@@ -46,8 +47,10 @@ public class FxConversion {
 
     @JsonCreator
     public FxConversion(@JsonProperty(required = true, value = "conversionId") String conversionId,
-                        @JsonProperty(required = true, value = "initiatingFsp") String initiatingFsp,
-                        @JsonProperty(required = true, value = "counterPartyFsp") String counterPartyFsp,
+                        @JsonProperty(required = true,
+                                      value = "initiatingFsp") String initiatingFsp,
+                        @JsonProperty(required = true,
+                                      value = "counterPartyFsp") String counterPartyFsp,
                         @JsonProperty(required = true, value = "amountType") AmountType amountType,
                         @JsonProperty(required = true, value = "sourceAmount") FxMoney sourceAmount,
                         @JsonProperty(required = true, value = "targetAmount") FxMoney targetAmount,
@@ -126,11 +129,16 @@ public class FxConversion {
             return false;
         }
         FxConversion fxConversion = (FxConversion) o;
-        return Objects.equals(this.conversionId, fxConversion.conversionId) && Objects.equals(this.determiningTransferId, fxConversion.determiningTransferId) &&
-                   Objects.equals(this.initiatingFsp, fxConversion.initiatingFsp) && Objects.equals(this.counterPartyFsp, fxConversion.counterPartyFsp) &&
-                   Objects.equals(this.amountType, fxConversion.amountType) && Objects.equals(this.sourceAmount, fxConversion.sourceAmount) &&
-                   Objects.equals(this.targetAmount, fxConversion.targetAmount) && Objects.equals(this.expiration, fxConversion.expiration) &&
-                   Objects.equals(this.charges, fxConversion.charges) && Objects.equals(this.extensionList, fxConversion.extensionList);
+        return Objects.equals(this.conversionId, fxConversion.conversionId) &&
+                   Objects.equals(this.determiningTransferId, fxConversion.determiningTransferId) &&
+                   Objects.equals(this.initiatingFsp, fxConversion.initiatingFsp) &&
+                   Objects.equals(this.counterPartyFsp, fxConversion.counterPartyFsp) &&
+                   Objects.equals(this.amountType, fxConversion.amountType) &&
+                   Objects.equals(this.sourceAmount, fxConversion.sourceAmount) &&
+                   Objects.equals(this.targetAmount, fxConversion.targetAmount) &&
+                   Objects.equals(this.expiration, fxConversion.expiration) &&
+                   Objects.equals(this.charges, fxConversion.charges) &&
+                   Objects.equals(this.extensionList, fxConversion.extensionList);
     }
 
     /**
@@ -290,7 +298,9 @@ public class FxConversion {
     @Override
     public int hashCode() {
 
-        return Objects.hash(conversionId, determiningTransferId, initiatingFsp, counterPartyFsp, amountType, sourceAmount, targetAmount, expiration, charges, extensionList);
+        return Objects.hash(
+            conversionId, determiningTransferId, initiatingFsp, counterPartyFsp, amountType,
+            sourceAmount, targetAmount, expiration, charges, extensionList);
     }
 
     /**
@@ -334,7 +344,10 @@ public class FxConversion {
         sb.append("class FxConversion {\n");
 
         sb.append("    conversionId: ").append(toIndentedString(conversionId)).append("\n");
-        sb.append("    determiningTransferId: ").append(toIndentedString(determiningTransferId)).append("\n");
+        sb
+            .append("    determiningTransferId: ")
+            .append(toIndentedString(determiningTransferId))
+            .append("\n");
         sb.append("    initiatingFsp: ").append(toIndentedString(initiatingFsp)).append("\n");
         sb.append("    counterPartyFsp: ").append(toIndentedString(counterPartyFsp)).append("\n");
         sb.append("    amountType: ").append(toIndentedString(amountType)).append("\n");

@@ -44,7 +44,9 @@ class GetPartiesHandler implements GetParties {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public GetPartiesHandler(ParticipantContext participantContext, PartiesService partiesService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public GetPartiesHandler(ParticipantContext participantContext,
+                             PartiesService partiesService,
+                             FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert partiesService != null;
@@ -57,13 +59,17 @@ class GetPartiesHandler implements GetParties {
     }
 
     @Override
-    public void getParties(Payee payee, PartyIdType partyIdType, String partyId, String subId) throws FspiopException {
+    public void getParties(Payee payee, PartyIdType partyIdType, String partyId, String subId)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(this.participantContext.fspCode(), payee.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(
+                this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.partiesService.getParties(fspiopHeaders, partyIdType, partyId), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesService.getParties(fspiopHeaders, partyIdType, partyId),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -72,13 +78,17 @@ class GetPartiesHandler implements GetParties {
     }
 
     @Override
-    public void getParties(Payee payee, PartyIdType partyIdType, String partyId) throws FspiopException {
+    public void getParties(Payee payee, PartyIdType partyIdType, String partyId)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(this.participantContext.fspCode(), payee.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Parties.forRequest(
+                this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.partiesService.getParties(fspiopHeaders, partyIdType, partyId), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.partiesService.getParties(fspiopHeaders, partyIdType, partyId),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

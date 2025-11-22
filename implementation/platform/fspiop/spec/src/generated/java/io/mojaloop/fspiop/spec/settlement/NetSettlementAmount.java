@@ -47,7 +47,8 @@ public class NetSettlementAmount {
             return false;
         }
         NetSettlementAmount netSettlementAmount = (NetSettlementAmount) o;
-        return Objects.equals(this.amount, netSettlementAmount.amount) && Objects.equals(this.currency, netSettlementAmount.currency);
+        return Objects.equals(this.amount, netSettlementAmount.amount) &&
+                   Objects.equals(this.currency, netSettlementAmount.currency);
     }
 
     @JsonProperty("amount")

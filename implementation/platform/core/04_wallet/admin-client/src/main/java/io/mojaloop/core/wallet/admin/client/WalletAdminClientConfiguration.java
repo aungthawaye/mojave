@@ -34,39 +34,47 @@ import org.springframework.context.annotation.Import;
 public class WalletAdminClientConfiguration {
 
     @Bean
-    public WalletAdminService.PositionCommand positionCommands(WalletAdminService.Settings settings, ObjectMapper objectMapper) {
+    public WalletAdminService.PositionCommand positionCommands(WalletAdminService.Settings settings,
+                                                               ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(WalletAdminService.PositionCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(WalletAdminService.PositionCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public WalletAdminService.PositionQuery positionQuery(WalletAdminService.Settings settings, ObjectMapper objectMapper) {
+    public WalletAdminService.PositionQuery positionQuery(WalletAdminService.Settings settings,
+                                                          ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(WalletAdminService.PositionQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(WalletAdminService.PositionQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public WalletAdminService.WalletCommand walletCommands(WalletAdminService.Settings settings, ObjectMapper objectMapper) {
+    public WalletAdminService.WalletCommand walletCommands(WalletAdminService.Settings settings,
+                                                           ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(WalletAdminService.WalletCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(WalletAdminService.WalletCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public WalletAdminService.WalletQuery walletQuery(WalletAdminService.Settings settings, ObjectMapper objectMapper) {
+    public WalletAdminService.WalletQuery walletQuery(WalletAdminService.Settings settings,
+                                                      ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(WalletAdminService.WalletQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(WalletAdminService.WalletQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }

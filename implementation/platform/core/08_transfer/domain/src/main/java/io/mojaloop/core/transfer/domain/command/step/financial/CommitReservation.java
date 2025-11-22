@@ -45,7 +45,8 @@ public class CommitReservation {
 
     private final AddStepPublisher addStepPublisher;
 
-    public CommitReservation(CommitReservationCommand commitReservationCommand, AddStepPublisher addStepPublisher) {
+    public CommitReservation(CommitReservationCommand commitReservationCommand,
+                             AddStepPublisher addStepPublisher) {
 
         assert commitReservationCommand != null;
         assert addStepPublisher != null;
@@ -69,14 +70,23 @@ public class CommitReservation {
             before.put("transactionId", input.transactionId().getId().toString());
             before.put("positionReservationId", input.positionReservationId().getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             var commitReservationOutput = this.commitReservationCommand.execute(
-                new CommitReservationCommand.Input(input.positionReservationId(), "Commit Payer's position reservation "));
+                new CommitReservationCommand.Input(
+                    input.positionReservationId(),
+                    "Commit Payer's position reservation "));
 
-            after.put("payerCommitId", commitReservationOutput.positionUpdateId().getId().toString());
+            after.put(
+                "payerCommitId", commitReservationOutput.positionUpdateId().getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, after, StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, after,
+                    StepPhase.AFTER));
 
             var output = new Output(commitReservationOutput.positionUpdateId());
 
@@ -88,13 +98,18 @@ public class CommitReservation {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context, TransactionId transactionId, PositionUpdateId positionReservationId) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        PositionUpdateId positionReservationId) { }
 
     public record Output(PositionUpdateId payerCommitId) { }
 

@@ -102,7 +102,8 @@ public class FlowDefinitionIdJavaType extends AbstractClassJavaType<FlowDefiniti
             case null -> null;
             case FlowDefinitionId id -> id;
             case Number n -> new FlowDefinitionId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

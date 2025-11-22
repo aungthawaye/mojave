@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("Money")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class Money {
 
     private Currency currency;
@@ -25,7 +26,8 @@ public class Money {
     }
 
     @JsonCreator
-    public Money(@JsonProperty(required = true, value = "currency") Currency currency, @JsonProperty(required = true, value = "amount") String amount) {
+    public Money(@JsonProperty(required = true, value = "currency") Currency currency,
+                 @JsonProperty(required = true, value = "amount") String amount) {
 
         this.currency = currency;
         this.amount = amount;
@@ -58,7 +60,8 @@ public class Money {
             return false;
         }
         Money money = (Money) o;
-        return Objects.equals(this.currency, money.currency) && Objects.equals(this.amount, money.amount);
+        return Objects.equals(this.currency, money.currency) &&
+                   Objects.equals(this.amount, money.amount);
     }
 
     @JsonProperty(required = true, value = "amount")

@@ -36,7 +36,8 @@ public class DecreasePositionInvoker implements DecreasePositionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public DecreasePositionInvoker(final WalletIntercomService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public DecreasePositionInvoker(final WalletIntercomService.PositionCommand positionCommand,
+                                   final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -50,8 +51,12 @@ public class DecreasePositionInvoker implements DecreasePositionCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.decrease(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.decrease(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -40,7 +40,8 @@ public class WalletQueryInvoker implements WalletQuery {
 
     private final ObjectMapper objectMapper;
 
-    public WalletQueryInvoker(final WalletAdminService.WalletQuery walletQuery, final ObjectMapper objectMapper) {
+    public WalletQueryInvoker(final WalletAdminService.WalletQuery walletQuery,
+                              final ObjectMapper objectMapper) {
 
         assert walletQuery != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class WalletQueryInvoker implements WalletQuery {
 
         try {
 
-            return RetrofitService.invoke(this.walletQuery.getByWalletId(walletId), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.walletQuery.getByWalletId(walletId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -68,8 +73,12 @@ public class WalletQueryInvoker implements WalletQuery {
 
         try {
 
-            return RetrofitService.invoke(this.walletQuery.getByOwnerIdAndCurrency(ownerId, currency),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.walletQuery.getByOwnerIdAndCurrency(ownerId, currency),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -82,7 +91,12 @@ public class WalletQueryInvoker implements WalletQuery {
 
         try {
 
-            return RetrofitService.invoke(this.walletQuery.getAll(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.walletQuery.getAll(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

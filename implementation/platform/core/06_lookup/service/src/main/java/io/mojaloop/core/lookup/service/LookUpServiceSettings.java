@@ -54,7 +54,8 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.ParticipantSettings(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
 
     }
 
@@ -62,28 +63,32 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     @Override
     public LookUpServiceConfiguration.TomcatSettings lookUpServiceTomcatSettings() {
 
-        return new LookUpServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv("LOOKUP_SERVICE_PORT")));
+        return new LookUpServiceConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("LOOKUP_SERVICE_PORT")));
     }
 
     @Bean
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+        return new ParticipantIntercomService.Settings(
+            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
     @Override
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
+        return new ParticipantStoreConfiguration.Settings(
+            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
     }
 
     @Bean
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
+        return new FspiopServiceConfiguration.ServiceSettings(
+            Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
             Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
     }
 

@@ -31,7 +31,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PutPartiesErrorEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutPartiesErrorEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PutPartiesErrorEventListener.class);
 
     private final PutPartiesErrorCommand putPartiesError;
 

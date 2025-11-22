@@ -63,11 +63,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                  ParticipantDomainConfiguration.class,
                  AccountingDomainConfiguration.class,
                  WalletDomainConfiguration.class})
-public class MonoAdminConfiguration extends JacksonWebMvcExtension implements SpringSecurityConfiguration.RequiredBeans,
-                                                                              ParticipantDomainConfiguration.RequiredBeans,
-                                                                              AccountingDomainConfiguration.RequiredBeans,
-                                                                              WalletDomainConfiguration.RequiredBeans,
-                                                                              SpringSecurityConfiguration.RequiredSettings {
+public class MonoAdminConfiguration extends JacksonWebMvcExtension implements
+                                                                   SpringSecurityConfiguration.RequiredBeans,
+                                                                   ParticipantDomainConfiguration.RequiredBeans,
+                                                                   AccountingDomainConfiguration.RequiredBeans,
+                                                                   WalletDomainConfiguration.RequiredBeans,
+                                                                   SpringSecurityConfiguration.RequiredSettings {
 
     private final AccountCache accountCache;
 
@@ -206,7 +207,8 @@ public class MonoAdminConfiguration extends JacksonWebMvcExtension implements Sp
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }

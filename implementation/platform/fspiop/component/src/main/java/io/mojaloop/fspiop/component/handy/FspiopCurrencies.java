@@ -48,7 +48,8 @@ public class FspiopCurrencies {
 
     public static final Profile AZN = new Profile(Currency.AZN, "Azerbaijanian new manat", 2);
 
-    public static final Profile BAM = new Profile(Currency.BAM, "Bosnia-Herzegovina convertible mark", 2);
+    public static final Profile BAM = new Profile(
+        Currency.BAM, "Bosnia-Herzegovina convertible mark", 2);
 
     public static final Profile BBD = new Profile(Currency.BBD, "Barbados dollar", 2);
 
@@ -346,7 +347,8 @@ public class FspiopCurrencies {
 
     public static final Profile XTS = new Profile(Currency.XTS, "Reserved for testing purposes", 4);
 
-    public static final Profile XXX = new Profile(Currency.XXX, "Assigned for transactions where no currency is involved", 4);
+    public static final Profile XXX = new Profile(
+        Currency.XXX, "Assigned for transactions where no currency is involved", 4);
 
     public static final Profile YER = new Profile(Currency.YER, "Yemeni rial", 2);
 

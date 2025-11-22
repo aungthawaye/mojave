@@ -32,7 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CloseTransactionCommandHandler implements CloseTransactionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CloseTransactionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CloseTransactionCommandHandler.class);
 
     private final TransactionRepository transactionRepository;
 
@@ -49,11 +50,16 @@ public class CloseTransactionCommandHandler implements CloseTransactionCommand {
 
         LOGGER.info("Executing CloseTransactionCommand with input: {}", input);
 
-        var transaction = this.transactionRepository.findById(input.transactionId()).orElseThrow(() -> new TransactionIdNotFoundException(input.transactionId()));
+        var transaction = this.transactionRepository
+                              .findById(input.transactionId())
+                              .orElseThrow(
+                                  () -> new TransactionIdNotFoundException(input.transactionId()));
         LOGGER.info("Found Transaction with id: {}", input.transactionId());
 
         transaction.close(input.error());
-        LOGGER.info("Closed Transaction with id: {}. Success: {}", transaction.getId(), transaction.getSuccess());
+        LOGGER.info(
+            "Closed Transaction with id: {}. Success: {}", transaction.getId(),
+            transaction.getSuccess());
 
         this.transactionRepository.save(transaction);
         LOGGER.info("Saved Transaction with id: {}", transaction.getId());

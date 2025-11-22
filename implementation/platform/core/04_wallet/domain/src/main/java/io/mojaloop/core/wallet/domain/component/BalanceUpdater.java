@@ -32,12 +32,22 @@ import java.time.Instant;
 
 public interface BalanceUpdater {
 
-    BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
-        throws BalanceUpdater.NoBalanceUpdateException;
+    BalanceHistory deposit(TransactionId transactionId,
+                           Instant transactionAt,
+                           BalanceUpdateId balanceUpdateId,
+                           WalletId walletId,
+                           BigDecimal amount,
+                           String description) throws BalanceUpdater.NoBalanceUpdateException;
 
-    BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId) throws BalanceUpdater.ReversalFailedException;
+    BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId)
+        throws BalanceUpdater.ReversalFailedException;
 
-    BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+    BalanceHistory withdraw(TransactionId transactionId,
+                            Instant transactionAt,
+                            BalanceUpdateId balanceUpdateId,
+                            WalletId walletId,
+                            BigDecimal amount,
+                            String description)
         throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
 
     record BalanceHistory(BalanceUpdateId balanceUpdateId,
@@ -76,9 +86,13 @@ public interface BalanceUpdater {
 
         private final BigDecimal oldBalance;
 
-        public InsufficientBalanceException(TransactionId transactionId, WalletId walletId, BigDecimal amount, BigDecimal oldBalance) {
+        public InsufficientBalanceException(TransactionId transactionId,
+                                            WalletId walletId,
+                                            BigDecimal amount,
+                                            BigDecimal oldBalance) {
 
-            super("Insufficient balance in walletId: " + walletId + " amount: " + amount + " transactionId: " + transactionId + " oldBalance: " +
+            super("Insufficient balance in walletId: " + walletId + " amount: " + amount +
+                      " transactionId: " + transactionId + " oldBalance: " +
                       oldBalance.stripTrailingZeros().toPlainString());
 
             this.transactionId = transactionId;

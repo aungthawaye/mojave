@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxMoney")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxMoney {
 
     private Currency currency;
@@ -57,7 +58,8 @@ public class FxMoney {
             return false;
         }
         FxMoney fxMoney = (FxMoney) o;
-        return Objects.equals(this.currency, fxMoney.currency) && Objects.equals(this.amount, fxMoney.amount);
+        return Objects.equals(this.currency, fxMoney.currency) &&
+                   Objects.equals(this.amount, fxMoney.amount);
     }
 
     @JsonProperty("amount")

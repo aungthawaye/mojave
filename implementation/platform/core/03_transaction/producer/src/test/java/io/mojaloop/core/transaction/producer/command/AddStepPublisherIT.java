@@ -51,9 +51,14 @@ public class AddStepPublisherIT {
 
         for (int i = 0; i < 1000; i++) {
 
-            var output = this.openTransactionCommand.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
-            this.addStepPublisher.publish(new AddStepCommand.Input(output.transactionId(), "step" + i, "c", Map.of("k1", "v1", "k2", "v2"), StepPhase.BEFORE));
-            this.closeTransactionPublisher.publish(new CloseTransactionCommand.Input(output.transactionId(), null));
+            var output = this.openTransactionCommand.execute(
+                new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    output.transactionId(), "step" + i, "c", Map.of("k1", "v1", "k2", "v2"),
+                    StepPhase.BEFORE));
+            this.closeTransactionPublisher.publish(
+                new CloseTransactionCommand.Input(output.transactionId(), null));
         }
 
     }

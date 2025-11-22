@@ -35,7 +35,8 @@ public class SettlementWindow {
     @JsonCreator
     public SettlementWindow(@JsonProperty(required = true, value = "id") Integer id,
                             @JsonProperty(required = true, value = "state") String state,
-                            @JsonProperty(required = true, value = "createdDate") String createdDate) {
+                            @JsonProperty(required = true,
+                                          value = "createdDate") String createdDate) {
 
         this.id = id;
         this.state = state;
@@ -86,8 +87,11 @@ public class SettlementWindow {
             return false;
         }
         SettlementWindow settlementWindow = (SettlementWindow) o;
-        return Objects.equals(this.id, settlementWindow.id) && Objects.equals(this.reason, settlementWindow.reason) && Objects.equals(this.state, settlementWindow.state) &&
-                   Objects.equals(this.createdDate, settlementWindow.createdDate) && Objects.equals(this.changedDate, settlementWindow.changedDate) &&
+        return Objects.equals(this.id, settlementWindow.id) &&
+                   Objects.equals(this.reason, settlementWindow.reason) &&
+                   Objects.equals(this.state, settlementWindow.state) &&
+                   Objects.equals(this.createdDate, settlementWindow.createdDate) &&
+                   Objects.equals(this.changedDate, settlementWindow.changedDate) &&
                    Objects.equals(this.content, settlementWindow.content);
     }
 

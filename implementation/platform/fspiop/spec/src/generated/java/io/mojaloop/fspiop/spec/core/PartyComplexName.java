@@ -12,7 +12,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("PartyComplexName")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class PartyComplexName {
 
     private String firstName;
@@ -35,7 +36,8 @@ public class PartyComplexName {
             return false;
         }
         PartyComplexName partyComplexName = (PartyComplexName) o;
-        return Objects.equals(this.firstName, partyComplexName.firstName) && Objects.equals(this.middleName, partyComplexName.middleName) &&
+        return Objects.equals(this.firstName, partyComplexName.firstName) &&
+                   Objects.equals(this.middleName, partyComplexName.middleName) &&
                    Objects.equals(this.lastName, partyComplexName.lastName);
     }
 

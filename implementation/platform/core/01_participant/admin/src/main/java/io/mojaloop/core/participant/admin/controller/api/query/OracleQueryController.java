@@ -37,7 +37,8 @@ import java.util.List;
 @RestController
 public class OracleQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OracleQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        OracleQueryController.class.getName());
 
     private final OracleQuery oracleQuery;
 

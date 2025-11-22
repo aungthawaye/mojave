@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("BulkQuotesIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class BulkQuotesIDPutResponse {
 
     private @Valid List<@Valid IndividualQuoteResult> individualQuoteResults = new ArrayList<>();
@@ -31,7 +32,8 @@ public class BulkQuotesIDPutResponse {
     }
 
     @JsonCreator
-    public BulkQuotesIDPutResponse(@JsonProperty(required = true, value = "expiration") String expiration) {
+    public BulkQuotesIDPutResponse(@JsonProperty(required = true,
+                                                 value = "expiration") String expiration) {
 
         this.expiration = expiration;
     }
@@ -56,7 +58,10 @@ public class BulkQuotesIDPutResponse {
             return false;
         }
         BulkQuotesIDPutResponse bulkQuotesIDPutResponse = (BulkQuotesIDPutResponse) o;
-        return Objects.equals(this.individualQuoteResults, bulkQuotesIDPutResponse.individualQuoteResults) && Objects.equals(this.expiration, bulkQuotesIDPutResponse.expiration) &&
+        return Objects.equals(
+            this.individualQuoteResults,
+            bulkQuotesIDPutResponse.individualQuoteResults) &&
+                   Objects.equals(this.expiration, bulkQuotesIDPutResponse.expiration) &&
                    Objects.equals(this.extensionList, bulkQuotesIDPutResponse.extensionList);
     }
 
@@ -148,7 +153,10 @@ public class BulkQuotesIDPutResponse {
         StringBuilder sb = new StringBuilder();
         sb.append("class BulkQuotesIDPutResponse {\n");
 
-        sb.append("    individualQuoteResults: ").append(toIndentedString(individualQuoteResults)).append("\n");
+        sb
+            .append("    individualQuoteResults: ")
+            .append(toIndentedString(individualQuoteResults))
+            .append("\n");
         sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

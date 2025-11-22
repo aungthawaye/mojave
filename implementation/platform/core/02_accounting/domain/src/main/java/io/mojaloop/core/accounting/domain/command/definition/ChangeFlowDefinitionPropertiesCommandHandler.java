@@ -50,9 +50,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowDefinitionPropertiesCommand {
+public class ChangeFlowDefinitionPropertiesCommandHandler
+    implements ChangeFlowDefinitionPropertiesCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFlowDefinitionPropertiesCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeFlowDefinitionPropertiesCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -70,14 +72,19 @@ public class ChangeFlowDefinitionPropertiesCommandHandler implements ChangeFlowD
 
         LOGGER.info("Executing ChangeFlowDefinitionPropertiesCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
 
         final var newName = input.name();
 
         if (newName != null) {
 
             final var conflict = this.flowDefinitionRepository.findOne(
-                FlowDefinitionRepository.Filters.withNameEquals(newName).and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
+                FlowDefinitionRepository.Filters
+                    .withNameEquals(newName)
+                    .and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
 
             if (conflict.isPresent()) {
                 LOGGER.info("Flow Definition with name {} already exists", newName);

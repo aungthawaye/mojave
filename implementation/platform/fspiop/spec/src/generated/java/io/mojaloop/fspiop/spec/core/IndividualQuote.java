@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("IndividualQuote")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class IndividualQuote {
 
     private String quoteId;
@@ -42,11 +43,14 @@ public class IndividualQuote {
 
     @JsonCreator
     public IndividualQuote(@JsonProperty(required = true, value = "quoteId") String quoteId,
-                           @JsonProperty(required = true, value = "transactionId") String transactionId,
+                           @JsonProperty(required = true,
+                                         value = "transactionId") String transactionId,
                            @JsonProperty(required = true, value = "payee") Party payee,
-                           @JsonProperty(required = true, value = "amountType") AmountType amountType,
+                           @JsonProperty(required = true,
+                                         value = "amountType") AmountType amountType,
                            @JsonProperty(required = true, value = "amount") Money amount,
-                           @JsonProperty(required = true, value = "transactionType") TransactionType transactionType) {
+                           @JsonProperty(required = true,
+                                         value = "transactionType") TransactionType transactionType) {
 
         this.quoteId = quoteId;
         this.transactionId = transactionId;
@@ -82,10 +86,14 @@ public class IndividualQuote {
             return false;
         }
         IndividualQuote individualQuote = (IndividualQuote) o;
-        return Objects.equals(this.quoteId, individualQuote.quoteId) && Objects.equals(this.transactionId, individualQuote.transactionId) &&
-                   Objects.equals(this.payee, individualQuote.payee) && Objects.equals(this.amountType, individualQuote.amountType) &&
-                   Objects.equals(this.amount, individualQuote.amount) && Objects.equals(this.fees, individualQuote.fees) &&
-                   Objects.equals(this.transactionType, individualQuote.transactionType) && Objects.equals(this.note, individualQuote.note) &&
+        return Objects.equals(this.quoteId, individualQuote.quoteId) &&
+                   Objects.equals(this.transactionId, individualQuote.transactionId) &&
+                   Objects.equals(this.payee, individualQuote.payee) &&
+                   Objects.equals(this.amountType, individualQuote.amountType) &&
+                   Objects.equals(this.amount, individualQuote.amount) &&
+                   Objects.equals(this.fees, individualQuote.fees) &&
+                   Objects.equals(this.transactionType, individualQuote.transactionType) &&
+                   Objects.equals(this.note, individualQuote.note) &&
                    Objects.equals(this.extensionList, individualQuote.extensionList);
     }
 
@@ -230,7 +238,9 @@ public class IndividualQuote {
     @Override
     public int hashCode() {
 
-        return Objects.hash(quoteId, transactionId, payee, amountType, amount, fees, transactionType, note, extensionList);
+        return Objects.hash(
+            quoteId, transactionId, payee, amountType, amount, fees, transactionType, note,
+            extensionList);
     }
 
     /**

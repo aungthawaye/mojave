@@ -55,7 +55,8 @@ public class WalletTimerStore implements WalletStore {
 
     private final Timer timer = new Timer("WalletLocalStoreRefreshTimer", true);
 
-    public WalletTimerStore(final WalletQuery walletQuery, final WalletStoreConfiguration.Settings walletStoreSettings) {
+    public WalletTimerStore(final WalletQuery walletQuery,
+                            final WalletStoreConfiguration.Settings walletStoreSettings) {
 
         assert walletQuery != null;
         assert walletStoreSettings != null;
@@ -77,14 +78,15 @@ public class WalletTimerStore implements WalletStore {
         LOGGER.info("Bootstrapping WalletTimerStore");
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                WalletTimerStore.this.refreshData();
-            }
-        }, interval, interval);
+                    WalletTimerStore.this.refreshData();
+                }
+            }, interval, interval);
     }
 
     @Override
@@ -124,19 +126,34 @@ public class WalletTimerStore implements WalletStore {
 
         List<WalletData> wallets = this.walletQuery.getAll();
 
-        var _withWalletId = wallets.stream().collect(Collectors.toUnmodifiableMap(WalletData::walletId, Function.identity(), (a, b) -> a));
+        var _withWalletId = wallets
+                                .stream()
+                                .collect(Collectors.toUnmodifiableMap(
+                                    WalletData::walletId,
+                                    Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(
-            wallets.stream().collect(Collectors.groupingBy(WalletData::walletOwnerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(wallets
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               WalletData::walletOwnerId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
-        var _withOwnerCurrency = wallets.stream().collect(Collectors.toUnmodifiableMap(w -> key(w.walletOwnerId(), w.currency()), Function.identity(), (a, b) -> a));
+        var _withOwnerCurrency = wallets
+                                     .stream()
+                                     .collect(Collectors.toUnmodifiableMap(
+                                         w -> key(w.walletOwnerId(), w.currency()),
+                                         Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed Wallet data, count: {}", wallets.size());
 
         this.snapshotRef.set(new Snapshot(_withWalletId, _withOwnerId, _withOwnerCurrency));
     }
 
-    private record Snapshot(Map<WalletId, WalletData> withWalletId, Map<WalletOwnerId, Set<WalletData>> withOwnerId, Map<String, WalletData> withOwnerCurrency) {
+    private record Snapshot(Map<WalletId, WalletData> withWalletId,
+                            Map<WalletOwnerId, Set<WalletData>> withOwnerId,
+                            Map<String, WalletData> withOwnerCurrency) {
 
         static Snapshot empty() {
 

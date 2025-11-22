@@ -45,7 +45,8 @@ public class ChartEntryRedisCache implements ChartEntryCache {
 
     private final RMap<String, ChartEntryData> withCode;
 
-    public ChartEntryRedisCache(ChartEntryRepository chartEntryRepository, RedissonOpsClient redissonOpsClient) {
+    public ChartEntryRedisCache(ChartEntryRepository chartEntryRepository,
+                                RedissonOpsClient redissonOpsClient) {
 
         assert chartEntryRepository != null;
         assert redissonOpsClient != null;

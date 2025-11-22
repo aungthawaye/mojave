@@ -49,7 +49,8 @@ public class SpringContext implements ApplicationContextAware {
 
         for (Map.Entry<String, T> entry : beansOfType.entrySet()) {
 
-            Qualifier qualifierAnnotation = context.findAnnotationOnBean(entry.getKey(), Qualifier.class);
+            Qualifier qualifierAnnotation = context.findAnnotationOnBean(
+                entry.getKey(), Qualifier.class);
 
             if (qualifierAnnotation != null) {
 

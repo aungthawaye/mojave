@@ -32,7 +32,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RollbackReservationCommandHandler implements RollbackReservationCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RollbackReservationCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RollbackReservationCommandHandler.class);
 
     private final PositionUpdater positionUpdater;
 
@@ -49,10 +50,14 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
 
         try {
 
-            final var history = this.positionUpdater.rollback(input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
+            final var history = this.positionUpdater.rollback(
+                input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(
+                history.positionUpdateId(), history.positionId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(),
+                history.newReserved(), history.netDebitCap(), history.transactionAt());
 
             LOGGER.info("RollbackReservationCommand executed successfully with output: {}", output);
 

@@ -30,7 +30,8 @@ public class OpenApiConfiguration {
     @Bean
     public OpenAPI mojaveOpenAPI(ApiSettings apiSettings) {
 
-        return new OpenAPI().info(new Info().title(apiSettings.title()).version(apiSettings.version()));
+        return new OpenAPI().info(
+            new Info().title(apiSettings.title()).version(apiSettings.version()));
     }
 
     @Bean
@@ -44,7 +45,8 @@ public class OpenApiConfiguration {
                 operation.setSummary(className);
             }
 
-            if (operation.getOperationId() == null || operation.getOperationId().startsWith("execute")) {
+            if (operation.getOperationId() == null ||
+                    operation.getOperationId().startsWith("execute")) {
                 operation.setOperationId(className + "_" + handlerMethod.getMethod().getName());
             }
 

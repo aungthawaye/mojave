@@ -51,13 +51,18 @@ public class AddStepCommandHandler implements AddStepCommand {
 
         LOGGER.info("Executing AddStepCommand with input: {}", input);
 
-        var transaction = this.transactionRepository.findById(input.transactionId()).orElseThrow(() -> new TransactionIdNotFoundException(input.transactionId()));
+        var transaction = this.transactionRepository
+                              .findById(input.transactionId())
+                              .orElseThrow(
+                                  () -> new TransactionIdNotFoundException(input.transactionId()));
         LOGGER.info("Found Transaction with id: {}", input.transactionId());
 
         Map<String, String> params = input.params() == null ? Map.of() : input.params();
 
         transaction.addStep(input.phase(), input.name(), params);
-        LOGGER.info("Added step '{}' with phase {} to transaction {}", input.name(), input.phase(), transaction.getId());
+        LOGGER.info(
+            "Added step '{}' with phase {} to transaction {}", input.name(), input.phase(),
+            transaction.getId());
 
         this.transactionRepository.save(transaction);
         LOGGER.info("Saved Transaction with id: {}", transaction.getId());

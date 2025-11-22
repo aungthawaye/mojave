@@ -30,7 +30,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WalletRepository extends JpaRepository<Wallet, WalletId>, JpaSpecificationExecutor<Wallet> {
+public interface WalletRepository
+    extends JpaRepository<Wallet, WalletId>, JpaSpecificationExecutor<Wallet> {
 
     class Filters {
 

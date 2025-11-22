@@ -58,7 +58,8 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "acc_chart", uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
+@Table(name = "acc_chart",
+       uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartData> {
 
@@ -75,7 +76,10 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @OneToMany(mappedBy = "chart", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chart",
+               orphanRemoval = true,
+               cascade = CascadeType.ALL,
+               fetch = FetchType.EAGER)
     protected Set<ChartEntry> entries = new HashSet<>();
 
     public Chart(String name) {
@@ -85,7 +89,10 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
         this.createdAt = Instant.now();
     }
 
-    public ChartEntry addEntry(ChartEntryCode code, String name, String description, AccountType accountType) {
+    public ChartEntry addEntry(ChartEntryCode code,
+                               String name,
+                               String description,
+                               AccountType accountType) {
 
         ChartEntry entry = new ChartEntry(this, code, name, description, accountType);
 
@@ -97,7 +104,11 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
     @Override
     public ChartData convert() {
 
-        var entriesData = this.getEntries().stream().map(ChartEntry::convert).toArray(ChartEntryData[]::new);
+        var entriesData = this
+                              .getEntries()
+                              .stream()
+                              .map(ChartEntry::convert)
+                              .toArray(ChartEntryData[]::new);
 
         return new ChartData(this.getId(), this.getName(), this.createdAt, entriesData);
     }

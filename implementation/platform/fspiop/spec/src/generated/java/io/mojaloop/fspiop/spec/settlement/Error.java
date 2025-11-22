@@ -21,7 +21,8 @@ public class Error {
     }
 
     @JsonCreator
-    public Error(@JsonProperty(required = true, value = "errorInformation") ErrorErrorInformation errorInformation) {
+    public Error(@JsonProperty(required = true,
+                               value = "errorInformation") ErrorErrorInformation errorInformation) {
 
         this.errorInformation = errorInformation;
     }

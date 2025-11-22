@@ -49,7 +49,8 @@ import java.util.Date;
 @RestController
 public class RequestTransfersController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestTransfersController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestTransfersController.class.getName());
 
     private final ParticipantContext participantContext;
 
@@ -84,27 +85,39 @@ public class RequestTransfersController {
         var transfersPostRequest = new TransfersPostRequest();
         var extensionList = new ExtensionList();
         // Payer related
-        extensionList.addExtensionItem(new Extension("payerFspId", this.participantContext.fspCode()));
-        extensionList.addExtensionItem(new Extension("payerPartyIdType", request.payer.getPartyIdType().toString()));
-        extensionList.addExtensionItem(new Extension("payerPartyId", request.payer.getPartyIdentifier()));
+        extensionList.addExtensionItem(
+            new Extension("payerFspId", this.participantContext.fspCode()));
+        extensionList.addExtensionItem(
+            new Extension("payerPartyIdType", request.payer.getPartyIdType().toString()));
+        extensionList.addExtensionItem(
+            new Extension("payerPartyId", request.payer.getPartyIdentifier()));
 
         // Payee related
         extensionList.addExtensionItem(new Extension("payeeFspId", request.destination));
-        extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
-        extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
+        extensionList.addExtensionItem(
+            new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
+        extensionList.addExtensionItem(
+            new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
-        var expireAfterSeconds = new Date(Instant.now().plus(this.transferSettings.transferRequestExpirySeconds(), ChronoUnit.SECONDS).toEpochMilli());
+        var expireAfterSeconds = new Date(Instant
+                                              .now()
+                                              .plus(
+                                                  this.transferSettings.transferRequestExpirySeconds(),
+                                                  ChronoUnit.SECONDS)
+                                              .toEpochMilli());
 
-        transfersPostRequest.transferId(request.transferId())
-                            .payerFsp(this.participantContext.fspCode())
-                            .payeeFsp(request.destination)
-                            .amount(request.amount)
-                            .ilpPacket(request.ilpPacket)
-                            .condition(request.condition)
-                            .expiration(FspiopDates.forRequestBody(expireAfterSeconds))
-                            .extensionList(extensionList);
+        transfersPostRequest
+            .transferId(request.transferId())
+            .payerFsp(this.participantContext.fspCode())
+            .payeeFsp(request.destination)
+            .amount(request.amount)
+            .ilpPacket(request.ilpPacket)
+            .condition(request.condition)
+            .expiration(FspiopDates.forRequestBody(expireAfterSeconds))
+            .extensionList(extensionList);
 
-        var input = new RequestTransfersCommand.Input(new Payee(request.destination()), transfersPostRequest);
+        var input = new RequestTransfersCommand.Input(
+            new Payee(request.destination()), transfersPostRequest);
         var output = this.requestTransfersCommand.execute(input);
 
         this.eventPublisher.publish(new RequestTransfersEvent(input));
@@ -113,6 +126,13 @@ public class RequestTransfersController {
 
     }
 
-    public record Request(String destination, String transferId, AmountType amountType, Money amount, PartyIdInfo payer, PartyIdInfo payee, String ilpPacket, String condition) { }
+    public record Request(String destination,
+                          String transferId,
+                          AmountType amountType,
+                          Money amount,
+                          PartyIdInfo payer,
+                          PartyIdInfo payee,
+                          String ilpPacket,
+                          String condition) { }
 
 }

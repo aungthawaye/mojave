@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DeactivateHubCurrencyController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateHubCurrencyController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateHubCurrencyController.class);
 
     private final DeactivateHubCurrencyCommand deactivateHubCurrencyCommand;
 

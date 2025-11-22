@@ -26,12 +26,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.transaction.domain"})
-@Import(value = {MiscConfiguration.class, TransactionFlywayConfiguration.class, RoutingJpaConfiguration.class})
+@Import(value = {MiscConfiguration.class,
+                 TransactionFlywayConfiguration.class,
+                 RoutingJpaConfiguration.class})
 public class TransactionDomainConfiguration {
 
     public interface RequiredBeans { }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, TransactionFlywayConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              TransactionFlywayConfiguration.RequiredSettings,
+                                              RoutingJpaConfiguration.RequiredSettings {
 
     }
 

@@ -51,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RemovePostingDefinitionCommandHandler implements RemovePostingDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RemovePostingDefinitionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RemovePostingDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -69,7 +70,10 @@ public class RemovePostingDefinitionCommandHandler implements RemovePostingDefin
 
         LOGGER.info("Executing RemovePostingDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
 
         definition.removePosting(input.postingDefinitionId());
 

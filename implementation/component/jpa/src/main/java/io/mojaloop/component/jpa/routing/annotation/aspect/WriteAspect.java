@@ -34,7 +34,8 @@ public class WriteAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WriteAspect.class);
 
-    @Around("execution(public * *(..)) && @annotation(io.mojaloop.component.jpa.routing.annotation.Write)")
+    @Around(
+        "execution(public * *(..)) && @annotation(io.mojaloop.component.jpa.routing.annotation.Write)")
     public Object aroundTransactional(ProceedingJoinPoint joinPoint) throws Throwable {
 
         try {

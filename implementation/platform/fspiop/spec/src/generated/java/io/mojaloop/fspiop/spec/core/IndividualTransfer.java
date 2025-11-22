@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("IndividualTransfer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class IndividualTransfer {
 
     private String transferId;
@@ -33,10 +34,13 @@ public class IndividualTransfer {
     }
 
     @JsonCreator
-    public IndividualTransfer(@JsonProperty(required = true, value = "transferId") String transferId,
-                              @JsonProperty(required = true, value = "transferAmount") Money transferAmount,
+    public IndividualTransfer(@JsonProperty(required = true,
+                                            value = "transferId") String transferId,
+                              @JsonProperty(required = true,
+                                            value = "transferAmount") Money transferAmount,
                               @JsonProperty(required = true, value = "ilpPacket") String ilpPacket,
-                              @JsonProperty(required = true, value = "condition") String condition) {
+                              @JsonProperty(required = true,
+                                            value = "condition") String condition) {
 
         this.transferId = transferId;
         this.transferAmount = transferAmount;
@@ -63,8 +67,10 @@ public class IndividualTransfer {
             return false;
         }
         IndividualTransfer individualTransfer = (IndividualTransfer) o;
-        return Objects.equals(this.transferId, individualTransfer.transferId) && Objects.equals(this.transferAmount, individualTransfer.transferAmount) &&
-                   Objects.equals(this.ilpPacket, individualTransfer.ilpPacket) && Objects.equals(this.condition, individualTransfer.condition) &&
+        return Objects.equals(this.transferId, individualTransfer.transferId) &&
+                   Objects.equals(this.transferAmount, individualTransfer.transferAmount) &&
+                   Objects.equals(this.ilpPacket, individualTransfer.ilpPacket) &&
+                   Objects.equals(this.condition, individualTransfer.condition) &&
                    Objects.equals(this.extensionList, individualTransfer.extensionList);
     }
 

@@ -56,11 +56,13 @@ public class HubId extends EntityId<Long> {
             try {
                 var value = Long.parseLong(text);
                 if (value != 1L) {
-                    throw InvalidFormatException.from(p, "'" + field + "' has invalid value. Only '1' is accepted.", null);
+                    throw InvalidFormatException.from(
+                        p, "'" + field + "' has invalid value. Only '1' is accepted.", null);
                 }
                 return new HubId();
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number '1'.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number '1'.", e);
             }
         }
 
@@ -74,7 +76,8 @@ public class HubId extends EntityId<Long> {
 
             var value = Long.parseLong(source);
             if (value != 1L) {
-                throw new IllegalArgumentException("'hubId' has invalid value. Only '1' is accepted.");
+                throw new IllegalArgumentException(
+                    "'hubId' has invalid value. Only '1' is accepted.");
             }
 
             return new HubId();

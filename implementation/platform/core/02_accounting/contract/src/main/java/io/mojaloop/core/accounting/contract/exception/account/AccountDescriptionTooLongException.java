@@ -51,7 +51,9 @@ public class AccountDescriptionTooLongException extends UncheckedDomainException
 
     public static final String CODE = "ACCOUNT_DESCRIPTION_TOO_LONG";
 
-    private static final String TEMPLATE = "Account Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
+    private static final String TEMPLATE = "Account Description is too long. Must not exceed " +
+                                               StringSizeConstraints.MAX_DESCRIPTION_LENGTH +
+                                               " characters.";
 
     public AccountDescriptionTooLongException() {
 

@@ -52,7 +52,8 @@ public class ChartEntryTimerCache implements ChartEntryCache {
 
     private final int interval;
 
-    public ChartEntryTimerCache(final ChartEntryRepository chartEntryRepository, final int interval) {
+    public ChartEntryTimerCache(final ChartEntryRepository chartEntryRepository,
+                                final int interval) {
 
         assert chartEntryRepository != null;
         assert interval > 0;
@@ -109,14 +110,15 @@ public class ChartEntryTimerCache implements ChartEntryCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                ChartEntryTimerCache.this.refreshData();
-            }
-        }, this.interval, this.interval);
+                    ChartEntryTimerCache.this.refreshData();
+                }
+            }, this.interval, this.interval);
     }
 
     @Override
@@ -131,17 +133,32 @@ public class ChartEntryTimerCache implements ChartEntryCache {
         final var entities = this.chartEntryRepository.findAll();
         final var entries = entities.stream().map(ChartEntry::convert).toList();
 
-        var _withId = entries.stream().collect(Collectors.toUnmodifiableMap(ChartEntryData::chartEntryId, Function.identity(), (a, b) -> a));
-        var _withCode = entries.stream().collect(Collectors.toUnmodifiableMap(ChartEntryData::code, Function.identity(), (a, b) -> a));
-        var _withChartId = Collections.unmodifiableMap(
-            entries.stream().collect(Collectors.groupingBy(ChartEntryData::chartId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withId = entries
+                          .stream()
+                          .collect(Collectors.toUnmodifiableMap(
+                              ChartEntryData::chartEntryId,
+                              Function.identity(), (a, b) -> a));
+        var _withCode = entries
+                            .stream()
+                            .collect(Collectors.toUnmodifiableMap(
+                                ChartEntryData::code,
+                                Function.identity(), (a, b) -> a));
+        var _withChartId = Collections.unmodifiableMap(entries
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               ChartEntryData::chartId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
         LOGGER.info("Refreshed ChartEntry cache data, count: {}", entries.size());
 
         this.snapshotRef.set(new Snapshot(_withId, _withCode, _withChartId));
     }
 
-    private record Snapshot(Map<ChartEntryId, ChartEntryData> withId, Map<ChartEntryCode, ChartEntryData> withCode, Map<ChartId, Set<ChartEntryData>> withChartId) {
+    private record Snapshot(Map<ChartEntryId, ChartEntryData> withId,
+                            Map<ChartEntryCode, ChartEntryData> withCode,
+                            Map<ChartId, Set<ChartEntryData>> withChartId) {
 
         static Snapshot empty() {
 

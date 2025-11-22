@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("Refund")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class Refund {
 
     private String originalTransactionId;
@@ -26,7 +27,8 @@ public class Refund {
     }
 
     @JsonCreator
-    public Refund(@JsonProperty(required = true, value = "originalTransactionId") String originalTransactionId) {
+    public Refund(@JsonProperty(required = true,
+                                value = "originalTransactionId") String originalTransactionId) {
 
         this.originalTransactionId = originalTransactionId;
     }
@@ -41,7 +43,8 @@ public class Refund {
             return false;
         }
         Refund refund = (Refund) o;
-        return Objects.equals(this.originalTransactionId, refund.originalTransactionId) && Objects.equals(this.refundReason, refund.refundReason);
+        return Objects.equals(this.originalTransactionId, refund.originalTransactionId) &&
+                   Objects.equals(this.refundReason, refund.refundReason);
     }
 
     @JsonProperty(required = true, value = "originalTransactionId")
@@ -101,7 +104,10 @@ public class Refund {
         StringBuilder sb = new StringBuilder();
         sb.append("class Refund {\n");
 
-        sb.append("    originalTransactionId: ").append(toIndentedString(originalTransactionId)).append("\n");
+        sb
+            .append("    originalTransactionId: ")
+            .append(toIndentedString(originalTransactionId))
+            .append("\n");
         sb.append("    refundReason: ").append(toIndentedString(refundReason)).append("\n");
         sb.append("}");
         return sb.toString();

@@ -50,7 +50,8 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException {
+    public Output execute(final Input input)
+        throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException {
 
         LOGGER.info("Executing WithdrawFundCommand with input: {}", input);
 
@@ -58,18 +59,26 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
 
         if (wallet == null) {
 
-            LOGGER.error("Wallet does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
-            throw new RuntimeException("Wallet does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+            LOGGER.error(
+                "Wallet does not exist for walletOwnerId: {} and currency: {}",
+                input.walletOwnerId(), input.currency());
+            throw new RuntimeException(
+                "Wallet does not exist for walletOwnerId: " + input.walletOwnerId() +
+                    " and currency: " + input.currency());
         }
 
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());
 
         try {
 
-            final var history = this.balanceUpdater.withdraw(input.transactionId(), input.transactionAt(), balanceUpdateId, wallet.walletId(), input.amount(), "Withdraw funds");
+            final var history = this.balanceUpdater.withdraw(
+                input.transactionId(), input.transactionAt(), balanceUpdateId, wallet.walletId(),
+                input.amount(), "Withdraw funds");
 
-            var output = new Output(history.balanceUpdateId(), history.walletId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldBalance(), history.newBalance(), history.transactionAt());
+            var output = new Output(
+                history.balanceUpdateId(), history.walletId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
+                history.newBalance(), history.transactionAt());
 
             LOGGER.info("WithdrawFundCommand executed successfully with output: {}", output);
 
@@ -82,8 +91,11 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
 
         } catch (final BalanceUpdater.InsufficientBalanceException e) {
 
-            LOGGER.error("Failed to withdraw funds for transaction (insufficient balance): {}", input.transactionId());
-            throw new InsufficientBalanceInWalletException(e.getWalletId(), e.getAmount(), e.getOldBalance(), e.getTransactionId());
+            LOGGER.error(
+                "Failed to withdraw funds for transaction (insufficient balance): {}",
+                input.transactionId());
+            throw new InsufficientBalanceInWalletException(
+                e.getWalletId(), e.getAmount(), e.getOldBalance(), e.getTransactionId());
         }
     }
 

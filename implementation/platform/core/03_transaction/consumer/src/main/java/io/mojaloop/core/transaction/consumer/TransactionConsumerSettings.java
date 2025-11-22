@@ -30,13 +30,16 @@ import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.UUID;
 
-final class TransactionConsumerSettings implements TransactionConsumerConfiguration.RequiredSettings {
+final class TransactionConsumerSettings
+    implements TransactionConsumerConfiguration.RequiredSettings {
 
     @Bean
     @Override
     public AddStepListener.Settings addStepListenerSettings() {
 
-        return new AddStepListener.Settings(System.getenv("KAFKA_BROKER_URL"), AddStepListener.GROUP_ID, UUID.randomUUID().toString(), "earliest", 1, 100, false,
+        return new AddStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), AddStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -44,7 +47,9 @@ final class TransactionConsumerSettings implements TransactionConsumerConfigurat
     @Override
     public CloseTransactionListener.Settings closeTransactionListenerSettings() {
 
-        return new CloseTransactionListener.Settings(System.getenv("KAFKA_BROKER_URL"), CloseTransactionListener.GROUP_ID, UUID.randomUUID().toString(), "earliest", 1, 100, false,
+        return new CloseTransactionListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), CloseTransactionListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -52,10 +57,12 @@ final class TransactionConsumerSettings implements TransactionConsumerConfigurat
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("TXN_READ_DB_URL"), System.getenv("TXN_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("TXN_READ_DB_URL"), System.getenv("TXN_READ_DB_USER"),
             System.getenv("TXN_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-admin-read", Integer.parseInt(System.getenv("TXN_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "accounting-admin-read", Integer.parseInt(System.getenv("TXN_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("TXN_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -65,10 +72,12 @@ final class TransactionConsumerSettings implements TransactionConsumerConfigurat
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
             System.getenv("TXN_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-admin-write", Integer.parseInt(System.getenv("TXN_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "accounting-admin-write", Integer.parseInt(System.getenv("TXN_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("TXN_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -85,8 +94,10 @@ final class TransactionConsumerSettings implements TransactionConsumerConfigurat
     @Override
     public FlywayMigration.Settings transactionFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"), System.getenv("TXN_WRITE_DB_PASSWORD"),
-            "flyway_transaction_history", new String[]{"classpath:migration/transaction"});
+        return new FlywayMigration.Settings(
+            System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
+            System.getenv("TXN_WRITE_DB_PASSWORD"), "flyway_transaction_history",
+            new String[]{"classpath:migration/transaction"});
     }
 
 }

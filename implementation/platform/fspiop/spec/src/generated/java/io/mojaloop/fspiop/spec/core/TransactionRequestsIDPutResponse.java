@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("TransactionRequestsIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class TransactionRequestsIDPutResponse {
 
     private String transactionId;
@@ -28,7 +29,8 @@ public class TransactionRequestsIDPutResponse {
     }
 
     @JsonCreator
-    public TransactionRequestsIDPutResponse(@JsonProperty(required = true, value = "transactionRequestState") TransactionRequestState transactionRequestState) {
+    public TransactionRequestsIDPutResponse(@JsonProperty(required = true,
+                                                          value = "transactionRequestState") TransactionRequestState transactionRequestState) {
 
         this.transactionRequestState = transactionRequestState;
     }
@@ -44,8 +46,12 @@ public class TransactionRequestsIDPutResponse {
         }
         TransactionRequestsIDPutResponse transactionRequestsIDPutResponse = (TransactionRequestsIDPutResponse) o;
         return Objects.equals(this.transactionId, transactionRequestsIDPutResponse.transactionId) &&
-                   Objects.equals(this.transactionRequestState, transactionRequestsIDPutResponse.transactionRequestState) &&
-                   Objects.equals(this.extensionList, transactionRequestsIDPutResponse.extensionList);
+                   Objects.equals(
+                       this.transactionRequestState,
+                       transactionRequestsIDPutResponse.transactionRequestState) &&
+                   Objects.equals(
+                       this.extensionList,
+                       transactionRequestsIDPutResponse.extensionList);
     }
 
     /**
@@ -108,7 +114,10 @@ public class TransactionRequestsIDPutResponse {
         sb.append("class TransactionRequestsIDPutResponse {\n");
 
         sb.append("    transactionId: ").append(toIndentedString(transactionId)).append("\n");
-        sb.append("    transactionRequestState: ").append(toIndentedString(transactionRequestState)).append("\n");
+        sb
+            .append("    transactionRequestState: ")
+            .append(toIndentedString(transactionRequestState))
+            .append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");
         return sb.toString();

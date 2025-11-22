@@ -34,7 +34,8 @@ public class CreateChartEntryInvoker implements CreateChartEntryCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateChartEntryInvoker(final AccountingAdminService.ChartCommand chartCommand, final ObjectMapper objectMapper) {
+    public CreateChartEntryInvoker(final AccountingAdminService.ChartCommand chartCommand,
+                                   final ObjectMapper objectMapper) {
 
         assert chartCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class CreateChartEntryInvoker implements CreateChartEntryCommand {
 
         try {
 
-            return RetrofitService.invoke(this.chartCommand.createEntry(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.chartCommand.createEntry(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

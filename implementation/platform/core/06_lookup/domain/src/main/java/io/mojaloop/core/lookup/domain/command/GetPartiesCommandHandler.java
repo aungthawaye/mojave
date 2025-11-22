@@ -45,7 +45,9 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    public GetPartiesCommandHandler(ParticipantStore participantStore, RespondParties respondParties, ForwardRequest forwardRequest) {
+    public GetPartiesCommandHandler(ParticipantStore participantStore,
+                                    RespondParties respondParties,
+                                    ForwardRequest forwardRequest) {
 
         assert participantStore != null;
         assert respondParties != null;
@@ -94,10 +96,15 @@ public class GetPartiesCommandHandler implements GetPartiesCommand {
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondParties.putPartiesError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    LOGGER.error(
+                        "Something went wrong while sending error response to payer FSP: ", e);
                 }
             }
 

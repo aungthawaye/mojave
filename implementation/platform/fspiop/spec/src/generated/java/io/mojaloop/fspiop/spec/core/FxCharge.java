@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxCharge")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxCharge {
 
     private String chargeType;
@@ -52,7 +53,8 @@ public class FxCharge {
             return false;
         }
         FxCharge fxCharge = (FxCharge) o;
-        return Objects.equals(this.chargeType, fxCharge.chargeType) && Objects.equals(this.sourceAmount, fxCharge.sourceAmount) &&
+        return Objects.equals(this.chargeType, fxCharge.chargeType) &&
+                   Objects.equals(this.sourceAmount, fxCharge.sourceAmount) &&
                    Objects.equals(this.targetAmount, fxCharge.targetAmount);
     }
 

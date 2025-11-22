@@ -57,7 +57,10 @@ public class HubQueryHandler implements HubQuery {
     @Override
     public HubData get() {
 
-        return this.hubRepository.findById(new HubId()).orElseThrow(HubNotFoundException::new).convert();
+        return this.hubRepository
+                   .findById(new HubId())
+                   .orElseThrow(HubNotFoundException::new)
+                   .convert();
     }
 
     @Override

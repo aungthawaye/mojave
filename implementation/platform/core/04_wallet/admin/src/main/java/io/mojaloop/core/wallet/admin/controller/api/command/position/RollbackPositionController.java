@@ -49,7 +49,8 @@ public class RollbackPositionController {
     @PostMapping("/positions/rollback")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public RollbackReservationCommand.Output execute(@Valid @RequestBody final RollbackReservationCommand.Input input) throws FailedToRollbackReservationException {
+    public RollbackReservationCommand.Output execute(@Valid @RequestBody final RollbackReservationCommand.Input input)
+        throws FailedToRollbackReservationException {
 
         LOGGER.info("Entering RollbackReservationCommand.execute: input : {}", input);
 

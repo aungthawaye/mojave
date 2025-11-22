@@ -48,7 +48,8 @@ public class ReserveTransfer {
 
     private final AddStepPublisher addStepPublisher;
 
-    public ReserveTransfer(TransferRepository transferRepository, AddStepPublisher addStepPublisher) {
+    public ReserveTransfer(TransferRepository transferRepository,
+                           AddStepPublisher addStepPublisher) {
 
         assert transferRepository != null;
         assert addStepPublisher != null;
@@ -74,7 +75,10 @@ public class ReserveTransfer {
             before.put("transactionId", input.transactionId().getId().toString());
             before.put("transferId", input.transferId().getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             var transfer = this.transferRepository.getReferenceById(input.transferId());
 
@@ -84,7 +88,10 @@ public class ReserveTransfer {
 
             after.put("transferId", transfer.getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, after, StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, after,
+                    StepPhase.AFTER));
 
             var output = new Output();
 
@@ -96,7 +103,10 @@ public class ReserveTransfer {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -104,6 +114,9 @@ public class ReserveTransfer {
 
     public record Output() { }
 
-    public record Input(String context, TransactionId transactionId, TransferId transferId, PositionUpdateId positionReservationId) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        TransferId transferId,
+                        PositionUpdateId positionReservationId) { }
 
 }

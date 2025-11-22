@@ -32,7 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChangeAccountPropertiesCommandHandler implements ChangeAccountPropertiesCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeAccountPropertiesCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeAccountPropertiesCommandHandler.class);
 
     private final AccountRepository accountRepository;
 
@@ -49,7 +50,9 @@ public class ChangeAccountPropertiesCommandHandler implements ChangeAccountPrope
 
         LOGGER.info("Executing ChangeAccountPropertiesCommand with input: {}", input);
 
-        var account = this.accountRepository.findById(input.accountId()).orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
+        var account = this.accountRepository
+                          .findById(input.accountId())
+                          .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
         if (input.name() != null) {

@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("BulkTransfersIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class BulkTransfersIDPutResponse {
 
     private String completedTimestamp;
@@ -33,7 +34,8 @@ public class BulkTransfersIDPutResponse {
     }
 
     @JsonCreator
-    public BulkTransfersIDPutResponse(@JsonProperty(required = true, value = "bulkTransferState") BulkTransferState bulkTransferState) {
+    public BulkTransfersIDPutResponse(@JsonProperty(required = true,
+                                                    value = "bulkTransferState") BulkTransferState bulkTransferState) {
 
         this.bulkTransferState = bulkTransferState;
     }
@@ -75,9 +77,15 @@ public class BulkTransfersIDPutResponse {
             return false;
         }
         BulkTransfersIDPutResponse bulkTransfersIDPutResponse = (BulkTransfersIDPutResponse) o;
-        return Objects.equals(this.completedTimestamp, bulkTransfersIDPutResponse.completedTimestamp) &&
-                   Objects.equals(this.individualTransferResults, bulkTransfersIDPutResponse.individualTransferResults) &&
-                   Objects.equals(this.bulkTransferState, bulkTransfersIDPutResponse.bulkTransferState) &&
+        return Objects.equals(
+            this.completedTimestamp,
+            bulkTransfersIDPutResponse.completedTimestamp) &&
+                   Objects.equals(
+                       this.individualTransferResults,
+                       bulkTransfersIDPutResponse.individualTransferResults) &&
+                   Objects.equals(
+                       this.bulkTransferState,
+                       bulkTransfersIDPutResponse.bulkTransferState) &&
                    Objects.equals(this.extensionList, bulkTransfersIDPutResponse.extensionList);
     }
 
@@ -145,7 +153,8 @@ public class BulkTransfersIDPutResponse {
     @Override
     public int hashCode() {
 
-        return Objects.hash(completedTimestamp, individualTransferResults, bulkTransferState, extensionList);
+        return Objects.hash(
+            completedTimestamp, individualTransferResults, bulkTransferState, extensionList);
     }
 
     /**
@@ -172,9 +181,18 @@ public class BulkTransfersIDPutResponse {
         StringBuilder sb = new StringBuilder();
         sb.append("class BulkTransfersIDPutResponse {\n");
 
-        sb.append("    completedTimestamp: ").append(toIndentedString(completedTimestamp)).append("\n");
-        sb.append("    individualTransferResults: ").append(toIndentedString(individualTransferResults)).append("\n");
-        sb.append("    bulkTransferState: ").append(toIndentedString(bulkTransferState)).append("\n");
+        sb
+            .append("    completedTimestamp: ")
+            .append(toIndentedString(completedTimestamp))
+            .append("\n");
+        sb
+            .append("    individualTransferResults: ")
+            .append(toIndentedString(individualTransferResults))
+            .append("\n");
+        sb
+            .append("    bulkTransferState: ")
+            .append(toIndentedString(bulkTransferState))
+            .append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");
         return sb.toString();

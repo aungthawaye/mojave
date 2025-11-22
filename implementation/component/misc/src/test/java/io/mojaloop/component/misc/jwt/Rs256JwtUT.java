@@ -36,7 +36,8 @@ public class Rs256JwtUT {
     @Test
     public void testSign() throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        var privateKey = Rs256.privateKeyFromPem("-----BEGIN PRIVATE KEY-----\n" + "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCv5/S8dgS1TjP5\n" +
+        var privateKey = Rs256.privateKeyFromPem("-----BEGIN PRIVATE KEY-----\n" +
+                                                     "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCv5/S8dgS1TjP5\n" +
                                                      "UIVYIDnljX1LqQSS1dFedQLLMs7GO4hXZqWi/YzC4Bs5h7ouu9rOQZm3NPOLX5L+\n" +
                                                      "ejEG8le0MDEz2opcsy6r6maS7rl1ZYFTJC3i5GSm7pr5XzMrvdokzkvJyCZcPBY3\n" +
                                                      "l83M3mWtNF2LAxUH1Kt6SqGcmMgFY7wTi1nBjiP5CvW9JGPg/FUszEiS3FBWJRKs\n" +
@@ -60,15 +61,18 @@ public class Rs256JwtUT {
                                                      "yGLxpkNytl9+ekQ11UERVmcCr3KS0EylrFEGrRsP+kNF9ssfmYy6z5nbT2q3S4pj\n" +
                                                      "KtsPv1DeF+JXCB+2Wbv5/CAqjSz0nTyMGVKH4U0CgYAe6AQcrQfg8ok6lTmZB+3d\n" +
                                                      "qLyE64bSadRa7VsNJkY6/3LoqdFZKNKXgYfYH6wuTDE5upD3xXdBN3IUFqRgN9jY\n" +
-                                                     "AuQBfdRswe5p6LfxASnjB8lQgn76CvIyeyM+1RF3C+i3sbF/Pr3uKAUPvsovfMwX\n" + "HyFsQTxMTbJaGmnoi6X+gQ==\n" +
+                                                     "AuQBfdRswe5p6LfxASnjB8lQgn76CvIyeyM+1RF3C+i3sbF/Pr3uKAUPvsovfMwX\n" +
+                                                     "HyFsQTxMTbJaGmnoi6X+gQ==\n" +
                                                      "-----END PRIVATE KEY-----");
 
-        var publicKey = Rs256.publicKeyFromPem("-----BEGIN PUBLIC KEY-----\n" + "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr+f0vHYEtU4z+VCFWCA5\n" +
+        var publicKey = Rs256.publicKeyFromPem("-----BEGIN PUBLIC KEY-----\n" +
+                                                   "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr+f0vHYEtU4z+VCFWCA5\n" +
                                                    "5Y19S6kEktXRXnUCyzLOxjuIV2alov2MwuAbOYe6LrvazkGZtzTzi1+S/noxBvJX\n" +
                                                    "tDAxM9qKXLMuq+pmku65dWWBUyQt4uRkpu6a+V8zK73aJM5LycgmXDwWN5fNzN5l\n" +
                                                    "rTRdiwMVB9SrekqhnJjIBWO8E4tZwY4j+Qr1vSRj4PxVLMxIktxQViUSrFn2WVfF\n" +
                                                    "M5wZset33rGQSgZv9TYFKAlQA3DZ9yGJWR7h/tz6deLu5tX0o/L20RsFJZ4RwBZL\n" +
-                                                   "4qCwhM7+cTv94/UWYWUL0imnm55w6aFS+YbpAwlJPNi4p2mtTnvquWjEUfZ+r4Bh\n" + "6wIDAQAB\n" + "-----END PUBLIC KEY-----");
+                                                   "4qCwhM7+cTv94/UWYWUL0imnm55w6aFS+YbpAwlJPNi4p2mtTnvquWjEUfZ+r4Bh\n" +
+                                                   "6wIDAQAB\n" + "-----END PUBLIC KEY-----");
 
         var headers = new HashMap<String, String>();
         headers.put("alg", "RS256");
@@ -82,7 +86,8 @@ public class Rs256JwtUT {
         var encodedPayload = JwtBase64Util.encode(payload);
         LOGGER.debug("encodedPayload : {}", encodedPayload);
 
-        var ok = Rs256Jwt.verify(publicKey, new Rs256Jwt.Token(token.header(), encodedPayload, token.signature()));
+        var ok = Rs256Jwt.verify(
+            publicKey, new Rs256Jwt.Token(token.header(), encodedPayload, token.signature()));
         LOGGER.debug("ok : {}", ok);
 
     }

@@ -28,7 +28,8 @@ public class SettlementUpdateBySettlementIdPayload {
 
     }
 
-    public SettlementUpdateBySettlementIdPayload addParticipantsItem(SettlementUpdateBySettlementIDOuterPayload participantsItem) {
+    public SettlementUpdateBySettlementIdPayload addParticipantsItem(
+        SettlementUpdateBySettlementIDOuterPayload participantsItem) {
 
         if (this.participants == null) {
             this.participants = new ArrayList<>();
@@ -48,9 +49,14 @@ public class SettlementUpdateBySettlementIdPayload {
             return false;
         }
         SettlementUpdateBySettlementIdPayload settlementUpdateBySettlementIdPayload = (SettlementUpdateBySettlementIdPayload) o;
-        return Objects.equals(this.state, settlementUpdateBySettlementIdPayload.state) && Objects.equals(this.reason, settlementUpdateBySettlementIdPayload.reason) &&
-                   Objects.equals(this.externalReference, settlementUpdateBySettlementIdPayload.externalReference) &&
-                   Objects.equals(this.participants, settlementUpdateBySettlementIdPayload.participants);
+        return Objects.equals(this.state, settlementUpdateBySettlementIdPayload.state) &&
+                   Objects.equals(this.reason, settlementUpdateBySettlementIdPayload.reason) &&
+                   Objects.equals(
+                       this.externalReference,
+                       settlementUpdateBySettlementIdPayload.externalReference) &&
+                   Objects.equals(
+                       this.participants,
+                       settlementUpdateBySettlementIdPayload.participants);
     }
 
     /**
@@ -132,7 +138,8 @@ public class SettlementUpdateBySettlementIdPayload {
         return this;
     }
 
-    public SettlementUpdateBySettlementIdPayload removeParticipantsItem(SettlementUpdateBySettlementIDOuterPayload participantsItem) {
+    public SettlementUpdateBySettlementIdPayload removeParticipantsItem(
+        SettlementUpdateBySettlementIDOuterPayload participantsItem) {
 
         if (participantsItem != null && this.participants != null) {
             this.participants.remove(participantsItem);
@@ -157,7 +164,10 @@ public class SettlementUpdateBySettlementIdPayload {
 
         sb.append("    state: ").append(toIndentedString(state)).append("\n");
         sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
-        sb.append("    externalReference: ").append(toIndentedString(externalReference)).append("\n");
+        sb
+            .append("    externalReference: ")
+            .append(toIndentedString(externalReference))
+            .append("\n");
         sb.append("    participants: ").append(toIndentedString(participants)).append("\n");
         sb.append("}");
         return sb.toString();

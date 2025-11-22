@@ -31,7 +31,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 
-public record ParticipantContext(String fspCode, String fspName, String ilpSecret, boolean signJws, boolean verifyJws, PrivateKey signingKey, Map<String, PublicKey> publicKeys) {
+public record ParticipantContext(String fspCode,
+                                 String fspName,
+                                 String ilpSecret,
+                                 boolean signJws,
+                                 boolean verifyJws,
+                                 PrivateKey signingKey,
+                                 Map<String, PublicKey> publicKeys) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantContext.class);
 
@@ -50,11 +56,13 @@ public record ParticipantContext(String fspCode, String fspName, String ilpSecre
         }
 
         if (signJws && (signingKey == null)) {
-            throw new IllegalArgumentException("Signing Key (Private Key) is required when signing JWS");
+            throw new IllegalArgumentException(
+                "Signing Key (Private Key) is required when signing JWS");
         }
 
         if (verifyJws && (publicKeys == null || publicKeys.isEmpty())) {
-            throw new IllegalArgumentException("Verification Key (Public Key) of FSPs are required when verifying JWS");
+            throw new IllegalArgumentException(
+                "Verification Key (Public Key) of FSPs are required when verifying JWS");
         }
     }
 
@@ -64,7 +72,8 @@ public record ParticipantContext(String fspCode, String fspName, String ilpSecre
                                           boolean signJws,
                                           boolean verifyJws,
                                           String base64PrivateKey,
-                                          Map<String, String> base64PublicKeys) throws NoSuchAlgorithmException, InvalidKeySpecException {
+                                          Map<String, String> base64PublicKeys)
+        throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         if (fspCode == null || fspCode.isEmpty()) {
             throw new IllegalArgumentException("FSP Code is required");
@@ -79,11 +88,13 @@ public record ParticipantContext(String fspCode, String fspName, String ilpSecre
         }
 
         if (signJws && (base64PrivateKey == null || base64PrivateKey.isEmpty())) {
-            throw new IllegalArgumentException("Signing Key (Private Key) is required when signing JWS");
+            throw new IllegalArgumentException(
+                "Signing Key (Private Key) is required when signing JWS");
         }
 
         if (verifyJws && (base64PublicKeys == null || base64PublicKeys.isEmpty())) {
-            throw new IllegalArgumentException("Verification Key (Public Key) of FSPs are required when verifying JWS");
+            throw new IllegalArgumentException(
+                "Verification Key (Public Key) of FSPs are required when verifying JWS");
         }
 
         var signingKey = Rs256.privateKeyFromPem(base64PrivateKey);
@@ -96,7 +107,8 @@ public record ParticipantContext(String fspCode, String fspName, String ilpSecre
             LOGGER.info("FspCode: [{}], PublicKey: [{}]", entry.getKey(), entry.getValue());
         }
 
-        return new ParticipantContext(fspCode, fspName, ilpSecret, signJws, verifyJws, signingKey, publicKeys);
+        return new ParticipantContext(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, signingKey, publicKeys);
     }
 
 }

@@ -61,7 +61,9 @@ public class WalletAlreadyExistsException extends UncheckedDomainException {
 
     public WalletAlreadyExistsException(final WalletOwnerId ownerId, final Currency currency) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{ownerId.getId().toString(), currency.name()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{ownerId.getId().toString(), currency.name()}));
 
         this.ownerId = ownerId;
         this.currency = currency;

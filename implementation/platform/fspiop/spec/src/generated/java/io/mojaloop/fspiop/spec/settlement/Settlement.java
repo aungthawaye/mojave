@@ -56,7 +56,9 @@ public class Settlement {
             return false;
         }
         Settlement settlement = (Settlement) o;
-        return Objects.equals(this.id, settlement.id) && Objects.equals(this.state, settlement.state) && Objects.equals(this.settlementWindows, settlement.settlementWindows) &&
+        return Objects.equals(this.id, settlement.id) &&
+                   Objects.equals(this.state, settlement.state) &&
+                   Objects.equals(this.settlementWindows, settlement.settlementWindows) &&
                    Objects.equals(this.participants, settlement.participants);
     }
 
@@ -174,7 +176,10 @@ public class Settlement {
 
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
         sb.append("    state: ").append(toIndentedString(state)).append("\n");
-        sb.append("    settlementWindows: ").append(toIndentedString(settlementWindows)).append("\n");
+        sb
+            .append("    settlementWindows: ")
+            .append(toIndentedString(settlementWindows))
+            .append("\n");
         sb.append("    participants: ").append(toIndentedString(participants)).append("\n");
         sb.append("}");
         return sb.toString();

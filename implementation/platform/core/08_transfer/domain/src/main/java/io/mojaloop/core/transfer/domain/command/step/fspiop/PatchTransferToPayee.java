@@ -55,7 +55,8 @@ public class PatchTransferToPayee {
 
     private final AddStepPublisher addStepPublisher;
 
-    public PatchTransferToPayee(RespondTransfers respondTransfers, AddStepPublisher addStepPublisher) {
+    public PatchTransferToPayee(RespondTransfers respondTransfers,
+                                AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -73,7 +74,8 @@ public class PatchTransferToPayee {
 
         try {
 
-            var response = new TransfersIDPatchResponse(FspiopDates.forRequestBody(new Date()), input.state);
+            var response = new TransfersIDPatchResponse(
+                FspiopDates.forRequestBody(new Date()), input.state);
 
             var extensions = new ArrayList<Extension>();
             input.extensions.forEach((k, v) -> extensions.add(new Extension(k, v)));
@@ -82,20 +84,29 @@ public class PatchTransferToPayee {
             response.setExtensionList(extensionList);
 
             var payeeBaseUrl = input.payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-            var url = FspiopUrls.Transfers.patchTransfers(payeeBaseUrl, input.udfTransferId.getId());
+            var url = FspiopUrls.Transfers.patchTransfers(
+                payeeBaseUrl, input.udfTransferId.getId());
 
             var before = new HashMap<>(input.extensions);
 
             before.put("state", input.state.toString());
             before.put("url", url);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
-            this.respondTransfers.patchTransfers(new Payee(input.payeeFsp.fspCode().value()), url, response);
+            this.respondTransfers.patchTransfers(
+                new Payee(input.payeeFsp.fspCode().value()), url, response);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
+                    StepPhase.AFTER));
 
-            LOGGER.info("Patched transfer to Payee : udfTransferId : [{}]", input.udfTransferId.getId());
+            LOGGER.info(
+                "Patched transfer to Payee : udfTransferId : [{}]", input.udfTransferId.getId());
 
         } catch (FspiopException e) {
 
@@ -107,7 +118,10 @@ public class PatchTransferToPayee {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -115,7 +129,12 @@ public class PatchTransferToPayee {
         return new Output();
     }
 
-    public record Input(String context, TransactionId transactionId, UdfTransferId udfTransferId, FspData payeeFsp, TransferState state, Map<String, String> extensions) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        UdfTransferId udfTransferId,
+                        FspData payeeFsp,
+                        TransferState state,
+                        Map<String, String> extensions) { }
 
     public record Output() { }
 

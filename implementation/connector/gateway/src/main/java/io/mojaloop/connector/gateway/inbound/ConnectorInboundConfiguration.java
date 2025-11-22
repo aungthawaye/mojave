@@ -51,16 +51,22 @@ import java.util.List;
 @EnableAutoConfiguration
 @EnableAsync
 @EnableWebMvc
-@Import(value = {MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
+@Import(value = {MiscConfiguration.class,
+                 ConnectorAdapterConfiguration.class,
+                 FspiopInvokerConfiguration.class,
+                 SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
-public class ConnectorInboundConfiguration
-    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredBeans,
+                                                      FspiopInvokerConfiguration.RequiredBeans,
+                                                      SpringSecurityConfiguration.RequiredBeans,
+                                                      SpringSecurityConfiguration.RequiredSettings {
 
     private final ParticipantContext participantContext;
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorInboundConfiguration(ParticipantContext participantContext, ObjectMapper objectMapper) {
+    public ConnectorInboundConfiguration(ParticipantContext participantContext,
+                                         ObjectMapper objectMapper) {
 
         assert participantContext != null;
         assert objectMapper != null;
@@ -89,7 +95,8 @@ public class ConnectorInboundConfiguration
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("*"));  // or your allowed origins
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
+        config.setAllowedMethods(
+            List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
@@ -104,11 +111,13 @@ public class ConnectorInboundConfiguration
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
+        return new SpringSecurityConfigurer.Settings(
+            new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
     }
 
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(
+        InboundSettings inboundSettings) {
 
         return factory -> {
             // existing port configuration
@@ -129,11 +138,14 @@ public class ConnectorInboundConfiguration
 
                             var keystoreSettings = inboundSettings.keyStoreSettings();
                             var truststoreSettings = inboundSettings.trustStoreSettings();
-                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
+                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(
+                                inboundSettings.portNo(), inboundSettings.maxThreads(),
                                 inboundSettings.connectionTimeout(),
-                                new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(truststoreSettings.contentType(), truststoreSettings.contentValue(),
-                                    truststoreSettings.password),
-                                new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(keystoreSettings.contentType(), keystoreSettings.contentValue(),
+                                new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
+                                    truststoreSettings.contentType(),
+                                    truststoreSettings.contentValue(), truststoreSettings.password),
+                                new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
+                                    keystoreSettings.contentType(), keystoreSettings.contentValue(),
                                     keystoreSettings.password, keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
@@ -156,7 +168,9 @@ public class ConnectorInboundConfiguration
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, ConnectorAdapterConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              ConnectorAdapterConfiguration.RequiredSettings,
+                                              FspiopInvokerConfiguration.RequiredSettings {
 
         InboundSettings inboundSettings();
 
@@ -169,9 +183,14 @@ public class ConnectorInboundConfiguration
                                   KeyStoreSettings keyStoreSettings,
                                   TrustStoreSettings trustStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password, String keyAlias) { }
+        public record KeyStoreSettings(P12Reader.ContentType contentType,
+                                       String contentValue,
+                                       String password,
+                                       String keyAlias) { }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
+        public record TrustStoreSettings(P12Reader.ContentType contentType,
+                                         String contentValue,
+                                         String password) { }
 
     }
 

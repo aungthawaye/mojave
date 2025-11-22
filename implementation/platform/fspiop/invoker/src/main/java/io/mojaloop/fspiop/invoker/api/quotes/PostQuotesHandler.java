@@ -40,7 +40,9 @@ class PostQuotesHandler implements PostQuotes {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public PostQuotesHandler(ParticipantContext participantContext, QuotesService quotesService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public PostQuotesHandler(ParticipantContext participantContext,
+                             QuotesService quotesService,
+                             FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert quotesService != null;
@@ -52,13 +54,17 @@ class PostQuotesHandler implements PostQuotes {
     }
 
     @Override
-    public void postQuotes(Payee payee, QuotesPostRequest quotesPostRequest) throws FspiopException {
+    public void postQuotes(Payee payee, QuotesPostRequest quotesPostRequest)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Quotes.forRequest(this.participantContext.fspCode(), payee.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Quotes.forRequest(
+                this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.quotesService.postQuotes(fspiopHeaders, quotesPostRequest), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.quotesService.postQuotes(fspiopHeaders, quotesPostRequest),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

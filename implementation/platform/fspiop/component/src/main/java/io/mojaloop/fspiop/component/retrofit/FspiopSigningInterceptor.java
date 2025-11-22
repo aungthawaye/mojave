@@ -37,7 +37,8 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
 
     private final ObjectMapper objectMapper;
 
-    public FspiopSigningInterceptor(ParticipantContext participantContext, ObjectMapper objectMapper) {
+    public FspiopSigningInterceptor(ParticipantContext participantContext,
+                                    ObjectMapper objectMapper) {
 
         assert participantContext != null;
         assert objectMapper != null;
@@ -81,7 +82,8 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
 
         LOGGER.info("Signing protected headers: [{}] and body: [{}]", protectedHeaders, body);
 
-        var signature = this.objectMapper.writeValueAsString(FspiopSignature.sign(this.participantContext.signingKey(), protectedHeaders, body));
+        var signature = this.objectMapper.writeValueAsString(
+            FspiopSignature.sign(this.participantContext.signingKey(), protectedHeaders, body));
         LOGGER.debug("Fspiop signature: [{}]", signature);
         builder.header(FspiopHeaders.Names.FSPIOP_SIGNATURE, signature);
 

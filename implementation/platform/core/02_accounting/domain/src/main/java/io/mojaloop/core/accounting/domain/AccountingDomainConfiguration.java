@@ -31,7 +31,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.domain"})
-@Import(value = {MiscConfiguration.class, AccountingFlywayConfiguration.class, RoutingJpaConfiguration.class})
+@Import(value = {MiscConfiguration.class,
+                 AccountingFlywayConfiguration.class,
+                 RoutingJpaConfiguration.class})
 public class AccountingDomainConfiguration {
 
     public interface RequiredBeans {
@@ -48,7 +50,9 @@ public class AccountingDomainConfiguration {
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, AccountingFlywayConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              AccountingFlywayConfiguration.RequiredSettings,
+                                              RoutingJpaConfiguration.RequiredSettings {
 
     }
 

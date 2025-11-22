@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ParticipantsTypeIDSubIDPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ParticipantsTypeIDSubIDPostRequest {
 
     private String fspId;
@@ -28,7 +29,8 @@ public class ParticipantsTypeIDSubIDPostRequest {
     }
 
     @JsonCreator
-    public ParticipantsTypeIDSubIDPostRequest(@JsonProperty(required = true, value = "fspId") String fspId) {
+    public ParticipantsTypeIDSubIDPostRequest(@JsonProperty(required = true,
+                                                            value = "fspId") String fspId) {
 
         this.fspId = fspId;
     }
@@ -51,8 +53,11 @@ public class ParticipantsTypeIDSubIDPostRequest {
             return false;
         }
         ParticipantsTypeIDSubIDPostRequest participantsTypeIDSubIDPostRequest = (ParticipantsTypeIDSubIDPostRequest) o;
-        return Objects.equals(this.fspId, participantsTypeIDSubIDPostRequest.fspId) && Objects.equals(this.currency, participantsTypeIDSubIDPostRequest.currency) &&
-                   Objects.equals(this.extensionList, participantsTypeIDSubIDPostRequest.extensionList);
+        return Objects.equals(this.fspId, participantsTypeIDSubIDPostRequest.fspId) &&
+                   Objects.equals(this.currency, participantsTypeIDSubIDPostRequest.currency) &&
+                   Objects.equals(
+                       this.extensionList,
+                       participantsTypeIDSubIDPostRequest.extensionList);
     }
 
     /**

@@ -28,7 +28,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BalanceUpdateRepository extends JpaRepository<BalanceUpdate, BalanceUpdateId>, JpaSpecificationExecutor<BalanceUpdate> {
+public interface BalanceUpdateRepository
+    extends JpaRepository<BalanceUpdate, BalanceUpdateId>, JpaSpecificationExecutor<BalanceUpdate> {
 
     class Filters {
 

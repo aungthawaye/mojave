@@ -49,7 +49,8 @@ public class CommitTransfer {
 
     private final AddStepPublisher addStepPublisher;
 
-    public CommitTransfer(TransferRepository transferRepository, AddStepPublisher addStepPublisher) {
+    public CommitTransfer(TransferRepository transferRepository,
+                          AddStepPublisher addStepPublisher) {
 
         assert transferRepository != null;
         assert addStepPublisher != null;
@@ -76,15 +77,22 @@ public class CommitTransfer {
             before.put("payerCommitId", input.payerCommitId.getId().toString());
             before.put("payeeCommitId", input.payeeCommitId.getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
-            transfer.committed(input.ilpFulfilment, input.payerCommitId, input.payeeCommitId, input.completedAt);
+            transfer.committed(
+                input.ilpFulfilment, input.payerCommitId, input.payeeCommitId, input.completedAt);
 
             this.transferRepository.save(transfer);
 
             LOGGER.info("Committed transfer successfully : transferId [{}]", transfer.getId());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
+                    StepPhase.AFTER));
 
             return new Output();
 
@@ -92,7 +100,10 @@ public class CommitTransfer {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

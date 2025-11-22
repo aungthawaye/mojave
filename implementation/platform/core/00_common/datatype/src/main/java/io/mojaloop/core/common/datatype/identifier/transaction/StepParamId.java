@@ -44,7 +44,8 @@ public class StepParamId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<StepParamId> {
 
         @Override
-        public StepParamId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public StepParamId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class StepParamId extends EntityId<Long> {
             try {
                 return new StepParamId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 

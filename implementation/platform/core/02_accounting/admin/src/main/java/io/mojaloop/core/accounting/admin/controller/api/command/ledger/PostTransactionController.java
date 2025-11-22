@@ -44,7 +44,11 @@ public class PostTransactionController {
 
     @PostMapping("/ledgers/post-transaction")
     public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input)
-        throws InsufficientBalanceInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException, OverdraftLimitReachedInAccountException {
+        throws
+        InsufficientBalanceInAccountException,
+        DuplicatePostingInLedgerException,
+        RestoreFailedInAccountException,
+        OverdraftLimitReachedInAccountException {
 
         return this.postTransactionCommand.execute(input);
     }

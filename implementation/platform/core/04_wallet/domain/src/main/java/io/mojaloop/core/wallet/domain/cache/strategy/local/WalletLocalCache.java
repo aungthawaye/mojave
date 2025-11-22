@@ -117,7 +117,9 @@ public class WalletLocalCache implements WalletCache {
         final var key = key(wallet.walletOwnerId(), wallet.currency());
         this.withOwnerCurrency.put(key, wallet);
 
-        final var set = this.withOwnerId.computeIfAbsent(wallet.walletOwnerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        final var set = this.withOwnerId.computeIfAbsent(
+            wallet.walletOwnerId().getId(),
+            __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(wallet);
     }
 

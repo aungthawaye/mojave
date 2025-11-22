@@ -52,7 +52,9 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "wlt_wallet", uniqueConstraints = @UniqueConstraint(name = "wlt_wallet_owner_id_currency_UK", columnNames = {"wallet_owner_id", "currency"}))
+@Table(name = "wlt_wallet",
+       uniqueConstraints = @UniqueConstraint(name = "wlt_wallet_owner_id_currency_UK",
+                                             columnNames = {"wallet_owner_id", "currency"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wallet extends JpaEntity<WalletId> implements DataConversion<WalletData> {
 
@@ -66,11 +68,17 @@ public class Wallet extends JpaEntity<WalletId> implements DataConversion<Wallet
     @Convert(converter = WalletOwnerIdConverter.class)
     protected WalletOwnerId walletOwnerId;
 
-    @Column(name = "currency", length = StringSizeConstraints.MAX_CURRENCY_LENGTH, nullable = false, updatable = false)
+    @Column(name = "currency",
+            length = StringSizeConstraints.MAX_CURRENCY_LENGTH,
+            nullable = false,
+            updatable = false)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "name", length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH, nullable = false, updatable = false)
+    @Column(name = "name",
+            length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH,
+            nullable = false,
+            updatable = false)
     protected String name;
 
     @Column(name = "balance", nullable = false, precision = 34, scale = 4)
@@ -97,7 +105,8 @@ public class Wallet extends JpaEntity<WalletId> implements DataConversion<Wallet
     @Override
     public WalletData convert() {
 
-        return new WalletData(this.id, this.walletOwnerId, this.currency, this.name, this.balance, this.createdAt);
+        return new WalletData(
+            this.id, this.walletOwnerId, this.currency, this.name, this.balance, this.createdAt);
     }
 
     @Override

@@ -44,7 +44,8 @@ public class ReservationId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<ReservationId> {
 
         @Override
-        public ReservationId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public ReservationId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class ReservationId extends EntityId<Long> {
             try {
                 return new ReservationId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 

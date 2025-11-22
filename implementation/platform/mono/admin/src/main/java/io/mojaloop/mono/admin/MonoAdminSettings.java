@@ -15,8 +15,10 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     @Override
     public FlywayMigration.Settings accountingFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "flyway_accounting_history", new String[]{"classpath:migration/accounting"});
+        return new FlywayMigration.Settings(
+            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"});
     }
 
     @Bean
@@ -31,9 +33,11 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     public MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings() {
 
         return new MySqlBalanceUpdater.BalanceDbSettings(
-            new MySqlBalanceUpdater.BalanceDbSettings.Connection(System.getenv("MONO_BALANCE_DB_URL"), System.getenv("MONO_BALANCE_DB_USER"),
+            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
+                System.getenv("MONO_BALANCE_DB_URL"), System.getenv("MONO_BALANCE_DB_USER"),
                 System.getenv("MONO_BALANCE_DB_PASSWORD")),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool("wallet-balance", Integer.parseInt(System.getenv("MONO_BALANCE_DB_MIN_POOL_SIZE")),
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance", Integer.parseInt(System.getenv("MONO_BALANCE_DB_MIN_POOL_SIZE")),
                 Integer.parseInt(System.getenv("MONO_BALANCE_DB_MAX_POOL_SIZE"))));
     }
 
@@ -42,17 +46,21 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
 
         return new MySqlLedger.LedgerDbSettings(
-            new MySqlLedger.LedgerDbSettings.Connection(System.getenv("MONO_LEDGER_DB_URL"), System.getenv("MONO_LEDGER_DB_USER"), System.getenv("MONO_LEDGER_DB_PASSWORD")),
-            new MySqlLedger.LedgerDbSettings.Pool("accounting-ledger", Integer.parseInt(System.getenv("MONO_LEDGER_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("MONO_LEDGER_DB_MAX_POOL_SIZE"))));
+            new MySqlLedger.LedgerDbSettings.Connection(
+                System.getenv("MONO_LEDGER_DB_URL"), System.getenv("MONO_LEDGER_DB_USER"),
+                System.getenv("MONO_LEDGER_DB_PASSWORD")), new MySqlLedger.LedgerDbSettings.Pool(
+            "accounting-ledger", Integer.parseInt(System.getenv("MONO_LEDGER_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("MONO_LEDGER_DB_MAX_POOL_SIZE"))));
     }
 
     @Bean
     @Override
     public FlywayMigration.Settings participantFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "flyway_participant_history", new String[]{"classpath:migration/participant"});
+        return new FlywayMigration.Settings(
+            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
+            new String[]{"classpath:migration/participant"});
     }
 
     @Bean
@@ -60,9 +68,12 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     public MySqlPositionUpdater.PositionDbSettings positionDbSettings() {
 
         return new MySqlPositionUpdater.PositionDbSettings(
-            new MySqlPositionUpdater.PositionDbSettings.Connection(System.getenv("MONO_POSITION_DB_URL"), System.getenv("MONO_POSITION_DB_USER"),
+            new MySqlPositionUpdater.PositionDbSettings.Connection(
+                System.getenv("MONO_POSITION_DB_URL"), System.getenv("MONO_POSITION_DB_USER"),
                 System.getenv("MONO_POSITION_DB_PASSWORD")),
-            new MySqlPositionUpdater.PositionDbSettings.Pool("wallet-position", Integer.parseInt(System.getenv("MONO_POSITION_DB_MIN_POOL_SIZE")),
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position",
+                Integer.parseInt(System.getenv("MONO_POSITION_DB_MIN_POOL_SIZE")),
                 Integer.parseInt(System.getenv("MONO_POSITION_DB_MAX_POOL_SIZE"))));
     }
 
@@ -70,10 +81,12 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(System.getenv("MONO_READ_DB_URL"), System.getenv("MONO_READ_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
+            System.getenv("MONO_READ_DB_URL"), System.getenv("MONO_READ_DB_USER"),
             System.getenv("MONO_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("mojave-admin-read", Integer.parseInt(System.getenv("MONO_READ_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "mojave-admin-read", Integer.parseInt(System.getenv("MONO_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("MONO_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -83,10 +96,12 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     @Override
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
-        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(System.getenv("MONO_WRITE_DB_URL"), System.getenv("MONO_WRITE_DB_USER"),
+        var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
+            System.getenv("MONO_WRITE_DB_URL"), System.getenv("MONO_WRITE_DB_USER"),
             System.getenv("MONO_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("mojave-admin-write", Integer.parseInt(System.getenv("MONO_WRITE_DB_MIN_POOL_SIZE")),
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "mojave-admin-write", Integer.parseInt(System.getenv("MONO_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("MONO_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -103,15 +118,18 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     @Override
     public MonoAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new MonoAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv("MOJAVE_ADMIN_PORT")));
+        return new MonoAdminConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("MOJAVE_ADMIN_PORT")));
     }
 
     @Bean
     @Override
     public FlywayMigration.Settings walletFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "flyway_wallet_history", new String[]{"classpath:migration/wallet"});
+        return new FlywayMigration.Settings(
+            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
+            new String[]{"classpath:migration/wallet"});
     }
 
 }

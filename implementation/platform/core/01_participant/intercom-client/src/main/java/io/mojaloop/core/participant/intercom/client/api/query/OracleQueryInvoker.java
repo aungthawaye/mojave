@@ -48,7 +48,8 @@ public class OracleQueryInvoker implements OracleQuery {
 
     private final ObjectMapper objectMapper;
 
-    public OracleQueryInvoker(final ParticipantIntercomService.OracleQuery oracleQuery, final ObjectMapper objectMapper) {
+    public OracleQueryInvoker(final ParticipantIntercomService.OracleQuery oracleQuery,
+                              final ObjectMapper objectMapper) {
 
         assert oracleQuery != null;
         assert objectMapper != null;
@@ -62,8 +63,12 @@ public class OracleQueryInvoker implements OracleQuery {
 
         try {
 
-            var data = RetrofitService.invoke(this.oracleQuery.getByPartyIdType(type.name()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            var data = RetrofitService
+                           .invoke(
+                               this.oracleQuery.getByPartyIdType(type.name()),
+                               (status, errorResponseBody) -> RestErrorResponse.decode(
+                                   errorResponseBody, this.objectMapper))
+                           .body();
             return Optional.ofNullable(data);
 
         } catch (RetrofitService.InvocationException e) {
@@ -92,8 +97,12 @@ public class OracleQueryInvoker implements OracleQuery {
 
         try {
 
-            return RetrofitService.invoke(this.oracleQuery.getByPartyIdType(type.name()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleQuery.getByPartyIdType(type.name()),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -117,8 +126,12 @@ public class OracleQueryInvoker implements OracleQuery {
 
         try {
 
-            return RetrofitService.invoke(this.oracleQuery.getByOracleId(oracleId.getId().toString()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleQuery.getByOracleId(oracleId.getId().toString()),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -146,7 +159,12 @@ public class OracleQueryInvoker implements OracleQuery {
 
         try {
 
-            return RetrofitService.invoke(this.oracleQuery.getAllOracles(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleQuery.getAllOracles(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

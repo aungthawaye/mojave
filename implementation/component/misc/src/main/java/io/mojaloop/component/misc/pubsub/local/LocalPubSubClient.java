@@ -47,9 +47,12 @@ public class LocalPubSubClient implements PubSubClient {
     }
 
     @Override
-    public Subscription subscribe(String channel, PubSubClient.MessageHandler handler, int timeout) {
+    public Subscription subscribe(String channel,
+                                  PubSubClient.MessageHandler handler,
+                                  int timeout) {
 
-        var disposable = this.pubSub.subscribe(channel, message -> handler.handle(channel, message), timeout);
+        var disposable = this.pubSub.subscribe(
+            channel, message -> handler.handle(channel, message), timeout);
 
         return new Subscription(channel, disposable);
     }

@@ -34,7 +34,8 @@ public class TerminateFlowDefinitionInvoker implements TerminateFlowDefinitionCo
 
     private final ObjectMapper objectMapper;
 
-    public TerminateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public TerminateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                          final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class TerminateFlowDefinitionInvoker implements TerminateFlowDefinitionCo
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.terminate(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.terminate(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

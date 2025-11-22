@@ -28,7 +28,9 @@ public class Transfers {
 
     public static class Post {
 
-        public record Request(String transferId, Agreement agreement, ExtensionList extensionList) { }
+        public record Request(String transferId,
+                              Agreement agreement,
+                              ExtensionList extensionList) { }
 
         public record Response(String homeTransactionId) { }
 
@@ -36,7 +38,10 @@ public class Transfers {
 
     public static class Patch {
 
-        public record Request(String transferId, TransferState transferState, String completedTimestamp, ExtensionList extensionList) { }
+        public record Request(String transferId,
+                              TransferState transferState,
+                              String completedTimestamp,
+                              ExtensionList extensionList) { }
 
     }
 

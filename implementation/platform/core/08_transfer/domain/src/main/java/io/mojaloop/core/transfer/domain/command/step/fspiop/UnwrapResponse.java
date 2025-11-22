@@ -55,7 +55,9 @@ public class UnwrapResponse {
         if (state != TransferState.RESERVED && state != TransferState.ABORTED) {
 
             LOGGER.info("Payee responded with invalid Transfer state : [{}]", state);
-            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Payee responded with invalid Transfer state.");
+            throw new FspiopException(
+                FspiopErrors.GENERIC_VALIDATION_ERROR,
+                "Payee responded with invalid Transfer state.");
         }
 
         var completedAt = Instant.now();
@@ -64,7 +66,9 @@ public class UnwrapResponse {
             completedAt = FspiopDates.fromRequestBody(completedTimestamp);
         } catch (Exception ignored) { }
 
-        LOGGER.info("Unwrapped transfer response from Payee. State : [{}], completedAt : [{}]", state, completedAt);
+        LOGGER.info(
+            "Unwrapped transfer response from Payee. State : [{}], completedAt : [{}]", state,
+            completedAt);
 
         return new Output(state, response.getFulfilment(), completedAt);
     }

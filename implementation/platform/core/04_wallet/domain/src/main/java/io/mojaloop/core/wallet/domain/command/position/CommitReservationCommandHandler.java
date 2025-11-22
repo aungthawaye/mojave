@@ -32,7 +32,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommitReservationCommandHandler implements CommitReservationCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitReservationCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CommitReservationCommandHandler.class);
 
     private final PositionUpdater positionUpdater;
 
@@ -49,10 +50,14 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
 
         try {
 
-            final var history = this.positionUpdater.commit(input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
+            final var history = this.positionUpdater.commit(
+                input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(
+                history.positionUpdateId(), history.positionId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(),
+                history.newReserved(), history.netDebitCap(), history.transactionAt());
 
             LOGGER.info("CommitReservationCommand executed successfully with output: {}", output);
 

@@ -49,7 +49,8 @@ public class CommitPositionController {
     @PostMapping("/positions/commit")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CommitReservationCommand.Output execute(@Valid @RequestBody final CommitReservationCommand.Input input) throws FailedToCommitReservationException {
+    public CommitReservationCommand.Output execute(@Valid @RequestBody final CommitReservationCommand.Input input)
+        throws FailedToCommitReservationException {
 
         LOGGER.info("Entering CommitReservationCommand.execute: input : {}", input);
 

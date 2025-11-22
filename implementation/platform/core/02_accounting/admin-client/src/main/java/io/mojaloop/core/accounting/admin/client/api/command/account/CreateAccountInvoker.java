@@ -34,7 +34,8 @@ public class CreateAccountInvoker implements CreateAccountCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateAccountInvoker(final AccountingAdminService.AccountCommand accountCommand, final ObjectMapper objectMapper) {
+    public CreateAccountInvoker(final AccountingAdminService.AccountCommand accountCommand,
+                                final ObjectMapper objectMapper) {
 
         assert accountCommand != null;
         assert objectMapper != null;
@@ -48,7 +49,12 @@ public class CreateAccountInvoker implements CreateAccountCommand {
 
         try {
 
-            return RetrofitService.invoke(this.accountCommand.create(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.accountCommand.create(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

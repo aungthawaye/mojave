@@ -58,12 +58,16 @@ public class TransferIlpPacket extends JpaEntity<TransferId> {
     @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String condition;
 
-    @Column(name = "ilp_fulfilment", length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
+    @Column(name = "ilp_fulfilment",
+            length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
     protected String fulfilment;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "transfer_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "transfer_ilp_packet_transfer_FK"))
+    @JoinColumn(name = "transfer_id",
+                nullable = false,
+                updatable = false,
+                foreignKey = @ForeignKey(name = "transfer_ilp_packet_transfer_FK"))
     protected Transfer transfer;
 
     public TransferIlpPacket(Transfer transfer, String ilpPacket, String ilpCondition) {

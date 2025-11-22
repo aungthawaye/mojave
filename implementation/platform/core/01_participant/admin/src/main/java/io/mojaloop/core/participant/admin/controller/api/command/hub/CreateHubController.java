@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreateHubController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreateHubController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CreateHubController.class.getName());
 
     private final CreateHubCommand createHubCommand;
 

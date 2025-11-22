@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("GeoCode")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class GeoCode {
 
     private String latitude;
@@ -25,7 +26,8 @@ public class GeoCode {
     }
 
     @JsonCreator
-    public GeoCode(@JsonProperty(required = true, value = "latitude") String latitude, @JsonProperty(required = true, value = "longitude") String longitude) {
+    public GeoCode(@JsonProperty(required = true, value = "latitude") String latitude,
+                   @JsonProperty(required = true, value = "longitude") String longitude) {
 
         this.latitude = latitude;
         this.longitude = longitude;
@@ -41,7 +43,8 @@ public class GeoCode {
             return false;
         }
         GeoCode geoCode = (GeoCode) o;
-        return Objects.equals(this.latitude, geoCode.latitude) && Objects.equals(this.longitude, geoCode.longitude);
+        return Objects.equals(this.latitude, geoCode.latitude) &&
+                   Objects.equals(this.longitude, geoCode.longitude);
     }
 
     @JsonProperty(required = true, value = "latitude")

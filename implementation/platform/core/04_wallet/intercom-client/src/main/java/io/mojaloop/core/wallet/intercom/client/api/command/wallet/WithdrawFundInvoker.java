@@ -38,7 +38,8 @@ public class WithdrawFundInvoker implements WithdrawFundCommand {
 
     private final ObjectMapper objectMapper;
 
-    public WithdrawFundInvoker(final WalletIntercomService.WalletCommand walletCommand, final ObjectMapper objectMapper) {
+    public WithdrawFundInvoker(final WalletIntercomService.WalletCommand walletCommand,
+                               final ObjectMapper objectMapper) {
 
         assert walletCommand != null;
         assert objectMapper != null;
@@ -48,12 +49,17 @@ public class WithdrawFundInvoker implements WithdrawFundCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException {
+    public Output execute(final Input input)
+        throws NoBalanceUpdateForTransactionException, InsufficientBalanceInWalletException {
 
         try {
 
-            return RetrofitService.invoke(this.walletCommand.withdrawFund(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.walletCommand.withdrawFund(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

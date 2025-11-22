@@ -34,7 +34,8 @@ public class CreateFlowDefinitionInvoker implements CreateFlowDefinitionCommand 
 
     private final ObjectMapper objectMapper;
 
-    public CreateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public CreateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                       final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class CreateFlowDefinitionInvoker implements CreateFlowDefinitionCommand 
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.create(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.create(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

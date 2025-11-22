@@ -32,7 +32,8 @@ import java.util.HashMap;
 
 public class KafkaConsumerConfigurer {
 
-    public static <K, V> ConcurrentKafkaListenerContainerFactory<K, V> configure(ConsumerSettings opts, Deserializer<K, V> deserializer) {
+    public static <K, V> ConcurrentKafkaListenerContainerFactory<K, V> configure(ConsumerSettings opts,
+                                                                                 Deserializer<K, V> deserializer) {
 
         var props = new HashMap<String, Object>();
 
@@ -42,7 +43,8 @@ public class KafkaConsumerConfigurer {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, Boolean.toString(opts.isAutoCommit()));
         props.put(ConsumerConfig.CLIENT_ID_CONFIG, opts.getClientId());
 
-        var consumerFactory = new DefaultKafkaConsumerFactory<>(props, deserializer.forKey(), deserializer.forValue());
+        var consumerFactory = new DefaultKafkaConsumerFactory<>(
+            props, deserializer.forKey(), deserializer.forValue());
 
         var listenerContainerFactory = new ConcurrentKafkaListenerContainerFactory<K, V>();
 
@@ -53,7 +55,9 @@ public class KafkaConsumerConfigurer {
         }
 
         if (opts.getPollTimeoutMs() > 0) {
-            listenerContainerFactory.getContainerProperties().setPollTimeout(opts.getPollTimeoutMs());
+            listenerContainerFactory
+                .getContainerProperties()
+                .setPollTimeout(opts.getPollTimeoutMs());
         }
 
         // Ack mode is only meaningful when auto-commit is false

@@ -79,7 +79,8 @@ public class FspCodeJavaType extends AbstractClassJavaType<FspCode> {
             case null -> null;
             case FspCode code -> code;
             case String s -> new FspCode(s);
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

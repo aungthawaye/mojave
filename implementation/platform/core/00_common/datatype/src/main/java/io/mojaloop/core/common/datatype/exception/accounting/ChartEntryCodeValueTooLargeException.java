@@ -30,7 +30,9 @@ public class ChartEntryCodeValueTooLargeException extends UncheckedDomainExcepti
 
     public static final String CODE = "CHART_ENTRY_CODE_VALUE_TOO_LARGE";
 
-    private static final String TEMPLATE = "Chart Entry Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
+    private static final String TEMPLATE =
+        "Chart Entry Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH +
+            " characters.";
 
     public ChartEntryCodeValueTooLargeException() {
 

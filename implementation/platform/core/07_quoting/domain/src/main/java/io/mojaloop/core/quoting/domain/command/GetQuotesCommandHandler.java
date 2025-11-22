@@ -90,7 +90,8 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
         MDC.put("requestId", udfQuoteId.getId());
 
-        LOGGER.info("({}) Executing GetQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
+        LOGGER.info(
+            "({}) Executing GetQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -110,7 +111,8 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
             if (this.quoteSettings.stateful()) {
 
                 TransactionContext.startNew(this.transactionManager, input.udfQuoteId().getId());
-                var optQuote = this.quoteRepository.findOne(QuoteRepository.Filters.withUdfQuoteId(input.udfQuoteId()));
+                var optQuote = this.quoteRepository.findOne(
+                    QuoteRepository.Filters.withUdfQuoteId(input.udfQuoteId()));
 
                 if (optQuote.isEmpty()) {
 
@@ -119,7 +121,9 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
                 }
 
                 var quote = optQuote.get();
-                LOGGER.info("({}) Found Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), quote.getId(), quote);
+                LOGGER.info(
+                    "({}) Found Quote object with UDF Quote ID: [{}] , quote : {}",
+                    udfQuoteId.getId(), quote.getId(), quote);
 
                 var quoteIdPutResponse = quote.toFspiopResponse();
 
@@ -127,12 +131,17 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
                 var payerBaseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
                 var finalUrl = FspiopUrls.newUrl(payerBaseUrl, input.request().uri());
-                LOGGER.info("({}) Responding request to payer FSP (Url): [{}]", udfQuoteId.getId(), finalUrl);
+                LOGGER.info(
+                    "({}) Responding request to payer FSP (Url): [{}]", udfQuoteId.getId(),
+                    finalUrl);
 
                 try {
 
-                    this.respondQuotes.putQuotes(new Payer(payeeFspCode.value()), finalUrl, quoteIdPutResponse);
-                    LOGGER.info("({}) Done responding request to payer FSP (Url): [{}]", udfQuoteId.getId(), finalUrl);
+                    this.respondQuotes.putQuotes(
+                        new Payer(payeeFspCode.value()), finalUrl, quoteIdPutResponse);
+                    LOGGER.info(
+                        "({}) Done responding request to payer FSP (Url): [{}]", udfQuoteId.getId(),
+                        finalUrl);
 
                 } catch (FspiopCommunicationException ignored) {
                     // Do nothing. We are not able to respond to the payer.
@@ -141,10 +150,14 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
             } else {
 
                 var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                LOGGER.info("({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeBaseUrl);
+                LOGGER.info(
+                    "({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(),
+                    payeeBaseUrl);
 
                 this.forwardRequest.forward(payeeBaseUrl, input.request());
-                LOGGER.info("({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeBaseUrl);
+                LOGGER.info(
+                    "({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(),
+                    payeeBaseUrl);
             }
 
         } catch (Exception e) {
@@ -159,10 +172,15 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondQuotes.putQuotesError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    LOGGER.error(
+                        "Something went wrong while sending error response to payer FSP: ", e);
                 }
             }
         }

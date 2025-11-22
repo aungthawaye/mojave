@@ -34,7 +34,8 @@ public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinition
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public DeactivateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                           final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinition
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.deactivate(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.deactivate(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

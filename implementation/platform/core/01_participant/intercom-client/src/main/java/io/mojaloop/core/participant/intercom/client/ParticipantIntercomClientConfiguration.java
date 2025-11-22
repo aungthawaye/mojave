@@ -34,21 +34,25 @@ import org.springframework.context.annotation.Import;
 public class ParticipantIntercomClientConfiguration implements MiscConfiguration.RequiredBeans {
 
     @Bean
-    public ParticipantIntercomService.FspQuery fspQuery(ParticipantIntercomService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantIntercomService.FspQuery fspQuery(ParticipantIntercomService.Settings settings,
+                                                        ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantIntercomService.FspQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantIntercomService.FspQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public ParticipantIntercomService.OracleQuery oracleQuery(ParticipantIntercomService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantIntercomService.OracleQuery oracleQuery(ParticipantIntercomService.Settings settings,
+                                                              ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantIntercomService.OracleQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantIntercomService.OracleQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans {

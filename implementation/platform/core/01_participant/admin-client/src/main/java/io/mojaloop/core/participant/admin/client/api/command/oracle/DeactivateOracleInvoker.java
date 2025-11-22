@@ -40,7 +40,8 @@ public class DeactivateOracleInvoker implements DeactivateOracleCommand {
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateOracleInvoker(final ParticipantAdminService.OracleCommands oracleCommands, final ObjectMapper objectMapper) {
+    public DeactivateOracleInvoker(final ParticipantAdminService.OracleCommands oracleCommands,
+                                   final ObjectMapper objectMapper) {
 
         assert oracleCommands != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class DeactivateOracleInvoker implements DeactivateOracleCommand {
 
         try {
 
-            return RetrofitService.invoke(this.oracleCommands.deactivateOracle(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleCommands.deactivateOracle(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

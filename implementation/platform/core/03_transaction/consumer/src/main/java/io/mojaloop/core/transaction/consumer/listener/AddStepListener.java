@@ -50,7 +50,9 @@ public class AddStepListener {
         this.addStepCommand = addStepCommand;
     }
 
-    @KafkaListener(topics = TopicNames.ADD_STEP, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
+    @KafkaListener(topics = TopicNames.ADD_STEP,
+                   containerFactory = LISTENER_CONTAINER_FACTORY,
+                   groupId = GROUP_ID)
     public void handle(AddStepCommand.Input input, Acknowledgment ack) {
 
         try {
@@ -80,7 +82,9 @@ public class AddStepListener {
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
-            super(bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs, autoCommit, ackMode);
+            super(
+                bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs,
+                autoCommit, ackMode);
         }
 
     }

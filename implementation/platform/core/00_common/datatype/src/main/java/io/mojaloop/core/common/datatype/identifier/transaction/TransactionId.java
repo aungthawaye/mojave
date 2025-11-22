@@ -44,7 +44,8 @@ public class TransactionId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<TransactionId> {
 
         @Override
-        public TransactionId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public TransactionId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class TransactionId extends EntityId<Long> {
             try {
                 return new TransactionId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 

@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ActivateHubCurrencyController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateHubCurrencyController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateHubCurrencyController.class);
 
     private final ActivateHubCurrencyCommand activateHubCurrencyCommand;
 

@@ -50,13 +50,15 @@ import java.util.UUID;
 @RestController
 public class RequestQuotesController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestQuotesController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestQuotesController.class.getName());
 
     private final RequestQuotesCommand requestQuotesCommand;
 
     private final EventPublisher eventPublisher;
 
-    public RequestQuotesController(RequestQuotesCommand requestQuotesCommand, EventPublisher eventPublisher) {
+    public RequestQuotesController(RequestQuotesCommand requestQuotesCommand,
+                                   EventPublisher eventPublisher) {
 
         assert requestQuotesCommand != null;
         assert eventPublisher != null;
@@ -72,19 +74,23 @@ public class RequestQuotesController {
 
         var id = UUID.randomUUID().toString();
 
-        var quotesPostRequest = new QuotesPostRequest().quoteId(id)
-                                                       .transactionId(id)
-                                                       .payee(new Party().partyIdInfo(request.payee()))
-                                                       .payer(new Party().partyIdInfo(request.payer()))
-                                                       .amountType(request.amountType())
-                                                       .amount(request.amount())
-                                                       .fees(request.fees())
-                                                       .expiration(request.expiration())
-                                                       .transactionType(new TransactionType().scenario(TransactionScenario.TRANSFER)
-                                                                                             .initiator(TransactionInitiator.PAYER)
-                                                                                             .initiatorType(TransactionInitiatorType.CONSUMER));
+        var quotesPostRequest = new QuotesPostRequest()
+                                    .quoteId(id)
+                                    .transactionId(id)
+                                    .payee(new Party().partyIdInfo(request.payee()))
+                                    .payer(new Party().partyIdInfo(request.payer()))
+                                    .amountType(request.amountType())
+                                    .amount(request.amount())
+                                    .fees(request.fees())
+                                    .expiration(request.expiration())
+                                    .transactionType(new TransactionType()
+                                                         .scenario(TransactionScenario.TRANSFER)
+                                                         .initiator(TransactionInitiator.PAYER)
+                                                         .initiatorType(
+                                                             TransactionInitiatorType.CONSUMER));
 
-        var input = new RequestQuotesCommand.Input(new Payee(request.destination), quotesPostRequest);
+        var input = new RequestQuotesCommand.Input(
+            new Payee(request.destination), quotesPostRequest);
 
         var output = this.requestQuotesCommand.execute(input);
 

@@ -38,8 +38,10 @@ import org.springframework.context.annotation.Import;
                  RoutingJpaConfiguration.class})
 public class TransferDomainConfiguration {
 
-    public interface RequiredBeans
-        extends MiscConfiguration.RequiredBeans, FspiopCommonConfiguration.RequiredBeans, TransactionProducerConfiguration.RequiredBeans, RoutingJpaConfiguration.RequiredBeans {
+    public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
+                                           FspiopCommonConfiguration.RequiredBeans,
+                                           TransactionProducerConfiguration.RequiredBeans,
+                                           RoutingJpaConfiguration.RequiredBeans {
 
         PartyUnwrapper partyUnwrapper();
 

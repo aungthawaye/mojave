@@ -34,7 +34,8 @@ public class ChangeFlowDefinitionCurrencyInvoker implements ChangeFlowDefinition
 
     private final ObjectMapper objectMapper;
 
-    public ChangeFlowDefinitionCurrencyInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public ChangeFlowDefinitionCurrencyInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                               final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class ChangeFlowDefinitionCurrencyInvoker implements ChangeFlowDefinition
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.changeCurrency(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.changeCurrency(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

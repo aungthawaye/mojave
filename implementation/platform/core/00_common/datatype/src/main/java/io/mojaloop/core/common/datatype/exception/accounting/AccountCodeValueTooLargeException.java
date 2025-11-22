@@ -30,7 +30,9 @@ public class AccountCodeValueTooLargeException extends UncheckedDomainException 
 
     public static final String CODE = "ACCOUNT_CODE_VALUE_TOO_LARGE";
 
-    private static final String TEMPLATE = "Account Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH + " characters.";
+    private static final String TEMPLATE =
+        "Account Code is too large. Must not exceed " + StringSizeConstraints.MAX_CODE_LENGTH +
+            " characters.";
 
     public AccountCodeValueTooLargeException() {
 

@@ -70,7 +70,8 @@ public record ChartEntryCode(@JsonValue @JsonProperty(required = true) @NotNull 
     public static class Deserializer extends JsonDeserializer<ChartEntryCode> {
 
         @Override
-        public ChartEntryCode deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public ChartEntryCode deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var text = p.getValueAsString();
 

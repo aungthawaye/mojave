@@ -46,9 +46,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.participant.intercom.controller")
-@Import(value = {OpenApiConfiguration.class, DatatypeConfiguration.class, ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-final class ParticipantIntercomConfiguration extends JacksonWebMvcExtension
-    implements ParticipantDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@Import(value = {OpenApiConfiguration.class,
+                 DatatypeConfiguration.class,
+                 ParticipantDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class})
+final class ParticipantIntercomConfiguration extends JacksonWebMvcExtension implements
+                                                                            ParticipantDomainConfiguration.RequiredBeans,
+                                                                            SpringSecurityConfiguration.RequiredBeans,
+                                                                            SpringSecurityConfiguration.RequiredSettings {
 
     public ParticipantIntercomConfiguration(ObjectMapper objectMapper) {
 
@@ -77,12 +83,14 @@ final class ParticipantIntercomConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

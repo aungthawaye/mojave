@@ -51,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TerminateFlowDefinitionCommandHandler implements TerminateFlowDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TerminateFlowDefinitionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        TerminateFlowDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -69,7 +70,10 @@ public class TerminateFlowDefinitionCommandHandler implements TerminateFlowDefin
 
         LOGGER.info("Executing TerminateFlowDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
 
         definition.terminate();
 

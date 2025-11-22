@@ -32,13 +32,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DecreasePositionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DecreasePositionCommandHandler.class);
 
     private final PositionUpdater positionUpdater;
 
     private final PositionCache positionCache;
 
-    public DecreasePositionCommandHandler(final PositionUpdater positionUpdater, final PositionCache positionCache) {
+    public DecreasePositionCommandHandler(final PositionUpdater positionUpdater,
+                                          final PositionCache positionCache) {
 
         assert positionUpdater != null;
         assert positionCache != null;
@@ -56,18 +58,26 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
         if (position == null) {
 
-            LOGGER.error("Position does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
-            throw new RuntimeException("Position does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+            LOGGER.error(
+                "Position does not exist for walletOwnerId: {} and currency: {}",
+                input.walletOwnerId(), input.currency());
+            throw new RuntimeException(
+                "Position does not exist for walletOwnerId: " + input.walletOwnerId() +
+                    " and currency: " + input.currency());
         }
 
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
-            final var history = this.positionUpdater.decrease(input.transactionId(), input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
-                input.description());
+            final var history = this.positionUpdater.decrease(
+                input.transactionId(), input.transactionAt(), positionUpdateId,
+                position.positionId(), input.amount(), input.description());
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(
+                history.positionUpdateId(), history.positionId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(),
+                history.newReserved(), history.netDebitCap(), history.transactionAt());
 
             LOGGER.info("DecreasePositionCommand executed successfully with output: {}", output);
 

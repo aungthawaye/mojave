@@ -30,7 +30,8 @@ public interface ChangeChartNameCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull ChartId chartId, @JsonProperty(required = true) @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name) { }
+    record Input(@JsonProperty(required = true) @NotNull ChartId chartId,
+                 @JsonProperty(required = true) @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name) { }
 
     record Output(ChartId chartId) { }
 

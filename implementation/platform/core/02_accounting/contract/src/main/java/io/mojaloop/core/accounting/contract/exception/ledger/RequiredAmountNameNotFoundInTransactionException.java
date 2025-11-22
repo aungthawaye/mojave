@@ -61,9 +61,14 @@ public class RequiredAmountNameNotFoundInTransactionException extends UncheckedD
 
     private final TransactionId transactionId;
 
-    public RequiredAmountNameNotFoundInTransactionException(final String requiredAmountName, final Set<String> amounts, final TransactionId transactionId) {
+    public RequiredAmountNameNotFoundInTransactionException(final String requiredAmountName,
+                                                            final Set<String> amounts,
+                                                            final TransactionId transactionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{requiredAmountName, amounts.toString(), transactionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{requiredAmountName,
+                                         amounts.toString(),
+                                         transactionId.getId().toString()}));
 
         this.requiredAmountName = requiredAmountName;
         this.amounts = amounts;

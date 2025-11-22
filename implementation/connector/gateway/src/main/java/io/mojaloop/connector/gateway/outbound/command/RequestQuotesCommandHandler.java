@@ -40,7 +40,8 @@ import java.time.Instant;
 @Service
 class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestQuotesCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestQuotesCommandHandler.class.getName());
 
     private final PostQuotes postQuotes;
 
@@ -48,7 +49,9 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
     private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
-    public RequestQuotesCommandHandler(PostQuotes postQuotes, PubSubClient pubSubClient, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public RequestQuotesCommandHandler(PostQuotes postQuotes,
+                                       PubSubClient pubSubClient,
+                                       ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != postQuotes;
         assert null != pubSubClient;
@@ -77,7 +80,9 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             var expireAt = FspiopDates.fromRequestBody(expiration);
 
             if (expireAt.isBefore(Instant.now())) {
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Expiration date/time must be in the future.");
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+                    "Expiration date/time must be in the future.");
             }
         }
 
@@ -85,7 +90,9 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
 
             if (fees.getCurrency() != amount.getCurrency()) {
 
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Fees and Amount currency must have the same currency.");
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+                    "Fees and Amount currency must have the same currency.");
             }
         }
 
@@ -93,7 +100,8 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         var errorTopic = PubSubKeys.forQuotes(quoteId);
 
         // Listening to the pub/sub
-        var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, QuotesResult.class, QuotesErrorResult.class);
+        var resultListener = new FspiopResultListener<>(
+            this.pubSubClient, this.outboundSettings, QuotesResult.class, QuotesErrorResult.class);
         resultListener.init(resultTopic, errorTopic);
 
         this.postQuotes.postQuotes(input.payee(), input.request());
@@ -105,9 +113,12 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         }
 
         var error = resultListener.getError();
-        var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
+        var errorDefinition = FspiopErrors.find(
+            error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));
+        throw new FspiopException(new ErrorDefinition(
+            errorDefinition.errorType(),
+            error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

@@ -22,7 +22,8 @@ public class Extension {
     }
 
     @JsonCreator
-    public Extension(@JsonProperty(required = true, value = "key") String key, @JsonProperty(required = true, value = "value") String value) {
+    public Extension(@JsonProperty(required = true, value = "key") String key,
+                     @JsonProperty(required = true, value = "value") String value) {
 
         this.key = key;
         this.value = value;
@@ -38,7 +39,8 @@ public class Extension {
             return false;
         }
         Extension extension = (Extension) o;
-        return Objects.equals(this.key, extension.key) && Objects.equals(this.value, extension.value);
+        return Objects.equals(this.key, extension.key) &&
+                   Objects.equals(this.value, extension.value);
     }
 
     @JsonProperty(required = true, value = "key")

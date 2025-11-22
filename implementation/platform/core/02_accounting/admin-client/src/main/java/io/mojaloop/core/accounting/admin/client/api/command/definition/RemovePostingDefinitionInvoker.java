@@ -34,7 +34,8 @@ public class RemovePostingDefinitionInvoker implements RemovePostingDefinitionCo
 
     private final ObjectMapper objectMapper;
 
-    public RemovePostingDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public RemovePostingDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                          final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -48,8 +49,12 @@ public class RemovePostingDefinitionInvoker implements RemovePostingDefinitionCo
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.removePosting(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.removePosting(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

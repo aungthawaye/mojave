@@ -27,7 +27,8 @@ public record ErrorDefinition(FspiopErrorType errorType, String description) {
 
     public ErrorInformationObject toErrorObject() {
 
-        return new ErrorInformationObject().errorInformation(new ErrorInformation(this.errorType.getCode(), this.description()));
+        return new ErrorInformationObject().errorInformation(
+            new ErrorInformation(this.errorType.getCode(), this.description()));
     }
 
 }

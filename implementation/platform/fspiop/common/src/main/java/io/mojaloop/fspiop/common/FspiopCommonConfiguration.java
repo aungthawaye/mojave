@@ -30,10 +30,14 @@ import java.util.Map;
 public class FspiopCommonConfiguration {
 
     @Bean
-    public ParticipantContext participantContext(ParticipantSettings participantSettings) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public ParticipantContext participantContext(ParticipantSettings participantSettings)
+        throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        return ParticipantContext.with(participantSettings.fspCode(), participantSettings.fspName(), participantSettings.ilpSecret(), participantSettings.signJws(),
-            participantSettings.verifyJws(), participantSettings.privateKeyPem(), participantSettings.fspPublicKeyPem());
+        return ParticipantContext.with(
+            participantSettings.fspCode(), participantSettings.fspName(),
+            participantSettings.ilpSecret(), participantSettings.signJws(),
+            participantSettings.verifyJws(), participantSettings.privateKeyPem(),
+            participantSettings.fspPublicKeyPem());
     }
 
     public interface RequiredBeans { }

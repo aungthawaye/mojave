@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("AuthorizationsIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class AuthorizationsIDPutResponse {
 
     private AuthenticationInfo authenticationInfo;
@@ -25,7 +26,8 @@ public class AuthorizationsIDPutResponse {
     }
 
     @JsonCreator
-    public AuthorizationsIDPutResponse(@JsonProperty(required = true, value = "responseType") AuthorizationResponse responseType) {
+    public AuthorizationsIDPutResponse(@JsonProperty(required = true,
+                                                     value = "responseType") AuthorizationResponse responseType) {
 
         this.responseType = responseType;
     }
@@ -48,7 +50,9 @@ public class AuthorizationsIDPutResponse {
             return false;
         }
         AuthorizationsIDPutResponse authorizationsIDPutResponse = (AuthorizationsIDPutResponse) o;
-        return Objects.equals(this.authenticationInfo, authorizationsIDPutResponse.authenticationInfo) &&
+        return Objects.equals(
+            this.authenticationInfo,
+            authorizationsIDPutResponse.authenticationInfo) &&
                    Objects.equals(this.responseType, authorizationsIDPutResponse.responseType);
     }
 
@@ -98,7 +102,10 @@ public class AuthorizationsIDPutResponse {
         StringBuilder sb = new StringBuilder();
         sb.append("class AuthorizationsIDPutResponse {\n");
 
-        sb.append("    authenticationInfo: ").append(toIndentedString(authenticationInfo)).append("\n");
+        sb
+            .append("    authenticationInfo: ")
+            .append(toIndentedString(authenticationInfo))
+            .append("\n");
         sb.append("    responseType: ").append(toIndentedString(responseType)).append("\n");
         sb.append("}");
         return sb.toString();

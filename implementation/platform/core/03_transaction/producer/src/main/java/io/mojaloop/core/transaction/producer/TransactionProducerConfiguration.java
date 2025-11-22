@@ -45,56 +45,66 @@ public class TransactionProducerConfiguration {
 
     @Bean
     @Qualifier(AddStepPublisher.QUALIFIER)
-    public KafkaTemplate<String, AddStepCommand.Input> addStepKafkaTemplate(@Qualifier(AddStepPublisher.QUALIFIER) ProducerFactory<String, AddStepCommand.Input> producerFactory) {
+    public KafkaTemplate<String, AddStepCommand.Input> addStepKafkaTemplate(@Qualifier(
+        AddStepPublisher.QUALIFIER) ProducerFactory<String, AddStepCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     @Qualifier(AddStepPublisher.QUALIFIER)
-    public ProducerFactory<String, AddStepCommand.Input> addStepProducerFactory(KafkaProducerConfigurer.ProducerSettings settings, ObjectMapper objectMapper) {
+    public ProducerFactory<String, AddStepCommand.Input> addStepProducerFactory(
+        KafkaProducerConfigurer.ProducerSettings settings,
+        ObjectMapper objectMapper) {
 
-        return KafkaProducerConfigurer.configure(settings.bootstrapServers(), settings.ack(), new KafkaProducerConfigurer.Serializer<>() {
+        return KafkaProducerConfigurer.configure(
+            settings.bootstrapServers(), settings.ack(),
+            new KafkaProducerConfigurer.Serializer<>() {
 
-            @Override
-            public JsonSerializer<String> forKey() {
+                @Override
+                public JsonSerializer<String> forKey() {
 
-                return new JsonSerializer<>(objectMapper);
-            }
+                    return new JsonSerializer<>(objectMapper);
+                }
 
-            @Override
-            public JsonSerializer<AddStepCommand.Input> forValue() {
+                @Override
+                public JsonSerializer<AddStepCommand.Input> forValue() {
 
-                return new JsonSerializer<>(objectMapper);
-            }
-        });
+                    return new JsonSerializer<>(objectMapper);
+                }
+            });
     }
 
     @Bean
     @Qualifier(CloseTransactionPublisher.QUALIFIER)
-    public KafkaTemplate<String, CloseTransactionCommand.Input> commitTransactionKafkaTemplate(@Qualifier(CloseTransactionPublisher.QUALIFIER) ProducerFactory<String, CloseTransactionCommand.Input> producerFactory) {
+    public KafkaTemplate<String, CloseTransactionCommand.Input> commitTransactionKafkaTemplate(@Qualifier(
+        CloseTransactionPublisher.QUALIFIER) ProducerFactory<String, CloseTransactionCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     @Qualifier(CloseTransactionPublisher.QUALIFIER)
-    public ProducerFactory<String, CloseTransactionCommand.Input> commitTransactionProducerFactory(KafkaProducerConfigurer.ProducerSettings settings, ObjectMapper objectMapper) {
+    public ProducerFactory<String, CloseTransactionCommand.Input> commitTransactionProducerFactory(
+        KafkaProducerConfigurer.ProducerSettings settings,
+        ObjectMapper objectMapper) {
 
-        return KafkaProducerConfigurer.configure(settings.bootstrapServers(), settings.ack(), new KafkaProducerConfigurer.Serializer<>() {
+        return KafkaProducerConfigurer.configure(
+            settings.bootstrapServers(), settings.ack(),
+            new KafkaProducerConfigurer.Serializer<>() {
 
-            @Override
-            public JsonSerializer<String> forKey() {
+                @Override
+                public JsonSerializer<String> forKey() {
 
-                return new JsonSerializer<>(objectMapper);
-            }
+                    return new JsonSerializer<>(objectMapper);
+                }
 
-            @Override
-            public JsonSerializer<CloseTransactionCommand.Input> forValue() {
+                @Override
+                public JsonSerializer<CloseTransactionCommand.Input> forValue() {
 
-                return new JsonSerializer<>(objectMapper);
-            }
-        });
+                    return new JsonSerializer<>(objectMapper);
+                }
+            });
     }
 
     @Bean

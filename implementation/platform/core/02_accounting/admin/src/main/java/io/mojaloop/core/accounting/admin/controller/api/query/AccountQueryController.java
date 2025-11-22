@@ -42,7 +42,8 @@ import java.util.List;
 @RestController
 public class AccountQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        AccountQueryController.class.getName());
 
     private final AccountQuery accountQuery;
 

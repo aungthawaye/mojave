@@ -100,7 +100,8 @@ public class ReceiveTransfer {
             var payerPartyIdInfo = input.payerPartyIdInfo();
             var payeePartyIdInfo = input.payeePartyIdInfo();
 
-            var openTransactionOutput = this.openTransactionCommand.execute(new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            var openTransactionOutput = this.openTransactionCommand.execute(
+                new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
 
             transactionId = openTransactionOutput.transactionId();
             var transactionIdString = transactionId.getId().toString();
@@ -109,11 +110,16 @@ public class ReceiveTransfer {
             var transactionAtString = transactionAt.getEpochSecond() + "";
 
             var transferAmountString = input.transferAmount().stripTrailingZeros().toPlainString();
-            var reservationTimeoutAt = Instant.now().plusMillis(this.transferSettings.reservationTimeoutMs());
+            var reservationTimeoutAt = Instant
+                                           .now()
+                                           .plusMillis(
+                                               this.transferSettings.reservationTimeoutMs());
 
             var extensions = new HashMap<String, String>();
 
-            input.extensionList.getExtension().forEach(e -> extensions.put(e.getKey(), e.getValue()));
+            input.extensionList
+                .getExtension()
+                .forEach(e -> extensions.put(e.getKey(), e.getValue()));
 
             var before = new HashMap<>(extensions);
             var after = new HashMap<String, String>();
@@ -134,33 +140,52 @@ public class ReceiveTransfer {
 
             before.put("currency", input.currency.name());
             before.put("amount", transferAmountString);
-            before.put("requestExpiration", "" + (input.requestExpiration != null ? input.requestExpiration.getEpochSecond() : 0));
+            before.put(
+                "requestExpiration", "" + (input.requestExpiration != null ?
+                                               input.requestExpiration.getEpochSecond() : 0));
             before.put("reservationTimeoutAt", reservationTimeoutAt.getEpochSecond() + "");
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    transactionId, STEP_NAME, CONTEXT, before,
+                    StepPhase.BEFORE));
 
             before.clear();
 
-            var transfer = new Transfer(transactionId, transactionAt, input.udfTransferId, payerFsp.fspCode(),
-                new Party(payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(), payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspCode(),
-                new Party(payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(), payeePartyIdInfo.getPartySubIdOrType()), input.currency, input.transferAmount,
+            var transfer = new Transfer(
+                transactionId, transactionAt, input.udfTransferId, payerFsp.fspCode(), new Party(
+                payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(),
+                payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspCode(), new Party(
+                payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(),
+                payeePartyIdInfo.getPartySubIdOrType()), input.currency, input.transferAmount,
                 input.ilpPacket, input.ilpCondition, input.requestExpiration, reservationTimeoutAt);
 
             transfer.addExtension(Direction.TO_PAYEE, "payerFspCode", payerFsp.fspCode().value());
-            transfer.addExtension(Direction.TO_PAYEE, "payerPartyIdType", payerPartyIdInfo.getPartyIdType().name());
-            transfer.addExtension(Direction.TO_PAYEE, "payerPartyIdentifier", payerPartyIdInfo.getPartyIdentifier());
-            transfer.addExtension(Direction.TO_PAYEE, "payerPartySubIdOrType", payerPartyIdInfo.getPartySubIdOrType());
+            transfer.addExtension(
+                Direction.TO_PAYEE, "payerPartyIdType", payerPartyIdInfo.getPartyIdType().name());
+            transfer.addExtension(
+                Direction.TO_PAYEE, "payerPartyIdentifier", payerPartyIdInfo.getPartyIdentifier());
+            transfer.addExtension(
+                Direction.TO_PAYEE, "payerPartySubIdOrType",
+                payerPartyIdInfo.getPartySubIdOrType());
 
             transfer.addExtension(Direction.TO_PAYEE, "payeeFspCode", payeeFsp.fspCode().value());
-            transfer.addExtension(Direction.TO_PAYEE, "payeePartyIdType", payeePartyIdInfo.getPartyIdType().name());
-            transfer.addExtension(Direction.TO_PAYEE, "payeePartyIdentifier", payeePartyIdInfo.getPartyIdentifier());
-            transfer.addExtension(Direction.TO_PAYEE, "payeePartySubIdOrType", payeePartyIdInfo.getPartySubIdOrType());
+            transfer.addExtension(
+                Direction.TO_PAYEE, "payeePartyIdType", payeePartyIdInfo.getPartyIdType().name());
+            transfer.addExtension(
+                Direction.TO_PAYEE, "payeePartyIdentifier", payeePartyIdInfo.getPartyIdentifier());
+            transfer.addExtension(
+                Direction.TO_PAYEE, "payeePartySubIdOrType",
+                payeePartyIdInfo.getPartySubIdOrType());
 
             this.transferRepository.save(transfer);
 
             after.put("transferId", transfer.getId().toString());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(transactionId, STEP_NAME, CONTEXT, after, StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    transactionId, STEP_NAME, CONTEXT, after,
+                    StepPhase.AFTER));
 
             after.clear();
 
@@ -175,7 +200,10 @@ public class ReceiveTransfer {
             LOGGER.error("Error:", e);
 
             if (transactionId != null) {
-                this.addStepPublisher.publish(new AddStepCommand.Input(transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+                this.addStepPublisher.publish(
+                    new AddStepCommand.Input(
+                        transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                        StepPhase.ERROR));
             }
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
@@ -196,6 +224,8 @@ public class ReceiveTransfer {
                         Instant requestExpiration,
                         ExtensionList extensionList) { }
 
-    public record Output(TransactionId transactionId, Instant transactionAt, TransferId transferId) { }
+    public record Output(TransactionId transactionId,
+                         Instant transactionAt,
+                         TransferId transferId) { }
 
 }

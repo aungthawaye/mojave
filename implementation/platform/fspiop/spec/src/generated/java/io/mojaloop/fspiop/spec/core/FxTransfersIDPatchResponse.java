@@ -14,7 +14,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxTransfersIDPatchResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxTransfersIDPatchResponse {
 
     private String completedTimestamp;
@@ -28,7 +29,8 @@ public class FxTransfersIDPatchResponse {
     }
 
     @JsonCreator
-    public FxTransfersIDPatchResponse(@JsonProperty(required = true, value = "conversionState") TransferState conversionState) {
+    public FxTransfersIDPatchResponse(@JsonProperty(required = true,
+                                                    value = "conversionState") TransferState conversionState) {
 
         this.conversionState = conversionState;
     }
@@ -60,8 +62,12 @@ public class FxTransfersIDPatchResponse {
             return false;
         }
         FxTransfersIDPatchResponse fxTransfersIDPatchResponse = (FxTransfersIDPatchResponse) o;
-        return Objects.equals(this.completedTimestamp, fxTransfersIDPatchResponse.completedTimestamp) &&
-                   Objects.equals(this.conversionState, fxTransfersIDPatchResponse.conversionState) && Objects.equals(this.extensionList, fxTransfersIDPatchResponse.extensionList);
+        return Objects.equals(
+            this.completedTimestamp,
+            fxTransfersIDPatchResponse.completedTimestamp) && Objects.equals(
+            this.conversionState,
+            fxTransfersIDPatchResponse.conversionState) &&
+                   Objects.equals(this.extensionList, fxTransfersIDPatchResponse.extensionList);
     }
 
     /**
@@ -123,7 +129,10 @@ public class FxTransfersIDPatchResponse {
         StringBuilder sb = new StringBuilder();
         sb.append("class FxTransfersIDPatchResponse {\n");
 
-        sb.append("    completedTimestamp: ").append(toIndentedString(completedTimestamp)).append("\n");
+        sb
+            .append("    completedTimestamp: ")
+            .append(toIndentedString(completedTimestamp))
+            .append("\n");
         sb.append("    conversionState: ").append(toIndentedString(conversionState)).append("\n");
         sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
         sb.append("}");

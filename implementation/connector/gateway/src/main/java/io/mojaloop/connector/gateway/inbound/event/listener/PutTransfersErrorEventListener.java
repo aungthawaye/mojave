@@ -31,7 +31,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PutTransfersErrorEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersErrorEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PutTransfersErrorEventListener.class);
 
     private final HandlePutTransfersErrorCommand handleTransfersError;
 
@@ -54,7 +55,10 @@ public class PutTransfersErrorEventListener {
 
         try {
 
-            this.handleTransfersError.execute(new HandlePutTransfersErrorCommand.Input(payload.payee(), payload.transferId(), payload.errorInformationObject()));
+            this.handleTransfersError.execute(
+                new HandlePutTransfersErrorCommand.Input(
+                    payload.payee(), payload.transferId(),
+                    payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutTransfersErrorEvent : {}", event);
 

@@ -43,7 +43,8 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
     private final PathPattern[] pathPatterns;
 
-    public AuthenticationProcessFilter(Authenticator authenticator, SpringSecurityConfigurer.Settings settings) {
+    public AuthenticationProcessFilter(Authenticator authenticator,
+                                       SpringSecurityConfigurer.Settings settings) {
 
         assert authenticator != null;
         assert settings != null;
@@ -70,7 +71,9 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         var uri = request.getRequestURI();
         LOGGER.debug("Received request for URI : [{}]", uri);
@@ -132,7 +135,9 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
             } catch (IOException e) {
 
                 LOGGER.error("Error :", e);
-                LOGGER.error("Error occurred during reading request body for CachedServletRequest : [{}]", e.getMessage());
+                LOGGER.error(
+                    "Error occurred during reading request body for CachedServletRequest : [{}]",
+                    e.getMessage());
                 throw new RuntimeException(e);
             }
         }

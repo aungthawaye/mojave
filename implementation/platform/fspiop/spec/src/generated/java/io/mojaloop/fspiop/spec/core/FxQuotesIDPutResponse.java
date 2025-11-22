@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("FxQuotesIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class FxQuotesIDPutResponse {
 
     private String condition;
@@ -27,7 +28,8 @@ public class FxQuotesIDPutResponse {
     }
 
     @JsonCreator
-    public FxQuotesIDPutResponse(@JsonProperty(required = true, value = "conversionTerms") FxConversion conversionTerms) {
+    public FxQuotesIDPutResponse(@JsonProperty(required = true,
+                                               value = "conversionTerms") FxConversion conversionTerms) {
 
         this.conversionTerms = conversionTerms;
     }
@@ -59,7 +61,8 @@ public class FxQuotesIDPutResponse {
             return false;
         }
         FxQuotesIDPutResponse fxQuotesIDPutResponse = (FxQuotesIDPutResponse) o;
-        return Objects.equals(this.condition, fxQuotesIDPutResponse.condition) && Objects.equals(this.conversionTerms, fxQuotesIDPutResponse.conversionTerms);
+        return Objects.equals(this.condition, fxQuotesIDPutResponse.condition) &&
+                   Objects.equals(this.conversionTerms, fxQuotesIDPutResponse.conversionTerms);
     }
 
     @JsonProperty("condition")

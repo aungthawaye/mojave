@@ -62,6 +62,7 @@ public interface CreateFlowDefinitionCommand {
     /**
      * Output of creation, returning the generated DefinitionId and posting IDs.
      */
-    record Output(FlowDefinitionId flowDefinitionId, List<PostingDefinitionId> postingDefinitionIds) { }
+    record Output(FlowDefinitionId flowDefinitionId,
+                  List<PostingDefinitionId> postingDefinitionIds) { }
 
 }

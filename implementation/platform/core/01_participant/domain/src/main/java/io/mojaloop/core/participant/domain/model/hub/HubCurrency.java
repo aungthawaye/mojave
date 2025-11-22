@@ -72,9 +72,12 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_hub_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_hub_currency_hub_currency_id_currency_UK", columnNames = {"hub_currency_id", "currency"})})
+@Table(name = "pcp_hub_currency",
+       uniqueConstraints = {@UniqueConstraint(name = "pcp_hub_currency_hub_currency_id_currency_UK",
+                                              columnNames = {"hub_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataConversion<HubData.HubCurrencyData> {
+public final class HubCurrency extends JpaEntity<HubCurrencyId>
+    implements DataConversion<HubData.HubCurrencyData> {
 
     @Id
     @JavaType(HubCurrencyIdJavaType.class)
@@ -86,7 +89,9 @@ public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataC
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
@@ -95,7 +100,9 @@ public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataC
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "hub_id", nullable = false, foreignKey = @ForeignKey(name = "hub_currency_hub_FK"))
+    @JoinColumn(name = "hub_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "hub_currency_hub_FK"))
     private Hub hub;
 
     HubCurrency(Hub hub, Currency currency) {
@@ -111,7 +118,8 @@ public final class HubCurrency extends JpaEntity<HubCurrencyId> implements DataC
     @Override
     public HubData.HubCurrencyData convert() {
 
-        return new HubData.HubCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus());
+        return new HubData.HubCurrencyData(
+            this.getId(), this.getCurrency(), this.getActivationStatus());
     }
 
     @Override

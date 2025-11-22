@@ -54,11 +54,13 @@ public class FetchTransfer {
 
             LOGGER.info("Fetching transfer with transferId: [{}]", input.udfTransferId);
 
-            var optTransfer = this.transferRepository.findOne(TransferRepository.Filters.withUdfTransferId(input.udfTransferId));
+            var optTransfer = this.transferRepository.findOne(
+                TransferRepository.Filters.withUdfTransferId(input.udfTransferId));
 
             if (optTransfer.isEmpty()) {
 
-                LOGGER.info("Transfer not found for udfTransferId : [{}]", input.udfTransferId.getId());
+                LOGGER.info(
+                    "Transfer not found for udfTransferId : [{}]", input.udfTransferId.getId());
                 return new Output(null);
             }
 

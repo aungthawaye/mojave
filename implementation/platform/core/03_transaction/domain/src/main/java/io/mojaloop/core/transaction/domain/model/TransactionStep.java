@@ -58,7 +58,8 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(name = "txn_transaction_step")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TransactionStep extends JpaEntity<TransactionStepId> implements DataConversion<TransactionStepData> {
+public class TransactionStep extends JpaEntity<TransactionStepId>
+    implements DataConversion<TransactionStepData> {
 
     @Id
     @JavaType(TransactionStepIdJavaType.class)
@@ -72,7 +73,10 @@ public class TransactionStep extends JpaEntity<TransactionStepId> implements Dat
     @Column(name = "context")
     protected String context;
 
-    @Column(name = "phase", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "phase",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected StepPhase phase;
 
@@ -80,7 +84,10 @@ public class TransactionStep extends JpaEntity<TransactionStepId> implements Dat
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @OneToMany(mappedBy = "step", orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "step",
+               orphanRemoval = true,
+               cascade = {CascadeType.ALL},
+               fetch = FetchType.EAGER)
     protected List<StepParam> params = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -109,7 +116,8 @@ public class TransactionStep extends JpaEntity<TransactionStepId> implements Dat
 
         var paramData = this.params.stream().map(StepParam::convert).toList();
 
-        return new TransactionStepData(this.id, this.name, this.phase, this.createdAt, this.transaction.getId(), paramData);
+        return new TransactionStepData(
+            this.id, this.name, this.phase, this.createdAt, this.transaction.getId(), paramData);
     }
 
     @Override

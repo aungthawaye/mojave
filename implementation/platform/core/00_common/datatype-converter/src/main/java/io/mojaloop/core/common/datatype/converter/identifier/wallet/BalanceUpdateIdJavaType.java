@@ -83,7 +83,8 @@ public class BalanceUpdateIdJavaType extends AbstractClassJavaType<BalanceUpdate
             case null -> null;
             case BalanceUpdateId balanceUpdateId -> balanceUpdateId;
             case Number n -> new BalanceUpdateId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

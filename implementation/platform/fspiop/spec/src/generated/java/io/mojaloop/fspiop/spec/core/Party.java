@@ -17,7 +17,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("Party")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class Party {
 
     private PartyIdInfo partyIdInfo;
@@ -60,8 +61,11 @@ public class Party {
             return false;
         }
         Party party = (Party) o;
-        return Objects.equals(this.partyIdInfo, party.partyIdInfo) && Objects.equals(this.merchantClassificationCode, party.merchantClassificationCode) &&
-                   Objects.equals(this.name, party.name) && Objects.equals(this.personalInfo, party.personalInfo) &&
+        return Objects.equals(this.partyIdInfo, party.partyIdInfo) &&
+                   Objects.equals(
+                       this.merchantClassificationCode,
+                       party.merchantClassificationCode) && Objects.equals(this.name, party.name) &&
+                   Objects.equals(this.personalInfo, party.personalInfo) &&
                    Objects.equals(this.supportedCurrencies, party.supportedCurrencies);
     }
 
@@ -134,7 +138,8 @@ public class Party {
     @Override
     public int hashCode() {
 
-        return Objects.hash(partyIdInfo, merchantClassificationCode, name, personalInfo, supportedCurrencies);
+        return Objects.hash(
+            partyIdInfo, merchantClassificationCode, name, personalInfo, supportedCurrencies);
     }
 
     /**
@@ -196,10 +201,16 @@ public class Party {
         sb.append("class Party {\n");
 
         sb.append("    partyIdInfo: ").append(toIndentedString(partyIdInfo)).append("\n");
-        sb.append("    merchantClassificationCode: ").append(toIndentedString(merchantClassificationCode)).append("\n");
+        sb
+            .append("    merchantClassificationCode: ")
+            .append(toIndentedString(merchantClassificationCode))
+            .append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    personalInfo: ").append(toIndentedString(personalInfo)).append("\n");
-        sb.append("    supportedCurrencies: ").append(toIndentedString(supportedCurrencies)).append("\n");
+        sb
+            .append("    supportedCurrencies: ")
+            .append(toIndentedString(supportedCurrencies))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

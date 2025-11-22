@@ -49,7 +49,8 @@ public class ReverseFundController {
     @PostMapping("/wallets/reverse-fund")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ReverseFundCommand.Output execute(@Valid @RequestBody final ReverseFundCommand.Input input) throws ReversalFailedInWalletException {
+    public ReverseFundCommand.Output execute(@Valid @RequestBody final ReverseFundCommand.Input input)
+        throws ReversalFailedInWalletException {
 
         LOGGER.info("Entering ReverseFundCommand.execute: input : {}", input);
 

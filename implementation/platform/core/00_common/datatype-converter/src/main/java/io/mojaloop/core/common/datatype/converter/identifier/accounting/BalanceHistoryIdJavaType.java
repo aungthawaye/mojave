@@ -83,7 +83,8 @@ public class BalanceHistoryIdJavaType extends AbstractClassJavaType<BalanceHisto
             case null -> null;
             case BalanceHistoryId id -> id;
             case Number n -> new BalanceHistoryId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

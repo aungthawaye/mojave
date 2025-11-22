@@ -54,7 +54,10 @@ public class PostTransfersEventListener {
 
         try {
 
-            this.handleTransfersRequest.execute(new HandlePostTransfersRequestCommand.Input(payload.payer(), payload.transferId(), payload.request()));
+            this.handleTransfersRequest.execute(
+                new HandlePostTransfersRequestCommand.Input(
+                    payload.payer(), payload.transferId(),
+                    payload.request()));
 
             LOGGER.info("Done handling PostTransfersEvent : {}", event);
 

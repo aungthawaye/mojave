@@ -83,7 +83,8 @@ public class WalletOwnerIdJavaType extends AbstractClassJavaType<WalletOwnerId> 
             case null -> null;
             case WalletOwnerId walletOwnerId -> walletOwnerId;
             case Number n -> new WalletOwnerId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

@@ -35,7 +35,8 @@ import java.util.List;
 @RestController
 public class HubQueryController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HubQueryController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HubQueryController.class.getName());
 
     private final HubQuery hubQuery;
 

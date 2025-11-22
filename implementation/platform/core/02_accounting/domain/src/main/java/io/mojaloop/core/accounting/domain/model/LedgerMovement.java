@@ -63,10 +63,14 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Table(name = "acc_ledger_movement",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_account_account_id_side_transaction_id_UK", columnNames = {"account_id", "side", "transaction_id"}),},
+       uniqueConstraints = {@UniqueConstraint(name = "acc_account_account_id_side_transaction_id_UK",
+                                              columnNames = {"account_id",
+                                                             "side",
+                                                             "transaction_id"}),},
        indexes = {@Index(name = "acc_account_transaction_id_IDX", columnList = "transaction_id"),
                   @Index(name = "acc_account_transaction_at_IDX", columnList = "transaction_at"),
-                  @Index(name = "acc_account_account_id_transaction_at_IDX", columnList = "account_id, transaction_at"),
+                  @Index(name = "acc_account_account_id_transaction_at_IDX",
+                         columnList = "account_id, transaction_at"),
                   @Index(name = "acc_account_account_id", columnList = "account_id")})
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -82,11 +86,17 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Convert(converter = AccountIdConverter.class)
     protected AccountId accountId;
 
-    @Column(name = "side", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "side",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Side side;
 
-    @Column(name = "currency", nullable = false, updatable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(name = "currency",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
@@ -94,13 +104,25 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     protected BigDecimal amount;
 
     @Embedded
-    @AttributeOverrides({@AttributeOverride(name = "debits", column = @Column(name = "old_debits", precision = 34, scale = 4)),
-                         @AttributeOverride(name = "credits", column = @Column(name = "old_credits", precision = 34, scale = 4))})
+    @AttributeOverrides({@AttributeOverride(name = "debits",
+                                            column = @Column(name = "old_debits",
+                                                             precision = 34,
+                                                             scale = 4)),
+                         @AttributeOverride(name = "credits",
+                                            column = @Column(name = "old_credits",
+                                                             precision = 34,
+                                                             scale = 4))})
     protected DrCr oldDrCr;
 
     @Embedded
-    @AttributeOverrides({@AttributeOverride(name = "debits", column = @Column(name = "new_debits", precision = 34, scale = 4)),
-                         @AttributeOverride(name = "credits", column = @Column(name = "new_credits", precision = 34, scale = 4))})
+    @AttributeOverrides({@AttributeOverride(name = "debits",
+                                            column = @Column(name = "new_debits",
+                                                             precision = 34,
+                                                             scale = 4)),
+                         @AttributeOverride(name = "credits",
+                                            column = @Column(name = "new_credits",
+                                                             precision = 34,
+                                                             scale = 4))})
     protected DrCr newDrCr;
 
     @Column(name = "transaction_id", nullable = false, updatable = false)
@@ -123,11 +145,15 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Convert(converter = PostingDefinitionIdConverter.class)
     protected PostingDefinitionId postingDefinitionId;
 
-    @Column(name = "movement_stage", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "movement_stage",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected MovementStage movementStage;
 
-    @Column(name = "movement_result", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "movement_result",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected MovementResult movementResult;
 

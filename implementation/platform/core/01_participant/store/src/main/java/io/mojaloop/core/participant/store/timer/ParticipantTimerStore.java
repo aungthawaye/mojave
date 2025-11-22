@@ -58,7 +58,9 @@ public class ParticipantTimerStore implements ParticipantStore {
 
     private final Timer timer = new Timer("ParticipantLocalStoreRefreshTimer", true);
 
-    public ParticipantTimerStore(FspQuery fspQuery, OracleQuery oracleQuery, ParticipantStoreConfiguration.Settings participantStoreSettings) {
+    public ParticipantTimerStore(FspQuery fspQuery,
+                                 OracleQuery oracleQuery,
+                                 ParticipantStoreConfiguration.Settings participantStoreSettings) {
 
         assert fspQuery != null;
         assert oracleQuery != null;
@@ -79,14 +81,15 @@ public class ParticipantTimerStore implements ParticipantStore {
         this.refreshData();
 
         // Schedule a timer to refresh data every 30 seconds
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                ParticipantTimerStore.this.refreshData();
-            }
-        }, interval, interval); // 30 seconds in milliseconds
+                    ParticipantTimerStore.this.refreshData();
+                }
+            }, interval, interval); // 30 seconds in milliseconds
     }
 
     @Override
@@ -138,17 +141,35 @@ public class ParticipantTimerStore implements ParticipantStore {
         // Fetch all Oracles and populate maps
         List<OracleData> oracles = this.oracleQuery.getAll();
 
-        var _withFspId = fsps.stream().collect(Collectors.toUnmodifiableMap(FspData::fspId, Function.identity(), (a, b) -> a));
+        var _withFspId = fsps
+                             .stream()
+                             .collect(
+                                 Collectors.toUnmodifiableMap(
+                                     FspData::fspId, Function.identity(),
+                                     (a, b) -> a));
 
-        var _withFspCode = fsps.stream().collect(Collectors.toUnmodifiableMap(FspData::fspCode, Function.identity(), (a, b) -> a));
+        var _withFspCode = fsps
+                               .stream()
+                               .collect(Collectors.toUnmodifiableMap(
+                                   FspData::fspCode,
+                                   Function.identity(), (a, b) -> a));
 
-        var _withOracleId = oracles.stream().collect(Collectors.toUnmodifiableMap(OracleData::oracleId, Function.identity(), (a, b) -> a));
+        var _withOracleId = oracles
+                                .stream()
+                                .collect(Collectors.toUnmodifiableMap(
+                                    OracleData::oracleId,
+                                    Function.identity(), (a, b) -> a));
 
-        var _withPartyIdType = oracles.stream().collect(Collectors.toUnmodifiableMap(OracleData::type, Function.identity(), (a, b) -> a));
+        var _withPartyIdType = oracles
+                                   .stream()
+                                   .collect(Collectors.toUnmodifiableMap(
+                                       OracleData::type,
+                                       Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed FSP count: {} | Oracle count: {}", fsps.size(), oracles.size());
 
-        this.snapshotRef.set(new Snapshot(_withFspId, _withFspCode, _withOracleId, _withPartyIdType));
+        this.snapshotRef.set(
+            new Snapshot(_withFspId, _withFspCode, _withOracleId, _withPartyIdType));
     }
 
     private record Snapshot(Map<FspId, FspData> withFspId,

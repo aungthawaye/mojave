@@ -44,7 +44,8 @@ public class LedgerMovementId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<LedgerMovementId> {
 
         @Override
-        public LedgerMovementId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public LedgerMovementId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class LedgerMovementId extends EntityId<Long> {
             try {
                 return new LedgerMovementId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 

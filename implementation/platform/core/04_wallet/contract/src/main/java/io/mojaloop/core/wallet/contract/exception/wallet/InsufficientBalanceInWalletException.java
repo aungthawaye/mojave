@@ -64,12 +64,16 @@ public class InsufficientBalanceInWalletException extends CheckedDomainException
 
     private final TransactionId transactionId;
 
-    public InsufficientBalanceInWalletException(final WalletId walletId, final BigDecimal amount, final BigDecimal oldBalance, final TransactionId transactionId) {
+    public InsufficientBalanceInWalletException(final WalletId walletId,
+                                                final BigDecimal amount,
+                                                final BigDecimal oldBalance,
+                                                final TransactionId transactionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{walletId.getId().toString(),
-                                                             amount.stripTrailingZeros().toPlainString(),
-                                                             oldBalance.stripTrailingZeros().toPlainString(),
-                                                             transactionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{walletId.getId().toString(),
+                                         amount.stripTrailingZeros().toPlainString(),
+                                         oldBalance.stripTrailingZeros().toPlainString(),
+                                         transactionId.getId().toString()}));
 
         this.walletId = walletId;
         this.amount = amount;
@@ -84,7 +88,8 @@ public class InsufficientBalanceInWalletException extends CheckedDomainException
         final var oldBalance = new BigDecimal(extras.get(Keys.OLD_BALANCE));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
-        return new InsufficientBalanceInWalletException(walletId, amount, oldBalance, transactionId);
+        return new InsufficientBalanceInWalletException(
+            walletId, amount, oldBalance, transactionId);
     }
 
     @Override

@@ -35,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeEndpointCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeEndpointCommandHandler.class);
 
     private final FspRepository fspRepository;
 
@@ -52,15 +53,20 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
 
         LOGGER.info("Executing ChangeEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspEndpoint = fsp.changeEndpoint(input.type(), input.baseUrl());
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ChangeEndpointCommand with input: {} -> changed={}", input, optFspEndpoint.isPresent());
+        LOGGER.info(
+            "Completed ChangeEndpointCommand with input: {} -> changed={}", input,
+            optFspEndpoint.isPresent());
 
-        return new Output(optFspEndpoint.map(FspEndpoint::getId).orElse(null), optFspEndpoint.isPresent());
+        return new Output(
+            optFspEndpoint.map(FspEndpoint::getId).orElse(null), optFspEndpoint.isPresent());
     }
 
 }

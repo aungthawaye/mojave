@@ -71,7 +71,10 @@ public class CreateChartEntryController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CreateChartEntryCommand.Output execute(@Valid @RequestBody CreateChartEntryCommand.Input input)
-        throws ChartIdNotFoundException, ChartEntryCodeAlreadyExistsException, ChartEntryNameAlreadyExistsException {
+        throws
+        ChartIdNotFoundException,
+        ChartEntryCodeAlreadyExistsException,
+        ChartEntryNameAlreadyExistsException {
 
         return this.createChartEntryCommand.execute(input);
     }

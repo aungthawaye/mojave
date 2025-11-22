@@ -95,8 +95,14 @@ public class MySqlLedger implements Ledger {
     }
 
     @Override
-    public List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt, TransactionType transactionType)
-        throws InsufficientBalanceException, OverdraftExceededException, RestoreFailedException, DuplicatePostingException {
+    public List<Movement> post(List<Request> requests,
+                               TransactionId transactionId,
+                               Instant transactionAt,
+                               TransactionType transactionType) throws
+                                                                InsufficientBalanceException,
+                                                                OverdraftExceededException,
+                                                                RestoreFailedException,
+                                                                DuplicatePostingException {
 
         try {
 
@@ -104,18 +110,27 @@ public class MySqlLedger implements Ledger {
 
             requests.forEach(request -> {
 
-                var added = addedKeys.add(request.accountId().getId() + request.side().name() + transactionId.getId());
+                var added = addedKeys.add(
+                    request.accountId().getId() + request.side().name() + transactionId.getId());
 
                 if (!added) {
-                    throw new RuntimeException(new DuplicatePostingException(request.accountId(), request.side(), transactionId));
+                    throw new RuntimeException(
+                        new DuplicatePostingException(
+                            request.accountId(), request.side(),
+                            transactionId));
                 }
             });
 
-            var posting = requests.stream()
-                                  .map(request -> new Posting(request.ledgerMovementId().getId(), request.accountId().getId(), request.side().name(), request.currency().name(),
-                                      request.amount().toPlainString(), transactionId.getId(), transactionAt.getEpochSecond(), transactionType.name(),
-                                      request.flowDefinitionId().getId(), request.postingDefinitionId().getId()))
-                                  .toList();
+            var posting = requests
+                              .stream()
+                              .map(request -> new Posting(
+                                  request.ledgerMovementId().getId(), request.accountId().getId(),
+                                  request.side().name(), request.currency().name(),
+                                  request.amount().toPlainString(), transactionId.getId(),
+                                  transactionAt.getEpochSecond(), transactionType.name(),
+                                  request.flowDefinitionId().getId(),
+                                  request.postingDefinitionId().getId()))
+                              .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
@@ -204,19 +219,31 @@ public class MySqlLedger implements Ledger {
         switch (code) {
 
             case "DUPLICATE_POSTING": {
-                throw new RuntimeException(new DuplicatePostingException(new AccountId(accountId), Side.valueOf(side), transactionId));
+                throw new RuntimeException(
+                    new DuplicatePostingException(
+                        new AccountId(accountId), Side.valueOf(side),
+                        transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {
-                throw new RuntimeException(new InsufficientBalanceException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+                throw new RuntimeException(
+                    new InsufficientBalanceException(
+                        new AccountId(accountId), Side.valueOf(side), amount,
+                        new DrCr(debits, credits), transactionId));
             }
 
             case "OVERDRAFT_EXCEEDED": {
-                throw new RuntimeException(new OverdraftExceededException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+                throw new RuntimeException(
+                    new OverdraftExceededException(
+                        new AccountId(accountId), Side.valueOf(side), amount,
+                        new DrCr(debits, credits), transactionId));
             }
 
             case "RESTORE_FAILED": {
-                throw new RuntimeException(new RestoreFailedException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+                throw new RuntimeException(
+                    new RestoreFailedException(
+                        new AccountId(accountId), Side.valueOf(side), amount,
+                        new DrCr(debits, credits), transactionId));
             }
 
             default:
@@ -224,7 +251,8 @@ public class MySqlLedger implements Ledger {
         }
     }
 
-    private List<Movement> handleSuccess(ResultSet rs, TransactionId transactionId) throws SQLException {
+    private List<Movement> handleSuccess(ResultSet rs, TransactionId transactionId)
+        throws SQLException {
 
         var movements = new ArrayList<Movement>();
 
@@ -248,8 +276,11 @@ public class MySqlLedger implements Ledger {
             var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
             var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
 
-            var movement = new Movement(new LedgerMovementId(ledgerMovementId), new AccountId(accountId), Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
-                new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId, postingDefinitionId, movementStage, movementResult, createdAt);
+            var movement = new Movement(
+                new LedgerMovementId(ledgerMovementId), new AccountId(accountId),
+                Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
+                new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId,
+                postingDefinitionId, movementStage, movementResult, createdAt);
             movements.add(movement);
 
         } while (rs.next());
@@ -257,7 +288,8 @@ public class MySqlLedger implements Ledger {
         return movements;
     }
 
-    public record LedgerDbSettings(LedgerDbSettings.Connection connection, LedgerDbSettings.Pool pool) {
+    public record LedgerDbSettings(LedgerDbSettings.Connection connection,
+                                   LedgerDbSettings.Pool pool) {
 
         public record Connection(String url, String username, String password) { }
 

@@ -29,7 +29,8 @@ import java.util.Map;
 
 public class RoutingDataSourceConfigurer {
 
-    public static RoutingDataSource configure(ReadSettings readSettings, WriteSettings writeSettings) {
+    public static RoutingDataSource configure(ReadSettings readSettings,
+                                              WriteSettings writeSettings) {
 
         var readDataSource = RoutingDataSourceConfigurer.readDataSource(readSettings);
         var writeDataSource = RoutingDataSourceConfigurer.writeDataSource(writeSettings);
@@ -103,7 +104,10 @@ public class RoutingDataSourceConfigurer {
 
     public record WriteSettings(Connection connection, Pool pool) {
 
-        public record Connection(String url, String username, String password, boolean autoCommit) { }
+        public record Connection(String url,
+                                 String username,
+                                 String password,
+                                 boolean autoCommit) { }
 
         public record Pool(String name, int minPool, int maxPool) { }
 
@@ -111,7 +115,10 @@ public class RoutingDataSourceConfigurer {
 
     public record ReadSettings(ReadSettings.Connection connection, ReadSettings.Pool pool) {
 
-        public record Connection(String url, String username, String password, boolean autoCommit) { }
+        public record Connection(String url,
+                                 String username,
+                                 String password,
+                                 boolean autoCommit) { }
 
         public record Pool(String name, int minPool, int maxPool) { }
 

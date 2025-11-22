@@ -47,7 +47,15 @@ public final class Hs256Jwt {
             payload = "{}";
         }
 
-        String token = Jwts.builder().signWith(secretKey).header().add("typ", "JWT").add(headers).and().content(payload, "application/json").compact();
+        String token = Jwts
+                           .builder()
+                           .signWith(secretKey)
+                           .header()
+                           .add("typ", "JWT")
+                           .add(headers)
+                           .and()
+                           .content(payload, "application/json")
+                           .compact();
 
         String[] parts = token.split("\\.");
 
@@ -58,7 +66,9 @@ public final class Hs256Jwt {
 
         try {
 
-            var content = new String(Jwts.parser().verifyWith(secretKey).build().parseSignedContent(token).getPayload(), StandardCharsets.UTF_8);
+            var content = new String(
+                Jwts.parser().verifyWith(secretKey).build().parseSignedContent(token).getPayload(),
+                StandardCharsets.UTF_8);
 
             return content.equals(payload);
 

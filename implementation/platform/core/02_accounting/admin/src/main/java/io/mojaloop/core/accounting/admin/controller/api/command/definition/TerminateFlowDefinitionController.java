@@ -53,7 +53,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TerminateFlowDefinitionController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TerminateFlowDefinitionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        TerminateFlowDefinitionController.class);
 
     private final TerminateFlowDefinitionCommand terminateFlowDefinitionCommand;
 

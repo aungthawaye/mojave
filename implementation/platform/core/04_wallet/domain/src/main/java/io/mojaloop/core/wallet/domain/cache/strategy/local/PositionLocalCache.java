@@ -117,7 +117,9 @@ public class PositionLocalCache implements PositionCache {
         final var key = key(position.walletOwnerId(), position.currency());
         this.withOwnerCurrency.put(key, position);
 
-        final var set = this.withOwnerId.computeIfAbsent(position.walletOwnerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        final var set = this.withOwnerId.computeIfAbsent(
+            position.walletOwnerId().getId(),
+            __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(position);
     }
 

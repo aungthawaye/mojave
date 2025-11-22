@@ -79,7 +79,8 @@ public class HubCurrencyIdJavaType extends AbstractClassJavaType<HubCurrencyId> 
             case null -> null;
             case HubCurrencyId id -> id;
             case Number n -> new HubCurrencyId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
     }
 

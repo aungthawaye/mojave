@@ -83,7 +83,8 @@ public class LedgerMovementIdJavaType extends AbstractClassJavaType<LedgerMoveme
             case null -> null;
             case LedgerMovementId id -> id;
             case Number n -> new LedgerMovementId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

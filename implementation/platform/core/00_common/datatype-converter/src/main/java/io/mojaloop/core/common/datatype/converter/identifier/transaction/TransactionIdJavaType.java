@@ -83,7 +83,8 @@ public class TransactionIdJavaType extends AbstractClassJavaType<TransactionId> 
             case null -> null;
             case TransactionId transactionId -> transactionId;
             case Number n -> new TransactionId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

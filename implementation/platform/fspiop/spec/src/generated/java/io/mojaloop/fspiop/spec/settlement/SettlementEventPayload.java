@@ -29,9 +29,11 @@ public class SettlementEventPayload {
     }
 
     @JsonCreator
-    public SettlementEventPayload(@JsonProperty(required = true, value = "settlementModel") String settlementModel,
+    public SettlementEventPayload(@JsonProperty(required = true,
+                                                value = "settlementModel") String settlementModel,
                                   @JsonProperty(required = true, value = "reason") String reason,
-                                  @JsonProperty(required = true, value = "settlementWindows") Set<@Valid SettlementWindowId> settlementWindows) {
+                                  @JsonProperty(required = true,
+                                                value = "settlementWindows") Set<@Valid SettlementWindowId> settlementWindows) {
 
         this.settlementModel = settlementModel;
         this.reason = reason;
@@ -58,7 +60,8 @@ public class SettlementEventPayload {
             return false;
         }
         SettlementEventPayload settlementEventPayload = (SettlementEventPayload) o;
-        return Objects.equals(this.settlementModel, settlementEventPayload.settlementModel) && Objects.equals(this.reason, settlementEventPayload.reason) &&
+        return Objects.equals(this.settlementModel, settlementEventPayload.settlementModel) &&
+                   Objects.equals(this.reason, settlementEventPayload.reason) &&
                    Objects.equals(this.settlementWindows, settlementEventPayload.settlementWindows);
     }
 
@@ -151,7 +154,10 @@ public class SettlementEventPayload {
 
         sb.append("    settlementModel: ").append(toIndentedString(settlementModel)).append("\n");
         sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
-        sb.append("    settlementWindows: ").append(toIndentedString(settlementWindows)).append("\n");
+        sb
+            .append("    settlementWindows: ")
+            .append(toIndentedString(settlementWindows))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

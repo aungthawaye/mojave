@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("AuthenticationInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class AuthenticationInfo {
 
     private AuthenticationType authentication;
@@ -25,8 +26,10 @@ public class AuthenticationInfo {
     }
 
     @JsonCreator
-    public AuthenticationInfo(@JsonProperty(required = true, value = "authentication") AuthenticationType authentication,
-                              @JsonProperty(required = true, value = "authenticationValue") AuthenticationValue authenticationValue) {
+    public AuthenticationInfo(@JsonProperty(required = true,
+                                            value = "authentication") AuthenticationType authentication,
+                              @JsonProperty(required = true,
+                                            value = "authenticationValue") AuthenticationValue authenticationValue) {
 
         this.authentication = authentication;
         this.authenticationValue = authenticationValue;
@@ -58,7 +61,8 @@ public class AuthenticationInfo {
             return false;
         }
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) o;
-        return Objects.equals(this.authentication, authenticationInfo.authentication) && Objects.equals(this.authenticationValue, authenticationInfo.authenticationValue);
+        return Objects.equals(this.authentication, authenticationInfo.authentication) &&
+                   Objects.equals(this.authenticationValue, authenticationInfo.authenticationValue);
     }
 
     @JsonProperty(required = true, value = "authentication")
@@ -101,7 +105,10 @@ public class AuthenticationInfo {
         sb.append("class AuthenticationInfo {\n");
 
         sb.append("    authentication: ").append(toIndentedString(authentication)).append("\n");
-        sb.append("    authenticationValue: ").append(toIndentedString(authenticationValue)).append("\n");
+        sb
+            .append("    authenticationValue: ")
+            .append(toIndentedString(authenticationValue))
+            .append("\n");
         sb.append("}");
         return sb.toString();
     }

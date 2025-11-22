@@ -49,7 +49,8 @@ public class DepositFundController {
     @PostMapping("/wallets/deposit-fund")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DepositFundCommand.Output execute(@Valid @RequestBody final DepositFundCommand.Input input) throws NoBalanceUpdateForTransactionException {
+    public DepositFundCommand.Output execute(@Valid @RequestBody final DepositFundCommand.Input input)
+        throws NoBalanceUpdateForTransactionException {
 
         LOGGER.info("Entering DepositFundCommand.execute: input : {}", input);
 

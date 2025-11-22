@@ -37,7 +37,8 @@ public class DepositFundInvoker implements DepositFundCommand {
 
     private final ObjectMapper objectMapper;
 
-    public DepositFundInvoker(final WalletAdminService.WalletCommand walletCommand, final ObjectMapper objectMapper) {
+    public DepositFundInvoker(final WalletAdminService.WalletCommand walletCommand,
+                              final ObjectMapper objectMapper) {
 
         assert walletCommand != null;
         assert objectMapper != null;
@@ -51,8 +52,12 @@ public class DepositFundInvoker implements DepositFundCommand {
 
         try {
 
-            return RetrofitService.invoke(this.walletCommand.depositFund(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.walletCommand.depositFund(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

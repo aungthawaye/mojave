@@ -49,7 +49,8 @@ import java.util.ArrayList;
 @Service
 public class PostTransactionCommandHandler implements PostTransactionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostTransactionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PostTransactionCommandHandler.class);
 
     private final AccountCache accountCache;
 
@@ -57,7 +58,9 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
 
     private final Ledger ledger;
 
-    public PostTransactionCommandHandler(AccountCache accountCache, FlowDefinitionCache flowDefinitionCache, Ledger ledger) {
+    public PostTransactionCommandHandler(AccountCache accountCache,
+                                         FlowDefinitionCache flowDefinitionCache,
+                                         Ledger ledger) {
 
         assert accountCache != null;
         assert flowDefinitionCache != null;
@@ -69,17 +72,24 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
     }
 
     @Override
-    public Output execute(Input input)
-        throws InsufficientBalanceInAccountException, OverdraftLimitReachedInAccountException, DuplicatePostingInLedgerException, RestoreFailedInAccountException {
+    public Output execute(Input input) throws
+                                       InsufficientBalanceInAccountException,
+                                       OverdraftLimitReachedInAccountException,
+                                       DuplicatePostingInLedgerException,
+                                       RestoreFailedInAccountException {
 
         LOGGER.info("Executing PostTransactionCommand with input: {}", input);
 
         var transactionId = input.transactionId();
-        var flowDefinition = this.flowDefinitionCache.get(input.transactionType(), input.currency());
+        var flowDefinition = this.flowDefinitionCache.get(
+            input.transactionType(), input.currency());
 
         if (flowDefinition == null) {
-            LOGGER.error("Flow Definition not found for transaction type: {} and currency: {}", input.transactionType(), input.currency());
-            throw new FlowDefinitionNotConfiguredException(input.transactionType(), input.currency());
+            LOGGER.error(
+                "Flow Definition not found for transaction type: {} and currency: {}",
+                input.transactionType(), input.currency());
+            throw new FlowDefinitionNotConfiguredException(
+                input.transactionType(), input.currency());
         }
 
         var requests = new ArrayList<Ledger.Request>();
@@ -90,10 +100,13 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
 
             if (amount == null) {
 
-                LOGGER.error("Required amount name not found in transaction: amount name : {}, amounts : {}, transactionId : {}", posting.amountName(), input.amounts().keySet(),
+                LOGGER.error(
+                    "Required amount name not found in transaction: amount name : {}, amounts : {}, transactionId : {}",
+                    posting.amountName(), input.amounts().keySet(),
                     transactionId.getId().toString());
 
-                throw new RequiredAmountNameNotFoundInTransactionException(posting.amountName(), input.amounts().keySet(), transactionId);
+                throw new RequiredAmountNameNotFoundInTransactionException(
+                    posting.amountName(), input.amounts().keySet(), transactionId);
             }
 
             AccountId accountId = null;
@@ -105,13 +118,18 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
 
                 if (accountOfParticipant == null) {
 
-                    LOGGER.error("Required participant ({}) not found in participants ({}) of Transaction Id ({})", posting.participant(), input.participants().keySet(),
+                    LOGGER.error(
+                        "Required participant ({}) not found in participants ({}) of Transaction Id ({})",
+                        posting.participant(), input.participants().keySet(),
                         transactionId.getId().toString());
 
-                    throw new RequiredParticipantNotFoundInTransactionException(posting.participant(), input.participants().keySet(), transactionId);
+                    throw new RequiredParticipantNotFoundInTransactionException(
+                        posting.participant(), input.participants().keySet(), transactionId);
                 }
 
-                accountData = this.accountCache.get(new ChartEntryId(posting.receiveInId()), accountOfParticipant, input.currency());
+                accountData = this.accountCache.get(
+                    new ChartEntryId(posting.receiveInId()), accountOfParticipant,
+                    input.currency());
                 accountId = accountData.accountId();
 
             } else {
@@ -131,7 +149,9 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
                 throw new AccountNotActiveException(accountData.code());
             }
 
-            var request = new Ledger.Request(new LedgerMovementId(Snowflake.get().nextId()), accountId, posting.side(), input.currency(), amount, flowDefinition.flowDefinitionId(),
+            var request = new Ledger.Request(
+                new LedgerMovementId(Snowflake.get().nextId()), accountId, posting.side(),
+                input.currency(), amount, flowDefinition.flowDefinitionId(),
                 posting.postingDefinitionId());
 
             requests.add(request);
@@ -141,47 +161,71 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
 
             var movements = new ArrayList<Output.Movement>();
 
-            this.ledger.post(requests, input.transactionId(), input.transactionAt(), input.transactionType()).forEach(movement -> {
+            this.ledger
+                .post(
+                    requests, input.transactionId(), input.transactionAt(),
+                    input.transactionType())
+                .forEach(movement -> {
 
-                var accountData = this.accountCache.get(movement.accountId());
+                    var accountData = this.accountCache.get(movement.accountId());
 
-                movements.add(
-                    new Output.Movement(movement.ledgerMovementId(), movement.accountId(), accountData.ownerId(), accountData.chartEntryId(), movement.side(), movement.currency(),
-                        movement.amount(), new Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
-                        new Output.DrCr(movement.newDrCr().debits(), movement.newDrCr().credits()), movement.movementStage(), movement.movementResult(), movement.createdAt()));
-            });
+                    movements.add(new Output.Movement(
+                        movement.ledgerMovementId(), movement.accountId(), accountData.ownerId(),
+                        accountData.chartEntryId(), movement.side(), movement.currency(),
+                        movement.amount(),
+                        new Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
+                        new Output.DrCr(movement.newDrCr().debits(), movement.newDrCr().credits()),
+                        movement.movementStage(), movement.movementResult(), movement.createdAt()));
+                });
 
-            return new Output(input.transactionId(), input.transactionAt(), input.transactionType(), flowDefinition.flowDefinitionId(), movements);
+            return new Output(
+                input.transactionId(), input.transactionAt(), input.transactionType(),
+                flowDefinition.flowDefinitionId(), movements);
 
         } catch (Ledger.InsufficientBalanceException e) {
 
             var accountData = this.accountCache.get(e.getAccountId());
-            LOGGER.error("Insufficient balance in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}", accountData.code(), e.getSide(),
-                e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
-            throw new InsufficientBalanceInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+            LOGGER.error(
+                "Insufficient balance in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}",
+                accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(),
+                e.getDrCr().credits(), input.transactionId());
+            throw new InsufficientBalanceInAccountException(
+                accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(),
+                e.getDrCr().credits(), input.transactionId());
 
         } catch (Ledger.OverdraftExceededException e) {
 
             var accountData = this.accountCache.get(e.getAccountId());
-            LOGGER.error("Insufficient balance in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}", accountData.code(), e.getSide(),
-                e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+            LOGGER.error(
+                "Insufficient balance in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}",
+                accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(),
+                e.getDrCr().credits(), input.transactionId());
 
-            throw new OverdraftLimitReachedInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+            throw new OverdraftLimitReachedInAccountException(
+                accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(),
+                e.getDrCr().credits(), input.transactionId());
 
         } catch (Ledger.RestoreFailedException e) {
 
             var accountData = this.accountCache.get(e.getAccountId());
-            LOGGER.error("Restore failed in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}", accountData.code(), e.getSide(),
-                e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+            LOGGER.error(
+                "Restore failed in account: code : {} | side : {} | amount : {} | debits : {} | credits : {} | transactionId : {}",
+                accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(),
+                e.getDrCr().credits(), input.transactionId());
 
-            throw new RestoreFailedInAccountException(accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(), e.getDrCr().credits(), input.transactionId());
+            throw new RestoreFailedInAccountException(
+                accountData.code(), e.getSide(), e.getAmount(), e.getDrCr().debits(),
+                e.getDrCr().credits(), input.transactionId());
 
         } catch (Ledger.DuplicatePostingException e) {
 
             var accountData = this.accountCache.get(e.getAccountId());
-            LOGGER.error("Duplicate posting in ledger : code : {} | side : {} | transactionId : {}", accountData.code(), e.getSide(), input.transactionId());
+            LOGGER.error(
+                "Duplicate posting in ledger : code : {} | side : {} | transactionId : {}",
+                accountData.code(), e.getSide(), input.transactionId());
 
-            throw new DuplicatePostingInLedgerException(accountData.code(), e.getSide(), input.transactionId());
+            throw new DuplicatePostingInLedgerException(
+                accountData.code(), e.getSide(), input.transactionId());
         }
     }
 

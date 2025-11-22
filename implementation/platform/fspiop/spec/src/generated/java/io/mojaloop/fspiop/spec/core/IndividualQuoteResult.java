@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("IndividualQuoteResult")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class IndividualQuoteResult {
 
     private String quoteId;
@@ -67,11 +68,20 @@ public class IndividualQuoteResult {
             return false;
         }
         IndividualQuoteResult individualQuoteResult = (IndividualQuoteResult) o;
-        return Objects.equals(this.quoteId, individualQuoteResult.quoteId) && Objects.equals(this.payee, individualQuoteResult.payee) &&
-                   Objects.equals(this.transferAmount, individualQuoteResult.transferAmount) && Objects.equals(this.payeeReceiveAmount, individualQuoteResult.payeeReceiveAmount) &&
-                   Objects.equals(this.payeeFspFee, individualQuoteResult.payeeFspFee) && Objects.equals(this.payeeFspCommission, individualQuoteResult.payeeFspCommission) &&
-                   Objects.equals(this.ilpPacket, individualQuoteResult.ilpPacket) && Objects.equals(this.condition, individualQuoteResult.condition) &&
-                   Objects.equals(this.errorInformation, individualQuoteResult.errorInformation) && Objects.equals(this.extensionList, individualQuoteResult.extensionList);
+        return Objects.equals(this.quoteId, individualQuoteResult.quoteId) &&
+                   Objects.equals(this.payee, individualQuoteResult.payee) &&
+                   Objects.equals(this.transferAmount, individualQuoteResult.transferAmount) &&
+                   Objects.equals(
+                       this.payeeReceiveAmount,
+                       individualQuoteResult.payeeReceiveAmount) &&
+                   Objects.equals(this.payeeFspFee, individualQuoteResult.payeeFspFee) &&
+                   Objects.equals(
+                       this.payeeFspCommission,
+                       individualQuoteResult.payeeFspCommission) &&
+                   Objects.equals(this.ilpPacket, individualQuoteResult.ilpPacket) &&
+                   Objects.equals(this.condition, individualQuoteResult.condition) &&
+                   Objects.equals(this.errorInformation, individualQuoteResult.errorInformation) &&
+                   Objects.equals(this.extensionList, individualQuoteResult.extensionList);
     }
 
     /**
@@ -226,7 +236,9 @@ public class IndividualQuoteResult {
     @Override
     public int hashCode() {
 
-        return Objects.hash(quoteId, payee, transferAmount, payeeReceiveAmount, payeeFspFee, payeeFspCommission, ilpPacket, condition, errorInformation, extensionList);
+        return Objects.hash(
+            quoteId, payee, transferAmount, payeeReceiveAmount, payeeFspFee, payeeFspCommission,
+            ilpPacket, condition, errorInformation, extensionList);
     }
 
     /**
@@ -288,9 +300,15 @@ public class IndividualQuoteResult {
         sb.append("    quoteId: ").append(toIndentedString(quoteId)).append("\n");
         sb.append("    payee: ").append(toIndentedString(payee)).append("\n");
         sb.append("    transferAmount: ").append(toIndentedString(transferAmount)).append("\n");
-        sb.append("    payeeReceiveAmount: ").append(toIndentedString(payeeReceiveAmount)).append("\n");
+        sb
+            .append("    payeeReceiveAmount: ")
+            .append(toIndentedString(payeeReceiveAmount))
+            .append("\n");
         sb.append("    payeeFspFee: ").append(toIndentedString(payeeFspFee)).append("\n");
-        sb.append("    payeeFspCommission: ").append(toIndentedString(payeeFspCommission)).append("\n");
+        sb
+            .append("    payeeFspCommission: ")
+            .append(toIndentedString(payeeFspCommission))
+            .append("\n");
         sb.append("    ilpPacket: ").append(toIndentedString(ilpPacket)).append("\n");
         sb.append("    condition: ").append(toIndentedString(condition)).append("\n");
         sb.append("    errorInformation: ").append(toIndentedString(errorInformation)).append("\n");

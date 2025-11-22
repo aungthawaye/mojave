@@ -13,7 +13,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("PartiesTypeIDPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class PartiesTypeIDPutResponse {
 
     private Party party;

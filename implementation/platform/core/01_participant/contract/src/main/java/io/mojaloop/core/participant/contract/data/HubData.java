@@ -63,7 +63,9 @@ public record HubData(HubId hubId, String name, HubCurrencyData[] currencies) {
         return Objects.hashCode(hubId);
     }
 
-    public record HubCurrencyData(HubCurrencyId hubCurrencyId, Currency currency, ActivationStatus activationStatus) {
+    public record HubCurrencyData(HubCurrencyId hubCurrencyId,
+                                  Currency currency,
+                                  ActivationStatus activationStatus) {
 
         @Override
         public boolean equals(Object o) {

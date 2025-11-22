@@ -15,7 +15,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("QuotesPostRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class QuotesPostRequest {
 
     private String quoteId;
@@ -54,12 +55,15 @@ public class QuotesPostRequest {
 
     @JsonCreator
     public QuotesPostRequest(@JsonProperty(required = true, value = "quoteId") String quoteId,
-                             @JsonProperty(required = true, value = "transactionId") String transactionId,
+                             @JsonProperty(required = true,
+                                           value = "transactionId") String transactionId,
                              @JsonProperty(required = true, value = "payee") Party payee,
                              @JsonProperty(required = true, value = "payer") Party payer,
-                             @JsonProperty(required = true, value = "amountType") AmountType amountType,
+                             @JsonProperty(required = true,
+                                           value = "amountType") AmountType amountType,
                              @JsonProperty(required = true, value = "amount") Money amount,
-                             @JsonProperty(required = true, value = "transactionType") TransactionType transactionType) {
+                             @JsonProperty(required = true,
+                                           value = "transactionType") TransactionType transactionType) {
 
         this.quoteId = quoteId;
         this.transactionId = transactionId;
@@ -112,13 +116,22 @@ public class QuotesPostRequest {
             return false;
         }
         QuotesPostRequest quotesPostRequest = (QuotesPostRequest) o;
-        return Objects.equals(this.quoteId, quotesPostRequest.quoteId) && Objects.equals(this.transactionId, quotesPostRequest.transactionId) &&
-                   Objects.equals(this.transactionRequestId, quotesPostRequest.transactionRequestId) && Objects.equals(this.payee, quotesPostRequest.payee) &&
-                   Objects.equals(this.payer, quotesPostRequest.payer) && Objects.equals(this.amountType, quotesPostRequest.amountType) &&
-                   Objects.equals(this.amount, quotesPostRequest.amount) && Objects.equals(this.fees, quotesPostRequest.fees) &&
-                   Objects.equals(this.transactionType, quotesPostRequest.transactionType) && Objects.equals(this.converter, quotesPostRequest.converter) &&
-                   Objects.equals(this.currencyConversion, quotesPostRequest.currencyConversion) && Objects.equals(this.geoCode, quotesPostRequest.geoCode) &&
-                   Objects.equals(this.note, quotesPostRequest.note) && Objects.equals(this.expiration, quotesPostRequest.expiration) &&
+        return Objects.equals(this.quoteId, quotesPostRequest.quoteId) &&
+                   Objects.equals(this.transactionId, quotesPostRequest.transactionId) &&
+                   Objects.equals(
+                       this.transactionRequestId,
+                       quotesPostRequest.transactionRequestId) &&
+                   Objects.equals(this.payee, quotesPostRequest.payee) &&
+                   Objects.equals(this.payer, quotesPostRequest.payer) &&
+                   Objects.equals(this.amountType, quotesPostRequest.amountType) &&
+                   Objects.equals(this.amount, quotesPostRequest.amount) &&
+                   Objects.equals(this.fees, quotesPostRequest.fees) &&
+                   Objects.equals(this.transactionType, quotesPostRequest.transactionType) &&
+                   Objects.equals(this.converter, quotesPostRequest.converter) &&
+                   Objects.equals(this.currencyConversion, quotesPostRequest.currencyConversion) &&
+                   Objects.equals(this.geoCode, quotesPostRequest.geoCode) &&
+                   Objects.equals(this.note, quotesPostRequest.note) &&
+                   Objects.equals(this.expiration, quotesPostRequest.expiration) &&
                    Objects.equals(this.extensionList, quotesPostRequest.extensionList);
     }
 
@@ -358,8 +371,10 @@ public class QuotesPostRequest {
     @Override
     public int hashCode() {
 
-        return Objects.hash(quoteId, transactionId, transactionRequestId, payee, payer, amountType, amount, fees, transactionType, converter, currencyConversion, geoCode, note,
-            expiration, extensionList);
+        return Objects.hash(
+            quoteId, transactionId, transactionRequestId, payee, payer, amountType, amount, fees,
+            transactionType, converter, currencyConversion, geoCode, note, expiration,
+            extensionList);
     }
 
     /**
@@ -404,7 +419,10 @@ public class QuotesPostRequest {
 
         sb.append("    quoteId: ").append(toIndentedString(quoteId)).append("\n");
         sb.append("    transactionId: ").append(toIndentedString(transactionId)).append("\n");
-        sb.append("    transactionRequestId: ").append(toIndentedString(transactionRequestId)).append("\n");
+        sb
+            .append("    transactionRequestId: ")
+            .append(toIndentedString(transactionRequestId))
+            .append("\n");
         sb.append("    payee: ").append(toIndentedString(payee)).append("\n");
         sb.append("    payer: ").append(toIndentedString(payer)).append("\n");
         sb.append("    amountType: ").append(toIndentedString(amountType)).append("\n");
@@ -412,7 +430,10 @@ public class QuotesPostRequest {
         sb.append("    fees: ").append(toIndentedString(fees)).append("\n");
         sb.append("    transactionType: ").append(toIndentedString(transactionType)).append("\n");
         sb.append("    converter: ").append(toIndentedString(converter)).append("\n");
-        sb.append("    currencyConversion: ").append(toIndentedString(currencyConversion)).append("\n");
+        sb
+            .append("    currencyConversion: ")
+            .append(toIndentedString(currencyConversion))
+            .append("\n");
         sb.append("    geoCode: ").append(toIndentedString(geoCode)).append("\n");
         sb.append("    note: ").append(toIndentedString(note)).append("\n");
         sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");

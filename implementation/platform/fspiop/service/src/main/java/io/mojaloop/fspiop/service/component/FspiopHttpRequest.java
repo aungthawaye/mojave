@@ -32,13 +32,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public record FspiopHttpRequest(Payer payer, Payee payee, String method, String uri, String contentType, Map<String, String> headers, Map<String, String> params, String payload) {
+public record FspiopHttpRequest(Payer payer,
+                                Payee payee,
+                                String method,
+                                String uri,
+                                String contentType,
+                                Map<String, String> headers,
+                                Map<String, String> params,
+                                String payload) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopHttpRequest.class);
 
     public static FspiopHttpRequest with(HttpServletRequest request) throws IOException {
 
-        var cachedRequest = request instanceof CachedServletRequest already ? already : new CachedServletRequest(request);
+        var cachedRequest = request instanceof CachedServletRequest already ? already :
+                                new CachedServletRequest(request);
 
         var method = cachedRequest.getMethod();
         LOGGER.debug("Method: [{}]", method);
@@ -85,7 +93,8 @@ public record FspiopHttpRequest(Payer payer, Payee payee, String method, String 
         var payload = cachedRequest.getCachedBodyAsString();
         LOGGER.debug("Payload: [{}]", payload);
 
-        return new FspiopHttpRequest(payer, payee, method, uri, contentType, headers, params, payload);
+        return new FspiopHttpRequest(
+            payer, payee, method, uri, contentType, headers, params, payload);
     }
 
     public boolean hasPayload() {

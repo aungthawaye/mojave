@@ -51,7 +51,10 @@ public class WalletQueryHandler implements WalletQuery {
     @Override
     public WalletData get(final WalletId walletId) {
 
-        return this.walletRepository.findById(walletId).orElseThrow(() -> new WalletIdNotFoundException(walletId)).convert();
+        return this.walletRepository
+                   .findById(walletId)
+                   .orElseThrow(() -> new WalletIdNotFoundException(walletId))
+                   .convert();
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +62,9 @@ public class WalletQueryHandler implements WalletQuery {
     @Override
     public List<WalletData> get(final WalletOwnerId ownerId, final Currency currency) {
 
-        var spec = WalletRepository.Filters.withOwnerId(ownerId).and(WalletRepository.Filters.withCurrency(currency));
+        var spec = WalletRepository.Filters
+                       .withOwnerId(ownerId)
+                       .and(WalletRepository.Filters.withCurrency(currency));
 
         return this.walletRepository.findAll(spec).stream().map(Wallet::convert).toList();
     }

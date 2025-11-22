@@ -45,7 +45,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Service
 public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PutQuotesErrorCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PutQuotesErrorCommandHandler.class);
 
     private final ParticipantStore participantStore;
 
@@ -89,7 +90,9 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
         MDC.put("requestId", udfQuoteId.getId());
 
-        LOGGER.info("({}) Executing PutQuotesErrorCommandHandler with input: [{}].", udfQuoteId.getId(), input);
+        LOGGER.info(
+            "({}) Executing PutQuotesErrorCommandHandler with input: [{}].", udfQuoteId.getId(),
+            input);
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -112,22 +115,29 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
             if (this.quoteSettings.stateful()) {
 
                 TransactionContext.startNew(this.transactionManager, udfQuoteId.getId());
-                var optQuote = this.quoteRepository.findOne(QuoteRepository.Filters.withUdfQuoteId(udfQuoteId));
+                var optQuote = this.quoteRepository.findOne(
+                    QuoteRepository.Filters.withUdfQuoteId(udfQuoteId));
 
                 if (optQuote.isEmpty()) {
 
-                    LOGGER.warn("({}) Receiving non-existence Quote. Just ignore it.", udfQuoteId.getId());
-                    LOGGER.info("({}) Returning from PutQuotesErrorCommandHandler (non-existence Quote).", udfQuoteId.getId());
+                    LOGGER.warn(
+                        "({}) Receiving non-existence Quote. Just ignore it.", udfQuoteId.getId());
+                    LOGGER.info(
+                        "({}) Returning from PutQuotesErrorCommandHandler (non-existence Quote).",
+                        udfQuoteId.getId());
 
                     return new Output();
                 }
 
                 var quote = optQuote.get();
-                LOGGER.info("({}) Retrieved Quote object with UDF Quote ID: [{}] , quote : {}", udfQuoteId.getId(), udfQuoteId.getId(), quote);
+                LOGGER.info(
+                    "({}) Retrieved Quote object with UDF Quote ID: [{}] , quote : {}",
+                    udfQuoteId.getId(), udfQuoteId.getId(), quote);
 
                 quote.error(error.getErrorInformation().getErrorDescription());
 
-                if (error.getErrorInformation().getExtensionList() != null && error.getErrorInformation().getExtensionList().getExtension() != null) {
+                if (error.getErrorInformation().getExtensionList() != null &&
+                        error.getErrorInformation().getExtensionList().getExtension() != null) {
                     error.getErrorInformation().getExtensionList().getExtension().forEach(ext -> {
                         LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), ext);
                         quote.addExtension(Direction.TO_PAYEE, ext.getKey(), ext.getValue());
@@ -136,23 +146,32 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
                 this.quoteRepository.save(quote);
                 TransactionContext.commit();
-                LOGGER.info("({}) Quote error set. Error : [{}]", udfQuoteId.getId(), error.getErrorInformation().getErrorDescription());
+                LOGGER.info(
+                    "({}) Quote error set. Error : [{}]", udfQuoteId.getId(),
+                    error.getErrorInformation().getErrorDescription());
 
             }
 
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            LOGGER.info("({}) Forwarding request to payer FSP (Url): [{}]", udfQuoteId.getId(), payerFsp);
+            LOGGER.info(
+                "({}) Forwarding request to payer FSP (Url): [{}]", udfQuoteId.getId(), payerFsp);
 
             this.forwardRequest.forward(payerBaseUrl, input.request());
-            LOGGER.info("({}) Done forwarding request to payer FSP (Url): [{}]", udfQuoteId.getId(), payerFsp);
+            LOGGER.info(
+                "({}) Done forwarding request to payer FSP (Url): [{}]", udfQuoteId.getId(),
+                payerFsp);
 
         } catch (FspiopCommunicationException e) {
 
-            LOGGER.error("({}) (FspiopCommunicationException) Exception occurred while executing PutQuotesErrorCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
+            LOGGER.error(
+                "({}) (FspiopCommunicationException) Exception occurred while executing PutQuotesErrorCommandHandler: [{}]",
+                udfQuoteId.getId(), e.getMessage());
 
         } catch (Exception e) {
 
-            LOGGER.error("({}) (Exception) Exception occurred while executing PutQuotesErrorCommandHandler: [{}]", udfQuoteId.getId(), e.getMessage());
+            LOGGER.error(
+                "({}) (Exception) Exception occurred while executing PutQuotesErrorCommandHandler: [{}]",
+                udfQuoteId.getId(), e.getMessage());
 
             if (payerFsp != null) {
 
@@ -162,10 +181,15 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondQuotes.putQuotesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondQuotes.putQuotesError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                    LOGGER.error(
+                        "Something went wrong while sending error response to payer FSP: ", e);
                 }
             }
         }

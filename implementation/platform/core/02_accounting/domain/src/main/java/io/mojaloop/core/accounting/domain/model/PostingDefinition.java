@@ -64,7 +64,12 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(name = "acc_posting_definition",
        uniqueConstraints = {@UniqueConstraint(name = "acc_posting_definition_for_posting_UK",
-                                              columnNames = {"definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"})})
+                                              columnNames = {"definition_id",
+                                                             "participant",
+                                                             "amount_name",
+                                                             "side",
+                                                             "receive_in",
+                                                             "receive_in_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
@@ -77,7 +82,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     @Column(name = "participant", length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String participant;
 
-    @Column(name = "amount_name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(name = "amount_name",
+            nullable = false,
+            length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String amountName;
 
     @Column(name = "side", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
@@ -95,7 +102,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     protected String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "definition_id", nullable = false, foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
+    @JoinColumn(name = "definition_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
     protected FlowDefinition definition;
 
     public PostingDefinition(FlowDefinition definition,
@@ -113,7 +122,11 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
-        this.forPosting(receiveIn, receiveInId, participant, amountName, side, accountCache, chartEntryCache).description(description);
+        this
+            .forPosting(
+                receiveIn, receiveInId, participant, amountName, side, accountCache,
+                chartEntryCache)
+            .description(description);
     }
 
     public PostingDefinition description(String description) {
@@ -172,7 +185,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         if (!this.definition.transactionType.getParticipants().types().contains(participant)) {
 
-            throw new InvalidParticipantForTransactionTypeException(this.definition.transactionType);
+            throw new InvalidParticipantForTransactionTypeException(
+                this.definition.transactionType);
         }
 
         // Now verify whether the newly adding posting conflicts with any of the existing posting definition.
@@ -181,16 +195,22 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         // 2. When BY_ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
 
         // Find all the accounts, created under the same receiveInId in the accounting system, and previously added for the same Side and AmountName.
-        var existingAccountIds = this.definition.postings.stream()
-                                                         .filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT && pd.side == side && pd.amountName.equals(_amountName))
-                                                         .map(pd -> pd.receiveInId)
-                                                         .collect(Collectors.toSet());
+        var existingAccountIds = this.definition.postings
+                                     .stream()
+                                     .filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT &&
+                                                       pd.side == side &&
+                                                       pd.amountName.equals(_amountName))
+                                     .map(pd -> pd.receiveInId)
+                                     .collect(Collectors.toSet());
 
-        var existingChartEntryIds = this.definition.postings.stream()
-                                                            .filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY && pd.participant.equals(participant) && pd.side == side &&
-                                                                              pd.amountName.equals(_amountName))
-                                                            .map(pd -> pd.receiveInId)
-                                                            .collect(Collectors.toSet());
+        var existingChartEntryIds = this.definition.postings
+                                        .stream()
+                                        .filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY &&
+                                                          pd.participant.equals(participant) &&
+                                                          pd.side == side &&
+                                                          pd.amountName.equals(_amountName))
+                                        .map(pd -> pd.receiveInId)
+                                        .collect(Collectors.toSet());
 
         if (receiveIn == ReceiveIn.CHART_ENTRY) {
 
@@ -210,9 +230,13 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
             } else {
 
-                accounts.stream().filter(account -> existingAccountIds.contains(account.accountId().getId())).findFirst().ifPresent((conflict) -> {
-                    throw new AccountConflictInDefinitionException(conflict.code());
-                });
+                accounts
+                    .stream()
+                    .filter(account -> existingAccountIds.contains(account.accountId().getId()))
+                    .findFirst()
+                    .ifPresent((conflict) -> {
+                        throw new AccountConflictInDefinitionException(conflict.code());
+                    });
             }
 
         } else {
@@ -233,9 +257,13 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
                 var accounts = accountCache.get(new ChartEntryId(existingChartEntryId));
 
-                accounts.stream().filter(account -> account.accountId().equals(_accountId)).findFirst().ifPresent((conflict) -> {
-                    throw new AccountConflictInDefinitionException(conflict.code());
-                });
+                accounts
+                    .stream()
+                    .filter(account -> account.accountId().equals(_accountId))
+                    .findFirst()
+                    .ifPresent((conflict) -> {
+                        throw new AccountConflictInDefinitionException(conflict.code());
+                    });
             }
         }
 

@@ -16,7 +16,8 @@ import java.util.Objects;
  **/
 
 @JsonTypeName("ServicesFXPPutResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+                              comments = "Generator version: 7.13.0")
 public class ServicesFXPPutResponse {
 
     private @Valid List<@Size(min = 1, max = 32) String> providers = new ArrayList<>();
@@ -26,7 +27,9 @@ public class ServicesFXPPutResponse {
     }
 
     @JsonCreator
-    public ServicesFXPPutResponse(@JsonProperty(required = true, value = "providers") List<@Size(min = 1, max = 32) String> providers) {
+    public ServicesFXPPutResponse(@JsonProperty(required = true,
+                                                value = "providers") List<@Size(min = 1,
+                                                                                max = 32) String> providers) {
 
         this.providers = providers;
     }

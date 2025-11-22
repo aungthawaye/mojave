@@ -31,21 +31,34 @@ import java.time.Instant;
 public class EmptyBalanceUpdater implements BalanceUpdater {
 
     @Override
-    public BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description) {
+    public BalanceHistory deposit(TransactionId transactionId,
+                                  Instant transactionAt,
+                                  BalanceUpdateId balanceUpdateId,
+                                  WalletId walletId,
+                                  BigDecimal amount,
+                                  String description) {
 
-        throw new UnsupportedOperationException("Balance update operations are not supported in the empty implementation");
+        throw new UnsupportedOperationException(
+            "Balance update operations are not supported in the empty implementation");
     }
 
     @Override
     public BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId) {
 
-        throw new UnsupportedOperationException("Balance reversal operations are not supported in the empty implementation");
+        throw new UnsupportedOperationException(
+            "Balance reversal operations are not supported in the empty implementation");
     }
 
     @Override
-    public BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description) {
+    public BalanceHistory withdraw(TransactionId transactionId,
+                                   Instant transactionAt,
+                                   BalanceUpdateId balanceUpdateId,
+                                   WalletId walletId,
+                                   BigDecimal amount,
+                                   String description) {
 
-        throw new UnsupportedOperationException("Balance withdrawal operations are not supported in the empty implementation");
+        throw new UnsupportedOperationException(
+            "Balance withdrawal operations are not supported in the empty implementation");
     }
 
 }
