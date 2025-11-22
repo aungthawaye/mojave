@@ -16,7 +16,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     public FlywayMigration.Settings accountingFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/accounting");
+            "flyway_accounting_history", new String[]{"classpath:migration/accounting"});
     }
 
     @Bean
@@ -53,7 +53,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     public FlywayMigration.Settings participantFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/participant");
+            "flyway_participant_history", new String[]{"classpath:migration/participant"});
     }
 
     @Bean
@@ -112,7 +112,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     public FlywayMigration.Settings transactionFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/transaction");
+            "flyway_transaction_history", new String[]{"classpath:migration/transaction"});
     }
 
     @Bean
@@ -120,7 +120,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     public FlywayMigration.Settings walletFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/wallet");
+            "flyway_wallet_history", new String[]{"classpath:migration/wallet"});
     }
 
 }

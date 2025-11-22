@@ -163,7 +163,7 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     public FlywayMigration.Settings transferFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("TFR_FLYWAY_DB_URL"), System.getenv("TFR_FLYWAY_DB_USER"), System.getenv("TFR_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/transfer");
+            "flyway_transfer_history", new String[]{"classpath:migration/transfer"});
     }
 
     @Bean

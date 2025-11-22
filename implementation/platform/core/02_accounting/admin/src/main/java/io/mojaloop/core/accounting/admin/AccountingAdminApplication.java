@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.accounting.admin;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -37,16 +36,6 @@ public class AccountingAdminApplication {
     private final static Logger LOGGER = LoggerFactory.getLogger(AccountingAdminApplication.class);
 
     public static void main(String[] args) {
-
-        LOGGER.info("Starting accounting-admin application");
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("ACC_FLYWAY_DB_URL",
-                                                                    "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("ACC_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("ACC_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/accounting");
-
-        LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.configure(flywaySettings);
-        LOGGER.info("Flyway migration completed");
 
         new SpringApplicationBuilder(AccountingAdminApplication.class).web(WebApplicationType.SERVLET)
                                                                       .properties("spring.application.name=accounting-admin", "spring.jmx.enabled=true",

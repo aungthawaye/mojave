@@ -101,10 +101,8 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     @Override
     public FlywayMigration.Settings walletFlywaySettings() {
 
-        return new FlywayMigration.Settings(System.getenv()
-                                                  .getOrDefault("WLT_FLYWAY_DB_URL",
-                                                      "jdbc:mysql://localhost:3306/ml_wallet?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("WLT_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("WLT_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/wallet");
+        return new FlywayMigration.Settings(System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"), System.getenv("WLT_FLYWAY_DB_PASSWORD"),
+            "flyway_wallet_history", new String[]{"classpath:migration/wallet"});
     }
 
 }

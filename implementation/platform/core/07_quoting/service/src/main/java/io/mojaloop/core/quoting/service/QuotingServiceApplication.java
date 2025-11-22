@@ -38,17 +38,6 @@ public class QuotingServiceApplication {
 
     public static void main(String[] args) {
 
-        LOGGER.info("Starting participant-admin application");
-
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("QOT_FLYWAY_DB_URL",
-                                                                    "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("QOT_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("QOT_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/quoting");
-
-        LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.configure(flywaySettings);
-        LOGGER.info("Flyway migration completed");
-
         new SpringApplicationBuilder(QuotingServiceApplication.class).web(WebApplicationType.SERVLET)
                                                                      .properties("spring.application.name=quoting-service", "spring.jmx.enabled=true",
                                                                          "spring.jmx.unique-types=true", "spring.jmx.default-domain=quoting-service",

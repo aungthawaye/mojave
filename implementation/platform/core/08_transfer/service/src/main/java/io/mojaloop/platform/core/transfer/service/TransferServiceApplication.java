@@ -38,17 +38,6 @@ public class TransferServiceApplication {
 
     public static void main(String[] args) {
 
-        LOGGER.info("Starting transfer-service application");
-
-        var flywaySettings = new FlywayMigration.Settings(System.getenv()
-                                                                .getOrDefault("TFR_FLYWAY_DB_URL",
-                                                                    "jdbc:mysql://localhost:3306/ml_transfer?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"),
-            System.getenv().getOrDefault("TFR_FLYWAY_DB_USER", "root"), System.getenv().getOrDefault("TFR_FLYWAY_DB_PASSWORD", "password"), "classpath:migration/transfer");
-
-        LOGGER.info("Flyway migration settings: {}", flywaySettings);
-        FlywayMigration.configure(flywaySettings);
-        LOGGER.info("Flyway migration completed");
-
         new SpringApplicationBuilder(TransferServiceApplication.class).web(WebApplicationType.SERVLET)
                                                                       .properties("spring.application.name=transfer-service", "spring.jmx.enabled=true",
                                                                           "spring.jmx.unique-types=true", "spring.jmx.default-domain=transfer-service",

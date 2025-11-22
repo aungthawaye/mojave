@@ -80,7 +80,7 @@ final class TransactionIntercomSettings implements TransactionIntercomConfigurat
     public FlywayMigration.Settings transactionFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"), System.getenv("TXN_WRITE_DB_PASSWORD"),
-            "flyway_transaction_history", "classpath:migration/transaction");
+            "flyway_transaction_history", new String[]{"classpath:migration/transaction"});
     }
 
 }

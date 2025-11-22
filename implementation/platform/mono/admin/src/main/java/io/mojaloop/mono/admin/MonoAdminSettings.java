@@ -16,7 +16,7 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     public FlywayMigration.Settings accountingFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/accounting");
+            "flyway_accounting_history", new String[]{"classpath:migration/accounting"});
     }
 
     @Bean
@@ -47,11 +47,12 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
                 Integer.parseInt(System.getenv("MONO_LEDGER_DB_MAX_POOL_SIZE"))));
     }
 
+    @Bean
     @Override
     public FlywayMigration.Settings participantFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "flyway_participant_history", "classpath:migration/participant");
+            "flyway_participant_history", new String[]{"classpath:migration/participant"});
     }
 
     @Bean
@@ -110,7 +111,7 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     public FlywayMigration.Settings walletFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/wallet");
+            "flyway_wallet_history", new String[]{"classpath:migration/wallet"});
     }
 
 }

@@ -36,6 +36,6 @@ public class FlywayMigration {
                      .load();
     }
 
-    public record Settings(String url, String username, String password, String table, String... locations) { }
+    public record Settings(String url, String username, String password, String table, String[] locations) { }
 
 }

@@ -33,7 +33,7 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     public FlywayMigration.Settings accountingFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"), System.getenv("ACC_FLYWAY_DB_PASSWORD"),
-            "flyway_accounting_history", "classpath:migration/accounting");
+            "flyway_accounting_history", new String[]{"classpath:migration/accounting"});
 
     }
 

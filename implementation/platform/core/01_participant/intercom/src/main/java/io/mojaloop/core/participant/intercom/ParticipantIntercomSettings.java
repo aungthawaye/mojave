@@ -40,7 +40,7 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     public FlywayMigration.Settings participantFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"), System.getenv("PCP_FLYWAY_DB_PASSWORD"),
-            "flyway_participant_history", "classpath:migration/participant");
+            "flyway_participant_history", new String[]{"classpath:migration/participant"});
 
     }
 

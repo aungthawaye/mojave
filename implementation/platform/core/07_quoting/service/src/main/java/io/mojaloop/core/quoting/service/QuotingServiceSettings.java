@@ -88,7 +88,7 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     public FlywayMigration.Settings quotingFlywaySettings() {
 
         return new FlywayMigration.Settings(System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"), System.getenv("QOT_FLYWAY_DB_PASSWORD"),
-            "classpath:migration/quoting");
+            "flyway_quoting_history", new String[]{"classpath:migration/quoting"});
     }
 
     @Bean
