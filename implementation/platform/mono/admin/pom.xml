@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mojaloop.platform.mono</groupId>
@@ -30,23 +29,23 @@
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-web</artifactId>
+            <artifactId>mod-component-openapi</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.participant</groupId>
-            <artifactId>mod-participant-admin</artifactId>
+            <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.accounting</groupId>
             <artifactId>mod-accounting-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.wallet</groupId>
-            <artifactId>mod-wallet-admin</artifactId>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
-            <artifactId>mod-component-openapi</artifactId>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-admin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

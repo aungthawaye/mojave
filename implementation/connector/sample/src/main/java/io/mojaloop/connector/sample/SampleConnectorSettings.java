@@ -38,7 +38,6 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
 
     @Bean
     @Override
-    @ConditionalOnMissingBean(FspiopCommonConfiguration.ParticipantSettings.class)
     public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         var fspCode = System.getenv("FSPIOP_FSP_CODE");

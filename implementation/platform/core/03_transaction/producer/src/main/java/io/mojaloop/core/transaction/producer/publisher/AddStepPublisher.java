@@ -48,8 +48,8 @@ public class AddStepPublisher {
 
         LOGGER.info("Publishing AddStepCommand with input: {}", input);
 
-        this.kafkaTemplate.send(
-            TopicNames.ADD_STEP, input.transactionId().getId().toString(), input);
+//        this.kafkaTemplate.send(
+//            TopicNames.ADD_STEP, input.transactionId().getId().toString(), input);
 
         LOGGER.info("Published AddStepCommand with input: {}", input);
 

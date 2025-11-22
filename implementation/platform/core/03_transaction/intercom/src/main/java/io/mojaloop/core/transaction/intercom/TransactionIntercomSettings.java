@@ -41,13 +41,13 @@ final class TransactionIntercomSettings
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv("TX_READ_DB_URL"), System.getenv("TX_READ_DB_USER"),
-            System.getenv("TX_READ_DB_PASSWORD"), false);
+            System.getenv("TXN_READ_DB_URL"), System.getenv("TXN_READ_DB_USER"),
+            System.getenv("TXN_READ_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
             "transaction-intercom-read",
-            Integer.parseInt(System.getenv("TX_READ_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("TX_READ_DB_MAX_POOL_SIZE")));
+            Integer.parseInt(System.getenv("TXN_READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("TXN_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -57,13 +57,13 @@ final class TransactionIntercomSettings
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv("TX_WRITE_DB_URL"), System.getenv("TX_WRITE_DB_USER"),
-            System.getenv("TX_WRITE_DB_PASSWORD"), false);
+            System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
+            System.getenv("TXN_WRITE_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
             "transaction-intercom-write",
-            Integer.parseInt(System.getenv("TX_WRITE_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("TX_WRITE_DB_MAX_POOL_SIZE")));
+            Integer.parseInt(System.getenv("TXN_WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("TXN_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
