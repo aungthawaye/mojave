@@ -41,7 +41,7 @@ public class ReadAspect {
         try {
 
             RoutingDataSource.Context.set(RoutingDataSource.Keys.READ);
-            LOGGER.debug("ReadAspect : RoutingDataSource -> read");
+
             return joinPoint.proceed();
 
         } finally {

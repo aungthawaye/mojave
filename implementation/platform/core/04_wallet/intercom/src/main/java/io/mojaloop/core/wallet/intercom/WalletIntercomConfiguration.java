@@ -23,7 +23,7 @@ package io.mojaloop.core.wallet.intercom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -59,7 +59,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                  WalletDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})
-final class WalletIntercomConfiguration extends JacksonWebMvcExtension implements
+final class WalletIntercomConfiguration extends WebMvcExtension implements
                                                                        WalletDomainConfiguration.RequiredBeans,
                                                                        SpringSecurityConfiguration.RequiredBeans,
                                                                        SpringSecurityConfiguration.RequiredSettings {

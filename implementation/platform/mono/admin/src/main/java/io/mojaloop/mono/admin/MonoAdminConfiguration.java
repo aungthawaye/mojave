@@ -3,7 +3,7 @@ package io.mojaloop.mono.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -63,7 +63,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                  ParticipantDomainConfiguration.class,
                  AccountingDomainConfiguration.class,
                  WalletDomainConfiguration.class})
-public class MonoAdminConfiguration extends JacksonWebMvcExtension implements
+public class MonoAdminConfiguration extends WebMvcExtension implements
                                                                    SpringSecurityConfiguration.RequiredBeans,
                                                                    ParticipantDomainConfiguration.RequiredBeans,
                                                                    AccountingDomainConfiguration.RequiredBeans,

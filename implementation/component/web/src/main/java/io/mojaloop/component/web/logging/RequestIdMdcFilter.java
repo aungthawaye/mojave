@@ -20,6 +20,7 @@
 
 package io.mojaloop.component.web.logging;
 
+import io.mojaloop.component.misc.handy.Snowflake;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -29,13 +30,12 @@ import jakarta.servlet.ServletResponse;
 import org.slf4j.MDC;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class RequestIdMdcFilter implements Filter {
 
     @Override
     public void destroy() {
-        // Cleanup logic, if needed
+
     }
 
     @Override
@@ -45,17 +45,17 @@ public class RequestIdMdcFilter implements Filter {
 
         try {
 
-            MDC.put("REQ_ID", String.valueOf(UUID.randomUUID().toString()));
+            MDC.put("REQ_ID", String.valueOf(Snowflake.get().nextId()));
             filterChain.doFilter(servletRequest, servletResponse);
 
         } finally {
-            MDC.clear();
+            MDC.remove("REQ_ID");
         }
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // Initialization logic, if needed
+    public void init(FilterConfig filterConfig) {
+
     }
 
 }

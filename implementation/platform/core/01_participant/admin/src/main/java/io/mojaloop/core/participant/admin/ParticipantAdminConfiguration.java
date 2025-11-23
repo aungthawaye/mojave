@@ -23,7 +23,8 @@ package io.mojaloop.core.participant.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -48,13 +49,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.participant.admin.controller")
 @Import(value = {OpenApiConfiguration.class,
                  DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  ParticipantDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})
-final class ParticipantAdminConfiguration extends JacksonWebMvcExtension implements
-                                                                         ParticipantDomainConfiguration.RequiredBeans,
-                                                                         SpringSecurityConfiguration.RequiredBeans,
-                                                                         SpringSecurityConfiguration.RequiredSettings {
+final class ParticipantAdminConfiguration extends WebMvcExtension implements
+                                                                  ParticipantDomainConfiguration.RequiredBeans,
+                                                                  SpringSecurityConfiguration.RequiredBeans,
+                                                                  SpringSecurityConfiguration.RequiredSettings {
 
     public ParticipantAdminConfiguration(ObjectMapper objectMapper) {
 

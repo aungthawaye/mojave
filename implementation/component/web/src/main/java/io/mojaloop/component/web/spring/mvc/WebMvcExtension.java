@@ -27,11 +27,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-public class JacksonWebMvcExtension implements WebMvcConfigurer {
+public class WebMvcExtension implements WebMvcConfigurer {
 
     private final ObjectMapper objectMapper;
 
-    public JacksonWebMvcExtension(ObjectMapper objectMapper) {
+    public WebMvcExtension(ObjectMapper objectMapper) {
 
         this.objectMapper = objectMapper;
     }
@@ -46,12 +46,10 @@ public class JacksonWebMvcExtension implements WebMvcConfigurer {
             if (c instanceof MappingJackson2HttpMessageConverter) {
 
                 converters.set(i, new MappingJackson2HttpMessageConverter(this.objectMapper));
-
-                return; // replaced the existing one
+                return;
             }
         }
 
-        // none present? add ours at the front
         converters.addFirst(new MappingJackson2HttpMessageConverter(this.objectMapper));
     }
 

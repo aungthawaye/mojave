@@ -6,6 +6,7 @@
     <file url="file://$PROJECT_DIR$/implementation/component/jackson/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/jpa/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/logging/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/misc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/openapi/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/redis/src/main/java" charset="UTF-8" />

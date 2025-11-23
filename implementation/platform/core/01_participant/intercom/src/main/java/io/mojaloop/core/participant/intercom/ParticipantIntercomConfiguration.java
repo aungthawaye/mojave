@@ -23,7 +23,7 @@ package io.mojaloop.core.participant.intercom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -51,7 +51,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                  ParticipantDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})
-final class ParticipantIntercomConfiguration extends JacksonWebMvcExtension implements
+final class ParticipantIntercomConfiguration extends WebMvcExtension implements
                                                                             ParticipantDomainConfiguration.RequiredBeans,
                                                                             SpringSecurityConfiguration.RequiredBeans,
                                                                             SpringSecurityConfiguration.RequiredSettings {

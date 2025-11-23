@@ -41,7 +41,7 @@ public class WriteAspect {
         try {
 
             RoutingDataSource.Context.set(RoutingDataSource.Keys.WRITE);
-            LOGGER.debug("WriteAspect : RoutingDataSource -> write");
+
             return joinPoint.proceed();
 
         } finally {

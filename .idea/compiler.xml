@@ -88,6 +88,7 @@
       <module name="mod-component" target="21" />
       <module name="mod-component-http" target="21" />
       <module name="mod-component-jackson" target="21" />
+      <module name="mod-component-logging" target="21" />
       <module name="mod-connector-core" target="21" />
       <module name="mod-connector-fspclient" target="21" />
       <module name="mod-datatype" target="21" />
@@ -142,6 +143,7 @@
       <module name="mod-component-jackson" options="-parameters" />
       <module name="mod-component-jpa" options="-parameters" />
       <module name="mod-component-kafka" options="-parameters" />
+      <module name="mod-component-logging" options="-parameters" />
       <module name="mod-component-misc" options="-parameters" />
       <module name="mod-component-openapi" options="-parameters" />
       <module name="mod-component-redis" options="-parameters" />
