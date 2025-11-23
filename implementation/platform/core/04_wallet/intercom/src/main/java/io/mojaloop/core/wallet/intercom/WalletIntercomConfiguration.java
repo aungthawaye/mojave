@@ -23,11 +23,13 @@ package io.mojaloop.core.wallet.intercom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
+import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.cache.WalletCache;
@@ -56,13 +58,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom.controller")
 @Import(value = {OpenApiConfiguration.class,
+                 DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  WalletDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})
-final class WalletIntercomConfiguration extends WebMvcExtension implements
-                                                                       WalletDomainConfiguration.RequiredBeans,
-                                                                       SpringSecurityConfiguration.RequiredBeans,
-                                                                       SpringSecurityConfiguration.RequiredSettings {
+final class WalletIntercomConfiguration extends WebMvcExtension
+    implements WalletDomainConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredSettings {
 
     private final BalanceUpdater balanceUpdater;
 
@@ -82,9 +86,11 @@ final class WalletIntercomConfiguration extends WebMvcExtension implements
         this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
         this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
 
-        this.walletCache = new WalletTimerCache(walletRepository, Integer.parseInt(
+        this.walletCache = new WalletTimerCache(
+            walletRepository, Integer.parseInt(
             System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-        this.positionCache = new PositionTimerCache(positionRepository, Integer.parseInt(
+        this.positionCache = new PositionTimerCache(
+            positionRepository, Integer.parseInt(
             System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
     }
 

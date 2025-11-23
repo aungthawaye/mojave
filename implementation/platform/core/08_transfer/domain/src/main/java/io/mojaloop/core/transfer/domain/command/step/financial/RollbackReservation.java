@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transfer.domain.command.step.financial;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
@@ -31,9 +32,6 @@ import io.mojaloop.fspiop.common.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class RollbackReservation {
@@ -56,42 +54,31 @@ public class RollbackReservation {
 
     public Output execute(Input input) throws FspiopException {
 
+        LOGGER.info("RollbackReservation : input : ({})", ObjectLogger.log(input));
+
         final var CONTEXT = input.context;
-        final var STEP_NAME = "rollback-reservation";
+        final var STEP_NAME = "RollbackReservation";
 
         try {
 
-            LOGGER.info(
-                "Roll back reservation  : transactionId : [{}], reservationId : [{}]",
-                input.transactionId.getId(), input.positionReservationId.getId());
-
-            var before = new HashMap<String, String>();
-            var after = new HashMap<String, String>();
-
-            before.put("transactionId", input.transactionId().getId().toString());
-            before.put("positionReservationId", input.positionReservationId().getId().toString());
+            var rollbackReservationInput = new RollbackReservationCommand.Input(
+                input.positionReservationId(), "Roll back due to : " + input.error());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, before,
-                    StepPhase.BEFORE));
+                    input.transactionId(), STEP_NAME, CONTEXT,
+                    ObjectLogger.log(rollbackReservationInput).toString(), StepPhase.BEFORE));
 
             var rollbackReservationOutput = this.rollbackReservationCommand.execute(
-                new RollbackReservationCommand.Input(
-                    input.positionReservationId(),
-                    "Roll back due to : " + input.error()));
+                rollbackReservationInput);
 
-            after.put(
-                "rollbackId", rollbackReservationOutput.positionUpdateId().getId().toString());
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, after,
-                    StepPhase.AFTER));
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId(), STEP_NAME, CONTEXT,
+                ObjectLogger.log(rollbackReservationOutput).toString(), StepPhase.AFTER));
 
             var output = new Output(rollbackReservationOutput.positionUpdateId());
 
-            LOGGER.info("Rolled back reservation successfully  : output : [{}]", output);
+            LOGGER.info("RollbackReservation : output : ({})", output);
 
             return output;
 
@@ -101,7 +88,7 @@ public class RollbackReservation {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());

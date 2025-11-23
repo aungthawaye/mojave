@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.admin.controller.api.command.position;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +52,12 @@ public class IncreasePositionController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public IncreasePositionCommand.Output execute(@Valid @RequestBody final IncreasePositionCommand.Input input)
-        throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+        throws
+        NoPositionUpdateForTransactionException,
+        PositionLimitExceededException,
+        PositionNotExistException {
 
-        LOGGER.info("Entering IncreasePositionCommand.execute: input : {}", input);
-
-        final var output = this.increasePositionCommand.execute(input);
-
-        LOGGER.info("Exiting IncreasePositionCommand.execute: {}", output);
-
-        return output;
+        return this.increasePositionCommand.execute(input);
     }
 
 }

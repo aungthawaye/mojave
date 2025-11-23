@@ -97,7 +97,7 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
         }
 
         var resultTopic = PubSubKeys.forQuotes(quoteId);
-        var errorTopic = PubSubKeys.forQuotes(quoteId);
+        var errorTopic = PubSubKeys.forQuotesError(quoteId);
 
         // Listening to the pub/sub
         var resultListener = new FspiopResultListener<>(

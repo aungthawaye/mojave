@@ -51,7 +51,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static java.sql.Types.BIGINT;
 
@@ -116,11 +115,9 @@ public class Transaction extends JpaEntity<TransactionId>
         this.openAt = Instant.now();
     }
 
-    public TransactionStep addStep(StepPhase phase, String name, Map<String, String> params) {
+    public TransactionStep addStep(StepPhase phase, String name, String context, String payload) {
 
-        var step = new TransactionStep(this, phase, name);
-
-        params.forEach(step::addParam);
+        var step = new TransactionStep(this, phase, name, context, payload);
 
         this.steps.add(step);
 

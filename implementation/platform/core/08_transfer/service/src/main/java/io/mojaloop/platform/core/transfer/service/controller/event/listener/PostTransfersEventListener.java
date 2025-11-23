@@ -45,11 +45,11 @@ public class PostTransfersEventListener {
     @EventListener
     public void onPostTransfersEvent(PostTransfersEvent event) {
 
-        LOGGER.info("Start handling PostTransfersEvent : [{}]", event);
+        LOGGER.info("Start handling PostTransfersEvent : ({})", event);
 
         var output = this.postTransfers.execute(event.getPayload());
 
-        LOGGER.info("Done handling PostTransfersEvent : [{}], output : [{}]", event, output);
+        LOGGER.info("Done handling PostTransfersEvent : ({}), output : ({})", event, output);
     }
 
 }

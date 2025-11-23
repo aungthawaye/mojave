@@ -104,7 +104,7 @@ public record ParticipantContext(String fspCode,
         for (var entry : base64PublicKeys.entrySet()) {
 
             publicKeys.put(entry.getKey(), Rs256.publicKeyFromPem(entry.getValue()));
-            LOGGER.info("FspCode: [{}], PublicKey: [{}]", entry.getKey(), entry.getValue());
+            LOGGER.info("FspCode: ({}), PublicKey: ({})", entry.getKey(), entry.getValue());
         }
 
         return new ParticipantContext(

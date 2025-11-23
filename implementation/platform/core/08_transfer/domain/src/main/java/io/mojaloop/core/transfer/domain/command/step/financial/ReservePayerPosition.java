@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transfer.domain.command.step.financial;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
@@ -39,8 +40,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ReservePayerPosition {
@@ -66,10 +65,10 @@ public class ReservePayerPosition {
                                        NoPositionUpdateForTransactionException,
                                        PositionLimitExceededException {
 
-        LOGGER.info("Reserving payer position : input : [{}]", input);
+        LOGGER.info("ReservePayerPosition : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context();
-        final var STEP_NAME = "reserve-payer-position";
+        final var STEP_NAME = "ReservePayerPosition";
 
         try {
 
@@ -85,75 +84,42 @@ public class ReservePayerPosition {
             var transferAmountString = transferAmount.stripTrailingZeros().toPlainString();
 
             var transactionId = input.transactionId();
-            var transactionIdString = transactionId.getId().toString();
-
             var transactionAt = input.transactionAt();
-            var transactionAtString = transactionAt.getEpochSecond() + "";
 
             var walletOwnerId = new WalletOwnerId(payerFsp.fspId().getId());
             var description = "Transfer " + currency + " " + transferAmountString + " from " +
                                   payerFspCode.value() + " to " + payeeFspCode.value();
 
-            var before = new HashMap<String, String>();
-
-            before.put("walletOwnerId", walletOwnerId.getId().toString());
-            before.put("currency", currency.name());
-            before.put("transferAmount", transferAmountString);
-            before.put("transactionId", transactionIdString);
-            before.put("transactionAt", transactionAtString);
-            before.put("description", description);
+            var reservePayerPositionInput = new ReservePositionCommand.Input(
+                walletOwnerId,
+                currency, transferAmount, transactionId, transactionAt, description);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    transactionId, STEP_NAME, CONTEXT, before,
-                    StepPhase.BEFORE));
+                    transactionId, STEP_NAME, CONTEXT,
+                    ObjectLogger.log(reservePayerPositionInput).toString(), StepPhase.BEFORE));
 
             var reservePositionOutput = this.reservePositionCommand.execute(
-                new ReservePositionCommand.Input(
-                    walletOwnerId, currency, transferAmount,
-                    transactionId, transactionAt, description));
-
-            var after = new HashMap<String, String>();
-
-            after.put(
-                "positionUpdateId", reservePositionOutput.positionUpdateId().getId().toString());
-            after.put(
-                "oldPosition",
-                reservePositionOutput.oldPosition().stripTrailingZeros().toPlainString());
-            after.put(
-                "newPosition",
-                reservePositionOutput.newPosition().stripTrailingZeros().toPlainString());
-            after.put(
-                "oldReserved",
-                reservePositionOutput.oldReserved().stripTrailingZeros().toPlainString());
-            after.put(
-                "newReserved",
-                reservePositionOutput.newReserved().stripTrailingZeros().toPlainString());
+                reservePayerPositionInput);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    transactionId, STEP_NAME, CONTEXT, after,
-                    StepPhase.AFTER));
+                    transactionId, STEP_NAME, CONTEXT,
+                    ObjectLogger.log(reservePositionOutput).toString(), StepPhase.AFTER));
 
             var output = new Output(reservePositionOutput.positionUpdateId());
 
-            LOGGER.info("Reserved payer position successfully: output : [{}]", output);
+            LOGGER.info("ReservePayerPosition : output : ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (NoPositionUpdateForTransactionException e) {
 
-            LOGGER.error(
-                "No position updated for payer FSP: [{}], currency: [{}], amount: [{}]",
-                input.payerFsp.fspId().getId(), input.currency(), input.transferAmount());
-
-            var error = new HashMap<String, String>();
-
-            error.put("error", e.getMessage());
+            LOGGER.error("Error:", e);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, error,
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -164,7 +130,7 @@ public class ReservePayerPosition {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.PAYER_LIMIT_ERROR, e.getMessage());
@@ -175,7 +141,7 @@ public class ReservePayerPosition {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());

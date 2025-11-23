@@ -58,10 +58,6 @@ public class TransferIlpPacket extends JpaEntity<TransferId> {
     @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String condition;
 
-    @Column(name = "ilp_fulfilment",
-            length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
-    protected String fulfilment;
-
     @MapsId
     @OneToOne
     @JoinColumn(name = "transfer_id",
@@ -81,13 +77,6 @@ public class TransferIlpPacket extends JpaEntity<TransferId> {
         this.condition = ilpCondition;
 
         this.transfer = transfer;
-    }
-
-    public void fulfil(String fulfilment) {
-
-        assert fulfilment != null;
-
-        this.fulfilment = fulfilment;
     }
 
     @Override

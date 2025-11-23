@@ -21,6 +21,7 @@
 package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
@@ -35,9 +36,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ReserveTransfer {
@@ -60,25 +58,18 @@ public class ReserveTransfer {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Write
-    public Output execute(Input input) throws FspiopException {
+    public void execute(Input input) throws FspiopException {
 
         var CONTEXT = input.context;
         var STEP_NAME = "reserve-transfer";
 
         try {
 
-            LOGGER.info("Reserve transfer : input : [{}]", input);
+            LOGGER.info("ReserveTransfer : input : ({})", ObjectLogger.log(input));
 
-            var before = new HashMap<String, String>();
-            var after = new HashMap<String, String>();
-
-            before.put("transactionId", input.transactionId().getId().toString());
-            before.put("transferId", input.transferId().getId().toString());
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, before,
-                    StepPhase.BEFORE));
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId(), STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                StepPhase.BEFORE));
 
             var transfer = this.transferRepository.getReferenceById(input.transferId());
 
@@ -86,18 +77,11 @@ public class ReserveTransfer {
 
             this.transferRepository.save(transfer);
 
-            after.put("transferId", transfer.getId().toString());
-
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, after,
-                    StepPhase.AFTER));
+                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            var output = new Output();
-
-            LOGGER.info("Reserved transfer : output : [{}]", output);
-
-            return output;
+            LOGGER.info("ReservedTransfer : done");
 
         } catch (Exception e) {
 
@@ -105,14 +89,12 @@ public class ReserveTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
-
-    public record Output() { }
 
     public record Input(String context,
                         TransactionId transactionId,

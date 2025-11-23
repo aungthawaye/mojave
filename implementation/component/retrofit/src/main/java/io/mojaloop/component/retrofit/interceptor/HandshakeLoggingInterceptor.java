@@ -118,7 +118,7 @@ public final class HandshakeLoggingInterceptor implements Interceptor {
                 String issuer = x.getIssuerX500Principal().getName();
 
                 LOGGER.info(
-                    "TLS-PEER[{}] subject='{}' issuer='{}' notBefore={} notAfter={}", i, subj,
+                    "TLS-PEER({}) subject='{}' issuer='{}' notBefore={} notAfter={}", i, subj,
                     issuer, x.getNotBefore(), x.getNotAfter());
 
                 try {
@@ -139,13 +139,13 @@ public final class HandshakeLoggingInterceptor implements Interceptor {
                             sb.setLength(sb.length() - 2);
                         }
 
-                        LOGGER.info("TLS-PEER[{}] SANs={}", i, sb);
+                        LOGGER.info("TLS-PEER({}) SANs={}", i, sb);
                     }
                 } catch (Exception ignore) { }
 
             } else {
 
-                LOGGER.info("TLS-PEER[{}] type={}", i, c.getType());
+                LOGGER.info("TLS-PEER({}) type={}", i, c.getType());
             }
 
             i++;

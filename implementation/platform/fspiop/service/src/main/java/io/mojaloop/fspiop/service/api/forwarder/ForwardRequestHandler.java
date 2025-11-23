@@ -59,8 +59,6 @@ public class ForwardRequestHandler implements ForwardRequest {
         var method = request.method().toUpperCase();
         var url = FspiopUrls.newUrl(baseUrl, request.uri());
 
-        LOGGER.debug("Forwarding request to : {} {}", method, url);
-
         try {
 
             switch (method) {
@@ -74,43 +72,39 @@ public class ForwardRequestHandler implements ForwardRequest {
                         this.forwardingService.post(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(),
-                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                                request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 case "PUT":
                     RetrofitService.invoke(
                         this.forwardingService.put(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(),
-                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                                request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 case "PATCH":
                     RetrofitService.invoke(
                         this.forwardingService.patch(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(),
-                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                                request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 case "DELETE":
                     RetrofitService.invoke(
                         this.forwardingService.delete(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(),
-                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
+                                request.payload(), MediaType.get(request.contentType()))),
+                        this.fspiopErrorDecoder);
                     break;
                 default:
                     throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);
             }
 
-            LOGGER.debug("Done forwarding request to : {} {}", method, url);
-
         } catch (RetrofitService.InvocationException e) {
 
-            LOGGER.error(
-                "Error forwarding request to : {} {} - error {}", method, baseUrl, e.getMessage());
             throw FspiopInvocationExceptionResolver.resolve(e);
         }
     }

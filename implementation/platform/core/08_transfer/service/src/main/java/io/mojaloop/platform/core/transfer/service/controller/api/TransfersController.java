@@ -74,9 +74,9 @@ public class TransfersController {
         var event = new GetTransfersEvent(
             new GetTransfersCommand.Input(fspiopHttpRequest, transferId));
 
-        LOGGER.info("Publishing GetTransfersEvent : [{}]", event);
+        LOGGER.info("Publishing GetTransfersEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published GetTransfersEvent : [{}]", event);
+        LOGGER.info("Published GetTransfersEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -93,9 +93,9 @@ public class TransfersController {
         var event = new PostTransfersEvent(
             new PostTransfersCommand.Input(fspiopHttpRequest, requestBody));
 
-        LOGGER.info("Publishing PostTransfersEvent : [{}]", event);
+        LOGGER.info("Publishing PostTransfersEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PostTransfersEvent : [{}]", event);
+        LOGGER.info("Published PostTransfersEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -113,9 +113,9 @@ public class TransfersController {
         var event = new PutTransfersEvent(
             new PutTransfersCommand.Input(fspiopHttpRequest, transferId, response));
 
-        LOGGER.info("Publishing PutTransfersEvent : [{}]", event);
+        LOGGER.info("Publishing PutTransfersEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutTransfersEvent : [{}]", event);
+        LOGGER.info("Published PutTransfersEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -133,9 +133,9 @@ public class TransfersController {
         var event = new PutTransfersErrorEvent(
             new PutTransfersErrorCommand.Input(fspiopHttpRequest, transferId, error));
 
-        LOGGER.info("Publishing PutTransfersErrorEvent : [{}]", event);
+        LOGGER.info("Publishing PutTransfersErrorEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutTransfersErrorEvent : [{}]", event);
+        LOGGER.info("Published PutTransfersErrorEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }

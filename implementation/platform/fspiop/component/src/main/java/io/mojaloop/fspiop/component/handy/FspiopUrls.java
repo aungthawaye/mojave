@@ -66,19 +66,11 @@ public class FspiopUrls {
 
         public static String putPartiesError(String baseUrl,
                                              PartyIdType partyIdType,
-                                             String partyId) {
-
-            return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + "parties/" + partyIdType + "/" +
-                       partyId + "/error";
-        }
-
-        public static String putPartiesError(String baseUrl,
-                                             PartyIdType partyIdType,
                                              String partyId,
                                              String subId) {
 
             return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + "parties/" + partyIdType + "/" +
-                       partyId + "/" + subId + "/error";
+                       partyId + (subId != null ? "/" + subId : "") + "/error";
         }
 
     }

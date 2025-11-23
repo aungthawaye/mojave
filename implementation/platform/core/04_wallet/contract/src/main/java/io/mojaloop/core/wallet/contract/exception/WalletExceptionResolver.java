@@ -27,6 +27,7 @@ import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTr
 import io.mojaloop.core.wallet.contract.exception.position.PositionAlreadyExistsException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionIdNotFoundException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.core.wallet.contract.exception.wallet.BalanceUpdateIdNotFoundException;
 import io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException;
 import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
@@ -62,6 +63,7 @@ public class WalletExceptionResolver {
             case PositionAlreadyExistsException.CODE -> PositionAlreadyExistsException.from(extras);
             case PositionIdNotFoundException.CODE -> PositionIdNotFoundException.from(extras);
             case PositionLimitExceededException.CODE -> PositionLimitExceededException.from(extras);
+            case PositionNotExistException.CODE -> PositionNotExistException.from(extras);
             case FailedToRollbackReservationException.CODE ->
                 FailedToRollbackReservationException.from(extras);
 

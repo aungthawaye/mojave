@@ -36,6 +36,8 @@ CREATE TABLE `tfr_transfer`
     `reservation_timeout_at` bigint       DEFAULT NULL,
     `payee_completed_at`     bigint       DEFAULT NULL,
 
+    `ilp_fulfilment`         varchar(48) DEFAULT NULL,
+
     `rec_created_at`         bigint       DEFAULT NULL,
     `rec_updated_at`         bigint       DEFAULT NULL,
     `rec_version`            int          DEFAULT NULL,
@@ -96,7 +98,6 @@ CREATE TABLE `tfr_transfer_ilp_packet`
     `transfer_id`    bigint NOT NULL,
     `ilp_packet`     MEDIUMTEXT  DEFAULT NULL,
     `ilp_condition`  varchar(48) DEFAULT NULL,
-    `ilp_fulfilment` varchar(48) DEFAULT NULL,
 
     `rec_created_at` bigint      DEFAULT NULL,
     `rec_updated_at` bigint      DEFAULT NULL,

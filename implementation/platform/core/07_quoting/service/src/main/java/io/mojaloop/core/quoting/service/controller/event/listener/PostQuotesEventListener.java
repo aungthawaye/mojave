@@ -46,11 +46,11 @@ public class PostQuotesEventListener {
     @EventListener
     public void onPostQuotesEvent(PostQuotesEvent event) {
 
-        LOGGER.info("Start handling PostQuotesEvent : [{}]", event);
+        LOGGER.info("Start handling PostQuotesEvent : ({})", event);
 
         var output = this.postQuotes.execute(event.getPayload());
 
-        LOGGER.info("Done handling PostQuotesEvent : [{}], output : [{}]", event, output);
+        LOGGER.info("Done handling PostQuotesEvent : ({}), output : ({})", event, output);
     }
 
 }

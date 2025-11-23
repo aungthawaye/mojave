@@ -29,6 +29,7 @@ import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,17 +50,18 @@ public class IncreasePositionInvoker implements IncreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input)
-        throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+    public Output execute(final Input input) throws
+                                             NoPositionUpdateForTransactionException,
+                                             PositionLimitExceededException,
+                                             PositionNotExistException {
 
         try {
 
-            return RetrofitService
-                       .invoke(
-                           this.positionCommand.increase(input),
-                           (status, errorResponseBody) -> RestErrorResponse.decode(
-                               errorResponseBody, this.objectMapper))
-                       .body();
+            return RetrofitService.invoke(
+                this.positionCommand.increase(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(
+                    errorResponseBody,
+                    this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -72,6 +74,7 @@ public class IncreasePositionInvoker implements IncreasePositionCommand {
                 switch (throwable) {
                     case NoPositionUpdateForTransactionException e1 -> throw e1;
                     case PositionLimitExceededException e2 -> throw e2;
+                    case PositionNotExistException pne -> throw pne;
                     case UncheckedDomainException ude -> throw ude;
                     default -> {
                     }

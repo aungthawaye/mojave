@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -43,7 +44,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -67,46 +67,39 @@ public class PatchTransferToPayee {
 
     public Output execute(Input input) throws FspiopException {
 
-        var CONTEXT = input.context;
-        var STEP_NAME = "patch-transfer-to-payee";
+        LOGGER.info("PatchTransferToPayee : input : ({})", ObjectLogger.log(input));
 
-        LOGGER.info("Patching transfer to Payee : input : [{}]", input);
+        var CONTEXT = input.context;
+        var STEP_NAME = "PatchTransferToPayee";
 
         try {
 
-            var response = new TransfersIDPatchResponse(
+            var patchResponse = new TransfersIDPatchResponse(
                 FspiopDates.forRequestBody(new Date()), input.state);
 
             var extensions = new ArrayList<Extension>();
             input.extensions.forEach((k, v) -> extensions.add(new Extension(k, v)));
 
             var extensionList = new ExtensionList(extensions);
-            response.setExtensionList(extensionList);
+            patchResponse.setExtensionList(extensionList);
 
             var payeeBaseUrl = input.payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
             var url = FspiopUrls.Transfers.patchTransfers(
                 payeeBaseUrl, input.udfTransferId.getId());
 
-            var before = new HashMap<>(input.extensions);
-
-            before.put("state", input.state.toString());
-            before.put("url", url);
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, before,
-                    StepPhase.BEFORE));
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(patchResponse).toString(),
+                StepPhase.BEFORE));
 
             this.respondTransfers.patchTransfers(
-                new Payee(input.payeeFsp.fspCode().value()), url, response);
+                new Payee(input.payeeFsp.fspCode().value()), url, patchResponse);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
                     StepPhase.AFTER));
 
-            LOGGER.info(
-                "Patched transfer to Payee : udfTransferId : [{}]", input.udfTransferId.getId());
+            LOGGER.info("PatchTransferToPayee : done");
 
         } catch (FspiopException e) {
 
@@ -120,7 +113,7 @@ public class PatchTransferToPayee {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());

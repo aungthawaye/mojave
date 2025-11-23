@@ -43,11 +43,11 @@ public class Rs256UT {
         PublicKey publicKey = keyPair.getPublic();
 
         LOGGER.debug(
-            "Private key : [{}]", Rs256.privateKeyToPem(privateKey).replaceAll("\n", "\\\\n"));
-        LOGGER.debug("Private key : [{}]", Rs256.privateKeyToPem(privateKey));
+            "Private key : ({})", Rs256.privateKeyToPem(privateKey).replaceAll("\n", "\\\\n"));
+        LOGGER.debug("Private key : ({})", Rs256.privateKeyToPem(privateKey));
         LOGGER.debug(
-            "Public Key : [{}]", Rs256.publicKeyToPem(publicKey).replaceAll("\n", "\\\\n"));
-        LOGGER.debug("Public Key : [{}]", Rs256.publicKeyToPem(publicKey));
+            "Public Key : ({})", Rs256.publicKeyToPem(publicKey).replaceAll("\n", "\\\\n"));
+        LOGGER.debug("Public Key : ({})", Rs256.publicKeyToPem(publicKey));
 
     }
 

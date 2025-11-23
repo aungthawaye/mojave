@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -32,25 +33,24 @@ import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.transfers.RespondTransfers;
+import io.mojaloop.fspiop.spec.core.ExtensionList;
+import io.mojaloop.fspiop.spec.core.TransferState;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
-public class RespondTransferToPayer {
+public class CommitTransferToPayer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RespondTransferToPayer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransferToPayer.class);
 
     private final RespondTransfers respondTransfers;
 
     private final AddStepPublisher addStepPublisher;
 
-    public RespondTransferToPayer(RespondTransfers respondTransfers,
-                                  AddStepPublisher addStepPublisher) {
+    public CommitTransferToPayer(RespondTransfers respondTransfers,
+                                 AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -61,36 +61,35 @@ public class RespondTransferToPayer {
 
     public void execute(Input input) throws FspiopException {
 
+        LOGGER.info("CommitTransferToPayer : input : ({})", ObjectLogger.log(input));
+
         final var CONTEXT = input.context;
-        final var STEP_NAME = "respond-transfer-to-payer";
+        final var STEP_NAME = "CommitTransferToPayer";
 
         var payerFsp = input.payerFsp;
 
         try {
 
-            var before = new HashMap<String, String>();
+            var response = new TransfersIDPutResponse()
+                               .transferState(TransferState.COMMITTED)
+                               .fulfilment(input.ilpFulfilment)
+                               .completedTimestamp(input.completedTimestamp)
+                               .extensionList(input.extensionList);
 
-            before.put("state", input.response.getTransferState().name());
-            before.put("fulfilment", input.response.getFulfilment());
-            before.put("competedTimestamp", input.response.getCompletedTimestamp());
-            before.put("payer", payerFsp.fspCode().value());
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, before,
-                    StepPhase.BEFORE));
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(response).toString(),
+                StepPhase.BEFORE));
 
             var sendBackTo = new Payer(input.payerFsp.fspCode().value());
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
             var url = FspiopUrls.Transfers.putTransfers(
                 payerBaseUrl, input.udfTransferId().getId());
 
-            this.respondTransfers.putTransfers(sendBackTo, url, input.response);
+            this.respondTransfers.putTransfers(sendBackTo, url, response);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"),
-                    StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
         } catch (FspiopException e) {
 
@@ -104,8 +103,7 @@ public class RespondTransferToPayer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
-                    StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -116,7 +114,9 @@ public class RespondTransferToPayer {
                         TransactionId transactionId,
                         UdfTransferId udfTransferId,
                         FspData payerFsp,
-                        TransfersIDPutResponse response) {
+                        String ilpFulfilment,
+                        String completedTimestamp,
+                        ExtensionList extensionList) {
 
     }
 

@@ -12,7 +12,7 @@ public class ObjectLogger {
         OBJECT_MAPPER = objectMapper;
     }
 
-    public Object log(Object object) {
+    public static Object log(Object object) {
 
         return new LazyObject(object);
     }
@@ -22,15 +22,34 @@ public class ObjectLogger {
         @Override
         public String toString() {
 
-            if (value == null) {
-                return "null";
+            switch (value) {
+                case null -> {
+                    return "null";
+                }
+                case String s -> {
+                    return s;
+                }
+                case Number number -> {
+                    return String.valueOf(value);
+                }
+                case Boolean b -> {
+                    return String.valueOf(value);
+                }
+                case Enum anEnum -> {
+                    return String.valueOf(value);
+                }
+                case Exception e -> {
+                    return e.getMessage();
+                }
+                default -> {
+                    try {
+                        return OBJECT_MAPPER.writeValueAsString(value);
+                    } catch (JsonProcessingException e) {
+                        return String.valueOf(value);
+                    }
+                }
             }
 
-            try {
-                return OBJECT_MAPPER.writeValueAsString(value);
-            } catch (JsonProcessingException e) {
-                return String.valueOf(value);
-            }
         }
 
     }

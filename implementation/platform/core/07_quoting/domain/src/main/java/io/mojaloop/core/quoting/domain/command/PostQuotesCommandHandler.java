@@ -22,6 +22,7 @@ package io.mojaloop.core.quoting.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.jpa.transaction.TransactionContext;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.quoting.UdfQuoteId;
@@ -39,12 +40,12 @@ import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
+import io.mojaloop.fspiop.component.handy.FspiopMoney;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -96,10 +97,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
         var udfQuoteId = new UdfQuoteId(input.quotesPostRequest().getQuoteId());
 
-        MDC.put("requestId", udfQuoteId.getId());
-
-        LOGGER.info(
-            "({}) Executing PostQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
+        LOGGER.info("PostQuotesCommandHandler : input: ({})", ObjectLogger.log(input));
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -110,11 +108,9 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             payerFspCode = new FspCode(input.request().payer().fspCode());
             payerFsp = this.participantStore.getFspData(payerFspCode);
-            LOGGER.debug("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
 
             payeeFspCode = new FspCode(input.request().payee().fspCode());
             payeeFsp = this.participantStore.getFspData(payeeFspCode);
-            LOGGER.debug("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             var postQuotesRequest = input.quotesPostRequest();
 
@@ -130,7 +126,13 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
             }
 
             var amount = postQuotesRequest.getAmount();
+
+            FspiopMoney.validate(amount);
+
             var fees = postQuotesRequest.getFees();
+
+            FspiopMoney.validate(fees);
+
             var currency = amount.getCurrency();
 
             final var payer = postQuotesRequest.getPayer().getPartyIdInfo();
@@ -154,7 +156,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                 if (requestExpiration.isBefore(Instant.now())) {
 
                     throw new FspiopException(
-                        FspiopErrors.QUOTE_EXPIRED,
+                        FspiopErrors.GENERIC_VALIDATION_ERROR,
                         "The quote request from Payer FSP has expired. The expiration is : " +
                             expiration);
                 }
@@ -166,7 +168,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                 try {
 
                     var quote = new Quote(
-                        payeeFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
+                        payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
                         new BigDecimal(amount.getAmount()),
                         fees != null ? new BigDecimal(fees.getAmount()) : null,
                         postQuotesRequest.getAmountType(), transactionType.getScenario(),
@@ -183,55 +185,46 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                             postQuotesRequest.getExtensionList().getExtension() != null) {
 
                         postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
-                            LOGGER.debug("({}) Extension found: {}", udfQuoteId.getId(), extension);
+
                             quote.addExtension(
                                 Direction.FROM_PAYEE, extension.getKey(), extension.getValue());
                         });
 
                     }
 
-                    // I don't use @Transactional and manually control the transaction scope because
-                    // forwardRequest is the HTTP API call, and it has latency. To avoid holding the
-                    // connection for a long period, I used manual transaction control.
                     TransactionContext.startNew(this.transactionManager, quote.getId().toString());
                     this.quoteRepository.save(quote);
                     TransactionContext.commit();
 
                 } catch (ExpirationNotInFutureException ignored) {
 
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     TransactionContext.rollback();
-                    LOGGER.error(
-                        "({}) Exception in TransactionContext: [{}]", udfQuoteId.getId(), e);
+                    LOGGER.error("Error:", e);
                 }
 
             } else {
 
                 LOGGER.warn(
-                    "({}) Quoting is not stateful. Ignoring saving the quote.", udfQuoteId.getId());
+                    "Quoting is not stateful. Ignoring saving the quote. udfQuoteId : ({})",
+                    udfQuoteId.getId());
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-            LOGGER.info(
-                "({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(), payeeFsp);
+            LOGGER.info("Forwarding request to payee FSP (Url): ({})", payeeBaseUrl);
 
             this.forwardRequest.forward(payeeBaseUrl, input.request());
-            LOGGER.info(
-                "({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(),
-                payeeFsp);
+            LOGGER.info("Done forwarding request to payee FSP (Url): ({})", payeeBaseUrl);
 
         } catch (Exception e) {
 
-            LOGGER.error(
-                "({}) Exception occurred while executing PostQuotesCommandHandler: [{}]",
-                udfQuoteId.getId(), e.getMessage());
+            LOGGER.error("Error:", e);
 
             if (payerFsp != null) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
                 final var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                final var url = FspiopUrls.newUrl(
-                    baseUrl, "quotes/" + udfQuoteId.getId() + "/error");
+                final var url = FspiopUrls.Quotes.putQuotesError(baseUrl, udfQuoteId.getId());
 
                 try {
 
@@ -241,19 +234,14 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                             sendBackTo, url,
                             error));
 
-                } catch (Throwable throwable) {
-                    LOGGER.error(
-                        "Something went wrong while sending error response to payer FSP: ",
-                        throwable);
+                } catch (Exception e1) {
+                    LOGGER.error("Error:", e1);
                 }
             }
 
         }
 
-        LOGGER.info(
-            "({}) Returning from PostQuotesCommandHandler successfully.", udfQuoteId.getId());
-
-        MDC.remove("requestId");
+        LOGGER.info("PostQuotesCommandHandler : done");
 
         return new Output();
     }

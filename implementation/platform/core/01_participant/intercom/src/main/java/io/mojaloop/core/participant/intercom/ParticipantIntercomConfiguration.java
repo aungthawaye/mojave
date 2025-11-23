@@ -23,6 +23,7 @@ package io.mojaloop.core.participant.intercom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
@@ -48,6 +49,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = "io.mojaloop.core.participant.intercom.controller")
 @Import(value = {OpenApiConfiguration.class,
                  DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  ParticipantDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})

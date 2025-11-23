@@ -21,31 +21,38 @@
 package io.mojaloop.core.transfer.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import io.mojaloop.core.transfer.contract.command.PutTransfersCommand;
-import io.mojaloop.core.transfer.domain.command.step.financial.CommitReservation;
-import io.mojaloop.core.transfer.domain.command.step.financial.DecreasePayeePosition;
+import io.mojaloop.core.transfer.domain.command.step.financial.FulfilPositions;
 import io.mojaloop.core.transfer.domain.command.step.financial.RollbackReservation;
+import io.mojaloop.core.transfer.domain.command.step.fspiop.CommitTransferToPayer;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.ForwardToDestination;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.PatchTransferToPayee;
-import io.mojaloop.core.transfer.domain.command.step.fspiop.RespondTransferToPayer;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.UnwrapResponse;
 import io.mojaloop.core.transfer.domain.command.step.stateful.AbortTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.CommitTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.FetchTransfer;
-import io.mojaloop.core.transfer.domain.model.Transfer;
+import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
+import io.mojaloop.fspiop.component.handy.FspiopUrls;
+import io.mojaloop.fspiop.service.api.transfers.RespondTransfers;
+import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.TransferState;
-import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Map;
 
 @Service
@@ -63,20 +70,20 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     private final CommitTransfer commitTransfer;
 
     // Financial steps
-    private final CommitReservation commitReservation;
-
-    private final DecreasePayeePosition decreasePayeePosition;
+    private final FulfilPositions fulfilPositions;
 
     private final RollbackReservation rollbackReservation;
 
     // FSPIOP steps
     private final UnwrapResponse unwrapResponse;
 
-    private final RespondTransferToPayer respondTransferToPayer;
+    private final CommitTransferToPayer commitTransferToPayer;
 
     private final ForwardToDestination forwardToDestination;
 
     private final PatchTransferToPayee patchTransferToPayee;
+
+    private final RespondTransfers respondTransfers;
 
     private final CloseTransactionPublisher closeTransactionPublisher;
 
@@ -84,39 +91,39 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       FetchTransfer fetchTransfer,
                                       AbortTransfer abortTransfer,
                                       CommitTransfer commitTransfer,
-                                      CommitReservation commitReservation,
-                                      DecreasePayeePosition decreasePayeePosition,
+                                      FulfilPositions fulfilPositions,
                                       RollbackReservation rollbackReservation,
                                       UnwrapResponse unwrapResponse,
-                                      RespondTransferToPayer respondTransferToPayer,
+                                      CommitTransferToPayer commitTransferToPayer,
                                       ForwardToDestination forwardToDestination,
                                       PatchTransferToPayee patchTransferToPayee,
+                                      RespondTransfers respondTransfers,
                                       CloseTransactionPublisher closeTransactionPublisher) {
 
         assert participantStore != null;
         assert fetchTransfer != null;
         assert abortTransfer != null;
         assert commitTransfer != null;
-        assert commitReservation != null;
-        assert decreasePayeePosition != null;
+        assert fulfilPositions != null;
         assert rollbackReservation != null;
         assert unwrapResponse != null;
-        assert respondTransferToPayer != null;
+        assert commitTransferToPayer != null;
         assert forwardToDestination != null;
         assert patchTransferToPayee != null;
+        assert respondTransfers != null;
         assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
         this.fetchTransfer = fetchTransfer;
         this.abortTransfer = abortTransfer;
         this.commitTransfer = commitTransfer;
-        this.commitReservation = commitReservation;
-        this.decreasePayeePosition = decreasePayeePosition;
+        this.fulfilPositions = fulfilPositions;
         this.rollbackReservation = rollbackReservation;
         this.unwrapResponse = unwrapResponse;
-        this.respondTransferToPayer = respondTransferToPayer;
+        this.commitTransferToPayer = commitTransferToPayer;
         this.forwardToDestination = forwardToDestination;
         this.patchTransferToPayee = patchTransferToPayee;
+        this.respondTransfers = respondTransfers;
         this.closeTransactionPublisher = closeTransactionPublisher;
     }
 
@@ -124,18 +131,22 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     @Write
     public Output execute(Input input) {
 
-        final var CONTEXT = "put-transfers";
+        LOGGER.info("PutTransfersCommandHandler : input: ({})", ObjectLogger.log(input));
+
+        final var CONTEXT = "PutTransfers";
 
         var udfTransferId = input.udfTransferId();
 
-        MDC.put("requestId", udfTransferId.getId());
-
-        LOGGER.info(
-            "({}) Executing PutTransfersCommandHandler with input: [{}]", udfTransferId.getId(),
-            input);
-
-        Transfer transfer = null;
+        TransferId transferId = null;
+        TransferState state = null;
+        PositionUpdateId reservationId = null;
+        Currency currency = null;
+        BigDecimal transferAmount = null;
+        TransactionId transactionId = null;
+        Instant transactionAt = null;
         Exception errorOccurred = null;
+
+        boolean payeeReserved = false;
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -149,48 +160,63 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
             payerFspCode = new FspCode(input.request().payer().fspCode());
             payerFsp = this.participantStore.getFspData(payerFspCode);
-            LOGGER.debug("({}) Found payer FSP: [{}]", udfTransferId.getId(), payerFsp);
 
             payeeFspCode = new FspCode(input.request().payee().fspCode());
             payeeFsp = this.participantStore.getFspData(payeeFspCode);
-            LOGGER.debug("({}) Found payee FSP: [{}]", udfTransferId.getId(), payeeFsp);
 
             var putTransfersResponse = input.transfersIDPutResponse();
 
             // 1. Fetch the transfer.
             fetchTransferOutput = this.fetchTransfer.execute(
                 new FetchTransfer.Input(udfTransferId));
-            transfer = fetchTransferOutput.transfer();
 
-            if (transfer == null) {
+            transferId = fetchTransferOutput.transferId();
+            state = fetchTransferOutput.state();
+            reservationId = fetchTransferOutput.reservationId();
+            currency = fetchTransferOutput.currency();
+            transferAmount = fetchTransferOutput.transferAmount();
+            transactionId = fetchTransferOutput.transactionId();
+            transactionAt = fetchTransferOutput.transactionAt();
+
+            if (transferId == null) {
                 // Surely non-existence Transfer.
                 LOGGER.warn(
-                    "Transfer not found for udfTransferId : [{}]. Possible non-existence Transfer. Ignored it.",
+                    "Transfer not found for udfTransferId : ({}). Possible non-existence Transfer. Ignored it.",
                     udfTransferId.getId());
                 return new Output();
 
-            } else if (transfer.getState() == TransferState.COMMITTED ||
-                           transfer.getState() == TransferState.ABORTED) {
+            } else if (state == TransferState.COMMITTED || state == TransferState.ABORTED) {
                 // This transfer has already been processed. Just forward back to Payer. It seems Payer is retrieving again.
                 LOGGER.info(
-                    "Transfer already processed for udfTransferId : [{}]. Ignored it.",
+                    "Transfer already processed for udfTransferId : ({}). Ignored it.",
                     udfTransferId.getId());
 
                 var stateFromRequest = putTransfersResponse.getTransferState();
 
-                if (transfer.getState() == stateFromRequest) {
+                if (state == stateFromRequest) {
 
                     LOGGER.info(
-                        "Payee responded with the same state as the one in the request. Forwarding back to Payer.");
-                    this.respondTransferToPayer.execute(
-                        new RespondTransferToPayer.Input(
-                            CONTEXT, transfer.getTransactionId(), udfTransferId, payerFsp,
-                            putTransfersResponse));
+                        "Possible that Payer is fetching Transfer. So, Payee responded the previous Transfer again. Forwarding back to Payer.");
+
+                    var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
+                    LOGGER.info("Forwarding request to payer FSP (BaseUrl): ({})", payerBaseUrl);
+
+                    try {
+
+                        this.forwardToDestination.execute(
+                            new ForwardToDestination.Input(
+                                CONTEXT, transactionId, payeeFspCode.value(), payerBaseUrl,
+                                input.request()));
+
+                    } catch (Exception ignored) { }
+
+                    LOGGER.info(
+                        "Done forwarding request to payer FSP (BaseUrl): ({})", payerBaseUrl);
 
                 } else {
 
                     LOGGER.warn(
-                        "Payee responded with a different state than the one in the request. Ignoring it.");
+                        "Payee responded the previous Transfer with a different state. Ignoring it.");
                 }
 
                 return new Output();
@@ -206,10 +232,21 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                 LOGGER.error("Error:", e);
                 // Roll back the Payer position reservation.
-                this.rollbackReservation.execute(
+                var rollbackReservationOutput = this.rollbackReservation.execute(
                     new RollbackReservation.Input(
-                        CONTEXT, transfer.getTransactionId(), transfer.getReservationId(),
+                        CONTEXT, transactionId, reservationId,
                         e.getMessage()));
+
+                this.abortTransfer.execute(new AbortTransfer.Input(
+                    CONTEXT, transactionId, transferId, rollbackReservationOutput.rollbackId(),
+                    "Payee responded with an error."));
+
+                // Although Payee responded with an error, we still need to inform back
+                // to Payee the state of the transfer.
+                this.patchTransferToPayee.execute(
+                    new PatchTransferToPayee.Input(
+                        CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.ABORTED,
+                        Map.of()));
 
                 throw e;
             }
@@ -220,67 +257,62 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
             // 4. Handle ABORTED state and RESERVED state.
             if (unwrapResponseOutput.state() == TransferState.ABORTED) {
 
+                // Oh, Payee aborted the transfer. We roll back the Payer position reservation.
+                // Mark the Transfer as ABORTED. Then inform back to Payer that the transfer is ABORTED.
                 LOGGER.info(
-                    "Payee responded with the aborted transfer : udfTransferId : [{}].",
+                    "Payee responded with the aborted transfer : udfTransferId : ({}).",
                     udfTransferId.getId());
 
-                this.rollbackReservation.execute(
+                var rollbackReservationOutput = this.rollbackReservation.execute(
                     new RollbackReservation.Input(
-                        CONTEXT, transfer.getTransactionId(), transfer.getReservationId(),
+                        CONTEXT, transactionId, reservationId,
                         "Payee aborted transfer."));
 
-                this.abortTransfer.execute(
-                    new AbortTransfer.Input(
-                        CONTEXT, transfer.getTransactionId(), transfer.getId(),
-                        transfer.getReservationId(), "Payee aborted transfer."));
+                this.abortTransfer.execute(new AbortTransfer.Input(
+                    CONTEXT, transactionId, transferId, rollbackReservationOutput.rollbackId(),
+                    "Payee aborted transfer."));
 
                 // Forward the Payee's response back to Payer.
                 var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-                LOGGER.info("Forwarding request to payer FSP (BaseUrl): [{}]", payerBaseUrl);
+                LOGGER.info("Forwarding request to payer FSP (BaseUrl): ({})", payerBaseUrl);
 
                 this.forwardToDestination.execute(
                     new ForwardToDestination.Input(
-                        CONTEXT, transfer.getTransactionId(), payeeFspCode.value(), payerBaseUrl,
+                        CONTEXT, transactionId, payeeFspCode.value(), payerBaseUrl,
                         input.request()));
 
-                return new Output();
+                LOGGER.info("Done forwarding request to payer FSP (BaseUrl): ({})", payerBaseUrl);
 
             } else if (unwrapResponseOutput.state() == TransferState.RESERVED) {
 
                 LOGGER.info(
-                    "Payee responded with the reserved transfer : udfTransferId : [{}].",
+                    "Payee responded with the reserved transfer : udfTransferId : ({}).",
                     udfTransferId.getId());
-                // Upon receiving the reserved transfer from Payee, Hub will need to commit the payer position
-                // reservation, then give money to the Payee by decreasing its position. Then hub responds to the Payer
-                // with the committed transfer.
-                var commitReservationOutput = this.commitReservation.execute(
-                    new CommitReservation.Input(
-                        CONTEXT, transfer.getTransactionId(),
-                        transfer.getReservationId()));
+                // Upon receiving the reserved transfer from Payee, Hub must commit the payer position
+                // reservation, then give money to the Payee by decreasing its position.
+                // Then hub responds to the Payer with the committed transfer.
+                // Finally, send the committed transfer to Payee.
+                payeeReserved = true;
 
-                var decreasePayeePositionOutput = this.decreasePayeePosition.execute(
-                    new DecreasePayeePosition.Input(
-                        CONTEXT, transfer.getTransactionId(), transfer.getTransactionAt(), payerFsp,
-                        payeeFsp, transfer.getCurrency(), transfer.getTransferAmount()));
+                var fulfilPositionsOutput = this.fulfilPositions.execute(new FulfilPositions.Input(
+                    CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp, reservationId,
+                    currency, transferAmount));
 
-                var commitTransferOutput = this.commitTransfer.execute(new CommitTransfer.Input(
-                    CONTEXT, transfer.getTransactionId(), transfer.getId(),
-                    unwrapResponseOutput.ilpFulfilment(), commitReservationOutput.payerCommitId(),
-                    decreasePayeePositionOutput.payeeCommitId(),
+                this.commitTransfer.execute(new CommitTransfer.Input(
+                    CONTEXT, transactionId, transferId, unwrapResponseOutput.ilpFulfilment(),
+                    fulfilPositionsOutput.payerCommitId(), fulfilPositionsOutput.payeeCommitId(),
                     unwrapResponseOutput.completedAt()));
 
-                var committedResponse = new TransfersIDPutResponse();
+                this.commitTransferToPayer.execute(new CommitTransferToPayer.Input(
+                    CONTEXT, transactionId, udfTransferId, payerFsp,
+                    putTransfersResponse.getFulfilment(),
+                    putTransfersResponse.getCompletedTimestamp(),
+                    putTransfersResponse.getExtensionList()));
 
-                committedResponse.setTransferState(TransferState.COMMITTED);
-                committedResponse.setCompletedTimestamp(
-                    putTransfersResponse.getCompletedTimestamp());
-                committedResponse.setFulfilment(putTransfersResponse.getFulfilment());
-                committedResponse.setExtensionList(putTransfersResponse.getExtensionList());
-
-                this.respondTransferToPayer.execute(
-                    new RespondTransferToPayer.Input(
-                        CONTEXT, transfer.getTransactionId(), udfTransferId, payerFsp,
-                        committedResponse));
+                this.patchTransferToPayee.execute(
+                    new PatchTransferToPayee.Input(
+                        CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.COMMITTED,
+                        Map.of()));
 
             }
 
@@ -290,14 +322,36 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
             errorOccurred = e;
 
+            if (payerFsp != null) {
+
+                final var sendBackTo = new Payer(payerFspCode.value());
+                final var baseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
+                final var url = FspiopUrls.Transfers.putTransfersError(
+                    baseUrl, udfTransferId.getId());
+
+                try {
+
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondTransfers.putTransfersError(
+                            sendBackTo, url,
+                            error));
+
+                } catch (Exception e1) {
+                    LOGGER.error("Error:", e1);
+                }
+
+            }
+
             try {
 
-                if (transfer != null) {
-                    // Inform back to the Payee only if Transfer exists.
+                if (payeeReserved) {
+                    // Inform back to the Payee only if Transfer exists
+                    // and Payee's transfer state is not ABORTED.
                     this.patchTransferToPayee.execute(
                         new PatchTransferToPayee.Input(
-                            CONTEXT, transfer.getTransactionId(), udfTransferId, payeeFsp,
-                            TransferState.ABORTED, Map.of()));
+                            CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.ABORTED,
+                            Map.of()));
                 }
 
             } catch (Exception e1) {
@@ -309,20 +363,18 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
         } finally {
 
-            if (transfer != null && errorOccurred != null) {
+            if (transferId != null) {
 
-                LOGGER.info("Closing transaction : udfTransferId : [{}]", udfTransferId.getId());
+                LOGGER.info("Closing transaction : udfTransferId : ({})", udfTransferId.getId());
 
                 this.closeTransactionPublisher.publish(
                     new CloseTransactionCommand.Input(
-                        transfer.getTransactionId(),
-                        errorOccurred.getMessage()));
+                        transactionId,
+                        errorOccurred != null ? errorOccurred.getMessage() : null));
             }
         }
 
-        LOGGER.info("Returning from PutTransfersCommandHandler successfully.");
-
-        MDC.remove("requestId");
+        LOGGER.info("PutTransfersCommandHandler : done");
 
         return new Output();
     }

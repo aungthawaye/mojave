@@ -73,9 +73,9 @@ public class QuotesController {
 
         var event = new GetQuotesEvent(new GetQuotesCommand.Input(fspiopHttpRequest, quoteId));
 
-        LOGGER.info("Publishing GetQuotesEvent : [{}]", event);
+        LOGGER.info("Publishing GetQuotesEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published GetQuotesEvent : [{}]", event);
+        LOGGER.info("Published GetQuotesEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -92,9 +92,9 @@ public class QuotesController {
         var event = new PostQuotesEvent(
             new PostQuotesCommand.Input(fspiopHttpRequest, requestBody));
 
-        LOGGER.info("Publishing PostQuotesEvent : [{}]", event);
+        LOGGER.info("Publishing PostQuotesEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PostQuotesEvent : [{}]", event);
+        LOGGER.info("Published PostQuotesEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -112,9 +112,9 @@ public class QuotesController {
         var event = new PutQuotesEvent(
             new PutQuotesCommand.Input(fspiopHttpRequest, quoteId, response));
 
-        LOGGER.info("Publishing PutQuotesEvent : [{}]", event);
+        LOGGER.info("Publishing PutQuotesEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutQuotesEvent : [{}]", event);
+        LOGGER.info("Published PutQuotesEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -132,9 +132,9 @@ public class QuotesController {
         var event = new PutQuotesErrorEvent(
             new PutQuotesErrorCommand.Input(fspiopHttpRequest, quoteId, error));
 
-        LOGGER.info("Publishing PutQuotesErrorEvent : [{}]", event);
+        LOGGER.info("Publishing PutQuotesErrorEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutQuotesErrorEvent : [{}]", event);
+        LOGGER.info("Published PutQuotesErrorEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }

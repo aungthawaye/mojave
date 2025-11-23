@@ -46,11 +46,11 @@ public class GetTransfersEventListener {
     @EventListener
     public void onGetTransfersEvent(GetTransfersEvent event) {
 
-        LOGGER.info("Start handling GetTransfersEvent : [{}]", event);
+        LOGGER.info("Start handling GetTransfersEvent : ({})", event);
 
         var output = this.getTransfers.execute(event.getPayload());
 
-        LOGGER.info("Done handling GetTransfersEvent : [{}], output : [{}]", event, output);
+        LOGGER.info("Done handling GetTransfersEvent : ({}), output : ({})", event, output);
     }
 
 }

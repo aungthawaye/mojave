@@ -88,7 +88,7 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
         for (var fsp : fsps) {
 
             LOGGER.info(
-                "Deactivating currency of FSP: fspId : [{}], currency : [{}]", fsp.getId(),
+                "Deactivating currency of FSP: fspId : ({}), currency : ({})", fsp.getId(),
                 input.currency());
 
             fsp.deactivate(input.currency());

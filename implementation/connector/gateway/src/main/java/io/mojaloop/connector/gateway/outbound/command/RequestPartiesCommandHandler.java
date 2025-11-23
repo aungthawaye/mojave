@@ -29,6 +29,7 @@ import io.mojaloop.connector.gateway.outbound.component.FspiopResultListener;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.invoker.api.parties.GetParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,12 +72,16 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
         var errorTopic = PubSubKeys.forPartiesError(
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var hubErrorTopic = PubSubKeys.forPartiesError(
+            new Payee("hub"), input.partyIdType(),
+            input.partyId(), input.subId());
 
         // Listening to the pub/sub
         var resultListener = new FspiopResultListener<>(
-            this.pubSubClient, this.outboundSettings, PartiesResult.class,
-            PartiesErrorResult.class);
-        resultListener.init(resultTopic, errorTopic);
+            this.pubSubClient, this.outboundSettings,
+            PartiesResult.class, PartiesErrorResult.class);
+
+        resultListener.init(resultTopic, errorTopic, hubErrorTopic);
 
         if (withSubId) {
             this.getParties.getParties(
@@ -95,9 +100,10 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         var errorDefinition = FspiopErrors.find(
             error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(
-            errorDefinition.errorType(),
-            error.errorInformation().getErrorInformation().getErrorDescription()));
+        throw new FspiopException(
+            new ErrorDefinition(
+                errorDefinition.errorType(),
+                error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

@@ -46,11 +46,11 @@ public class GetQuotesEventListener {
     @EventListener
     public void onGetQuotesEvent(GetQuotesEvent event) {
 
-        LOGGER.info("Start handling GetQuotesEvent : [{}]", event);
+        LOGGER.info("Start handling GetQuotesEvent : ({})", event);
 
         var output = this.getQuotes.execute(event.getPayload());
 
-        LOGGER.info("Done handling GetQuotesEvent : [{}], output : [{}]", event, output);
+        LOGGER.info("Done handling GetQuotesEvent : ({}), output : ({})", event, output);
     }
 
 }

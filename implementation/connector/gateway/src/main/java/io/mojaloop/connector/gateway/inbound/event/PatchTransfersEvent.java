@@ -18,12 +18,16 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.transaction.producer;
+package io.mojaloop.connector.gateway.inbound.event;
 
-import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
-import org.springframework.context.annotation.Import;
+import io.mojaloop.component.misc.spring.event.DomainEvent;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePatchTransfersCommand;
 
-@Import(value = {TransactionProducerConfiguration.class,
-                 TransactionIntercomClientConfiguration.class,
-                 TestSettings.class})
-public class TestConfiguration { }
+public class PatchTransfersEvent extends DomainEvent<HandlePatchTransfersCommand.Input> {
+
+    public PatchTransfersEvent(HandlePatchTransfersCommand.Input payload) {
+
+        super(payload);
+    }
+
+}

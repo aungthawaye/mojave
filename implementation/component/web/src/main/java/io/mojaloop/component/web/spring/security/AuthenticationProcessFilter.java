@@ -76,7 +76,7 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         var uri = request.getRequestURI();
-        LOGGER.debug("Received request for URI : [{}]", uri);
+        LOGGER.debug("Received request for URI : ({})", uri);
 
         var match = false;
 
@@ -95,17 +95,17 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
         if (match && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            LOGGER.info("Authentication is required for URI : [{}]", uri);
+            LOGGER.info("Authentication is required for URI : ({})", uri);
 
             try {
 
                 var authenticationToken = this.authenticator.authenticate(requestWrapper);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                LOGGER.debug("Authentication is successful for URI : {}", uri);
+                LOGGER.info("Authentication is successful for URI : ({})", uri);
 
             } catch (AuthenticationFailureException e) {
 
-                LOGGER.error("Authentication error : {}", e.getMessage());
+                LOGGER.error("Authentication error : ({})", e.getMessage());
                 SecurityContextHolder.clearContext();
                 throw e;
             }
@@ -136,7 +136,7 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
                 LOGGER.error("Error :", e);
                 LOGGER.error(
-                    "Error occurred during reading request body for CachedServletRequest : [{}]",
+                    "Error occurred during reading request body for CachedServletRequest : ({})",
                     e.getMessage());
                 throw new RuntimeException(e);
             }

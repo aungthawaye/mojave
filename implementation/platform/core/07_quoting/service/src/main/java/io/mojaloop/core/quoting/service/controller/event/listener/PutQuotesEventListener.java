@@ -46,11 +46,11 @@ public class PutQuotesEventListener {
     @EventListener
     public void onPutQuotesEvent(PutQuotesEvent event) {
 
-        LOGGER.info("Start handling PutQuotesEvent : [{}]", event);
+        LOGGER.info("Start handling PutQuotesEvent : ({})", event);
 
         var output = this.putQuotes.execute(event.getPayload());
 
-        LOGGER.info("Done handling PutQuotesEvent : [{}], output : [{}]", event, output);
+        LOGGER.info("Done handling PutQuotesEvent : ({}), output : ({})", event, output);
     }
 
 }

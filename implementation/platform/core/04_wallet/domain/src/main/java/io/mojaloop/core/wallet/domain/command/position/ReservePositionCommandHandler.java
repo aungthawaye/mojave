@@ -25,6 +25,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
@@ -52,8 +53,10 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input)
-        throws PositionLimitExceededException, NoPositionUpdateForTransactionException {
+    public Output execute(final Input input) throws
+                                             PositionLimitExceededException,
+                                             NoPositionUpdateForTransactionException,
+                                             PositionNotExistException {
 
         LOGGER.info("Executing ReservePositionCommand with input: {}", input);
 
@@ -64,9 +67,7 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
             LOGGER.error(
                 "Position does not exist for walletOwnerId: {} and currency: {}",
                 input.walletOwnerId(), input.currency());
-            throw new RuntimeException(
-                "Position does not exist for walletOwnerId: " + input.walletOwnerId() +
-                    " and currency: " + input.currency());
+            throw new PositionNotExistException(input.walletOwnerId(), input.currency());
         }
 
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());

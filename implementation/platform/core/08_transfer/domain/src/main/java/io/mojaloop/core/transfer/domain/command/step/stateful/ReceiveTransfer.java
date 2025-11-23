@@ -21,6 +21,7 @@
 package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
@@ -48,8 +49,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ReceiveTransfer {
@@ -84,7 +83,7 @@ public class ReceiveTransfer {
     @Write
     public Output execute(Input input) throws FspiopException {
 
-        LOGGER.info("Receiving transfer request : input : [{}]", input);
+        LOGGER.info("ReceiveTransfer : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
         final var STEP_NAME = "receive-transfer";
@@ -115,42 +114,10 @@ public class ReceiveTransfer {
                                            .plusMillis(
                                                this.transferSettings.reservationTimeoutMs());
 
-            var extensions = new HashMap<String, String>();
-
-            input.extensionList
-                .getExtension()
-                .forEach(e -> extensions.put(e.getKey(), e.getValue()));
-
-            var before = new HashMap<>(extensions);
-            var after = new HashMap<String, String>();
-
-            before.put("transactionId", transactionIdString);
-            before.put("transactionAt", transactionAtString);
-            before.put("udfTransferId", input.udfTransferId.getId());
-
-            before.put("payerFspCode", payerFsp.fspCode().value());
-            before.put("payerPartyIdType", payerPartyIdInfo.getPartyIdType().name());
-            before.put("payerPartyIdentifier", payerPartyIdInfo.getPartyIdentifier());
-            before.put("payerPartySubIdOrType", payerPartyIdInfo.getPartySubIdOrType());
-
-            before.put("payeeFspCode", payeeFsp.fspCode().value());
-            before.put("payeePartyIdType", payeePartyIdInfo.getPartyIdType().name());
-            before.put("payeePartyIdentifier", payeePartyIdInfo.getPartyIdentifier());
-            before.put("payeePartySubIdOrType", payeePartyIdInfo.getPartySubIdOrType());
-
-            before.put("currency", input.currency.name());
-            before.put("amount", transferAmountString);
-            before.put(
-                "requestExpiration", "" + (input.requestExpiration != null ?
-                                               input.requestExpiration.getEpochSecond() : 0));
-            before.put("reservationTimeoutAt", reservationTimeoutAt.getEpochSecond() + "");
-
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    transactionId, STEP_NAME, CONTEXT, before,
+                    transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                     StepPhase.BEFORE));
-
-            before.clear();
 
             var transfer = new Transfer(
                 transactionId, transactionAt, input.udfTransferId, payerFsp.fspCode(), new Party(
@@ -180,18 +147,14 @@ public class ReceiveTransfer {
 
             this.transferRepository.save(transfer);
 
-            after.put("transferId", transfer.getId().toString());
+            var output = new Output(transactionId, transactionAt, transfer.getId());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    transactionId, STEP_NAME, CONTEXT, after,
+                    transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(output).toString(),
                     StepPhase.AFTER));
 
-            after.clear();
-
-            var output = new Output(transactionId, transactionAt, transfer.getId());
-
-            LOGGER.info("Received transfer successfully: output : [{}]", output);
+            LOGGER.info("ReceivedTransfer : output : ({})", ObjectLogger.log(output));
 
             return output;
 
@@ -202,8 +165,7 @@ public class ReceiveTransfer {
             if (transactionId != null) {
                 this.addStepPublisher.publish(
                     new AddStepCommand.Input(
-                        transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()),
-                        StepPhase.ERROR));
+                        transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
             }
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());

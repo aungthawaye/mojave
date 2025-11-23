@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.lookup.service;
 
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
@@ -42,6 +43,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.lookup.service.controller")
 @Import(value = {LookUpDomainConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  ParticipantIntercomClientConfiguration.class,
                  FspiopServiceConfiguration.class})
 final class LookUpServiceConfiguration

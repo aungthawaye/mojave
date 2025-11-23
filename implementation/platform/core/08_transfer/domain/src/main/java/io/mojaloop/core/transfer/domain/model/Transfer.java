@@ -23,6 +23,7 @@ package io.mojaloop.core.transfer.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.transfer.TransferIdJavaType;
@@ -47,6 +48,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
@@ -102,7 +104,7 @@ import static java.sql.Types.BIGINT;
                   @Index(name = "tfr_transfer_aborted_at_IDX", columnList = "aborted_at"),
                   @Index(name = "tfr_transfer_state_IDX", columnList = "state")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Transfer extends JpaEntity<TransferId> {
+public class Transfer extends JpaEntity<TransferId> implements DataConversion<io.mojaloop.core.transfer.contract.data.TransferData> {
 
     @Id
     @JavaType(TransferIdJavaType.class)
@@ -245,6 +247,10 @@ public class Transfer extends JpaEntity<TransferId> {
     @OneToMany(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<TransferExtension> extensions = new ArrayList<>();
 
+    @Column(name = "ilp_fulfilment",
+            length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
+    protected String ilpFulfilment;
+
     @OneToOne(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     protected TransferIlpPacket ilpPacket;
@@ -321,7 +327,7 @@ public class Transfer extends JpaEntity<TransferId> {
         this.committedAt = Instant.now();
         this.payeeCompletedAt = completedAt;
 
-        this.ilpPacket.fulfil(ilpFulfilment);
+        this.ilpFulfilment = ilpFulfilment;
 
         this.payerCommitId = payerCommitId;
         this.payeeCommitId = payeeCommitId;
@@ -345,6 +351,53 @@ public class Transfer extends JpaEntity<TransferId> {
         this.state = TransferState.RESERVED;
         this.reservedAt = Instant.now();
         this.reservationId = reservationId;
+    }
+
+    @Override
+    public io.mojaloop.core.transfer.contract.data.TransferData convert() {
+
+        final var payerData = new io.mojaloop.core.transfer.contract.data.TransferData.PartyData(
+            this.payer.partyIdType(), this.payer.partyId(), this.payer.subId());
+        final var payeeData = new io.mojaloop.core.transfer.contract.data.TransferData.PartyData(
+            this.payee.partyIdType(), this.payee.partyId(), this.payee.subId());
+
+        final var extData = this.extensions.stream()
+            .map(x -> new io.mojaloop.core.transfer.contract.data.TransferData.TransferExtensionData(
+                x.getDirection(), x.getKey(), x.getValue()))
+            .toList();
+
+        final var ilpData = this.ilpPacket == null ? null
+            : new io.mojaloop.core.transfer.contract.data.TransferData.TransferIlpPacketData(
+                this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
+
+        return new io.mojaloop.core.transfer.contract.data.TransferData(
+            this.id,
+            this.transactionId,
+            this.transactionAt,
+            this.udfTransferId,
+            this.payerFsp,
+            payerData,
+            this.payeeFsp,
+            payeeData,
+            this.currency,
+            this.transferAmount,
+            this.requestExpiration,
+            this.reservationId,
+            this.payerCommitId,
+            this.payeeCommitId,
+            this.rollbackId,
+            this.state,
+            this.receivedAt,
+            this.reservedAt,
+            this.committedAt,
+            this.abortedAt,
+            this.error,
+            this.reservationTimeoutAt,
+            this.payeeCompletedAt,
+            extData,
+            this.ilpFulfilment,
+            ilpData
+        );
     }
 
 }

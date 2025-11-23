@@ -126,7 +126,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         }
 
         var signature = this.objectMapper.readValue(signatureHeader, FspiopSignature.Header.class);
-        LOGGER.debug("FSPIOP_SIGNATURE : [{}]", signature);
+        LOGGER.debug("FSPIOP_SIGNATURE : ({})", signature);
 
         var publicKey = this.participantContext.publicKeys().get(payer);
 
@@ -142,10 +142,10 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
         var payload = getMethod ? this.buildDummyPayload(cachedServletRequest) :
                           cachedServletRequest.getCachedBodyAsString();
-        LOGGER.debug("Payload : [{}]", payload);
+        LOGGER.debug("Payload : ({})", payload);
 
         var encodedPayload = JwtBase64Util.encode(payload);
-        LOGGER.debug("Encoded payload : [{}]", encodedPayload);
+        LOGGER.debug("Encoded payload : ({})", encodedPayload);
 
         var verificationOk = FspiopSignature.verify(
             publicKey,
@@ -176,7 +176,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
     private void verifyFsps(CachedServletRequest cachedServletRequest) {
 
         var payer = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
-        LOGGER.debug("FSPIOP_SOURCE : [{}]", payer);
+        LOGGER.debug("FSPIOP_SOURCE : ({})", payer);
 
         if (payer == null || payer.isBlank()) {
 
@@ -189,7 +189,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
         }
 
         var destination = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
-        LOGGER.debug("FSPIOP_DESTINATION : [{}]", destination);
+        LOGGER.debug("FSPIOP_DESTINATION : ({})", destination);
 
         if (destination == null || destination.isBlank()) {
 

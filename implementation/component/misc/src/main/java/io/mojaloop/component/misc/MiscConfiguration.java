@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.mojaloop.component.misc.jackson.conversion.BigDecimalConversion;
 import io.mojaloop.component.misc.jackson.conversion.InstantConversion;
+import io.mojaloop.component.misc.logger.ObjectLoggerInitializer;
 import io.mojaloop.component.misc.spring.SpringContext;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.component.misc.spring.event.publisher.SpringEventPublisher;
@@ -79,6 +80,12 @@ public class MiscConfiguration {
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 
         return new SpringEventPublisher(applicationEventPublisher);
+    }
+
+    @Bean
+    public ObjectLoggerInitializer objectLoggerInitializer(ObjectMapper objectMapper) {
+
+        return new ObjectLoggerInitializer(objectMapper);
     }
 
     @Bean

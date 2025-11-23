@@ -71,14 +71,14 @@ public class TomcatFactoryConfigurer {
                             hostSetting.host(), tempDir);
                         tomcat.getEngine().addChild(standardHost);
                         LOGGER.info(
-                            "Created host: name [{}] appBase : [{}]", standardHost.getName(),
+                            "Created host: name ({}) appBase : ({})", standardHost.getName(),
                             standardHost.getAppBase());
 
                         var connector = TomcatFactoryConfigurer.createConnector(
                             connectorDecorator.getPort(), hostSetting.host());
                         tomcat.getService().addConnector(connector);
                         LOGGER.info(
-                            "Created connector: port [{}], host : [{}]",
+                            "Created connector: port ({}), host : ({})",
                             connectorDecorator.getPort(), hostSetting.host());
                         connectorDecorator.decorate(connector);
 
@@ -150,11 +150,11 @@ public class TomcatFactoryConfigurer {
             context.addServletMappingDecoded("/*", servletName);
 
             LOGGER.info(
-                "Configured context for host [{}] with {} configurations", hostName,
+                "Configured context for host ({}) with {} configurations", hostName,
                 configurations.length);
 
         } catch (Exception e) {
-            LOGGER.error("Failed to configure context for host [{}]", host.getName(), e);
+            LOGGER.error("Failed to configure context for host ({})", host.getName(), e);
             throw new RuntimeException(
                 "Failed to configure context for host: " + host.getName(), e);
 

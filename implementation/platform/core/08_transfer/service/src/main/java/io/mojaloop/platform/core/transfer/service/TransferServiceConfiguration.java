@@ -21,6 +21,7 @@
 package io.mojaloop.platform.core.transfer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStore;
@@ -49,6 +50,7 @@ import java.util.List;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service.controller")
 @Import(value = {TransferDomainConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  ParticipantIntercomClientConfiguration.class,
                  WalletIntercomClientConfiguration.class,
                  TransactionIntercomClientConfiguration.class,

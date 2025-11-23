@@ -23,8 +23,6 @@ package io.mojaloop.core.wallet.intercom.controller.api.command.position;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CommitPositionController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitPositionController.class);
 
     private final CommitReservationCommand commitReservationCommand;
 
@@ -52,13 +48,7 @@ public class CommitPositionController {
     public CommitReservationCommand.Output execute(@Valid @RequestBody final CommitReservationCommand.Input input)
         throws FailedToCommitReservationException {
 
-        LOGGER.info("Entering CommitReservationCommand.execute: input : {}", input);
-
-        final var output = this.commitReservationCommand.execute(input);
-
-        LOGGER.info("Exiting CommitReservationCommand.execute: {}", output);
-
-        return output;
+        return this.commitReservationCommand.execute(input);
     }
 
 }

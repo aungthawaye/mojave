@@ -21,6 +21,7 @@
 package io.mojaloop.core.transfer.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
@@ -35,7 +36,6 @@ import io.mojaloop.core.transfer.contract.command.PostTransfersCommand;
 import io.mojaloop.core.transfer.domain.command.step.financial.ReservePayerPosition;
 import io.mojaloop.core.transfer.domain.command.step.financial.RollbackReservation;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.ForwardToDestination;
-import io.mojaloop.core.transfer.domain.command.step.fspiop.RespondErrorToPayer;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.UnwrapRequest;
 import io.mojaloop.core.transfer.domain.command.step.stateful.ReceiveTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.ReserveTransfer;
@@ -44,10 +44,11 @@ import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceeded
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
+import io.mojaloop.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -74,7 +75,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
     private final ForwardToDestination forwardToDestination;
 
-    private final RespondErrorToPayer respondErrorToPayer;
+    private final RespondTransfers respondTransfers;
 
     private final CloseTransactionPublisher closeTransactionPublisher;
 
@@ -85,7 +86,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
                                        RollbackReservation rollbackReservation,
                                        UnwrapRequest unwrapRequest,
                                        ForwardToDestination forwardToDestination,
-                                       RespondErrorToPayer respondErrorToPayer,
+                                       RespondTransfers respondTransfers,
                                        CloseTransactionPublisher closeTransactionPublisher) {
 
         assert participantStore != null;
@@ -95,7 +96,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         assert rollbackReservation != null;
         assert unwrapRequest != null;
         assert forwardToDestination != null;
-        assert respondErrorToPayer != null;
+        assert respondTransfers != null;
         assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
@@ -105,7 +106,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         this.rollbackReservation = rollbackReservation;
         this.unwrapRequest = unwrapRequest;
         this.forwardToDestination = forwardToDestination;
-        this.respondErrorToPayer = respondErrorToPayer;
+        this.respondTransfers = respondTransfers;
         this.closeTransactionPublisher = closeTransactionPublisher;
     }
 
@@ -113,13 +114,11 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     @Write
     public Output execute(Input input) {
 
+        LOGGER.info("PostTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
+
         final var CONTEXT = "post-transfers";
 
         var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
-
-        MDC.put("requestId", udfTransferId.getId());
-
-        LOGGER.info("Executing PostTransfersCommandHandler with input: {}", input);
 
         TransactionId transactionId = null;
         Instant transactionAt = null;
@@ -208,8 +207,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.forwardToDestination.execute(
                     new ForwardToDestination.Input(
-                        CONTEXT, transactionId, payeeFspCode.value(),
-                        payeeBaseUrl, input.request()));
+                        CONTEXT, transactionId, payeeFspCode.value(), payeeBaseUrl,
+                        input.request()));
 
             } catch (Exception e) {
 
@@ -237,14 +236,14 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 try {
 
-                    this.respondErrorToPayer.execute(
-                        new RespondErrorToPayer.Input(CONTEXT, transactionId, sendBackTo, url, e));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondTransfers.putTransfersError(
+                            sendBackTo, url,
+                            error));
 
                 } catch (Exception e1) {
-
                     LOGGER.error("Error:", e1);
-
-                    errorOccurred = e1;
                 }
 
             }
@@ -253,7 +252,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             if (transactionId != null && errorOccurred != null) {
 
-                LOGGER.info("Closing transaction : udfTransferId : [{}]", udfTransferId.getId());
+                LOGGER.info(
+                    "PostTransfersCommandHandler : error : ({})", errorOccurred.getMessage());
 
                 this.closeTransactionPublisher.publish(
                     new CloseTransactionCommand.Input(transactionId, errorOccurred.getMessage()));
@@ -261,9 +261,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             }
         }
 
-        LOGGER.info("Returning from PostTransfersCommandHandler successfully.");
-
-        MDC.remove("requestId");
+        LOGGER.info("PostTransfersCommandHandler : done");
 
         return new Output();
     }

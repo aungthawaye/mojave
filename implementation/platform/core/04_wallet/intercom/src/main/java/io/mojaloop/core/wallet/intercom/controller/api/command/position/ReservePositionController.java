@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.intercom.controller.api.command.position;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,10 @@ public class ReservePositionController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ReservePositionCommand.Output execute(@Valid @RequestBody final ReservePositionCommand.Input input)
-        throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+        throws
+        NoPositionUpdateForTransactionException,
+        PositionLimitExceededException,
+        PositionNotExistException {
 
         LOGGER.info("Entering ReservePositionCommand.execute: input : {}", input);
 

@@ -76,7 +76,7 @@ public class PartiesController {
         this.eventPublisher.publish(event);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Publishing GetPartiesEvent : [{}]", event);
+            LOGGER.debug("Publishing GetPartiesEvent : ({})", event);
         }
 
         return ResponseEntity.accepted().build();
@@ -96,9 +96,9 @@ public class PartiesController {
         var event = new GetPartiesEvent(
             new GetPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId));
 
-        LOGGER.info("Publishing GetPartiesEvent (subId) : [{}]", event);
+        LOGGER.info("Publishing GetPartiesEvent (subId) : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published GetPartiesEvent (subId) : [{}]", event);
+        LOGGER.info("Published GetPartiesEvent (subId) : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -117,9 +117,9 @@ public class PartiesController {
         var event = new PutPartiesEvent(
             new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, null, response));
 
-        LOGGER.info("Publishing PutPartiesEvent : [{}]", event);
+        LOGGER.info("Publishing PutPartiesEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutPartiesEvent : [{}]", event);
+        LOGGER.info("Published PutPartiesEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -138,9 +138,9 @@ public class PartiesController {
         var event = new PutPartiesErrorEvent(
             new PutPartiesErrorCommand.Input(fspiopHttpRequest, partyIdType, partyId, null, error));
 
-        LOGGER.info("Publishing PutPartiesErrorEvent : [{}]", event);
+        LOGGER.info("Publishing PutPartiesErrorEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutPartiesErrorEvent : [{}]", event);
+        LOGGER.info("Published PutPartiesErrorEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -162,9 +162,9 @@ public class PartiesController {
             new PutPartiesErrorCommand.Input(
                 fspiopHttpRequest, partyIdType, partyId, subId, error));
 
-        LOGGER.info("Publishing PutPartiesErrorEvent (subId) : [{}]", event);
+        LOGGER.info("Publishing PutPartiesErrorEvent (subId) : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutPartiesErrorEvent (subId) : [{}]", event);
+        LOGGER.info("Published PutPartiesErrorEvent (subId) : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -184,9 +184,9 @@ public class PartiesController {
         var event = new PutPartiesEvent(
             new PutPartiesCommand.Input(fspiopHttpRequest, partyIdType, partyId, subId, response));
 
-        LOGGER.info("Publishing PutPartiesEvent (subId) : [{}]", event);
+        LOGGER.info("Publishing PutPartiesEvent (subId) : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutPartiesEvent (subId) : [{}]", event);
+        LOGGER.info("Published PutPartiesEvent (subId) : ({})", event);
 
         return ResponseEntity.accepted().build();
     }

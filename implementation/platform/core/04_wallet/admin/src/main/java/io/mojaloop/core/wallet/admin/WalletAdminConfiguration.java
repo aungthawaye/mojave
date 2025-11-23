@@ -23,11 +23,13 @@ package io.mojaloop.core.wallet.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
+import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.wallet.admin.controller.component.EmptyErrorWriter;
 import io.mojaloop.core.wallet.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
@@ -56,6 +58,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.admin.controller")
 @Import(value = {OpenApiConfiguration.class,
+                 DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  WalletDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})

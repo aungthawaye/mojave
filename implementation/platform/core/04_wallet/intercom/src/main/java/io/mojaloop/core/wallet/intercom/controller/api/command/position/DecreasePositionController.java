@@ -21,6 +21,8 @@
 package io.mojaloop.core.wallet.intercom.controller.api.command.position;
 
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
+import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,15 +50,10 @@ public class DecreasePositionController {
     @PostMapping("/positions/decrease")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DecreasePositionCommand.Output execute(@Valid @RequestBody final DecreasePositionCommand.Input input) {
+    public DecreasePositionCommand.Output execute(@Valid @RequestBody final DecreasePositionCommand.Input input)
+        throws NoPositionUpdateForTransactionException, PositionNotExistException {
 
-        LOGGER.info("Entering DecreasePositionCommand.execute: input : {}", input);
-
-        final var output = this.decreasePositionCommand.execute(input);
-
-        LOGGER.info("Exiting DecreasePositionCommand.execute: {}", output);
-
-        return output;
+        return this.decreasePositionCommand.execute(input);
     }
 
 }

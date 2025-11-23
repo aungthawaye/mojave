@@ -35,7 +35,7 @@ public class FspiopSignature {
     public static Header sign(PrivateKey privateKey, Map<String, String> headers, String payload) {
 
         var token = Rs256Jwt.sign(privateKey, headers, payload);
-        LOGGER.debug("Signed Token: [{}]", token);
+        LOGGER.debug("Signed Token: ({})", token);
 
         return new Header(token.signature(), token.header());
     }

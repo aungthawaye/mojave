@@ -286,10 +286,10 @@ public class FspCoreAdapter {
             var unwrappedIlpPacketData = new String(
                 unwrappedIlpPacket.getData(), StandardCharsets.UTF_8);
 
-            LOGGER.debug("Transfer Id : [{}]", transferId);
-            LOGGER.debug("Request ILP Packet : [{}]", ilpPacketFromRequest);
-            LOGGER.debug("Prepare ILP Packet : [{}]", unwrappedIlpPacket);
-            LOGGER.debug("ILP Packet Data : [{}]", unwrappedIlpPacketData);
+            LOGGER.debug("Transfer Id : ({})", transferId);
+            LOGGER.debug("Request ILP Packet : ({})", ilpPacketFromRequest);
+            LOGGER.debug("Prepare ILP Packet : ({})", unwrappedIlpPacket);
+            LOGGER.debug("ILP Packet Data : ({})", unwrappedIlpPacketData);
 
             var currency = request.getAmount().getCurrency();
             var transferAmount = new BigDecimal(request.getAmount().getAmount());
@@ -309,7 +309,7 @@ public class FspCoreAdapter {
             }
 
             var fulfilment = optFulfilment.get();
-            LOGGER.debug("Fulfilment : [{}]", fulfilment);
+            LOGGER.debug("Fulfilment : ({})", fulfilment);
 
             var agreement = this.objectMapper.readValue(unwrappedIlpPacketData, Agreement.class);
 

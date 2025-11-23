@@ -46,11 +46,11 @@ public class PutTransfersEventListener {
     @EventListener
     public void onPutTransfersEvent(PutTransfersEvent event) {
 
-        LOGGER.info("Start handling PutTransfersEvent : [{}]", event);
+        LOGGER.info("Start handling PutTransfersEvent : ({})", event);
 
         var output = this.putTransfers.execute(event.getPayload());
 
-        LOGGER.info("Done handling PutTransfersEvent : [{}], output : [{}]", event, output);
+        LOGGER.info("Done handling PutTransfersEvent : ({}), output : ({})", event, output);
     }
 
 }

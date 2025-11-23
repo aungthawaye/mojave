@@ -23,6 +23,7 @@ package io.mojaloop.core.accounting.intercom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
@@ -44,6 +45,7 @@ import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import io.mojaloop.core.accounting.intercom.controller.component.EmptyErrorWriter;
 import io.mojaloop.core.accounting.intercom.controller.component.EmptyGatekeeper;
+import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -59,6 +61,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom.controller")
 @Import(value = {OpenApiConfiguration.class,
+                 DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  AccountingDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})

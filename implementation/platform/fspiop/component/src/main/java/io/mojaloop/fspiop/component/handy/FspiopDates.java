@@ -56,6 +56,11 @@ public class FspiopDates {
         return FOR_BODY.get().format(date);
     }
 
+    public static String forRequestBody(Instant instant) {
+
+        return FOR_BODY.get().format(Date.from(instant));
+    }
+
     public static String forRequestHeader() {
 
         return forRequestHeader(new Date());
@@ -64,6 +69,11 @@ public class FspiopDates {
     public static String forRequestHeader(Date date) {
 
         return FOR_HEADER.get().format(date);
+    }
+
+    public static String forRequestHeader(Instant instant) {
+
+        return FOR_HEADER.get().format(Date.from(instant));
     }
 
     public static Instant fromRequestBody(String body) throws FspiopException {

@@ -26,6 +26,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
@@ -86,6 +87,9 @@ public interface WalletAdminService {
 
         @POST("/positions/decrease")
         Call<DecreasePositionCommand.Output> decrease(@Body DecreasePositionCommand.Input input);
+
+        @POST("/positions/fulfil")
+        Call<FulfilPositionsCommand.Output> fulfil(@Body FulfilPositionsCommand.Input input);
 
         @POST("/positions/increase")
         Call<IncreasePositionCommand.Output> increase(@Body IncreasePositionCommand.Input input);

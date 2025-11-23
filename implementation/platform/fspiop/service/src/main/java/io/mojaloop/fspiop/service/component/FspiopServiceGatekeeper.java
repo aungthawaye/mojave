@@ -138,7 +138,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
         }
 
         var signature = this.objectMapper.readValue(signatureHeader, FspiopSignature.Header.class);
-        LOGGER.debug("FSPIOP_SIGNATURE : [{}]", signature);
+        LOGGER.debug("FSPIOP_SIGNATURE : ({})", signature);
 
         var publicKey = this.participantContext.publicKeys().get(payer);
 
@@ -154,10 +154,10 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         var payload = getMethod ? this.buildDummyPayload(cachedServletRequest) :
                           cachedServletRequest.getCachedBodyAsString();
-        LOGGER.debug("Payload : [{}]", payload);
+        LOGGER.debug("Payload : ({})", payload);
 
         var encodedPayload = JwtBase64Util.encode(payload);
-        LOGGER.debug("Encoded payload : [{}]", encodedPayload);
+        LOGGER.debug("Encoded payload : ({})", encodedPayload);
 
         var verificationOk = FspiopSignature.verify(
             publicKey,
@@ -188,7 +188,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
     private void verifyFsps(CachedServletRequest cachedServletRequest) {
 
         var source = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
-        LOGGER.debug("FSPIOP_SOURCE : [{}]", source);
+        LOGGER.debug("FSPIOP_SOURCE : ({})", source);
 
         if (source == null || source.isBlank()) {
 
@@ -201,7 +201,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
         }
 
         var destination = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
-        LOGGER.debug("FSPIOP_DESTINATION : [{}]", destination);
+        LOGGER.debug("FSPIOP_DESTINATION : ({})", destination);
 
         if (destination == null || destination.isBlank()) {
 
@@ -214,7 +214,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
         }
 
         var uri = cachedServletRequest.getRequestURI();
-        LOGGER.debug("URI : [{}]", uri);
+        LOGGER.debug("URI : ({})", uri);
 
         if (!this.participantVerifier.fspExists(source)) {
 
@@ -263,7 +263,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
     private void verifyRequestAge(CachedServletRequest cachedServletRequest) {
 
         var date = cachedServletRequest.getHeader(FspiopHeaders.Names.DATE);
-        LOGGER.debug("Date : [{}]", date);
+        LOGGER.debug("Date : ({})", date);
 
         if (date == null || date.isBlank()) {
 
@@ -280,7 +280,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
         try {
 
             sentAt = FspiopDates.fromRequestHeader(date);
-            LOGGER.debug("Sent at : [{}]", sentAt);
+            LOGGER.debug("Sent at : ({})", sentAt);
 
         } catch (FspiopException e) {
 

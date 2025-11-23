@@ -39,7 +39,6 @@ import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
 import io.mojaloop.fspiop.service.api.quotes.RespondQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -88,10 +87,7 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
         var udfQuoteId = input.udfQuoteId();
 
-        MDC.put("requestId", udfQuoteId.getId());
-
-        LOGGER.info(
-            "({}) Executing GetQuotesCommandHandler with input: [{}]", udfQuoteId.getId(), input);
+        LOGGER.info("GetQuotesCommandHandler : input: ({})", input);
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -102,11 +98,9 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
             payeeFspCode = new FspCode(input.request().payee().fspCode());
             payeeFsp = this.participantStore.getFspData(payeeFspCode);
-            LOGGER.info("({}) Found payee FSP: [{}]", udfQuoteId.getId(), payeeFsp);
 
             payerFspCode = new FspCode(input.request().payer().fspCode());
             payerFsp = this.participantStore.getFspData(payerFspCode);
-            LOGGER.info("({}) Found payer FSP: [{}]", udfQuoteId.getId(), payerFsp);
 
             if (this.quoteSettings.stateful()) {
 
@@ -116,32 +110,25 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
 
                 if (optQuote.isEmpty()) {
 
-                    LOGGER.warn("({}) Receiving non-existence Quote.", udfQuoteId.getId());
+                    LOGGER.warn("Receiving non-existence Quote.");
                     throw new FspiopException(FspiopErrors.QUOTE_ID_NOT_FOUND);
                 }
 
                 var quote = optQuote.get();
-                LOGGER.info(
-                    "({}) Found Quote object with UDF Quote ID: [{}] , quote : {}",
-                    udfQuoteId.getId(), quote.getId(), quote);
 
                 var quoteIdPutResponse = quote.toFspiopResponse();
 
                 TransactionContext.commit();
 
                 var payerBaseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                var finalUrl = FspiopUrls.newUrl(payerBaseUrl, input.request().uri());
-                LOGGER.info(
-                    "({}) Responding request to payer FSP (Url): [{}]", udfQuoteId.getId(),
-                    finalUrl);
+                var url = FspiopUrls.newUrl(payerBaseUrl, input.request().uri());
+                LOGGER.info("Responding request to payer FSP (Url): ({})", url);
 
                 try {
 
                     this.respondQuotes.putQuotes(
-                        new Payer(payeeFspCode.value()), finalUrl, quoteIdPutResponse);
-                    LOGGER.info(
-                        "({}) Done responding request to payer FSP (Url): [{}]", udfQuoteId.getId(),
-                        finalUrl);
+                        new Payer(payeeFspCode.value()), url, quoteIdPutResponse);
+                    LOGGER.info("Done responding request to payer FSP (Url): ({})", url);
 
                 } catch (FspiopCommunicationException ignored) {
                     // Do nothing. We are not able to respond to the payer.
@@ -150,21 +137,17 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
             } else {
 
                 var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
-                LOGGER.info(
-                    "({}) Forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(),
-                    payeeBaseUrl);
+                LOGGER.info("Forwarding request to payee FSP (Url): ({})", payeeBaseUrl);
 
                 this.forwardRequest.forward(payeeBaseUrl, input.request());
-                LOGGER.info(
-                    "({}) Done forwarding request to payee FSP (Url): [{}]", udfQuoteId.getId(),
-                    payeeBaseUrl);
+                LOGGER.info("Done forwarding request to payee FSP (Url): ({})", payeeBaseUrl);
             }
 
         } catch (Exception e) {
 
-            LOGGER.error("Exception occurred while executing GetPartiesCommandHandler: ", e);
+            LOGGER.error("Error: ", e);
 
-            if (payerFspCode != null && payerFsp != null) {
+            if (payerFsp != null) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
                 final var baseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
@@ -178,16 +161,13 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
                             sendBackTo, url,
                             error));
 
-                } catch (Throwable ignored) {
-                    LOGGER.error(
-                        "Something went wrong while sending error response to payer FSP: ", e);
+                } catch (Exception e1) {
+                    LOGGER.error("Error:", e1);
                 }
             }
         }
 
-        LOGGER.info("Returning from GetQuotesCommandHandler successfully.");
-
-        MDC.remove("requestId");
+        LOGGER.info("GetQuotesCommandHandler : done");
 
         return new Output();
     }

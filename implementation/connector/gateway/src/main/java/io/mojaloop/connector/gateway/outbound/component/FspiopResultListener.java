@@ -53,6 +53,8 @@ public class FspiopResultListener<R, E> {
 
     private PubSubClient.Subscription resultSubscription;
 
+    private PubSubClient.Subscription hubErrorSubscription;
+
     public FspiopResultListener(PubSubClient pubSubClient,
                                 ConnectorOutboundConfiguration.OutboundSettings outboundSettings,
                                 Class<R> resultClazz,
@@ -98,9 +100,14 @@ public class FspiopResultListener<R, E> {
 
     public void init(String resultTopic, String errorTopic) {
 
+        this.init(resultTopic, errorTopic, null);
+    }
+
+    public void init(String resultTopic, String errorTopic, String hubErrorTopic) {
+
         LOGGER.debug(
-            "Listening for results on channel {} and errors on channel {}", resultTopic,
-            errorTopic);
+            "Listening for results on channel {} and errors on channel {} and hub channel {}",
+            resultTopic, errorTopic, hubErrorTopic);
 
         this.resultSubscription = this.pubSubClient.subscribe(
             resultTopic, new PubSubClient.MessageHandler() {
@@ -150,6 +157,34 @@ public class FspiopResultListener<R, E> {
                 }
 
             }, this.outboundSettings.pubSubTimeoutMs());
+
+        if (hubErrorTopic != null) {
+
+            this.hubErrorSubscription = this.pubSubClient.subscribe(
+                errorTopic, new PubSubClient.MessageHandler() {
+
+                    @Override
+                    public void handle(String channel, Object message) {
+
+                        LOGGER.debug(
+                            "Error message from hub channel : {}, message : {}", channel, message);
+
+                        if (FspiopResultListener.this.errorClazz.isInstance(message)) {
+                            FspiopResultListener.this.errorRef.set(
+                                FspiopResultListener.this.errorClazz.cast(message));
+                        }
+
+                        FspiopResultListener.this.blocker.countDown();
+                    }
+
+                    @Override
+                    public Class<?> messageType() {
+
+                        return FspiopResultListener.this.errorClazz;
+                    }
+
+                }, this.outboundSettings.pubSubTimeoutMs());
+        }
     }
 
     public void unsubscribe() {
@@ -160,6 +195,10 @@ public class FspiopResultListener<R, E> {
 
         if (this.errorSubscription != null) {
             this.pubSubClient.unsubscribe(this.errorSubscription);
+        }
+
+        if (this.hubErrorSubscription != null) {
+            this.pubSubClient.unsubscribe(this.hubErrorSubscription);
         }
     }
 

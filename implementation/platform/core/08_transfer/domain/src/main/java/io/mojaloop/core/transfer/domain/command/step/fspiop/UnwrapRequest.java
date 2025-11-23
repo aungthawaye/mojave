@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
@@ -27,6 +28,7 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopCurrencies;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
+import io.mojaloop.fspiop.component.handy.FspiopMoney;
 import io.mojaloop.fspiop.component.interledger.Interledger;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.PartyIdInfo;
@@ -54,7 +56,7 @@ public class UnwrapRequest {
 
     public Output execute(Input input) throws FspiopException {
 
-        LOGGER.info("Unwrapping transfer request from Payer. input : [{}]", input);
+        LOGGER.info("UnwrapRequest : input : ({})", ObjectLogger.log(input));
 
         var payerFspCode = input.payerFsp().fspCode();
         var payeeFspCode = input.payeeFsp().fspCode();
@@ -73,6 +75,8 @@ public class UnwrapRequest {
 
         var currency = request.getAmount().getCurrency();
         var transferAmount = new BigDecimal(request.getAmount().getAmount());
+
+        FspiopMoney.validate(request.getAmount());
 
         var ilpPacketString = request.getIlpPacket();
         var ilpCondition = request.getCondition();
@@ -99,7 +103,7 @@ public class UnwrapRequest {
             if (requestExpiration.isBefore(Instant.now())) {
 
                 LOGGER.info(
-                    "The transfer request from Payer FSP has expired. The expiration is : [{}]",
+                    "The transfer request from Payer FSP has expired. The expiration is : ({})",
                     expiration);
                 throw new FspiopException(
                     FspiopErrors.GENERIC_VALIDATION_ERROR,
@@ -126,7 +130,7 @@ public class UnwrapRequest {
             payerPartyIdInfo, payeePartyIdInfo, currency, transferAmount, ilpPacketString,
             ilpCondition, requestExpiration);
 
-        LOGGER.info("Unwrapped transfer request from Payer. output : [{}]", output);
+        LOGGER.info("UnwrapRequest : ({})", ObjectLogger.log(output));
 
         return output;
     }
