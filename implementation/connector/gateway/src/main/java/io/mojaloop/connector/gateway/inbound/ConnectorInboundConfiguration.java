@@ -22,7 +22,6 @@ package io.mojaloop.connector.gateway.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.component.misc.handy.P12Reader;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.tomcat.connector.MutualTLSConnectorDecorator;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
@@ -35,6 +34,7 @@ import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -48,13 +48,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableAsync
 @EnableWebMvc
-@Import(value = {MiscConfiguration.class,
-                 ConnectorAdapterConfiguration.class,
-                 FspiopInvokerConfiguration.class,
-                 SpringSecurityConfiguration.class,})
+@Import(
+    value = {
+        MiscConfiguration.class,
+        ConnectorAdapterConfiguration.class,
+        FspiopInvokerConfiguration.class,
+        SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
 public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredBeans,
                                                       FspiopInvokerConfiguration.RequiredBeans,
@@ -142,10 +144,10 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
                                 inboundSettings.portNo(), inboundSettings.maxThreads(),
                                 inboundSettings.connectionTimeout(),
                                 new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(
-                                    truststoreSettings.contentType(),
-                                    truststoreSettings.contentValue(), truststoreSettings.password),
+                                    truststoreSettings.file, truststoreSettings.base64(),
+                                    truststoreSettings.password),
                                 new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(
-                                    keystoreSettings.contentType(), keystoreSettings.contentValue(),
+                                    keystoreSettings.file, keystoreSettings.base64(),
                                     keystoreSettings.password, keystoreSettings.keyAlias()));
 
                             var decorator = new MutualTLSConnectorDecorator(connectorSettings);
@@ -183,14 +185,12 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
                                   KeyStoreSettings keyStoreSettings,
                                   TrustStoreSettings trustStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType,
-                                       String contentValue,
+        public record KeyStoreSettings(String file,
+                                       boolean base64,
                                        String password,
                                        String keyAlias) { }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType,
-                                         String contentValue,
-                                         String password) { }
+        public record TrustStoreSettings(String file, boolean base64, String password) { }
 
     }
 

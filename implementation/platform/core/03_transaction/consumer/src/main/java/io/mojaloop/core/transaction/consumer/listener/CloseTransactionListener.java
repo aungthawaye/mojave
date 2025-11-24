@@ -57,17 +57,13 @@ public class CloseTransactionListener {
 
         try {
 
-            LOGGER.info("Received CloseTransactionCommand with input: {}", input);
-
             this.closeTransactionCommand.execute(input);
 
             ack.acknowledge();
 
-            LOGGER.info("Acknowledged CloseTransactionCommand with input: {}", input);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling CloseTransactionCommand with input: {}", input, e);
+            LOGGER.error("Error:", e);
         }
     }
 

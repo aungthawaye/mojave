@@ -57,17 +57,13 @@ public class AddStepListener {
 
         try {
 
-            LOGGER.info("Received AddStepCommand with input: {}", input);
-
             this.addStepCommand.execute(input);
 
             ack.acknowledge();
 
-            LOGGER.info("Acknowledged AddStepCommand with input: {}", input);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling AddStepCommand with input: {}", input, e);
+            LOGGER.error("Error:", e);
         }
     }
 

@@ -87,25 +87,19 @@ public class PatchTransferToPayee {
             var url = FspiopUrls.Transfers.patchTransfers(
                 payeeBaseUrl, input.udfTransferId.getId());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(patchResponse).toString(),
-                StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT,
+                    ObjectLogger.log(patchResponse).toString(), StepPhase.BEFORE));
 
             this.respondTransfers.patchTransfers(
                 new Payee(input.payeeFsp.fspCode().value()), url, patchResponse);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
-                    StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             LOGGER.info("PatchTransferToPayee : done");
-
-        } catch (FspiopException e) {
-
-            LOGGER.error("Error:", e);
-
-            throw e;
 
         } catch (Exception e) {
 

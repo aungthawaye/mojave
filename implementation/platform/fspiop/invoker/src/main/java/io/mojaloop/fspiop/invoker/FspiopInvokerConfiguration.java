@@ -21,7 +21,7 @@
 package io.mojaloop.fspiop.invoker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.handy.P12Reader;
+import io.mojaloop.component.misc.handy.InputStreamLoader;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
@@ -55,8 +55,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                           .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                           .withInterceptors(fspiopSigningInterceptor)
                           .withConverterFactories(
-                              new NullOrEmptyConverterFactory(),
-                              ScalarsConverterFactory.create(),
+                              new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
                               JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
@@ -66,12 +65,12 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = P12Reader.read(
-                keyStoreSettings.contentType,
-                keyStoreSettings.contentValue);
-                 var trustStoreInput = P12Reader.read(
-                     trustStoreSettings.contentType,
-                     trustStoreSettings.contentValue)) {
+            try (var keyStoreInput = InputStreamLoader.from(
+                keyStoreSettings.file,
+                keyStoreSettings.base64);
+                 var trustStoreInput = InputStreamLoader.from(
+                     trustStoreSettings.file,
+                     trustStoreSettings.base64)) {
 
                 builder.withMutualTLS(
                     keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
@@ -98,8 +97,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                           .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                           .withInterceptors(fspiopSigningInterceptor)
                           .withConverterFactories(
-                              new NullOrEmptyConverterFactory(),
-                              ScalarsConverterFactory.create(),
+                              new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
                               JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
@@ -109,12 +107,12 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = P12Reader.read(
-                keyStoreSettings.contentType,
-                keyStoreSettings.contentValue);
-                 var trustStoreInput = P12Reader.read(
-                     trustStoreSettings.contentType,
-                     trustStoreSettings.contentValue)) {
+            try (var keyStoreInput = InputStreamLoader.from(
+                keyStoreSettings.file,
+                keyStoreSettings.base64);
+                 var trustStoreInput = InputStreamLoader.from(
+                     trustStoreSettings.file,
+                     trustStoreSettings.base64)) {
 
                 builder.withMutualTLS(
                     keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
@@ -140,8 +138,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                           .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                           .withInterceptors(fspiopSigningInterceptor)
                           .withConverterFactories(
-                              new NullOrEmptyConverterFactory(),
-                              ScalarsConverterFactory.create(),
+                              new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
                               JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
@@ -151,12 +148,12 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = P12Reader.read(
-                keyStoreSettings.contentType,
-                keyStoreSettings.contentValue);
-                 var trustStoreInput = P12Reader.read(
-                     trustStoreSettings.contentType,
-                     trustStoreSettings.contentValue)) {
+            try (var keyStoreInput = InputStreamLoader.from(
+                keyStoreSettings.file,
+                keyStoreSettings.base64);
+                 var trustStoreInput = InputStreamLoader.from(
+                     trustStoreSettings.file,
+                     trustStoreSettings.base64)) {
 
                 builder.withMutualTLS(
                     keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
@@ -190,13 +187,9 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                                     TrustStoreSettings trustStoreSettings,
                                     boolean ignoreHostnameVerification) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType,
-                                       String contentValue,
-                                       String password) { }
+        public record KeyStoreSettings(String file, boolean base64, String password) { }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType,
-                                         String contentValue,
-                                         String password) { }
+        public record TrustStoreSettings(String file, boolean base64, String password) { }
 
     }
 

@@ -20,7 +20,6 @@
 
 package io.mojaloop.connector.sample;
 
-import io.mojaloop.component.misc.handy.P12Reader;
 import io.mojaloop.connector.gateway.ConnectorGatewayConfiguration;
 import io.mojaloop.connector.gateway.inbound.ConnectorInboundConfiguration;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
@@ -75,14 +74,13 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
         }
 
         return new FspiopInvokerConfiguration.TransportSettings(
-            true,
-            new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
-                P12Reader.ContentType.valueOf(System.getenv("INVOKER_KEYSTORE_CONTENT_TYPE")),
-                System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"),
-                System.getenv("INVOKER_KEYSTORE_PASSWORD")),
+            true, new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
+            System.getenv("INVOKER_KEYSTORE_FILE"),
+            Boolean.parseBoolean(System.getenv("INVOKER_KEYSTORE_BASE64")),
+            System.getenv("INVOKER_KEYSTORE_PASSWORD")),
             new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(
-                P12Reader.ContentType.valueOf(System.getenv("INVOKER_TRUSTSTORE_CONTENT_TYPE")),
-                System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"),
+                System.getenv("INVOKER_TRUSTSTORE_FILE"),
+                Boolean.parseBoolean(System.getenv("INVOKER_TRUSTSTORE_BASE64")),
                 System.getenv("INVOKER_TRUSTSTORE_PASSWORD")), true);
     }
 
@@ -106,14 +104,12 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
             Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
             Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), true,
             new ConnectorInboundConfiguration.InboundSettings.KeyStoreSettings(
-                P12Reader.ContentType.valueOf(
-                    System.getenv("FSPIOP_INBOUND_KEYSTORE_CONTENT_TYPE")),
-                System.getenv("FSPIOP_INBOUND_KEYSTORE_CONTENT_VALUE"),
+                System.getenv("FSPIOP_INBOUND_KEYSTORE_FILE"),
+                Boolean.parseBoolean(System.getenv("FSPIOP_INBOUND_KEYSTORE_BASE64")),
                 System.getenv("FSPIOP_INBOUND_KEYSTORE_PASSWORD"), null),
             new ConnectorInboundConfiguration.InboundSettings.TrustStoreSettings(
-                P12Reader.ContentType.valueOf(
-                    System.getenv("FSPIOP_INBOUND_TRUSTSTORE_CONTENT_TYPE")),
-                System.getenv("FSPIOP_INBOUND_TRUSTSTORE_CONTENT_VALUE"),
+                System.getenv("FSPIOP_INBOUND_TRUSTSTORE_FILE"),
+                Boolean.parseBoolean(System.getenv("FSPIOP_INBOUND_TRUSTSTORE_BASE64")),
                 System.getenv("FSPIOP_INBOUND_TRUSTSTORE_PASSWORD")));
     }
 

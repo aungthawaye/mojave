@@ -22,6 +22,8 @@ package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.enums.Direction;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
@@ -31,6 +33,7 @@ import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.spec.core.ExtensionList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -60,7 +63,7 @@ public class AbortTransfer {
     public void execute(Input input) throws FspiopException {
 
         var CONTEXT = input.context;
-        var STEP_NAME = "abort-transfer";
+        var STEP_NAME = "AbortTransfer";
 
         LOGGER.info("AbortTransfer : input : ({})", ObjectLogger.log(input));
 
@@ -72,14 +75,23 @@ public class AbortTransfer {
                 input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
-            transfer.aborted(input.rollbackId, input.error);
+            transfer.aborted(input.abortStage, input.rollbackId, input.abortReason);
+
+            var extensionList = input.extensionList();
+
+            if (extensionList != null) {
+
+                for (var extension : extensionList.getExtension()) {
+                    transfer.addExtension(
+                        input.direction(), extension.getKey(), extension.getValue());
+                }
+            }
 
             this.transferRepository.save(transfer);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
-                    StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             LOGGER.info("AbortTransfer : done");
 
@@ -89,7 +101,8 @@ public class AbortTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -98,7 +111,10 @@ public class AbortTransfer {
     public record Input(String context,
                         TransactionId transactionId,
                         TransferId transferId,
+                        AbortStage abortStage,
+                        String abortReason,
                         PositionUpdateId rollbackId,
-                        String error) { }
+                        Direction direction,
+                        ExtensionList extensionList) { }
 
 }

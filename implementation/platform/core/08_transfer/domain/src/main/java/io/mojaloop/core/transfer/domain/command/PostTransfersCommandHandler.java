@@ -22,7 +22,10 @@ package io.mojaloop.core.transfer.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -37,6 +40,8 @@ import io.mojaloop.core.transfer.domain.command.step.financial.ReservePayerPosit
 import io.mojaloop.core.transfer.domain.command.step.financial.RollbackReservation;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.ForwardToDestination;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.UnwrapRequest;
+import io.mojaloop.core.transfer.domain.command.step.stateful.AbortTransfer;
+import io.mojaloop.core.transfer.domain.command.step.stateful.DisputeTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.ReceiveTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.ReserveTransfer;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
@@ -65,6 +70,10 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
     private final ReserveTransfer reserveTransfer;
 
+    private final AbortTransfer abortTransfer;
+
+    private final DisputeTransfer disputeTransfer;
+
     // Financial steps
     private final ReservePayerPosition reservePayerPosition;
 
@@ -82,6 +91,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     public PostTransfersCommandHandler(ParticipantStore participantStore,
                                        ReceiveTransfer receiveTransfer,
                                        ReserveTransfer reserveTransfer,
+                                       AbortTransfer abortTransfer,
+                                       DisputeTransfer disputeTransfer,
                                        ReservePayerPosition reservePayerPosition,
                                        RollbackReservation rollbackReservation,
                                        UnwrapRequest unwrapRequest,
@@ -92,6 +103,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         assert participantStore != null;
         assert receiveTransfer != null;
         assert reserveTransfer != null;
+        assert abortTransfer != null;
+        assert disputeTransfer != null;
         assert reservePayerPosition != null;
         assert rollbackReservation != null;
         assert unwrapRequest != null;
@@ -102,6 +115,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         this.participantStore = participantStore;
         this.receiveTransfer = receiveTransfer;
         this.reserveTransfer = reserveTransfer;
+        this.abortTransfer = abortTransfer;
+        this.disputeTransfer = disputeTransfer;
         this.reservePayerPosition = reservePayerPosition;
         this.rollbackReservation = rollbackReservation;
         this.unwrapRequest = unwrapRequest;
@@ -171,11 +186,21 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
+                this.abortTransfer.execute(
+                    new AbortTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.RESERVE_PAYER_POSITION,
+                        e.getMessage(), null, Direction.TO_PAYEE, null));
+
                 throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
 
             } catch (PositionLimitExceededException e) {
 
                 LOGGER.error("Error:", e);
+
+                this.abortTransfer.execute(
+                    new AbortTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.RESERVE_PAYER_POSITION,
+                        e.getMessage(), null, Direction.TO_PAYEE, null));
 
                 throw new FspiopException(FspiopErrors.PAYER_LIMIT_ERROR);
             }
@@ -192,10 +217,34 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.rollbackReservation.execute(
-                    new RollbackReservation.Input(
-                        CONTEXT, transactionId, positionReservationId,
-                        "Failed to reserve position"));
+                RollbackReservation.Output rollbackReservationOutput;
+
+                try {
+
+                    // We cannot forward the request to Payee. So, we roll back the Reservation.
+                    rollbackReservationOutput = this.rollbackReservation.execute(
+                        new RollbackReservation.Input(
+                            CONTEXT, transactionId, positionReservationId,
+                            "Failed to forward request to payee."));
+
+                } catch (Exception e1) {
+
+                    LOGGER.error("Error:", e1);
+                    // We faced a problem while rolling back the Reservation.
+                    // So, we abort the transfer. And since unable to roll back the Reservation, we
+                    // mark this as a dispute. ‼️
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.RESERVE_TRANSFER,
+                        "Unable to reserve Transfer.", DisputeType.PAYER,
+                        "Unable to roll back Payer's position reservation"));
+
+                    throw e1;
+                }
+
+                this.abortTransfer.execute(new AbortTransfer.Input(
+                    CONTEXT, transactionId, transferId, AbortStage.RESERVE_TRANSFER,
+                    "Failed to reserve the transfer.", rollbackReservationOutput.rollbackId(),
+                    Direction.TO_PAYEE, null));
 
                 throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
             }
@@ -214,9 +263,35 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.rollbackReservation.execute(new RollbackReservation.Input(
-                    CONTEXT, transactionId, positionReservationId,
-                    "Failed to forward request to payee"));
+                RollbackReservation.Output rollbackReservationOutput;
+
+                try {
+
+                    // We cannot forward the request to Payee. So, we roll back the Reservation.
+                    rollbackReservationOutput = this.rollbackReservation.execute(
+                        new RollbackReservation.Input(
+                            CONTEXT, transactionId, positionReservationId,
+                            "Failed to forward request to payee."));
+
+                } catch (Exception e1) {
+
+                    LOGGER.error("Error:", e1);
+                    // We faced a problem while rolling back the Reservation.
+                    // So, we abort the transfer. And since unable to roll back the Reservation, we
+                    // mark this as a dispute. ‼️
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.FORWARD_TO_PAYEE,
+                        "Unable to forward Transfer to Payee.", DisputeType.PAYER,
+                        "Unable to roll back Payer's position reservation"));
+
+                    throw e1;
+                }
+
+                // And abort the transfer.
+                this.abortTransfer.execute(new AbortTransfer.Input(
+                    CONTEXT, transactionId, transferId, AbortStage.FORWARD_TO_PAYEE,
+                    "Unable to forward request to Payee.", rollbackReservationOutput.rollbackId(),
+                    Direction.TO_PAYEE, null));
 
                 throw e;
             }

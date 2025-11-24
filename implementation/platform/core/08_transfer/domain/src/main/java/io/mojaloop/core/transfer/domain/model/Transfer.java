@@ -31,11 +31,14 @@ import io.mojaloop.core.common.datatype.converter.identifier.transfer.UdfTransfe
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.fspiop.FspCodeConverter;
 import io.mojaloop.core.common.datatype.enums.Direction;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import io.mojaloop.core.transfer.contract.data.TransferData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.TransferState;
 import jakarta.persistence.AttributeOverride;
@@ -48,7 +51,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
@@ -73,38 +75,42 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "tfr_transfer",
-       uniqueConstraints = {@UniqueConstraint(name = "tfr_transfer_transaction_id_UK",
-                                              columnNames = {"transaction_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_udf_transfer_id_UK",
-                                              columnNames = {"udf_transfer_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_reservation_id_UK",
-                                              columnNames = {"reservation_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_payer_commit_id_UK",
-                                              columnNames = {"payer_commit_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_payee_commit_id_UK",
-                                              columnNames = {"payee_commit_id"}),
-                            @UniqueConstraint(name = "tfr_transfer_rollback_id_UK",
-                                              columnNames = {"rollback_id"})},
-       indexes = {@Index(name = "tfr_transfer_payer_fsp_IDX", columnList = "payer_fsp"),
-                  @Index(name = "tfr_transfer_payer_fsp_transaction_id_IDX",
-                         columnList = "payer_fsp, transaction_id"),
-                  @Index(name = "tfr_transfer_payee_fsp_IDX", columnList = "payee_fsp"),
-                  @Index(name = "tfr_transfer_payee_fsp_transaction_IDX",
-                         columnList = "payee_fsp, transaction_id"),
-                  @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX",
-                         columnList = "payee_fsp, payer_fsp"),
-                  @Index(name = "tfr_transfer_transaction_at_IDX", columnList = "transaction_at"),
-                  @Index(name = "tfr_transfer_payer_party_id_IDX", columnList = "payer_party_id"),
-                  @Index(name = "tfr_transfer_payee_party_id_IDX", columnList = "payee_party_id"),
-                  @Index(name = "tfr_transfer_reservation_timeout_at_IDX",
-                         columnList = "reservation_timeout_at"),
-                  @Index(name = "tfr_transfer_reserved_at_IDX", columnList = "reserved_at"),
-                  @Index(name = "tfr_transfer_committed_at_IDX", columnList = "committed_at"),
-                  @Index(name = "tfr_transfer_aborted_at_IDX", columnList = "aborted_at"),
-                  @Index(name = "tfr_transfer_state_IDX", columnList = "state")})
+@Table(
+    name = "tfr_transfer",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "tfr_transfer_transaction_id_UK", columnNames = {"transaction_id"}),
+        @UniqueConstraint(
+            name = "tfr_transfer_udf_transfer_id_UK", columnNames = {"udf_transfer_id"}),
+        @UniqueConstraint(
+            name = "tfr_transfer_reservation_id_UK", columnNames = {"reservation_id"}),
+        @UniqueConstraint(
+            name = "tfr_transfer_payer_commit_id_UK", columnNames = {"payer_commit_id"}),
+        @UniqueConstraint(
+            name = "tfr_transfer_payee_commit_id_UK", columnNames = {"payee_commit_id"}),
+        @UniqueConstraint(name = "tfr_transfer_rollback_id_UK", columnNames = {"rollback_id"})},
+    indexes = {
+        @Index(name = "tfr_transfer_payer_fsp_IDX", columnList = "payer_fsp"),
+        @Index(
+            name = "tfr_transfer_payer_fsp_transaction_id_IDX",
+            columnList = "payer_fsp, transaction_id"),
+        @Index(name = "tfr_transfer_payee_fsp_IDX", columnList = "payee_fsp"),
+        @Index(
+            name = "tfr_transfer_payee_fsp_transaction_IDX",
+            columnList = "payee_fsp, transaction_id"),
+        @Index(name = "tfr_transfer_payee_fsp_payer_fsp_IDX", columnList = "payee_fsp, payer_fsp"),
+        @Index(name = "tfr_transfer_transaction_at_IDX", columnList = "transaction_at"),
+        @Index(name = "tfr_transfer_payer_party_id_IDX", columnList = "payer_party_id"),
+        @Index(name = "tfr_transfer_payee_party_id_IDX", columnList = "payee_party_id"),
+        @Index(
+            name = "tfr_transfer_reservation_timeout_at_IDX",
+            columnList = "reservation_timeout_at"),
+        @Index(name = "tfr_transfer_reserved_at_IDX", columnList = "reserved_at"),
+        @Index(name = "tfr_transfer_committed_at_IDX", columnList = "committed_at"),
+        @Index(name = "tfr_transfer_aborted_at_IDX", columnList = "aborted_at"),
+        @Index(name = "tfr_transfer_state_IDX", columnList = "state")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Transfer extends JpaEntity<TransferId> implements DataConversion<io.mojaloop.core.transfer.contract.data.TransferData> {
+public class Transfer extends JpaEntity<TransferId> implements DataConversion<TransferData> {
 
     @Id
     @JavaType(TransferIdJavaType.class)
@@ -125,63 +131,66 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<io
     @Basic
     @JavaType(UdfTransferIdJavaType.class)
     @JdbcTypeCode(Types.VARCHAR)
-    @Column(name = "udf_transfer_id",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_UDF_TRANSFER_ID_LENGTH)
+    @Column(
+        name = "udf_transfer_id",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_UDF_TRANSFER_ID_LENGTH)
     protected UdfTransferId udfTransferId;
 
-    @Column(name = "payer_fsp",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(
+        name = "payer_fsp",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = FspCodeConverter.class)
     protected FspCode payerFsp;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
-                                                    column = @Column(name = "payer_party_type",
-                                                                     length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId",
-                                                    column = @Column(name = "payer_party_id",
-                                                                     length = 48)),
-                                 @AttributeOverride(name = "subId",
-                                                    column = @Column(name = "payer_sub_id",
-                                                                     length = 48))})
+    @AttributeOverrides(
+        value = {
+            @AttributeOverride(
+                name = "partyIdType", column = @Column(
+                name = "payer_party_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+            @AttributeOverride(
+                name = "partyId", column = @Column(name = "payer_party_id", length = 48)),
+            @AttributeOverride(
+                name = "subId",
+                column = @Column(name = "payer_sub_id", length = 48))})
     protected Party payer;
 
-    @Column(name = "payee_fsp",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(
+        name = "payee_fsp",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = FspCodeConverter.class)
     protected FspCode payeeFsp;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
-                                                    column = @Column(name = "payee_party_type",
-                                                                     length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId",
-                                                    column = @Column(name = "payee_party_id",
-                                                                     length = 48)),
-                                 @AttributeOverride(name = "subId",
-                                                    column = @Column(name = "payee_sub_id",
-                                                                     length = 48))})
+    @AttributeOverrides(
+        value = {
+            @AttributeOverride(
+                name = "partyIdType", column = @Column(
+                name = "payee_party_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+            @AttributeOverride(
+                name = "partyId", column = @Column(name = "payee_party_id", length = 48)),
+            @AttributeOverride(
+                name = "subId",
+                column = @Column(name = "payee_sub_id", length = 48))})
 
     protected Party payee;
 
-    @Column(name = "currency",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(
+        name = "currency",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "transfer_amount",
-            nullable = false,
-            updatable = false,
-            precision = 34,
-            scale = 4)
+    @Column(
+        name = "transfer_amount", nullable = false, updatable = false, precision = 34, scale = 4)
     protected BigDecimal transferAmount;
 
     @Column(name = "request_expiration")
@@ -232,8 +241,23 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<io
     @Convert(converter = JpaInstantConverter.class)
     protected Instant abortedAt;
 
-    @Column(name = "error")
-    protected String error;
+    @Column(name = "abort_stage", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected AbortStage abortStage;
+
+    @Column(name = "abort_reason")
+    protected String abortReason;
+
+    @Column(name = "dispute_at")
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant disputeAt;
+
+    @Column(name = "dispute_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected DisputeType disputeType;
+
+    @Column(name = "dispute_reason")
+    protected String disputeReason;
 
     @Column(name = "reservation_timeout_at")
     @Convert(converter = JpaInstantConverter.class)
@@ -247,8 +271,8 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<io
     @OneToMany(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<TransferExtension> extensions = new ArrayList<>();
 
-    @Column(name = "ilp_fulfilment",
-            length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
+    @Column(
+        name = "ilp_fulfilment", length = StringSizeConstraints.MAX_ILP_PACKET_FULFILMENT_LENGTH)
     protected String ilpFulfilment;
 
     @OneToOne(mappedBy = "transfer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -300,12 +324,13 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<io
         this.ilpPacket = new TransferIlpPacket(this, ilpPacket, ilpCondition);
     }
 
-    public void aborted(PositionUpdateId rollbackId, String error) {
+    public void aborted(AbortStage abortStage, PositionUpdateId rollbackId, String abortReason) {
 
         this.rollbackId = rollbackId;
         this.state = TransferState.ABORTED;
+        this.abortStage = abortStage;
         this.abortedAt = Instant.now();
-        this.error = error;
+        this.abortReason = abortReason;
     }
 
     public void addExtension(Direction direction, String key, String value) {
@@ -333,6 +358,50 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<io
         this.payeeCommitId = payeeCommitId;
     }
 
+    @Override
+    public TransferData convert() {
+
+        final var payerData = new TransferData.PartyData(
+            this.payer.partyIdType(), this.payer.partyId(), this.payer.subId());
+        final var payeeData = new TransferData.PartyData(
+            this.payee.partyIdType(), this.payee.partyId(), this.payee.subId());
+
+        final var extData = this.extensions
+                                .stream()
+                                .map(x -> new TransferData.TransferExtensionData(
+                                    x.getDirection(),
+                                    x.getKey(), x.getValue()))
+                                .toList();
+
+        final var ilpData = this.ilpPacket == null ? null : new TransferData.TransferIlpPacketData(
+            this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
+
+        return new TransferData(
+            this.id, this.transactionId, this.transactionAt, this.udfTransferId, this.payerFsp,
+            payerData, this.payeeFsp, payeeData, this.currency, this.transferAmount,
+            this.requestExpiration, this.reservationId, this.payerCommitId, this.payeeCommitId,
+            this.rollbackId, this.state, this.receivedAt, this.reservedAt, this.committedAt,
+            this.abortedAt, this.abortStage, this.abortReason, this.disputeAt, this.disputeType,
+            this.disputeReason, this.reservationTimeoutAt, this.payeeCompletedAt, extData,
+            this.ilpFulfilment, ilpData);
+    }
+
+    public void disputed(AbortStage abortStage,
+                         String abortReason,
+                         DisputeType disputeType,
+                         String disputeReason) {
+
+        this.abortStage = abortStage;
+        this.abortReason = abortReason;
+        this.abortedAt = Instant.now();
+
+        this.disputeType = disputeType;
+        this.disputeReason = disputeReason;
+        this.disputeAt = Instant.now();
+
+        this.state = TransferState.ABORTED;
+    }
+
     public List<TransferExtension> getExtensions() {
 
         return Collections.unmodifiableList(this.extensions);
@@ -351,53 +420,6 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<io
         this.state = TransferState.RESERVED;
         this.reservedAt = Instant.now();
         this.reservationId = reservationId;
-    }
-
-    @Override
-    public io.mojaloop.core.transfer.contract.data.TransferData convert() {
-
-        final var payerData = new io.mojaloop.core.transfer.contract.data.TransferData.PartyData(
-            this.payer.partyIdType(), this.payer.partyId(), this.payer.subId());
-        final var payeeData = new io.mojaloop.core.transfer.contract.data.TransferData.PartyData(
-            this.payee.partyIdType(), this.payee.partyId(), this.payee.subId());
-
-        final var extData = this.extensions.stream()
-            .map(x -> new io.mojaloop.core.transfer.contract.data.TransferData.TransferExtensionData(
-                x.getDirection(), x.getKey(), x.getValue()))
-            .toList();
-
-        final var ilpData = this.ilpPacket == null ? null
-            : new io.mojaloop.core.transfer.contract.data.TransferData.TransferIlpPacketData(
-                this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
-
-        return new io.mojaloop.core.transfer.contract.data.TransferData(
-            this.id,
-            this.transactionId,
-            this.transactionAt,
-            this.udfTransferId,
-            this.payerFsp,
-            payerData,
-            this.payeeFsp,
-            payeeData,
-            this.currency,
-            this.transferAmount,
-            this.requestExpiration,
-            this.reservationId,
-            this.payerCommitId,
-            this.payeeCommitId,
-            this.rollbackId,
-            this.state,
-            this.receivedAt,
-            this.reservedAt,
-            this.committedAt,
-            this.abortedAt,
-            this.error,
-            this.reservationTimeoutAt,
-            this.payeeCompletedAt,
-            extData,
-            this.ilpFulfilment,
-            ilpData
-        );
     }
 
 }

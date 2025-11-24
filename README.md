@@ -1,14 +1,8 @@
-# Mojave (Mojaloop Java Edition)
-Mojaloop implementation in Java
+# Mojave 
+Mojave is the **unofficial** implementation of Mojaloop's FSPIOP API specification in Java.
+In short, Mojave means "Mojaloop Java Edition."
 
-## Diagrams (PlantUML)
-- PlantUML source files are kept under `documentation/mojaloop/*.puml`.
-- Example: `documentation/mojaloop/transfers.puml` contains a Mojaloop transfer sequence diagram.
+The primary goal of this project is to provide a reference implementation for developers to learn from.
 
-Render options:
-1) Using Kroki (no Java required):
-   - curl -H "Accept: image/svg+xml" --data-binary @documentation/mojaloop/transfers.puml https://kroki.io/plantuml/svg > documentation/astro/public/transfers.svg
-   - Then include `/transfers.svg` in Astro docs.
-2) Using local PlantUML (requires Java):
-   - brew install plantuml   # macOS (or use your package manager)
-   - plantuml -tsvg documentation/mojaloop/transfers.puml
+This project is currently in development.
+

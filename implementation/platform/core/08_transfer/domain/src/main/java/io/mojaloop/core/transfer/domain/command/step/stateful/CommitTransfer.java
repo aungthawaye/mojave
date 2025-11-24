@@ -63,7 +63,7 @@ public class CommitTransfer {
     public void execute(Input input) throws FspiopException {
 
         var CONTEXT = input.context;
-        var STEP_NAME = "commit-transfer";
+        var STEP_NAME = "CommitTransfer";
 
         LOGGER.info("CommitTransfer : input : ({})", ObjectLogger.log(input));
 

@@ -20,8 +20,9 @@
 
 package io.mojaloop.component.tomcat.connector;
 
-import io.mojaloop.component.misc.handy.P12Reader;
+import io.mojaloop.component.misc.handy.InputStreamLoader;
 import io.mojaloop.component.tomcat.ConnectorDecorator;
+import lombok.Getter;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.net.SSLHostConfig;
@@ -34,6 +35,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+@Getter
 public class MutualTLSConnectorDecorator implements ConnectorDecorator {
 
     private final Settings settings;
@@ -96,9 +98,8 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
     private void addKeyStore(SSLHostConfig sslHostConfig,
                              Settings.KeyStoreSettings keyStoreSettings) {
 
-        try (var in = P12Reader.read(
-            keyStoreSettings.contentType(),
-            keyStoreSettings.contentValue())) {
+        try (
+            var in = InputStreamLoader.from(keyStoreSettings.file(), keyStoreSettings.base64())) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, keyStoreSettings.storePassword().toCharArray());
@@ -124,9 +125,9 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
     private void setTrustStore(SSLHostConfig sslHostConfig,
                                Settings.TrustStoreSettings trustStoreSettings) {
 
-        try (var in = P12Reader.read(
-            trustStoreSettings.contentType(),
-            trustStoreSettings.contentValue())) {
+        try (var in = InputStreamLoader.from(
+            trustStoreSettings.file(),
+            trustStoreSettings.base64())) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, trustStoreSettings.storePassword().toCharArray());
@@ -145,16 +146,14 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
                            TrustStoreSettings trustStoreSettings,
                            KeyStoreSettings... keyStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType,
-                                       String contentValue,
+        public record KeyStoreSettings(String file,
+                                       boolean base64,
                                        String storePassword,
                                        String keyAlias) {
 
         }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType,
-                                         String contentValue,
-                                         String storePassword) { }
+        public record TrustStoreSettings(String file, boolean base64, String storePassword) { }
 
     }
 

@@ -1,6 +1,8 @@
 package io.mojaloop.core.transfer.contract.data;
 
 import io.mojaloop.core.common.datatype.enums.Direction;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -35,7 +37,11 @@ public record TransferData(TransferId transferId,
                            Instant reservedAt,
                            Instant committedAt,
                            Instant abortedAt,
-                           String error,
+                           AbortStage abortStage,
+                           String abortReason,
+                           Instant disputeAt,
+                           DisputeType disputeType,
+                           String disputeReason,
                            Instant reservationTimeoutAt,
                            Instant payeeCompletedAt,
                            List<TransferExtensionData> extensions,

@@ -1,6 +1,7 @@
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
@@ -39,9 +40,14 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
 
         LOGGER.info("FulfilPositionsCommand : input: ({})", ObjectLogger.log(input));
 
+        PositionUpdateId payerCommitId = null;
+        PositionUpdateId payeeCommitId = null;
+
         var commitReservationOutput = this.commitReservationCommand.execute(input.reservation());
+        payerCommitId = commitReservationOutput.positionUpdateId();
 
         var decreasePositionOutput = this.decreasePositionCommand.execute(input.decrease());
+        payeeCommitId = decreasePositionOutput.positionUpdateId();
 
         var output = new Output(commitReservationOutput, decreasePositionOutput);
 

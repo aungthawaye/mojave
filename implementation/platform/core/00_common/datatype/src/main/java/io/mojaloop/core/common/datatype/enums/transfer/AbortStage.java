@@ -1,0 +1,15 @@
+package io.mojaloop.core.common.datatype.enums.transfer;
+
+public enum AbortStage {
+
+    RESERVE_PAYER_POSITION,
+    RESERVE_TRANSFER,
+    FORWARD_TO_PAYEE,
+    UNWRAP_TRANSFER_RESPONSE,
+    PAYEE_ABORTED_TRANSFER,
+    FULFILLED_ALL_POSITIONS,
+    COMMITTED_TRANSFER,
+    ABORT_TO_PAYER,
+    COMMIT_TRANSFER_TO_PAYER,
+    PATCH_TO_PAYEE
+}

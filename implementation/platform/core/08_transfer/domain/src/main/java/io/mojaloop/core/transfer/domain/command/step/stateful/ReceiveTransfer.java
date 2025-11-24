@@ -86,7 +86,7 @@ public class ReceiveTransfer {
         LOGGER.info("ReceiveTransfer : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
-        final var STEP_NAME = "receive-transfer";
+        final var STEP_NAME = "ReceiveTransfer";
 
         TransactionId transactionId = null;
         Instant transactionAt = null;
@@ -106,9 +106,6 @@ public class ReceiveTransfer {
             var transactionIdString = transactionId.getId().toString();
 
             transactionAt = openTransactionOutput.transactionAt();
-            var transactionAtString = transactionAt.getEpochSecond() + "";
-
-            var transferAmountString = input.transferAmount().stripTrailingZeros().toPlainString();
             var reservationTimeoutAt = Instant
                                            .now()
                                            .plusMillis(
@@ -127,23 +124,15 @@ public class ReceiveTransfer {
                 payeePartyIdInfo.getPartySubIdOrType()), input.currency, input.transferAmount,
                 input.ilpPacket, input.ilpCondition, input.requestExpiration, reservationTimeoutAt);
 
-            transfer.addExtension(Direction.TO_PAYEE, "payerFspCode", payerFsp.fspCode().value());
-            transfer.addExtension(
-                Direction.TO_PAYEE, "payerPartyIdType", payerPartyIdInfo.getPartyIdType().name());
-            transfer.addExtension(
-                Direction.TO_PAYEE, "payerPartyIdentifier", payerPartyIdInfo.getPartyIdentifier());
-            transfer.addExtension(
-                Direction.TO_PAYEE, "payerPartySubIdOrType",
-                payerPartyIdInfo.getPartySubIdOrType());
+            var extensionList = input.extensionList();
 
-            transfer.addExtension(Direction.TO_PAYEE, "payeeFspCode", payeeFsp.fspCode().value());
-            transfer.addExtension(
-                Direction.TO_PAYEE, "payeePartyIdType", payeePartyIdInfo.getPartyIdType().name());
-            transfer.addExtension(
-                Direction.TO_PAYEE, "payeePartyIdentifier", payeePartyIdInfo.getPartyIdentifier());
-            transfer.addExtension(
-                Direction.TO_PAYEE, "payeePartySubIdOrType",
-                payeePartyIdInfo.getPartySubIdOrType());
+            if (extensionList != null) {
+
+                for (var extension : extensionList.getExtension()) {
+                    transfer.addExtension(
+                        Direction.TO_PAYEE, extension.getKey(), extension.getValue());
+                }
+            }
 
             this.transferRepository.save(transfer);
 

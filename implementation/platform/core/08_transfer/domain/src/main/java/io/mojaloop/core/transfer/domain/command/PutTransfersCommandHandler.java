@@ -22,7 +22,10 @@ package io.mojaloop.core.transfer.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
@@ -40,7 +43,9 @@ import io.mojaloop.core.transfer.domain.command.step.fspiop.PatchTransferToPayee
 import io.mojaloop.core.transfer.domain.command.step.fspiop.UnwrapResponse;
 import io.mojaloop.core.transfer.domain.command.step.stateful.AbortTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.CommitTransfer;
+import io.mojaloop.core.transfer.domain.command.step.stateful.DisputeTransfer;
 import io.mojaloop.core.transfer.domain.command.step.stateful.FetchTransfer;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopErrorResponder;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
@@ -69,6 +74,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final CommitTransfer commitTransfer;
 
+    private final DisputeTransfer disputeTransfer;
+
     // Financial steps
     private final FulfilPositions fulfilPositions;
 
@@ -91,6 +98,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       FetchTransfer fetchTransfer,
                                       AbortTransfer abortTransfer,
                                       CommitTransfer commitTransfer,
+                                      DisputeTransfer disputeTransfer,
                                       FulfilPositions fulfilPositions,
                                       RollbackReservation rollbackReservation,
                                       UnwrapResponse unwrapResponse,
@@ -104,6 +112,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         assert fetchTransfer != null;
         assert abortTransfer != null;
         assert commitTransfer != null;
+        assert disputeTransfer != null;
         assert fulfilPositions != null;
         assert rollbackReservation != null;
         assert unwrapResponse != null;
@@ -117,6 +126,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.fetchTransfer = fetchTransfer;
         this.abortTransfer = abortTransfer;
         this.commitTransfer = commitTransfer;
+        this.disputeTransfer = disputeTransfer;
         this.fulfilPositions = fulfilPositions;
         this.rollbackReservation = rollbackReservation;
         this.unwrapResponse = unwrapResponse;
@@ -231,15 +241,34 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
             } catch (Exception e) {
 
                 LOGGER.error("Error:", e);
-                // Roll back the Payer position reservation.
-                var rollbackReservationOutput = this.rollbackReservation.execute(
-                    new RollbackReservation.Input(
-                        CONTEXT, transactionId, reservationId,
-                        e.getMessage()));
+                // Payee responded with some validation error.
+                RollbackReservation.Output rollbackReservationOutput = null;
 
-                this.abortTransfer.execute(new AbortTransfer.Input(
-                    CONTEXT, transactionId, transferId, rollbackReservationOutput.rollbackId(),
-                    "Payee responded with an error."));
+                try {
+
+                    // Roll back the Payer position reservation.
+                    rollbackReservationOutput = this.rollbackReservation.execute(
+                        new RollbackReservation.Input(
+                            CONTEXT, transactionId, reservationId,
+                            e.getMessage()));
+
+                } catch (Exception e1) {
+
+                    // Failed to roll back Payer's position. This is dispute. ‼️
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.UNWRAP_TRANSFER_RESPONSE,
+                        "Payee responded with an error.", DisputeType.PAYER,
+                        "Failed to rollback reservation."));
+                }
+
+                if (rollbackReservationOutput != null) {
+
+                    this.abortTransfer.execute(new AbortTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.UNWRAP_TRANSFER_RESPONSE,
+                        "Payee responded with an error.", rollbackReservationOutput.rollbackId(),
+                        Direction.FROM_PAYEE, putTransfersResponse.getExtensionList()));
+
+                }
 
                 // Although Payee responded with an error, we still need to inform back
                 // to Payee the state of the transfer.
@@ -263,56 +292,195 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     "Payee responded with the aborted transfer : udfTransferId : ({}).",
                     udfTransferId.getId());
 
-                var rollbackReservationOutput = this.rollbackReservation.execute(
-                    new RollbackReservation.Input(
-                        CONTEXT, transactionId, reservationId,
-                        "Payee aborted transfer."));
+                RollbackReservation.Output rollbackReservationOutput = null;
 
-                this.abortTransfer.execute(new AbortTransfer.Input(
-                    CONTEXT, transactionId, transferId, rollbackReservationOutput.rollbackId(),
-                    "Payee aborted transfer."));
+                try {
 
-                // Forward the Payee's response back to Payer.
+                    // Roll back the Payer position reservation.
+                    rollbackReservationOutput = this.rollbackReservation.execute(
+                        new RollbackReservation.Input(
+                            CONTEXT, transactionId, reservationId,
+                            "Payee aborted the transfer."));
+
+                } catch (Exception e1) {
+
+                    // Failed to roll back Payer's position. This is dispute. ‼️
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.PAYEE_ABORTED_TRANSFER,
+                        "Payee aborted the transfer.", DisputeType.PAYER,
+                        "Failed to rollback Payer's position reservation."));
+                }
+
+                if (rollbackReservationOutput != null) {
+
+                    this.abortTransfer.execute(new AbortTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.PAYEE_ABORTED_TRANSFER,
+                        "Payee aborted the transfer.", rollbackReservationOutput.rollbackId(),
+                        Direction.FROM_PAYEE, putTransfersResponse.getExtensionList()));
+
+                }
+
+                // Forward the Payee's response to Payer.
                 var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-                LOGGER.info("Forwarding request to payer FSP (BaseUrl): ({})", payerBaseUrl);
+                LOGGER.info("Forwarding request back to payer FSP (BaseUrl): ({})", payerBaseUrl);
 
-                this.forwardToDestination.execute(
-                    new ForwardToDestination.Input(
-                        CONTEXT, transactionId, payeeFspCode.value(), payerBaseUrl,
-                        input.request()));
+                try {
 
-                LOGGER.info("Done forwarding request to payer FSP (BaseUrl): ({})", payerBaseUrl);
+                    this.forwardToDestination.execute(
+                        new ForwardToDestination.Input(
+                            CONTEXT, transactionId, payerFspCode.value(), payerBaseUrl,
+                            input.request()));
+
+                    LOGGER.info(
+                        "Done forwarding request back to payer FSP (BaseUrl): ({})", payerBaseUrl);
+
+                } catch (Exception e) {
+
+                    LOGGER.error("(Ignored) Error:", e);
+                    // 💡We don't worry because the Transfer is already aborted.
+                }
 
             } else if (unwrapResponseOutput.state() == TransferState.RESERVED) {
 
                 LOGGER.info(
                     "Payee responded with the reserved transfer : udfTransferId : ({}).",
                     udfTransferId.getId());
-                // Upon receiving the reserved transfer from Payee, Hub must commit the payer position
-                // reservation, then give money to the Payee by decreasing its position.
-                // Then hub responds to the Payer with the committed transfer.
-                // Finally, send the committed transfer to Payee.
-                payeeReserved = true;
 
-                var fulfilPositionsOutput = this.fulfilPositions.execute(new FulfilPositions.Input(
-                    CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp, reservationId,
-                    currency, transferAmount));
+                // 💡Upon receiving the RESERVED transfer from Payee. Do these:
+                // 1️⃣Fulfil all positions (commit the reservation and decrease Payee position)
+                // 2️⃣Inform Payer that the transfer is COMMITTED.
+                // 3️⃣Inform Payee that the transfer is COMMITTED.
+                // 4️⃣Update Transfer state to COMMITTED.
+                // ‼️At any of these stages, if something went wrong, do these:
+                // 👉Inform Payee that the transfer is ABORTED.
+                // 👉Dispute the transfer.
+                // 👉Send the error respond to Payer.
 
-                this.commitTransfer.execute(new CommitTransfer.Input(
-                    CONTEXT, transactionId, transferId, unwrapResponseOutput.ilpFulfilment(),
-                    fulfilPositionsOutput.payerCommitId(), fulfilPositionsOutput.payeeCommitId(),
-                    unwrapResponseOutput.completedAt()));
+                FulfilPositions.Output fulfilPositionsOutput = null;
 
-                this.commitTransferToPayer.execute(new CommitTransferToPayer.Input(
-                    CONTEXT, transactionId, udfTransferId, payerFsp,
-                    putTransfersResponse.getFulfilment(),
-                    putTransfersResponse.getCompletedTimestamp(),
-                    putTransfersResponse.getExtensionList()));
+                try {
 
-                this.patchTransferToPayee.execute(
-                    new PatchTransferToPayee.Input(
+                    fulfilPositionsOutput = this.fulfilPositions.execute(new FulfilPositions.Input(
+                        CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp, reservationId,
+                        currency, transferAmount));
+
+                } catch (Exception e) {
+
+                    LOGGER.error("Error:", e);
+
+                    // ‼️Problem occurred while fulfilling positions. 💰
+                    // So, we inform the Payee to ABORT the transfer.
+                    // And we return the error to the Payer.
+                    try {
+
+                        this.patchTransferToPayee.execute(new PatchTransferToPayee.Input(
+                            CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.ABORTED,
+                            Map.of()));
+
+                    } catch (Exception ignored) {
+                        // OMG. Payee is also unreachable. 🥲
+                        // What is happening? 😭
+                    }
+
+                    if (e instanceof FailedToCommitReservationException ce) {
+
+                        // The problem is only at Payer because the committing the reservation failed.
+                        // Dispute for Payer ‼️
+                        this.disputeTransfer.execute(new DisputeTransfer.Input(
+                            CONTEXT, transactionId, transferId, AbortStage.FULFILLED_ALL_POSITIONS,
+                            "Failed to fulfil all positions.", DisputeType.PAYER,
+                            "Unable to commit Payer's position reservation. ReservationId : " +
+                                ce.getReservationId()));
+                    }
+
+                    throw e;
+                }
+
+                try {
+
+                    this.commitTransferToPayer.execute(new CommitTransferToPayer.Input(
+                        CONTEXT, transactionId, udfTransferId, payerFsp,
+                        putTransfersResponse.getFulfilment(),
+                        putTransfersResponse.getCompletedTimestamp(),
+                        putTransfersResponse.getExtensionList()));
+
+                } catch (Exception e) {
+
+                    LOGGER.error("Error:", e);
+                    // We try to inform Payer that the transfer is COMMITTED but failed.
+                    // So, we need to inform the Payee to ABORT at its side.
+                    // For Payer, it is dispute.
+                    try {
+
+                        this.patchTransferToPayee.execute(new PatchTransferToPayee.Input(
+                            CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.ABORTED,
+                            Map.of()));
+
+                    } catch (Exception ignored) {
+                        // OMG. Both are unreachable. 🥲
+                    }
+
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.COMMIT_TRANSFER_TO_PAYER,
+                        "Failed to inform Payer that the transfer is COMMITTED.", DisputeType.BOTH,
+                        "All positions were fulfilled, but failed to inform Payer that the transfer is COMMITTED."));
+
+                    throw e;
+                }
+
+                try {
+
+                    // Now inform back to Payee that the transfer is COMMITTED.
+                    this.patchTransferToPayee.execute(new PatchTransferToPayee.Input(
                         CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.COMMITTED,
                         Map.of()));
+
+                } catch (Exception e) {
+
+                    LOGGER.error("Error:", e);
+                    // After we have informed the Payer that the Transfer is COMMITTED, we
+                    // must inform the Payee too. But for some reason, it failed.
+                    // This is DISPUTE.
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.PATCH_TO_PAYEE,
+                        "Failed to inform Payer that the transfer is COMMITTED.", DisputeType.BOTH,
+                        "All positions were fulfilled, but failed to inform Payee that the transfer is COMMITTED."));
+
+                    throw e;
+                }
+
+                try {
+
+                    this.commitTransfer.execute(new CommitTransfer.Input(
+                        CONTEXT, transactionId, transferId, unwrapResponseOutput.ilpFulfilment(),
+                        fulfilPositionsOutput.payerCommitId(),
+                        fulfilPositionsOutput.payeeCommitId(), unwrapResponseOutput.completedAt()));
+
+                } catch (Exception e) {
+
+                    LOGGER.error("Error:", e);
+
+                    // Big problem! Positions were fulfilled, but CommitTransfer failed.
+                    // So, we inform the Payee to ABORT the transfer.
+                    // And we return the error to the Payer.
+                    try {
+
+                        this.patchTransferToPayee.execute(new PatchTransferToPayee.Input(
+                            CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.ABORTED,
+                            Map.of()));
+
+                    } catch (Exception ignored) {
+                        // OMG. Payee is also unreachable. 🥲
+                        // What is happening? 😭
+                    }
+
+                    this.disputeTransfer.execute(new DisputeTransfer.Input(
+                        CONTEXT, transactionId, transferId, AbortStage.COMMITTED_TRANSFER,
+                        "Failed to commit transfer.", DisputeType.BOTH,
+                        "All positions were fulfilled, but failed to update Transfer state to COMMITTED."));
+
+                    throw e;
+                }
 
             }
 
@@ -338,27 +506,12 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             error));
 
                 } catch (Exception e1) {
+
                     LOGGER.error("Error:", e1);
+
+                    errorOccurred = e1;
                 }
 
-            }
-
-            try {
-
-                if (payeeReserved) {
-                    // Inform back to the Payee only if Transfer exists
-                    // and Payee's transfer state is not ABORTED.
-                    this.patchTransferToPayee.execute(
-                        new PatchTransferToPayee.Input(
-                            CONTEXT, transactionId, udfTransferId, payeeFsp, TransferState.ABORTED,
-                            Map.of()));
-                }
-
-            } catch (Exception e1) {
-
-                LOGGER.error("Error:", e1);
-
-                errorOccurred = e1;
             }
 
         } finally {

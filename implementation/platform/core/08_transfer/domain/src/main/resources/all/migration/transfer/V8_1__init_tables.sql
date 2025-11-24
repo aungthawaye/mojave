@@ -33,6 +33,13 @@ CREATE TABLE `tfr_transfer`
     `aborted_at`             bigint       DEFAULT NULL,
     `error`                  varchar(255) DEFAULT NULL,
 
+    `abort_stage`            varchar(32)  DEFAULT NULL,
+    `abort_reason`           varchar(255) DEFAULT NULL,
+
+    `dispute_at`             bigint       DEFAULT NULL,
+    `dispute_type`           varchar(32)  DEFAULT NULL,
+    `dispute_reason`         varchar(255) DEFAULT NULL,
+
     `reservation_timeout_at` bigint       DEFAULT NULL,
     `payee_completed_at`     bigint       DEFAULT NULL,
 

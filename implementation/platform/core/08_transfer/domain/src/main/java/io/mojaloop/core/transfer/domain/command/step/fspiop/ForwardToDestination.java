@@ -93,7 +93,7 @@ public class ForwardToDestination {
 
     public record Input(String context,
                         TransactionId transactionId,
-                        String payeeFspCode,
+                        String destinationFspCode,
                         String baseUrl,
                         FspiopHttpRequest request) { }
 

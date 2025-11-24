@@ -88,7 +88,14 @@ final class ParticipantAdminConfiguration extends WebMvcExtension implements
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
         TomcatSettings settings) {
 
-        return factory -> factory.setPort(settings.portNo());
+        return new WebServerFactoryCustomizer<ConfigurableWebServerFactory>() {
+
+            @Override
+            public void customize(ConfigurableWebServerFactory factory) {
+
+                factory.setPort(settings.portNo());
+            }
+        };
     }
 
     public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,

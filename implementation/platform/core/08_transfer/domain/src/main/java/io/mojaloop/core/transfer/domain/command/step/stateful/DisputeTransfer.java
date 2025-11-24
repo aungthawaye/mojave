@@ -1,31 +1,12 @@
-/*-
- * ================================================================================
- * Mojave
- * --------------------------------------------------------------------------------
- * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ================================================================================
- */
-
 package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
-import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
@@ -38,15 +19,15 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ReserveTransfer {
+public class DisputeTransfer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReserveTransfer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbortTransfer.class);
 
     private final TransferRepository transferRepository;
 
     private final AddStepPublisher addStepPublisher;
 
-    public ReserveTransfer(TransferRepository transferRepository,
+    public DisputeTransfer(TransferRepository transferRepository,
                            AddStepPublisher addStepPublisher) {
 
         assert transferRepository != null;
@@ -58,30 +39,31 @@ public class ReserveTransfer {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Write
-    public void execute(Input input) throws FspiopException {
-
-        LOGGER.info("ReserveTransfer : input : ({})", ObjectLogger.log(input));
+    public void execute(DisputeTransfer.Input input) throws FspiopException {
 
         var CONTEXT = input.context;
-        var STEP_NAME = "ReserveTransfer";
+        var STEP_NAME = "DisputeTransfer";
+
+        LOGGER.info("DisputeTransfer : input : ({})", ObjectLogger.log(input));
 
         try {
 
+            var transfer = this.transferRepository.getReferenceById(input.transferId);
+
             this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId(), STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
-            var transfer = this.transferRepository.getReferenceById(input.transferId());
-
-            transfer.reserved(input.positionReservationId());
+            transfer.disputed(
+                input.abortStage, input.abortReason, input.disputeType, input.disputeReason);
 
             this.transferRepository.save(transfer);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("ReservedTransfer : done");
+            LOGGER.info("DisputeTransfer : done");
 
         } catch (Exception e) {
 
@@ -89,7 +71,7 @@ public class ReserveTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
@@ -99,6 +81,9 @@ public class ReserveTransfer {
     public record Input(String context,
                         TransactionId transactionId,
                         TransferId transferId,
-                        PositionUpdateId positionReservationId) { }
+                        AbortStage abortStage,
+                        String abortReason,
+                        DisputeType disputeType,
+                        String disputeReason) { }
 
 }

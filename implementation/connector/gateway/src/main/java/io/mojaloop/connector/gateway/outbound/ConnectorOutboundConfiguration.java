@@ -30,6 +30,7 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -38,12 +39,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableAsync
 @EnableWebMvc
-@Import(value = {MiscConfiguration.class,
-                 FspiopInvokerConfiguration.class,
-                 SpringSecurityConfiguration.class})
+@Import(
+    value = {
+        MiscConfiguration.class,
+        FspiopInvokerConfiguration.class,
+        SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.outbound"})
 public class ConnectorOutboundConfiguration implements MiscConfiguration.RequiredBeans,
                                                        FspiopInvokerConfiguration.RequiredBeans,

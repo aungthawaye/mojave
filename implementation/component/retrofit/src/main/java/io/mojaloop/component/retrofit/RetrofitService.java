@@ -316,8 +316,8 @@ public class RetrofitService {
             return this;
         }
 
-        public Builder<S> withMutualTLS(InputStream clientCertInputStream,
-                                        String clientCertPassword,
+        public Builder<S> withMutualTLS(InputStream keyStoreInputStream,
+                                        String keyStorePassword,
                                         InputStream trustStoreInputStream,
                                         String trustStorePassword,
                                         boolean ignoreHostnameVerification) {
@@ -327,11 +327,11 @@ public class RetrofitService {
             try {
 
                 KeyStore keyStore = KeyStore.getInstance("PKCS12");
-                keyStore.load(clientCertInputStream, clientCertPassword.toCharArray());
+                keyStore.load(keyStoreInputStream, keyStorePassword.toCharArray());
 
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance(
                     KeyManagerFactory.getDefaultAlgorithm());
-                kmf.init(keyStore, clientCertPassword.toCharArray());
+                kmf.init(keyStore, keyStorePassword.toCharArray());
 
                 KeyStore trustStore = KeyStore.getInstance("PKCS12");
                 trustStore.load(trustStoreInputStream, trustStorePassword.toCharArray());
