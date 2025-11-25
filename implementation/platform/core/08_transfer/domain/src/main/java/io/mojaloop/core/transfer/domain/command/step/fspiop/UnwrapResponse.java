@@ -47,6 +47,7 @@ public class UnwrapResponse {
     @Read
     public Output execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
         LOGGER.info("UnwrapResponse : input : ({})", ObjectLogger.log(input));
 
         var response = input.response();
@@ -69,7 +70,10 @@ public class UnwrapResponse {
 
         var output = new Output(state, response.getFulfilment(), completedAt);
 
-        LOGGER.info("UnwrapResponse : output : ({})", ObjectLogger.log(output));
+        var endAt = System.nanoTime();
+        LOGGER.info(
+            "UnwrapResponse : output : ({}), took {} ms", ObjectLogger.log(output),
+            (endAt - startAt) / 1_000_000);
 
         return output;
     }

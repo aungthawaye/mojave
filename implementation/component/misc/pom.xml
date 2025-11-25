@@ -18,6 +18,12 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>software.amazon.cryptools</groupId>
+            <artifactId>AmazonCorrettoCryptoProvider</artifactId>
+            <!-- IMPORTANT: you usually also need a classifier -->
+            <classifier>osx-aarch_64</classifier>
+        </dependency>
+        <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
         </dependency>

@@ -53,6 +53,8 @@ public class ForwardToDestination {
 
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("ForwardToDestination : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
@@ -70,7 +72,8 @@ public class ForwardToDestination {
                 new AddStepCommand.Input(
                     input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("ForwardToDestination : done");
+            var endAt = System.nanoTime();
+            LOGGER.info("ForwardToDestination : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (FspiopException e) {
 

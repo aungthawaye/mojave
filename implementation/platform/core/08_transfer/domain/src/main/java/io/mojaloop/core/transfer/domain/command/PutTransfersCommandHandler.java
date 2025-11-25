@@ -21,6 +21,7 @@
 package io.mojaloop.core.transfer.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
@@ -54,6 +55,7 @@ import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -63,7 +65,7 @@ import java.util.Map;
 @Service
 public class PutTransfersCommandHandler implements PutTransfersCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostTransfersCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PutTransfersCommandHandler.class);
 
     private final ParticipantStore participantStore;
 
@@ -140,6 +142,10 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     @Override
     @Write
     public Output execute(Input input) {
+
+        MDC.put("REQ_ID", String.valueOf(Snowflake.get().nextId()));
+
+        var startAt = System.nanoTime();
 
         LOGGER.info("PutTransfersCommandHandler : input: ({})", ObjectLogger.log(input));
 
@@ -527,7 +533,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
             }
         }
 
-        LOGGER.info("PutTransfersCommandHandler : done");
+        var endAt = System.nanoTime();
+        LOGGER.info(
+            "PutTransfersCommandHandler : done : took {} ms", (endAt - startAt) / 1_000_000);
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }

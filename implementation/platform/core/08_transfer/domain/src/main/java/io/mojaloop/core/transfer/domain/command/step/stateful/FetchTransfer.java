@@ -21,6 +21,7 @@
 package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -57,9 +58,11 @@ public class FetchTransfer {
     @Read
     public Output execute(Input input) throws FspiopException {
 
-        try {
+        var startAt = System.nanoTime();
 
-            LOGGER.info("Fetching transfer with transferId: ({})", input.udfTransferId);
+        LOGGER.info("FetchTransfer: input : ({})", ObjectLogger.log(input));
+
+        try {
 
             var optTransfer = this.transferRepository.findOne(
                 TransferRepository.Filters.withUdfTransferId(input.udfTransferId));
@@ -68,17 +71,32 @@ public class FetchTransfer {
 
                 LOGGER.info(
                     "Transfer not found for udfTransferId : ({})", input.udfTransferId.getId());
-                return new Output(null, null, null, null, null, null, null);
+
+                var endAt = System.nanoTime();
+                var output = new Output(null, null, null, null, null, null, null);
+
+                LOGGER.info(
+                    "FetchTransfer : output : ({}) , took : {} ms", output,
+                    (endAt - startAt) / 1_000_000);
+
+                return output;
             }
 
             var transfer = optTransfer.get();
 
             LOGGER.info("Transfer found for udfTransferId : ({})", input.udfTransferId.getId());
 
-            return new Output(
+            var output = new Output(
                 transfer.getId(), transfer.getState(), transfer.getReservationId(),
                 transfer.getCurrency(), transfer.getTransferAmount(), transfer.getTransactionId(),
                 transfer.getTransactionAt());
+
+            var endAt = System.nanoTime();
+            LOGGER.info(
+                "FetchTransfer : output : ({}) , took : {} ms", output,
+                (endAt - startAt) / 1_000_000);
+
+            return output;
 
         } catch (Exception e) {
 

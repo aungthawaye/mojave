@@ -44,6 +44,8 @@ public class FulfilPositions {
     public FulfilPositions.Output execute(FulfilPositions.Input input)
         throws FailedToCommitReservationException, FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("FulfilPositions : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
@@ -76,9 +78,10 @@ public class FulfilPositions {
                     walletOwnerId, currency, transferAmount, transactionId, transactionAt,
                     description));
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId(), STEP_NAME, CONTEXT,
-                ObjectLogger.log(fulfilPositionsInput).toString(), StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT,
+                    ObjectLogger.log(fulfilPositionsInput).toString(), StepPhase.BEFORE));
 
             var fulfilPositionsOutput = this.fulfilPositionsCommand.execute(fulfilPositionsInput);
 
@@ -91,7 +94,10 @@ public class FulfilPositions {
                 fulfilPositionsOutput.reservation().positionUpdateId(),
                 fulfilPositionsOutput.decrease().positionUpdateId());
 
-            LOGGER.info("FulfilPositions : output : ({})", ObjectLogger.log(output));
+            var endAt = System.nanoTime();
+            LOGGER.info(
+                "FulfilPositions : output : ({}) , took : {} ms", ObjectLogger.log(output),
+                (endAt - startAt) / 1_000_000);
 
             return output;
 
@@ -101,8 +107,7 @@ public class FulfilPositions {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

@@ -21,6 +21,7 @@
 package io.mojaloop.fspiop.component.retrofit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.component.handy.FspiopSignature;
@@ -54,6 +55,8 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
             return chain.proceed(chain.request());
         }
 
+        var startAt = System.nanoTime();
+
         var original = chain.request();
         String body = null;
 
@@ -80,15 +83,23 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
             body = "{\"date\":\"" + protectedHeaders.get(FspiopHeaders.Names.DATE) + "\"}";
         }
 
-        LOGGER.info("Signing protected headers: ({}) and body: ({})", protectedHeaders, body);
+        LOGGER.info(
+            "Signing protected headers: ({}) and body: ({})", ObjectLogger.log(protectedHeaders),
+            ObjectLogger.log(body));
 
+        var genSigStartAt = System.nanoTime();
         var signature = this.objectMapper.writeValueAsString(
             FspiopSignature.sign(this.participantContext.signingKey(), protectedHeaders, body));
-        LOGGER.debug("Fspiop signature: ({})", signature);
+        var genSigEndAt = System.nanoTime();
+        LOGGER.info(
+            "Signature generation took {} ms", (genSigEndAt - genSigStartAt) / 1_000_000);
+
         builder.header(FspiopHeaders.Names.FSPIOP_SIGNATURE, signature);
 
         var modifiedRequest = builder.build();
-        LOGGER.debug("Modified request: ({})", modifiedRequest);
+
+        var endAt = System.nanoTime();
+        LOGGER.info("Signing took {} ms", (endAt - startAt) / 1_000_000);
 
         return chain.proceed(modifiedRequest);
     }

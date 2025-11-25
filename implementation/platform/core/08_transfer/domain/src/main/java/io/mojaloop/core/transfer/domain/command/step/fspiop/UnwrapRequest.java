@@ -56,6 +56,8 @@ public class UnwrapRequest {
 
     public Output execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("UnwrapRequest : input : ({})", ObjectLogger.log(input));
 
         var payerFspCode = input.payerFsp().fspCode();
@@ -130,7 +132,10 @@ public class UnwrapRequest {
             payerPartyIdInfo, payeePartyIdInfo, currency, transferAmount, ilpPacketString,
             ilpCondition, requestExpiration);
 
-        LOGGER.info("UnwrapRequest : ({})", ObjectLogger.log(output));
+        var endAt = System.nanoTime();
+        LOGGER.info(
+            "UnwrapRequest : output : ({}), took {} ms", ObjectLogger.log(output),
+            (endAt - startAt) / 1_000_000);
 
         return output;
     }

@@ -22,9 +22,8 @@ package io.mojaloop.connector.gateway.outbound.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.crypto.Rs256;
-import io.mojaloop.component.misc.jwt.JwtBase64Util;
-import io.mojaloop.component.misc.jwt.Rs256Jwt;
+import io.mojaloop.component.misc.crypto.KeyPairs;
+import io.mojaloop.component.misc.jwt.Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
@@ -65,7 +64,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
         try {
 
-            this.publicKey = Rs256.publicKeyFromPem(outboundSettings.publicKeyPem());
+            this.publicKey = KeyPairs.Rsa.publicKeyOf(outboundSettings.publicKeyPem());
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
@@ -94,13 +93,13 @@ public class FspiopOutboundGatekeeper implements Authenticator {
         }
 
         var payload = cachedServletRequest.getCachedBodyAsString();
-        var base64Payload = JwtBase64Util.encode(payload);
+        var base64Payload = Jwt.encode(payload);
         var parts = authorization.split("\\.", -1);
         var header = parts[0];
         var signature = parts[2];
 
-        var verificationOk = Rs256Jwt.verify(
-            this.publicKey, new Rs256Jwt.Token(header, base64Payload, signature));
+        var verificationOk = Jwt.verify(
+            this.publicKey, new Jwt.Token(header, base64Payload, signature));
 
         if (!verificationOk) {
 

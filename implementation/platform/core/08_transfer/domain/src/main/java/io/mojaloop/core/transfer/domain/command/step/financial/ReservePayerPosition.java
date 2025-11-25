@@ -65,6 +65,8 @@ public class ReservePayerPosition {
                                        NoPositionUpdateForTransactionException,
                                        PositionLimitExceededException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("ReservePayerPosition : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context();
@@ -109,7 +111,10 @@ public class ReservePayerPosition {
 
             var output = new Output(reservePositionOutput.positionUpdateId());
 
-            LOGGER.info("ReservePayerPosition : output : ({})", ObjectLogger.log(output));
+            var endAt = System.nanoTime();
+            LOGGER.info(
+                "ReservePayerPosition : output : ({}) , took : {} ms",
+                ObjectLogger.log(output), (endAt - startAt) / 1_000_000);
 
             return output;
 
@@ -119,8 +124,7 @@ public class ReservePayerPosition {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
 
@@ -130,8 +134,7 @@ public class ReservePayerPosition {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.PAYER_LIMIT_ERROR, e.getMessage());
 
@@ -141,8 +144,7 @@ public class ReservePayerPosition {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

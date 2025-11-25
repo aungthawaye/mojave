@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transaction.producer.publisher;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.constant.TopicNames;
 import org.slf4j.Logger;
@@ -46,12 +47,14 @@ public class AddStepPublisher {
 
     public void publish(AddStepCommand.Input input) {
 
-        LOGGER.info("Publishing AddStepCommand with input: {}", input);
+        var startAt = System.nanoTime();
+        LOGGER.info("AddStepPublisher : input: ({})", ObjectLogger.log(input));
 
-//        this.kafkaTemplate.send(
-//            TopicNames.ADD_STEP, input.transactionId().getId().toString(), input);
+        this.kafkaTemplate.send(
+            TopicNames.ADD_STEP, input.transactionId().getId().toString(), input);
 
-        LOGGER.info("Published AddStepCommand with input: {}", input);
+        var endAt = System.nanoTime();
+        LOGGER.info("AddStepPublisher : done , took {} ms", (endAt - startAt) / 1_000_000);
 
     }
 

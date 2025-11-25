@@ -100,6 +100,7 @@ public class TransactionStep extends JpaEntity<TransactionStepId>
         this.phase = phase;
         this.name = name;
         this.context = context;
+        this.payload = payload;
         this.createdAt = Instant.now();
         this.transaction = transaction;
     }

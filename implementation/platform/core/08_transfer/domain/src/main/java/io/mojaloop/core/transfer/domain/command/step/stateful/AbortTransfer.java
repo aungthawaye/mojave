@@ -62,6 +62,8 @@ public class AbortTransfer {
     @Write
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         var CONTEXT = input.context;
         var STEP_NAME = "AbortTransfer";
 
@@ -91,9 +93,11 @@ public class AbortTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    StepPhase.AFTER));
 
-            LOGGER.info("AbortTransfer : done");
+            var endAt = System.nanoTime();
+            LOGGER.info("AbortTransfer : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
@@ -101,8 +105,7 @@ public class AbortTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

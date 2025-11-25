@@ -62,6 +62,8 @@ public class CommitTransfer {
     @Write
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         var CONTEXT = input.context;
         var STEP_NAME = "CommitTransfer";
 
@@ -84,7 +86,8 @@ public class CommitTransfer {
                 new AddStepCommand.Input(
                     input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("CommitTransfer : done");
+            var endAt = System.nanoTime();
+            LOGGER.info("CommitTransfer : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

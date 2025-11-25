@@ -54,6 +54,8 @@ public class RollbackReservation {
 
     public Output execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("RollbackReservation : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
@@ -72,13 +74,17 @@ public class RollbackReservation {
             var rollbackReservationOutput = this.rollbackReservationCommand.execute(
                 rollbackReservationInput);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId(), STEP_NAME, CONTEXT,
-                ObjectLogger.log(rollbackReservationOutput).toString(), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT,
+                    ObjectLogger.log(rollbackReservationOutput).toString(), StepPhase.AFTER));
 
             var output = new Output(rollbackReservationOutput.positionUpdateId());
 
-            LOGGER.info("RollbackReservation : output : ({})", output);
+            var endAt = System.nanoTime();
+            LOGGER.info(
+                "RollbackReservation : output : ({}) , took : {} ms", output,
+                (endAt - startAt) / 1_000_000);
 
             return output;
 
@@ -88,8 +94,7 @@ public class RollbackReservation {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

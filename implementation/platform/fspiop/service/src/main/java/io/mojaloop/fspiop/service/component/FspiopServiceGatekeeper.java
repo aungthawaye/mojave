@@ -22,8 +22,7 @@ package io.mojaloop.fspiop.service.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.jwt.JwtBase64Util;
-import io.mojaloop.component.misc.jwt.Rs256Jwt;
+import io.mojaloop.component.misc.jwt.Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
 import io.mojaloop.component.web.spring.security.Authenticator;
@@ -156,12 +155,12 @@ public class FspiopServiceGatekeeper implements Authenticator {
                           cachedServletRequest.getCachedBodyAsString();
         LOGGER.debug("Payload : ({})", payload);
 
-        var encodedPayload = JwtBase64Util.encode(payload);
+        var encodedPayload = Jwt.encode(payload);
         LOGGER.debug("Encoded payload : ({})", encodedPayload);
 
         var verificationOk = FspiopSignature.verify(
             publicKey,
-            new Rs256Jwt.Token(signature.protectedHeader(), encodedPayload, signature.signature()));
+            new Jwt.Token(signature.protectedHeader(), encodedPayload, signature.signature()));
 
         if (!verificationOk) {
 

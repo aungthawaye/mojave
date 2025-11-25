@@ -67,6 +67,8 @@ public class PatchTransferToPayee {
 
     public Output execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("PatchTransferToPayee : input : ({})", ObjectLogger.log(input));
 
         var CONTEXT = input.context;
@@ -99,7 +101,8 @@ public class PatchTransferToPayee {
                 new AddStepCommand.Input(
                     input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("PatchTransferToPayee : done");
+            var endAt = System.nanoTime();
+            LOGGER.info("PatchTransferToPayee : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

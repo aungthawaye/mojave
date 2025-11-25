@@ -21,21 +21,47 @@
 package io.mojaloop.component.misc.jwt;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Base64;
 import java.util.Map;
 
-public final class Rs256Jwt {
+public final class Jwt {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Rs256Jwt.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Jwt.class);
 
-    private Rs256Jwt() { }
+    private static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
+
+    private static final Base64.Decoder DECODER = Base64.getUrlDecoder();
+
+    private Jwt() { }
+
+    public static String decode(String base64Url) {
+
+        byte[] decoded = DECODER.decode(base64Url);
+        return new String(decoded, StandardCharsets.UTF_8);
+    }
+
+    public static String encode(String json) {
+
+        return ENCODER.encodeToString(json.getBytes(StandardCharsets.UTF_8));
+    }
 
     public static Token sign(PrivateKey privateKey, Map<String, String> headers, String payload) {
+
+        return Jwt.sign(privateKey, Jwts.SIG.RS256, headers, payload);
+    }
+
+    public static Token sign(PrivateKey privateKey,
+                             SignatureAlgorithm alg,
+                             Map<String, String> headers,
+                             String payload) {
 
         assert privateKey != null;
         assert headers != null;
@@ -43,7 +69,7 @@ public final class Rs256Jwt {
 
         String token = Jwts
                            .builder()
-                           .signWith(privateKey)
+                           .signWith(privateKey, alg)
                            .header()
                            .add("typ", "JWT")
                            .add(headers)
@@ -53,7 +79,45 @@ public final class Rs256Jwt {
 
         String[] parts = token.split("\\.");
 
-        return new Token(parts[0], parts[1], parts[2], token);
+        return new Jwt.Token(parts[0], parts[1], parts[2], token);
+    }
+
+    public static Jwt.Token sign(SecretKey secretKey, Map<String, ?> headers, String payload) {
+
+        if (payload.isEmpty()) {
+            payload = "{}";
+        }
+
+        String token = Jwts
+                           .builder()
+                           .signWith(secretKey)
+                           .header()
+                           .add("typ", "JWT")
+                           .add(headers)
+                           .and()
+                           .content(payload, "application/json")
+                           .compact();
+
+        String[] parts = token.split("\\.");
+
+        return new Jwt.Token(parts[0], parts[1], parts[2], token);
+    }
+
+    public static boolean verify(SecretKey secretKey, String token, String payload) {
+
+        try {
+
+            var content = new String(
+                Jwts.parser().verifyWith(secretKey).build().parseSignedContent(token).getPayload(),
+                StandardCharsets.UTF_8);
+
+            return content.equals(payload);
+
+        } catch (Exception e) {
+
+            LOGGER.error("Error : {0}", e);
+            return false;
+        }
     }
 
     public static boolean verify(PublicKey publicKey, Token token) {
@@ -63,13 +127,7 @@ public final class Rs256Jwt {
             assert token != null;
             LOGGER.debug("Verifying token : {}", token.full());
 
-            var content = new String(
-                Jwts
-                    .parser()
-                    .verifyWith(publicKey)
-                    .build()
-                    .parseSignedContent(token.full())
-                    .getPayload(), StandardCharsets.UTF_8);
+            Jwts.parser().verifyWith(publicKey).build().parseSignedContent(token.full());
 
             return true;
 

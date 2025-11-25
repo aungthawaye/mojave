@@ -60,6 +60,8 @@ public class ReserveTransfer {
     @Write
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("ReserveTransfer : input : ({})", ObjectLogger.log(input));
 
         var CONTEXT = input.context;
@@ -81,7 +83,8 @@ public class ReserveTransfer {
                 new AddStepCommand.Input(
                     input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("ReservedTransfer : done");
+            var endAt = System.nanoTime();
+            LOGGER.info("ReservedTransfer : done, took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

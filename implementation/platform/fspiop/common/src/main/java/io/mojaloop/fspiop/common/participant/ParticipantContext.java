@@ -20,7 +20,7 @@
 
 package io.mojaloop.fspiop.common.participant;
 
-import io.mojaloop.component.misc.crypto.Rs256;
+import io.mojaloop.component.misc.crypto.KeyPairs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,14 +97,18 @@ public record ParticipantContext(String fspCode,
                 "Verification Key (Public Key) of FSPs are required when verifying JWS");
         }
 
-        var signingKey = Rs256.privateKeyFromPem(base64PrivateKey);
+        var signingKey = KeyPairs.Rsa.privateKeyOf(base64PrivateKey);
+        LOGGER.info("FspCode: ({}), PrivateKey: ({})", fspCode, base64PrivateKey);
 
         var publicKeys = new HashMap<String, PublicKey>();
 
         for (var entry : base64PublicKeys.entrySet()) {
 
-            publicKeys.put(entry.getKey(), Rs256.publicKeyFromPem(entry.getValue()));
-            LOGGER.info("FspCode: ({}), PublicKey: ({})", entry.getKey(), entry.getValue());
+            var publicKey = KeyPairs.Rsa.publicKeyOf(entry.getValue());
+            publicKeys.put(entry.getKey(), publicKey);
+            LOGGER.info(
+                "FspCode: ({}), PublicKey: ({}), Size: ({})", entry.getKey(), entry.getValue(),
+                KeyPairs.checkKeySize(publicKey));
         }
 
         return new ParticipantContext(

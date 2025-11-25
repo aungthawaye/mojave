@@ -48,8 +48,7 @@ public class CloseTransactionPublisher {
 
         LOGGER.info("Publishing CloseTransactionCommand with input: {}", input);
 
-//        this.kafkaTemplate.send(
-//            TopicNames.CLOSE_TRANSACTION, input.transactionId().getId().toString(), input);
+        this.kafkaTemplate.send(TopicNames.CLOSE_TRANSACTION, input.transactionId().getId().toString(), input);
 
         LOGGER.info("Published CloseTransactionCommand with input: {}", input);
 

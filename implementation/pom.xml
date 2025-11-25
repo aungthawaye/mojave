@@ -26,6 +26,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>software.amazon.cryptools</groupId>
+                <artifactId>AmazonCorrettoCryptoProvider</artifactId>
+                <version>2.5.0</version>
+                <!-- IMPORTANT: you usually also need a classifier -->
+                <classifier>osx-aarch_64</classifier>
+            </dependency>
+            <dependency>
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>4.0.0</version>

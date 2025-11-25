@@ -41,6 +41,8 @@ public class DisputeTransfer {
     @Write
     public void execute(DisputeTransfer.Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         var CONTEXT = input.context;
         var STEP_NAME = "DisputeTransfer";
 
@@ -63,7 +65,8 @@ public class DisputeTransfer {
                 new AddStepCommand.Input(
                     input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("DisputeTransfer : done");
+            var endAt = System.nanoTime();
+            LOGGER.info("DisputeTransfer : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

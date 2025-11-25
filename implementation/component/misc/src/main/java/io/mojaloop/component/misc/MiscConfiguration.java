@@ -20,6 +20,7 @@
 
 package io.mojaloop.component.misc;
 
+import com.amazon.corretto.crypto.provider.AmazonCorrettoCryptoProvider;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,34 +45,50 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.Security;
 import java.time.Instant;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableAsync
 public class MiscConfiguration {
 
+    static {
+        AmazonCorrettoCryptoProvider.install();
+        AmazonCorrettoCryptoProvider.INSTANCE.assertHealthy();
+    }
+
     @Bean(name = "applicationEventMulticaster")
-    public ApplicationEventMulticaster asyncEventMulticaster(TaskExecutor aysncTaskExecutor) {
+    public ApplicationEventMulticaster asyncEventMulticaster() {
 
         SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
-        eventMulticaster.setTaskExecutor(aysncTaskExecutor);
+        //eventMulticaster.setTaskExecutor(asyncTaskExecutor);
 
         return eventMulticaster;
     }
 
     @Bean
-    public TaskExecutor aysncTaskExecutor() {
+    public TaskExecutor asyncTaskExecutor() {
 
-        var executor = new ThreadPoolTaskExecutor();
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
-        executor.setCorePoolSize(0);
-        executor.setMaxPoolSize(Integer.MAX_VALUE);
+        int cores = Runtime.getRuntime().availableProcessors();
+
+        // Tune these based on your workload
+        executor.setCorePoolSize(cores);          // e.g. 8 on an 8-core box
+        executor.setMaxPoolSize(cores * 2);       // allow some burst, but still bounded
+        executor.setQueueCapacity(10_000);        // buffer for spikes
         executor.setKeepAliveSeconds(60);
         executor.setAllowCoreThreadTimeOut(true);
-        executor.setQueueCapacity(0); // No queue like cachedThreadPool
         executor.setThreadNamePrefix("async-event-");
-        executor.initialize();
+
+        // Back-pressure strategy when the queue is full and threads are maxed
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        // Alternatives: AbortPolicy, DiscardPolicy, DiscardOldestPolicy
+
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(60);
+
+        executor.initialize();
 
         return executor;
     }

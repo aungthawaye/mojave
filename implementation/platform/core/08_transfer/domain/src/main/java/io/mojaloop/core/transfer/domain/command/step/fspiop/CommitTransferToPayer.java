@@ -61,6 +61,8 @@ public class CommitTransferToPayer {
 
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("CommitTransferToPayer : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
@@ -89,7 +91,11 @@ public class CommitTransferToPayer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    StepPhase.AFTER));
+
+            LOGGER.info(
+                "CommitTransferToPayer : done , took {} ms", (System.nanoTime() - startAt) / 1_000_000);
 
         } catch (FspiopException e) {
 
@@ -103,7 +109,8 @@ public class CommitTransferToPayer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

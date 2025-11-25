@@ -83,6 +83,8 @@ public class ReceiveTransfer {
     @Write
     public Output execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
         LOGGER.info("ReceiveTransfer : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context;
@@ -143,7 +145,10 @@ public class ReceiveTransfer {
                     transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(output).toString(),
                     StepPhase.AFTER));
 
-            LOGGER.info("ReceivedTransfer : output : ({})", ObjectLogger.log(output));
+            var endAt = System.nanoTime();
+            LOGGER.info(
+                "ReceivedTransfer : output : ({}) , took : {} ms", output,
+                (endAt - startAt) / 1_000_000);
 
             return output;
 
@@ -154,7 +159,8 @@ public class ReceiveTransfer {
             if (transactionId != null) {
                 this.addStepPublisher.publish(
                     new AddStepCommand.Input(
-                        transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                        transactionId, STEP_NAME, CONTEXT, e.getMessage(),
+                        StepPhase.ERROR));
             }
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
