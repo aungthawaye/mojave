@@ -57,16 +57,18 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.admin.controller")
-@Import(value = {OpenApiConfiguration.class,
-                 DatatypeConfiguration.class,
-                 RequestIdMdcConfiguration.class,
-                 WalletDomainConfiguration.class,
-                 RestErrorConfiguration.class,
-                 SpringSecurityConfiguration.class})
-final class WalletAdminConfiguration extends WebMvcExtension implements
-                                                                    WalletDomainConfiguration.RequiredBeans,
-                                                                    SpringSecurityConfiguration.RequiredBeans,
-                                                                    SpringSecurityConfiguration.RequiredSettings {
+@Import(
+    value = {
+        OpenApiConfiguration.class,
+        DatatypeConfiguration.class,
+        RequestIdMdcConfiguration.class,
+        WalletDomainConfiguration.class,
+        RestErrorConfiguration.class,
+        SpringSecurityConfiguration.class})
+final class WalletAdminConfiguration extends WebMvcExtension
+    implements WalletDomainConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredSettings {
 
     private final BalanceUpdater balanceUpdater;
 
@@ -77,15 +79,28 @@ final class WalletAdminConfiguration extends WebMvcExtension implements
     private final PositionCache positionCache;
 
     public WalletAdminConfiguration(ObjectMapper objectMapper,
-                                    MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
-                                    MySqlPositionUpdater.PositionDbSettings positionDbSettings,
                                     WalletRepository walletRepository,
                                     PositionRepository positionRepository) {
 
         super(objectMapper);
 
-        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
-        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
+        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
+            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
+                System.getenv("WLT_MYSQL_BALANCE_DB_URL"),
+                System.getenv("WLT_MYSQL_BALANCE_DB_USER"),
+                System.getenv("WLT_MYSQL_BALANCE_DB_PASSWORD")),
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance",
+                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
+
+        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
+            new MySqlPositionUpdater.PositionDbSettings.Connection(
+                System.getenv("WLT_POSITION_DB_URL"), System.getenv("WLT_POSITION_DB_USER"),
+                System.getenv("WLT_POSITION_DB_PASSWORD")),
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position", Integer.parseInt(System.getenv("WLT_POSITION_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_POSITION_DB_MAX_POOL_SIZE")))));
 
         this.walletCache = new WalletLocalCache(walletRepository);
         this.positionCache = new PositionLocalCache(positionRepository);
@@ -149,10 +164,6 @@ final class WalletAdminConfiguration extends WebMvcExtension implements
 
     public interface RequiredSettings
         extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
-
-        MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
-
-        MySqlPositionUpdater.PositionDbSettings positionDbSettings();
 
         TomcatSettings tomcatSettings();
 

@@ -38,7 +38,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.transaction.consumer"})
 @Import(value = {TransactionDomainConfiguration.class})
-final class TransactionConsumerConfiguration {
+final class TransactionConsumerConfiguration
+    implements TransactionDomainConfiguration.RequiredBeans {
 
     @Bean(name = AddStepListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(AddStepListener.QUALIFIER)
@@ -104,7 +105,7 @@ final class TransactionConsumerConfiguration {
             });
     }
 
-    public interface RequiredBeans extends TransactionDomainConfiguration.RequiredBeans { }
+    public interface RequiredBeans { }
 
     public interface RequiredSettings extends TransactionDomainConfiguration.RequiredSettings {
 

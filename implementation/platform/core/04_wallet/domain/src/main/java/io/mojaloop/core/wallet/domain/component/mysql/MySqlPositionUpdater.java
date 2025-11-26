@@ -49,37 +49,6 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
         assert settings != null;
 
-//        var config = new HikariConfig();
-//
-//        config.setPoolName(settings.pool().name());
-//        config.setJdbcUrl(settings.connection().url());
-//        config.setUsername(settings.connection().username());
-//        config.setPassword(settings.connection().password());
-//        config.setDriverClassName(com.mysql.cj.jdbc.Driver.class.getName());
-//
-//        config.addDataSourceProperty("cachePrepStmts", "true");
-//        config.addDataSourceProperty("prepStmtCacheSize", "250");
-//        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-//        config.addDataSourceProperty("rereadBatchedStatements", true);
-//        config.addDataSourceProperty("cacheResultSetMetadata", true);
-//        config.addDataSourceProperty("cacheServerConfiguration", true);
-//        config.addDataSourceProperty("elideSetAutoCommits", true);
-//        config.addDataSourceProperty("maintainTimeStats", false);
-//        // The below 2 lines are very IMPORTANT
-//        // Make sessions pristine between borrows
-//        config.addDataSourceProperty("useResetSession", true);
-//        // Let the driver manage true session state rather than local emulation
-//        config.addDataSourceProperty("useLocalSessionState", false);
-//        // Turn OFF server-side prepared statements for CALL (avoids metadata bugs)
-//        config.addDataSourceProperty("useServerPrepStmts", false);
-//        config.addDataSourceProperty("cacheResultSetMetadata", false);
-//        config.addDataSourceProperty("callableStmtCacheSize", "0");
-//
-//        config.setMaximumPoolSize(settings.pool().maxPool());
-//        config.setAutoCommit(true);
-//
-//        this.jdbcTemplate = new JdbcTemplate(new HikariDataSource(config));
-
         var config = new HikariConfig();
 
         // Basic

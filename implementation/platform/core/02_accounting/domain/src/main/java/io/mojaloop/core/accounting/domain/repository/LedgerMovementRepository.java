@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.accounting.domain.repository;
 
-import io.mojaloop.core.accounting.domain.model.LedgerMovement;
+import io.mojaloop.core.accounting.domain.model.ledger.LedgerMovement;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerMovementId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

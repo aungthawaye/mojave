@@ -18,11 +18,12 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.model;
+package io.mojaloop.core.accounting.domain.model.ledger;
 
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
+import io.mojaloop.core.accounting.domain.model.DrCr;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.AccountIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.FlowDefinitionIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.LedgerMovementIdJavaType;

@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.accounting.domain.repository;
 
-import io.mojaloop.core.accounting.domain.model.LedgerBalance;
+import io.mojaloop.core.accounting.domain.model.ledger.LedgerBalance;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerBalanceId;
 import org.springframework.data.jpa.domain.Specification;

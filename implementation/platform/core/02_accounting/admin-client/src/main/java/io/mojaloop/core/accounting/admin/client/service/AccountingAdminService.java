@@ -57,7 +57,7 @@ import io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinit
 import io.mojaloop.core.accounting.contract.command.definition.DeactivateFlowDefinitionCommand;
 import io.mojaloop.core.accounting.contract.command.definition.RemovePostingDefinitionCommand;
 import io.mojaloop.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
-import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
@@ -200,8 +200,8 @@ public interface AccountingAdminService {
 
     interface LedgerCommand {
 
-        @POST("/ledgers/post-transaction")
-        Call<PostTransactionCommand.Output> postTransaction(@Body PostTransactionCommand.Input input);
+        @POST("/ledgers/post-ledger-flow")
+        Call<PostLedgerFlowCommand.Output> postLedgerFlow(@Body PostLedgerFlowCommand.Input input);
 
     }
 

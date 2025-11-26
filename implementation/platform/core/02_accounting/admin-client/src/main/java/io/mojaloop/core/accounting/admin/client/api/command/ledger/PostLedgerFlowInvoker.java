@@ -25,21 +25,21 @@ import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
-import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
 import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 
-public class PostTransactionInvoker implements PostTransactionCommand {
+public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
 
     private final AccountingAdminService.LedgerCommand ledgerCommand;
 
     private final ObjectMapper objectMapper;
 
-    public PostTransactionInvoker(final AccountingAdminService.LedgerCommand ledgerCommand,
-                                  final ObjectMapper objectMapper) {
+    public PostLedgerFlowInvoker(final AccountingAdminService.LedgerCommand ledgerCommand,
+                                 final ObjectMapper objectMapper) {
 
         assert ledgerCommand != null;
         assert objectMapper != null;
@@ -59,7 +59,7 @@ public class PostTransactionInvoker implements PostTransactionCommand {
 
             return RetrofitService
                        .invoke(
-                           this.ledgerCommand.postTransaction(input),
+                           this.ledgerCommand.postLedgerFlow(input),
                            (status, errorResponseBody) -> RestErrorResponse.decode(
                                errorResponseBody, this.objectMapper))
                        .body();

@@ -21,7 +21,7 @@
 package io.mojaloop.core.accounting.domain.command.ledger;
 
 import io.mojaloop.component.misc.handy.Snowflake;
-import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.accounting.contract.exception.account.AccountNotActiveException;
@@ -47,10 +47,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class PostTransactionCommandHandler implements PostTransactionCommand {
+public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        PostTransactionCommandHandler.class);
+        PostLedgerFlowCommandHandler.class);
 
     private final AccountCache accountCache;
 
@@ -58,9 +58,9 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
 
     private final Ledger ledger;
 
-    public PostTransactionCommandHandler(AccountCache accountCache,
-                                         FlowDefinitionCache flowDefinitionCache,
-                                         Ledger ledger) {
+    public PostLedgerFlowCommandHandler(AccountCache accountCache,
+                                        FlowDefinitionCache flowDefinitionCache,
+                                        Ledger ledger) {
 
         assert accountCache != null;
         assert flowDefinitionCache != null;
@@ -78,7 +78,7 @@ public class PostTransactionCommandHandler implements PostTransactionCommand {
                                        DuplicatePostingInLedgerException,
                                        RestoreFailedInAccountException {
 
-        LOGGER.info("Executing PostTransactionCommand with input: {}", input);
+        LOGGER.info("Executing PostLedgerFlowCommand with input: {}", input);
 
         var transactionId = input.transactionId();
         var flowDefinition = this.flowDefinitionCache.get(

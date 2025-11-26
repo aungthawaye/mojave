@@ -43,11 +43,11 @@ public enum TransactionType {
 
     FUND_TRANSFER(
         new Participants(Set.of(
-            FundTransferCommitDimension.Participants.PAYER_FSP.name(),
-            FundTransferCommitDimension.Participants.PAYEE_FSP.name())), new Amounts(Set.of(
-        FundTransferCommitDimension.Amounts.TRANSFER_AMOUNT.name(),
-        FundTransferCommitDimension.Amounts.PAYEE_FSP_FEE.name(),
-        FundTransferCommitDimension.Amounts.PAYEE_FSP_COMMISSION.name())));
+            FundTransferDimension.Participants.PAYER_FSP.name(),
+            FundTransferDimension.Participants.PAYEE_FSP.name())), new Amounts(Set.of(
+        FundTransferDimension.Amounts.TRANSFER_AMOUNT.name(),
+        FundTransferDimension.Amounts.PAYEE_FSP_FEE.name(),
+        FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name())));
 
     @Getter
     private final Participants participants;

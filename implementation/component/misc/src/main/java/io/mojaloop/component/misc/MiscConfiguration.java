@@ -74,9 +74,9 @@ public class MiscConfiguration {
         int cores = Runtime.getRuntime().availableProcessors();
 
         // Tune these based on your workload
-        executor.setCorePoolSize(cores);          // e.g. 8 on an 8-core box
-        executor.setMaxPoolSize(cores * 2);       // allow some burst, but still bounded
-        executor.setQueueCapacity(10_000);        // buffer for spikes
+        executor.setCorePoolSize(cores);
+        executor.setMaxPoolSize(cores * 2);
+        executor.setQueueCapacity(10_000);
         executor.setKeepAliveSeconds(60);
         executor.setAllowCoreThreadTimeOut(true);
         executor.setThreadNamePrefix("async-event-");
@@ -132,7 +132,6 @@ public class MiscConfiguration {
         objectMapper.registerModule(module);
 
         // Force millis, not seconds.nanos
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
         objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
         objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
 

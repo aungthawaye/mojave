@@ -40,7 +40,7 @@
 package io.mojaloop.core.accounting.intercom.client.service;
 
 import io.mojaloop.component.misc.query.PagedResult;
-import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
@@ -120,8 +120,8 @@ public interface AccountingIntercomService {
 
     interface LedgerCommand {
 
-        @POST("/ledgers/post-transaction")
-        Call<PostTransactionCommand.Output> postTransaction(@Body PostTransactionCommand.Input input);
+        @POST("/ledgers/post-ledger-flow")
+        Call<PostLedgerFlowCommand.Output> postLedgerFlow(@Body PostLedgerFlowCommand.Input input);
 
     }
 

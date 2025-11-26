@@ -18,13 +18,15 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.domain.model;
+package io.mojaloop.core.accounting.domain.model.ledger;
 
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.accounting.contract.data.LedgerBalanceData;
+import io.mojaloop.core.accounting.domain.model.Account;
+import io.mojaloop.core.accounting.domain.model.DrCr;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.AccountIdJavaType;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.enums.accounting.Side;
@@ -115,8 +117,8 @@ public class LedgerBalance extends JpaEntity<AccountId>
         assert overdraftLimit != null;
 
         this.id = account.getId();
-        this.currency = account.currency;
-        this.scale = FspiopCurrencies.get(account.currency).scale();
+        this.currency = account.getCurrency();
+        this.scale = FspiopCurrencies.get(account.getCurrency()).scale();
         this.nature = nature;
         this.postedDebits = BigDecimal.ZERO.setScale(this.scale, RoundingMode.UNNECESSARY);
         this.postedCredits = BigDecimal.ZERO.setScale(this.scale, RoundingMode.UNNECESSARY);

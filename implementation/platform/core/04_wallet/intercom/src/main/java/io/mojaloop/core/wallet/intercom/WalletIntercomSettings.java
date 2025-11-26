@@ -24,8 +24,6 @@ import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.springframework.context.annotation.Bean;
 
 final class WalletIntercomSettings implements WalletIntercomConfiguration.RequiredSettings {
@@ -35,30 +33,6 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
         return new OpenApiConfiguration.ApiSettings("Mojave - Wallet - Intercom", "1.0.0");
-    }
-
-    @Bean
-    public MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings() {
-
-        return new MySqlBalanceUpdater.BalanceDbSettings(
-            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-                System.getenv("WLT_BALANCE_DB_URL"), System.getenv("WLT_BALANCE_DB_USER"),
-                System.getenv("WLT_BALANCE_DB_PASSWORD")),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
-                "wallet-balance", Integer.parseInt(System.getenv("WLT_BALANCE_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_BALANCE_DB_MAX_POOL_SIZE"))));
-    }
-
-    @Bean
-    public MySqlPositionUpdater.PositionDbSettings positionDbSettings() {
-
-        return new MySqlPositionUpdater.PositionDbSettings(
-            new MySqlPositionUpdater.PositionDbSettings.Connection(
-                System.getenv("WLT_POSITION_DB_URL"), System.getenv("WLT_POSITION_DB_USER"),
-                System.getenv("WLT_POSITION_DB_PASSWORD")),
-            new MySqlPositionUpdater.PositionDbSettings.Pool(
-                "wallet-position", Integer.parseInt(System.getenv("WLT_POSITION_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_POSITION_DB_MAX_POOL_SIZE"))));
     }
 
     @Bean

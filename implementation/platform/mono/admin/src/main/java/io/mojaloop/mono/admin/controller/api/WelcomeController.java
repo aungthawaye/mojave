@@ -8,12 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class WelcomeController {
 
     @GetMapping("/**")
-    public ResponseEntity<io.mojaloop.core.participant.admin.controller.api.WelcomeController.Response> welcome() {
+    public ResponseEntity<Response> welcome() {
 
-        return ResponseEntity.ok(
-            new io.mojaloop.core.participant.admin.controller.api.WelcomeController.Response(
-                "1.0",
-                "Welcome to the Mojave Admin API."));
+        return ResponseEntity.ok(new Response("1.0", "Welcome to the Mojave Admin API."));
     }
 
     public record Response(String version, String message) { }

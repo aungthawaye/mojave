@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
 import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
@@ -32,14 +32,14 @@ import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReach
 import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import io.mojaloop.core.accounting.intercom.client.service.AccountingIntercomService;
 
-public class PostTransactionInvoker implements PostTransactionCommand {
+public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
 
     private final AccountingIntercomService.LedgerCommand ledgerCommand;
 
     private final ObjectMapper objectMapper;
 
-    public PostTransactionInvoker(final AccountingIntercomService.LedgerCommand ledgerCommand,
-                                  final ObjectMapper objectMapper) {
+    public PostLedgerFlowInvoker(final AccountingIntercomService.LedgerCommand ledgerCommand,
+                                 final ObjectMapper objectMapper) {
 
         assert ledgerCommand != null;
         assert objectMapper != null;
@@ -59,7 +59,7 @@ public class PostTransactionInvoker implements PostTransactionCommand {
 
             return RetrofitService
                        .invoke(
-                           this.ledgerCommand.postTransaction(input),
+                           this.ledgerCommand.postLedgerFlow(input),
                            (status, errorResponseBody) -> RestErrorResponse.decode(
                                errorResponseBody, this.objectMapper))
                        .body();

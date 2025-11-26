@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.common.datatype.enums.trasaction;
 
-public final class FundTransferReserveDimension {
+public final class FundTransferDimension {
 
     public enum Participants {
         PAYER_FSP,

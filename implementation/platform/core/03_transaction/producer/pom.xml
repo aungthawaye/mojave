@@ -27,10 +27,5 @@
             <groupId>io.mojaloop.platform.core.transaction</groupId>
             <artifactId>mod-transaction-contract</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.mojaloop.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-intercom-client</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>

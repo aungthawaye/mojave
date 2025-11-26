@@ -62,7 +62,8 @@ final class TransactionConsumerSettings
             System.getenv("TXN_READ_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "accounting-admin-read", Integer.parseInt(System.getenv("TXN_READ_DB_MIN_POOL_SIZE")),
+            "transaction-consumer-read",
+            Integer.parseInt(System.getenv("TXN_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("TXN_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -77,7 +78,8 @@ final class TransactionConsumerSettings
             System.getenv("TXN_WRITE_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "accounting-admin-write", Integer.parseInt(System.getenv("TXN_WRITE_DB_MIN_POOL_SIZE")),
+            "transaction-consumer-write",
+            Integer.parseInt(System.getenv("TXN_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("TXN_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -87,7 +89,7 @@ final class TransactionConsumerSettings
     @Override
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
-        return new RoutingEntityManagerConfigurer.Settings("accounting-admin", false, false);
+        return new RoutingEntityManagerConfigurer.Settings("transaction-consumer", false, false);
     }
 
     @Bean

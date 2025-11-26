@@ -24,7 +24,6 @@ import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
-import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 
 final class AccountingIntercomSettings implements AccountingIntercomConfiguration.RequiredSettings {
@@ -45,17 +44,6 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
         return new OpenApiConfiguration.ApiSettings("Mojave - Accounting - Intercom", "1.0.0");
-    }
-
-    @Bean
-    public MySqlLedger.LedgerDbSettings ledgerDbSettings() {
-
-        return new MySqlLedger.LedgerDbSettings(
-            new MySqlLedger.LedgerDbSettings.Connection(
-                System.getenv("ACC_LEDGER_DB_URL"), System.getenv("ACC_LEDGER_DB_USER"),
-                System.getenv("ACC_LEDGER_DB_PASSWORD")), new MySqlLedger.LedgerDbSettings.Pool(
-            "accounting-ledger", Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE"))));
     }
 
     @Bean

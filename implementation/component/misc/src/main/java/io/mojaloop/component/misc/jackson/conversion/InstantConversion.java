@@ -79,7 +79,7 @@ public class InstantConversion {
                     return null;
                 }
 
-                // Try numeric string first (epoch millis)
+                // Try numeric string first (epoch second)
                 if (s.chars().allMatch(ch -> ch == '-' || Character.isDigit(ch))) {
 
                     try {
@@ -102,7 +102,7 @@ public class InstantConversion {
                 return null;
             }
 
-            throw new JsonMappingException(p, "Expected epoch millis (long) or ISO-8601 instant");
+            throw new JsonMappingException(p, "Expected epoch seconds (long) or ISO-8601 instant");
         }
 
     }

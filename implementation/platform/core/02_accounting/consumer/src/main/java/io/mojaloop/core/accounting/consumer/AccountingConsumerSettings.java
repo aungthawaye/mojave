@@ -18,21 +18,37 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.wallet.admin;
+package io.mojaloop.core.accounting.consumer;
 
 import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.core.accounting.consumer.listener.PostLedgerFlowListener;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.listener.ContainerProperties;
 
-final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSettings {
+import java.util.UUID;
+
+final class AccountingConsumerSettings implements AccountingConsumerConfiguration.RequiredSettings {
 
     @Bean
     @Override
-    public OpenApiConfiguration.ApiSettings apiSettings() {
+    public FlywayMigration.Settings accountingFlywaySettings() {
 
-        return new OpenApiConfiguration.ApiSettings("Mojave - Wallet - Admin", "1.0.0");
+        return new FlywayMigration.Settings(
+            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
+            System.getenv("ACC_WRITE_DB_PASSWORD"), "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"});
+    }
+
+    @Bean
+    @Override
+    public PostLedgerFlowListener.Settings postLedgerFlowListenerSettings() {
+
+        return new PostLedgerFlowListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -40,12 +56,13 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv("WLT_READ_DB_URL"), System.getenv("WLT_READ_DB_USER"),
-            System.getenv("WLT_READ_DB_PASSWORD"), false);
+            System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
+            System.getenv("ACC_READ_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "wallet-admin-read", Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("WLT_READ_DB_MAX_POOL_SIZE")));
+            "accounting-consumer-read",
+            Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("ACC_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -55,12 +72,13 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv("WLT_WRITE_DB_URL"), System.getenv("WLT_WRITE_DB_USER"),
-            System.getenv("WLT_WRITE_DB_PASSWORD"), false);
+            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
+            System.getenv("ACC_WRITE_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "wallet-admin-write", Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("WLT_WRITE_DB_MAX_POOL_SIZE")));
+            "accounting-consumer-write",
+            Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("ACC_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -69,25 +87,7 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     @Override
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
-        return new RoutingEntityManagerConfigurer.Settings("wallet-admin", false, false);
-    }
-
-    @Bean
-    @Override
-    public WalletAdminConfiguration.TomcatSettings tomcatSettings() {
-
-        return new WalletAdminConfiguration.TomcatSettings(
-            Integer.parseInt(System.getenv("WALLET_ADMIN_PORT")));
-    }
-
-    @Bean
-    @Override
-    public FlywayMigration.Settings walletFlywaySettings() {
-
-        return new FlywayMigration.Settings(
-            System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
-            System.getenv("WLT_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
-            new String[]{"classpath:migration/wallet"});
+        return new RoutingEntityManagerConfigurer.Settings("accounting-consumer", false, false);
     }
 
 }

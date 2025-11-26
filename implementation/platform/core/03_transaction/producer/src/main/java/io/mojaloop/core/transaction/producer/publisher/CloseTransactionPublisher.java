@@ -33,8 +33,6 @@ public class CloseTransactionPublisher {
 
     public static final String QUALIFIER = "commitTransaction";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CloseTransactionPublisher.class);
-
     private final KafkaTemplate<String, CloseTransactionCommand.Input> kafkaTemplate;
 
     public CloseTransactionPublisher(@Qualifier(QUALIFIER) KafkaTemplate<String, CloseTransactionCommand.Input> kafkaTemplate) {
@@ -46,12 +44,8 @@ public class CloseTransactionPublisher {
 
     public void publish(CloseTransactionCommand.Input input) {
 
-        LOGGER.info("Publishing CloseTransactionCommand with input: {}", input);
-
-        this.kafkaTemplate.send(TopicNames.CLOSE_TRANSACTION, input.transactionId().getId().toString(), input);
-
-        LOGGER.info("Published CloseTransactionCommand with input: {}", input);
-
+        this.kafkaTemplate.send(
+            TopicNames.CLOSE_TRANSACTION, input.transactionId().getId().toString(), input);
     }
 
 }

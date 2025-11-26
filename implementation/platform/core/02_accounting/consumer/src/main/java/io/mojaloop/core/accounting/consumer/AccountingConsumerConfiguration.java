@@ -18,17 +18,12 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.intercom;
+package io.mojaloop.core.accounting.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.openapi.OpenApiConfiguration;
-import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
-import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
-import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
-import io.mojaloop.component.web.spring.security.Authenticator;
-import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
-import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
+import io.mojaloop.component.kafka.KafkaConsumerConfigurer;
+import io.mojaloop.core.accounting.consumer.listener.PostLedgerFlowListener;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
@@ -43,35 +38,18 @@ import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBased
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
-import io.mojaloop.core.accounting.intercom.controller.component.EmptyErrorWriter;
-import io.mojaloop.core.accounting.intercom.controller.component.EmptyGatekeeper;
-import io.mojaloop.core.common.datatype.DatatypeConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-@EnableAutoConfiguration
-
-@EnableWebMvc
-@EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom.controller")
-@Import(
-    value = {
-        OpenApiConfiguration.class,
-        DatatypeConfiguration.class,
-        RequestIdMdcConfiguration.class,
-        AccountingDomainConfiguration.class,
-        RestErrorConfiguration.class,
-        SpringSecurityConfiguration.class})
-final class AccountingIntercomConfiguration extends WebMvcExtension implements
-                                                                    AccountingDomainConfiguration.RequiredBeans,
-                                                                    SpringSecurityConfiguration.RequiredBeans,
-                                                                    SpringSecurityConfiguration.RequiredSettings {
+@EnableKafka
+@ComponentScan(basePackages = {"io.mojaloop.core.accounting.consumer"})
+@Import(value = {AccountingDomainConfiguration.class})
+final class AccountingConsumerConfiguration implements AccountingDomainConfiguration.RequiredBeans {
 
     private final Ledger ledger;
 
@@ -83,16 +61,15 @@ final class AccountingIntercomConfiguration extends WebMvcExtension implements
 
     private final FlowDefinitionCache flowDefinitionCache;
 
-    public AccountingIntercomConfiguration(AccountRepository accountRepository,
+    public AccountingConsumerConfiguration(AccountRepository accountRepository,
                                            ChartEntryRepository chartEntryRepository,
                                            FlowDefinitionRepository flowDefinitionRepository,
                                            ObjectMapper objectMapper) {
 
-        super(objectMapper);
-
         assert accountRepository != null;
         assert chartEntryRepository != null;
         assert flowDefinitionRepository != null;
+        assert objectMapper != null;
 
         this.ledger = new MySqlLedger(
             new MySqlLedger.LedgerDbSettings(
@@ -137,18 +114,36 @@ final class AccountingIntercomConfiguration extends WebMvcExtension implements
         return this.accountResolver;
     }
 
-    @Bean
-    @Override
-    public AuthenticationErrorWriter authenticationErrorWriter() {
+    @Bean(name = PostLedgerFlowListener.LISTENER_CONTAINER_FACTORY)
+    @Qualifier(PostLedgerFlowListener.QUALIFIER)
+    public ConcurrentKafkaListenerContainerFactory<String, PostLedgerFlowCommand.Input> addStepListenerContainerFactory(
+        PostLedgerFlowListener.Settings settings,
+        ObjectMapper objectMapper) {
 
-        return new EmptyErrorWriter();
-    }
+        return KafkaConsumerConfigurer.configure(
+            settings, new KafkaConsumerConfigurer.Deserializer<>() {
 
-    @Bean
-    @Override
-    public Authenticator authenticator() {
+                @Override
+                public JsonDeserializer<String> forKey() {
 
-        return new EmptyGatekeeper();
+                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+
+                @Override
+                public JsonDeserializer<PostLedgerFlowCommand.Input> forValue() {
+
+                    var deserializer = new JsonDeserializer<>(
+                        PostLedgerFlowCommand.Input.class, objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+            });
     }
 
     @Bean
@@ -169,30 +164,15 @@ final class AccountingIntercomConfiguration extends WebMvcExtension implements
     @Override
     public Ledger ledger() {
 
-        return this.ledger;
+        return null;
     }
 
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+    public interface RequiredBeans { }
 
-        return new SpringSecurityConfigurer.Settings(null);
-    }
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings {
 
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return factory -> factory.setPort(settings.portNo());
-    }
-
-    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings,
-                                              OpenApiConfiguration.RequiredSettings {
-
-        TomcatSettings tomcatSettings();
+        PostLedgerFlowListener.Settings postLedgerFlowListenerSettings();
 
     }
-
-    public record TomcatSettings(int portNo) { }
 
 }

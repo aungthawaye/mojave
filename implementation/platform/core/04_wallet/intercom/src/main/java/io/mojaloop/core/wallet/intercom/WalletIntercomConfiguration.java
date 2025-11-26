@@ -57,12 +57,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom.controller")
-@Import(value = {OpenApiConfiguration.class,
-                 DatatypeConfiguration.class,
-                 RequestIdMdcConfiguration.class,
-                 WalletDomainConfiguration.class,
-                 RestErrorConfiguration.class,
-                 SpringSecurityConfiguration.class})
+@Import(
+    value = {
+        OpenApiConfiguration.class,
+        DatatypeConfiguration.class,
+        RequestIdMdcConfiguration.class,
+        WalletDomainConfiguration.class,
+        RestErrorConfiguration.class,
+        SpringSecurityConfiguration.class})
 final class WalletIntercomConfiguration extends WebMvcExtension
     implements WalletDomainConfiguration.RequiredBeans,
                SpringSecurityConfiguration.RequiredBeans,
@@ -77,18 +79,31 @@ final class WalletIntercomConfiguration extends WebMvcExtension
     private final PositionCache positionCache;
 
     public WalletIntercomConfiguration(ObjectMapper objectMapper,
-                                       MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
-                                       MySqlPositionUpdater.PositionDbSettings positionDbSettings,
                                        WalletRepository walletRepository,
                                        PositionRepository positionRepository) {
 
         super(objectMapper);
-        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
-        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
+
+        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
+            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
+                System.getenv("WLT_BALANCE_DB_URL"), System.getenv("WLT_BALANCE_DB_USER"),
+                System.getenv("WLT_BALANCE_DB_PASSWORD")),
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance", Integer.parseInt(System.getenv("WLT_BALANCE_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_BALANCE_DB_MAX_POOL_SIZE")))));
+
+        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
+            new MySqlPositionUpdater.PositionDbSettings.Connection(
+                System.getenv("WLT_POSITION_DB_URL"), System.getenv("WLT_POSITION_DB_USER"),
+                System.getenv("WLT_POSITION_DB_PASSWORD")),
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position", Integer.parseInt(System.getenv("WLT_POSITION_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_POSITION_DB_MAX_POOL_SIZE")))));
 
         this.walletCache = new WalletTimerCache(
             walletRepository, Integer.parseInt(
             System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+
         this.positionCache = new PositionTimerCache(
             positionRepository, Integer.parseInt(
             System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));

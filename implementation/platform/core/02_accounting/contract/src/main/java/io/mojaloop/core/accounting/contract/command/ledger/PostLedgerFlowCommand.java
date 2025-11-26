@@ -43,7 +43,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-public interface PostTransactionCommand {
+public interface PostLedgerFlowCommand {
 
     Output execute(Input input) throws
                                 InsufficientBalanceInAccountException,

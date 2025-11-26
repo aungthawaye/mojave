@@ -18,9 +18,9 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.accounting.intercom.controller.api.command.ledger;
+package io.mojaloop.core.accounting.admin.controller.api.command.ledger;
 
-import io.mojaloop.core.accounting.contract.command.ledger.PostTransactionCommand;
+import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
@@ -31,26 +31,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PostTransactionController {
+public class PostLedgerFlowController {
 
-    private final PostTransactionCommand postTransactionCommand;
+    private final PostLedgerFlowCommand postLedgerFlowCommand;
 
-    public PostTransactionController(PostTransactionCommand postTransactionCommand) {
+    public PostLedgerFlowController(PostLedgerFlowCommand postLedgerFlowCommand) {
 
-        assert postTransactionCommand != null;
+        assert postLedgerFlowCommand != null;
 
-        this.postTransactionCommand = postTransactionCommand;
+        this.postLedgerFlowCommand = postLedgerFlowCommand;
     }
 
-    @PostMapping("/ledgers/post-transaction")
-    public PostTransactionCommand.Output execute(@Valid @RequestBody PostTransactionCommand.Input input)
+    @PostMapping("/ledgers/post-ledger-flow")
+    public PostLedgerFlowCommand.Output execute(@Valid @RequestBody PostLedgerFlowCommand.Input input)
         throws
         InsufficientBalanceInAccountException,
         DuplicatePostingInLedgerException,
         RestoreFailedInAccountException,
         OverdraftLimitReachedInAccountException {
 
-        return this.postTransactionCommand.execute(input);
+        return this.postLedgerFlowCommand.execute(input);
     }
 
 }
