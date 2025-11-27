@@ -136,7 +136,7 @@ public class ReservePayerPosition {
                 new AddStepCommand.Input(
                     e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
-            throw new FspiopException(FspiopErrors.PAYER_LIMIT_ERROR, e.getMessage());
+            throw e;
 
         } catch (Exception e) {
 

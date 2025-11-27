@@ -23,7 +23,7 @@ package io.mojaloop.core.transfer.domain.command.step.stateful;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.Direction;
-import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortReason;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
@@ -77,7 +77,7 @@ public class AbortTransfer {
                 input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
-            transfer.aborted(input.abortStage, input.rollbackId, input.abortReason);
+            transfer.aborted(input.abortReason, input.rollbackId);
 
             var extensionList = input.extensionList();
 
@@ -114,8 +114,7 @@ public class AbortTransfer {
     public record Input(String context,
                         TransactionId transactionId,
                         TransferId transferId,
-                        AbortStage abortStage,
-                        String abortReason,
+                        AbortReason abortReason,
                         PositionUpdateId rollbackId,
                         Direction direction,
                         ExtensionList extensionList) { }

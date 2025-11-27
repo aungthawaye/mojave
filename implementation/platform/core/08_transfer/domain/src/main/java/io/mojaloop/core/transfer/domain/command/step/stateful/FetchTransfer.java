@@ -30,7 +30,7 @@ import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.Currency;
-import io.mojaloop.fspiop.spec.core.TransferState;
+import io.mojaloop.core.common.datatype.enums.transfer.TransferStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -87,7 +87,7 @@ public class FetchTransfer {
             LOGGER.info("Transfer found for udfTransferId : ({})", input.udfTransferId.getId());
 
             var output = new Output(
-                transfer.getId(), transfer.getState(), transfer.getReservationId(),
+                transfer.getId(), transfer.getStatus(), transfer.getReservationId(),
                 transfer.getCurrency(), transfer.getTransferAmount(), transfer.getTransactionId(),
                 transfer.getTransactionAt());
 
@@ -109,7 +109,7 @@ public class FetchTransfer {
     public record Input(UdfTransferId udfTransferId) { }
 
     public record Output(TransferId transferId,
-                         TransferState state,
+                         TransferStatus state,
                          PositionUpdateId reservationId,
                          Currency currency,
                          BigDecimal transferAmount,

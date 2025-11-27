@@ -2,8 +2,7 @@ package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
-import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
-import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeReason;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
@@ -56,8 +55,7 @@ public class DisputeTransfer {
                 input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
-            transfer.disputed(
-                input.abortStage, input.abortReason, input.disputeType, input.disputeReason);
+            transfer.disputed(input.disputeReason);
 
             this.transferRepository.save(transfer);
 
@@ -84,9 +82,6 @@ public class DisputeTransfer {
     public record Input(String context,
                         TransactionId transactionId,
                         TransferId transferId,
-                        AbortStage abortStage,
-                        String abortReason,
-                        DisputeType disputeType,
-                        String disputeReason) { }
+                        DisputeReason disputeReason) { }
 
 }

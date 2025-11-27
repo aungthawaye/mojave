@@ -56,10 +56,10 @@ public class UnwrapResponse {
 
         if (state != TransferState.RESERVED && state != TransferState.ABORTED) {
 
-            LOGGER.info("Payee responded with invalid Transfer state : ({})", state);
+            LOGGER.info("Payee responded with invalid Transfer status : ({})", state);
             throw new FspiopException(
                 FspiopErrors.GENERIC_VALIDATION_ERROR,
-                "Payee responded with invalid Transfer state.");
+                "Payee responded with invalid Transfer status.");
         }
 
         var completedAt = Instant.now();

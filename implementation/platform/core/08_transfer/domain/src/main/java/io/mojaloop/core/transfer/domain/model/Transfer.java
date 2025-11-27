@@ -31,8 +31,9 @@ import io.mojaloop.core.common.datatype.converter.identifier.transfer.UdfTransfe
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.fspiop.FspCodeConverter;
 import io.mojaloop.core.common.datatype.enums.Direction;
-import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
-import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortReason;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeReason;
+import io.mojaloop.core.common.datatype.enums.transfer.TransferStatus;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -40,7 +41,6 @@ import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.transfer.contract.data.TransferData;
 import io.mojaloop.fspiop.spec.core.Currency;
-import io.mojaloop.fspiop.spec.core.TransferState;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Basic;
@@ -108,7 +108,7 @@ import static java.sql.Types.BIGINT;
         @Index(name = "tfr_transfer_reserved_at_IDX", columnList = "reserved_at"),
         @Index(name = "tfr_transfer_committed_at_IDX", columnList = "committed_at"),
         @Index(name = "tfr_transfer_aborted_at_IDX", columnList = "aborted_at"),
-        @Index(name = "tfr_transfer_state_IDX", columnList = "state")})
+        @Index(name = "tfr_transfer_state_IDX", columnList = "status")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Transfer extends JpaEntity<TransferId> implements DataConversion<TransferData> {
 
@@ -155,8 +155,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
             @AttributeOverride(
                 name = "partyId", column = @Column(name = "payer_party_id", length = 48)),
             @AttributeOverride(
-                name = "subId",
-                column = @Column(name = "payer_sub_id", length = 48))})
+                name = "subId", column = @Column(name = "payer_sub_id", length = 48))})
     protected Party payer;
 
     @Column(
@@ -176,8 +175,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
             @AttributeOverride(
                 name = "partyId", column = @Column(name = "payee_party_id", length = 48)),
             @AttributeOverride(
-                name = "subId",
-                column = @Column(name = "payee_sub_id", length = 48))})
+                name = "subId", column = @Column(name = "payee_sub_id", length = 48))})
 
     protected Party payee;
 
@@ -221,9 +219,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
     @Column(name = "rollback_id", unique = true)
     protected PositionUpdateId rollbackId;
 
-    @Column(name = "state", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected TransferState state;
+    protected TransferStatus status;
 
     @Column(name = "received_at", nullable = false)
     @Convert(converter = JpaInstantConverter.class)
@@ -241,23 +239,24 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
     @Convert(converter = JpaInstantConverter.class)
     protected Instant abortedAt;
 
-    @Column(name = "abort_stage", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "abort_reason", length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected AbortStage abortStage;
-
-    @Column(name = "abort_reason")
-    protected String abortReason;
+    protected AbortReason abortReason;
 
     @Column(name = "dispute_at")
     @Convert(converter = JpaInstantConverter.class)
     protected Instant disputeAt;
 
-    @Column(name = "dispute_type", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "dispute_reason", length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected DisputeType disputeType;
+    protected DisputeReason disputeReason;
 
-    @Column(name = "dispute_reason")
-    protected String disputeReason;
+    @Column(name = "dispute_resolved")
+    protected Boolean disputeResolved;
+
+    @Column(name = "dispute_resolved_at")
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant disputeResolvedAt;
 
     @Column(name = "reservation_timeout_at")
     @Convert(converter = JpaInstantConverter.class)
@@ -317,20 +316,20 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         this.currency = currency;
         this.transferAmount = transferAmount;
         this.requestExpiration = requestExpiration;
-        this.state = TransferState.RECEIVED;
+        this.status = TransferStatus.RECEIVED;
         this.receivedAt = Instant.now();
         this.reservationTimeoutAt = reservationTimeoutAt;
 
         this.ilpPacket = new TransferIlpPacket(this, ilpPacket, ilpCondition);
     }
 
-    public void aborted(AbortStage abortStage, PositionUpdateId rollbackId, String abortReason) {
+    public void aborted(AbortReason abortReason, PositionUpdateId rollbackId) {
 
         this.rollbackId = rollbackId;
-        this.state = TransferState.ABORTED;
-        this.abortStage = abortStage;
-        this.abortedAt = Instant.now();
         this.abortReason = abortReason;
+
+        this.status = TransferStatus.ABORTED;
+        this.abortedAt = Instant.now();
     }
 
     public void addExtension(Direction direction, String key, String value) {
@@ -347,7 +346,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         assert payerCommitId != null;
         assert payeeCommitId != null;
 
-        this.state = TransferState.COMMITTED;
+        this.status = TransferStatus.COMMITTED;
 
         this.committedAt = Instant.now();
         this.payeeCompletedAt = completedAt;
@@ -380,26 +379,19 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
             this.id, this.transactionId, this.transactionAt, this.udfTransferId, this.payerFsp,
             payerData, this.payeeFsp, payeeData, this.currency, this.transferAmount,
             this.requestExpiration, this.reservationId, this.payerCommitId, this.payeeCommitId,
-            this.rollbackId, this.state, this.receivedAt, this.reservedAt, this.committedAt,
-            this.abortedAt, this.abortStage, this.abortReason, this.disputeAt, this.disputeType,
-            this.disputeReason, this.reservationTimeoutAt, this.payeeCompletedAt, extData,
-            this.ilpFulfilment, ilpData);
+            this.rollbackId, this.status, this.receivedAt, this.reservedAt, this.committedAt,
+            this.abortedAt, this.abortReason, this.disputeAt, this.disputeReason,
+            this.reservationTimeoutAt, this.payeeCompletedAt, extData, this.ilpFulfilment, ilpData);
     }
 
-    public void disputed(AbortStage abortStage,
-                         String abortReason,
-                         DisputeType disputeType,
-                         String disputeReason) {
+    public void disputed(DisputeReason disputeReason) {
 
-        this.abortStage = abortStage;
-        this.abortReason = abortReason;
-        this.abortedAt = Instant.now();
+        assert disputeReason != null;
 
-        this.disputeType = disputeType;
         this.disputeReason = disputeReason;
         this.disputeAt = Instant.now();
 
-        this.state = TransferState.ABORTED;
+        this.status = TransferStatus.DISPUTED;
     }
 
     public List<TransferExtension> getExtensions() {
@@ -417,9 +409,15 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
 
         assert reservationId != null;
 
-        this.state = TransferState.RESERVED;
+        this.status = TransferStatus.RESERVED;
         this.reservedAt = Instant.now();
         this.reservationId = reservationId;
+    }
+
+    public void resolvedDispute() {
+
+        this.disputeResolved = true;
+        this.disputeResolvedAt = Instant.now();
     }
 
 }

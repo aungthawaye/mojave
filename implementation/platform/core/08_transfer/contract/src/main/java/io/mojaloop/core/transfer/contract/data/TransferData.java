@@ -1,8 +1,9 @@
 package io.mojaloop.core.transfer.contract.data;
 
 import io.mojaloop.core.common.datatype.enums.Direction;
-import io.mojaloop.core.common.datatype.enums.transfer.AbortStage;
-import io.mojaloop.core.common.datatype.enums.transfer.DisputeType;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortReason;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeReason;
+import io.mojaloop.core.common.datatype.enums.transfer.TransferStatus;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -10,7 +11,6 @@ import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.fspiop.spec.core.Currency;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
-import io.mojaloop.fspiop.spec.core.TransferState;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -32,16 +32,14 @@ public record TransferData(TransferId transferId,
                            PositionUpdateId payerCommitId,
                            PositionUpdateId payeeCommitId,
                            PositionUpdateId rollbackId,
-                           TransferState state,
+                           TransferStatus status,
                            Instant receivedAt,
                            Instant reservedAt,
                            Instant committedAt,
                            Instant abortedAt,
-                           AbortStage abortStage,
-                           String abortReason,
+                           AbortReason abortReason,
                            Instant disputeAt,
-                           DisputeType disputeType,
-                           String disputeReason,
+                           DisputeReason disputeReason,
                            Instant reservationTimeoutAt,
                            Instant payeeCompletedAt,
                            List<TransferExtensionData> extensions,
@@ -68,4 +66,5 @@ public record TransferData(TransferId transferId,
     public record TransferExtensionData(Direction direction, String key, String value) { }
 
     public record TransferIlpPacketData(String ilpPacket, String condition) { }
+
 }

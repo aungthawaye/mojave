@@ -26,24 +26,24 @@ CREATE TABLE `tfr_transfer`
     `payee_commit_id`        bigint       DEFAULT NULL,
     `rollback_id`            bigint       DEFAULT NULL,
 
-    `state`                  varchar(32)    NOT NULL,
+    `status`                 varchar(32)    NOT NULL,
     `received_at`            bigint         NOT NULL,
     `reserved_at`            bigint       DEFAULT NULL,
     `committed_at`           bigint       DEFAULT NULL,
-    `aborted_at`             bigint       DEFAULT NULL,
-    `error`                  varchar(255) DEFAULT NULL,
 
-    `abort_stage`            varchar(32)  DEFAULT NULL,
-    `abort_reason`           varchar(255) DEFAULT NULL,
+    `aborted_at`             bigint       DEFAULT NULL,
+    `abort_reason`           varchar(32)  DEFAULT NULL,
 
     `dispute_at`             bigint       DEFAULT NULL,
-    `dispute_type`           varchar(32)  DEFAULT NULL,
-    `dispute_reason`         varchar(255) DEFAULT NULL,
+    `dispute_reason`         varchar(32)  DEFAULT NULL,
+
+    `dispute_resolved`       tinyint(1)   DEFAULT NULL,
+    `dispute_resolved_at`    bigint       DEFAULT NULL,
 
     `reservation_timeout_at` bigint       DEFAULT NULL,
     `payee_completed_at`     bigint       DEFAULT NULL,
 
-    `ilp_fulfilment`         varchar(48) DEFAULT NULL,
+    `ilp_fulfilment`         varchar(48)  DEFAULT NULL,
 
     `rec_created_at`         bigint       DEFAULT NULL,
     `rec_updated_at`         bigint       DEFAULT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE `tfr_transfer`
     KEY `tfr_transfer_reserved_at_IDX` (`reserved_at`),
     KEY `tfr_transfer_committed_at_IDX` (`committed_at`),
     KEY `tfr_transfer_aborted_at_IDX` (`aborted_at`),
-    KEY `tfr_transfer_state_IDX` (`state`)
+    KEY `tfr_transfer_status_IDX` (`status`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
