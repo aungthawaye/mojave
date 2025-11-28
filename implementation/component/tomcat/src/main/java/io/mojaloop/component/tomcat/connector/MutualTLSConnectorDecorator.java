@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@
 
 package io.mojaloop.component.tomcat.connector;
 
-import io.mojaloop.component.misc.handy.InputStreamLoader;
+import io.mojaloop.component.misc.handy.ContentLoader;
 import io.mojaloop.component.tomcat.ConnectorDecorator;
 import lombok.Getter;
 import org.apache.catalina.connector.Connector;
@@ -34,6 +34,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Base64;
 
 @Getter
 public class MutualTLSConnectorDecorator implements ConnectorDecorator {
@@ -98,8 +99,7 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
     private void addKeyStore(SSLHostConfig sslHostConfig,
                              Settings.KeyStoreSettings keyStoreSettings) {
 
-        try (
-            var in = InputStreamLoader.from(keyStoreSettings.file(), keyStoreSettings.base64())) {
+        try (var in = Base64.getMimeDecoder().wrap(ContentLoader.from(keyStoreSettings.file()))) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, keyStoreSettings.storePassword().toCharArray());
@@ -125,9 +125,7 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
     private void setTrustStore(SSLHostConfig sslHostConfig,
                                Settings.TrustStoreSettings trustStoreSettings) {
 
-        try (var in = InputStreamLoader.from(
-            trustStoreSettings.file(),
-            trustStoreSettings.base64())) {
+        try (var in = Base64.getMimeDecoder().wrap(ContentLoader.from(trustStoreSettings.file()))) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, trustStoreSettings.storePassword().toCharArray());

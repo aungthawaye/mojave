@@ -1,3 +1,22 @@
+/*-
+ * ================================================================================
+ * Mojave
+ * --------------------------------------------------------------------------------
+ * Copyright (C) 2025 Open Source
+ * --------------------------------------------------------------------------------
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ================================================================================
+ */
 package io.mojaloop.fspiop.spec.settlement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -58,125 +77,6 @@ public class SettlementUpdateBySettlementIdPayload {
                        this.participants,
                        settlementUpdateBySettlementIdPayload.participants);
     }
-
-    /**
-     **/
-    public SettlementUpdateBySettlementIdPayload externalReference(String externalReference) {
-
-        this.externalReference = externalReference;
-        return this;
-    }
-
-    @JsonProperty("externalReference")
-    public String getExternalReference() {
-
-        return externalReference;
-    }
-
-    @JsonProperty("externalReference")
-    public void setExternalReference(String externalReference) {
-
-        this.externalReference = externalReference;
-    }
-
-    @JsonProperty("participants")
-    @Valid
-    public List<@Valid SettlementUpdateBySettlementIDOuterPayload> getParticipants() {
-
-        return participants;
-    }
-
-    @JsonProperty("participants")
-    public void setParticipants(List<@Valid SettlementUpdateBySettlementIDOuterPayload> participants) {
-
-        this.participants = participants;
-    }
-
-    @JsonProperty("reason")
-    public String getReason() {
-
-        return reason;
-    }
-
-    @JsonProperty("reason")
-    public void setReason(String reason) {
-
-        this.reason = reason;
-    }
-
-    @JsonProperty("state")
-    public StateEnum getState() {
-
-        return state;
-    }
-
-    @JsonProperty("state")
-    public void setState(StateEnum state) {
-
-        this.state = state;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(state, reason, externalReference, participants);
-    }
-
-    /**
-     **/
-    public SettlementUpdateBySettlementIdPayload participants(List<@Valid SettlementUpdateBySettlementIDOuterPayload> participants) {
-
-        this.participants = participants;
-        return this;
-    }
-
-    /**
-     **/
-    public SettlementUpdateBySettlementIdPayload reason(String reason) {
-
-        this.reason = reason;
-        return this;
-    }
-
-    public SettlementUpdateBySettlementIdPayload removeParticipantsItem(
-        SettlementUpdateBySettlementIDOuterPayload participantsItem) {
-
-        if (participantsItem != null && this.participants != null) {
-            this.participants.remove(participantsItem);
-        }
-
-        return this;
-    }
-
-    /**
-     **/
-    public SettlementUpdateBySettlementIdPayload state(StateEnum state) {
-
-        this.state = state;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("class SettlementUpdateBySettlementIdPayload {\n");
-
-        sb.append("    state: ").append(toIndentedString(state)).append("\n");
-        sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
-        sb
-            .append("    externalReference: ")
-            .append(toIndentedString(externalReference))
-            .append("\n");
-        sb.append("    participants: ").append(toIndentedString(participants)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
     private String toIndentedString(Object o) {
 
         if (o == null) {

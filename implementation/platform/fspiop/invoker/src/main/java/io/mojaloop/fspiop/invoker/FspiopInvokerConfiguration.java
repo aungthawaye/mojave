@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,7 @@
 package io.mojaloop.fspiop.invoker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.handy.InputStreamLoader;
+import io.mojaloop.component.misc.handy.ContentLoader;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
@@ -37,6 +37,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
 
 @ComponentScan(basePackages = {"io.mojaloop.fspiop.invoker"})
 @Import(value = {FspiopComponentConfiguration.class})
@@ -65,12 +68,11 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = InputStreamLoader.from(
-                keyStoreSettings.file,
-                keyStoreSettings.base64);
-                 var trustStoreInput = InputStreamLoader.from(
-                     trustStoreSettings.file,
-                     trustStoreSettings.base64)) {
+            var keyStoreBase64 = Base64.getMimeDecoder().decode(keyStoreSettings.p12b64Content);
+            var trustStoreBase64 = Base64.getMimeDecoder().decode(trustStoreSettings.p12b64Content);
+
+            try (var keyStoreInput = new ByteArrayInputStream(keyStoreBase64);
+                 var trustStoreInput = new ByteArrayInputStream(trustStoreBase64)) {
 
                 builder.withMutualTLS(
                     keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
@@ -107,12 +109,11 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = InputStreamLoader.from(
-                keyStoreSettings.file,
-                keyStoreSettings.base64);
-                 var trustStoreInput = InputStreamLoader.from(
-                     trustStoreSettings.file,
-                     trustStoreSettings.base64)) {
+            var keyStoreBase64 = Base64.getMimeDecoder().decode(keyStoreSettings.p12b64Content);
+            var trustStoreBase64 = Base64.getMimeDecoder().decode(trustStoreSettings.p12b64Content);
+
+            try (var keyStoreInput = new ByteArrayInputStream(keyStoreBase64);
+                 var trustStoreInput = new ByteArrayInputStream(trustStoreBase64)) {
 
                 builder.withMutualTLS(
                     keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
@@ -148,12 +149,11 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = InputStreamLoader.from(
-                keyStoreSettings.file,
-                keyStoreSettings.base64);
-                 var trustStoreInput = InputStreamLoader.from(
-                     trustStoreSettings.file,
-                     trustStoreSettings.base64)) {
+            var keyStoreBase64 = Base64.getMimeDecoder().decode(keyStoreSettings.p12b64Content);
+            var trustStoreBase64 = Base64.getMimeDecoder().decode(trustStoreSettings.p12b64Content);
+
+            try (var keyStoreInput = new ByteArrayInputStream(keyStoreBase64);
+                 var trustStoreInput = new ByteArrayInputStream(trustStoreBase64)) {
 
                 builder.withMutualTLS(
                     keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
@@ -187,9 +187,9 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                                     TrustStoreSettings trustStoreSettings,
                                     boolean ignoreHostnameVerification) {
 
-        public record KeyStoreSettings(String file, boolean base64, String password) { }
+        public record KeyStoreSettings(String p12b64Content, String password) { }
 
-        public record TrustStoreSettings(String file, boolean base64, String password) { }
+        public record TrustStoreSettings(String p12b64Content, String password) { }
 
     }
 

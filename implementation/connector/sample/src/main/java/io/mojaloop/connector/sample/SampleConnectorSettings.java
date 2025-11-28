@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,13 +75,10 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
 
         return new FspiopInvokerConfiguration.TransportSettings(
             true, new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
-            System.getenv("INVOKER_KEYSTORE_FILE"),
-            Boolean.parseBoolean(System.getenv("INVOKER_KEYSTORE_BASE64")),
-            System.getenv("INVOKER_KEYSTORE_PASSWORD")),
+            System.getenv("KEYSTORE_P12B64_CONTENT"), System.getenv("KEYSTORE_PASSWORD")),
             new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(
-                System.getenv("INVOKER_TRUSTSTORE_FILE"),
-                Boolean.parseBoolean(System.getenv("INVOKER_TRUSTSTORE_BASE64")),
-                System.getenv("INVOKER_TRUSTSTORE_PASSWORD")), true);
+                System.getenv("TRUSTSTORE_P12B64_CONTENT"), System.getenv("TRUSTSTORE_PASSWORD")),
+            true);
     }
 
     @Bean
@@ -104,13 +101,9 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
             Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
             Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), true,
             new ConnectorInboundConfiguration.InboundSettings.KeyStoreSettings(
-                System.getenv("FSPIOP_INBOUND_KEYSTORE_FILE"),
-                Boolean.parseBoolean(System.getenv("FSPIOP_INBOUND_KEYSTORE_BASE64")),
-                System.getenv("FSPIOP_INBOUND_KEYSTORE_PASSWORD"), null),
+                System.getenv("KEYSTORE_P12B64_CONTENT"), System.getenv("KEYSTORE_PASSWORD"), null),
             new ConnectorInboundConfiguration.InboundSettings.TrustStoreSettings(
-                System.getenv("FSPIOP_INBOUND_TRUSTSTORE_FILE"),
-                Boolean.parseBoolean(System.getenv("FSPIOP_INBOUND_TRUSTSTORE_BASE64")),
-                System.getenv("FSPIOP_INBOUND_TRUSTSTORE_PASSWORD")));
+                System.getenv("TRUSTSTORE_P12B64_CONTENT"), System.getenv("TRUSTSTORE_PASSWORD")));
     }
 
     @Bean

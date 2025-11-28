@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,6 +38,7 @@ import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import io.mojaloop.core.transfer.contract.command.PutTransfersCommand;
 import io.mojaloop.core.transfer.domain.command.step.financial.FulfilPositions;
+import io.mojaloop.core.transfer.domain.command.step.financial.PostLedgerFlow;
 import io.mojaloop.core.transfer.domain.command.step.financial.RollbackReservation;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.CommitTransferToPayer;
 import io.mojaloop.core.transfer.domain.command.step.fspiop.ForwardToDestination;
@@ -83,6 +84,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final RollbackReservation rollbackReservation;
 
+    private final PostLedgerFlow postLedgerFlow;
+
     // FSPIOP steps
     private final UnwrapResponse unwrapResponse;
 
@@ -103,6 +106,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       DisputeTransfer disputeTransfer,
                                       FulfilPositions fulfilPositions,
                                       RollbackReservation rollbackReservation,
+                                      PostLedgerFlow postLedgerFlow,
                                       UnwrapResponse unwrapResponse,
                                       CommitTransferToPayer commitTransferToPayer,
                                       ForwardToDestination forwardToDestination,
@@ -117,6 +121,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         assert disputeTransfer != null;
         assert fulfilPositions != null;
         assert rollbackReservation != null;
+        assert postLedgerFlow != null;
         assert unwrapResponse != null;
         assert commitTransferToPayer != null;
         assert forwardToDestination != null;
@@ -131,6 +136,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.disputeTransfer = disputeTransfer;
         this.fulfilPositions = fulfilPositions;
         this.rollbackReservation = rollbackReservation;
+        this.postLedgerFlow = postLedgerFlow;
         this.unwrapResponse = unwrapResponse;
         this.commitTransferToPayer = commitTransferToPayer;
         this.forwardToDestination = forwardToDestination;
@@ -419,6 +425,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             fulfilPositionsOutput.payeeCommitId(),
                             unwrapResponseOutput.completedAt()));
 
+                        this.postLedgerFlow.execute(
+                            new PostLedgerFlow.Input(
+                                transactionId, transactionAt, currency, payerFsp, payeeFsp,
+                                transferAmount));
+
                     } catch (Exception e) {
 
                         LOGGER.error("Error:", e);
@@ -456,8 +467,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                     this.disputeTransfer.execute(
                         new DisputeTransfer.Input(
-                            CONTEXT, transactionId, transferId,
-                            finalDispute));
+                            CONTEXT, transactionId, transferId, finalDispute));
                 }
 
             }

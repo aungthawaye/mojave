@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,6 +41,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 final class TransferServiceSettings implements TransferServiceConfiguration.RequiredSettings {
+
+    @Override
+    public KafkaProducerConfigurer.ProducerSettings accountingProducerSettings() {
+
+        return new KafkaProducerConfigurer.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
+    }
 
     @Bean
     @Override
@@ -105,14 +112,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public KafkaProducerConfigurer.ProducerSettings producerSettings() {
-
-        return new KafkaProducerConfigurer.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
-
-    @Bean
-    @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
@@ -170,6 +169,14 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new TransactionIntercomService.Settings(
             System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
+    }
+
+    @Bean
+    @Override
+    public KafkaProducerConfigurer.ProducerSettings transactionProducerSettings() {
+
+        return new KafkaProducerConfigurer.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean
