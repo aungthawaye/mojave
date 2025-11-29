@@ -40,7 +40,7 @@ public interface BalanceUpdateRepository
 
         public static Specification<BalanceUpdate> withWalletId(final BalanceUpdateId walletId) {
 
-            return (root, query, cb) -> cb.equal(root.get("walletId"), walletId);
+            return (root, query, cb) -> cb.equal(root.get("balanceId"), walletId);
         }
 
     }

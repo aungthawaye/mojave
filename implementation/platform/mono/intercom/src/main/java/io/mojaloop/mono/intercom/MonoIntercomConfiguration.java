@@ -45,16 +45,16 @@ import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
 import io.mojaloop.core.transaction.domain.TransactionDomainConfiguration;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
+import io.mojaloop.core.wallet.domain.cache.BalanceCache;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.WalletCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.local.BalanceLocalCache;
 import io.mojaloop.core.wallet.domain.cache.strategy.local.PositionLocalCache;
-import io.mojaloop.core.wallet.domain.cache.strategy.local.WalletLocalCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import io.mojaloop.core.wallet.domain.repository.PositionRepository;
-import io.mojaloop.core.wallet.domain.repository.WalletRepository;
+import io.mojaloop.core.wallet.domain.repository.BalanceRepository;
 import io.mojaloop.mono.intercom.controller.component.EmptyErrorWriter;
 import io.mojaloop.mono.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
@@ -102,7 +102,7 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
 
     private final PositionCache positionCache;
 
-    private final WalletCache walletCache;
+    private final BalanceCache balanceCache;
 
     private final AccountResolver accountResolver;
 
@@ -117,7 +117,7 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
                                      ChartEntryRepository chartEntryRepository,
                                      FlowDefinitionRepository flowDefinitionRepository,
                                      PositionRepository positionRepository,
-                                     WalletRepository walletRepository,
+                                     BalanceRepository balanceRepository,
                                      MySqlLedger.LedgerDbSettings ledgerDbSettings,
                                      MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
                                      MySqlPositionUpdater.PositionDbSettings positionDbSettings) {
@@ -128,14 +128,14 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
         assert chartEntryRepository != null;
         assert flowDefinitionRepository != null;
         assert positionRepository != null;
-        assert walletRepository != null;
+        assert balanceRepository != null;
         assert ledgerDbSettings != null;
 
         this.accountCache = new AccountLocalCache(accountRepository);
         this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);
         this.flowDefinitionCache = new FlowDefinitionLocalCache(flowDefinitionRepository);
         this.positionCache = new PositionLocalCache(positionRepository);
-        this.walletCache = new WalletLocalCache(walletRepository);
+        this.balanceCache = new BalanceLocalCache(balanceRepository);
 
         this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
 
@@ -225,9 +225,9 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
 
     @Bean
     @Override
-    public WalletCache walletCache() {
+    public BalanceCache walletCache() {
 
-        return this.walletCache;
+        return this.balanceCache;
     }
 
     @Bean

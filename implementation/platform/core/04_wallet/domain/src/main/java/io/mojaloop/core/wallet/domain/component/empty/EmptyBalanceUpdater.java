@@ -21,8 +21,8 @@
 package io.mojaloop.core.wallet.domain.component.empty;
 
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 
 import java.math.BigDecimal;
@@ -34,7 +34,7 @@ public class EmptyBalanceUpdater implements BalanceUpdater {
     public BalanceHistory deposit(TransactionId transactionId,
                                   Instant transactionAt,
                                   BalanceUpdateId balanceUpdateId,
-                                  WalletId walletId,
+                                  BalanceId balanceId,
                                   BigDecimal amount,
                                   String description) {
 
@@ -53,7 +53,7 @@ public class EmptyBalanceUpdater implements BalanceUpdater {
     public BalanceHistory withdraw(TransactionId transactionId,
                                    Instant transactionAt,
                                    BalanceUpdateId balanceUpdateId,
-                                   WalletId walletId,
+                                   BalanceId balanceId,
                                    BigDecimal amount,
                                    String description) {
 

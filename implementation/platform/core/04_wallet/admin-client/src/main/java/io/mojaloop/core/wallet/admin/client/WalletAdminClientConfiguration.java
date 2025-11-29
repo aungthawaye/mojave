@@ -56,22 +56,22 @@ public class WalletAdminClientConfiguration {
     }
 
     @Bean
-    public WalletAdminService.WalletCommand walletCommands(WalletAdminService.Settings settings,
-                                                           ObjectMapper objectMapper) {
+    public WalletAdminService.BalanceCommand walletCommands(WalletAdminService.Settings settings,
+                                                            ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(WalletAdminService.WalletCommand.class, settings.baseUrl())
+                   .newBuilder(WalletAdminService.BalanceCommand.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();
     }
 
     @Bean
-    public WalletAdminService.WalletQuery walletQuery(WalletAdminService.Settings settings,
-                                                      ObjectMapper objectMapper) {
+    public WalletAdminService.BalanceQuery walletQuery(WalletAdminService.Settings settings,
+                                                       ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(WalletAdminService.WalletQuery.class, settings.baseUrl())
+                   .newBuilder(WalletAdminService.BalanceQuery.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();

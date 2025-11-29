@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,15 +32,15 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.WalletCache;
+import io.mojaloop.core.wallet.domain.cache.BalanceCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.timer.BalanceTimerCache;
 import io.mojaloop.core.wallet.domain.cache.strategy.timer.PositionTimerCache;
-import io.mojaloop.core.wallet.domain.cache.strategy.timer.WalletTimerCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import io.mojaloop.core.wallet.domain.repository.BalanceRepository;
 import io.mojaloop.core.wallet.domain.repository.PositionRepository;
-import io.mojaloop.core.wallet.domain.repository.WalletRepository;
 import io.mojaloop.core.wallet.intercom.controller.component.EmptyErrorWriter;
 import io.mojaloop.core.wallet.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -74,34 +74,38 @@ final class WalletIntercomConfiguration extends WebMvcExtension
 
     private final PositionUpdater positionUpdater;
 
-    private final WalletCache walletCache;
+    private final BalanceCache balanceCache;
 
     private final PositionCache positionCache;
 
     public WalletIntercomConfiguration(ObjectMapper objectMapper,
-                                       WalletRepository walletRepository,
+                                       BalanceRepository balanceRepository,
                                        PositionRepository positionRepository) {
 
         super(objectMapper);
 
         this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
             new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-                System.getenv("WLT_BALANCE_DB_URL"), System.getenv("WLT_BALANCE_DB_USER"),
-                System.getenv("WLT_BALANCE_DB_PASSWORD")),
+                System.getenv("WLT_MYSQL_BALANCE_DB_URL"),
+                System.getenv("WLT_MYSQL_BALANCE_DB_USER"),
+                System.getenv("WLT_MYSQL_BALANCE_DB_PASSWORD")),
             new MySqlBalanceUpdater.BalanceDbSettings.Pool(
-                "wallet-balance", Integer.parseInt(System.getenv("WLT_BALANCE_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_BALANCE_DB_MAX_POOL_SIZE")))));
+                "wallet-balance",
+                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
 
         this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
             new MySqlPositionUpdater.PositionDbSettings.Connection(
-                System.getenv("WLT_POSITION_DB_URL"), System.getenv("WLT_POSITION_DB_USER"),
-                System.getenv("WLT_POSITION_DB_PASSWORD")),
+                System.getenv("WLT_MYSQL_POSITION_DB_URL"),
+                System.getenv("WLT_MYSQL_POSITION_DB_USER"),
+                System.getenv("WLT_MYSQL_POSITION_DB_PASSWORD")),
             new MySqlPositionUpdater.PositionDbSettings.Pool(
-                "wallet-position", Integer.parseInt(System.getenv("WLT_POSITION_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_POSITION_DB_MAX_POOL_SIZE")))));
+                "wallet-position",
+                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
 
-        this.walletCache = new WalletTimerCache(
-            walletRepository, Integer.parseInt(
+        this.balanceCache = new BalanceTimerCache(
+            balanceRepository, Integer.parseInt(
             System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
         this.positionCache = new PositionTimerCache(
@@ -153,9 +157,9 @@ final class WalletIntercomConfiguration extends WebMvcExtension
 
     @Bean
     @Override
-    public WalletCache walletCache() {
+    public BalanceCache walletCache() {
 
-        return this.walletCache;
+        return this.balanceCache;
     }
 
     @Bean

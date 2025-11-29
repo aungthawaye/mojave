@@ -28,12 +28,12 @@ import io.mojaloop.core.wallet.contract.exception.position.PositionAlreadyExists
 import io.mojaloop.core.wallet.contract.exception.position.PositionIdNotFoundException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
-import io.mojaloop.core.wallet.contract.exception.wallet.BalanceUpdateIdNotFoundException;
-import io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException;
-import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
-import io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException;
-import io.mojaloop.core.wallet.contract.exception.wallet.WalletAlreadyExistsException;
-import io.mojaloop.core.wallet.contract.exception.wallet.WalletIdNotFoundException;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceUpdateIdNotFoundException;
+import io.mojaloop.core.wallet.contract.exception.balance.InsufficientBalanceException;
+import io.mojaloop.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceAlreadyExistsException;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
 
 public class WalletExceptionResolver {
 
@@ -43,17 +43,17 @@ public class WalletExceptionResolver {
         final var extras = error.extras();
 
         return switch (code) {
-            // wallet package
+            // balance package
             case BalanceUpdateIdNotFoundException.CODE ->
                 BalanceUpdateIdNotFoundException.from(extras);
-            case InsufficientBalanceInWalletException.CODE ->
-                InsufficientBalanceInWalletException.from(extras);
+            case InsufficientBalanceException.CODE ->
+                InsufficientBalanceException.from(extras);
             case NoBalanceUpdateForTransactionException.CODE ->
                 NoBalanceUpdateForTransactionException.from(extras);
             case ReversalFailedInWalletException.CODE ->
                 ReversalFailedInWalletException.from(extras);
-            case WalletAlreadyExistsException.CODE -> WalletAlreadyExistsException.from(extras);
-            case WalletIdNotFoundException.CODE -> WalletIdNotFoundException.from(extras);
+            case BalanceAlreadyExistsException.CODE -> BalanceAlreadyExistsException.from(extras);
+            case BalanceIdNotFoundException.CODE -> BalanceIdNotFoundException.from(extras);
 
             // position package
             case FailedToCommitReservationException.CODE ->

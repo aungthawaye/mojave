@@ -20,19 +20,19 @@
 
 package io.mojaloop.core.wallet.store;
 
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
-import io.mojaloop.core.wallet.contract.data.WalletData;
+import io.mojaloop.core.wallet.contract.data.BalanceData;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.util.Set;
 
 public interface WalletStore {
 
-    WalletData get(WalletId walletId);
+    BalanceData get(BalanceId balanceId);
 
-    WalletData get(WalletOwnerId walletOwnerId, Currency currency);
+    BalanceData get(WalletOwnerId walletOwnerId, Currency currency);
 
-    Set<WalletData> get(WalletOwnerId walletOwnerId);
+    Set<BalanceData> get(WalletOwnerId walletOwnerId);
 
 }

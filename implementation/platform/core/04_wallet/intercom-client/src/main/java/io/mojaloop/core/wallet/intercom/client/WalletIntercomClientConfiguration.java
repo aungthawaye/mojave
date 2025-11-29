@@ -75,22 +75,22 @@ public class WalletIntercomClientConfiguration implements MiscConfiguration.Requ
     }
 
     @Bean
-    public WalletIntercomService.WalletCommand walletCommands(WalletIntercomService.Settings settings,
-                                                              ObjectMapper objectMapper) {
+    public WalletIntercomService.BalanceCommand walletCommands(WalletIntercomService.Settings settings,
+                                                               ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(WalletIntercomService.WalletCommand.class, settings.baseUrl())
+                   .newBuilder(WalletIntercomService.BalanceCommand.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();
     }
 
     @Bean
-    public WalletIntercomService.WalletQuery walletQuery(WalletIntercomService.Settings settings,
-                                                         ObjectMapper objectMapper) {
+    public WalletIntercomService.BalanceQuery walletQuery(WalletIntercomService.Settings settings,
+                                                          ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(WalletIntercomService.WalletQuery.class, settings.baseUrl())
+                   .newBuilder(WalletIntercomService.BalanceQuery.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();

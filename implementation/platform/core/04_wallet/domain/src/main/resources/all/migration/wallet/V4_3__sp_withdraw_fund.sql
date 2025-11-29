@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_withdraw_fund(
     IN p_transaction_id BIGINT,
     IN p_transaction_at BIGINT,
     IN p_balance_update_id BIGINT,
-    IN p_wallet_id BIGINT,
+    IN p_balance_id BIGINT,
     IN p_amount DECIMAL(34, 4),
     IN p_description VARCHAR(256)
 )
@@ -25,7 +25,7 @@ BEGIN
 
             SELECT 'ERROR'             AS status,
                    p_balance_update_id AS balance_update_id,
-                   p_wallet_id         AS wallet_id,
+                   p_balance_id        AS balance_id,
                    'WITHDRAW'          AS action,
                    p_transaction_id    AS transaction_id,
                    NULL                AS currency,
@@ -46,8 +46,8 @@ BEGIN
     SELECT w.balance,
            w.currency
     INTO v_old_balance, v_currency
-    FROM wlt_wallet w
-    WHERE w.wallet_id = p_wallet_id
+    FROM wlt_balance w
+    WHERE w.balance_id = p_balance_id
         FOR
     UPDATE;
 
@@ -56,7 +56,7 @@ BEGIN
 
         SELECT 'ERROR'             AS status,
                p_balance_update_id AS balance_update_id,
-               p_wallet_id         AS wallet_id,
+               p_balance_id        AS balance_id,
                'WITHDRAW'          AS action,
                p_transaction_id    AS transaction_id,
                NULL                AS currency,
@@ -76,7 +76,7 @@ BEGIN
         ROLLBACK;
         SELECT 'INSUFFICIENT_BALANCE' AS status,
                p_balance_update_id    AS balance_update_id,
-               p_wallet_id            AS wallet_id,
+               p_balance_id           AS balance_id,
                'WITHDRAW'             AS action,
                p_transaction_id       AS transaction_id,
                v_currency             AS currency,
@@ -88,13 +88,13 @@ BEGIN
     END IF;
 
     /* 3) Apply deduction to balance */
-    UPDATE wlt_wallet
+    UPDATE wlt_balance
     SET balance = v_new_balance
-    WHERE wallet_id = p_wallet_id;
+    WHERE balance_id = p_balance_id;
 
     /* 4) Insert balance update row */
     INSERT INTO wlt_balance_update (balance_update_id,
-                                    wallet_id,
+                                    balance_id,
                                     action,
                                     transaction_id,
                                     currency,
@@ -108,7 +108,7 @@ BEGIN
                                     rec_updated_at,
                                     rec_version)
     VALUES (p_balance_update_id,
-            p_wallet_id,
+            p_balance_id,
             'WITHDRAW',
             p_transaction_id,
             v_currency,
@@ -126,7 +126,7 @@ BEGIN
     /* 5) Return result */
     SELECT 'SUCCESS' AS status,
            bu.balance_update_id,
-           bu.wallet_id,
+           bu.balance_id,
            bu.action,
            bu.transaction_id,
            bu.currency,

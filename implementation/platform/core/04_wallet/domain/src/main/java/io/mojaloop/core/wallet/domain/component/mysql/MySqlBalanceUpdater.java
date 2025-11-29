@@ -25,7 +25,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
@@ -121,13 +121,13 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     public BalanceHistory deposit(TransactionId transactionId,
                                   Instant transactionAt,
                                   BalanceUpdateId balanceUpdateId,
-                                  WalletId walletId,
+                                  BalanceId balanceId,
                                   BigDecimal amount,
                                   String description) throws NoBalanceUpdateException {
 
         LOGGER.info(
-            "Deposit transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId,
-            walletId, amount, description);
+            "Deposit transactionId: {}, balanceId: {}, amount: {}, description: {}", transactionId,
+            balanceId, amount, description);
 
         try {
 
@@ -138,7 +138,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                     stm.setLong(1, transactionId.getId());
                     stm.setLong(2, transactionAt.getEpochSecond());
                     stm.setLong(3, balanceUpdateId.getId());
-                    stm.setLong(4, walletId.getId());
+                    stm.setLong(4, balanceId.getId());
                     stm.setBigDecimal(5, amount);
                     stm.setString(6, description);
 
@@ -156,7 +156,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                     return new BalanceHistory(
                                         new BalanceUpdateId(rs.getLong("balance_update_id")),
-                                        new WalletId(rs.getLong("wallet_id")),
+                                        new BalanceId(rs.getLong("balance_id")),
                                         BalanceAction.valueOf(rs.getString("action")),
                                         new TransactionId(rs.getLong("transaction_id")),
                                         Currency.valueOf(rs.getString("currency")),
@@ -218,7 +218,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                     return new BalanceHistory(
                                         new BalanceUpdateId(rs.getLong("balance_update_id")),
-                                        new WalletId(rs.getLong("wallet_id")),
+                                        new BalanceId(rs.getLong("balance_id")),
                                         BalanceAction.valueOf(rs.getString("action")),
                                         new TransactionId(rs.getLong("transaction_id")),
                                         Currency.valueOf(rs.getString("currency")),
@@ -260,14 +260,14 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     public BalanceHistory withdraw(TransactionId transactionId,
                                    Instant transactionAt,
                                    BalanceUpdateId balanceUpdateId,
-                                   WalletId walletId,
+                                   BalanceId balanceId,
                                    BigDecimal amount,
                                    String description)
         throws NoBalanceUpdateException, InsufficientBalanceException {
 
         LOGGER.info(
-            "Withdraw transactionId: {}, walletId: {}, amount: {}, description: {}", transactionId,
-            walletId, amount, description);
+            "Withdraw transactionId: {}, balanceId: {}, amount: {}, description: {}", transactionId,
+            balanceId, amount, description);
 
         try {
 
@@ -278,7 +278,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                     stm.setLong(1, transactionId.getId());
                     stm.setLong(2, transactionAt.toEpochMilli());
                     stm.setLong(3, balanceUpdateId.getId());
-                    stm.setLong(4, walletId.getId());
+                    stm.setLong(4, balanceId.getId());
                     stm.setBigDecimal(5, amount);
                     stm.setString(6, description);
 
@@ -296,7 +296,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                     return new BalanceHistory(
                                         new BalanceUpdateId(rs.getLong("balance_update_id")),
-                                        new WalletId(rs.getLong("wallet_id")),
+                                        new BalanceId(rs.getLong("balance_id")),
                                         BalanceAction.valueOf(rs.getString("action")),
                                         new TransactionId(rs.getLong("transaction_id")),
                                         Currency.valueOf(rs.getString("currency")),
@@ -309,7 +309,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
 
                                     throw new RuntimeException(
                                         new InsufficientBalanceException(
-                                            transactionId, walletId,
+                                            transactionId, balanceId,
                                             amount, balance));
                                 }
                             }

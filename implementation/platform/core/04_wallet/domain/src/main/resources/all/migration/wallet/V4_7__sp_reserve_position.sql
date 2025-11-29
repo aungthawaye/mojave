@@ -51,7 +51,9 @@ BEGIN
         LEAVE proc_reserve;
     END IF;
 
-    UPDATE wlt_position SET reserved = v_new_reserved WHERE position_id = p_position_id;
+    UPDATE wlt_position
+    SET reserved = v_new_reserved
+    WHERE position_id = p_position_id;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,

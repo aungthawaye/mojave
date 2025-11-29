@@ -24,8 +24,6 @@ import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DecreasePositionController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DecreasePositionController.class);
 
     private final DecreasePositionCommand decreasePositionCommand;
 

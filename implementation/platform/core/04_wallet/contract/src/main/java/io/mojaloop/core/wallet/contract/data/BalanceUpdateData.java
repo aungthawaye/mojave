@@ -23,7 +23,7 @@ package io.mojaloop.core.wallet.contract.data;
 import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record BalanceUpdateData(BalanceUpdateId balanceUpdateId,
-                                WalletId walletId,
+                                BalanceId balanceId,
                                 BalanceAction action,
                                 TransactionId transactionId,
                                 Currency currency,

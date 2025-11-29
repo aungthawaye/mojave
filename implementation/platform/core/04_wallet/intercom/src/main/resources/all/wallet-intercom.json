@@ -17,7 +17,7 @@
       "name": "wallet",
       "item": [
         {
-          "name": "POST /wallets/deposit-fund",
+          "name": "POST /balances/deposit-fund",
           "request": {
             "method": "POST",
             "header": [
@@ -28,7 +28,7 @@
               "raw": "{\n  \"walletId\": 500001,\n  \"amount\": 125.50,\n  \"transactionId\": 9001001,\n  \"transactionAt\": 1730793600,\n  \"description\": \"Initial deposit\"\n}"
             },
             "url": {
-              "raw": "{{walletIntercomBaseUrl}}/wallets/deposit-fund",
+              "raw": "{{walletIntercomBaseUrl}}/balances/deposit-fund",
               "host": ["{{walletIntercomBaseUrl}}"],
               "path": ["wallets", "deposit-fund"]
             }
@@ -47,7 +47,7 @@
           ]
         },
         {
-          "name": "POST /wallets/withdraw-fund",
+          "name": "POST /balances/withdraw-fund",
           "request": {
             "method": "POST",
             "header": [
@@ -58,7 +58,7 @@
               "raw": "{\n  \"walletId\": 500001,\n  \"amount\": 25.00,\n  \"transactionId\": 9001002,\n  \"transactionAt\": 1730797200,\n  \"description\": \"ATM withdraw\"\n}"
             },
             "url": {
-              "raw": "{{walletIntercomBaseUrl}}/wallets/withdraw-fund",
+              "raw": "{{walletIntercomBaseUrl}}/balances/withdraw-fund",
               "host": ["{{walletIntercomBaseUrl}}"],
               "path": ["wallets", "withdraw-fund"]
             }
@@ -77,7 +77,7 @@
           ]
         },
         {
-          "name": "POST /wallets/reverse-fund",
+          "name": "POST /balances/reverse-fund",
           "request": {
             "method": "POST",
             "header": [
@@ -88,7 +88,7 @@
               "raw": "{\n  \"reversedId\": 8100002,\n  \"balanceUpdateId\": 8100003,\n  \"description\": \"Reversing withdraw due to failure\"\n}"
             },
             "url": {
-              "raw": "{{walletIntercomBaseUrl}}/wallets/reverse-fund",
+              "raw": "{{walletIntercomBaseUrl}}/balances/reverse-fund",
               "host": ["{{walletIntercomBaseUrl}}"],
               "path": ["wallets", "reverse-fund"]
             }

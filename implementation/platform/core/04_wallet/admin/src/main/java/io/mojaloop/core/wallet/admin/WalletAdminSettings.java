@@ -32,7 +32,7 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     @Override
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
-        return new OpenApiConfiguration.ApiSettings("Mojave - Wallet - Admin", "1.0.0");
+        return new OpenApiConfiguration.ApiSettings("Mojave - 04 Wallet - Admin", "1.0.0");
     }
 
     @Bean

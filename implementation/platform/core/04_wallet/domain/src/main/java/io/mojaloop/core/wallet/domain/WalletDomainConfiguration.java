@@ -22,8 +22,8 @@ package io.mojaloop.core.wallet.domain;
 
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
+import io.mojaloop.core.wallet.domain.cache.BalanceCache;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.WalletCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.springframework.context.annotation.ComponentScan;
@@ -43,7 +43,7 @@ public class WalletDomainConfiguration {
 
         PositionUpdater positionUpdater();
 
-        WalletCache walletCache();
+        BalanceCache walletCache();
 
     }
 

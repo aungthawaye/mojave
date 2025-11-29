@@ -57,7 +57,9 @@ BEGIN
         LEAVE proc_increase;
     END IF;
 
-    UPDATE wlt_position SET position = v_new_position WHERE position_id = p_position_id;
+    UPDATE wlt_position
+    SET position = v_new_position
+    WHERE position_id = p_position_id;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,

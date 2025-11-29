@@ -8,7 +8,7 @@ CREATE PROCEDURE sp_reverse_fund(
 proc_reverse:
 BEGIN
     /* -------- Variables -------- */
-    DECLARE v_wallet_id BIGINT;
+    DECLARE v_balance_id BIGINT;
     DECLARE v_action VARCHAR(32);
     DECLARE v_amount DECIMAL(34, 4);
     DECLARE v_currency VARCHAR(3);
@@ -27,7 +27,7 @@ BEGIN
 
             SELECT 'ERROR'                       AS status,
                    p_balance_update_id           AS balance_update_id,
-                   NULL                          AS wallet_id,
+                   NULL                          AS balance_id,
                    'REVERSE'                     AS action,
                    NULL                          AS transaction_id,
                    NULL                          AS currency,
@@ -44,14 +44,14 @@ BEGIN
     SET v_now = UNIX_TIMESTAMP();
 
     /* 1) Fetch the original balance update row */
-    SELECT bu.wallet_id,
+    SELECT bu.balance_id,
            bu.action,
            bu.amount,
            bu.currency,
            bu.transaction_id,
            bu.description
     INTO
-        v_wallet_id, v_action,
+        v_balance_id, v_action,
         v_amount,
         v_currency,
         v_transaction_id,
@@ -64,7 +64,7 @@ BEGIN
 
         SELECT 'REVERSAL_FAILED'             AS status,
                p_balance_update_id           AS balance_update_id,
-               NULL                          AS wallet_id,
+               NULL                          AS balance_id,
                'REVERSE'                     AS action,
                NULL                          AS transaction_id,
                NULL                          AS currency,
@@ -87,8 +87,8 @@ BEGIN
         /* Reverse the withdrawal by crediting back the amount */
         SELECT w.balance
         INTO v_old_balance
-        FROM wlt_wallet w
-        WHERE w.wallet_id = v_wallet_id FOR
+        FROM wlt_balance w
+        WHERE w.balance_id = v_balance_id FOR
         UPDATE;
 
         SET v_new_balance = v_old_balance + v_amount;
@@ -99,7 +99,7 @@ BEGIN
 
             SELECT 'REVERSAL_FAILED'             AS status,
                    p_balance_update_id           AS balance_update_id,
-                   NULL                          AS wallet_id,
+                   NULL                          AS balance_id,
                    'REVERSE'                     AS action,
                    NULL                          AS transaction_id,
                    NULL                          AS currency,
@@ -113,13 +113,13 @@ BEGIN
 
         END IF;
 
-        UPDATE wlt_wallet
+        UPDATE wlt_balance
         SET balance = v_new_balance
-        WHERE wallet_id = v_wallet_id;
+        WHERE balance_id = v_balance_id;
 
         /* Insert a new balance update row flagged as REVERSED */
         INSERT INTO wlt_balance_update (balance_update_id,
-                                        wallet_id,
+                                        balance_id,
                                         action,
                                         transaction_id,
                                         currency,
@@ -134,7 +134,7 @@ BEGIN
                                         rec_updated_at,
                                         rec_version)
         VALUES (p_balance_update_id,
-                v_wallet_id,
+                v_balance_id,
                 'REVERSE',
                 v_transaction_id,
                 v_currency,
@@ -153,7 +153,7 @@ BEGIN
         /* 3.c) Return the reversal row */
         SELECT 'SUCCESS' AS status,
                bu.balance_update_id,
-               bu.wallet_id,
+               bu.balance_id,
                bu.action,
                bu.transaction_id,
                bu.currency,
@@ -169,7 +169,7 @@ BEGIN
 
         SELECT 'REVERSAL_FAILED'             AS status,
                p_balance_update_id           AS balance_update_id,
-               NULL                          AS wallet_id,
+               NULL                          AS balance_id,
                'REVERSE'                     AS action,
                NULL                          AS transaction_id,
                NULL                          AS currency,

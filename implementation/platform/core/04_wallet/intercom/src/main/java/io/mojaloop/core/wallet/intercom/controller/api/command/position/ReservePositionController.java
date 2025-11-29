@@ -25,8 +25,6 @@ import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTr
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,8 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ReservePositionController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReservePositionController.class);
 
     private final ReservePositionCommand reservePositionCommand;
 
@@ -56,14 +52,7 @@ public class ReservePositionController {
         NoPositionUpdateForTransactionException,
         PositionLimitExceededException,
         PositionNotExistException {
-
-        LOGGER.info("Entering ReservePositionCommand.execute: input : {}", input);
-
-        final var output = this.reservePositionCommand.execute(input);
-
-        LOGGER.info("Exiting ReservePositionCommand.execute: {}", output);
-
-        return output;
+        return this.reservePositionCommand.execute(input);
     }
 
 }
