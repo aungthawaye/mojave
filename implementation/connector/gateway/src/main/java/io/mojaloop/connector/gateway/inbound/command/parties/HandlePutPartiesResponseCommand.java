@@ -28,7 +28,11 @@ public interface HandlePutPartiesResponseCommand {
 
     Output execute(Input input);
 
-    record Input(Payee payee, PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse response) { }
+    record Input(Payee payee,
+                 PartyIdType partyIdType,
+                 String partyId,
+                 String subId,
+                 PartiesTypeIDPutResponse response) { }
 
     record Output() { }
 

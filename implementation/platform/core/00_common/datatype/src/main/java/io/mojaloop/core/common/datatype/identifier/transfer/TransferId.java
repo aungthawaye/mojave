@@ -56,7 +56,8 @@ public class TransferId extends EntityId<Long> {
             try {
                 return new TransferId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 
@@ -70,6 +71,7 @@ public class TransferId extends EntityId<Long> {
 
             return new TransferId(Long.parseLong(source));
         }
+
     }
 
 }

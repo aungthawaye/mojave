@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.accounting.domain.repository;
 
-import io.mojaloop.core.accounting.domain.model.LedgerBalance;
+import io.mojaloop.core.accounting.domain.model.ledger.LedgerBalance;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.LedgerBalanceId;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,7 +29,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LedgerBalanceRepository extends JpaRepository<LedgerBalance, LedgerBalanceId>, JpaSpecificationExecutor<LedgerBalance> {
+public interface LedgerBalanceRepository
+    extends JpaRepository<LedgerBalance, LedgerBalanceId>, JpaSpecificationExecutor<LedgerBalance> {
 
     class Filters {
 

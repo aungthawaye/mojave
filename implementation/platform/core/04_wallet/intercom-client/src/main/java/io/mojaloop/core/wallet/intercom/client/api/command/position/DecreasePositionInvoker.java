@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.intercom.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,7 @@ import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +37,8 @@ public class DecreasePositionInvoker implements DecreasePositionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public DecreasePositionInvoker(final WalletIntercomService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public DecreasePositionInvoker(final WalletIntercomService.PositionCommand positionCommand,
+                                   final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -45,12 +48,15 @@ public class DecreasePositionInvoker implements DecreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input) {
+    public Output execute(final Input input) throws PositionNotExistException {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.decrease(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService.invoke(
+                this.positionCommand.decrease(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(
+                    errorResponseBody,
+                    this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -60,8 +66,11 @@ public class DecreasePositionInvoker implements DecreasePositionCommand {
 
                 final var throwable = WalletExceptionResolver.resolve(errorResponse);
 
-                if (throwable instanceof UncheckedDomainException ude) {
-                    throw ude;
+                switch (throwable) {
+                    case PositionNotExistException pne -> throw pne;
+                    case UncheckedDomainException ude -> throw ude;
+                    default -> {
+                    }
                 }
             }
 

@@ -51,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ActivateFlowDefinitionCommandHandler implements ActivateFlowDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateFlowDefinitionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateFlowDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -69,7 +70,10 @@ public class ActivateFlowDefinitionCommandHandler implements ActivateFlowDefinit
 
         LOGGER.info("Executing ActivateFlowDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
 
         definition.activate();
 

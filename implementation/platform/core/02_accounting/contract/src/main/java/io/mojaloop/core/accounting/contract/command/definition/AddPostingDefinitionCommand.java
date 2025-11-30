@@ -40,7 +40,8 @@ public interface AddPostingDefinitionCommand {
     /**
      * Input for adding postings under a Flow Definition.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull Posting posting) {
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
+                 @JsonProperty(required = true) @NotNull Posting posting) {
 
         public record Posting(@JsonProperty(required = true) @NotNull ReceiveIn receiveIn,
                               @JsonProperty(required = true) @NotNull Long receiveInId,

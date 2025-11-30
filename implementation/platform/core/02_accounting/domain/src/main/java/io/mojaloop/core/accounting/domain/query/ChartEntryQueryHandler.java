@@ -48,9 +48,13 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public ChartEntryData get(final ChartEntryId chartEntryId) throws ChartEntryIdNotFoundException {
+    public ChartEntryData get(final ChartEntryId chartEntryId)
+        throws ChartEntryIdNotFoundException {
 
-        return this.chartEntryRepository.findById(chartEntryId).orElseThrow(() -> new ChartEntryIdNotFoundException(chartEntryId)).convert();
+        return this.chartEntryRepository
+                   .findById(chartEntryId)
+                   .orElseThrow(() -> new ChartEntryIdNotFoundException(chartEntryId))
+                   .convert();
     }
 
     @Transactional(readOnly = true)
@@ -58,7 +62,11 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
     @Override
     public List<ChartEntryData> get(final ChartId chartId) {
 
-        return this.chartEntryRepository.findAll(ChartEntryRepository.Filters.withChartId(chartId)).stream().map(ChartEntry::convert).toList();
+        return this.chartEntryRepository
+                   .findAll(ChartEntryRepository.Filters.withChartId(chartId))
+                   .stream()
+                   .map(ChartEntry::convert)
+                   .toList();
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +82,11 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
     @Override
     public List<ChartEntryData> getByNameContains(final String name) {
 
-        return this.chartEntryRepository.findAll(ChartEntryRepository.Filters.withNameContains(name)).stream().map(ChartEntry::convert).toList();
+        return this.chartEntryRepository
+                   .findAll(ChartEntryRepository.Filters.withNameContains(name))
+                   .stream()
+                   .map(ChartEntry::convert)
+                   .toList();
     }
 
 }

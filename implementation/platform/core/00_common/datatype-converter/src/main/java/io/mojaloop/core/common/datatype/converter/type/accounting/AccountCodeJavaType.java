@@ -79,7 +79,8 @@ public class AccountCodeJavaType extends AbstractClassJavaType<AccountCode> {
             case null -> null;
             case AccountCode code -> code;
             case String s -> new AccountCode(s);
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

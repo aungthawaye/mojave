@@ -62,41 +62,85 @@ public class MySqlLedger implements Ledger {
 
         var config = new HikariConfig();
 
+        // Basic
         config.setPoolName(settings.pool().name());
         config.setJdbcUrl(settings.connection().url());
         config.setUsername(settings.connection().username());
         config.setPassword(settings.connection().password());
         config.setDriverClassName(com.mysql.cj.jdbc.Driver.class.getName());
 
+        // ---- MySQL driver performance flags ----
+        // Statement cache
         config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("rereadBatchedStatements", true);
-        config.addDataSourceProperty("cacheResultSetMetadata", true);
-        config.addDataSourceProperty("cacheServerConfiguration", true);
-        config.addDataSourceProperty("elideSetAutoCommits", true);
-        config.addDataSourceProperty("maintainTimeStats", false);
-        // The below 2 lines are very IMPORTANT
-        // Make sessions pristine between borrows
-        config.addDataSourceProperty("useResetSession", true);
-        // Let the driver manage true session state rather than local emulation
-        config.addDataSourceProperty("useLocalSessionState", false);
-        // Turn OFF server-side prepared statements for CALL (avoids metadata bugs)
-        config.addDataSourceProperty("useServerPrepStmts", false);
-        config.addDataSourceProperty("cacheResultSetMetadata", false);
+        config.addDataSourceProperty("prepStmtCacheSize", "500");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "4096");
+
+        // Batch optimization (if you use batch)
+        config.addDataSourceProperty("rewriteBatchedStatements", "true");
+
+        // Metadata / session state caches
+        config.addDataSourceProperty("cacheResultSetMetadata", "true");
+        config.addDataSourceProperty("cacheServerConfiguration", "true");
+        config.addDataSourceProperty("useLocalSessionState", "true");
+        config.addDataSourceProperty("elideSetAutoCommits", "true");
+        config.addDataSourceProperty("maintainTimeStats", "false");
+
+        // Server-side prepared statements
+        // If you *know* CALL metadata bugs are not an issue in your env, turn this ON for higher TPS:
+        config.addDataSourceProperty("useServerPrepStmts", "true");
+        // If you still hit CALL issues, set to false and keep callableStmtCacheSize = 0
+        // config.addDataSourceProperty("useServerPrepStmts", "false");
         config.addDataSourceProperty("callableStmtCacheSize", "0");
 
+        // Optional: keep your previous "useResetSession" behaviour
+        config.addDataSourceProperty("useResetSession", "true");
+
+        // ---- Hikari pool sizing ----
         config.setMaximumPoolSize(settings.pool().maxPool());
-        // Ledger's stored-procedure will handle transaction.
-        config.setAutoCommit(true);
+        // For no permanent idle connections: pool can shrink to 0 when app is idle
+        config.setMinimumIdle(0);
+
+        // ---- Timeouts (fail fast under high TPS) ----
+        config.setConnectionTimeout(250);         // ms – tune (200–500ms typical)
+        config.setValidationTimeout(1000);        // ms – how long isValid() may take
+        config.setAutoCommit(true);               // fine for most OLTP workloads
+
+        // ---- Idle behaviour & “no idle wakeup” to DB ----
+
+        // 1) Do NOT set a connectionTestQuery
+        //    Hikari will use connection.isValid() only when a connection is borrowed.
+
+        // 2) Disable keepalive pings – no queries while idle.
+        config.setKeepaliveTime(0L);              // default, but set explicitly for clarity
+
+        // 3) Let the pool close connections when app is idle, so DB sees *zero* connections
+        //    after some quiet period. No idle queries because there are no connections.
+        //
+        //    Example: after 60s of zero usage, shrink pool to 0.
+        config.setIdleTimeout(60_000L);           // 60s – adjust as you like
+
+        // 4) Reasonable max lifetime to avoid stale connections,
+        //    but still no idle test queries.
+        //    Make this a bit less than MySQL wait_timeout if you changed it.
+        config.setMaxLifetime(30 * 60_000L);      // 30 minutes
+
+        // If you want to *never* recycle connections proactively (not generally recommended):
+        // config.setIdleTimeout(0L);             // don't reap idles
+        // config.setMaxLifetime(0L);            // infinite lifetime; DB/firewall will close
 
         this.jdbcTemplate = new JdbcTemplate(new HikariDataSource(config));
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt, TransactionType transactionType)
-        throws InsufficientBalanceException, OverdraftExceededException, RestoreFailedException, DuplicatePostingException {
+    public List<Movement> post(List<Request> requests,
+                               TransactionId transactionId,
+                               Instant transactionAt,
+                               TransactionType transactionType) throws
+                                                                InsufficientBalanceException,
+                                                                OverdraftExceededException,
+                                                                RestoreFailedException,
+                                                                DuplicatePostingException {
 
         try {
 
@@ -104,18 +148,26 @@ public class MySqlLedger implements Ledger {
 
             requests.forEach(request -> {
 
-                var added = addedKeys.add(request.accountId().getId() + request.side().name() + transactionId.getId());
+                var added = addedKeys.add(
+                    request.accountId().getId() + request.side().name() + transactionId.getId());
 
                 if (!added) {
-                    throw new RuntimeException(new DuplicatePostingException(request.accountId(), request.side(), transactionId));
+                    throw new RuntimeException(
+                        new DuplicatePostingException(
+                            request.accountId(), request.side(), transactionId));
                 }
             });
 
-            var posting = requests.stream()
-                                  .map(request -> new Posting(request.ledgerMovementId().getId(), request.accountId().getId(), request.side().name(), request.currency().name(),
-                                      request.amount().toPlainString(), transactionId.getId(), transactionAt.getEpochSecond(), transactionType.name(),
-                                      request.flowDefinitionId().getId(), request.postingDefinitionId().getId()))
-                                  .toList();
+            var posting = requests
+                              .stream()
+                              .map(request -> new Posting(
+                                  request.ledgerMovementId().getId(), request.accountId().getId(),
+                                  request.side().name(), request.currency().name(),
+                                  request.amount().toPlainString(), transactionId.getId(),
+                                  transactionAt.getEpochSecond(), transactionType.name(),
+                                  request.flowDefinitionId().getId(),
+                                  request.postingDefinitionId().getId()))
+                              .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
@@ -204,19 +256,30 @@ public class MySqlLedger implements Ledger {
         switch (code) {
 
             case "DUPLICATE_POSTING": {
-                throw new RuntimeException(new DuplicatePostingException(new AccountId(accountId), Side.valueOf(side), transactionId));
+                throw new RuntimeException(
+                    new DuplicatePostingException(
+                        new AccountId(accountId), Side.valueOf(side), transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {
-                throw new RuntimeException(new InsufficientBalanceException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+                throw new RuntimeException(
+                    new InsufficientBalanceException(
+                        new AccountId(accountId), Side.valueOf(side), amount,
+                        new DrCr(debits, credits), transactionId));
             }
 
             case "OVERDRAFT_EXCEEDED": {
-                throw new RuntimeException(new OverdraftExceededException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+                throw new RuntimeException(
+                    new OverdraftExceededException(
+                        new AccountId(accountId), Side.valueOf(side), amount,
+                        new DrCr(debits, credits), transactionId));
             }
 
             case "RESTORE_FAILED": {
-                throw new RuntimeException(new RestoreFailedException(new AccountId(accountId), Side.valueOf(side), amount, new DrCr(debits, credits), transactionId));
+                throw new RuntimeException(
+                    new RestoreFailedException(
+                        new AccountId(accountId), Side.valueOf(side), amount,
+                        new DrCr(debits, credits), transactionId));
             }
 
             default:
@@ -224,7 +287,8 @@ public class MySqlLedger implements Ledger {
         }
     }
 
-    private List<Movement> handleSuccess(ResultSet rs, TransactionId transactionId) throws SQLException {
+    private List<Movement> handleSuccess(ResultSet rs, TransactionId transactionId)
+        throws SQLException {
 
         var movements = new ArrayList<Movement>();
 
@@ -248,8 +312,11 @@ public class MySqlLedger implements Ledger {
             var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
             var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
 
-            var movement = new Movement(new LedgerMovementId(ledgerMovementId), new AccountId(accountId), Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
-                new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId, postingDefinitionId, movementStage, movementResult, createdAt);
+            var movement = new Movement(
+                new LedgerMovementId(ledgerMovementId), new AccountId(accountId),
+                Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
+                new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId,
+                postingDefinitionId, movementStage, movementResult, createdAt);
             movements.add(movement);
 
         } while (rs.next());
@@ -257,7 +324,8 @@ public class MySqlLedger implements Ledger {
         return movements;
     }
 
-    public record LedgerDbSettings(LedgerDbSettings.Connection connection, LedgerDbSettings.Pool pool) {
+    public record LedgerDbSettings(LedgerDbSettings.Connection connection,
+                                   LedgerDbSettings.Pool pool) {
 
         public record Connection(String url, String username, String password) { }
 

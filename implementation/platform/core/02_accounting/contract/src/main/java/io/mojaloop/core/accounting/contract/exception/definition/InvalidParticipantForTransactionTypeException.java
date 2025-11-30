@@ -58,7 +58,9 @@ public class InvalidParticipantForTransactionTypeException extends UncheckedDoma
 
     public InvalidParticipantForTransactionTypeException(final TransactionType transactionType) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transactionType.getParticipants().types().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{transactionType.getParticipants().types().toString()}));
 
         this.transactionType = transactionType;
     }

@@ -76,12 +76,13 @@ public class InsufficientBalanceInAccountException extends CheckedDomainExceptio
                                                  final BigDecimal postedCredits,
                                                  final TransactionId transactionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{accountCode.value(),
-                                                             side.name(),
-                                                             amount.stripTrailingZeros().toPlainString(),
-                                                             postedDebits.stripTrailingZeros().toPlainString(),
-                                                             postedCredits.stripTrailingZeros().toPlainString(),
-                                                             transactionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{accountCode.value(),
+                                         side.name(),
+                                         amount.stripTrailingZeros().toPlainString(),
+                                         postedDebits.stripTrailingZeros().toPlainString(),
+                                         postedCredits.stripTrailingZeros().toPlainString(),
+                                         transactionId.getId().toString()}));
 
         this.accountCode = accountCode;
         this.side = side;
@@ -100,7 +101,8 @@ public class InsufficientBalanceInAccountException extends CheckedDomainExceptio
         final var postedCredits = new BigDecimal(extras.get(Keys.POSTED_CREDITS));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
-        return new InsufficientBalanceInAccountException(accountCode, side, amount, postedDebits, postedCredits, transactionId);
+        return new InsufficientBalanceInAccountException(
+            accountCode, side, amount, postedDebits, postedCredits, transactionId);
     }
 
     @Override

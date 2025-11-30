@@ -42,7 +42,8 @@ public class BigDecimalConversion {
         }
 
         @Override
-        public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider provider)
+            throws IOException {
 
             if (value == null) {
                 gen.writeNull();
@@ -83,7 +84,8 @@ public class BigDecimalConversion {
                 try {
                     return new BigDecimal(s);
                 } catch (NumberFormatException ignore) {
-                    throw ctx.weirdStringException(s, BigDecimal.class, "Expected integer or decimal number");
+                    throw ctx.weirdStringException(
+                        s, BigDecimal.class, "Expected integer or decimal number");
                 }
             }
 

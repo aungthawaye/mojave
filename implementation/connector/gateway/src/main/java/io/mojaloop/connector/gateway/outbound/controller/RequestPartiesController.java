@@ -37,13 +37,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RequestPartiesController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestPartiesController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestPartiesController.class.getName());
 
     private final RequestPartiesCommand requestPartiesCommand;
 
     private final EventPublisher eventPublisher;
 
-    public RequestPartiesController(RequestPartiesCommand requestPartiesCommand, EventPublisher eventPublisher) {
+    public RequestPartiesController(RequestPartiesCommand requestPartiesCommand,
+                                    EventPublisher eventPublisher) {
 
         assert null != requestPartiesCommand;
         assert null != eventPublisher;
@@ -53,12 +55,16 @@ public class RequestPartiesController {
     }
 
     @PostMapping("/lookup")
-    public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request) throws FspiopException {
+    public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request)
+        throws FspiopException {
 
-        LOGGER.info("Received lookup request for partyId: {}, partyIdType: {}, destination: {}", request.partyId(), request.partyIdType(), request.destination());
+        LOGGER.info(
+            "Received lookup request for partyId: {}, partyIdType: {}, destination: {}",
+            request.partyId(), request.partyIdType(), request.destination());
         LOGGER.debug("Lookup request: {}", request);
 
-        var input = new RequestPartiesCommand.Input(new Payee(request.destination()), request.partyIdType, request.partyId, request.subId);
+        var input = new RequestPartiesCommand.Input(
+            new Payee(request.destination()), request.partyIdType, request.partyId, request.subId);
 
         var output = this.requestPartiesCommand.execute(input);
 
@@ -68,6 +74,9 @@ public class RequestPartiesController {
 
     }
 
-    public record Request(String destination, PartyIdType partyIdType, String partyId, String subId) { }
+    public record Request(String destination,
+                          PartyIdType partyIdType,
+                          String partyId,
+                          String subId) { }
 
 }

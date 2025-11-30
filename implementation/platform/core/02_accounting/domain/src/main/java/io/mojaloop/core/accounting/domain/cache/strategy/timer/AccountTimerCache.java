@@ -105,7 +105,9 @@ public class AccountTimerCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(final ChartEntryId chartEntryId, final AccountOwnerId ownerId, final Currency currency) {
+    public AccountData get(final ChartEntryId chartEntryId,
+                           final AccountOwnerId ownerId,
+                           final Currency currency) {
 
         if (chartEntryId == null || ownerId == null || currency == null) {
             return null;
@@ -132,14 +134,15 @@ public class AccountTimerCache implements AccountCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                AccountTimerCache.this.refreshData();
-            }
-        }, this.interval, this.interval);
+                    AccountTimerCache.this.refreshData();
+                }
+            }, this.interval, this.interval);
     }
 
     @Override
@@ -154,23 +157,49 @@ public class AccountTimerCache implements AccountCache {
         final var entities = this.accountRepository.findAll();
         final var accounts = entities.stream().map(Account::convert).toList();
 
-        var _withId = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::accountId, Function.identity(), (a, b) -> a));
+        var _withId = accounts
+                          .stream()
+                          .collect(Collectors.toUnmodifiableMap(
+                              AccountData::accountId,
+                              Function.identity(), (a, b) -> a));
 
-        var _withCode = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::code, Function.identity(), (a, b) -> a));
+        var _withCode = accounts
+                            .stream()
+                            .collect(
+                                Collectors.toUnmodifiableMap(
+                                    AccountData::code, Function.identity(),
+                                    (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(
-            accounts.stream().collect(Collectors.groupingBy(AccountData::ownerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(accounts
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               AccountData::ownerId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
-        var _withChartEntryId = Collections.unmodifiableMap(
-            accounts.stream().collect(Collectors.groupingBy(AccountData::chartEntryId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withChartEntryId = Collections.unmodifiableMap(accounts
+                                                                .stream()
+                                                                .collect(Collectors.groupingBy(
+                                                                    AccountData::chartEntryId,
+                                                                    Collectors.collectingAndThen(
+                                                                        Collectors.toSet(),
+                                                                        Collections::unmodifiableSet))));
 
-        var _withChartEntryIdOwnerIdCurrency = accounts.stream()
-                                                       .collect(Collectors.toUnmodifiableMap(acc -> AccountCache.Keys.forChart(acc.chartEntryId(), acc.ownerId(), acc.currency()),
-                                                           Function.identity(), (a, b) -> a));
+        var _withChartEntryIdOwnerIdCurrency = accounts
+                                                   .stream()
+                                                   .collect(Collectors.toUnmodifiableMap(
+                                                       acc -> AccountCache.Keys.forChart(
+                                                           acc.chartEntryId(), acc.ownerId(),
+                                                           acc.currency()), Function.identity(),
+                                                       (a, b) -> a));
 
         LOGGER.info("Refreshed Account cache data, count: {}", accounts.size());
 
-        this.snapshotRef.set(new Snapshot(_withId, _withCode, _withOwnerId, _withChartEntryIdOwnerIdCurrency, _withChartEntryId));
+        this.snapshotRef.set(
+            new Snapshot(
+                _withId, _withCode, _withOwnerId, _withChartEntryIdOwnerIdCurrency,
+                _withChartEntryId));
     }
 
     private record Snapshot(Map<AccountId, AccountData> withId,

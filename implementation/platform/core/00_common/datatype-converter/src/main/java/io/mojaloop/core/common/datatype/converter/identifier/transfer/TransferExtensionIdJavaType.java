@@ -83,7 +83,8 @@ public class TransferExtensionIdJavaType extends AbstractClassJavaType<TransferE
             case null -> null;
             case TransferExtensionId transferExtensionId -> transferExtensionId;
             case Number n -> new TransferExtensionId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

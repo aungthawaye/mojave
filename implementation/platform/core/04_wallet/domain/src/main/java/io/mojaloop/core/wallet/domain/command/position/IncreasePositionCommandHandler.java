@@ -25,6 +25,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
@@ -34,13 +35,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class IncreasePositionCommandHandler implements IncreasePositionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IncreasePositionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        IncreasePositionCommandHandler.class);
 
     private final PositionUpdater positionUpdater;
 
     private final PositionCache positionCache;
 
-    public IncreasePositionCommandHandler(final PositionUpdater positionUpdater, final PositionCache positionCache) {
+    public IncreasePositionCommandHandler(final PositionUpdater positionUpdater,
+                                          final PositionCache positionCache) {
 
         assert positionUpdater != null;
         assert positionCache != null;
@@ -50,7 +53,10 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+    public Output execute(final Input input) throws
+                                             NoPositionUpdateForTransactionException,
+                                             PositionLimitExceededException,
+                                             PositionNotExistException {
 
         LOGGER.info("Executing IncreasePositionCommand with input: {}", input);
 
@@ -58,19 +64,25 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
 
         if (position == null) {
 
-            LOGGER.error("Position does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
-            throw new RuntimeException("Position does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+            LOGGER.error(
+                "Position does not exist for walletOwnerId: {} and currency: {}",
+                input.walletOwnerId(), input.currency());
+            throw new PositionNotExistException(input.walletOwnerId(), input.currency());
         }
 
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
 
-            final var history = this.positionUpdater.increase(input.transactionId(), input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
-                input.description());
+            final var history = this.positionUpdater.increase(
+                input.transactionId(), input.transactionAt(), positionUpdateId,
+                position.positionId(), input.amount(), input.description());
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(
+                history.positionUpdateId(), history.positionId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(),
+                history.newReserved(), history.netDebitCap(), history.transactionAt());
 
             LOGGER.info("IncreasePositionCommand executed successfully with output: {}", output);
 
@@ -83,8 +95,12 @@ public class IncreasePositionCommandHandler implements IncreasePositionCommand {
 
         } catch (final PositionUpdater.LimitExceededException e) {
 
-            LOGGER.error("Position limit exceeded for positionId: {} amount: {}", e.getPositionId(), e.getAmount());
-            throw new PositionLimitExceededException(e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getOldReserved(), e.getNetDebitCap(), e.getTransactionId());
+            LOGGER.error(
+                "Position limit exceeded for positionId: {} amount: {}", e.getPositionId(),
+                e.getAmount());
+            throw new PositionLimitExceededException(
+                e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getOldReserved(),
+                e.getNetDebitCap(), e.getTransactionId());
         }
     }
 

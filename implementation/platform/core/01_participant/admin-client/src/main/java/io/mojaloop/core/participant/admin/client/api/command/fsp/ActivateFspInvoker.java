@@ -40,7 +40,8 @@ public class ActivateFspInvoker implements ActivateFspCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ActivateFspInvoker(ParticipantAdminService.FspCommand fspCommand, ObjectMapper objectMapper) {
+    public ActivateFspInvoker(ParticipantAdminService.FspCommand fspCommand,
+                              ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -53,8 +54,12 @@ public class ActivateFspInvoker implements ActivateFspCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.activateFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.activateFsp(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -64,7 +69,7 @@ public class ActivateFspInvoker implements ActivateFspCommand {
 
                 var throwable = ParticipantExceptionResolver.resolve(errorResponse);
 
-                if(throwable instanceof UncheckedDomainException ude) {
+                if (throwable instanceof UncheckedDomainException ude) {
                     throw ude;
                 }
             }

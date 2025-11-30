@@ -21,7 +21,7 @@
 package io.mojaloop.fspiop.invoker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.handy.P12Reader;
+import io.mojaloop.component.misc.handy.ContentLoader;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
@@ -38,6 +38,9 @@ import org.springframework.context.annotation.Import;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
+
 @ComponentScan(basePackages = {"io.mojaloop.fspiop.invoker"})
 @Import(value = {FspiopComponentConfiguration.class})
 public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.RequiredBeans {
@@ -50,10 +53,13 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                                          FspiopSigningInterceptor fspiopSigningInterceptor,
                                          ObjectMapper objectMapper) {
 
-        var builder = RetrofitService.newBuilder(PartiesService.class, settings.baseUrl())
-                                     .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                                     .withInterceptors(fspiopSigningInterceptor)
-                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper));
+        var builder = RetrofitService
+                          .newBuilder(PartiesService.class, settings.baseUrl())
+                          .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                          .withInterceptors(fspiopSigningInterceptor)
+                          .withConverterFactories(
+                              new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
+                              JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -62,10 +68,15 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
-                 var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
+            var keyStoreBase64 = Base64.getMimeDecoder().decode(keyStoreSettings.p12b64Content);
+            var trustStoreBase64 = Base64.getMimeDecoder().decode(trustStoreSettings.p12b64Content);
 
-                builder.withMutualTLS(keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput, transportSettings.trustStoreSettings.password,
+            try (var keyStoreInput = new ByteArrayInputStream(keyStoreBase64);
+                 var trustStoreInput = new ByteArrayInputStream(trustStoreBase64)) {
+
+                builder.withMutualTLS(
+                    keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
+                    transportSettings.trustStoreSettings.password,
                     transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
@@ -83,10 +94,13 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                                        FspiopSigningInterceptor fspiopSigningInterceptor,
                                        ObjectMapper objectMapper) {
 
-        var builder = RetrofitService.newBuilder(QuotesService.class, settings.baseUrl())
-                                     .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                                     .withInterceptors(fspiopSigningInterceptor)
-                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper));
+        var builder = RetrofitService
+                          .newBuilder(QuotesService.class, settings.baseUrl())
+                          .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                          .withInterceptors(fspiopSigningInterceptor)
+                          .withConverterFactories(
+                              new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
+                              JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -95,10 +109,15 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
-                 var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
+            var keyStoreBase64 = Base64.getMimeDecoder().decode(keyStoreSettings.p12b64Content);
+            var trustStoreBase64 = Base64.getMimeDecoder().decode(trustStoreSettings.p12b64Content);
 
-                builder.withMutualTLS(keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput, transportSettings.trustStoreSettings.password,
+            try (var keyStoreInput = new ByteArrayInputStream(keyStoreBase64);
+                 var trustStoreInput = new ByteArrayInputStream(trustStoreBase64)) {
+
+                builder.withMutualTLS(
+                    keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
+                    transportSettings.trustStoreSettings.password,
                     transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
@@ -115,10 +134,13 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                                              FspiopSigningInterceptor fspiopSigningInterceptor,
                                              ObjectMapper objectMapper) {
 
-        var builder = RetrofitService.newBuilder(TransfersService.class, settings.baseUrl())
-                                     .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                                     .withInterceptors(fspiopSigningInterceptor)
-                                     .withConverterFactories(new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(), JacksonConverterFactory.create(objectMapper));
+        var builder = RetrofitService
+                          .newBuilder(TransfersService.class, settings.baseUrl())
+                          .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                          .withInterceptors(fspiopSigningInterceptor)
+                          .withConverterFactories(
+                              new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
+                              JacksonConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -127,10 +149,15 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
             var keyStoreSettings = transportSettings.keyStoreSettings;
             var trustStoreSettings = transportSettings.trustStoreSettings;
 
-            try (var keyStoreInput = P12Reader.read(keyStoreSettings.contentType, keyStoreSettings.contentValue);
-                 var trustStoreInput = P12Reader.read(trustStoreSettings.contentType, trustStoreSettings.contentValue)) {
+            var keyStoreBase64 = Base64.getMimeDecoder().decode(keyStoreSettings.p12b64Content);
+            var trustStoreBase64 = Base64.getMimeDecoder().decode(trustStoreSettings.p12b64Content);
 
-                builder.withMutualTLS(keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput, transportSettings.trustStoreSettings.password,
+            try (var keyStoreInput = new ByteArrayInputStream(keyStoreBase64);
+                 var trustStoreInput = new ByteArrayInputStream(trustStoreBase64)) {
+
+                builder.withMutualTLS(
+                    keyStoreInput, transportSettings.keyStoreSettings.password, trustStoreInput,
+                    transportSettings.trustStoreSettings.password,
                     transportSettings.ignoreHostnameVerification);
 
             } catch (Exception e) {
@@ -155,11 +182,14 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
 
     }
 
-    public record TransportSettings(boolean useMutualTls, KeyStoreSettings keyStoreSettings, TrustStoreSettings trustStoreSettings, boolean ignoreHostnameVerification) {
+    public record TransportSettings(boolean useMutualTls,
+                                    KeyStoreSettings keyStoreSettings,
+                                    TrustStoreSettings trustStoreSettings,
+                                    boolean ignoreHostnameVerification) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
+        public record KeyStoreSettings(String p12b64Content, String password) { }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
+        public record TrustStoreSettings(String p12b64Content, String password) { }
 
     }
 

@@ -58,14 +58,17 @@ public class PostingDefinitionNotFoundException extends UncheckedDomainException
 
     public PostingDefinitionNotFoundException(final PostingDefinitionId postingDefinitionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{postingDefinitionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{postingDefinitionId.getId().toString()}));
 
         this.postingDefinitionId = postingDefinitionId;
     }
 
     public static PostingDefinitionNotFoundException from(final Map<String, String> extras) {
 
-        final var id = new PostingDefinitionId(Long.valueOf(extras.get(Keys.POSTING_DEFINITION_ID)));
+        final var id = new PostingDefinitionId(
+            Long.valueOf(extras.get(Keys.POSTING_DEFINITION_ID)));
 
         return new PostingDefinitionNotFoundException(id);
     }

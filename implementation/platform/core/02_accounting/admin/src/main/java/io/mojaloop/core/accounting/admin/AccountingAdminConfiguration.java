@@ -23,13 +23,14 @@ package io.mojaloop.core.accounting.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.accounting.admin.component.EmptyErrorWriter;
-import io.mojaloop.core.accounting.admin.component.EmptyGatekeeper;
+import io.mojaloop.core.accounting.admin.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.accounting.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
@@ -44,24 +45,31 @@ import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBased
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
+import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
+
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.accounting.admin")
-@Import(value = {OpenApiConfiguration.class, AccountingDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class,})
-public class AccountingAdminConfiguration extends JacksonWebMvcExtension
-    implements AccountingDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@ComponentScan(basePackages = "io.mojaloop.core.accounting.admin.controller")
+@Import(value = {OpenApiConfiguration.class,
+                 DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
+                 AccountingDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class,})
+final class AccountingAdminConfiguration extends WebMvcExtension implements
+                                                                        AccountingDomainConfiguration.RequiredBeans,
+                                                                        SpringSecurityConfiguration.RequiredBeans,
+                                                                        SpringSecurityConfiguration.RequiredSettings {
 
     private final AccountCache accountCache;
 
@@ -146,12 +154,14 @@ public class AccountingAdminConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

@@ -25,14 +25,22 @@ import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 public class PubSubKeys {
 
-    public static String forParties(Payee payee, PartyIdType partyIdType, String partyId, String subId) {
+    public static String forParties(Payee payee,
+                                    PartyIdType partyIdType,
+                                    String partyId,
+                                    String subId) {
 
-        return "parties:" + payee.fspCode() + "-" + partyId + "-" + partyIdType + (subId != null && !subId.isBlank() ? "-" + subId : "");
+        return "parties:" + payee.fspCode() + "-" + partyId + "-" + partyIdType +
+                   (subId != null && !subId.isBlank() ? "-" + subId : "");
     }
 
-    public static String forPartiesError(Payee payee, PartyIdType partyIdType, String partyId, String subId) {
+    public static String forPartiesError(Payee payee,
+                                         PartyIdType partyIdType,
+                                         String partyId,
+                                         String subId) {
 
-        return "parties-error:" + payee.fspCode() + "-" + partyId + "-" + partyIdType + (subId != null && !subId.isBlank() ? "-" + subId : "");
+        return "parties-error:" + payee.fspCode() + "-" + partyId + "-" + partyIdType +
+                   (subId != null && !subId.isBlank() ? "-" + subId : "");
     }
 
     public static String forQuotes(String quoteId) {

@@ -20,8 +20,9 @@
 
 package io.mojaloop.component.tomcat.connector;
 
-import io.mojaloop.component.misc.handy.P12Reader;
+import io.mojaloop.component.misc.handy.ContentLoader;
 import io.mojaloop.component.tomcat.ConnectorDecorator;
+import lombok.Getter;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.util.net.SSLHostConfig;
@@ -33,7 +34,9 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Base64;
 
+@Getter
 public class MutualTLSConnectorDecorator implements ConnectorDecorator {
 
     private final Settings settings;
@@ -93,14 +96,16 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
         return this.settings.port();
     }
 
-    private void addKeyStore(SSLHostConfig sslHostConfig, Settings.KeyStoreSettings keyStoreSettings) {
+    private void addKeyStore(SSLHostConfig sslHostConfig,
+                             Settings.KeyStoreSettings keyStoreSettings) {
 
-        try (var in = P12Reader.read(keyStoreSettings.contentType(), keyStoreSettings.contentValue())) {
+        try (var in = Base64.getMimeDecoder().wrap(ContentLoader.from(keyStoreSettings.file()))) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, keyStoreSettings.storePassword().toCharArray());
 
-            var certificate = new SSLHostConfigCertificate(sslHostConfig, SSLHostConfigCertificate.Type.RSA);
+            var certificate = new SSLHostConfigCertificate(
+                sslHostConfig, SSLHostConfigCertificate.Type.RSA);
 
             certificate.setCertificateKeystore(keyStore);
 
@@ -111,32 +116,42 @@ public class MutualTLSConnectorDecorator implements ConnectorDecorator {
 
             sslHostConfig.addCertificate(certificate);
 
-        } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException e) {
+        } catch (IOException | KeyStoreException | CertificateException |
+                 NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void setTrustStore(SSLHostConfig sslHostConfig, Settings.TrustStoreSettings trustStoreSettings) {
+    private void setTrustStore(SSLHostConfig sslHostConfig,
+                               Settings.TrustStoreSettings trustStoreSettings) {
 
-        try (var in = P12Reader.read(trustStoreSettings.contentType(), trustStoreSettings.contentValue())) {
+        try (var in = Base64.getMimeDecoder().wrap(ContentLoader.from(trustStoreSettings.file()))) {
 
             var keyStore = KeyStore.getInstance("PKCS12");
             KeyStoreUtil.load(keyStore, in, trustStoreSettings.storePassword().toCharArray());
 
             sslHostConfig.setTrustStore(keyStore);
 
-        } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException e) {
+        } catch (IOException | KeyStoreException | CertificateException |
+                 NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public record Settings(int port, int maxThreads, int connectionTimeout, TrustStoreSettings trustStoreSettings, KeyStoreSettings... keyStoreSettings) {
+    public record Settings(int port,
+                           int maxThreads,
+                           int connectionTimeout,
+                           TrustStoreSettings trustStoreSettings,
+                           KeyStoreSettings... keyStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String storePassword, String keyAlias) {
+        public record KeyStoreSettings(String file,
+                                       boolean base64,
+                                       String storePassword,
+                                       String keyAlias) {
 
         }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String storePassword) { }
+        public record TrustStoreSettings(String file, boolean base64, String storePassword) { }
 
     }
 

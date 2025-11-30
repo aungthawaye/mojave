@@ -35,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class DeactivateEndpointCommandHandler implements DeactivateEndpointCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateEndpointCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateEndpointCommandHandler.class);
 
     private final FspRepository fspRepository;
 
@@ -53,7 +54,9 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
 
         LOGGER.info("Executing DeactivateEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspEndpoint = fsp.deactivate(input.type());
 
@@ -62,7 +65,9 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
         LOGGER.info("Completed DeactivateEndpointCommand with input: {}", input);
 
         if (optFspEndpoint.isPresent()) {
-            return new Output(optFspEndpoint.map(FspEndpoint::getId).orElse(null), optFspEndpoint.get().isActive());
+            return new Output(
+                optFspEndpoint.map(FspEndpoint::getId).orElse(null),
+                optFspEndpoint.get().isActive());
         }
 
         return new Output(null, false);

@@ -52,7 +52,9 @@ public class DeactivateFspCommandHandler implements DeactivateFspCommand {
 
         LOGGER.info("Executing DeactivateFspCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         fsp.deactivate();
 

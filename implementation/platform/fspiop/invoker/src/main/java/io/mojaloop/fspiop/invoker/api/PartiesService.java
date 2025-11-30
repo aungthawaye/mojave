@@ -35,7 +35,9 @@ import java.util.Map;
 public interface PartiesService {
 
     @GET("parties/{partyIdType}/{partyId}")
-    Call<String> getParties(@HeaderMap Map<String, String> fspiopHeaders, @Path("partyIdType") PartyIdType partyIdType, @Path("partyId") String partyId);
+    Call<String> getParties(@HeaderMap Map<String, String> fspiopHeaders,
+                            @Path("partyIdType") PartyIdType partyIdType,
+                            @Path("partyId") String partyId);
 
     @GET("parties/{partyIdType}/{partyId}/{subId}")
     Call<String> getParties(@HeaderMap Map<String, String> fspiopHeaders,

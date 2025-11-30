@@ -22,6 +22,7 @@ package io.mojaloop.core.transfer;
 
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
+import io.mojaloop.core.accounting.producer.AccountingProducerConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
 import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
@@ -30,22 +31,31 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.transfer.domain"})
-@Import(value = {MiscConfiguration.class,
-                 FspiopCommonConfiguration.class,
-                 TransactionProducerConfiguration.class,
-                 ParticipantStoreConfiguration.class,
-                 RoutingJpaConfiguration.class})
+@Import(
+    value = {
+        MiscConfiguration.class,
+        TransferFlywayConfiguration.class,
+        FspiopCommonConfiguration.class,
+        AccountingProducerConfiguration.class,
+        TransactionProducerConfiguration.class,
+        ParticipantStoreConfiguration.class,
+        RoutingJpaConfiguration.class})
 public class TransferDomainConfiguration {
 
-    public interface RequiredBeans
-        extends MiscConfiguration.RequiredBeans, FspiopCommonConfiguration.RequiredBeans, TransactionProducerConfiguration.RequiredBeans, RoutingJpaConfiguration.RequiredBeans {
+    public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
+                                           FspiopCommonConfiguration.RequiredBeans,
+                                           AccountingProducerConfiguration.RequiredBeans,
+                                           TransactionProducerConfiguration.RequiredBeans,
+                                           RoutingJpaConfiguration.RequiredBeans {
 
         PartyUnwrapper partyUnwrapper();
 
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              TransferFlywayConfiguration.RequiredSettings,
                                               FspiopCommonConfiguration.RequiredSettings,
+                                              AccountingProducerConfiguration.RequiredSettings,
                                               TransactionProducerConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {

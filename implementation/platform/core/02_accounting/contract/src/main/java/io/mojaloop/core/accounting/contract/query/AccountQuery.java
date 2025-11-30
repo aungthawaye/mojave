@@ -59,9 +59,16 @@ public interface AccountQuery {
 
     }
 
-    record Criteria(Filter filter, PagedRequest pagedRequest, Sorting.Column sortingColumn, SortingMode sortingMode) {
+    record Criteria(Filter filter,
+                    PagedRequest pagedRequest,
+                    Sorting.Column sortingColumn,
+                    SortingMode sortingMode) {
 
-        public record Filter(AccountCode accountCode, String name, AccountOwnerId ownerId, ChartEntryId chartEntryId, Currency currency) { }
+        public record Filter(AccountCode accountCode,
+                             String name,
+                             AccountOwnerId ownerId,
+                             ChartEntryId chartEntryId,
+                             Currency currency) { }
 
     }
 

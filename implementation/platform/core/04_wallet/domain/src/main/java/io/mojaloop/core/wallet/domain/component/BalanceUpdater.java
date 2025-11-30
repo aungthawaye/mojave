@@ -23,7 +23,7 @@ package io.mojaloop.core.wallet.domain.component;
 import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.fspiop.spec.core.Currency;
 import lombok.Getter;
 
@@ -32,16 +32,26 @@ import java.time.Instant;
 
 public interface BalanceUpdater {
 
-    BalanceHistory deposit(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
-        throws BalanceUpdater.NoBalanceUpdateException;
+    BalanceHistory deposit(TransactionId transactionId,
+                           Instant transactionAt,
+                           BalanceUpdateId balanceUpdateId,
+                           BalanceId balanceId,
+                           BigDecimal amount,
+                           String description) throws BalanceUpdater.NoBalanceUpdateException;
 
-    BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId) throws BalanceUpdater.ReversalFailedException;
+    BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId)
+        throws BalanceUpdater.ReversalFailedException;
 
-    BalanceHistory withdraw(TransactionId transactionId, Instant transactionAt, BalanceUpdateId balanceUpdateId, WalletId walletId, BigDecimal amount, String description)
+    BalanceHistory withdraw(TransactionId transactionId,
+                            Instant transactionAt,
+                            BalanceUpdateId balanceUpdateId,
+                            BalanceId balanceId,
+                            BigDecimal amount,
+                            String description)
         throws BalanceUpdater.NoBalanceUpdateException, BalanceUpdater.InsufficientBalanceException;
 
     record BalanceHistory(BalanceUpdateId balanceUpdateId,
-                          WalletId walletId,
+                          BalanceId balanceId,
                           BalanceAction action,
                           TransactionId transactionId,
                           Currency currency,
@@ -70,19 +80,23 @@ public interface BalanceUpdater {
 
         private final TransactionId transactionId;
 
-        private final WalletId walletId;
+        private final BalanceId balanceId;
 
         private final BigDecimal amount;
 
         private final BigDecimal oldBalance;
 
-        public InsufficientBalanceException(TransactionId transactionId, WalletId walletId, BigDecimal amount, BigDecimal oldBalance) {
+        public InsufficientBalanceException(TransactionId transactionId,
+                                            BalanceId balanceId,
+                                            BigDecimal amount,
+                                            BigDecimal oldBalance) {
 
-            super("Insufficient balance in walletId: " + walletId + " amount: " + amount + " transactionId: " + transactionId + " oldBalance: " +
+            super("Insufficient balance in balanceId: " + balanceId + " amount: " + amount +
+                      " transactionId: " + transactionId + " oldBalance: " +
                       oldBalance.stripTrailingZeros().toPlainString());
 
             this.transactionId = transactionId;
-            this.walletId = walletId;
+            this.balanceId = balanceId;
             this.amount = amount;
             this.oldBalance = oldBalance;
         }

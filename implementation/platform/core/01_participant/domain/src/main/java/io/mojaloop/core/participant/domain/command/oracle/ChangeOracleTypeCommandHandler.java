@@ -53,7 +53,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeOracleTypeCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeOracleTypeCommandHandler.class);
 
     private final OracleRepository oracleRepository;
 
@@ -70,7 +71,9 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
 
         LOGGER.info("Executing ChangeOracleTypeCommand with input: {}", input);
 
-        var oracle = this.oracleRepository.findById(input.oracleId()).orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+        var oracle = this.oracleRepository
+                         .findById(input.oracleId())
+                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         var newType = input.type();
         if (oracle.getType() != null && oracle.getType().equals(newType)) {
@@ -79,7 +82,11 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
         }
 
         // Check for conflict: any other oracle already holds this type
-        var existing = this.oracleRepository.findOne(OracleRepository.Filters.withType(newType).and(Specification.not(OracleRepository.Filters.withId(oracle.getId()))));
+        var existing = this.oracleRepository.findOne(OracleRepository.Filters
+                                                         .withType(newType)
+                                                         .and(Specification.not(
+                                                             OracleRepository.Filters.withId(
+                                                                 oracle.getId()))));
 
         if (existing.isPresent()) {
 

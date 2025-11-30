@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +28,6 @@ import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
-import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
-import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,7 +37,8 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
 
     private final ObjectMapper objectMapper;
 
-    public RollbackReservationInvoker(final WalletAdminService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public RollbackReservationInvoker(final WalletAdminService.PositionCommand positionCommand,
+                                      final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -52,8 +52,12 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.rollback(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.rollback(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -74,4 +78,5 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +36,8 @@ public class CreatePositionInvoker implements CreatePositionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreatePositionInvoker(final WalletAdminService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public CreatePositionInvoker(final WalletAdminService.PositionCommand positionCommand,
+                                 final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -49,8 +51,12 @@ public class CreatePositionInvoker implements CreatePositionCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.create(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.create(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -68,4 +74,5 @@ public class CreatePositionInvoker implements CreatePositionCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

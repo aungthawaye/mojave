@@ -83,7 +83,8 @@ public class QuoteIdJavaType extends AbstractClassJavaType<QuoteId> {
             case null -> null;
             case QuoteId quoteId -> quoteId;
             case Number n -> new QuoteId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

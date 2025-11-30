@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.wallet.store.timer;
 
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
-import io.mojaloop.core.wallet.contract.data.WalletData;
-import io.mojaloop.core.wallet.contract.query.WalletQuery;
+import io.mojaloop.core.wallet.contract.data.BalanceData;
+import io.mojaloop.core.wallet.contract.query.BalanceQuery;
 import io.mojaloop.core.wallet.store.WalletStore;
 import io.mojaloop.core.wallet.store.WalletStoreConfiguration;
 import io.mojaloop.fspiop.spec.core.Currency;
@@ -47,7 +47,7 @@ public class WalletTimerStore implements WalletStore {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WalletTimerStore.class);
 
-    private final WalletQuery walletQuery;
+    private final BalanceQuery balanceQuery;
 
     private final WalletStoreConfiguration.Settings walletStoreSettings;
 
@@ -55,12 +55,13 @@ public class WalletTimerStore implements WalletStore {
 
     private final Timer timer = new Timer("WalletLocalStoreRefreshTimer", true);
 
-    public WalletTimerStore(final WalletQuery walletQuery, final WalletStoreConfiguration.Settings walletStoreSettings) {
+    public WalletTimerStore(final BalanceQuery balanceQuery,
+                            final WalletStoreConfiguration.Settings walletStoreSettings) {
 
-        assert walletQuery != null;
+        assert balanceQuery != null;
         assert walletStoreSettings != null;
 
-        this.walletQuery = walletQuery;
+        this.balanceQuery = balanceQuery;
         this.walletStoreSettings = walletStoreSettings;
     }
 
@@ -77,28 +78,29 @@ public class WalletTimerStore implements WalletStore {
         LOGGER.info("Bootstrapping WalletTimerStore");
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                WalletTimerStore.this.refreshData();
-            }
-        }, interval, interval);
+                    WalletTimerStore.this.refreshData();
+                }
+            }, interval, interval);
     }
 
     @Override
-    public WalletData get(final WalletId walletId) {
+    public BalanceData get(final BalanceId balanceId) {
 
-        if (walletId == null) {
+        if (balanceId == null) {
             return null;
         }
 
-        return this.snapshotRef.get().withWalletId.get(walletId);
+        return this.snapshotRef.get().withWalletId.get(balanceId);
     }
 
     @Override
-    public WalletData get(final WalletOwnerId walletOwnerId, final Currency currency) {
+    public BalanceData get(final WalletOwnerId walletOwnerId, final Currency currency) {
 
         if (walletOwnerId == null || currency == null) {
             return null;
@@ -109,7 +111,7 @@ public class WalletTimerStore implements WalletStore {
     }
 
     @Override
-    public Set<WalletData> get(final WalletOwnerId walletOwnerId) {
+    public Set<BalanceData> get(final WalletOwnerId walletOwnerId) {
 
         if (walletOwnerId == null) {
             return Set.of();
@@ -122,21 +124,36 @@ public class WalletTimerStore implements WalletStore {
 
         LOGGER.info("Start refreshing wallet data");
 
-        List<WalletData> wallets = this.walletQuery.getAll();
+        List<BalanceData> wallets = this.balanceQuery.getAll();
 
-        var _withWalletId = wallets.stream().collect(Collectors.toUnmodifiableMap(WalletData::walletId, Function.identity(), (a, b) -> a));
+        var _withWalletId = wallets
+                                .stream()
+                                .collect(Collectors.toUnmodifiableMap(
+                                    BalanceData::balanceId,
+                                    Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(
-            wallets.stream().collect(Collectors.groupingBy(WalletData::walletOwnerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(wallets
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               BalanceData::walletOwnerId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
-        var _withOwnerCurrency = wallets.stream().collect(Collectors.toUnmodifiableMap(w -> key(w.walletOwnerId(), w.currency()), Function.identity(), (a, b) -> a));
+        var _withOwnerCurrency = wallets
+                                     .stream()
+                                     .collect(Collectors.toUnmodifiableMap(
+                                         w -> key(w.walletOwnerId(), w.currency()),
+                                         Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed Wallet data, count: {}", wallets.size());
 
         this.snapshotRef.set(new Snapshot(_withWalletId, _withOwnerId, _withOwnerCurrency));
     }
 
-    private record Snapshot(Map<WalletId, WalletData> withWalletId, Map<WalletOwnerId, Set<WalletData>> withOwnerId, Map<String, WalletData> withOwnerCurrency) {
+    private record Snapshot(Map<BalanceId, BalanceData> withWalletId,
+                            Map<WalletOwnerId, Set<BalanceData>> withOwnerId,
+                            Map<String, BalanceData> withOwnerCurrency) {
 
         static Snapshot empty() {
 

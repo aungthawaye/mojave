@@ -83,7 +83,8 @@ public class ChartEntryIdJavaType extends AbstractClassJavaType<ChartEntryId> {
             case null -> null;
             case ChartEntryId id -> id;
             case Number n -> new ChartEntryId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

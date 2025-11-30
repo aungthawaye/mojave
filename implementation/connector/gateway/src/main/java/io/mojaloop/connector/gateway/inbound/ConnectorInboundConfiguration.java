@@ -22,9 +22,10 @@ package io.mojaloop.connector.gateway.inbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
-import io.mojaloop.component.misc.handy.P12Reader;
+import io.mojaloop.component.misc.crypto.KeyStores;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
-import io.mojaloop.component.tomcat.connector.MutualTLSConnectorDecorator;
+import io.mojaloop.component.tomcat.MutualTlsTomcatFactoryConfigurer;
+import io.mojaloop.component.tomcat.SimpleTomcatFactoryConfigurer;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -33,8 +34,8 @@ import io.mojaloop.connector.adapter.ConnectorAdapterConfiguration;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
-import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -46,21 +47,33 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.List;
 
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableAsync
 @EnableWebMvc
-@Import(value = {MiscConfiguration.class, ConnectorAdapterConfiguration.class, FspiopInvokerConfiguration.class, SpringSecurityConfiguration.class,})
+@Import(
+    value = {
+        MiscConfiguration.class,
+        ConnectorAdapterConfiguration.class,
+        FspiopInvokerConfiguration.class,
+        SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.inbound"})
-public class ConnectorInboundConfiguration
-    implements MiscConfiguration.RequiredBeans, FspiopInvokerConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredBeans,
+                                                      FspiopInvokerConfiguration.RequiredBeans,
+                                                      SpringSecurityConfiguration.RequiredBeans,
+                                                      SpringSecurityConfiguration.RequiredSettings {
 
     private final ParticipantContext participantContext;
 
     private final ObjectMapper objectMapper;
 
-    public ConnectorInboundConfiguration(ParticipantContext participantContext, ObjectMapper objectMapper) {
+    public ConnectorInboundConfiguration(ParticipantContext participantContext,
+                                         ObjectMapper objectMapper) {
 
         assert participantContext != null;
         assert objectMapper != null;
@@ -89,7 +102,8 @@ public class ConnectorInboundConfiguration
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("*"));  // or your allowed origins
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
+        config.setAllowedMethods(
+            List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
@@ -104,50 +118,40 @@ public class ConnectorInboundConfiguration
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
+        return new SpringSecurityConfigurer.Settings(
+            new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
     }
 
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(InboundSettings inboundSettings) {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer(
+        InboundSettings inboundSettings)
+        throws CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException {
 
-        return factory -> {
-            // existing port configuration
-            factory.setPort(inboundSettings.portNo());
 
-            factory.addConnectorCustomizers(connector -> {
+        if (!inboundSettings.useMutualTls()) {
 
-                var protocolHandler = connector.getProtocolHandler();
+            return SimpleTomcatFactoryConfigurer.configure(
+                new SimpleTomcatFactoryConfigurer.ServerSettings(
+                    inboundSettings.portNo(), inboundSettings.maxThreads(),
+                    inboundSettings.maxThreads() / 2, inboundSettings.maxThreads(),
+                    inboundSettings.connectionTimeout(), inboundSettings.maxThreads()));
+        } else {
 
-                if (protocolHandler instanceof Http11NioProtocol protocol) {
+            var keyStore = KeyStores.Base64Pkcs12.base64(
+                inboundSettings.keyStoreSettings.p12b64Content,
+                inboundSettings.keyStoreSettings.password);
 
-                    protocol.setConnectionTimeout(inboundSettings.connectionTimeout());
-                    protocol.setMaxThreads(inboundSettings.maxThreads());
+            var trustStore = KeyStores.Base64Pkcs12.base64(
+                inboundSettings.trustStoreSettings.p12b64Content,
+                inboundSettings.trustStoreSettings.password);
 
-                    if (inboundSettings.useMutualTls()) {
-
-                        try {
-
-                            var keystoreSettings = inboundSettings.keyStoreSettings();
-                            var truststoreSettings = inboundSettings.trustStoreSettings();
-                            var connectorSettings = new MutualTLSConnectorDecorator.Settings(inboundSettings.portNo(), inboundSettings.maxThreads(),
-                                inboundSettings.connectionTimeout(),
-                                new MutualTLSConnectorDecorator.Settings.TrustStoreSettings(truststoreSettings.contentType(), truststoreSettings.contentValue(),
-                                    truststoreSettings.password),
-                                new MutualTLSConnectorDecorator.Settings.KeyStoreSettings(keystoreSettings.contentType(), keystoreSettings.contentValue(),
-                                    keystoreSettings.password, keystoreSettings.keyAlias()));
-
-                            var decorator = new MutualTLSConnectorDecorator(connectorSettings);
-
-                        } catch (Exception e) {
-
-                            throw new RuntimeException(e);
-                        }
-
-                    }
-                }
-
-            });
-        };
+            return MutualTlsTomcatFactoryConfigurer.configure(
+                new MutualTlsTomcatFactoryConfigurer.ServerSettings(
+                    inboundSettings.portNo(), inboundSettings.maxThreads(),
+                    inboundSettings.maxThreads() / 2, inboundSettings.maxThreads(),
+                    inboundSettings.connectionTimeout(), inboundSettings.maxThreads()), keyStore,
+                inboundSettings.keyStoreSettings.password, trustStore);
+        }
     }
 
     public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans {
@@ -156,7 +160,9 @@ public class ConnectorInboundConfiguration
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, ConnectorAdapterConfiguration.RequiredSettings, FspiopInvokerConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              ConnectorAdapterConfiguration.RequiredSettings,
+                                              FspiopInvokerConfiguration.RequiredSettings {
 
         InboundSettings inboundSettings();
 
@@ -169,9 +175,9 @@ public class ConnectorInboundConfiguration
                                   KeyStoreSettings keyStoreSettings,
                                   TrustStoreSettings trustStoreSettings) {
 
-        public record KeyStoreSettings(P12Reader.ContentType contentType, String contentValue, String password, String keyAlias) { }
+        public record KeyStoreSettings(String p12b64Content, String password, String keyAlias) { }
 
-        public record TrustStoreSettings(P12Reader.ContentType contentType, String contentValue, String password) { }
+        public record TrustStoreSettings(String p12b64Content, String password) { }
 
     }
 

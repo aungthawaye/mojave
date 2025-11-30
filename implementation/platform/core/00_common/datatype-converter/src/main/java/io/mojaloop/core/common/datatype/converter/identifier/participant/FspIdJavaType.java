@@ -82,7 +82,8 @@ public class FspIdJavaType extends AbstractClassJavaType<FspId> {
             case null -> null;
             case FspId fspId -> fspId;
             case Number n -> new FspId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

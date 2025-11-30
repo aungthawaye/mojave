@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,21 +21,23 @@
 package io.mojaloop.core.wallet.contract.command.position;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
-import io.mojaloop.fspiop.spec.core.Currency;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToUpdateNdcException;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public interface UpdateNetDebitCapCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws FailedToUpdateNdcException;
 
-    record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
-                 @JsonProperty(required = true) @NotNull Currency currency,
-                 @JsonProperty(required = true) @NotNull BigDecimal netDebitCap) { }
+    record Input(@JsonProperty(required = true) @NotNull PositionId positionId,
+                 @JsonProperty(required = true) @NotNull BigDecimal netDebitCap,
+                 @JsonProperty(required = true) @NotNull TransactionId transactionId,
+                 @JsonProperty(required = true) @NotNull Instant transactionAt) { }
 
-    record Output(PositionId positionId) { }
+    record Output(BigDecimal position, BigDecimal reserved, BigDecimal netDebitCap) { }
 
 }

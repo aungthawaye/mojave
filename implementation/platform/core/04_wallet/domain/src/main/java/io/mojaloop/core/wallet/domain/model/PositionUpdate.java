@@ -57,12 +57,19 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(name = "wlt_position_update",
-       uniqueConstraints = {@UniqueConstraint(name = "wlt_position_update_position_id_action_transaction_id_UK", columnNames = {"position_id", "action", "transaction_id"}),
-                            @UniqueConstraint(name = "wlt_balance_update_reversed_id_UK", columnNames = {"reservation_id"})},
-       indexes = {@Index(name = "wlt_position_update_position_id_action_transaction_at_idx", columnList = "position_id, action, transaction_at"),
-                  @Index(name = "wlt_position_update_transaction_at_idx", columnList = "transaction_at")})
+       uniqueConstraints = {@UniqueConstraint(name = "wlt_position_update_position_id_action_transaction_id_UK",
+                                              columnNames = {"position_id",
+                                                             "action",
+                                                             "transaction_id"}),
+                            @UniqueConstraint(name = "wlt_balance_update_reversed_id_UK",
+                                              columnNames = {"reservation_id"})},
+       indexes = {@Index(name = "wlt_position_update_position_id_action_transaction_at_idx",
+                         columnList = "position_id, action, transaction_at"),
+                  @Index(name = "wlt_position_update_transaction_at_idx",
+                         columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PositionUpdate extends JpaEntity<PositionUpdateId> implements DataConversion<PositionUpdateData> {
+public class PositionUpdate extends JpaEntity<PositionUpdateId>
+    implements DataConversion<PositionUpdateData> {
 
     @Id
     @JavaType(PositionUpdateIdJavaType.class)
@@ -122,8 +129,10 @@ public class PositionUpdate extends JpaEntity<PositionUpdateId> implements DataC
     @Override
     public PositionUpdateData convert() {
 
-        return new PositionUpdateData(this.id, this.positionId, this.action, this.transactionId, this.currency, this.amount, this.oldPosition, this.newPosition, this.description,
-            this.transactionAt, this.createdAt, this.reservationId);
+        return new PositionUpdateData(
+            this.id, this.positionId, this.action, this.transactionId, this.currency, this.amount,
+            this.oldPosition, this.newPosition, this.description, this.transactionAt,
+            this.createdAt, this.reservationId);
     }
 
 }

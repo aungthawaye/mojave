@@ -63,7 +63,8 @@ public class Interledger {
 
     public static String base64Encode(byte[] data, boolean padding) {
 
-        return !padding ? Base64.getUrlEncoder().withoutPadding().encodeToString(data) : Base64.getUrlEncoder().encodeToString(data);
+        return !padding ? Base64.getUrlEncoder().withoutPadding().encodeToString(data) :
+                   Base64.getUrlEncoder().encodeToString(data);
     }
 
     private static <T> T deserialize(String base64Packet, Class<T> clazz) {
@@ -77,7 +78,12 @@ public class Interledger {
         }
     }
 
-    public static Optional<String> fulfil(String ilpSecret, String peer, UnsignedLong amount, String data, String condition, int lifetimeSeconds) {
+    public static Optional<String> fulfil(String ilpSecret,
+                                          String peer,
+                                          UnsignedLong amount,
+                                          String data,
+                                          String condition,
+                                          int lifetimeSeconds) {
 
         assert ilpSecret != null;
         assert peer != null;
@@ -97,14 +103,21 @@ public class Interledger {
 
     }
 
-    private static byte[] preimage(String ilpSecret, UnsignedLong amount, String destination, String data) {
+    private static byte[] preimage(String ilpSecret,
+                                   UnsignedLong amount,
+                                   String destination,
+                                   String data) {
 
         String joined = ilpSecret + ":" + amount.longValue() + ":" + destination + ":" + data;
 
         return DigestUtils.sha256(joined.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static Prepare prepare(String ilpSecret, String peer, UnsignedLong amount, String data, int lifetimeSeconds) {
+    public static Prepare prepare(String ilpSecret,
+                                  String peer,
+                                  UnsignedLong amount,
+                                  String data,
+                                  int lifetimeSeconds) {
 
         assert ilpSecret != null;
         assert peer != null;
@@ -117,15 +130,20 @@ public class Interledger {
         LOGGER.debug("preimage: {}", preimage);
         LOGGER.debug("fulfillment.preimage: {}", fulfillment.getPreimage());
 
-        InterledgerPreparePacket preparePacket = InterledgerPreparePacket.builder()
-                                                                         .amount(amount)
-                                                                         .destination(InterledgerAddress.of(peer))
-                                                                         .executionCondition(condition)
-                                                                         .expiresAt(Instant.now().plusSeconds(lifetimeSeconds))
-                                                                         .data(data.getBytes(StandardCharsets.UTF_8))
-                                                                         .build();
+        InterledgerPreparePacket preparePacket = InterledgerPreparePacket
+                                                     .builder()
+                                                     .amount(amount)
+                                                     .destination(InterledgerAddress.of(peer))
+                                                     .executionCondition(condition)
+                                                     .expiresAt(
+                                                         Instant.now().plusSeconds(lifetimeSeconds))
+                                                     .data(data.getBytes(StandardCharsets.UTF_8))
+                                                     .build();
 
-        return new Prepare(base64Encode(serialize(preparePacket), true), base64Encode(fulfillment.getPreimage(), false), base64Encode(condition.getHash(), false));
+        return new Prepare(
+            base64Encode(serialize(preparePacket), true),
+            base64Encode(fulfillment.getPreimage(), false),
+            base64Encode(condition.getHash(), false));
 
     }
 
@@ -151,13 +169,16 @@ public class Interledger {
         return deserialize(base64Packet, InterledgerPreparePacket.class);
     }
 
-    public record Prepare(String base64PreparePacket, String base64Fulfillment, String base64Condition) { }
+    public record Prepare(String base64PreparePacket,
+                          String base64Fulfillment,
+                          String base64Condition) { }
 
     public record Fulfill(boolean valid, String base64Fulfillment) { }
 
     public static class Amount {
 
-        private static final BigInteger UINT64_MAX = new BigInteger(UnsignedLong.MAX_VALUE.toString());
+        private static final BigInteger UINT64_MAX = new BigInteger(
+            UnsignedLong.MAX_VALUE.toString());
 
         public static BigDecimal deserialize(UnsignedLong amount, int scale) {
 
@@ -169,7 +190,9 @@ public class Interledger {
             return new BigDecimal(minor).movePointLeft(scale);
         }
 
-        public static UnsignedLong serialize(BigDecimal amount, int scale, RoundingMode roundingMode) {
+        public static UnsignedLong serialize(BigDecimal amount,
+                                             int scale,
+                                             RoundingMode roundingMode) {
 
             assert amount != null;
             assert scale >= 0;

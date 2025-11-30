@@ -21,6 +21,7 @@
 package io.mojaloop.core.transaction.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import io.mojaloop.core.transaction.domain.repository.TransactionRepository;
@@ -28,8 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 @Service
 public class AddStepCommandHandler implements AddStepCommand {
@@ -49,22 +48,21 @@ public class AddStepCommandHandler implements AddStepCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing AddStepCommand with input: {}", input);
+        LOGGER.info("AddStepCommandHandler : input : ({})", ObjectLogger.log(input));
 
-        var transaction = this.transactionRepository.findById(input.transactionId()).orElseThrow(() -> new TransactionIdNotFoundException(input.transactionId()));
-        LOGGER.info("Found Transaction with id: {}", input.transactionId());
+        var transaction = this.transactionRepository
+                              .findById(input.transactionId())
+                              .orElseThrow(
+                                  () -> new TransactionIdNotFoundException(input.transactionId()));
 
-        Map<String, String> params = input.params() == null ? Map.of() : input.params();
-
-        transaction.addStep(input.phase(), input.name(), params);
-        LOGGER.info("Added step '{}' with phase {} to transaction {}", input.name(), input.phase(), transaction.getId());
+        transaction.addStep(input.phase(), input.name(), input.context(), input.payload());
 
         this.transactionRepository.save(transaction);
-        LOGGER.info("Saved Transaction with id: {}", transaction.getId());
 
-        LOGGER.info("Completed AddStepCommand with input: {}", input);
+        var output = new Output(transaction.getId());
+        LOGGER.info("AddStepCommandHandler : output : ({})", ObjectLogger.log(output));
 
-        return new Output(transaction.getId());
+        return output;
     }
 
 }

@@ -32,9 +32,11 @@ public class SpringSecurityConfiguration {
     public SecurityFilterChain applicationSecurity(HttpSecurity httpSecurity,
                                                    SpringSecurityConfigurer.Settings settings,
                                                    Authenticator authenticator,
-                                                   AuthenticationErrorWriter authenticationErrorWriter) throws Exception {
+                                                   AuthenticationErrorWriter authenticationErrorWriter)
+        throws Exception {
 
-        return SpringSecurityConfigurer.configure(httpSecurity, settings, authenticator, authenticationErrorWriter);
+        return SpringSecurityConfigurer.configure(
+            httpSecurity, settings, authenticator, authenticationErrorWriter);
     }
 
     public interface RequiredBeans {

@@ -53,12 +53,14 @@ import org.springframework.context.annotation.Import;
 public class TransactionIntercomClientConfiguration implements MiscConfiguration.RequiredBeans {
 
     @Bean
-    public TransactionIntercomService transactionIntercomService(TransactionIntercomService.Settings settings, ObjectMapper objectMapper) {
+    public TransactionIntercomService transactionIntercomService(TransactionIntercomService.Settings settings,
+                                                                 ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(TransactionIntercomService.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(TransactionIntercomService.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans {

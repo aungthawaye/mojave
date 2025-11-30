@@ -44,7 +44,8 @@ public class HubCurrencyId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<HubCurrencyId> {
 
         @Override
-        public HubCurrencyId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public HubCurrencyId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class HubCurrencyId extends EntityId<Long> {
             try {
                 return new HubCurrencyId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 
@@ -70,6 +72,7 @@ public class HubCurrencyId extends EntityId<Long> {
 
             return new HubCurrencyId(Long.parseLong(source));
         }
+
     }
 
 }

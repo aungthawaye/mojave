@@ -57,7 +57,8 @@ public class ChartEntryNameAlreadyExistsException extends UncheckedDomainExcepti
 
     private final String chartName;
 
-    public ChartEntryNameAlreadyExistsException(final String chartEntryName, final String chartName) {
+    public ChartEntryNameAlreadyExistsException(final String chartEntryName,
+                                                final String chartName) {
 
         super(new ErrorTemplate(CODE, TEMPLATE, new String[]{chartEntryName, chartName}));
 

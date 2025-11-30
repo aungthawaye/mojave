@@ -29,7 +29,8 @@ public interface ChangeOracleTypeCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull OracleId oracleId, @JsonProperty(required = true) @NotNull PartyIdType type) { }
+    record Input(@JsonProperty(required = true) @NotNull OracleId oracleId,
+                 @JsonProperty(required = true) @NotNull PartyIdType type) { }
 
     record Output() { }
 

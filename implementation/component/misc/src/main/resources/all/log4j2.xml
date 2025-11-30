@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss}{GMT+06:30}|%level|REQ_ID=%X{REQ_ID}|%t|%logger{36} - %msg%xEx%n"/>
+        </Console>
+
+        <!-- Asynchronous wrapper -->
+        <Async name="ASYNC_CONSOLE" bufferSize="262144" blocking="true">
+            <AppenderRef ref="CONSOLE"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ASYNC_CONSOLE"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+

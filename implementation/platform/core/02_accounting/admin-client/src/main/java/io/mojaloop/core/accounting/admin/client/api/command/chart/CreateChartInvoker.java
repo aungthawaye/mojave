@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.client.api.command.chart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,8 @@ public class CreateChartInvoker implements CreateChartCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateChartInvoker(final AccountingAdminService.ChartCommand chartCommand, final ObjectMapper objectMapper) {
+    public CreateChartInvoker(final AccountingAdminService.ChartCommand chartCommand,
+                              final ObjectMapper objectMapper) {
 
         assert chartCommand != null;
         assert objectMapper != null;
@@ -47,8 +49,12 @@ public class CreateChartInvoker implements CreateChartCommand {
 
         try {
 
-            return RetrofitService.invoke(this.chartCommand.create(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.chartCommand.create(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -66,4 +72,5 @@ public class CreateChartInvoker implements CreateChartCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

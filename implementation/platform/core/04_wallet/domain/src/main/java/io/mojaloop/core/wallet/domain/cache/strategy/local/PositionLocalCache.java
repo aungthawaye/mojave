@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.domain.cache.strategy.local;
 
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
@@ -28,6 +29,7 @@ import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.annotation.PostConstruct;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,6 +53,93 @@ public class PositionLocalCache implements PositionCache {
         this.withId = new ConcurrentHashMap<>();
         this.withOwnerCurrency = new ConcurrentHashMap<>();
         this.withOwnerId = new ConcurrentHashMap<>();
+    }
+
+    private static String key(final WalletOwnerId walletOwnerId, final Currency currency) {
+
+        return walletOwnerId.getId().toString() + ":" + currency.name();
+    }
+
+    @Override
+    public PositionData get(final PositionId positionId) {
+
+        if (positionId == null) {
+            return null;
+        }
+
+        var data = this.withId.get(positionId.getId());
+
+        if (data == null) {
+
+            var entity = this.positionRepository.findById(positionId).orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
+    }
+
+    @Override
+    public PositionData get(final WalletOwnerId walletOwnerId, final Currency currency) {
+
+        if (walletOwnerId == null || currency == null) {
+            return null;
+        }
+
+        final var key = key(walletOwnerId, currency);
+
+        var data = this.withOwnerCurrency.get(key);
+
+        if (data == null) {
+
+            var entity = this.positionRepository
+                             .findOne(PositionRepository.Filters
+                                          .withOwnerId(walletOwnerId)
+                                          .and(PositionRepository.Filters.withCurrency(currency)))
+                             .orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
+    }
+
+    @Override
+    public Set<PositionData> get(final WalletOwnerId walletOwnerId) {
+
+        if (walletOwnerId == null) {
+            return Set.of();
+        }
+
+        final var set = this.withOwnerId.get(walletOwnerId.getId());
+
+        if (set == null) {
+
+            var set2 = new HashSet<PositionData>();
+
+            var entities = this.positionRepository.findAll(
+                PositionRepository.Filters.withOwnerId(walletOwnerId));
+
+            entities.forEach((entity) -> {
+                var position = entity.convert();
+                this.save(position);
+                set2.add(position);
+            });
+
+            return set2;
+        }
+
+        return set;
     }
 
     @PostConstruct
@@ -79,44 +168,10 @@ public class PositionLocalCache implements PositionCache {
         final var key = key(position.walletOwnerId(), position.currency());
         this.withOwnerCurrency.put(key, position);
 
-        final var set = this.withOwnerId.computeIfAbsent(position.walletOwnerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        final var set = this.withOwnerId.computeIfAbsent(
+            position.walletOwnerId().getId(),
+            __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(position);
     }
 
-    @Override
-    public PositionData get(final PositionId positionId) {
-
-        if (positionId == null) {
-            return null;
-        }
-
-        return this.withId.get(positionId.getId());
-    }
-
-    @Override
-    public PositionData get(final WalletOwnerId walletOwnerId, final Currency currency) {
-
-        if (walletOwnerId == null || currency == null) {
-            return null;
-        }
-
-        final var key = key(walletOwnerId, currency);
-        return this.withOwnerCurrency.get(key);
-    }
-
-    @Override
-    public Set<PositionData> get(final WalletOwnerId walletOwnerId) {
-
-        if (walletOwnerId == null) {
-            return Set.of();
-        }
-
-        final var set = this.withOwnerId.get(walletOwnerId.getId());
-        return set == null ? Set.of() : Set.copyOf(set);
-    }
-
-    private static String key(final WalletOwnerId walletOwnerId, final Currency currency) {
-
-        return walletOwnerId.getId().toString() + ":" + currency.name();
-    }
 }

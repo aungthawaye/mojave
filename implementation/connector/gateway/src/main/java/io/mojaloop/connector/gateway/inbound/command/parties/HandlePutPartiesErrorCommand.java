@@ -28,7 +28,11 @@ public interface HandlePutPartiesErrorCommand {
 
     Output execute(Input input);
 
-    record Input(Payee payee, PartyIdType partyIdType, String partyId, String subId, ErrorInformationObject errorInformationObject) { }
+    record Input(Payee payee,
+                 PartyIdType partyIdType,
+                 String partyId,
+                 String subId,
+                 ErrorInformationObject errorInformationObject) { }
 
     record Output() { }
 

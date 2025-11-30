@@ -35,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateEndpointCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateEndpointCommandHandler.class);
 
     private final FspRepository fspRepository;
 
@@ -53,7 +54,9 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
 
         LOGGER.info("Executing ActivateEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspEndpoint = fsp.activate(input.type());
 
@@ -62,7 +65,9 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
         LOGGER.info("Completed ActivateEndpointCommand with input: {}", input);
 
         if (optFspEndpoint.isPresent()) {
-            return new Output(optFspEndpoint.map(FspEndpoint::getId).orElse(null), optFspEndpoint.get().isActive());
+            return new Output(
+                optFspEndpoint.map(FspEndpoint::getId).orElse(null),
+                optFspEndpoint.get().isActive());
         }
 
         return new Output(null, false);

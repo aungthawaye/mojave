@@ -34,13 +34,14 @@ public class ReadAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadAspect.class);
 
-    @Around("execution(public * *(..)) && @annotation(io.mojaloop.component.jpa.routing.annotation.Read)")
+    @Around(
+        "execution(public * *(..)) && @annotation(io.mojaloop.component.jpa.routing.annotation.Read)")
     public Object aroundTransactional(ProceedingJoinPoint joinPoint) throws Throwable {
 
         try {
 
             RoutingDataSource.Context.set(RoutingDataSource.Keys.READ);
-            LOGGER.debug("ReadAspect : RoutingDataSource -> read");
+
             return joinPoint.proceed();
 
         } finally {

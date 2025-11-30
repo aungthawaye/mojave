@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.client.api.command.definition;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,13 +28,15 @@ import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand;
 import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
 
-public class ChangeFlowDefinitionPropertiesInvoker implements ChangeFlowDefinitionPropertiesCommand {
+public class ChangeFlowDefinitionPropertiesInvoker
+    implements ChangeFlowDefinitionPropertiesCommand {
 
     private final AccountingAdminService.DefinitionCommand definitionCommand;
 
     private final ObjectMapper objectMapper;
 
-    public ChangeFlowDefinitionPropertiesInvoker(final AccountingAdminService.DefinitionCommand definitionCommand, final ObjectMapper objectMapper) {
+    public ChangeFlowDefinitionPropertiesInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+                                                 final ObjectMapper objectMapper) {
 
         assert definitionCommand != null;
         assert objectMapper != null;
@@ -47,8 +50,12 @@ public class ChangeFlowDefinitionPropertiesInvoker implements ChangeFlowDefiniti
 
         try {
 
-            return RetrofitService.invoke(this.definitionCommand.changeProperties(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionCommand.changeProperties(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -66,4 +73,5 @@ public class ChangeFlowDefinitionPropertiesInvoker implements ChangeFlowDefiniti
             throw new RuntimeException(e);
         }
     }
+
 }

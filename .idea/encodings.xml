@@ -6,6 +6,7 @@
     <file url="file://$PROJECT_DIR$/implementation/component/jackson/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/jpa/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/component/logging/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/misc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/openapi/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/component/redis/src/main/java" charset="UTF-8" />
@@ -32,6 +33,7 @@
     <file url="file://$PROJECT_DIR$/implementation/operation/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/operation/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/operation/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/operation/usecase/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/central-cache/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/common/component/src/generated/java" charset="UTF-8" />

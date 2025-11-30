@@ -50,22 +50,20 @@ public class AddStepListener {
         this.addStepCommand = addStepCommand;
     }
 
-    @KafkaListener(topics = TopicNames.ADD_STEP, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
+    @KafkaListener(topics = TopicNames.ADD_STEP,
+                   containerFactory = LISTENER_CONTAINER_FACTORY,
+                   groupId = GROUP_ID)
     public void handle(AddStepCommand.Input input, Acknowledgment ack) {
 
         try {
-
-            LOGGER.info("Received AddStepCommand with input: {}", input);
 
             this.addStepCommand.execute(input);
 
             ack.acknowledge();
 
-            LOGGER.info("Acknowledged AddStepCommand with input: {}", input);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling AddStepCommand with input: {}", input, e);
+            LOGGER.error("Error:", e);
         }
     }
 
@@ -80,7 +78,9 @@ public class AddStepListener {
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
-            super(bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs, autoCommit, ackMode);
+            super(
+                bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs,
+                autoCommit, ackMode);
         }
 
     }

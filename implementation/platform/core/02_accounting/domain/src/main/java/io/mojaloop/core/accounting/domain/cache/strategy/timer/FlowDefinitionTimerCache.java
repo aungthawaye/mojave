@@ -49,7 +49,8 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
 
     private final int interval;
 
-    public FlowDefinitionTimerCache(final FlowDefinitionRepository flowDefinitionRepository, final int interval) {
+    public FlowDefinitionTimerCache(final FlowDefinitionRepository flowDefinitionRepository,
+                                    final int interval) {
 
         assert flowDefinitionRepository != null;
         assert interval > 0;
@@ -97,14 +98,15 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                FlowDefinitionTimerCache.this.refreshData();
-            }
-        }, this.interval, this.interval);
+                    FlowDefinitionTimerCache.this.refreshData();
+                }
+            }, this.interval, this.interval);
     }
 
     @Override
@@ -117,20 +119,28 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
         LOGGER.info("Start refreshing flow definition cache data");
 
         final var defs = this.flowDefinitionRepository.findAll();
-        final var entries = defs.stream().map(e -> e.convert()).collect(Collectors.toUnmodifiableList());
+        final var entries = defs
+                                .stream()
+                                .map(e -> e.convert())
+                                .collect(Collectors.toUnmodifiableList());
 
-        var _withId = entries.stream().collect(Collectors.toUnmodifiableMap(FlowDefinitionData::flowDefinitionId, Function.identity(), (a, b) -> a));
-        var _withTxnTypeCurrency = entries.stream()
-                                          .collect(
-                                              Collectors.toUnmodifiableMap(e -> FlowDefinitionCache.Keys.forTransaction(e.transactionType(), e.currency()), Function.identity(),
-                                                  (a, b) -> a));
+        var _withId = entries
+                          .stream()
+                          .collect(
+                              Collectors.toUnmodifiableMap(
+                                  FlowDefinitionData::flowDefinitionId, Function.identity(),
+                                  (a, b) -> a));
+        var _withTxnTypeCurrency = entries.stream().collect(Collectors.toUnmodifiableMap(
+            e -> FlowDefinitionCache.Keys.forTransaction(e.transactionType(), e.currency()),
+            Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed FlowDefinition cache data, count: {}", entries.size());
 
         this.snapshotRef.set(new Snapshot(_withId, _withTxnTypeCurrency));
     }
 
-    private record Snapshot(Map<FlowDefinitionId, FlowDefinitionData> withId, Map<String, FlowDefinitionData> withTxnTypeCurrency) {
+    private record Snapshot(Map<FlowDefinitionId, FlowDefinitionData> withId,
+                            Map<String, FlowDefinitionData> withTxnTypeCurrency) {
 
         static Snapshot empty() {
 

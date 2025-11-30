@@ -30,7 +30,8 @@ public interface ActivateFspCurrencyCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull FspId fspId, @JsonProperty(required = true) @NotNull Currency currency) { }
+    record Input(@JsonProperty(required = true) @NotNull FspId fspId,
+                 @JsonProperty(required = true) @NotNull Currency currency) { }
 
     record Output(FspCurrencyId fspCurrencyId, boolean activated) { }
 

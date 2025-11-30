@@ -21,8 +21,11 @@
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
+import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
@@ -32,13 +35,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DecreasePositionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DecreasePositionCommandHandler.class);
 
     private final PositionUpdater positionUpdater;
 
     private final PositionCache positionCache;
 
-    public DecreasePositionCommandHandler(final PositionUpdater positionUpdater, final PositionCache positionCache) {
+    public DecreasePositionCommandHandler(final PositionUpdater positionUpdater,
+                                          final PositionCache positionCache) {
 
         assert positionUpdater != null;
         assert positionCache != null;
@@ -48,35 +53,42 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input) {
+    public Output execute(final Input input)
+        throws PositionNotExistException, NoPositionUpdateForTransactionException {
 
-        LOGGER.info("Executing DecreasePositionCommand with input: {}", input);
+        LOGGER.info("DecreasePositionCommand : input: ({})", ObjectLogger.log(input));
 
         var position = this.positionCache.get(input.walletOwnerId(), input.currency());
 
         if (position == null) {
 
-            LOGGER.error("Position does not exist for walletOwnerId: {} and currency: {}", input.walletOwnerId(), input.currency());
-            throw new RuntimeException("Position does not exist for walletOwnerId: " + input.walletOwnerId() + " and currency: " + input.currency());
+            LOGGER.error(
+                "Position does not exist for walletOwnerId: {} and currency: {}",
+                input.walletOwnerId(), input.currency());
+            throw new PositionNotExistException(input.walletOwnerId(), input.currency());
         }
 
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
-            final var history = this.positionUpdater.decrease(input.transactionId(), input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
-                input.description());
+            final var history = this.positionUpdater.decrease(
+                input.transactionId(), input.transactionAt(), positionUpdateId,
+                position.positionId(), input.amount(), input.description());
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(
+                history.positionUpdateId(), history.positionId(), history.action(),
+                history.transactionId(), history.currency(), history.amount(),
+                history.oldPosition(), history.newPosition(), history.oldReserved(),
+                history.newReserved(), history.netDebitCap(), history.transactionAt());
 
-            LOGGER.info("DecreasePositionCommand executed successfully with output: {}", output);
+            LOGGER.info("DecreasePositionCommand : output: ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (final PositionUpdater.NoPositionUpdateException e) {
 
-            LOGGER.error("No position update created for transaction: {}", input.transactionId());
-            throw new RuntimeException(e);
+            LOGGER.error("Error:", e);
+            throw new NoPositionUpdateForTransactionException(input.transactionId());
         }
     }
 

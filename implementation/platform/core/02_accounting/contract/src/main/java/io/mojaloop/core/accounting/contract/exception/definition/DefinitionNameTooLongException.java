@@ -51,7 +51,9 @@ public class DefinitionNameTooLongException extends UncheckedDomainException {
 
     public static final String CODE = "DEFINITION_NAME_TOO_LONG";
 
-    private static final String TEMPLATE = "Definition Name is too long. Must not exceed " + StringSizeConstraints.MAX_NAME_TITLE_LENGTH + " characters.";
+    private static final String TEMPLATE = "Definition Name is too long. Must not exceed " +
+                                               StringSizeConstraints.MAX_NAME_TITLE_LENGTH +
+                                               " characters.";
 
     public DefinitionNameTooLongException() {
 

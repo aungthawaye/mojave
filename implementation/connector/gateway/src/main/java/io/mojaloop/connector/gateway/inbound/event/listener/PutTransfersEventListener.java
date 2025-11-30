@@ -54,7 +54,10 @@ public class PutTransfersEventListener {
 
         try {
 
-            this.handleTransfersResponse.execute(new HandlePutTransfersResponseCommand.Input(payload.payee(), payload.transferId(), payload.response()));
+            this.handleTransfersResponse.execute(
+                new HandlePutTransfersResponseCommand.Input(
+                    payload.payee(), payload.transferId(),
+                    payload.response()));
 
             LOGGER.info("Done handling PutTransfersEvent : {}", event);
 

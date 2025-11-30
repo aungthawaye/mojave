@@ -28,7 +28,13 @@ import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import java.time.Instant;
 import java.util.Objects;
 
-public record ChartEntryData(ChartEntryId chartEntryId, ChartEntryCode code, String name, String description, AccountType accountType, Instant createdAt, ChartId chartId) {
+public record ChartEntryData(ChartEntryId chartEntryId,
+                             ChartEntryCode code,
+                             String name,
+                             String description,
+                             AccountType accountType,
+                             Instant createdAt,
+                             ChartId chartId) {
 
     @Override
     public boolean equals(Object o) {

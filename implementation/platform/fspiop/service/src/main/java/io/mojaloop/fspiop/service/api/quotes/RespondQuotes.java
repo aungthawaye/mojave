@@ -29,6 +29,7 @@ public interface RespondQuotes {
 
     void putQuotes(Payer payer, String url, QuotesIDPutResponse response) throws FspiopException;
 
-    void putQuotesError(Payer payer, String url, ErrorInformationObject error) throws FspiopException;
+    void putQuotesError(Payer payer, String url, ErrorInformationObject error)
+        throws FspiopException;
 
 }

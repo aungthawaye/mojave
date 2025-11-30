@@ -51,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DeactivateFlowDefinitionCommandHandler implements DeactivateFlowDefinitionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateFlowDefinitionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateFlowDefinitionCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -69,7 +70,10 @@ public class DeactivateFlowDefinitionCommandHandler implements DeactivateFlowDef
 
         LOGGER.info("Executing DeactivateFlowDefinitionCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
 
         definition.deactivate();
 

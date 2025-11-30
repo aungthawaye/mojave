@@ -54,7 +54,10 @@ public class PutQuotesErrorEventListener {
 
         try {
 
-            this.handleQuotesError.execute(new HandlePutQuotesErrorCommand.Input(payload.payee(), payload.quoteId(), payload.errorInformationObject()));
+            this.handleQuotesError.execute(
+                new HandlePutQuotesErrorCommand.Input(
+                    payload.payee(), payload.quoteId(),
+                    payload.errorInformationObject()));
 
             LOGGER.info("Done handling PutQuotesErrorEvent : {}", event);
 

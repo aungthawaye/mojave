@@ -20,6 +20,7 @@
 
 package io.mojaloop.component.misc;
 
+import com.amazon.corretto.crypto.provider.AmazonCorrettoCryptoProvider;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.mojaloop.component.misc.jackson.conversion.BigDecimalConversion;
 import io.mojaloop.component.misc.jackson.conversion.InstantConversion;
+import io.mojaloop.component.misc.logger.ObjectLoggerInitializer;
 import io.mojaloop.component.misc.spring.SpringContext;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.component.misc.spring.event.publisher.SpringEventPublisher;
@@ -43,34 +45,50 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.Security;
 import java.time.Instant;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableAsync
 public class MiscConfiguration {
 
+    static {
+        AmazonCorrettoCryptoProvider.install();
+        AmazonCorrettoCryptoProvider.INSTANCE.assertHealthy();
+    }
+
     @Bean(name = "applicationEventMulticaster")
-    public ApplicationEventMulticaster asyncEventMulticaster(TaskExecutor aysncTaskExecutor) {
+    public ApplicationEventMulticaster asyncEventMulticaster() {
 
         SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
-        eventMulticaster.setTaskExecutor(aysncTaskExecutor);
+        //eventMulticaster.setTaskExecutor(asyncTaskExecutor);
 
         return eventMulticaster;
     }
 
     @Bean
-    public TaskExecutor aysncTaskExecutor() {
+    public TaskExecutor asyncTaskExecutor() {
 
-        var executor = new ThreadPoolTaskExecutor();
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
-        executor.setCorePoolSize(0);
-        executor.setMaxPoolSize(Integer.MAX_VALUE);
+        int cores = Runtime.getRuntime().availableProcessors();
+
+        // Tune these based on your workload
+        executor.setCorePoolSize(cores);
+        executor.setMaxPoolSize(cores * 2);
+        executor.setQueueCapacity(10_000);
         executor.setKeepAliveSeconds(60);
         executor.setAllowCoreThreadTimeOut(true);
-        executor.setQueueCapacity(0); // No queue like cachedThreadPool
         executor.setThreadNamePrefix("async-event-");
-        executor.initialize();
+
+        // Back-pressure strategy when the queue is full and threads are maxed
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        // Alternatives: AbortPolicy, DiscardPolicy, DiscardOldestPolicy
+
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(60);
+
+        executor.initialize();
 
         return executor;
     }
@@ -79,6 +97,12 @@ public class MiscConfiguration {
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 
         return new SpringEventPublisher(applicationEventPublisher);
+    }
+
+    @Bean
+    public ObjectLoggerInitializer objectLoggerInitializer(ObjectMapper objectMapper) {
+
+        return new ObjectLoggerInitializer(objectMapper);
     }
 
     @Bean
@@ -92,22 +116,22 @@ public class MiscConfiguration {
 
         objectMapper.findAndRegisterModules();
 
-        var module = new SimpleModule().addSerializer(Instant.class, new InstantConversion.Serializer())
-                                       .addDeserializer(Instant.class, new InstantConversion.Deserializer())
-                                       .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
-                                       .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer())
-                                       .addSerializer(Long.class, ToStringSerializer.instance)
-                                       .addSerializer(Long.TYPE, ToStringSerializer.instance)
-                                       .addSerializer(Integer.class, ToStringSerializer.instance)
-                                       .addSerializer(Integer.TYPE, ToStringSerializer.instance)
-                                       .addSerializer(Boolean.class, ToStringSerializer.instance)
-                                       .addSerializer(Boolean.TYPE, ToStringSerializer.instance)
-                                       .addSerializer(BigInteger.class, ToStringSerializer.instance);
+        var module = new SimpleModule()
+                         .addSerializer(Instant.class, new InstantConversion.Serializer())
+                         .addDeserializer(Instant.class, new InstantConversion.Deserializer())
+                         .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
+                         .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer())
+                         .addSerializer(Long.class, ToStringSerializer.instance)
+                         .addSerializer(Long.TYPE, ToStringSerializer.instance)
+                         .addSerializer(Integer.class, ToStringSerializer.instance)
+                         .addSerializer(Integer.TYPE, ToStringSerializer.instance)
+                         .addSerializer(Boolean.class, ToStringSerializer.instance)
+                         .addSerializer(Boolean.TYPE, ToStringSerializer.instance)
+                         .addSerializer(BigInteger.class, ToStringSerializer.instance);
 
         objectMapper.registerModule(module);
 
         // Force millis, not seconds.nanos
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
         objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
         objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
 

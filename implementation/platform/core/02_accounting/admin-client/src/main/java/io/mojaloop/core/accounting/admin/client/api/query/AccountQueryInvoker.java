@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.client.api.query;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +47,8 @@ public class AccountQueryInvoker implements AccountQuery {
 
     private final ObjectMapper objectMapper;
 
-    public AccountQueryInvoker(final AccountingAdminService.AccountQuery accountQuery, final ObjectMapper objectMapper) {
+    public AccountQueryInvoker(final AccountingAdminService.AccountQuery accountQuery,
+                               final ObjectMapper objectMapper) {
 
         assert accountQuery != null;
         assert objectMapper != null;
@@ -60,8 +62,12 @@ public class AccountQueryInvoker implements AccountQuery {
 
         try {
 
-            return RetrofitService.invoke(this.accountQuery.find(criteria),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.accountQuery.find(criteria),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -75,8 +81,12 @@ public class AccountQueryInvoker implements AccountQuery {
 
         try {
 
-            return RetrofitService.invoke(this.accountQuery.getByAccountCode(accountCode),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.accountQuery.getByAccountCode(accountCode),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -89,8 +99,12 @@ public class AccountQueryInvoker implements AccountQuery {
 
         try {
 
-            return RetrofitService.invoke(this.accountQuery.getByOwnerId(ownerId),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.accountQuery.getByOwnerId(ownerId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -103,8 +117,12 @@ public class AccountQueryInvoker implements AccountQuery {
 
         try {
 
-            return RetrofitService.invoke(this.accountQuery.getByAccountId(accountId),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.accountQuery.getByAccountId(accountId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -117,8 +135,12 @@ public class AccountQueryInvoker implements AccountQuery {
 
         try {
 
-            return RetrofitService.invoke(this.accountQuery.getAll(),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.accountQuery.getAll(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

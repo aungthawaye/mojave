@@ -35,7 +35,8 @@ public interface ChangeFlowDefinitionCurrencyCommand {
     /**
      * Input specifying the definition to change currency.
      */
-    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId, @JsonProperty(required = true) @NotNull Currency currency) { }
+    record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
+                 @JsonProperty(required = true) @NotNull Currency currency) { }
 
     /**
      * Output returning the affected DefinitionId.

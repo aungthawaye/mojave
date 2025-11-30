@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.quoting.service;
 
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStore;
@@ -32,18 +33,21 @@ import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-@Configuration(proxyBeanMethods = false)
+
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.quoting.service")
-@Import(value = {QuotingDomainConfiguration.class, ParticipantIntercomClientConfiguration.class, FspiopServiceConfiguration.class})
-public class QuotingServiceConfiguration implements QuotingDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
+@ComponentScan(basePackages = "io.mojaloop.core.quoting.service.controller")
+@Import(value = {QuotingDomainConfiguration.class,
+                 RequestIdMdcConfiguration.class,
+                 ParticipantIntercomClientConfiguration.class,
+                 FspiopServiceConfiguration.class})
+final class QuotingServiceConfiguration
+    implements QuotingDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
@@ -62,13 +66,15 @@ public class QuotingServiceConfiguration implements QuotingDomainConfiguration.R
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings
-        extends QuotingDomainConfiguration.RequiredSettings, ParticipantIntercomClientConfiguration.RequiredSettings, FspiopServiceConfiguration.RequiredSettings {
+    public interface RequiredSettings extends QuotingDomainConfiguration.RequiredSettings,
+                                              ParticipantIntercomClientConfiguration.RequiredSettings,
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings quotingServiceTomcatSettings();
 

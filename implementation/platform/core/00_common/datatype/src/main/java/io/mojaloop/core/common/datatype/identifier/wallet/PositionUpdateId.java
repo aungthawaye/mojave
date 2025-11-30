@@ -44,7 +44,8 @@ public class PositionUpdateId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<PositionUpdateId> {
 
         @Override
-        public PositionUpdateId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public PositionUpdateId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class PositionUpdateId extends EntityId<Long> {
             try {
                 return new PositionUpdateId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 
@@ -70,6 +72,7 @@ public class PositionUpdateId extends EntityId<Long> {
 
             return new PositionUpdateId(Long.parseLong(source));
         }
+
     }
 
 }

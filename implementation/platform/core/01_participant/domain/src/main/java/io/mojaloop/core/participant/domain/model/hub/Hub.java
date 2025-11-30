@@ -77,7 +77,8 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(name = "pcp_hub")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.core.participant.contract.data.HubData> {
+public class Hub extends JpaEntity<HubId>
+    implements DataConversion<io.mojaloop.core.participant.contract.data.HubData> {
 
     @Id
     @JavaType(HubIdJavaType.class)
@@ -93,11 +94,19 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
     protected Instant createdAt;
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "hub", cascade = {CascadeType.ALL}, orphanRemoval = true, targetEntity = HubCurrency.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "hub",
+               cascade = {CascadeType.ALL},
+               orphanRemoval = true,
+               targetEntity = HubCurrency.class,
+               fetch = FetchType.EAGER)
     protected Set<HubCurrency> currencies = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "hub", cascade = {CascadeType.ALL}, orphanRemoval = true, targetEntity = Fsp.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "hub",
+               cascade = {CascadeType.ALL},
+               orphanRemoval = true,
+               targetEntity = Fsp.class,
+               fetch = FetchType.EAGER)
     protected Set<Fsp> fsps = new HashSet<>();
 
     public Hub(String name) {
@@ -113,7 +122,10 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
 
         assert currency != null;
 
-        var optSupportedCurrency = this.currencies.stream().filter(sc -> sc.getCurrency() == currency).findFirst();
+        var optSupportedCurrency = this.currencies
+                                       .stream()
+                                       .filter(sc -> sc.getCurrency() == currency)
+                                       .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
             return false;
@@ -143,14 +155,22 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
     @Override
     public HubData convert() {
 
-        return new HubData(this.getId(), this.getName(), this.getCurrencies().stream().map(HubCurrency::convert).toArray(HubData.HubCurrencyData[]::new));
+        return new HubData(this.getId(), this.getName(), this
+                                                             .getCurrencies()
+                                                             .stream()
+                                                             .map(HubCurrency::convert)
+                                                             .toArray(
+                                                                 HubData.HubCurrencyData[]::new));
     }
 
     public Optional<HubCurrency> deactivate(Currency currency) {
 
         assert currency != null;
 
-        var optSupportedCurrency = this.currencies.stream().filter(sc -> sc.getCurrency() == currency).findFirst();
+        var optSupportedCurrency = this.currencies
+                                       .stream()
+                                       .filter(sc -> sc.getCurrency() == currency)
+                                       .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
             return Optional.empty();
@@ -172,7 +192,9 @@ public class Hub extends JpaEntity<HubId> implements DataConversion<io.mojaloop.
 
         assert currency != null;
 
-        return this.currencies.stream().anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
+        return this.currencies
+                   .stream()
+                   .anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
     }
 
     public Hub name(String name) {

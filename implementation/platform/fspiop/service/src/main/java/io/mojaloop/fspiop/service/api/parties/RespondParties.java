@@ -27,8 +27,10 @@ import io.mojaloop.fspiop.spec.core.PartiesTypeIDPutResponse;
 
 public interface RespondParties {
 
-    void putParties(Payer payer, String url, PartiesTypeIDPutResponse response) throws FspiopException;
+    void putParties(Payer payer, String url, PartiesTypeIDPutResponse response)
+        throws FspiopException;
 
-    void putPartiesError(Payer payer, String url, ErrorInformationObject error) throws FspiopException;
+    void putPartiesError(Payer payer, String url, ErrorInformationObject error)
+        throws FspiopException;
 
 }

@@ -44,7 +44,8 @@ public class QuoteExtensionId extends EntityId<Long> {
     public static class Deserializer extends JsonDeserializer<QuoteExtensionId> {
 
         @Override
-        public QuoteExtensionId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public QuoteExtensionId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -56,7 +57,8 @@ public class QuoteExtensionId extends EntityId<Long> {
             try {
                 return new QuoteExtensionId(Long.parseLong(text));
             } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "'" + field + "' has invalid format. Must be number.", e);
+                throw InvalidFormatException.from(
+                    p, "'" + field + "' has invalid format. Must be number.", e);
             }
         }
 
@@ -70,6 +72,7 @@ public class QuoteExtensionId extends EntityId<Long> {
 
             return new QuoteExtensionId(Long.parseLong(source));
         }
+
     }
 
 }

@@ -17,8 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
@@ -42,7 +44,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -54,7 +55,8 @@ public class PatchTransferToPayee {
 
     private final AddStepPublisher addStepPublisher;
 
-    public PatchTransferToPayee(RespondTransfers respondTransfers, AddStepPublisher addStepPublisher) {
+    public PatchTransferToPayee(RespondTransfers respondTransfers,
+                                AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -65,48 +67,51 @@ public class PatchTransferToPayee {
 
     public Output execute(Input input) throws FspiopException {
 
-        var CONTEXT = input.context;
-        var STEP_NAME = "patch-transfer-to-payee";
+        var startAt = System.nanoTime();
 
-        LOGGER.info("Patching transfer to Payee : input : [{}]", input);
+        LOGGER.info("PatchTransferToPayee : input : ({})", ObjectLogger.log(input));
+
+        var CONTEXT = input.context;
+        var STEP_NAME = "PatchTransferToPayee";
 
         try {
 
-            var response = new TransfersIDPatchResponse(FspiopDates.forRequestBody(new Date()), input.state);
+            var patchResponse = new TransfersIDPatchResponse(
+                FspiopDates.forRequestBody(new Date()), input.state);
 
             var extensions = new ArrayList<Extension>();
             input.extensions.forEach((k, v) -> extensions.add(new Extension(k, v)));
 
             var extensionList = new ExtensionList(extensions);
-            response.setExtensionList(extensionList);
+            patchResponse.setExtensionList(extensionList);
 
             var payeeBaseUrl = input.payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-            var url = FspiopUrls.Transfers.patchTransfers(payeeBaseUrl, input.udfTransferId.getId());
+            var url = FspiopUrls.Transfers.patchTransfers(
+                payeeBaseUrl, input.udfTransferId.getId());
 
-            var before = new HashMap<>(input.extensions);
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT,
+                    ObjectLogger.log(patchResponse).toString(), StepPhase.BEFORE));
 
-            before.put("state", input.state.toString());
-            before.put("url", url);
+            this.respondTransfers.patchTransfers(
+                new Payee(input.payeeFsp.fspCode().value()), url, patchResponse);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            this.respondTransfers.patchTransfers(new Payee(input.payeeFsp.fspCode().value()), url, response);
-
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
-
-            LOGGER.info("Patched transfer to Payee : udfTransferId : [{}]", input.udfTransferId.getId());
-
-        } catch (FspiopException e) {
-
-            LOGGER.error("Error:", e);
-
-            throw e;
+            var endAt = System.nanoTime();
+            LOGGER.info("PatchTransferToPayee : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -114,7 +119,12 @@ public class PatchTransferToPayee {
         return new Output();
     }
 
-    public record Input(String context, TransactionId transactionId, UdfTransferId udfTransferId, FspData payeeFsp, TransferState state, Map<String, String> extensions) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        UdfTransferId udfTransferId,
+                        FspData payeeFsp,
+                        TransferState state,
+                        Map<String, String> extensions) { }
 
     public record Output() { }
 

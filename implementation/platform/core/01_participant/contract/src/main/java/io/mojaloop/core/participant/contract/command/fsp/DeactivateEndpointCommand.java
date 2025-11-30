@@ -31,7 +31,8 @@ public interface DeactivateEndpointCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull FspId fspId, @JsonProperty(required = true) @NotNull @NotBlank EndpointType type) { }
+    record Input(@JsonProperty(required = true) @NotNull FspId fspId,
+                 @JsonProperty(required = true) @NotNull @NotBlank EndpointType type) { }
 
     record Output(FspEndpointId fspEndpointId, boolean deactivated) { }
 

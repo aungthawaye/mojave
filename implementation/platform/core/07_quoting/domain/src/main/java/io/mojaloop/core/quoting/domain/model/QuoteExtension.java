@@ -62,11 +62,15 @@ public class QuoteExtension extends JpaEntity<QuoteExtensionId> {
     @Column(name = "x_key", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String key;
 
-    @Column(name = "x_value", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "x_value",
+            nullable = false,
+            length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String value;
 
     @ManyToOne
-    @JoinColumn(name = "quote_id", nullable = false, foreignKey = @ForeignKey(name = "quote_extension_quote_FK"))
+    @JoinColumn(name = "quote_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "quote_extension_quote_FK"))
     protected Quote quote;
 
     public QuoteExtension(Quote quote, Direction direction, String key, String value) {

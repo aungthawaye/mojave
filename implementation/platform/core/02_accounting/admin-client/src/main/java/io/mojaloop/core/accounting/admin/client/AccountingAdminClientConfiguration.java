@@ -34,66 +34,80 @@ import org.springframework.context.annotation.Import;
 public class AccountingAdminClientConfiguration {
 
     @Bean
-    public AccountingAdminService.AccountCommand accountCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.AccountCommand accountCommands(AccountingAdminService.Settings settings,
+                                                                 ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.AccountCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.AccountCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public AccountingAdminService.AccountQuery accountQuery(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.AccountQuery accountQuery(AccountingAdminService.Settings settings,
+                                                            ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.AccountQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.AccountQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public AccountingAdminService.ChartCommand chartCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.ChartCommand chartCommands(AccountingAdminService.Settings settings,
+                                                             ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.ChartCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.ChartCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public AccountingAdminService.ChartQuery chartQuery(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.ChartQuery chartQuery(AccountingAdminService.Settings settings,
+                                                        ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.ChartQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.ChartQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public AccountingAdminService.DefinitionCommand definitionCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.DefinitionCommand definitionCommands(AccountingAdminService.Settings settings,
+                                                                       ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.DefinitionCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.DefinitionCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public AccountingAdminService.DefinitionQuery definitionQuery(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.DefinitionQuery definitionQuery(AccountingAdminService.Settings settings,
+                                                                  ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.DefinitionQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.DefinitionQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public AccountingAdminService.LedgerCommand ledgerCommands(AccountingAdminService.Settings settings, ObjectMapper objectMapper) {
+    public AccountingAdminService.LedgerCommand ledgerCommands(AccountingAdminService.Settings settings,
+                                                               ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(AccountingAdminService.LedgerCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(AccountingAdminService.LedgerCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }

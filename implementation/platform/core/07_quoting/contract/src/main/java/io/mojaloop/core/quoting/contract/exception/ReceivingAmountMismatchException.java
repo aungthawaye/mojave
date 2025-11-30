@@ -42,10 +42,15 @@ public class ReceivingAmountMismatchException extends CheckedDomainException {
 
     private final AmountType amountType;
 
-    public ReceivingAmountMismatchException(final BigDecimal receivingAmount, final BigDecimal amount, final AmountType amountType) {
+    public ReceivingAmountMismatchException(final BigDecimal receivingAmount,
+                                            final BigDecimal amount,
+                                            final AmountType amountType) {
 
-        super(
-            new ErrorTemplate(CODE, TEMPLATE, new String[]{receivingAmount.stripTrailingZeros().toPlainString(), amount.stripTrailingZeros().toPlainString(), amountType.name()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{receivingAmount.stripTrailingZeros().toPlainString(),
+                         amount.stripTrailingZeros().toPlainString(),
+                         amountType.name()}));
 
         this.receivingAmount = receivingAmount;
         this.amount = amount;
@@ -66,7 +71,8 @@ public class ReceivingAmountMismatchException extends CheckedDomainException {
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.RECEIVING_AMOUNT, this.receivingAmount.stripTrailingZeros().toPlainString());
+        extras.put(
+            Keys.RECEIVING_AMOUNT, this.receivingAmount.stripTrailingZeros().toPlainString());
         extras.put(Keys.AMOUNT, this.amount.stripTrailingZeros().toPlainString());
         extras.put(Keys.AMOUNT_TYPE, this.amountType.name());
 

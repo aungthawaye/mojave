@@ -54,7 +54,10 @@ public class PutQuotesEventListener {
 
         try {
 
-            this.handleQuotesResponse.execute(new HandlePutQuotesResponseCommand.Input(payload.payee(), payload.quoteId(), payload.response()));
+            this.handleQuotesResponse.execute(
+                new HandlePutQuotesResponseCommand.Input(
+                    payload.payee(), payload.quoteId(),
+                    payload.response()));
 
             LOGGER.info("Done handling PutQuotesEvent : {}", event);
 

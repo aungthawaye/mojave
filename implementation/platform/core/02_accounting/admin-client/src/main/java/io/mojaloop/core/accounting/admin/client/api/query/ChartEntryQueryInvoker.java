@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.client.api.query;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +44,8 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
 
     private final ObjectMapper objectMapper;
 
-    public ChartEntryQueryInvoker(final AccountingAdminService.ChartQuery chartQuery, final ObjectMapper objectMapper) {
+    public ChartEntryQueryInvoker(final AccountingAdminService.ChartQuery chartQuery,
+                                  final ObjectMapper objectMapper) {
 
         assert chartQuery != null;
         assert objectMapper != null;
@@ -53,12 +55,17 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
     }
 
     @Override
-    public ChartEntryData get(final ChartEntryId chartEntryId) throws ChartEntryIdNotFoundException {
+    public ChartEntryData get(final ChartEntryId chartEntryId)
+        throws ChartEntryIdNotFoundException {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getByChartEntryId(chartEntryId),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getByChartEntryId(chartEntryId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -71,8 +78,12 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getEntriesByChartId(chartId),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getEntriesByChartId(chartId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -85,8 +96,12 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getAllChartEntries(),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getAllChartEntries(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -99,8 +114,12 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getChartEntriesByNameContains(name),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getChartEntriesByNameContains(name),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

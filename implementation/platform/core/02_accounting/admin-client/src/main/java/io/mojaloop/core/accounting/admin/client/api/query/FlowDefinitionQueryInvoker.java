@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.client.api.query;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,8 @@ public class FlowDefinitionQueryInvoker implements FlowDefinitionQuery {
 
     private final ObjectMapper objectMapper;
 
-    public FlowDefinitionQueryInvoker(final AccountingAdminService.DefinitionQuery definitionQuery, final ObjectMapper objectMapper) {
+    public FlowDefinitionQueryInvoker(final AccountingAdminService.DefinitionQuery definitionQuery,
+                                      final ObjectMapper objectMapper) {
 
         assert definitionQuery != null;
         assert objectMapper != null;
@@ -52,12 +54,17 @@ public class FlowDefinitionQueryInvoker implements FlowDefinitionQuery {
     }
 
     @Override
-    public FlowDefinitionData get(final FlowDefinitionId flowDefinitionId) throws FlowDefinitionNotFoundException {
+    public FlowDefinitionData get(final FlowDefinitionId flowDefinitionId)
+        throws FlowDefinitionNotFoundException {
 
         try {
 
-            return RetrofitService.invoke(this.definitionQuery.getByFlowDefinitionId(flowDefinitionId),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionQuery.getByFlowDefinitionId(flowDefinitionId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -70,8 +77,12 @@ public class FlowDefinitionQueryInvoker implements FlowDefinitionQuery {
 
         try {
 
-            return RetrofitService.invoke(this.definitionQuery.getAllFlowDefinitions(),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionQuery.getAllFlowDefinitions(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -84,8 +95,12 @@ public class FlowDefinitionQueryInvoker implements FlowDefinitionQuery {
 
         try {
 
-            return RetrofitService.invoke(this.definitionQuery.getFlowDefinitionsByNameContains(name),
-                    (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.definitionQuery.getFlowDefinitionsByNameContains(name),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

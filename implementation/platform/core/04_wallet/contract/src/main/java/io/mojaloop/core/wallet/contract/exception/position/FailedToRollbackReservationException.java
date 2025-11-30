@@ -65,7 +65,8 @@ public class FailedToRollbackReservationException extends CheckedDomainException
 
     public static FailedToRollbackReservationException from(final Map<String, String> extras) {
 
-        final var reservationId = new PositionUpdateId(Long.valueOf(extras.get(Keys.RESERVATION_ID)));
+        final var reservationId = new PositionUpdateId(
+            Long.valueOf(extras.get(Keys.RESERVATION_ID)));
 
         return new FailedToRollbackReservationException(reservationId);
     }

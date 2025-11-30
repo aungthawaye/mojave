@@ -33,7 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CreatePositionCommandHandler implements CreatePositionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreatePositionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CreatePositionCommandHandler.class);
 
     private final PositionRepository positionRepository;
 
@@ -51,14 +52,19 @@ public class CreatePositionCommandHandler implements CreatePositionCommand {
         LOGGER.info("Executing CreatePositionCommand with input: {}", input);
 
         // Build uniqueness spec: walletOwnerId + currency
-        final var spec = PositionRepository.Filters.withOwnerId(input.walletOwnerId()).and(PositionRepository.Filters.withCurrency(input.currency()));
+        final var spec = PositionRepository.Filters
+                             .withOwnerId(input.walletOwnerId())
+                             .and(PositionRepository.Filters.withCurrency(input.currency()));
 
         if (this.positionRepository.findOne(spec).isPresent()) {
-            LOGGER.info("Position already exists for ownerId: {} and currency: {}", input.walletOwnerId(), input.currency());
+            LOGGER.info(
+                "Position already exists for ownerId: {} and currency: {}", input.walletOwnerId(),
+                input.currency());
             throw new PositionAlreadyExistsException(input.walletOwnerId(), input.currency());
         }
 
-        final var position = new Position(input.walletOwnerId(), input.currency(), input.name(), input.netDebitCap());
+        final var position = new Position(
+            input.walletOwnerId(), input.currency(), input.name(), input.netDebitCap());
         LOGGER.info("Created Position: {}", position);
 
         final var saved = this.positionRepository.save(position);

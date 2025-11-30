@@ -17,9 +17,13 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.enums.Direction;
+import io.mojaloop.core.common.datatype.enums.transfer.AbortReason;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
@@ -29,14 +33,12 @@ import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.spec.core.ExtensionList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class AbortTransfer {
@@ -58,46 +60,63 @@ public class AbortTransfer {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Write
-    public Output execute(Input input) throws FspiopException {
+    public void execute(Input input) throws FspiopException {
+
+        var startAt = System.nanoTime();
 
         var CONTEXT = input.context;
-        var STEP_NAME = "abort-transfer";
+        var STEP_NAME = "AbortTransfer";
 
-        LOGGER.info("Aborting transfer : input : [{}]", input);
+        LOGGER.info("AbortTransfer : input : ({})", ObjectLogger.log(input));
 
         try {
 
             var transfer = this.transferRepository.getReferenceById(input.transferId);
 
-            var before = new HashMap<String, String>();
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                StepPhase.BEFORE));
 
-            before.put("rollbackId", input.rollbackId.getId().toString());
-            before.put("error", input.error);
+            transfer.aborted(input.abortReason, input.rollbackId);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            var extensionList = input.extensionList();
 
-            transfer.aborted(input.rollbackId, input.error);
+            if (extensionList != null) {
+
+                for (var extension : extensionList.getExtension()) {
+                    transfer.addExtension(
+                        input.direction(), extension.getKey(), extension.getValue());
+                }
+            }
 
             this.transferRepository.save(transfer);
 
-            LOGGER.info("Aborted transfer successfully : transferId [{}]", transfer.getId());
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    StepPhase.AFTER));
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
-
-            return new Output();
+            var endAt = System.nanoTime();
+            LOGGER.info("AbortTransfer : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId, STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context, TransactionId transactionId, TransferId transferId, PositionUpdateId rollbackId, String error) { }
-
-    public record Output() { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        TransferId transferId,
+                        AbortReason abortReason,
+                        PositionUpdateId rollbackId,
+                        Direction direction,
+                        ExtensionList extensionList) { }
 
 }

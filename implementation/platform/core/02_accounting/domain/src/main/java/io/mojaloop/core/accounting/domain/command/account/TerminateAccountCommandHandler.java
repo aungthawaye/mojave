@@ -32,7 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TerminateAccountCommandHandler implements TerminateAccountCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TerminateAccountCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        TerminateAccountCommandHandler.class);
 
     private final AccountRepository accountRepository;
 
@@ -49,7 +50,9 @@ public class TerminateAccountCommandHandler implements TerminateAccountCommand {
 
         LOGGER.info("Executing TerminateAccountCommand with input: {}", input);
 
-        var account = this.accountRepository.findById(input.accountId()).orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
+        var account = this.accountRepository
+                          .findById(input.accountId())
+                          .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
         account.terminate();

@@ -83,7 +83,8 @@ public class StepParamIdJavaType extends AbstractClassJavaType<StepParamId> {
             case null -> null;
             case StepParamId stepParamId -> stepParamId;
             case Number n -> new StepParamId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

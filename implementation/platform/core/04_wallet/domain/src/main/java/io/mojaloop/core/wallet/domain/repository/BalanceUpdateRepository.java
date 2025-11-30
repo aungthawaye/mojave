@@ -28,18 +28,19 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BalanceUpdateRepository extends JpaRepository<BalanceUpdate, BalanceUpdateId>, JpaSpecificationExecutor<BalanceUpdate> {
+public interface BalanceUpdateRepository
+    extends JpaRepository<BalanceUpdate, BalanceUpdateId>, JpaSpecificationExecutor<BalanceUpdate> {
 
     class Filters {
 
         public static Specification<BalanceUpdate> withReversalId(final BalanceUpdateId walletId) {
 
-            return (root, query, cb) -> cb.equal(root.get("reversalId"), walletId);
+            return (root, query, cb) -> cb.equal(root.get("withdrawId"), walletId);
         }
 
         public static Specification<BalanceUpdate> withWalletId(final BalanceUpdateId walletId) {
 
-            return (root, query, cb) -> cb.equal(root.get("walletId"), walletId);
+            return (root, query, cb) -> cb.equal(root.get("balanceId"), walletId);
         }
 
     }

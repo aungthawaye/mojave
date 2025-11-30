@@ -40,7 +40,8 @@ public class ChangeHubNameInvoker implements ChangeHubNameCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ChangeHubNameInvoker(final ParticipantAdminService.HubCommands hubCommands, final ObjectMapper objectMapper) {
+    public ChangeHubNameInvoker(final ParticipantAdminService.HubCommands hubCommands,
+                                final ObjectMapper objectMapper) {
 
         assert hubCommands != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ChangeHubNameInvoker implements ChangeHubNameCommand {
 
         try {
 
-            return RetrofitService.invoke(this.hubCommands.changeHubName(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.hubCommands.changeHubName(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class ChangeHubNameInvoker implements ChangeHubNameCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

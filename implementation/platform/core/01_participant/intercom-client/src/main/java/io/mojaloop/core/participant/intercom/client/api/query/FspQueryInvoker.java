@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.intercom.client.api.query;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,7 +45,8 @@ public class FspQueryInvoker implements FspQuery {
 
     private final ObjectMapper objectMapper;
 
-    public FspQueryInvoker(ParticipantIntercomService.FspQuery fspQuery, ObjectMapper objectMapper) {
+    public FspQueryInvoker(ParticipantIntercomService.FspQuery fspQuery,
+                           ObjectMapper objectMapper) {
 
         assert fspQuery != null;
         assert objectMapper != null;
@@ -58,8 +60,12 @@ public class FspQueryInvoker implements FspQuery {
 
         try {
 
-            return RetrofitService.invoke(this.fspQuery.getByFspId(fspId.getId().toString()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspQuery.getByFspId(fspId.getId().toString()),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -83,8 +89,12 @@ public class FspQueryInvoker implements FspQuery {
 
         try {
 
-            return RetrofitService.invoke(this.fspQuery.getByFspCode(fspCode.value()),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspQuery.getByFspCode(fspCode.value()),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -108,7 +118,12 @@ public class FspQueryInvoker implements FspQuery {
 
         try {
 
-            return RetrofitService.invoke(this.fspQuery.getAllFsps(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.fspQuery.getAllFsps(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -51,7 +51,10 @@ public class PositionQueryHandler implements PositionQuery {
     @Override
     public PositionData get(final PositionId positionId) {
 
-        return this.positionRepository.findById(positionId).orElseThrow(() -> new PositionIdNotFoundException(positionId)).convert();
+        return this.positionRepository
+                   .findById(positionId)
+                   .orElseThrow(() -> new PositionIdNotFoundException(positionId))
+                   .convert();
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +62,9 @@ public class PositionQueryHandler implements PositionQuery {
     @Override
     public List<PositionData> get(final WalletOwnerId ownerId, final Currency currency) {
 
-        var spec = PositionRepository.Filters.withOwnerId(ownerId).and(PositionRepository.Filters.withCurrency(currency));
+        var spec = PositionRepository.Filters
+                       .withOwnerId(ownerId)
+                       .and(PositionRepository.Filters.withCurrency(currency));
 
         return this.positionRepository.findAll(spec).stream().map(Position::convert).toList();
     }

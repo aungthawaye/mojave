@@ -56,9 +56,12 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_currency", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_currency_fsp_currency_id_currency_UK", columnNames = {"fsp_currency_id", "currency"})})
+@Table(name = "pcp_fsp_currency",
+       uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_currency_fsp_currency_id_currency_UK",
+                                              columnNames = {"fsp_currency_id", "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataConversion<FspCurrencyData> {
+public final class FspCurrency extends JpaEntity<FspCurrencyId>
+    implements DataConversion<FspCurrencyData> {
 
     @Id
     @JavaType(FspCurrencyIdJavaType.class)
@@ -70,7 +73,9 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
@@ -79,7 +84,9 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "fsp_id", nullable = false, foreignKey = @ForeignKey(name = "fsp_currency_fsp_FK"))
+    @JoinColumn(name = "fsp_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "fsp_currency_fsp_FK"))
     private Fsp fsp;
 
     public FspCurrency(Fsp fsp, Currency currency) {
@@ -106,7 +113,9 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId> implements DataC
     @Override
     public FspCurrencyData convert() {
 
-        return new FspCurrencyData(this.getId(), this.getCurrency(), this.getActivationStatus(), this.createdAt, this.fsp.getId());
+        return new FspCurrencyData(
+            this.getId(), this.getCurrency(), this.getActivationStatus(), this.createdAt,
+            this.fsp.getId());
     }
 
     public boolean isActive() {

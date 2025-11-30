@@ -33,9 +33,13 @@ import java.util.Map;
 public interface QuotesResponseService {
 
     @PUT
-    Call<String> putQuotes(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, @Body QuotesIDPutResponse quotesIDPutResponse);
+    Call<String> putQuotes(@Url String url,
+                           @HeaderMap Map<String, String> fspiopHeaders,
+                           @Body QuotesIDPutResponse quotesIDPutResponse);
 
     @PUT
-    Call<String> putQuotesError(@Url String url, @HeaderMap Map<String, String> fspiopHeaders, @Body ErrorInformationObject errorInformationObject);
+    Call<String> putQuotesError(@Url String url,
+                                @HeaderMap Map<String, String> fspiopHeaders,
+                                @Body ErrorInformationObject errorInformationObject);
 
 }

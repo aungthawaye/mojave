@@ -39,7 +39,9 @@ class AuthenticationFailureFilter extends OncePerRequestFilter {
     private final AuthenticationErrorWriter authenticationErrorWriter;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) {
 
         try {
 
@@ -53,7 +55,8 @@ class AuthenticationFailureFilter extends OncePerRequestFilter {
         } catch (ServletException | IOException e) {
 
             LOGGER.error("Error:", e);
-            this.authenticationErrorWriter.write(response, new AuthenticationFailureException(e.getMessage(), e));
+            this.authenticationErrorWriter.write(
+                response, new AuthenticationFailureException(e.getMessage(), e));
         }
 
     }

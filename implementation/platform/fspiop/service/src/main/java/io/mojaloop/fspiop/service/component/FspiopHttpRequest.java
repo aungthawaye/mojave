@@ -32,16 +32,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public record FspiopHttpRequest(Payer payer, Payee payee, String method, String uri, String contentType, Map<String, String> headers, Map<String, String> params, String payload) {
+public record FspiopHttpRequest(Payer payer,
+                                Payee payee,
+                                String method,
+                                String uri,
+                                String contentType,
+                                Map<String, String> headers,
+                                Map<String, String> params,
+                                String payload) {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopHttpRequest.class);
 
     public static FspiopHttpRequest with(HttpServletRequest request) throws IOException {
 
-        var cachedRequest = request instanceof CachedServletRequest already ? already : new CachedServletRequest(request);
+        var cachedRequest = request instanceof CachedServletRequest already ? already :
+                                new CachedServletRequest(request);
 
         var method = cachedRequest.getMethod();
-        LOGGER.debug("Method: [{}]", method);
+        LOGGER.debug("Method: ({})", method);
 
         /*
          * HTTP methods such as GET, POST, PATCH are sent to Payee. When Payee responds, it will be through the PUT method.
@@ -61,31 +69,32 @@ public record FspiopHttpRequest(Payer payer, Payee payee, String method, String 
         };
 
         var payer = new Payer(cachedRequest.getHeader(payerHeader));
-        LOGGER.debug("Payer: [{}]", payer);
+        LOGGER.debug("Payer: ({})", payer);
 
         var payee = new Payee(cachedRequest.getHeader(payeeHeader));
-        LOGGER.debug("Payee: [{}]", payee);
+        LOGGER.debug("Payee: ({})", payee);
 
         var uri = cachedRequest.getRequestURI();
-        LOGGER.debug("URI: [{}]", uri);
+        LOGGER.debug("URI: ({})", uri);
 
         var contentType = cachedRequest.getContentType();
-        LOGGER.debug("Content-Type: [{}]", contentType);
+        LOGGER.debug("Content-Type: ({})", contentType);
 
         var headers = new HashMap<String, String>();
         request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
             headers.put(headerName, request.getHeader(headerName));
         });
-        LOGGER.debug("Headers: [{}]", headers);
+        LOGGER.debug("Headers: ({})", headers);
 
         var params = new HashMap<String, String>();
         request.getParameterMap().forEach((k, v) -> params.put(k, v[0]));
-        LOGGER.debug("Params: [{}]", params);
+        LOGGER.debug("Params: ({})", params);
 
         var payload = cachedRequest.getCachedBodyAsString();
-        LOGGER.debug("Payload: [{}]", payload);
+        LOGGER.debug("Payload: ({})", payload);
 
-        return new FspiopHttpRequest(payer, payee, method, uri, contentType, headers, params, payload);
+        return new FspiopHttpRequest(
+            payer, payee, method, uri, contentType, headers, params, payload);
     }
 
     public boolean hasPayload() {

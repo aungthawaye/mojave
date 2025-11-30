@@ -46,7 +46,11 @@ import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import java.time.Instant;
 import java.util.Objects;
 
-public record FspEndpointData(FspEndpointId fspEndpointId, EndpointType type, String baseUrl, Instant createdAt, FspId fspId) {
+public record FspEndpointData(FspEndpointId fspEndpointId,
+                              EndpointType type,
+                              String baseUrl,
+                              Instant createdAt,
+                              FspId fspId) {
 
     @Override
     public boolean equals(Object o) {

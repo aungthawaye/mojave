@@ -35,7 +35,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PositionRepository extends JpaRepository<Position, PositionId>, JpaSpecificationExecutor<Position> {
+public interface PositionRepository
+    extends JpaRepository<Position, PositionId>, JpaSpecificationExecutor<Position> {
 
     @Query("SELECT p FROM Position p WHERE p.id = :positionId")
     @Lock(LockModeType.PESSIMISTIC_WRITE)

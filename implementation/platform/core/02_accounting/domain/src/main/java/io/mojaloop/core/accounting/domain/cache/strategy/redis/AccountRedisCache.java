@@ -52,7 +52,8 @@ public class AccountRedisCache implements AccountCache {
 
     private final RMap<String, AccountData> withChartEntryIdOwnerIdCurrency;
 
-    public AccountRedisCache(AccountRepository accountRepository, RedissonOpsClient redissonOpsClient) {
+    public AccountRedisCache(AccountRepository accountRepository,
+                             RedissonOpsClient redissonOpsClient) {
 
         assert accountRepository != null;
         assert redissonOpsClient != null;
@@ -61,8 +62,13 @@ public class AccountRedisCache implements AccountCache {
 
         this.withId = redissonOpsClient.getRedissonClient().getMap(Names.WITH_ID);
         this.withCode = redissonOpsClient.getRedissonClient().getMap(Names.WITH_CODE);
-        this.withOwnerId = redissonOpsClient.getRedissonClient().getSetMultimap(Names.WITH_OWNER_ID);
-        this.withChartEntryIdOwnerIdCurrency = redissonOpsClient.getRedissonClient().getMap(Names.WITH_CHARTENTRYID_OWNERID_CURRENCY);
+        this.withOwnerId = redissonOpsClient
+                               .getRedissonClient()
+                               .getSetMultimap(Names.WITH_OWNER_ID);
+        this.withChartEntryIdOwnerIdCurrency = redissonOpsClient
+                                                   .getRedissonClient()
+                                                   .getMap(
+                                                       Names.WITH_CHARTENTRYID_OWNERID_CURRENCY);
 
     }
 
@@ -90,11 +96,15 @@ public class AccountRedisCache implements AccountCache {
 
         if (set != null && !set.isEmpty()) {
 
-            set.stream().filter(a -> a.accountId().equals(accountId)).forEach(a -> this.withOwnerId.remove(a.ownerId().getId(), a));
+            set
+                .stream()
+                .filter(a -> a.accountId().equals(accountId))
+                .forEach(a -> this.withOwnerId.remove(a.ownerId().getId(), a));
 
         }
 
-        var key = AccountCache.Keys.forChart(deleted.chartEntryId(), deleted.ownerId(), deleted.currency());
+        var key = AccountCache.Keys.forChart(
+            deleted.chartEntryId(), deleted.ownerId(), deleted.currency());
         this.withChartEntryIdOwnerIdCurrency.remove(key);
     }
 
@@ -158,7 +168,8 @@ public class AccountRedisCache implements AccountCache {
         this.withCode.put(account.code().value(), account);
         this.withOwnerId.put(account.ownerId().getId(), account);
 
-        var key = AccountCache.Keys.forChart(account.chartEntryId(), account.ownerId(), account.currency());
+        var key = AccountCache.Keys.forChart(
+            account.chartEntryId(), account.ownerId(), account.currency());
 
         this.withChartEntryIdOwnerIdCurrency.put(key, account);
     }

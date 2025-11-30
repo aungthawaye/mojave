@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
@@ -32,7 +33,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommitReservationCommandHandler implements CommitReservationCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitReservationCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CommitReservationCommandHandler.class);
 
     private final PositionUpdater positionUpdater;
 
@@ -45,22 +47,27 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
     @Override
     public Output execute(final Input input) throws FailedToCommitReservationException {
 
-        LOGGER.info("Executing CommitReservationCommand with input: {}", input);
+        LOGGER.info("CommitReservationCommand : input: ({})", ObjectLogger.log(input));
 
         try {
 
-            final var history = this.positionUpdater.commit(input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
+            final var committed = this.positionUpdater.commit(
+                input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
 
-            final var output = new Output(history.positionUpdateId(), history.positionId(), history.action(), history.transactionId(), history.currency(), history.amount(),
-                history.oldPosition(), history.newPosition(), history.oldReserved(), history.newReserved(), history.netDebitCap(), history.transactionAt());
+            final var output = new Output(
+                committed.positionUpdateId(), committed.positionId(), committed.action(),
+                committed.transactionId(), committed.currency(), committed.amount(),
+                committed.oldPosition(), committed.newPosition(), committed.oldReserved(),
+                committed.newReserved(), committed.netDebitCap(), committed.transactionAt());
 
-            LOGGER.info("CommitReservationCommand executed successfully with output: {}", output);
+            LOGGER.info("CommitReservationCommand : output: ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (final PositionUpdater.CommitFailedException e) {
 
-            LOGGER.error("Commit failed for reservationId: {}", e.getReservationId());
+            LOGGER.error("Error:", e);
+
             throw new FailedToCommitReservationException(e.getReservationId());
         }
     }

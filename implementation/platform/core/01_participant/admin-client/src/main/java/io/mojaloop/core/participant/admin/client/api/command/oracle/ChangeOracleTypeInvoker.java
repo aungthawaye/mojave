@@ -40,7 +40,8 @@ public class ChangeOracleTypeInvoker implements ChangeOracleTypeCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ChangeOracleTypeInvoker(final ParticipantAdminService.OracleCommands oracleCommands, final ObjectMapper objectMapper) {
+    public ChangeOracleTypeInvoker(final ParticipantAdminService.OracleCommands oracleCommands,
+                                   final ObjectMapper objectMapper) {
 
         assert oracleCommands != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ChangeOracleTypeInvoker implements ChangeOracleTypeCommand {
 
         try {
 
-            return RetrofitService.invoke(this.oracleCommands.changeOracleType(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleCommands.changeOracleType(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class ChangeOracleTypeInvoker implements ChangeOracleTypeCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

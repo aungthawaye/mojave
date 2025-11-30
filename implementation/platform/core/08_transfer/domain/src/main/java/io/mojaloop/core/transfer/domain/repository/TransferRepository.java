@@ -30,7 +30,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransferRepository extends JpaRepository<Transfer, TransferId>, JpaSpecificationExecutor<Transfer> {
+public interface TransferRepository
+    extends JpaRepository<Transfer, TransferId>, JpaSpecificationExecutor<Transfer> {
 
     class Filters {
 

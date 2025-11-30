@@ -43,7 +43,8 @@ public class UdfTransferId extends EntityId<String> {
     public static class Deserializer extends JsonDeserializer<UdfTransferId> {
 
         @Override
-        public UdfTransferId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public UdfTransferId deserialize(JsonParser p, DeserializationContext ctx)
+            throws IOException {
 
             var text = p.getValueAsString();
 
@@ -68,6 +69,7 @@ public class UdfTransferId extends EntityId<String> {
 
             return new UdfTransferId(source);
         }
+
     }
 
 }

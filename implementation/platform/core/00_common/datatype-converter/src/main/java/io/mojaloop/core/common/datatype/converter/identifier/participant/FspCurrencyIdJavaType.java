@@ -83,7 +83,8 @@ public class FspCurrencyIdJavaType extends AbstractClassJavaType<FspCurrencyId> 
             case null -> null;
             case FspCurrencyId fspCurrencyId -> fspCurrencyId;
             case Number n -> new FspCurrencyId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

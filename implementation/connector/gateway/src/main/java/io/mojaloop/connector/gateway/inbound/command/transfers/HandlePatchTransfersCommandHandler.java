@@ -28,7 +28,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePatchTransfersCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePatchTransfersCommandHandler.class.getName());
 
     private final FspCoreAdapter fspCoreAdapter;
 

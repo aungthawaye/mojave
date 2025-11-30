@@ -83,7 +83,8 @@ public class JournalEntryIdJavaType extends AbstractClassJavaType<JournalEntryId
             case null -> null;
             case JournalEntryId id -> id;
             case Number n -> new JournalEntryId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

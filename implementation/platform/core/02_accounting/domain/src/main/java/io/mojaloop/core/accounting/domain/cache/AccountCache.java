@@ -59,9 +59,12 @@ public interface AccountCache {
 
     class Keys {
 
-        public static String forChart(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
+        public static String forChart(ChartEntryId chartEntryId,
+                                      AccountOwnerId ownerId,
+                                      Currency currency) {
 
-            return chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" + currency.name();
+            return chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
+                       currency.name();
         }
 
     }

@@ -43,7 +43,9 @@ public class RespondTransfersHandler implements RespondTransfers {
 
     private final FspiopErrorDecoder fspiopErrorDecoder;
 
-    public RespondTransfersHandler(ParticipantContext participantContext, TransfersResponseService transfersResponseService, FspiopErrorDecoder fspiopErrorDecoder) {
+    public RespondTransfersHandler(ParticipantContext participantContext,
+                                   TransfersResponseService transfersResponseService,
+                                   FspiopErrorDecoder fspiopErrorDecoder) {
 
         assert participantContext != null;
         assert transfersResponseService != null;
@@ -56,13 +58,17 @@ public class RespondTransfersHandler implements RespondTransfers {
     }
 
     @Override
-    public void patchTransfers(Payee payee, String url, TransfersIDPatchResponse response) throws FspiopException {
+    public void patchTransfers(Payee payee, String url, TransfersIDPatchResponse response)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payee.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(
+                this.participantContext.fspCode(), payee.fspCode());
 
-            RetrofitService.invoke(this.transfersResponseService.patchTransfers(url, fspiopHeaders, response), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersResponseService.patchTransfers(url, fspiopHeaders, response),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -71,13 +77,17 @@ public class RespondTransfersHandler implements RespondTransfers {
     }
 
     @Override
-    public void putTransfers(Payer payer, String url, TransfersIDPutResponse response) throws FspiopException {
+    public void putTransfers(Payer payer, String url, TransfersIDPutResponse response)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.transfersResponseService.putTransfers(url, fspiopHeaders, response), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersResponseService.putTransfers(url, fspiopHeaders, response),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -86,13 +96,17 @@ public class RespondTransfersHandler implements RespondTransfers {
     }
 
     @Override
-    public void putTransfersError(Payer payer, String url, ErrorInformationObject error) throws FspiopException {
+    public void putTransfersError(Payer payer, String url, ErrorInformationObject error)
+        throws FspiopException {
 
         try {
 
-            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(this.participantContext.fspCode(), payer.fspCode());
+            var fspiopHeaders = FspiopHeaders.Values.Transfers.forResult(
+                this.participantContext.fspCode(), payer.fspCode());
 
-            RetrofitService.invoke(this.transfersResponseService.putTransfersError(url, fspiopHeaders, error), this.fspiopErrorDecoder);
+            RetrofitService.invoke(
+                this.transfersResponseService.putTransfersError(url, fspiopHeaders, error),
+                this.fspiopErrorDecoder);
 
         } catch (RetrofitService.InvocationException e) {
 

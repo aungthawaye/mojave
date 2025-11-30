@@ -102,7 +102,8 @@ public class PostingDefinitionIdJavaType extends AbstractClassJavaType<PostingDe
             case null -> null;
             case PostingDefinitionId id -> id;
             case Number n -> new PostingDefinitionId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

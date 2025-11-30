@@ -17,23 +17,25 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.client.service;
 
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
+import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
-import io.mojaloop.core.wallet.contract.command.wallet.CreateWalletCommand;
-import io.mojaloop.core.wallet.contract.command.wallet.DepositFundCommand;
-import io.mojaloop.core.wallet.contract.command.wallet.ReverseFundCommand;
-import io.mojaloop.core.wallet.contract.command.wallet.WithdrawFundCommand;
+import io.mojaloop.core.wallet.contract.command.balance.CreateBalanceCommand;
+import io.mojaloop.core.wallet.contract.command.balance.DepositFundCommand;
+import io.mojaloop.core.wallet.contract.command.balance.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.data.PositionData;
-import io.mojaloop.core.wallet.contract.data.WalletData;
+import io.mojaloop.core.wallet.contract.data.BalanceData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -45,52 +47,55 @@ import java.util.List;
 
 public interface WalletAdminService {
 
-    interface WalletCommand {
+    interface BalanceCommand {
 
-        @POST("/wallets/create")
-        Call<CreateWalletCommand.Output> create(@Body CreateWalletCommand.Input input);
+        @POST("/balances/create")
+        Call<CreateBalanceCommand.Output> create(@Body CreateBalanceCommand.Input input);
 
-        @POST("/wallets/deposit-fund")
+        @POST("/balances/deposit-fund")
         Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);
 
-        @POST("/wallets/withdraw-fund")
-        Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);
+        @POST("/balances/reverse-withdraw")
+        Call<ReverseWithdrawCommand.Output> reverseWithdraw(@Body ReverseWithdrawCommand.Input input);
 
-        @POST("/wallets/reverse-fund")
-        Call<ReverseFundCommand.Output> reverseFund(@Body ReverseFundCommand.Input input);
+        @POST("/balances/withdraw-fund")
+        Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);
 
     }
 
-    interface WalletQuery {
+    interface BalanceQuery {
 
-        @GET("/wallets/get-by-wallet-id")
-        Call<WalletData> getByWalletId(@Query("walletId") WalletId walletId);
+        @GET("/balances/get-all-balances")
+        Call<List<BalanceData>> getAll();
 
-        @GET("/wallets/get-by-owner-id-currency")
-        Call<List<WalletData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
-                                                       @Query("currency") Currency currency);
+        @GET("/balances/get-by-owner-id-currency")
+        Call<List<BalanceData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
+                                                        @Query("currency") Currency currency);
 
-        @GET("/wallets/get-all-wallets")
-        Call<List<WalletData>> getAll();
+        @GET("/balances/get-by-balance-id")
+        Call<BalanceData> getByWalletId(@Query("balanceId") BalanceId balanceId);
 
     }
 
     interface PositionCommand {
 
+        @POST("/positions/commit")
+        Call<CommitReservationCommand.Output> commit(@Body CommitReservationCommand.Input input);
+
         @POST("/positions/create")
         Call<CreatePositionCommand.Output> create(@Body CreatePositionCommand.Input input);
-
-        @POST("/positions/increase")
-        Call<IncreasePositionCommand.Output> increase(@Body IncreasePositionCommand.Input input);
 
         @POST("/positions/decrease")
         Call<DecreasePositionCommand.Output> decrease(@Body DecreasePositionCommand.Input input);
 
+        @POST("/positions/fulfil")
+        Call<FulfilPositionsCommand.Output> fulfil(@Body FulfilPositionsCommand.Input input);
+
+        @POST("/positions/increase")
+        Call<IncreasePositionCommand.Output> increase(@Body IncreasePositionCommand.Input input);
+
         @POST("/positions/reserve")
         Call<ReservePositionCommand.Output> reserve(@Body ReservePositionCommand.Input input);
-
-        @POST("/positions/commit")
-        Call<CommitReservationCommand.Output> commit(@Body CommitReservationCommand.Input input);
 
         @POST("/positions/rollback")
         Call<RollbackReservationCommand.Output> rollback(@Body RollbackReservationCommand.Input input);
@@ -99,17 +104,18 @@ public interface WalletAdminService {
 
     interface PositionQuery {
 
-        @GET("/positions/get-by-position-id")
-        Call<PositionData> getByPositionId(@Query("positionId") PositionId positionId);
+        @GET("/positions/get-all-positions")
+        Call<List<PositionData>> getAll();
 
         @GET("/positions/get-by-owner-id-currency")
         Call<List<PositionData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
                                                          @Query("currency") Currency currency);
 
-        @GET("/positions/get-all-positions")
-        Call<List<PositionData>> getAll();
+        @GET("/positions/get-by-position-id")
+        Call<PositionData> getByPositionId(@Query("positionId") PositionId positionId);
 
     }
 
     record Settings(String baseUrl) { }
+
 }

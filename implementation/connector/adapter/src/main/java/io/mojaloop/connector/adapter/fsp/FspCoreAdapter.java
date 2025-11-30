@@ -67,7 +67,9 @@ public class FspCoreAdapter {
 
     private final ObjectMapper objectMapper;
 
-    public FspCoreAdapter(ParticipantContext participantContext, FspClient fspClient, ObjectMapper objectMapper) {
+    public FspCoreAdapter(ParticipantContext participantContext,
+                          FspClient fspClient,
+                          ObjectMapper objectMapper) {
 
         assert null != participantContext;
         assert null != fspClient;
@@ -78,20 +80,28 @@ public class FspCoreAdapter {
         this.objectMapper = objectMapper;
     }
 
-    public PartiesTypeIDPutResponse getParties(Payer payer, PartyIdType partyIdType, String partyId, String subId) throws FspiopException {
+    public PartiesTypeIDPutResponse getParties(Payer payer,
+                                               PartyIdType partyIdType,
+                                               String partyId,
+                                               String subId) throws FspiopException {
 
         try {
 
             LOGGER.debug("Getting parties: {}", partyIdType);
 
             LOGGER.info("Getting parties from FSP Core: {}", partyIdType);
-            var result = fspClient.getParties(payer, new Parties.Get.Request(partyIdType, partyId, subId));
+            var result = fspClient.getParties(
+                payer, new Parties.Get.Request(partyIdType, partyId, subId));
             LOGGER.info("Got parties from FSP Core: {}", result);
 
-            var party = new Party().name(result.name())
-                                   .personalInfo(result.personalInfo())
-                                   .partyIdInfo(new PartyIdInfo().partyIdType(partyIdType).partyIdentifier(partyId).partySubIdOrType(subId))
-                                   .supportedCurrencies(result.supportedCurrencies());
+            var party = new Party()
+                            .name(result.name())
+                            .personalInfo(result.personalInfo())
+                            .partyIdInfo(new PartyIdInfo()
+                                             .partyIdType(partyIdType)
+                                             .partyIdentifier(partyId)
+                                             .partySubIdOrType(subId))
+                            .supportedCurrencies(result.supportedCurrencies());
 
             var response = new PartiesTypeIDPutResponse(party);
 
@@ -110,13 +120,17 @@ public class FspCoreAdapter {
         }
     }
 
-    public void patchTransfers(Payer payer, String transferId, TransfersIDPatchResponse response) throws FspiopException {
+    public void patchTransfers(Payer payer, String transferId, TransfersIDPatchResponse response)
+        throws FspiopException {
 
         try {
 
             LOGGER.info("Confirming transfer: {}", response);
-            this.fspClient.patchTransfers(payer,
-                new Transfers.Patch.Request(transferId, response.getTransferState(), response.getCompletedTimestamp(), response.getExtensionList()));
+            this.fspClient.patchTransfers(
+                payer,
+                new Transfers.Patch.Request(
+                    transferId, response.getTransferState(), response.getCompletedTimestamp(),
+                    response.getExtensionList()));
             LOGGER.info("Confirmed transfer: {}", response);
 
         } catch (FspiopException e) {
@@ -132,7 +146,8 @@ public class FspCoreAdapter {
 
     }
 
-    public QuotesIDPutResponse postQuotes(Payer payer, QuotesPostRequest request) throws FspiopException {
+    public QuotesIDPutResponse postQuotes(Payer payer, QuotesPostRequest request)
+        throws FspiopException {
 
         try {
 
@@ -149,15 +164,19 @@ public class FspCoreAdapter {
                 if (expiredAt.isBefore(Instant.now())) {
 
                     LOGGER.error("Quote request has expired.");
-                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "Quote request (" + quoteId + ") has expired.");
+                    throw new FspiopException(
+                        FspiopErrors.QUOTE_EXPIRED, "Quote request (" + quoteId + ") has expired.");
                 }
             }
 
             var currency = request.getAmount().getCurrency();
 
             LOGGER.info("Getting quotes from FSP Core: {}", quoteId);
-            var result = fspClient.postQuotes(payer,
-                new Quotes.Post.Request(quoteId, request.getPayer(), request.getPayee(), request.getAmountType(), request.getAmount(), request.getExpiration()));
+            var result = fspClient.postQuotes(
+                payer,
+                new Quotes.Post.Request(
+                    quoteId, request.getPayer(), request.getPayee(), request.getAmountType(),
+                    request.getAmount(), request.getExpiration()));
             LOGGER.info("Got quotes from FSP Core: {}", result);
 
             var originalAmount = new BigDecimal(result.originalAmount().getAmount());
@@ -166,34 +185,60 @@ public class FspCoreAdapter {
             var payeeReceiveAmount = new BigDecimal(result.payeeReceiveAmount().getAmount());
             var transferAmount = new BigDecimal(result.transferAmount().getAmount());
 
-            var agreement = new Agreement(quoteId, request.getPayer().getPartyIdInfo(), request.getPayee().getPartyIdInfo(), request.getAmountType(),
-                new Money(currency, originalAmount.stripTrailingZeros().toPlainString()), new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()),
-                new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()), new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()),
-                new Money(currency, transferAmount.stripTrailingZeros().toPlainString()), result.expiration());
+            var agreement = new Agreement(
+                quoteId, request.getPayer().getPartyIdInfo(), request.getPayee().getPartyIdInfo(),
+                request.getAmountType(),
+                new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),
+                new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()),
+                new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()),
+                new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()),
+                new Money(currency, transferAmount.stripTrailingZeros().toPlainString()),
+                result.expiration());
 
             var payload = this.objectMapper.writeValueAsString(agreement);
-            var preparePacket = Interledger.prepare(this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
-                Interledger.Amount.serialize(transferAmount, FspiopCurrencies.get(currency).scale(), RoundingMode.UNNECESSARY), payload, 900);
+            var preparePacket = Interledger.prepare(
+                this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
+                Interledger.Amount.serialize(
+                    transferAmount, FspiopCurrencies.get(currency).scale(),
+                    RoundingMode.UNNECESSARY), payload, 900);
 
             var extensionList = new ExtensionList();
             // Payer related
             extensionList.addExtensionItem(new Extension("payerFspId", payer.fspCode()));
-            extensionList.addExtensionItem(new Extension("payerPartyIdType", request.getPayer().getPartyIdInfo().getPartyIdType().toString()));
-            extensionList.addExtensionItem(new Extension("payerPartyId", request.getPayer().getPartyIdInfo().getPartyIdentifier()));
+            extensionList.addExtensionItem(new Extension(
+                "payerPartyIdType",
+                request.getPayer().getPartyIdInfo().getPartyIdType().toString()));
+            extensionList.addExtensionItem(new Extension(
+                "payerPartyId",
+                request.getPayer().getPartyIdInfo().getPartyIdentifier()));
 
             // Payee related
-            extensionList.addExtensionItem(new Extension("payeeFspId", this.participantContext.fspCode()));
-            extensionList.addExtensionItem(new Extension("payeePartyIdType", request.getPayee().getPartyIdInfo().getPartyIdType().toString()));
-            extensionList.addExtensionItem(new Extension("payeePartyId", request.getPayee().getPartyIdInfo().getPartyIdentifier()));
+            extensionList.addExtensionItem(
+                new Extension("payeeFspId", this.participantContext.fspCode()));
+            extensionList.addExtensionItem(new Extension(
+                "payeePartyIdType",
+                request.getPayee().getPartyIdInfo().getPartyIdType().toString()));
+            extensionList.addExtensionItem(new Extension(
+                "payeePartyId",
+                request.getPayee().getPartyIdInfo().getPartyIdentifier()));
 
-            var response = new QuotesIDPutResponse().condition(preparePacket.base64Condition())
-                                                    .ilpPacket(preparePacket.base64PreparePacket())
-                                                    .expiration(result.expiration())
-                                                    .payeeFspCommission(new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()))
-                                                    .payeeFspFee(new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()))
-                                                    .payeeReceiveAmount(new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()))
-                                                    .transferAmount(new Money(currency, transferAmount.stripTrailingZeros().toPlainString()))
-                                                    .extensionList(extensionList);
+            var response = new QuotesIDPutResponse()
+                               .condition(preparePacket.base64Condition())
+                               .ilpPacket(preparePacket.base64PreparePacket())
+                               .expiration(result.expiration())
+                               .payeeFspCommission(new Money(
+                                   currency,
+                                   payeeFspCommission.stripTrailingZeros().toPlainString()))
+                               .payeeFspFee(new Money(
+                                   currency,
+                                   payeeFspFee.stripTrailingZeros().toPlainString()))
+                               .payeeReceiveAmount(new Money(
+                                   currency,
+                                   payeeReceiveAmount.stripTrailingZeros().toPlainString()))
+                               .transferAmount(new Money(
+                                   currency,
+                                   transferAmount.stripTrailingZeros().toPlainString()))
+                               .extensionList(extensionList);
 
             LOGGER.debug("Returning quotes: {}", response);
 
@@ -211,7 +256,8 @@ public class FspCoreAdapter {
         }
     }
 
-    public TransfersIDPutResponse postTransfers(Payer payer, TransfersPostRequest request) throws FspiopException {
+    public TransfersIDPutResponse postTransfers(Payer payer, TransfersPostRequest request)
+        throws FspiopException {
 
         try {
 
@@ -228,35 +274,42 @@ public class FspCoreAdapter {
                 if (expiredAt.isBefore(Instant.now())) {
 
                     LOGGER.error("Transfer request has expired.");
-                    throw new FspiopException(FspiopErrors.TRANSFER_EXPIRED, "Transfer request (" + transferId + ") has expired.");
+                    throw new FspiopException(
+                        FspiopErrors.TRANSFER_EXPIRED,
+                        "Transfer request (" + transferId + ") has expired.");
                 }
             }
 
             var ilpConditionFromRequest = request.getCondition();
             var ilpPacketFromRequest = request.getIlpPacket();
             var unwrappedIlpPacket = Interledger.unwrap(ilpPacketFromRequest);
-            var unwrappedIlpPacketData = new String(unwrappedIlpPacket.getData(), StandardCharsets.UTF_8);
+            var unwrappedIlpPacketData = new String(
+                unwrappedIlpPacket.getData(), StandardCharsets.UTF_8);
 
-            LOGGER.debug("Transfer Id : [{}]", transferId);
-            LOGGER.debug("Request ILP Packet : [{}]", ilpPacketFromRequest);
-            LOGGER.debug("Prepare ILP Packet : [{}]", unwrappedIlpPacket);
-            LOGGER.debug("ILP Packet Data : [{}]", unwrappedIlpPacketData);
+            LOGGER.debug("Transfer Id : ({})", transferId);
+            LOGGER.debug("Request ILP Packet : ({})", ilpPacketFromRequest);
+            LOGGER.debug("Prepare ILP Packet : ({})", unwrappedIlpPacket);
+            LOGGER.debug("ILP Packet Data : ({})", unwrappedIlpPacketData);
 
             var currency = request.getAmount().getCurrency();
             var transferAmount = new BigDecimal(request.getAmount().getAmount());
 
-            var optFulfilment = Interledger.fulfil(this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
-                Interledger.Amount.serialize(transferAmount, FspiopCurrencies.get(currency).scale(), RoundingMode.UNNECESSARY), unwrappedIlpPacketData, ilpConditionFromRequest,
+            var optFulfilment = Interledger.fulfil(
+                this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
+                Interledger.Amount.serialize(
+                    transferAmount, FspiopCurrencies.get(currency).scale(),
+                    RoundingMode.UNNECESSARY), unwrappedIlpPacketData, ilpConditionFromRequest,
                 900);
 
             if (optFulfilment.isEmpty()) {
 
                 LOGGER.error("Fulfillment is not valid");
-                throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "ILP Fulfillment is not valid.");
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR, "ILP Fulfillment is not valid.");
             }
 
             var fulfilment = optFulfilment.get();
-            LOGGER.debug("Fulfilment : [{}]", fulfilment);
+            LOGGER.debug("Fulfilment : ({})", fulfilment);
 
             var agreement = this.objectMapper.readValue(unwrappedIlpPacketData, Agreement.class);
 
@@ -267,21 +320,31 @@ public class FspCoreAdapter {
                 if (quoteExpiredAt.isBefore(Instant.now())) {
 
                     LOGGER.error("Quote has expired.");
-                    throw new FspiopException(FspiopErrors.QUOTE_EXPIRED, "Quote has already expired. Transfer (" + transferId + ") cannot be performed.");
+                    throw new FspiopException(
+                        FspiopErrors.QUOTE_EXPIRED,
+                        "Quote has already expired. Transfer (" + transferId +
+                            ") cannot be performed.");
                 }
             }
 
             LOGGER.info("Posting transfers to FSP Core: {}", agreement);
-            var result = this.fspClient.postTransfers(payer, new Transfers.Post.Request(request.getTransferId(), agreement, request.getExtensionList()));
+            var result = this.fspClient.postTransfers(
+                payer, new Transfers.Post.Request(
+                    request.getTransferId(), agreement,
+                    request.getExtensionList()));
             LOGGER.info("Got transfers from FSP Core: {}", result);
 
             var response = new TransfersIDPutResponse();
 
-            response.fulfilment(fulfilment)
-                    .transferState(TransferState.RESERVED)
-                    .completedTimestamp(FspiopDates.forRequestBody())
-                    .extensionList(new ExtensionList().addExtensionItem(new Extension("homeTransactionId", UUID.randomUUID().toString()))
-                                                      .addExtensionItem(new Extension("transferId", transferId)));
+            response
+                .fulfilment(fulfilment)
+                .transferState(TransferState.RESERVED)
+                .completedTimestamp(FspiopDates.forRequestBody())
+                .extensionList(new ExtensionList()
+                                   .addExtensionItem(new Extension(
+                                       "homeTransactionId",
+                                       UUID.randomUUID().toString()))
+                                   .addExtensionItem(new Extension("transferId", transferId)));
 
             LOGGER.debug("Returning transfers: {}", response);
 

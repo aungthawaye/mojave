@@ -34,7 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OpenTransactionCommandHandler implements OpenTransactionCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OpenTransactionCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        OpenTransactionCommandHandler.class);
 
     private final TransactionRepository transactionRepository;
 

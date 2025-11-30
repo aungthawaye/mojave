@@ -51,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TerminateOracleCommandHandler implements TerminateOracleCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TerminateOracleCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        TerminateOracleCommandHandler.class);
 
     private final OracleRepository oracleRepository;
 
@@ -68,7 +69,9 @@ public class TerminateOracleCommandHandler implements TerminateOracleCommand {
 
         LOGGER.info("Executing TerminateOracleCommand with input: {}", input);
 
-        var oracle = this.oracleRepository.findById(input.oracleId()).orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+        var oracle = this.oracleRepository
+                         .findById(input.oracleId())
+                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.terminate();
         this.oracleRepository.save(oracle);

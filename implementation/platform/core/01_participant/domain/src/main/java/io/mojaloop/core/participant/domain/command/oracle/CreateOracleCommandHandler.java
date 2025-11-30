@@ -70,7 +70,9 @@ public class CreateOracleCommandHandler implements CreateOracleCommand {
         LOGGER.info("Executing CreateOracleCommand with input: {}", input);
 
         // Check if an Oracle already exists for the given PartyIdType
-        if (this.oracleRepository.findOne(OracleRepository.Filters.withType(input.type())).isPresent()) {
+        if (this.oracleRepository
+                .findOne(OracleRepository.Filters.withType(input.type()))
+                .isPresent()) {
 
             LOGGER.info("Oracle with type {} already exists", input.type());
             throw new OracleAlreadyExistsException(input.type());

@@ -18,7 +18,6 @@
         <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-flyway</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>

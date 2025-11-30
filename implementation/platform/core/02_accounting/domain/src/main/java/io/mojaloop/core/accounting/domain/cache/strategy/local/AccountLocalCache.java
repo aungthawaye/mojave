@@ -86,7 +86,8 @@ public class AccountLocalCache implements AccountCache {
             set.removeIf(a -> a.accountId().equals(accountId));
         }
 
-        final var key = AccountCache.Keys.forChart(deleted.chartEntryId(), deleted.ownerId(), deleted.currency());
+        final var key = AccountCache.Keys.forChart(
+            deleted.chartEntryId(), deleted.ownerId(), deleted.currency());
         this.withChartEntryIdOwnerIdCurrency.remove(key);
     }
 
@@ -110,7 +111,9 @@ public class AccountLocalCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(final ChartEntryId chartEntryId, final AccountOwnerId ownerId, final Currency currency) {
+    public AccountData get(final ChartEntryId chartEntryId,
+                           final AccountOwnerId ownerId,
+                           final Currency currency) {
 
         final var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
         return this.withChartEntryIdOwnerIdCurrency.get(key);
@@ -148,10 +151,12 @@ public class AccountLocalCache implements AccountCache {
         this.withId.put(account.accountId().getId(), account);
         this.withCode.put(account.code().value(), account);
 
-        final var set = this.withOwnerId.computeIfAbsent(account.ownerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        final var set = this.withOwnerId.computeIfAbsent(
+            account.ownerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(account);
 
-        final var key = AccountCache.Keys.forChart(account.chartEntryId(), account.ownerId(), account.currency());
+        final var key = AccountCache.Keys.forChart(
+            account.chartEntryId(), account.ownerId(), account.currency());
         this.withChartEntryIdOwnerIdCurrency.put(key, account);
     }
 

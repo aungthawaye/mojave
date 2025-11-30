@@ -30,7 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePutQuotesResponseCommandHandler implements HandlePutQuotesResponseCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutQuotesResponseCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePutQuotesResponseCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 

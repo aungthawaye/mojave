@@ -30,7 +30,8 @@ public interface ActivateEndpointCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull FspId fspId, @JsonProperty(required = true) @NotNull EndpointType type) { }
+    record Input(@JsonProperty(required = true) @NotNull FspId fspId,
+                 @JsonProperty(required = true) @NotNull EndpointType type) { }
 
     record Output(FspEndpointId fspEndpointId, boolean activated) { }
 

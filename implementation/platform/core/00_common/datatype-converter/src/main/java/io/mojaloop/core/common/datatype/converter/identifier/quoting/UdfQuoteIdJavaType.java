@@ -80,7 +80,8 @@ public class UdfQuoteIdJavaType extends AbstractClassJavaType<UdfQuoteId> {
             case UdfQuoteId udfQuoteId -> udfQuoteId;
             case String s -> new UdfQuoteId(s);
             case Character c -> new UdfQuoteId(c.toString());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

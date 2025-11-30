@@ -66,11 +66,14 @@ import static java.sql.Types.BIGINT;
 @Entity
 @EntityListeners(value = {FlowDefinitionCacheUpdater.class})
 @Table(name = "acc_flow_definition",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_flow_definition_currency_UK", columnNames = {"currency"}),
-                            @UniqueConstraint(name = "acc_flow_definition_name_UK", columnNames = {"name"})})
+       uniqueConstraints = {@UniqueConstraint(name = "acc_flow_definition_currency_UK",
+                                              columnNames = {"currency"}),
+                            @UniqueConstraint(name = "acc_flow_definition_name_UK",
+                                              columnNames = {"name"})})
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataConversion<FlowDefinitionData> {
+public class FlowDefinition extends JpaEntity<FlowDefinitionId>
+    implements DataConversion<FlowDefinitionData> {
 
     @Id
     @JavaType(FlowDefinitionIdJavaType.class)
@@ -78,7 +81,9 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     @Column(name = "flow_definition_id", nullable = false, updatable = false)
     protected FlowDefinitionId id;
 
-    @Column(name = "transaction_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "transaction_type",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionType transactionType;
 
@@ -92,18 +97,28 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
-    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "termination_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
-    @OneToMany(mappedBy = "definition", orphanRemoval = true, cascade = {jakarta.persistence.CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "definition",
+               orphanRemoval = true,
+               cascade = {jakarta.persistence.CascadeType.ALL},
+               fetch = FetchType.EAGER)
     protected List<PostingDefinition> postings = new ArrayList<>();
 
-    public FlowDefinition(TransactionType transactionType, Currency currency, String name, String description) {
+    public FlowDefinition(TransactionType transactionType,
+                          Currency currency,
+                          String name,
+                          String description) {
 
         assert transactionType != null;
         assert currency != null;
@@ -128,7 +143,9 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
                                         AccountCache accountCache,
                                         ChartEntryCache chartEntryCache) {
 
-        var posting = new PostingDefinition(this, receiveIn, receiveInId, participant, amountName, side, description, accountCache, chartEntryCache);
+        var posting = new PostingDefinition(
+            this, receiveIn, receiveInId, participant, amountName, side, description, accountCache,
+            chartEntryCache);
 
         this.postings.add(posting);
 
@@ -139,12 +156,17 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId> implements DataC
     @Override
     public FlowDefinitionData convert() {
 
-        var postingData = this.postings.stream()
-                                       .map(p -> new FlowDefinitionData.PostingDefinitionData(p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName, p.side, p.description))
-                                       .toList();
+        var postingData = this.postings
+                              .stream()
+                              .map(p -> new FlowDefinitionData.PostingDefinitionData(
+                                  p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName,
+                                  p.side, p.description))
+                              .toList();
 
-        return new FlowDefinitionData(this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(), this.getDescription(), this.getActivationStatus(),
-            this.getTerminationStatus(), postingData);
+        return new FlowDefinitionData(
+            this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(),
+            this.getDescription(), this.getActivationStatus(), this.getTerminationStatus(),
+            postingData);
     }
 
     public FlowDefinition currency(Currency currency) {

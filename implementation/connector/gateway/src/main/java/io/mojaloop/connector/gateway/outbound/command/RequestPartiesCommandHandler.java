@@ -29,6 +29,7 @@ import io.mojaloop.connector.gateway.outbound.component.FspiopResultListener;
 import io.mojaloop.fspiop.common.error.ErrorDefinition;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.invoker.api.parties.GetParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,8 @@ import org.springframework.stereotype.Service;
 @Service
 class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestPartiesCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestPartiesCommandHandler.class.getName());
 
     private final GetParties getParties;
 
@@ -45,7 +47,9 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
     private final ConnectorOutboundConfiguration.OutboundSettings outboundSettings;
 
-    public RequestPartiesCommandHandler(GetParties getParties, PubSubClient pubSubClient, ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
+    public RequestPartiesCommandHandler(GetParties getParties,
+                                        PubSubClient pubSubClient,
+                                        ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
         assert null != getParties;
         assert null != pubSubClient;
@@ -64,15 +68,24 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         assert input != null;
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
-        var resultTopic = PubSubKeys.forParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
-        var errorTopic = PubSubKeys.forPartiesError(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var resultTopic = PubSubKeys.forParties(
+            input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var errorTopic = PubSubKeys.forPartiesError(
+            input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var hubErrorTopic = PubSubKeys.forPartiesError(
+            new Payee("hub"), input.partyIdType(),
+            input.partyId(), input.subId());
 
         // Listening to the pub/sub
-        var resultListener = new FspiopResultListener<>(this.pubSubClient, this.outboundSettings, PartiesResult.class, PartiesErrorResult.class);
-        resultListener.init(resultTopic, errorTopic);
+        var resultListener = new FspiopResultListener<>(
+            this.pubSubClient, this.outboundSettings,
+            PartiesResult.class, PartiesErrorResult.class);
+
+        resultListener.init(resultTopic, errorTopic, hubErrorTopic);
 
         if (withSubId) {
-            this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+            this.getParties.getParties(
+                input.payee(), input.partyIdType(), input.partyId(), input.subId());
         } else {
             this.getParties.getParties(input.payee(), input.partyIdType(), input.partyId());
         }
@@ -84,9 +97,13 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         }
 
         var error = resultListener.getError();
-        var errorDefinition = FspiopErrors.find(error.errorInformation().getErrorInformation().getErrorCode());
+        var errorDefinition = FspiopErrors.find(
+            error.errorInformation().getErrorInformation().getErrorCode());
 
-        throw new FspiopException(new ErrorDefinition(errorDefinition.errorType(), error.errorInformation().getErrorInformation().getErrorDescription()));
+        throw new FspiopException(
+            new ErrorDefinition(
+                errorDefinition.errorType(),
+                error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

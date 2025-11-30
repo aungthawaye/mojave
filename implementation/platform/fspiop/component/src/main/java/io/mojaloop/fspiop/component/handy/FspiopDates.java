@@ -63,6 +63,11 @@ public class FspiopDates {
         return FOR_BODY.get().format(date);
     }
 
+    public static String forRequestBody(Instant instant) {
+
+        return FOR_BODY.get().format(Date.from(instant));
+    }
+
     public static String forRequestHeader() {
 
         return forRequestHeader(new Date());
@@ -73,12 +78,18 @@ public class FspiopDates {
         return FOR_HEADER.get().format(date);
     }
 
+    public static String forRequestHeader(Instant instant) {
+
+        return FOR_HEADER.get().format(Date.from(instant));
+    }
+
     public static Instant fromRequestBody(String body) throws FspiopException {
 
         try {
             return FOR_BODY.get().parse(body).toInstant();
         } catch (Exception e) {
-            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request body.");
+            throw new FspiopException(
+                FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request body.");
         }
     }
 
@@ -87,7 +98,8 @@ public class FspiopDates {
         try {
             return FOR_HEADER.get().parse(header).toInstant();
         } catch (Exception e) {
-            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request header.");
+            throw new FspiopException(
+                FspiopErrors.GENERIC_VALIDATION_ERROR, "Error parsing date from request header.");
         }
     }
 

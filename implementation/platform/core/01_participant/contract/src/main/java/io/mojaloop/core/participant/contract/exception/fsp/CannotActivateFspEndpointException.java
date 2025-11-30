@@ -42,7 +42,8 @@ public class CannotActivateFspEndpointException extends UncheckedDomainException
 
     public CannotActivateFspEndpointException(FspCode fspCode, EndpointType endpointType) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{endpointType.name(), fspCode.value()}));
+        super(
+            new ErrorTemplate(CODE, TEMPLATE, new String[]{endpointType.name(), fspCode.value()}));
 
         this.fspCode = fspCode;
         this.endpointType = endpointType;

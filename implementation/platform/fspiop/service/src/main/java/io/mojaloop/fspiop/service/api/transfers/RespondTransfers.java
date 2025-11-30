@@ -29,10 +29,13 @@ import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 
 public interface RespondTransfers {
 
-    void patchTransfers(Payee payee, String url, TransfersIDPatchResponse response) throws FspiopException;
+    void patchTransfers(Payee payee, String url, TransfersIDPatchResponse response)
+        throws FspiopException;
 
-    void putTransfers(Payer payer, String url, TransfersIDPutResponse response) throws FspiopException;
+    void putTransfers(Payer payer, String url, TransfersIDPutResponse response)
+        throws FspiopException;
 
-    void putTransfersError(Payer payer, String url, ErrorInformationObject error) throws FspiopException;
+    void putTransfersError(Payer payer, String url, ErrorInformationObject error)
+        throws FspiopException;
 
 }

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.contract.exception;
 
 import io.mojaloop.component.misc.error.RestErrorResponse;
@@ -70,49 +71,74 @@ public class AccountingExceptionResolver {
             // account
             case AccountCodeNotFoundException.CODE -> AccountCodeNotFoundException.from(extra);
             case AccountCodeRequiredException.CODE -> AccountCodeRequiredException.from(extra);
-            case AccountDescriptionTooLongException.CODE -> AccountDescriptionTooLongException.from(extra);
+            case AccountDescriptionTooLongException.CODE ->
+                AccountDescriptionTooLongException.from(extra);
             case AccountIdNotFoundException.CODE -> AccountIdNotFoundException.from(extra);
             case AccountNameRequiredException.CODE -> AccountNameRequiredException.from(extra);
             case AccountNameTooLongException.CODE -> AccountNameTooLongException.from(extra);
             case AccountNotActiveException.CODE -> AccountNotActiveException.from(extra);
 
             // chart
-            case ChartEntryCodeAlreadyExistsException.CODE -> ChartEntryCodeAlreadyExistsException.from(extra);
-            case ChartEntryDescriptionTooLongException.CODE -> ChartEntryDescriptionTooLongException.from(extra);
+            case ChartEntryCodeAlreadyExistsException.CODE ->
+                ChartEntryCodeAlreadyExistsException.from(extra);
+            case ChartEntryDescriptionTooLongException.CODE ->
+                ChartEntryDescriptionTooLongException.from(extra);
             case ChartEntryIdNotFoundException.CODE -> ChartEntryIdNotFoundException.from(extra);
-            case ChartEntryNameAlreadyExistsException.CODE -> ChartEntryNameAlreadyExistsException.from(extra);
-            case ChartEntryNameRequiredException.CODE -> ChartEntryNameRequiredException.from(extra);
+            case ChartEntryNameAlreadyExistsException.CODE ->
+                ChartEntryNameAlreadyExistsException.from(extra);
+            case ChartEntryNameRequiredException.CODE ->
+                ChartEntryNameRequiredException.from(extra);
             case ChartEntryNameTooLongException.CODE -> ChartEntryNameTooLongException.from(extra);
             case ChartIdNotFoundException.CODE -> ChartIdNotFoundException.from(extra);
             case ChartNameRequiredException.CODE -> ChartNameRequiredException.from(extra);
             case ChartNameTooLongException.CODE -> ChartNameTooLongException.from(extra);
 
             // definition
-            case AccountConflictInDefinitionException.CODE -> AccountConflictInDefinitionException.from(extra);
-            case AmbiguousReceiveInConfigException.CODE -> AmbiguousReceiveInConfigException.from(extra);
-            case ChartEntryConflictInDefinitionException.CODE -> ChartEntryConflictInDefinitionException.from(extra);
-            case DefinitionDescriptionTooLongException.CODE -> DefinitionDescriptionTooLongException.from(extra);
+            case AccountConflictInDefinitionException.CODE ->
+                AccountConflictInDefinitionException.from(extra);
+            case AmbiguousReceiveInConfigException.CODE ->
+                AmbiguousReceiveInConfigException.from(extra);
+            case ChartEntryConflictInDefinitionException.CODE ->
+                ChartEntryConflictInDefinitionException.from(extra);
+            case DefinitionDescriptionTooLongException.CODE ->
+                DefinitionDescriptionTooLongException.from(extra);
             case DefinitionNameTooLongException.CODE -> DefinitionNameTooLongException.from(extra);
-            case FlowDefinitionNameTakenException.CODE -> FlowDefinitionNameTakenException.from(extra);
-            case FlowDefinitionNotConfiguredException.CODE -> FlowDefinitionNotConfiguredException.from(extra);
-            case FlowDefinitionNotFoundException.CODE -> FlowDefinitionNotFoundException.from(extra);
-            case FlowDefinitionWithCurrencyExistsException.CODE -> FlowDefinitionWithCurrencyExistsException.from(extra);
+            case FlowDefinitionNameTakenException.CODE ->
+                FlowDefinitionNameTakenException.from(extra);
+            case FlowDefinitionNotConfiguredException.CODE ->
+                FlowDefinitionNotConfiguredException.from(extra);
+            case FlowDefinitionNotFoundException.CODE ->
+                FlowDefinitionNotFoundException.from(extra);
+            case FlowDefinitionWithCurrencyExistsException.CODE ->
+                FlowDefinitionWithCurrencyExistsException.from(extra);
             case ImmatureChartEntryException.CODE -> ImmatureChartEntryException.from(extra);
-            case InvalidAmountNameForTransactionTypeException.CODE -> InvalidAmountNameForTransactionTypeException.from(extra);
-            case InvalidParticipantForTransactionTypeException.CODE -> InvalidParticipantForTransactionTypeException.from(extra);
-            case PostingDefinitionNotFoundException.CODE -> PostingDefinitionNotFoundException.from(extra);
-            case RequireParticipantForReceiveInException.CODE -> RequireParticipantForReceiveInException.from(extra);
+            case InvalidAmountNameForTransactionTypeException.CODE ->
+                InvalidAmountNameForTransactionTypeException.from(extra);
+            case InvalidParticipantForTransactionTypeException.CODE ->
+                InvalidParticipantForTransactionTypeException.from(extra);
+            case PostingDefinitionNotFoundException.CODE ->
+                PostingDefinitionNotFoundException.from(extra);
+            case RequireParticipantForReceiveInException.CODE ->
+                RequireParticipantForReceiveInException.from(extra);
 
             // ledger
-            case DuplicatePostingInLedgerException.CODE -> DuplicatePostingInLedgerException.from(extra);
-            case InsufficientBalanceInAccountException.CODE -> InsufficientBalanceInAccountException.from(extra);
-            case OverdraftLimitReachedInAccountException.CODE -> OverdraftLimitReachedInAccountException.from(extra);
-            case PostingAccountNotFoundException.CODE -> PostingAccountNotFoundException.from(extra);
-            case RequiredAmountNameNotFoundInTransactionException.CODE -> RequiredAmountNameNotFoundInTransactionException.from(extra);
-            case RequiredParticipantNotFoundInTransactionException.CODE -> RequiredParticipantNotFoundInTransactionException.from(extra);
-            case RestoreFailedInAccountException.CODE -> RestoreFailedInAccountException.from(extra);
+            case DuplicatePostingInLedgerException.CODE ->
+                DuplicatePostingInLedgerException.from(extra);
+            case InsufficientBalanceInAccountException.CODE ->
+                InsufficientBalanceInAccountException.from(extra);
+            case OverdraftLimitReachedInAccountException.CODE ->
+                OverdraftLimitReachedInAccountException.from(extra);
+            case PostingAccountNotFoundException.CODE ->
+                PostingAccountNotFoundException.from(extra);
+            case RequiredAmountNameNotFoundInTransactionException.CODE ->
+                RequiredAmountNameNotFoundInTransactionException.from(extra);
+            case RequiredParticipantNotFoundInTransactionException.CODE ->
+                RequiredParticipantNotFoundInTransactionException.from(extra);
+            case RestoreFailedInAccountException.CODE ->
+                RestoreFailedInAccountException.from(extra);
 
             default -> throw new RuntimeException("Unknown exception code: " + code);
         };
     }
+
 }

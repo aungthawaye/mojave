@@ -28,7 +28,8 @@ public interface CloseTransactionCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId, @JsonProperty String error) { }
+    record Input(@JsonProperty(required = true) @NotNull TransactionId transactionId,
+                 @JsonProperty String error) { }
 
     record Output(TransactionId transactionId) { }
 

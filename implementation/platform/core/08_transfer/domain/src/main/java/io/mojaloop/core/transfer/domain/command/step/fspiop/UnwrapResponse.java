@@ -17,9 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
@@ -45,7 +47,8 @@ public class UnwrapResponse {
     @Read
     public Output execute(Input input) throws FspiopException {
 
-        LOGGER.info("Unwrapping transfer response from Payee.");
+        var startAt = System.nanoTime();
+        LOGGER.info("UnwrapResponse : input : ({})", ObjectLogger.log(input));
 
         var response = input.response();
         var state = response.getTransferState();
@@ -53,8 +56,10 @@ public class UnwrapResponse {
 
         if (state != TransferState.RESERVED && state != TransferState.ABORTED) {
 
-            LOGGER.info("Payee responded with invalid Transfer state : [{}]", state);
-            throw new FspiopException(FspiopErrors.GENERIC_VALIDATION_ERROR, "Payee responded with invalid Transfer state.");
+            LOGGER.info("Payee responded with invalid Transfer status : ({})", state);
+            throw new FspiopException(
+                FspiopErrors.GENERIC_VALIDATION_ERROR,
+                "Payee responded with invalid Transfer status.");
         }
 
         var completedAt = Instant.now();
@@ -63,9 +68,14 @@ public class UnwrapResponse {
             completedAt = FspiopDates.fromRequestBody(completedTimestamp);
         } catch (Exception ignored) { }
 
-        LOGGER.info("Unwrapped transfer response from Payee. State : [{}], completedAt : [{}]", state, completedAt);
+        var output = new Output(state, response.getFulfilment(), completedAt);
 
-        return new Output(state, response.getFulfilment(), completedAt);
+        var endAt = System.nanoTime();
+        LOGGER.info(
+            "UnwrapResponse : output : ({}), took {} ms", ObjectLogger.log(output),
+            (endAt - startAt) / 1_000_000);
+
+        return output;
     }
 
     public record Input(TransfersIDPutResponse response) { }

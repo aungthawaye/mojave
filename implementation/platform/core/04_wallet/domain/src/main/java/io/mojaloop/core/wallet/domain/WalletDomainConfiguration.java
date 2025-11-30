@@ -22,30 +22,34 @@ package io.mojaloop.core.wallet.domain;
 
 import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
 import io.mojaloop.component.misc.MiscConfiguration;
+import io.mojaloop.core.wallet.domain.cache.BalanceCache;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.WalletCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.wallet.domain"})
-@Import(value = {MiscConfiguration.class, RoutingJpaConfiguration.class})
+@Import(value = {MiscConfiguration.class,
+                 WalletFlywayConfiguration.class,
+                 RoutingJpaConfiguration.class})
 public class WalletDomainConfiguration {
 
     public interface RequiredBeans {
 
         BalanceUpdater balanceUpdater();
 
+        PositionCache positionCache();
+
         PositionUpdater positionUpdater();
 
-        WalletCache walletCache();
-
-        PositionCache positionCache();
+        BalanceCache walletCache();
 
     }
 
-    public interface RequiredSettings extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
+    public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
+                                              WalletFlywayConfiguration.RequiredSettings,
+                                              RoutingJpaConfiguration.RequiredSettings {
 
     }
 

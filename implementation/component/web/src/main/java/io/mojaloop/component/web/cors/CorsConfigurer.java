@@ -43,6 +43,8 @@ public class CorsConfigurer {
 
     }
 
-    public record Settings(String[] allowedOrigins, String[] allowedMethods, String[] allowedHeaders) { }
+    public record Settings(String[] allowedOrigins,
+                           String[] allowedMethods,
+                           String[] allowedHeaders) { }
 
 }

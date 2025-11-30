@@ -64,15 +64,19 @@ public class PostQuotesUT {
 
         var quoteId = UUID.randomUUID().toString();
 
-        quote.quoteId(UUID.randomUUID().toString())
-             .transactionId(quoteId)
-             .transactionRequestId(quoteId)
-             .amountType(AmountType.SEND)
-             .amount(new Money(Currency.USD, "100"))
-             .payer(new Party().partyIdInfo(new PartyIdInfo(PartyIdType.MSISDN, "987654321")))
-             .payee(new Party().partyIdInfo(new PartyIdInfo(PartyIdType.MSISDN, "123456789")))
-             .transactionType(new TransactionType().scenario(TransactionScenario.TRANSFER).initiator(TransactionInitiator.PAYER).initiatorType(TransactionInitiatorType.CONSUMER))
-             .expiration(FspiopDates.forRequestBody(_15minsLater));
+        quote
+            .quoteId(UUID.randomUUID().toString())
+            .transactionId(quoteId)
+            .transactionRequestId(quoteId)
+            .amountType(AmountType.SEND)
+            .amount(new Money(Currency.USD, "100"))
+            .payer(new Party().partyIdInfo(new PartyIdInfo(PartyIdType.MSISDN, "987654321")))
+            .payee(new Party().partyIdInfo(new PartyIdInfo(PartyIdType.MSISDN, "123456789")))
+            .transactionType(new TransactionType()
+                                 .scenario(TransactionScenario.TRANSFER)
+                                 .initiator(TransactionInitiator.PAYER)
+                                 .initiatorType(TransactionInitiatorType.CONSUMER))
+            .expiration(FspiopDates.forRequestBody(_15minsLater));
 
         this.postQuotes.postQuotes(new Payee("fsp2"), quote);
     }

@@ -25,7 +25,6 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.component.retrofit.FspiopErrorDecoder;
-import io.mojaloop.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -34,7 +33,8 @@ import org.springframework.context.annotation.Import;
 public class FspiopComponentConfiguration {
 
     @Bean
-    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantContext participantContext, ObjectMapper objectMapper) {
+    public FspiopSigningInterceptor fspSigningInterceptor(ParticipantContext participantContext,
+                                                          ObjectMapper objectMapper) {
 
         return new FspiopSigningInterceptor(participantContext, objectMapper);
     }
@@ -45,8 +45,10 @@ public class FspiopComponentConfiguration {
         return new FspiopErrorDecoder(objectMapper);
     }
 
-    public interface RequiredBeans extends FspiopCommonConfiguration.RequiredBeans, MiscConfiguration.RequiredBeans { }
+    public interface RequiredBeans
+        extends FspiopCommonConfiguration.RequiredBeans, MiscConfiguration.RequiredBeans { }
 
-    public interface RequiredSettings extends FspiopCommonConfiguration.RequiredSettings, MiscConfiguration.RequiredSettings { }
+    public interface RequiredSettings
+        extends FspiopCommonConfiguration.RequiredSettings, MiscConfiguration.RequiredSettings { }
 
 }

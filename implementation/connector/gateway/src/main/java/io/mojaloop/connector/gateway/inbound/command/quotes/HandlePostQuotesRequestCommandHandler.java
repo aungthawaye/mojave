@@ -31,13 +31,15 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePostQuotesRequestCommandHandler implements HandlePostQuotesRequestCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePostQuotesRequestCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePostQuotesRequestCommandHandler.class.getName());
 
     private final FspCoreAdapter fspCoreAdapter;
 
     private final PutQuotes putQuotes;
 
-    public HandlePostQuotesRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutQuotes putQuotes) {
+    public HandlePostQuotesRequestCommandHandler(FspCoreAdapter fspCoreAdapter,
+                                                 PutQuotes putQuotes) {
 
         assert fspCoreAdapter != null;
         assert putQuotes != null;

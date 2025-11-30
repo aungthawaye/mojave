@@ -64,7 +64,9 @@ public class PutPartiesUT {
         partyIdInfo.partyIdentifier("0987654321");
         party.setPartyIdInfo(partyIdInfo);
 
-        this.putParties.putParties(new Payer("fsp2"), PartyIdType.MSISDN, "987654321", new PartiesTypeIDPutResponse(party));
+        this.putParties.putParties(
+            new Payer("fsp2"), PartyIdType.MSISDN, "987654321",
+            new PartiesTypeIDPutResponse(party));
     }
 
 }

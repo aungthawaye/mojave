@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +28,6 @@ import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
-import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -37,7 +37,8 @@ public class CommitReservationInvoker implements CommitReservationCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CommitReservationInvoker(final WalletAdminService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public CommitReservationInvoker(final WalletAdminService.PositionCommand positionCommand,
+                                    final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -51,8 +52,12 @@ public class CommitReservationInvoker implements CommitReservationCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.commit(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.commit(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class CommitReservationInvoker implements CommitReservationCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

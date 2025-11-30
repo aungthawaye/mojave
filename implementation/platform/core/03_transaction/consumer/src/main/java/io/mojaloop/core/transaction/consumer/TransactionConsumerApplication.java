@@ -30,7 +30,8 @@ import java.util.concurrent.CountDownLatch;
 @Import(value = {TransactionConsumerConfiguration.class, TransactionConsumerSettings.class})
 public class TransactionConsumerApplication {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(TransactionConsumerApplication.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(
+        TransactionConsumerApplication.class);
 
     public static void main(String[] args) throws InterruptedException {
 

@@ -27,6 +27,8 @@ import io.mojaloop.fspiop.spec.core.Currency;
 
 public interface AccountResolver {
 
-    AccountData resolve(ChartEntryId chartEntryId, AccountOwnerId accountOwnerId, Currency currency);
+    AccountData resolve(ChartEntryId chartEntryId,
+                        AccountOwnerId accountOwnerId,
+                        Currency currency);
 
 }

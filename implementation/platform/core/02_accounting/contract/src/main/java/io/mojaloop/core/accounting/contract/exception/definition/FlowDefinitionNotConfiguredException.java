@@ -59,9 +59,12 @@ public class FlowDefinitionNotConfiguredException extends UncheckedDomainExcepti
 
     private final Currency currency;
 
-    public FlowDefinitionNotConfiguredException(final TransactionType transactionType, final Currency currency) {
+    public FlowDefinitionNotConfiguredException(final TransactionType transactionType,
+                                                final Currency currency) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{transactionType.name(), currency.name()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{transactionType.name(), currency.name()}));
 
         this.transactionType = transactionType;
         this.currency = currency;

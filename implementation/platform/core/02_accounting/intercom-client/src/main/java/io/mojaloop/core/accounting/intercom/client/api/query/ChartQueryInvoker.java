@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.intercom.client.api.query;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,8 @@ public class ChartQueryInvoker implements ChartQuery {
 
     private final ObjectMapper objectMapper;
 
-    public ChartQueryInvoker(final AccountingIntercomService.ChartQuery chartQuery, final ObjectMapper objectMapper) {
+    public ChartQueryInvoker(final AccountingIntercomService.ChartQuery chartQuery,
+                             final ObjectMapper objectMapper) {
 
         assert chartQuery != null;
         assert objectMapper != null;
@@ -56,8 +58,12 @@ public class ChartQueryInvoker implements ChartQuery {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getByChartId(chartId), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getByChartId(chartId),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -70,7 +76,12 @@ public class ChartQueryInvoker implements ChartQuery {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getAllCharts(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getAllCharts(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -83,8 +94,12 @@ public class ChartQueryInvoker implements ChartQuery {
 
         try {
 
-            return RetrofitService.invoke(this.chartQuery.getChartsByNameContains(name),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getChartsByNameContains(name),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

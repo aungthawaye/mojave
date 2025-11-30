@@ -51,7 +51,9 @@ public class ChartEntryDescriptionTooLongException extends UncheckedDomainExcept
 
     public static final String CODE = "CHART_ENTRY_DESCRIPTION_TOO_LONG";
 
-    private static final String TEMPLATE = "Chart Entry Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
+    private static final String TEMPLATE = "Chart Entry Description is too long. Must not exceed " +
+                                               StringSizeConstraints.MAX_DESCRIPTION_LENGTH +
+                                               " characters.";
 
     public ChartEntryDescriptionTooLongException() {
 

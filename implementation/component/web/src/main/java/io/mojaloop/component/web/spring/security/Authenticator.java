@@ -25,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 public interface Authenticator {
 
-    UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest) throws AuthenticationFailureException;
+    UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
+        throws AuthenticationFailureException;
 
 }

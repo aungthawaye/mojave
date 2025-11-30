@@ -20,12 +20,24 @@
 
 package io.mojaloop.core.accounting.admin;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class AccountingAdminSettings implements AccountingAdminConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings accountingFlywaySettings() {
+
+        return new FlywayMigration.Settings(
+            System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
+            System.getenv("ACC_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"});
+
+    }
 
     @Bean
     @Override
@@ -39,11 +51,12 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv().getOrDefault("ACC_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("ACC_READ_DB_USER", "root"), System.getenv().getOrDefault("ACC_READ_DB_PASSWORD", "password"), false);
+            System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
+            System.getenv("ACC_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("accounting-admin-read", Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("ACC_READ_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "accounting-admin-read", Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("ACC_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -53,11 +66,12 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv().getOrDefault("ACC_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_accounting?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("ACC_WRITE_DB_USER", "root"), System.getenv().getOrDefault("ACC_WRITE_DB_PASSWORD", "password"), false);
+            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
+            System.getenv("ACC_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("accounting-admin-write", Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("ACC_WRITE_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "accounting-admin-write", Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("ACC_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -73,7 +87,8 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     @Override
     public AccountingAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new AccountingAdminConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("ACCOUNTING_ADMIN_PORT", "4201")));
+        return new AccountingAdminConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("ACCOUNTING_ADMIN_PORT")));
     }
 
 }

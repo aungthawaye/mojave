@@ -29,7 +29,6 @@ import io.mojaloop.core.common.datatype.converter.identifier.transaction.Transac
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionStepId;
 import io.mojaloop.core.transaction.contract.data.TransactionStepData;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -39,7 +38,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,9 +46,6 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static java.sql.Types.BIGINT;
 
@@ -58,7 +53,8 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(name = "txn_transaction_step")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TransactionStep extends JpaEntity<TransactionStepId> implements DataConversion<TransactionStepData> {
+public class TransactionStep extends JpaEntity<TransactionStepId>
+    implements DataConversion<TransactionStepData> {
 
     @Id
     @JavaType(TransactionStepIdJavaType.class)
@@ -66,61 +62,60 @@ public class TransactionStep extends JpaEntity<TransactionStepId> implements Dat
     @Column(name = "step_id", nullable = false, updatable = false)
     protected TransactionStepId id;
 
+    @Column(name = "phase",
+            nullable = false,
+            updatable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected StepPhase phase;
+
     @Column(name = "name", nullable = false)
     protected String name;
 
     @Column(name = "context")
     protected String context;
 
-    @Column(name = "phase", nullable = false, updatable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected StepPhase phase;
+    @Column(name = "payload", length = StringSizeConstraints.MAX_PARAGRAPH_LENGTH)
+    protected String payload;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @OneToMany(mappedBy = "step", orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    protected List<StepParam> params = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "transaction_id", nullable = false)
     protected Transaction transaction;
 
-    public TransactionStep(Transaction transaction, StepPhase phase, String name) {
+    public TransactionStep(Transaction transaction,
+                           StepPhase phase,
+                           String name,
+                           String context,
+                           String payload) {
 
         assert transaction != null;
         assert phase != null;
         assert name != null;
 
         this.id = new TransactionStepId(Snowflake.get().nextId());
-        this.name = name;
         this.phase = phase;
+        this.name = name;
+        this.context = context;
+        this.payload = payload;
         this.createdAt = Instant.now();
         this.transaction = transaction;
     }
 
-    public void addParam(String name, String value) {
-
-        this.params.add(new StepParam(this, name, value));
-    }
-
     public TransactionStepData convert() {
 
-        var paramData = this.params.stream().map(StepParam::convert).toList();
-
-        return new TransactionStepData(this.id, this.name, this.phase, this.createdAt, this.transaction.getId(), paramData);
+        return new TransactionStepData(
+            this.id, this.phase, this.name, this.context, this.payload, this.createdAt,
+            this.transaction.getId());
     }
 
     @Override
     public TransactionStepId getId() {
 
         return id;
-    }
-
-    public List<StepParam> getParams() {
-
-        return Collections.unmodifiableList(this.params);
     }
 
 }

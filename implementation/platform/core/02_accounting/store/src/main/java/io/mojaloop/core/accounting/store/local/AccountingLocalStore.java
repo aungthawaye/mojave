@@ -57,7 +57,8 @@ public class AccountingLocalStore implements AccountingStore {
 
     private final Timer timer = new Timer("AccountingLocalStoreRefreshTimer", true);
 
-    public AccountingLocalStore(AccountQuery accountQuery, AccountingStoreConfiguration.Settings accountingStoreSettings) {
+    public AccountingLocalStore(AccountQuery accountQuery,
+                                AccountingStoreConfiguration.Settings accountingStoreSettings) {
 
         assert accountQuery != null;
         assert accountingStoreSettings != null;
@@ -74,14 +75,15 @@ public class AccountingLocalStore implements AccountingStore {
         LOGGER.info("Bootstrapping AccountingLocalStore");
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                AccountingLocalStore.this.refreshData();
-            }
-        }, interval, interval);
+                    AccountingLocalStore.this.refreshData();
+                }
+            }, interval, interval);
     }
 
     @Override
@@ -121,7 +123,8 @@ public class AccountingLocalStore implements AccountingStore {
             return null;
         }
 
-        var key = chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" + currency.name();
+        var key = chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
+                      currency.name();
 
         return this.snapshotRef.get().withChartEntryOwnerCurrency.get(key);
     }
@@ -142,24 +145,43 @@ public class AccountingLocalStore implements AccountingStore {
 
         List<AccountData> accounts = this.accountQuery.getAll();
 
-        var _withAccountId = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::accountId, Function.identity(), (a, b) -> a));
+        var _withAccountId = accounts
+                                 .stream()
+                                 .collect(Collectors.toUnmodifiableMap(
+                                     AccountData::accountId,
+                                     Function.identity(), (a, b) -> a));
 
-        var _withAccountCode = accounts.stream().collect(Collectors.toUnmodifiableMap(AccountData::code, Function.identity(), (a, b) -> a));
+        var _withAccountCode = accounts
+                                   .stream()
+                                   .collect(Collectors.toUnmodifiableMap(
+                                       AccountData::code,
+                                       Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(
-            accounts.stream().collect(Collectors.groupingBy(AccountData::ownerId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(accounts
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               AccountData::ownerId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
-        var _withChartEntryId = Collections.unmodifiableMap(
-            accounts.stream().collect(Collectors.groupingBy(AccountData::chartEntryId, Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withChartEntryId = Collections.unmodifiableMap(accounts
+                                                                .stream()
+                                                                .collect(Collectors.groupingBy(
+                                                                    AccountData::chartEntryId,
+                                                                    Collectors.collectingAndThen(
+                                                                        Collectors.toSet(),
+                                                                        Collections::unmodifiableSet))));
 
-        var _withChartEntryOwnerCurrency = accounts.stream()
-                                                   .collect(Collectors.toUnmodifiableMap(
-                                                       acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() + ":" + acc.currency().name(),
-                                                       Function.identity(), (a, b) -> a));
+        var _withChartEntryOwnerCurrency = accounts.stream().collect(Collectors.toUnmodifiableMap(
+            acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() +
+                       ":" + acc.currency().name(), Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed Account data, count: {}", accounts.size());
 
-        this.snapshotRef.set(new Snapshot(_withAccountId, _withAccountCode, _withOwnerId, _withChartEntryOwnerCurrency, _withChartEntryId));
+        this.snapshotRef.set(new Snapshot(
+            _withAccountId, _withAccountCode, _withOwnerId,
+            _withChartEntryOwnerCurrency, _withChartEntryId));
 
     }
 

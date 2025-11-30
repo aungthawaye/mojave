@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,13 +25,13 @@ import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.component.misc.data.DataConversion;
 import io.mojaloop.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
+import io.mojaloop.core.common.datatype.converter.identifier.wallet.BalanceIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.BalanceUpdateIdConverter;
 import io.mojaloop.core.common.datatype.converter.identifier.wallet.BalanceUpdateIdJavaType;
-import io.mojaloop.core.common.datatype.converter.identifier.wallet.WalletIdConverter;
 import io.mojaloop.core.common.datatype.enums.wallet.BalanceAction;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletId;
 import io.mojaloop.core.wallet.contract.data.BalanceUpdateData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
@@ -56,13 +56,19 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "wlt_balance_update",
-       uniqueConstraints = {@UniqueConstraint(name = "wlt_balance_update_wallet_id_action_transaction_id_UK", columnNames = {"wallet_id", "action", "transaction_id"}),
-                            @UniqueConstraint(name = "wlt_balance_update_reversal_id_UK", columnNames = {"reversal_id"})},
-       indexes = {@Index(name = "wlt_balance_update_wallet_id_action_transaction_at_idx", columnList = "wallet_id, action, transaction_at"),
-                  @Index(name = "wlt_balance_update_transaction_at_idx", columnList = "transaction_at")})
+@Table(
+    name = "wlt_balance_update", uniqueConstraints = {
+    @UniqueConstraint(
+        name = "wlt_balance_update_balance_id_action_transaction_id_UK", columnNames = {
+        "balance_id", "action", "transaction_id"}), @UniqueConstraint(
+    name = "wlt_balance_update_withdraw_id_UK", columnNames = {"withdraw_id"})}, indexes = {
+    @Index(
+        name = "wlt_balance_update_balance_id_action_transaction_at_idx",
+        columnList = "balance_id, action, transaction_at"), @Index(
+    name = "wlt_balance_update_transaction_at_idx", columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataConversion<BalanceUpdateData> {
+public class BalanceUpdate extends JpaEntity<BalanceUpdateId>
+    implements DataConversion<BalanceUpdateData> {
 
     @Id
     @JavaType(BalanceUpdateIdJavaType.class)
@@ -70,9 +76,9 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataCon
     @Column(name = "balance_update_id")
     protected BalanceUpdateId id;
 
-    @Column(name = "wallet_id")
-    @Convert(converter = WalletIdConverter.class)
-    protected WalletId walletId;
+    @Column(name = "balance_id")
+    @Convert(converter = BalanceIdConverter.class)
+    protected BalanceId balanceId;
 
     @Column(name = "action")
     @Enumerated(EnumType.STRING)
@@ -106,15 +112,17 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId> implements DataCon
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @Column(name = "reversal_id")
+    @Column(name = "withdraw_id")
     @Convert(converter = BalanceUpdateIdConverter.class)
-    protected BalanceUpdateId reversalId;
+    protected BalanceUpdateId withdrawId;
 
     @Override
     public BalanceUpdateData convert() {
 
-        return new BalanceUpdateData(this.id, this.walletId, this.action, this.transactionId, this.currency, this.amount, this.oldBalance, this.newBalance, this.description,
-            this.transactionAt, this.createdAt, this.reversalId);
+        return new BalanceUpdateData(
+            this.id, this.balanceId, this.action, this.transactionId, this.currency, this.amount,
+            this.oldBalance, this.newBalance, this.description, this.transactionAt, this.createdAt,
+            this.withdrawId);
     }
 
     @Override

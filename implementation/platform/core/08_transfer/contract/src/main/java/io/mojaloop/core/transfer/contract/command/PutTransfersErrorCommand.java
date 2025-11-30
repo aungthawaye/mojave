@@ -28,7 +28,9 @@ public interface PutTransfersErrorCommand {
 
     Output execute(Input input);
 
-    record Input(FspiopHttpRequest request, UdfTransferId udfTransferId, ErrorInformationObject error) { }
+    record Input(FspiopHttpRequest request,
+                 UdfTransferId udfTransferId,
+                 ErrorInformationObject error) { }
 
     record Output() { }
 

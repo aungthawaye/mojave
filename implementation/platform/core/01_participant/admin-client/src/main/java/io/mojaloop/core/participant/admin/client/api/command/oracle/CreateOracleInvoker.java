@@ -40,7 +40,8 @@ public class CreateOracleInvoker implements CreateOracleCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateOracleInvoker(final ParticipantAdminService.OracleCommands oracleCommands, final ObjectMapper objectMapper) {
+    public CreateOracleInvoker(final ParticipantAdminService.OracleCommands oracleCommands,
+                               final ObjectMapper objectMapper) {
 
         assert oracleCommands != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class CreateOracleInvoker implements CreateOracleCommand {
 
         try {
 
-            return RetrofitService.invoke(this.oracleCommands.createOracle(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleCommands.createOracle(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class CreateOracleInvoker implements CreateOracleCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

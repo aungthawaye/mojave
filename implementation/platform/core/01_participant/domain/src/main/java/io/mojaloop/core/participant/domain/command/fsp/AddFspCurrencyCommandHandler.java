@@ -34,7 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class AddFspCurrencyCommandHandler implements AddFspCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddFspCurrencyCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        AddFspCurrencyCommandHandler.class);
 
     private final FspRepository fspRepository;
 
@@ -52,13 +53,17 @@ public class AddFspCurrencyCommandHandler implements AddFspCurrencyCommand {
 
         LOGGER.info("Executing AddSupportedCurrencyCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var supportedCurrency = fsp.addCurrency(input.currency());
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed AddSupportedCurrencyCommand with input: {} -> supportedCurrencyId={}", input, supportedCurrency.getId());
+        LOGGER.info(
+            "Completed AddSupportedCurrencyCommand with input: {} -> supportedCurrencyId={}", input,
+            supportedCurrency.getId());
 
         return new Output(supportedCurrency.getId());
     }

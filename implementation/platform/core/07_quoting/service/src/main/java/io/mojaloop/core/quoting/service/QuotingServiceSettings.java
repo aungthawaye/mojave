@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.quoting.service;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
 
-public class QuotingServiceSettings implements QuotingServiceConfiguration.RequiredSettings {
+final class QuotingServiceSettings implements QuotingServiceConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -57,7 +58,8 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.ParticipantSettings(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
 
     }
 
@@ -65,28 +67,42 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return new ParticipantIntercomService.Settings(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_BASE_URL", "http://localhost:4102"));
+        return new ParticipantIntercomService.Settings(
+            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
     @Override
     public ParticipantStoreConfiguration.Settings participantStoreSettings() {
 
-        return new ParticipantStoreConfiguration.Settings(Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_STORE_REFRESH_INTERVAL_MS", "300000")));
+        return new ParticipantStoreConfiguration.Settings(
+            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
     }
 
     @Bean
     @Override
     public QuotingDomainConfiguration.QuoteSettings quoteSettings() {
 
-        return new QuotingDomainConfiguration.QuoteSettings(Boolean.parseBoolean(System.getenv().getOrDefault("QUOTING_STATEFUL", "true")));
+        return new QuotingDomainConfiguration.QuoteSettings(
+            Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
+    }
+
+    @Bean
+    @Override
+    public FlywayMigration.Settings quotingFlywaySettings() {
+
+        return new FlywayMigration.Settings(
+            System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"),
+            System.getenv("QOT_FLYWAY_DB_PASSWORD"), "flyway_quoting_history",
+            new String[]{"classpath:migration/quoting"});
     }
 
     @Bean
     @Override
     public QuotingServiceConfiguration.TomcatSettings quotingServiceTomcatSettings() {
 
-        return new QuotingServiceConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("QUOTING_SERVICE_PORT", "4703")));
+        return new QuotingServiceConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("QUOTING_SERVICE_PORT")));
     }
 
     @Bean
@@ -94,11 +110,12 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv().getOrDefault("QOT_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("QOT_READ_DB_USER", "root"), System.getenv().getOrDefault("QOT_READ_DB_PASSWORD", "password"), false);
+            System.getenv("QOT_READ_DB_URL"), System.getenv("QOT_READ_DB_USER"),
+            System.getenv("QOT_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("quoting-service-read", Integer.parseInt(System.getenv().getOrDefault("QOT_READ_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("QOT_READ_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "quoting-service-read", Integer.parseInt(System.getenv("QOT_READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("QOT_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -108,11 +125,12 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv().getOrDefault("QOT_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_quoting?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("QOT_WRITE_DB_USER", "root"), System.getenv().getOrDefault("QOT_WRITE_DB_PASSWORD", "password"), false);
+            System.getenv("QOT_WRITE_DB_URL"), System.getenv("QOT_WRITE_DB_USER"),
+            System.getenv("QOT_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("quoting-service-write", Integer.parseInt(System.getenv().getOrDefault("QOT_WRITE_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("QOT_WRITE_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "quoting-service-write", Integer.parseInt(System.getenv("QOT_WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("QOT_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -128,8 +146,9 @@ public class QuotingServiceSettings implements QuotingServiceConfiguration.Requi
     @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
-        return new FspiopServiceConfiguration.ServiceSettings(Integer.parseInt(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_MS", "30000")),
-            Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION", "true")));
+        return new FspiopServiceConfiguration.ServiceSettings(
+            Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
+            Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
     }
 
     @Bean

@@ -53,7 +53,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class ActivateOracleCommandHandler implements ActivateOracleCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateOracleCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateOracleCommandHandler.class);
 
     private final OracleRepository oracleRepository;
 
@@ -70,7 +71,9 @@ public class ActivateOracleCommandHandler implements ActivateOracleCommand {
 
         LOGGER.info("Executing ActivateOracleCommand with input: {}", input);
 
-        var oracle = this.oracleRepository.findById(input.oracleId()).orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
+        var oracle = this.oracleRepository
+                         .findById(input.oracleId())
+                         .orElseThrow(() -> new OracleIdNotFoundException(input.oracleId()));
 
         oracle.activate();
         this.oracleRepository.save(oracle);

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.component.misc.exception;
 
 import lombok.Getter;

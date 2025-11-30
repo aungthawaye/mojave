@@ -11,6 +11,9 @@
     <artifactId>operation-pom</artifactId>
     <packaging>pom</packaging>
     <name>Mojaloop - Operation</name>
+    <modules>
+        <module>usecase</module>
+    </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

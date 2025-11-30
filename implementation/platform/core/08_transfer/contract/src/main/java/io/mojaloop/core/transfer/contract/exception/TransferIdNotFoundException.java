@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.contract.exception;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;

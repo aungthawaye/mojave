@@ -28,7 +28,8 @@ import java.util.List;
 
 public interface FlowDefinitionQuery {
 
-    FlowDefinitionData get(FlowDefinitionId flowDefinitionId) throws FlowDefinitionNotFoundException;
+    FlowDefinitionData get(FlowDefinitionId flowDefinitionId)
+        throws FlowDefinitionNotFoundException;
 
     List<FlowDefinitionData> getAll();
 

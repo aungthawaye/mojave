@@ -40,7 +40,8 @@ public class CreateFspInvoker implements CreateFspCommand {
 
     private final ObjectMapper objectMapper;
 
-    public CreateFspInvoker(final ParticipantAdminService.FspCommand fspCommand, final ObjectMapper objectMapper) {
+    public CreateFspInvoker(final ParticipantAdminService.FspCommand fspCommand,
+                            final ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class CreateFspInvoker implements CreateFspCommand {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.createFsp(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.createFsp(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class CreateFspInvoker implements CreateFspCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

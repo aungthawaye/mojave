@@ -62,9 +62,13 @@ public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
     private final TransactionId transactionId;
 
-    public DuplicatePostingInLedgerException(final AccountCode accountCode, final Side side, final TransactionId transactionId) {
+    public DuplicatePostingInLedgerException(final AccountCode accountCode,
+                                             final Side side,
+                                             final TransactionId transactionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{accountCode.value(), side.name(), transactionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{accountCode.value(), side.name(), transactionId.getId().toString()}));
 
         this.accountCode = accountCode;
         this.side = side;

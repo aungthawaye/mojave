@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.participant.admin.client.api.query;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,8 @@ public class HubQueryInvoker implements HubQuery {
 
     private final ObjectMapper objectMapper;
 
-    public HubQueryInvoker(final ParticipantAdminService.HubQuery hubQuery, final ObjectMapper objectMapper) {
+    public HubQueryInvoker(final ParticipantAdminService.HubQuery hubQuery,
+                           final ObjectMapper objectMapper) {
 
         assert hubQuery != null;
         assert objectMapper != null;
@@ -56,8 +58,12 @@ public class HubQueryInvoker implements HubQuery {
 
         try {
 
-            return RetrofitService.invoke(this.hubQuery.count(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.hubQuery.count(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -81,8 +87,12 @@ public class HubQueryInvoker implements HubQuery {
 
         try {
 
-            return RetrofitService.invoke(this.hubQuery.get(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.hubQuery.get(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -106,8 +116,12 @@ public class HubQueryInvoker implements HubQuery {
 
         try {
 
-            return RetrofitService.invoke(this.hubQuery.getAll(), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.hubQuery.getAll(),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -125,4 +139,5 @@ public class HubQueryInvoker implements HubQuery {
             throw new RuntimeException(e);
         }
     }
+
 }

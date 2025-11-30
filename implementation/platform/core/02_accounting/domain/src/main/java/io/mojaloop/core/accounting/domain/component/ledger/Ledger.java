@@ -38,8 +38,15 @@ import java.util.List;
 
 public interface Ledger {
 
-    List<Movement> post(List<Request> requests, TransactionId transactionId, Instant transactionAt, TransactionType transactionType)
-        throws InsufficientBalanceException, NegativeAmountException, OverdraftExceededException, RestoreFailedException, DuplicatePostingException;
+    List<Movement> post(List<Request> requests,
+                        TransactionId transactionId,
+                        Instant transactionAt,
+                        TransactionType transactionType) throws
+                                                         InsufficientBalanceException,
+                                                         NegativeAmountException,
+                                                         OverdraftExceededException,
+                                                         RestoreFailedException,
+                                                         DuplicatePostingException;
 
     record Request(LedgerMovementId ledgerMovementId,
                    AccountId accountId,
@@ -94,10 +101,16 @@ public interface Ledger {
 
         private final TransactionId transactionId;
 
-        public InsufficientBalanceException(AccountId accountId, Side side, BigDecimal amount, Ledger.DrCr drCr, TransactionId transactionId) {
+        public InsufficientBalanceException(AccountId accountId,
+                                            Side side,
+                                            BigDecimal amount,
+                                            Ledger.DrCr drCr,
+                                            TransactionId transactionId) {
 
-            super("Insufficient balance in Account (" + accountId.getId() + ") : side : " + side + " | posted debits: " + drCr.debits + "| posted credits: " + drCr.credits +
-                      " | requested amount: " + amount + " | transactionId: " + transactionId.getId().toString());
+            super("Insufficient balance in Account (" + accountId.getId() + ") : side : " + side +
+                      " | posted debits: " + drCr.debits + "| posted credits: " + drCr.credits +
+                      " | requested amount: " + amount + " | transactionId: " +
+                      transactionId.getId().toString());
 
             this.accountId = accountId;
             this.side = side;
@@ -121,10 +134,15 @@ public interface Ledger {
 
         private final TransactionId transactionId;
 
-        public OverdraftExceededException(AccountId accountId, Side side, BigDecimal amount, Ledger.DrCr drCr, TransactionId transactionId) {
+        public OverdraftExceededException(AccountId accountId,
+                                          Side side,
+                                          BigDecimal amount,
+                                          Ledger.DrCr drCr,
+                                          TransactionId transactionId) {
 
-            super("Overdraft exceeded in Account (" + accountId + ") : posted debits: " + drCr.debits + ", posted credits: " + drCr.credits + " | requested amount: " + amount +
-                      " | transactionId: " + transactionId.getId().toString());
+            super("Overdraft exceeded in Account (" + accountId + ") : posted debits: " +
+                      drCr.debits + ", posted credits: " + drCr.credits + " | requested amount: " +
+                      amount + " | transactionId: " + transactionId.getId().toString());
 
             this.accountId = accountId;
             this.side = side;
@@ -148,10 +166,16 @@ public interface Ledger {
 
         private final TransactionId transactionId;
 
-        public RestoreFailedException(AccountId accountId, Side side, BigDecimal amount, Ledger.DrCr drCr, TransactionId transactionId) {
+        public RestoreFailedException(AccountId accountId,
+                                      Side side,
+                                      BigDecimal amount,
+                                      Ledger.DrCr drCr,
+                                      TransactionId transactionId) {
 
-            super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() + ") | amount (" + amount.stripTrailingZeros().toPlainString() +
-                      ") | posted debits: " + drCr.debits + " | posted credits: " + drCr.credits + " | transactionId: " + transactionId.getId().toString());
+            super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() +
+                      ") | amount (" + amount.stripTrailingZeros().toPlainString() +
+                      ") | posted debits: " + drCr.debits + " | posted credits: " + drCr.credits +
+                      " | transactionId: " + transactionId.getId().toString());
 
             this.accountId = accountId;
             this.side = side;
@@ -171,9 +195,12 @@ public interface Ledger {
 
         private final TransactionId transactionId;
 
-        public DuplicatePostingException(AccountId accountId, Side side, TransactionId transactionId) {
+        public DuplicatePostingException(AccountId accountId,
+                                         Side side,
+                                         TransactionId transactionId) {
 
-            super("Found duplicate posting for Account (" + accountId + ") : side (" + side + ") in same Transaction (" + transactionId.getId().toString() + ").");
+            super("Found duplicate posting for Account (" + accountId + ") : side (" + side +
+                      ") in same Transaction (" + transactionId.getId().toString() + ").");
             this.accountId = accountId;
             this.side = side;
             this.transactionId = transactionId;

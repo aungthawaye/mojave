@@ -28,7 +28,10 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
-public record FxpData(FxpId fxpId, String name, String host, Map<String, FxRatePairData> fxRatePairs) {
+public record FxpData(FxpId fxpId,
+                      String name,
+                      String host,
+                      Map<String, FxRatePairData> fxRatePairs) {
 
     @Override
     public boolean equals(Object o) {
@@ -45,7 +48,11 @@ public record FxpData(FxpId fxpId, String name, String host, Map<String, FxRateP
         return Objects.hashCode(fxpId);
     }
 
-    public record FxRatePairData(FxRatePairId fxRatePairId, Currency sourceCurrency, Currency targetCurrency, BigDecimal sourceAmount, BigDecimal targetAmount) {
+    public record FxRatePairData(FxRatePairId fxRatePairId,
+                                 Currency sourceCurrency,
+                                 Currency targetCurrency,
+                                 BigDecimal sourceAmount,
+                                 BigDecimal targetAmount) {
 
         @Override
         public boolean equals(Object o) {

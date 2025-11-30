@@ -34,57 +34,69 @@ import org.springframework.context.annotation.Import;
 public class ParticipantAdminClientConfiguration {
 
     @Bean
-    public ParticipantAdminService.FspCommand fspCommand(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.FspCommand fspCommand(ParticipantAdminService.Settings settings,
+                                                         ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.FspCommand.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.FspCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public ParticipantAdminService.FspQuery fspQuery(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.FspQuery fspQuery(ParticipantAdminService.Settings settings,
+                                                     ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.FspQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.FspQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public ParticipantAdminService.HubQuery hubQuery(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.HubCommands hubCommands(ParticipantAdminService.Settings settings,
+                                                           ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.HubQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.HubCommands.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public ParticipantAdminService.OracleQuery oracleQuery(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.HubQuery hubQuery(ParticipantAdminService.Settings settings,
+                                                     ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.OracleQuery.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.HubQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public ParticipantAdminService.HubCommands hubCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.OracleCommands oracleCommands(ParticipantAdminService.Settings settings,
+                                                                 ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.HubCommands.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.OracleCommands.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     @Bean
-    public ParticipantAdminService.OracleCommands oracleCommands(ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+    public ParticipantAdminService.OracleQuery oracleQuery(ParticipantAdminService.Settings settings,
+                                                           ObjectMapper objectMapper) {
 
-        return RetrofitService.newBuilder(ParticipantAdminService.OracleCommands.class, settings.baseUrl())
-                              .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                              .withDefaultFactories(objectMapper)
-                              .build();
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.OracleQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
     }
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }

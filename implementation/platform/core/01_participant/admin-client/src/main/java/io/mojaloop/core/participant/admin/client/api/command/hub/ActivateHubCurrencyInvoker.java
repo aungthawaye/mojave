@@ -40,7 +40,8 @@ public class ActivateHubCurrencyInvoker implements ActivateHubCurrencyCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ActivateHubCurrencyInvoker(final ParticipantAdminService.HubCommands hubCommands, final ObjectMapper objectMapper) {
+    public ActivateHubCurrencyInvoker(final ParticipantAdminService.HubCommands hubCommands,
+                                      final ObjectMapper objectMapper) {
 
         assert hubCommands != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ActivateHubCurrencyInvoker implements ActivateHubCurrencyCommand {
 
         try {
 
-            return RetrofitService.invoke(this.hubCommands.activateHubCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.hubCommands.activateHubCurrency(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class ActivateHubCurrencyInvoker implements ActivateHubCurrencyCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

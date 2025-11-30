@@ -23,33 +23,40 @@ package io.mojaloop.core.participant.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
-import io.mojaloop.core.participant.admin.component.EmptyErrorWriter;
-import io.mojaloop.core.participant.admin.component.EmptyGatekeeper;
+import io.mojaloop.core.participant.admin.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.participant.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
+
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.participant.admin")
-@Import(value = {OpenApiConfiguration.class, DatatypeConfiguration.class, ParticipantDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-public class ParticipantAdminConfiguration extends JacksonWebMvcExtension
-    implements ParticipantDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@ComponentScan(basePackages = "io.mojaloop.core.participant.admin.controller")
+@Import(value = {OpenApiConfiguration.class,
+                 DatatypeConfiguration.class,
+                 RequestIdMdcConfiguration.class,
+                 ParticipantDomainConfiguration.class,
+                 RestErrorConfiguration.class,
+                 SpringSecurityConfiguration.class})
+final class ParticipantAdminConfiguration extends WebMvcExtension implements
+                                                                  ParticipantDomainConfiguration.RequiredBeans,
+                                                                  SpringSecurityConfiguration.RequiredBeans,
+                                                                  SpringSecurityConfiguration.RequiredSettings {
 
     public ParticipantAdminConfiguration(ObjectMapper objectMapper) {
 
@@ -78,12 +85,21 @@ public class ParticipantAdminConfiguration extends JacksonWebMvcExtension
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
-        return factory -> factory.setPort(settings.portNo());
+        return new WebServerFactoryCustomizer<ConfigurableWebServerFactory>() {
+
+            @Override
+            public void customize(ConfigurableWebServerFactory factory) {
+
+                factory.setPort(settings.portNo());
+            }
+        };
     }
 
-    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

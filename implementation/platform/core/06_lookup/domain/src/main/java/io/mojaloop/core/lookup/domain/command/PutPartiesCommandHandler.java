@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.lookup.domain.command;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.fspiop.EndpointType;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.contract.command.PutPartiesCommand;
@@ -46,7 +47,9 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    public PutPartiesCommandHandler(ParticipantStore participantStore, RespondParties respondParties, ForwardRequest forwardRequest) {
+    public PutPartiesCommandHandler(ParticipantStore participantStore,
+                                    RespondParties respondParties,
+                                    ForwardRequest forwardRequest) {
 
         assert participantStore != null;
         assert respondParties != null;
@@ -60,55 +63,53 @@ public class PutPartiesCommandHandler implements PutPartiesCommand {
     @Override
     public Output execute(Input input) {
 
-        LOGGER.info("Executing PutPartiesCommandHandler with input: [{}].", input);
+        LOGGER.info("PutPartiesCommandHandler : input: ({})", ObjectLogger.log(input));
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
-        FspCode payeeFspCode = null;
-        FspData payeeFsp = null;
 
         try {
 
             payerFspCode = new FspCode(input.request().payer().fspCode());
             payerFsp = this.participantStore.getFspData(payerFspCode);
-            LOGGER.info("Found payer FSP: [{}]", payerFsp);
-
-            payeeFspCode = new FspCode(input.request().payee().fspCode());
-            payeeFsp = this.participantStore.getFspData(payeeFspCode);
-            LOGGER.info("Found payee FSP: [{}]", payeeFsp);
 
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-            LOGGER.info("Forwarding request to payer FSP (Url): [{}]", payerFsp);
+            LOGGER.info("Forwarding request to payer FSP (Url): ({})", payerBaseUrl);
 
             this.forwardRequest.forward(payerBaseUrl, input.request());
-            LOGGER.info("Done forwarding request to payer FSP (Url): [{}]", payerFsp);
+            LOGGER.info("Done forwarding request to payer FSP (Url): ({})", payerBaseUrl);
 
         } catch (FspiopCommunicationException e) {
 
-            LOGGER.error("(FspiopCommunicationException) Exception occurred while executing PutPartiesCommandHandler: [{}]", e.getMessage());
+            LOGGER.error("Error:", e);
 
         } catch (Exception e) {
 
-            LOGGER.error("Exception occurred while executing PutPartiesCommandHandler: ", e);
+            LOGGER.error("Error:", e);
 
-            if (payerFspCode != null && payerFsp != null) {
+            if (payerFsp != null) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
                 final var baseUrl = payerFsp.endpoints().get(EndpointType.PARTIES).baseUrl();
-                final var url = FspiopUrls.newUrl(baseUrl, input.request().uri() + "/error");
+                final var url = FspiopUrls.Parties.putPartiesError(
+                    baseUrl, input.partyIdType(), input.partyId(), input.subId());
 
                 try {
 
-                    FspiopErrorResponder.toPayer(new Payer(payerFspCode.value()), e, (payer, error) -> this.respondParties.putPartiesError(sendBackTo, url, error));
+                    FspiopErrorResponder.toPayer(
+                        new Payer(payerFspCode.value()), e,
+                        (payer, error) -> this.respondParties.putPartiesError(
+                            sendBackTo, url,
+                            error));
 
-                } catch (Throwable ignored) {
-                    LOGGER.error("Something went wrong while sending error response to payer FSP: ", e);
+                } catch (Exception e1) {
+                    LOGGER.error("Error:", e1);
                 }
             }
 
         }
 
-        LOGGER.info("Returning from PutPartiesCommandHandler.");
+        LOGGER.info("PutPartiesCommandHandler : done");
         return new Output();
     }
 

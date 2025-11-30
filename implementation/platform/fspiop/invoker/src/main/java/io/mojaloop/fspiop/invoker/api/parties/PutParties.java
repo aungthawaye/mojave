@@ -28,12 +28,26 @@ import io.mojaloop.fspiop.spec.core.PartyIdType;
 
 public interface PutParties {
 
-    void putParties(Payer payer, PartyIdType partyIdType, String partyId, PartiesTypeIDPutResponse partiesTypeIDPutResponse) throws FspiopException;
+    void putParties(Payer payer,
+                    PartyIdType partyIdType,
+                    String partyId,
+                    PartiesTypeIDPutResponse partiesTypeIDPutResponse) throws FspiopException;
 
-    void putParties(Payer payer, PartyIdType partyIdType, String partyId, String subId, PartiesTypeIDPutResponse partiesTypeIDPutResponse) throws FspiopException;
+    void putParties(Payer payer,
+                    PartyIdType partyIdType,
+                    String partyId,
+                    String subId,
+                    PartiesTypeIDPutResponse partiesTypeIDPutResponse) throws FspiopException;
 
-    void putPartiesError(Payer payer, PartyIdType partyIdType, String partyId, ErrorInformationObject errorInformationObject) throws FspiopException;
+    void putPartiesError(Payer payer,
+                         PartyIdType partyIdType,
+                         String partyId,
+                         ErrorInformationObject errorInformationObject) throws FspiopException;
 
-    void putPartiesError(Payer payer, PartyIdType partyIdType, String partyId, String subId, ErrorInformationObject errorInformationObject) throws FspiopException;
+    void putPartiesError(Payer payer,
+                         PartyIdType partyIdType,
+                         String partyId,
+                         String subId,
+                         ErrorInformationObject errorInformationObject) throws FspiopException;
 
 }

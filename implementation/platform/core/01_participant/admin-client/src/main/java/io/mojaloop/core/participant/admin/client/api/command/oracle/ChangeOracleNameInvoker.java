@@ -40,7 +40,8 @@ public class ChangeOracleNameInvoker implements ChangeOracleNameCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ChangeOracleNameInvoker(final ParticipantAdminService.OracleCommands oracleCommands, final ObjectMapper objectMapper) {
+    public ChangeOracleNameInvoker(final ParticipantAdminService.OracleCommands oracleCommands,
+                                   final ObjectMapper objectMapper) {
 
         assert oracleCommands != null;
         assert objectMapper != null;
@@ -54,8 +55,12 @@ public class ChangeOracleNameInvoker implements ChangeOracleNameCommand {
 
         try {
 
-            return RetrofitService.invoke(this.oracleCommands.changeOracleName(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.oracleCommands.changeOracleName(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +78,5 @@ public class ChangeOracleNameInvoker implements ChangeOracleNameCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

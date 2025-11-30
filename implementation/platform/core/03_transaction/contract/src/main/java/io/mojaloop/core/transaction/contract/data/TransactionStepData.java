@@ -25,10 +25,15 @@ import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionStepId;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
-public record TransactionStepData(TransactionStepId stepId, String name, StepPhase phase, Instant createdAt, TransactionId transactionId, List<StepParamData> params) {
+public record TransactionStepData(TransactionStepId stepId,
+                                  StepPhase phase,
+                                  String name,
+                                  String context,
+                                  String payload,
+                                  Instant createdAt,
+                                  TransactionId transactionId) {
 
     @Override
     public boolean equals(Object o) {

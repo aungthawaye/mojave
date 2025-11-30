@@ -20,7 +20,6 @@
 
 package io.mojaloop.connector.sample;
 
-import io.mojaloop.component.misc.handy.P12Reader;
 import io.mojaloop.connector.gateway.ConnectorGatewayConfiguration;
 import io.mojaloop.connector.gateway.inbound.ConnectorInboundConfiguration;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
@@ -38,7 +37,6 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
 
     @Bean
     @Override
-    @ConditionalOnMissingBean(FspiopCommonConfiguration.ParticipantSettings.class)
     public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
 
         var fspCode = System.getenv("FSPIOP_FSP_CODE");
@@ -60,55 +58,66 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+        return new FspiopCommonConfiguration.ParticipantSettings(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
     }
 
     @Bean
     @Override
     public FspiopInvokerConfiguration.TransportSettings fspiopInvokerTransportSettings() {
 
-        var useMutualTls = Boolean.parseBoolean(System.getenv().getOrDefault("INVOKER_USE_MUTUAL_TLS", "false"));
+        var useMutualTls = Boolean.parseBoolean(System.getenv("INVOKER_USE_MUTUAL_TLS"));
 
         if (!useMutualTls) {
 
             return new FspiopInvokerConfiguration.TransportSettings(false, null, null, true);
         }
 
-        return new FspiopInvokerConfiguration.TransportSettings(true,
-            new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(P12Reader.ContentType.valueOf(System.getenv("INVOKER_KEYSTORE_CONTENT_TYPE")),
-                System.getenv("INVOKER_KEYSTORE_CONTENT_VALUE"), System.getenv("INVOKER_KEYSTORE_PASSWORD")),
-            new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(P12Reader.ContentType.valueOf(System.getenv("INVOKER_TRUSTSTORE_CONTENT_TYPE")),
-                System.getenv("INVOKER_TRUSTSTORE_CONTENT_VALUE"), System.getenv("INVOKER_TRUSTSTORE_PASSWORD")), true);
+        return new FspiopInvokerConfiguration.TransportSettings(
+            true, new FspiopInvokerConfiguration.TransportSettings.KeyStoreSettings(
+            System.getenv("KEYSTORE_P12B64_CONTENT"), System.getenv("KEYSTORE_PASSWORD")),
+            new FspiopInvokerConfiguration.TransportSettings.TrustStoreSettings(
+                System.getenv("TRUSTSTORE_P12B64_CONTENT"), System.getenv("TRUSTSTORE_PASSWORD")),
+            true);
     }
 
     @Bean
     @Override
     public ConnectorInboundConfiguration.InboundSettings inboundSettings() {
 
-        var useMutualTls = Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_INBOUND_USE_MUTUAL_TLS", "false"));
+        var useMutualTls = Boolean.parseBoolean(System.getenv("FSPIOP_INBOUND_USE_MUTUAL_TLS"));
 
         if (!useMutualTls) {
 
-            return new ConnectorInboundConfiguration.InboundSettings(Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
-                Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")), Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), false, null, null);
+            return new ConnectorInboundConfiguration.InboundSettings(
+                Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
+                Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
+                Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), false, null,
+                null);
         }
 
-        return new ConnectorInboundConfiguration.InboundSettings(Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
-            Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")), Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), true,
-            new ConnectorInboundConfiguration.InboundSettings.KeyStoreSettings(P12Reader.ContentType.valueOf(System.getenv("FSPIOP_INBOUND_KEYSTORE_CONTENT_TYPE")),
-                System.getenv("FSPIOP_INBOUND_KEYSTORE_CONTENT_VALUE"), System.getenv("FSPIOP_INBOUND_KEYSTORE_PASSWORD"), null),
-            new ConnectorInboundConfiguration.InboundSettings.TrustStoreSettings(P12Reader.ContentType.valueOf(System.getenv("FSPIOP_INBOUND_TRUSTSTORE_CONTENT_TYPE")),
-                System.getenv("FSPIOP_INBOUND_TRUSTSTORE_CONTENT_VALUE"), System.getenv("FSPIOP_INBOUND_TRUSTSTORE_PASSWORD")));
+        return new ConnectorInboundConfiguration.InboundSettings(
+            Integer.parseInt(System.getenv("FSPIOP_INBOUND_PORT")),
+            Integer.parseInt(System.getenv("FSPIOP_INBOUND_MAX_THREAD")),
+            Integer.parseInt(System.getenv("FSPIOP_INBOUND_CONNECTION_TIMEOUT")), true,
+            new ConnectorInboundConfiguration.InboundSettings.KeyStoreSettings(
+                System.getenv("KEYSTORE_P12B64_CONTENT"), System.getenv("KEYSTORE_PASSWORD"), null),
+            new ConnectorInboundConfiguration.InboundSettings.TrustStoreSettings(
+                System.getenv("TRUSTSTORE_P12B64_CONTENT"), System.getenv("TRUSTSTORE_PASSWORD")));
     }
 
     @Bean
     @Override
     public ConnectorOutboundConfiguration.OutboundSettings outboundSettings() {
 
-        return new ConnectorOutboundConfiguration.OutboundSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")),
-            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
-            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")), Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")),
-            System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"), Boolean.parseBoolean(System.getenv().getOrDefault("FSPIOP_OUTBOUND_SECURED", "true")));
+        return new ConnectorOutboundConfiguration.OutboundSettings(
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PORT")),
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_MAX_THREAD")),
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_CONNECTION_TIMEOUT")),
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUT_RESULT_TIMEOUT")),
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")),
+            System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"),
+            Boolean.parseBoolean(System.getenv("FSPIOP_OUTBOUND_SECURED")));
     }
 
     @Bean
@@ -131,7 +140,8 @@ public class SampleConnectorSettings implements ConnectorGatewayConfiguration.Re
     @Override
     public ConnectorOutboundConfiguration.TransferSettings transactionSettings() {
 
-        return new ConnectorOutboundConfiguration.TransferSettings(Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
+        return new ConnectorOutboundConfiguration.TransferSettings(
+            Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_EXPIRE_AFTER_SECONDS")));
     }
 
     @Bean

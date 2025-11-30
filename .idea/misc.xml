@@ -14,6 +14,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/implementation/component/jackson/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/component/logging/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/connector/core/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/common/central-cache/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/common/http-security/pom.xml" />

@@ -51,7 +51,9 @@ public class DefinitionDescriptionTooLongException extends UncheckedDomainExcept
 
     public static final String CODE = "DEFINITION_DESCRIPTION_TOO_LONG";
 
-    private static final String TEMPLATE = "Definition Description is too long. Must not exceed " + StringSizeConstraints.MAX_DESCRIPTION_LENGTH + " characters.";
+    private static final String TEMPLATE = "Definition Description is too long. Must not exceed " +
+                                               StringSizeConstraints.MAX_DESCRIPTION_LENGTH +
+                                               " characters.";
 
     public DefinitionDescriptionTooLongException() {
 

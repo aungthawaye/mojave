@@ -66,7 +66,9 @@ public class TransferExtension extends JpaEntity<TransferExtensionId> {
     protected String value;
 
     @ManyToOne
-    @JoinColumn(name = "transfer_id", nullable = false, foreignKey = @ForeignKey(name = "transfer_extension_transfer_FK"))
+    @JoinColumn(name = "transfer_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "transfer_extension_transfer_FK"))
     protected Transfer transfer;
 
     public TransferExtension(Transfer transfer, Direction direction, String key, String value) {

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.contract.exception;
 
 import io.mojaloop.component.misc.error.RestErrorResponse;
@@ -34,4 +35,5 @@ public class TransactionExceptionResolver {
             default -> throw new RuntimeException("Unknown exception code: " + code);
         };
     }
+
 }

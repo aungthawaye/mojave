@@ -32,7 +32,9 @@ public class Parties {
 
         public record Request(PartyIdType partyIdType, String partyId, String subId) { }
 
-        public record Response(List<Currency> supportedCurrencies, String name, PartyPersonalInfo personalInfo) { }
+        public record Response(List<Currency> supportedCurrencies,
+                               String name,
+                               PartyPersonalInfo personalInfo) { }
 
     }
 

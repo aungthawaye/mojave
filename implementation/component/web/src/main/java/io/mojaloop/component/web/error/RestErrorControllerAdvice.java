@@ -44,13 +44,17 @@ public class RestErrorControllerAdvice {
     @ExceptionHandler(CheckedDomainException.class)
     public ResponseEntity<RestErrorResponse> handle(CheckedDomainException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+            new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UncheckedDomainException.class)
     public ResponseEntity<RestErrorResponse> handle(UncheckedDomainException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+            new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -64,49 +68,65 @@ public class RestErrorControllerAdvice {
             extra.put(fieldError.getField(), fieldError.getDefaultMessage());
         });
 
-        return new ResponseEntity<>(new RestErrorResponse("ARGUMENT_NOT_VALID", errors.toString(), extra), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(
+            new RestErrorResponse("ARGUMENT_NOT_VALID", errors.toString(), extra),
+            HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<RestErrorResponse> handle(MethodArgumentTypeMismatchException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("ARGUMENT_TYPE_MISMATCH", e.getMessage(), Map.of()), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(
+            new RestErrorResponse("ARGUMENT_TYPE_MISMATCH", e.getMessage(), Map.of()),
+            HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(NoHandlerFoundException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("NO_HANDLER_FOUND", e.getMessage(), Map.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+            new RestErrorResponse("NO_HANDLER_FOUND", e.getMessage(), Map.of()),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<RestErrorResponse> handle(HttpMessageNotReadableException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("MESSAGE_NOT_READABLE", e.getMessage(), Map.of()), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(
+            new RestErrorResponse("MESSAGE_NOT_READABLE", e.getMessage(), Map.of()),
+            HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<RestErrorResponse> handle(RuntimeException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+            new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<RestErrorResponse> handle(Exception e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+            new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<RestErrorResponse> handle(MissingServletRequestParameterException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("MISSING_PARAMETER", e.getMessage(), Map.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+            new RestErrorResponse("MISSING_PARAMETER", e.getMessage(), Map.of()),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<RestErrorResponse> handle(BindException e) {
 
-        return new ResponseEntity<>(new RestErrorResponse("BINDING_FAILED", e.getMessage(), Map.of()), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(
+            new RestErrorResponse("BINDING_FAILED", e.getMessage(), Map.of()),
+            HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 }

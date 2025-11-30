@@ -50,9 +50,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ChangeFlowDefinitionCurrencyCommandHandler implements ChangeFlowDefinitionCurrencyCommand {
+public class ChangeFlowDefinitionCurrencyCommandHandler
+    implements ChangeFlowDefinitionCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFlowDefinitionCurrencyCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ChangeFlowDefinitionCurrencyCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -70,12 +72,18 @@ public class ChangeFlowDefinitionCurrencyCommandHandler implements ChangeFlowDef
 
         LOGGER.info("Executing ChangeFlowDefinitionCurrencyCommand with input: {}", input);
 
-        final var definition = this.flowDefinitionRepository.findById(input.flowDefinitionId()).orElseThrow(() -> new FlowDefinitionNotFoundException(input.flowDefinitionId()));
+        final var definition = this.flowDefinitionRepository
+                                   .findById(input.flowDefinitionId())
+                                   .orElseThrow(() -> new FlowDefinitionNotFoundException(
+                                       input.flowDefinitionId()));
 
         // Ensure no other definition already uses the target currency
         final var currency = input.currency();
-        final var conflict = this.flowDefinitionRepository.findOne(
-            FlowDefinitionRepository.Filters.withCurrency(currency).and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
+        final var conflict = this.flowDefinitionRepository.findOne(FlowDefinitionRepository.Filters
+                                                                       .withCurrency(currency)
+                                                                       .and(
+                                                                           FlowDefinitionRepository.Filters.withIdNotEquals(
+                                                                               definition.getId())));
         if (conflict.isPresent()) {
             LOGGER.info("Flow Definition with currency {} already exists", currency);
             throw new FlowDefinitionWithCurrencyExistsException(currency);

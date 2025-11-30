@@ -58,7 +58,8 @@ public class LocalPubSub {
      */
     public void publish(String channelName, Object message) {
 
-        Channel channel = this.channels.computeIfAbsent(channelName, ch -> new Channel(Sinks.many().multicast().onBackpressureBuffer()));
+        Channel channel = this.channels.computeIfAbsent(
+            channelName, ch -> new Channel(Sinks.many().multicast().onBackpressureBuffer()));
         Sinks.EmitResult result = channel.sink.tryEmitNext(message);
 
         if (result.isFailure()) {
@@ -87,30 +88,34 @@ public class LocalPubSub {
      */
     public Disposable subscribe(String channelName, Consumer<Object> handler, long timeout) {
 
-        Channel channel = channels.computeIfAbsent(channelName, ch -> new Channel(Sinks.many().multicast().onBackpressureBuffer()));
+        Channel channel = channels.computeIfAbsent(
+            channelName, ch -> new Channel(Sinks.many().multicast().onBackpressureBuffer()));
 
         // Use take(timeout) to automatically unsubscribe after timeout
         Flux<Object> flux = channel.sink.asFlux().take(timeout);
 
         AtomicReference<Disposable> ref = new AtomicReference<>();
 
-        Disposable disposable = flux.subscribe(handler, error -> LOGGER.error("Error in subscriber of channel {}", channelName, error), () -> {
+        Disposable disposable = flux.subscribe(
+            handler, error -> LOGGER.error("Error in subscriber of channel {}", channelName, error),
+            () -> {
 
-            LOGGER.debug("Subscriber timeout/completed on channel {}", channelName);
+                LOGGER.debug("Subscriber timeout/completed on channel {}", channelName);
 
-            Disposable removing = ref.get();
+                Disposable removing = ref.get();
 
-            channel.subscriptions.remove(removing);
+                channel.subscriptions.remove(removing);
 
-            if (channel.subscriptions.isEmpty()) {
+                if (channel.subscriptions.isEmpty()) {
 
-                LOGGER.debug("No more subscribers on channel {}, removing channel", channelName);
+                    LOGGER.debug(
+                        "No more subscribers on channel {}, removing channel", channelName);
 
-                channel.sink.tryEmitComplete();
+                    channel.sink.tryEmitComplete();
 
-                channels.remove(channelName);
-            }
-        });
+                    channels.remove(channelName);
+                }
+            });
 
         ref.set(disposable);
 

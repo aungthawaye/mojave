@@ -30,7 +30,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestTransfersEventListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestTransfersEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RequestTransfersEventListener.class);
 
     @Async
     @EventListener

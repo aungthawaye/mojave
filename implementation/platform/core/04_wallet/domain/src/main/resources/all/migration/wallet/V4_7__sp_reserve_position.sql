@@ -9,6 +9,7 @@ CREATE PROCEDURE sp_reserve_position(
     IN p_amount DECIMAL(34, 4),
     IN p_description VARCHAR(256)
 )
+proc_reserve:
 BEGIN
     /* -------- Variables -------- */
     DECLARE v_old_position DECIMAL(34, 4);
@@ -47,9 +48,12 @@ BEGIN
                v_new_reserved       AS new_reserved,
                v_net_debit_cap      AS net_debit_cap,
                p_transaction_at     AS transaction_at;
+        LEAVE proc_reserve;
     END IF;
 
-    UPDATE wlt_position SET reserved = v_new_reserved WHERE position_id = p_position_id;
+    UPDATE wlt_position
+    SET reserved = v_new_reserved
+    WHERE position_id = p_position_id;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,

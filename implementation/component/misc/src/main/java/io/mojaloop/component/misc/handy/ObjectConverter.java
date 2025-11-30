@@ -40,13 +40,15 @@ public class ObjectConverter {
     // Serialization: Object -> Map -> JSON Path Map
     //--------------------------------------------------
 
-    public static <T> T convertJsonPathMapToObject(Map<String, Object> jsonPathMap, Class<T> clazz) throws ReflectiveOperationException {
+    public static <T> T convertJsonPathMapToObject(Map<String, Object> jsonPathMap, Class<T> clazz)
+        throws ReflectiveOperationException {
 
         Map<String, Object> nestedMap = unflattenJsonPathMap(jsonPathMap);
         return convertNestedMapToObject(nestedMap, clazz);
     }
 
-    private static Object convertList(List<?> list, Type targetType) throws ReflectiveOperationException {
+    private static Object convertList(List<?> list, Type targetType)
+        throws ReflectiveOperationException {
 
         Class<?> targetClass = getRawType(targetType);
         if (targetClass.isArray()) {
@@ -77,7 +79,8 @@ public class ObjectConverter {
         return jsonPathMap;
     }
 
-    private static <T> T convertNestedMapToObject(Map<String, Object> nestedMap, Class<T> clazz) throws ReflectiveOperationException {
+    private static <T> T convertNestedMapToObject(Map<String, Object> nestedMap, Class<T> clazz)
+        throws ReflectiveOperationException {
 
         if (clazz.isRecord()) {
             RecordComponent[] components = clazz.getRecordComponents();
@@ -89,7 +92,10 @@ public class ObjectConverter {
                 Type componentType = rc.getGenericType();
                 args[i] = convertValue(value, componentType);
             }
-            Class<?>[] paramTypes = Arrays.stream(components).map(RecordComponent::getType).toArray(Class<?>[]::new);
+            Class<?>[] paramTypes = Arrays
+                                        .stream(components)
+                                        .map(RecordComponent::getType)
+                                        .toArray(Class<?>[]::new);
             Constructor<T> constructor = clazz.getDeclaredConstructor(paramTypes);
             constructor.setAccessible(true);
             return constructor.newInstance(args);
@@ -118,7 +124,8 @@ public class ObjectConverter {
         return convertObjectToMap(obj, visited);
     }
 
-    private static Map<String, Object> convertObjectToMap(Object obj, Set<Object> visited) throws IllegalAccessException {
+    private static Map<String, Object> convertObjectToMap(Object obj, Set<Object> visited)
+        throws IllegalAccessException {
 
         if (obj == null || visited.contains(obj)) {
             return null;
@@ -142,7 +149,8 @@ public class ObjectConverter {
     // Map -> JSON Path Map
     //--------------------------------------------------
 
-    private static Object convertValue(Object value, Type targetType) throws ReflectiveOperationException {
+    private static Object convertValue(Object value, Type targetType)
+        throws ReflectiveOperationException {
 
         Class<?> targetClass = getRawType(targetType);
         if (value instanceof Map) {
@@ -175,7 +183,9 @@ public class ObjectConverter {
         return flatMap;
     }
 
-    private static void flattenMap(String prefix, Map<String, Object> map, Map<String, Object> flatMap) {
+    private static void flattenMap(String prefix,
+                                   Map<String, Object> map,
+                                   Map<String, Object> flatMap) {
 
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
@@ -212,11 +222,13 @@ public class ObjectConverter {
 
     private static boolean isSimpleType(Class<?> clazz) {
 
-        return clazz.isPrimitive() || clazz.equals(String.class) || Number.class.isAssignableFrom(clazz) || clazz.equals(Boolean.class) || clazz.equals(Character.class) ||
-                   clazz.isEnum();
+        return clazz.isPrimitive() || clazz.equals(String.class) ||
+                   Number.class.isAssignableFrom(clazz) || clazz.equals(Boolean.class) ||
+                   clazz.equals(Character.class) || clazz.isEnum();
     }
 
-    private static List<Object> processArray(Object array, Set<Object> visited) throws IllegalAccessException {
+    private static List<Object> processArray(Object array, Set<Object> visited)
+        throws IllegalAccessException {
 
         List<Object> processed = new ArrayList<>();
 
@@ -245,7 +257,8 @@ public class ObjectConverter {
         }
     }
 
-    private static List<Object> processList(List<?> list, Set<Object> visited) throws IllegalAccessException {
+    private static List<Object> processList(List<?> list, Set<Object> visited)
+        throws IllegalAccessException {
 
         List<Object> processed = new ArrayList<>();
 
@@ -256,7 +269,8 @@ public class ObjectConverter {
         return processed;
     }
 
-    private static Object processValue(Object value, Set<Object> visited) throws IllegalAccessException {
+    private static Object processValue(Object value, Set<Object> visited)
+        throws IllegalAccessException {
 
         if (value == null) {
             return null;
@@ -305,7 +319,9 @@ public class ObjectConverter {
                 boolean listOrArray = i < parts.length - 1 && parts[i + 1].matches("\\d+");
 
                 if (!current.containsKey(part)) {
-                    current.put(part, listOrArray ? new ArrayList<Object>() : new HashMap<String, Object>());
+                    current.put(
+                        part,
+                        listOrArray ? new ArrayList<Object>() : new HashMap<String, Object>());
                 }
 
                 Object next = current.get(part);

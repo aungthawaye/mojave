@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.domain.cache.strategy.local;
 
 import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
@@ -61,7 +62,8 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
         final var removed = this.withId.remove(flowDefinitionId.getId());
 
         if (removed != null) {
-            final var key = FlowDefinitionCache.Keys.forTransaction(removed.transactionType(), removed.currency());
+            final var key = FlowDefinitionCache.Keys.forTransaction(
+                removed.transactionType(), removed.currency());
             this.withTxnTypeCurrency.remove(key);
         }
     }
@@ -96,7 +98,8 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
         this.withId.put(flowDefinition.flowDefinitionId().getId(), flowDefinition);
 
-        final var key = FlowDefinitionCache.Keys.forTransaction(flowDefinition.transactionType(), flowDefinition.currency());
+        final var key = FlowDefinitionCache.Keys.forTransaction(
+            flowDefinition.transactionType(), flowDefinition.currency());
         this.withTxnTypeCurrency.put(key, flowDefinition);
     }
 

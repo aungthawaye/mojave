@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.accounting.admin.client.api.command.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,8 @@ public class DeactivateAccountInvoker implements DeactivateAccountCommand {
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateAccountInvoker(final AccountingAdminService.AccountCommand accountCommand, final ObjectMapper objectMapper) {
+    public DeactivateAccountInvoker(final AccountingAdminService.AccountCommand accountCommand,
+                                    final ObjectMapper objectMapper) {
 
         assert accountCommand != null;
         assert objectMapper != null;
@@ -47,8 +49,12 @@ public class DeactivateAccountInvoker implements DeactivateAccountCommand {
 
         try {
 
-            return RetrofitService.invoke(this.accountCommand.deactivate(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.accountCommand.deactivate(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -66,4 +72,5 @@ public class DeactivateAccountInvoker implements DeactivateAccountCommand {
             throw new RuntimeException(e);
         }
     }
+
 }

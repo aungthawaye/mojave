@@ -24,18 +24,23 @@ import org.flywaydb.core.Flyway;
 
 public class FlywayMigration {
 
-    public static void migrate(Settings settings) {
+    public static Flyway configure(Settings settings) {
 
-        Flyway.configure()
-              .dataSource(settings.url(), settings.username(), settings.password())
-              .locations(settings.locations())
-              .validateMigrationNaming(true)
-              .validateOnMigrate(true)
-              .baselineOnMigrate(true)
-              .load()
-              .migrate();
+        return Flyway
+                   .configure()
+                   .dataSource(settings.url(), settings.username(), settings.password())
+                   .table(settings.table())
+                   .locations(settings.locations())
+                   .validateMigrationNaming(true)
+                   .validateOnMigrate(true)
+                   .baselineOnMigrate(true)
+                   .load();
     }
 
-    public record Settings(String url, String username, String password, String... locations) { }
+    public record Settings(String url,
+                           String username,
+                           String password,
+                           String table,
+                           String[] locations) { }
 
 }

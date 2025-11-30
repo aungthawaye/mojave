@@ -38,66 +38,74 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.transaction.consumer"})
 @Import(value = {TransactionDomainConfiguration.class})
-public class TransactionConsumerConfiguration {
+final class TransactionConsumerConfiguration
+    implements TransactionDomainConfiguration.RequiredBeans {
 
     @Bean(name = AddStepListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(AddStepListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, AddStepCommand.Input> addStepListenerContainerFactory(AddStepListener.Settings settings, ObjectMapper objectMapper) {
+    public ConcurrentKafkaListenerContainerFactory<String, AddStepCommand.Input> addStepListenerContainerFactory(
+        AddStepListener.Settings settings,
+        ObjectMapper objectMapper) {
 
-        return KafkaConsumerConfigurer.configure(settings, new KafkaConsumerConfigurer.Deserializer<>() {
+        return KafkaConsumerConfigurer.configure(
+            settings, new KafkaConsumerConfigurer.Deserializer<>() {
 
-            @Override
-            public JsonDeserializer<String> forKey() {
+                @Override
+                public JsonDeserializer<String> forKey() {
 
-                var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
 
-                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                return deserializer;
-            }
+                    return deserializer;
+                }
 
-            @Override
-            public JsonDeserializer<AddStepCommand.Input> forValue() {
+                @Override
+                public JsonDeserializer<AddStepCommand.Input> forValue() {
 
-                var deserializer = new JsonDeserializer<>(AddStepCommand.Input.class, objectMapper);
+                    var deserializer = new JsonDeserializer<>(
+                        AddStepCommand.Input.class, objectMapper);
 
-                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                return deserializer;
-            }
-        });
+                    return deserializer;
+                }
+            });
     }
 
     @Bean(name = CloseTransactionListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(CloseTransactionListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, CloseTransactionCommand.Input> closeTransactionListenerContainerFactory(CloseTransactionListener.Settings settings,
-                                                                                                                                   ObjectMapper objectMapper) {
+    public ConcurrentKafkaListenerContainerFactory<String, CloseTransactionCommand.Input> closeTransactionListenerContainerFactory(
+        CloseTransactionListener.Settings settings,
+        ObjectMapper objectMapper) {
 
-        return KafkaConsumerConfigurer.configure(settings, new KafkaConsumerConfigurer.Deserializer<>() {
+        return KafkaConsumerConfigurer.configure(
+            settings, new KafkaConsumerConfigurer.Deserializer<>() {
 
-            @Override
-            public JsonDeserializer<String> forKey() {
+                @Override
+                public JsonDeserializer<String> forKey() {
 
-                var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
 
-                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                return deserializer;
-            }
+                    return deserializer;
+                }
 
-            @Override
-            public JsonDeserializer<CloseTransactionCommand.Input> forValue() {
+                @Override
+                public JsonDeserializer<CloseTransactionCommand.Input> forValue() {
 
-                var deserializer = new JsonDeserializer<>(CloseTransactionCommand.Input.class, objectMapper);
+                    var deserializer = new JsonDeserializer<>(
+                        CloseTransactionCommand.Input.class, objectMapper);
 
-                deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
-                return deserializer;
-            }
-        });
+                    return deserializer;
+                }
+            });
     }
 
-    public interface RequiredBeans extends TransactionDomainConfiguration.RequiredBeans { }
+    public interface RequiredBeans { }
 
     public interface RequiredSettings extends TransactionDomainConfiguration.RequiredSettings {
 

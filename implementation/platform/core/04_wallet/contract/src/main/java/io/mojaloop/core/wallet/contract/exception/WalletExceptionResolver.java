@@ -17,21 +17,23 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.contract.exception;
 
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionAlreadyExistsException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionIdNotFoundException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
-import io.mojaloop.core.wallet.contract.exception.position.FailedToRollbackReservationException;
-import io.mojaloop.core.wallet.contract.exception.wallet.BalanceUpdateIdNotFoundException;
-import io.mojaloop.core.wallet.contract.exception.wallet.InsufficientBalanceInWalletException;
-import io.mojaloop.core.wallet.contract.exception.wallet.NoBalanceUpdateForTransactionException;
-import io.mojaloop.core.wallet.contract.exception.wallet.ReversalFailedInWalletException;
-import io.mojaloop.core.wallet.contract.exception.wallet.WalletAlreadyExistsException;
-import io.mojaloop.core.wallet.contract.exception.wallet.WalletIdNotFoundException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceUpdateIdNotFoundException;
+import io.mojaloop.core.wallet.contract.exception.balance.InsufficientBalanceException;
+import io.mojaloop.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceAlreadyExistsException;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
 
 public class WalletExceptionResolver {
 
@@ -41,21 +43,29 @@ public class WalletExceptionResolver {
         final var extras = error.extras();
 
         return switch (code) {
-            // wallet package
-            case BalanceUpdateIdNotFoundException.CODE -> BalanceUpdateIdNotFoundException.from(extras);
-            case InsufficientBalanceInWalletException.CODE -> InsufficientBalanceInWalletException.from(extras);
-            case NoBalanceUpdateForTransactionException.CODE -> NoBalanceUpdateForTransactionException.from(extras);
-            case ReversalFailedInWalletException.CODE -> ReversalFailedInWalletException.from(extras);
-            case WalletAlreadyExistsException.CODE -> WalletAlreadyExistsException.from(extras);
-            case WalletIdNotFoundException.CODE -> WalletIdNotFoundException.from(extras);
+            // balance package
+            case BalanceUpdateIdNotFoundException.CODE ->
+                BalanceUpdateIdNotFoundException.from(extras);
+            case InsufficientBalanceException.CODE ->
+                InsufficientBalanceException.from(extras);
+            case NoBalanceUpdateForTransactionException.CODE ->
+                NoBalanceUpdateForTransactionException.from(extras);
+            case ReversalFailedInWalletException.CODE ->
+                ReversalFailedInWalletException.from(extras);
+            case BalanceAlreadyExistsException.CODE -> BalanceAlreadyExistsException.from(extras);
+            case BalanceIdNotFoundException.CODE -> BalanceIdNotFoundException.from(extras);
 
             // position package
-            case FailedToCommitReservationException.CODE -> FailedToCommitReservationException.from(extras);
-            case NoPositionUpdateForTransactionException.CODE -> NoPositionUpdateForTransactionException.from(extras);
+            case FailedToCommitReservationException.CODE ->
+                FailedToCommitReservationException.from(extras);
+            case NoPositionUpdateForTransactionException.CODE ->
+                NoPositionUpdateForTransactionException.from(extras);
             case PositionAlreadyExistsException.CODE -> PositionAlreadyExistsException.from(extras);
             case PositionIdNotFoundException.CODE -> PositionIdNotFoundException.from(extras);
             case PositionLimitExceededException.CODE -> PositionLimitExceededException.from(extras);
-            case FailedToRollbackReservationException.CODE -> FailedToRollbackReservationException.from(extras);
+            case PositionNotExistException.CODE -> PositionNotExistException.from(extras);
+            case FailedToRollbackReservationException.CODE ->
+                FailedToRollbackReservationException.from(extras);
 
             default -> throw new RuntimeException("Unknown exception code: " + code);
         };

@@ -21,9 +21,11 @@
 package io.mojaloop.connector.gateway.inbound.controller;
 
 import io.mojaloop.component.misc.spring.event.EventPublisher;
+import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePatchTransfersCommand;
 import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
 import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePutTransfersErrorCommand;
 import io.mojaloop.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
+import io.mojaloop.connector.gateway.inbound.event.PatchTransfersEvent;
 import io.mojaloop.connector.gateway.inbound.event.PostTransfersEvent;
 import io.mojaloop.connector.gateway.inbound.event.PutTransfersErrorEvent;
 import io.mojaloop.connector.gateway.inbound.event.PutTransfersEvent;
@@ -31,11 +33,13 @@ import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopHeaders;
 import io.mojaloop.fspiop.spec.core.ErrorInformationObject;
+import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
 import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import io.mojaloop.fspiop.spec.core.TransfersPostRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,7 +52,8 @@ import java.util.Map;
 @RestController
 public class HandleTransfersController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleTransfersController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandleTransfersController.class.getName());
 
     private final EventPublisher eventPublisher;
 
@@ -59,34 +64,58 @@ public class HandleTransfersController {
     }
 
     @PostMapping("/transfers")
-    public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers, @RequestBody TransfersPostRequest request) {
+    public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers,
+                                           @RequestBody TransfersPostRequest request) {
 
         LOGGER.debug("Received POST /transfers : request : {}", request);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PostTransfersEvent(new HandlePostTransfersRequestCommand.Input(payer, request.getTransferId(), request)));
+        this.eventPublisher.publish(new PostTransfersEvent(
+            new HandlePostTransfersRequestCommand.Input(payer, request.getTransferId(), request)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/transfers/{transferId}")
-    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers, @PathVariable String transferId, @RequestBody TransfersIDPutResponse response) {
+    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers,
+                                          @PathVariable String transferId,
+                                          @RequestBody TransfersIDPutResponse response) {
 
         LOGGER.debug("Received PUT /transfers/{} : response : {}", transferId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutTransfersEvent(new HandlePutTransfersResponseCommand.Input(payee, transferId, response)));
+        this.eventPublisher.publish(new PutTransfersEvent(
+            new HandlePutTransfersResponseCommand.Input(payee, transferId, response)));
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PatchMapping("/transfers/{transferId}")
+    public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers,
+                                          @PathVariable String transferId,
+                                          @RequestBody TransfersIDPatchResponse response) {
+
+        LOGGER.debug("Received PATCH /transfers/{} : response : {}", transferId, response);
+        var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
+
+        this.eventPublisher.publish(new PatchTransfersEvent(
+            new HandlePatchTransfersCommand.Input(payer, transferId, response)));
 
         return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/transfers/{transferId}/error")
-    public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers, @PathVariable String transferId, @RequestBody ErrorInformationObject errorInformation) {
+    public ResponseEntity<?> putTransfersError(@RequestHeader Map<String, String> headers,
+                                               @PathVariable String transferId,
+                                               @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug("Received PUT /transfers/{}/error : errorInformation : {}", transferId, errorInformation);
+        LOGGER.debug(
+            "Received PUT /transfers/{}/error : errorInformation : {}", transferId,
+            errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PutTransfersErrorEvent(new HandlePutTransfersErrorCommand.Input(payee, transferId, errorInformation)));
+        this.eventPublisher.publish(new PutTransfersErrorEvent(
+            new HandlePutTransfersErrorCommand.Input(payee, transferId, errorInformation)));
 
         return ResponseEntity.accepted().build();
     }

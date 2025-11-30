@@ -59,7 +59,8 @@ public class OpenTransactionInvoker implements OpenTransactionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public OpenTransactionInvoker(final TransactionIntercomService transactionIntercomService, final ObjectMapper objectMapper) {
+    public OpenTransactionInvoker(final TransactionIntercomService transactionIntercomService,
+                                  final ObjectMapper objectMapper) {
 
         assert transactionIntercomService != null;
         assert objectMapper != null;
@@ -73,8 +74,12 @@ public class OpenTransactionInvoker implements OpenTransactionCommand {
 
         try {
 
-            return RetrofitService.invoke(this.transactionIntercomService.open(input),
-                (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper)).body();
+            return RetrofitService
+                       .invoke(
+                           this.transactionIntercomService.open(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.component.interledger.unwrapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,7 +54,8 @@ public class MojavePartyUnwrapper implements PartyUnwrapper {
             var agreement = this.objectMapper.readValue(json, Agreement.class);
             LOGGER.debug("Unwrapped Agreement: {}", agreement);
 
-            return new Parties(Optional.ofNullable(agreement.payer()), Optional.ofNullable(agreement.payee()));
+            return new Parties(
+                Optional.ofNullable(agreement.payer()), Optional.ofNullable(agreement.payee()));
 
         } catch (JsonProcessingException e) {
 

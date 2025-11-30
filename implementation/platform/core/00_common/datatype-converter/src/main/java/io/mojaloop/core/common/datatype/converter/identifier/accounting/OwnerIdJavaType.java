@@ -83,7 +83,8 @@ public class OwnerIdJavaType extends AbstractClassJavaType<AccountOwnerId> {
             case null -> null;
             case AccountOwnerId ownerId -> ownerId;
             case Number n -> new AccountOwnerId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

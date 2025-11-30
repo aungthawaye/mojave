@@ -29,8 +29,12 @@ import retrofit2.http.Path;
 
 public interface PutQuotes {
 
-    void putQuotes(Payer payer, @Path("quoteId") String quoteId, @Body QuotesIDPutResponse quotesIDPutResponse) throws FspiopException;
+    void putQuotes(Payer payer,
+                   @Path("quoteId") String quoteId,
+                   @Body QuotesIDPutResponse quotesIDPutResponse) throws FspiopException;
 
-    void putQuotesError(Payer payer, @Path("quoteId") String quoteId, @Body ErrorInformationObject errorInformationObject) throws FspiopException;
+    void putQuotesError(Payer payer,
+                        @Path("quoteId") String quoteId,
+                        @Body ErrorInformationObject errorInformationObject) throws FspiopException;
 
 }

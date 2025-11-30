@@ -35,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class DeactivateFspCurrencyCommandHandler implements DeactivateFspCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateFspCurrencyCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateFspCurrencyCommandHandler.class);
 
     private final FspRepository fspRepository;
 
@@ -53,7 +54,9 @@ public class DeactivateFspCurrencyCommandHandler implements DeactivateFspCurrenc
 
         LOGGER.info("Executing DeactivateSupportedCurrencyCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspCurrency = fsp.deactivate(input.currency());
 
@@ -62,7 +65,9 @@ public class DeactivateFspCurrencyCommandHandler implements DeactivateFspCurrenc
         LOGGER.info("Completed DeactivateSupportedCurrencyCommand with input: {}", input);
 
         if (optFspCurrency.isPresent()) {
-            return new Output(optFspCurrency.map(FspCurrency::getId).orElse(null), optFspCurrency.get().isActive());
+            return new Output(
+                optFspCurrency.map(FspCurrency::getId).orElse(null),
+                optFspCurrency.get().isActive());
         }
 
         return new Output(null, false);

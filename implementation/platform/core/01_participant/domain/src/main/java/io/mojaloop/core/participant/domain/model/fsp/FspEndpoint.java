@@ -57,9 +57,12 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_endpoint", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK", columnNames = {"fsp_endpoint_id", "type"})})
+@Table(name = "pcp_fsp_endpoint",
+       uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK",
+                                              columnNames = {"fsp_endpoint_id", "type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataConversion<FspEndpointData> {
+public final class FspEndpoint extends JpaEntity<FspEndpointId>
+    implements DataConversion<FspEndpointData> {
 
     @Id
 
@@ -75,7 +78,9 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
     @Column(name = "base_url", nullable = false, length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
     private String baseUrl;
 
-    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
@@ -84,7 +89,9 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "fsp_id", nullable = false, foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
+    @JoinColumn(name = "fsp_id",
+                nullable = false,
+                foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
     private Fsp fsp;
 
     public FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) {
@@ -125,7 +132,8 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId> implements DataC
     @Override
     public FspEndpointData convert() {
 
-        return new FspEndpointData(this.getId(), this.getType(), this.getBaseUrl(), this.createdAt, this.fsp.getId());
+        return new FspEndpointData(
+            this.getId(), this.getType(), this.getBaseUrl(), this.createdAt, this.fsp.getId());
     }
 
     @Override

@@ -52,7 +52,9 @@ public class AddEndpointCommandHandler implements AddEndpointCommand {
 
         LOGGER.info("Executing ConfigureEndpointCommand with input: {}", input);
 
-        var fsp = this.fspRepository.findById(input.fspId()).orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
+        var fsp = this.fspRepository
+                      .findById(input.fspId())
+                      .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var endpoint = fsp.addEndpoint(input.type(), input.baseUrl());
 

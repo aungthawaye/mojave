@@ -30,7 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePutPartiesResponseCommandHandler implements HandlePutPartiesResponseCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutPartiesResponseCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePutPartiesResponseCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
@@ -44,10 +45,12 @@ class HandlePutPartiesResponseCommandHandler implements HandlePutPartiesResponse
     @Override
     public Output execute(Input input) {
 
-        var channel = PubSubKeys.forParties(input.payee(), input.partyIdType(), input.partyId(), input.subId());
+        var channel = PubSubKeys.forParties(
+            input.payee(), input.partyIdType(), input.partyId(), input.subId());
         LOGGER.info("Publishing parties result to channel : {}", channel);
 
-        var result = new PartiesResult(input.partyIdType(), input.partyId(), input.subId(), input.response());
+        var result = new PartiesResult(
+            input.partyIdType(), input.partyId(), input.subId(), input.response());
         this.pubSubClient.publish(channel, result);
         LOGGER.info("Published parties result to channel : {}, result : {}", channel, result);
 

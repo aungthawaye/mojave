@@ -75,12 +75,13 @@ public class PositionLimitExceededException extends CheckedDomainException {
                                           final BigDecimal netDebitCap,
                                           final TransactionId transactionId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{positionId.getId().toString(),
-                                                             amount.stripTrailingZeros().toPlainString(),
-                                                             position.stripTrailingZeros().toPlainString(),
-                                                             reserved.stripTrailingZeros().toPlainString(),
-                                                             netDebitCap.stripTrailingZeros().toPlainString(),
-                                                             transactionId.getId().toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{positionId.getId().toString(),
+                                         amount.stripTrailingZeros().toPlainString(),
+                                         position.stripTrailingZeros().toPlainString(),
+                                         reserved.stripTrailingZeros().toPlainString(),
+                                         netDebitCap.stripTrailingZeros().toPlainString(),
+                                         transactionId.getId().toString()}));
 
         this.positionId = positionId;
         this.amount = amount;
@@ -99,7 +100,8 @@ public class PositionLimitExceededException extends CheckedDomainException {
         final var netDebitCap = new BigDecimal(extras.get(Keys.NET_DEBIT_CAP));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
-        return new PositionLimitExceededException(positionId, amount, position, reserved, netDebitCap, transactionId);
+        return new PositionLimitExceededException(
+            positionId, amount, position, reserved, netDebitCap, transactionId);
     }
 
     @Override

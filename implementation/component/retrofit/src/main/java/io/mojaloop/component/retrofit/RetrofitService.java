@@ -66,7 +66,8 @@ public class RetrofitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetrofitService.class);
 
-    public static <RES, E> Response<RES> invoke(Call<RES> invocation, ErrorDecoder<E> errorDecoder) throws InvocationException {
+    public static <RES, E> Response<RES> invoke(Call<RES> invocation, ErrorDecoder<E> errorDecoder)
+        throws InvocationException {
 
         E decodedErrorResponse = null;
         String errorResponseBody = null;
@@ -84,9 +85,11 @@ public class RetrofitService {
                         errorResponseBody = responseBody.string();
 
                         if (errorDecoder != null) {
-                            decodedErrorResponse = errorDecoder.decode(response.code(), errorResponseBody);
+                            decodedErrorResponse = errorDecoder.decode(
+                                response.code(), errorResponseBody);
                             LOGGER.error("Decoded error response : {}", decodedErrorResponse);
-                            throw new InvocationException(response.code(), decodedErrorResponse, errorResponseBody);
+                            throw new InvocationException(
+                                response.code(), decodedErrorResponse, errorResponseBody);
                         }
 
                         LOGGER.error("Error response : {}", responseBody.string());
@@ -118,19 +121,33 @@ public class RetrofitService {
     public interface ForwardingService {
 
         @DELETE
-        Call<Void> delete(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
+        Call<Void> delete(@Url String url,
+                          @HeaderMap Map<String, String> headers,
+                          @QueryMap Map<String, String> params,
+                          @Body RequestBody body);
 
         @GET
-        Call<Void> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params);
+        Call<Void> get(@Url String url,
+                       @HeaderMap Map<String, String> headers,
+                       @QueryMap Map<String, String> params);
 
         @PATCH
-        Call<Void> patch(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
+        Call<Void> patch(@Url String url,
+                         @HeaderMap Map<String, String> headers,
+                         @QueryMap Map<String, String> params,
+                         @Body RequestBody body);
 
         @POST
-        Call<Void> post(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
+        Call<Void> post(@Url String url,
+                        @HeaderMap Map<String, String> headers,
+                        @QueryMap Map<String, String> params,
+                        @Body RequestBody body);
 
         @PUT
-        Call<Void> put(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> params, @Body RequestBody body);
+        Call<Void> put(@Url String url,
+                       @HeaderMap Map<String, String> headers,
+                       @QueryMap Map<String, String> params,
+                       @Body RequestBody body);
 
     }
 
@@ -299,8 +316,8 @@ public class RetrofitService {
             return this;
         }
 
-        public Builder<S> withMutualTLS(InputStream clientCertInputStream,
-                                        String clientCertPassword,
+        public Builder<S> withMutualTLS(InputStream keyStoreInputStream,
+                                        String keyStorePassword,
                                         InputStream trustStoreInputStream,
                                         String trustStorePassword,
                                         boolean ignoreHostnameVerification) {
@@ -310,15 +327,17 @@ public class RetrofitService {
             try {
 
                 KeyStore keyStore = KeyStore.getInstance("PKCS12");
-                keyStore.load(clientCertInputStream, clientCertPassword.toCharArray());
+                keyStore.load(keyStoreInputStream, keyStorePassword.toCharArray());
 
-                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                kmf.init(keyStore, clientCertPassword.toCharArray());
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance(
+                    KeyManagerFactory.getDefaultAlgorithm());
+                kmf.init(keyStore, keyStorePassword.toCharArray());
 
                 KeyStore trustStore = KeyStore.getInstance("PKCS12");
                 trustStore.load(trustStoreInputStream, trustStorePassword.toCharArray());
 
-                TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(
+                    TrustManagerFactory.getDefaultAlgorithm());
                 tmf.init(trustStore);
 
                 SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -328,10 +347,14 @@ public class RetrofitService {
 
                 this.httpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), tm);
 
-                okhttp3.ConnectionSpec spec = new okhttp3.ConnectionSpec.Builder(okhttp3.ConnectionSpec.MODERN_TLS).tlsVersions(okhttp3.TlsVersion.TLS_1_2).build();
+                okhttp3.ConnectionSpec spec = new okhttp3.ConnectionSpec.Builder(
+                    okhttp3.ConnectionSpec.MODERN_TLS)
+                                                  .tlsVersions(okhttp3.TlsVersion.TLS_1_2)
+                                                  .build();
 
                 this.httpClientBuilder.connectionSpecs(List.of(spec));
-                this.httpClientBuilder.hostnameVerifier((hostname, session) -> ignoreHostnameVerification);
+                this.httpClientBuilder.hostnameVerifier(
+                    (hostname, session) -> ignoreHostnameVerification);
 
             } catch (Exception e) {
                 throw new RuntimeException("Failed to configure mTLS", e);
@@ -344,9 +367,12 @@ public class RetrofitService {
 
             LOGGER.debug("Configured withTimeouts.");
 
-            this.httpClientBuilder.connectTimeout(Duration.ofSeconds(connectTimeout <= 0 ? 60 : connectTimeout));
-            this.httpClientBuilder.callTimeout(Duration.ofSeconds(callTimeout <= 0 ? 60 : callTimeout));
-            this.httpClientBuilder.readTimeout(Duration.ofSeconds(readTimeout <= 0 ? 60 : readTimeout));
+            this.httpClientBuilder.connectTimeout(
+                Duration.ofSeconds(connectTimeout <= 0 ? 60 : connectTimeout));
+            this.httpClientBuilder.callTimeout(
+                Duration.ofSeconds(callTimeout <= 0 ? 60 : callTimeout));
+            this.httpClientBuilder.readTimeout(
+                Duration.ofSeconds(readTimeout <= 0 ? 60 : readTimeout));
 
             return this;
         }
@@ -362,7 +388,9 @@ public class RetrofitService {
 
         private final String originalErrorMessage;
 
-        public InvocationException(int responseStatusCode, Object decodedErrorResponse, String originalErrorMessage) {
+        public InvocationException(int responseStatusCode,
+                                   Object decodedErrorResponse,
+                                   String originalErrorMessage) {
 
             super();
 

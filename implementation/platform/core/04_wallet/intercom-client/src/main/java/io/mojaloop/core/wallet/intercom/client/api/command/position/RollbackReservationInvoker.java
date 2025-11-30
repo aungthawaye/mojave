@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.intercom.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +37,8 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
 
     private final ObjectMapper objectMapper;
 
-    public RollbackReservationInvoker(final WalletIntercomService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public RollbackReservationInvoker(final WalletIntercomService.PositionCommand positionCommand,
+                                      final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -50,8 +52,12 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.rollback(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.positionCommand.rollback(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 

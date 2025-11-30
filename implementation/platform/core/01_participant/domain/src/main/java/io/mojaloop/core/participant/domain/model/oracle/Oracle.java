@@ -55,7 +55,8 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_oracle", uniqueConstraints = {@UniqueConstraint(name = "pcp_oracle_type_UK", columnNames = {"type"})})
+@Table(name = "pcp_oracle",
+       uniqueConstraints = {@UniqueConstraint(name = "pcp_oracle_type_UK", columnNames = {"type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Oracle extends JpaEntity<OracleId> implements DataConversion<OracleData> {
 
@@ -125,7 +126,9 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
     @Override
     public OracleData convert() {
 
-        return new OracleData(this.id, this.type, this.name, this.baseUrl, this.activationStatus, this.terminationStatus);
+        return new OracleData(
+            this.id, this.type, this.name, this.baseUrl, this.activationStatus,
+            this.terminationStatus);
     }
 
     public void deactivate() {

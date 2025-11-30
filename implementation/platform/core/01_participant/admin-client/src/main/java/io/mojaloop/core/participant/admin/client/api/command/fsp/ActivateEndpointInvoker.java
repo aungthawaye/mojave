@@ -40,7 +40,8 @@ public class ActivateEndpointInvoker implements ActivateEndpointCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ActivateEndpointInvoker(ParticipantAdminService.FspCommand fspCommand, ObjectMapper objectMapper) {
+    public ActivateEndpointInvoker(ParticipantAdminService.FspCommand fspCommand,
+                                   ObjectMapper objectMapper) {
 
         assert fspCommand != null;
         assert objectMapper != null;
@@ -49,12 +50,16 @@ public class ActivateEndpointInvoker implements ActivateEndpointCommand {
         this.objectMapper = objectMapper;
     }
 
-    public ActivateEndpointCommand.Output execute(ActivateEndpointCommand.Input input)  {
+    public ActivateEndpointCommand.Output execute(ActivateEndpointCommand.Input input) {
 
         try {
 
-            return RetrofitService.invoke(this.fspCommand.activateEndpoint(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.fspCommand.activateEndpoint(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -64,7 +69,7 @@ public class ActivateEndpointInvoker implements ActivateEndpointCommand {
 
                 var throwable = ParticipantExceptionResolver.resolve(errorResponse);
 
-                if(throwable instanceof UncheckedDomainException ude) {
+                if (throwable instanceof UncheckedDomainException ude) {
                     throw ude;
                 }
             }

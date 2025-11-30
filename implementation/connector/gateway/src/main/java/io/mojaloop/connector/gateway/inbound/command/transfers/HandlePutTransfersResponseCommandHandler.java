@@ -30,7 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResponseCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutTransfersResponseCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePutTransfersResponseCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
@@ -47,7 +48,8 @@ class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResp
         var channel = PubSubKeys.forTransfers(input.transferId());
         LOGGER.info("Publishing transfers result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new TransfersResult(input.transferId(), input.response()));
+        this.pubSubClient.publish(
+            channel, new TransfersResult(input.transferId(), input.response()));
         LOGGER.info("Published transfers result to channel : {}", channel);
 
         return new Output();

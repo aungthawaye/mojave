@@ -21,6 +21,7 @@
 package io.mojaloop.platform.core.transfer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStore;
@@ -37,7 +38,6 @@ import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -45,22 +45,26 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.util.List;
 
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-@Configuration(proxyBeanMethods = false)
+
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service")
+@ComponentScan(basePackages = "io.mojaloop.platform.core.transfer.service.controller")
 @Import(value = {TransferDomainConfiguration.class,
+                 RequestIdMdcConfiguration.class,
                  ParticipantIntercomClientConfiguration.class,
                  WalletIntercomClientConfiguration.class,
                  TransactionIntercomClientConfiguration.class,
                  FspiopServiceConfiguration.class})
-public class TransferServiceConfiguration implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
+final class TransferServiceConfiguration
+    implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
 
     private final ParticipantStore participantStore;
 
     private final ObjectMapper objectMapper;
 
-    public TransferServiceConfiguration(ParticipantStore participantStore, FspCodeList fspCodeList, ObjectMapper objectMapper) {
+    public TransferServiceConfiguration(ParticipantStore participantStore,
+                                        FspCodeList fspCodeList,
+                                        ObjectMapper objectMapper) {
 
         assert participantStore != null;
         assert fspCodeList != null;
@@ -85,7 +89,8 @@ public class TransferServiceConfiguration implements TransferDomainConfiguration
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }

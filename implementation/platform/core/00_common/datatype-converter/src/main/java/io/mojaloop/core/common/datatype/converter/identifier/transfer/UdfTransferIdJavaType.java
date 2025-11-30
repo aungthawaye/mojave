@@ -80,7 +80,8 @@ public class UdfTransferIdJavaType extends AbstractClassJavaType<UdfTransferId> 
             case UdfTransferId udfTransferId -> udfTransferId;
             case String s -> new UdfTransferId(s);
             case Character c -> new UdfTransferId(c.toString());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

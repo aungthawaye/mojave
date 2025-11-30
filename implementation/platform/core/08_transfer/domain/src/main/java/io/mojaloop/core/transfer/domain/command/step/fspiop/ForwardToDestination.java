@@ -17,8 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
@@ -30,9 +32,6 @@ import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ForwardToDestination {
@@ -54,25 +53,27 @@ public class ForwardToDestination {
 
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+
+        LOGGER.info("ForwardToDestination : input : ({})", ObjectLogger.log(input));
+
         final var CONTEXT = input.context;
-        final var STEP_NAME = "forward-to-destination";
+        final var STEP_NAME = "ForwardToDestination";
 
         try {
 
-            LOGGER.info("Forwarding request to destination FSP: input [{}]", input);
-
-            var before = new HashMap<String, String>();
-
-            before.put("payee", input.payeeFspCode());
-            before.put("url", input.baseUrl());
-
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, before, StepPhase.BEFORE));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.BEFORE));
 
             this.forwardRequest.forward(input.baseUrl(), input.request());
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("-", "-"), StepPhase.AFTER));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.info("Forwarded request to destination FSP successfully");
+            var endAt = System.nanoTime();
+            LOGGER.info("ForwardToDestination : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (FspiopException e) {
 
@@ -84,12 +85,19 @@ public class ForwardToDestination {
 
             LOGGER.error("Error:", e);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(input.transactionId(), STEP_NAME, CONTEXT, Map.of("error", e.getMessage()), StepPhase.ERROR));
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context, TransactionId transactionId, String payeeFspCode, String baseUrl, FspiopHttpRequest request) { }
+    public record Input(String context,
+                        TransactionId transactionId,
+                        String destinationFspCode,
+                        String baseUrl,
+                        FspiopHttpRequest request) { }
 
 }

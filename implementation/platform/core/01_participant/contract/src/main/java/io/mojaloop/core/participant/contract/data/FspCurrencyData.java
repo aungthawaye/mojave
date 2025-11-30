@@ -47,7 +47,11 @@ import io.mojaloop.fspiop.spec.core.Currency;
 import java.time.Instant;
 import java.util.Objects;
 
-public record FspCurrencyData(FspCurrencyId fspCurrencyId, Currency currency, ActivationStatus activationStatus, Instant createdAt, FspId fspId) {
+public record FspCurrencyData(FspCurrencyId fspCurrencyId,
+                              Currency currency,
+                              ActivationStatus activationStatus,
+                              Instant createdAt,
+                              FspId fspId) {
 
     @Override
     public boolean equals(Object o) {

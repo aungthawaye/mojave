@@ -28,7 +28,11 @@ public interface PutPartiesErrorCommand {
 
     Output execute(Input input);
 
-    record Input(FspiopHttpRequest request, PartyIdType partyIdType, String partyId, String subId, ErrorInformationObject error) { }
+    record Input(FspiopHttpRequest request,
+                 PartyIdType partyIdType,
+                 String partyId,
+                 String subId,
+                 ErrorInformationObject error) { }
 
     record Output() { }
 

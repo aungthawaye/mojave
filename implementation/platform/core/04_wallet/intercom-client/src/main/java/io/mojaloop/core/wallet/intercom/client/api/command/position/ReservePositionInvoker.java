@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.intercom.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
+import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +39,8 @@ public class ReservePositionInvoker implements ReservePositionCommand {
 
     private final ObjectMapper objectMapper;
 
-    public ReservePositionInvoker(final WalletIntercomService.PositionCommand positionCommand, final ObjectMapper objectMapper) {
+    public ReservePositionInvoker(final WalletIntercomService.PositionCommand positionCommand,
+                                  final ObjectMapper objectMapper) {
 
         assert positionCommand != null;
         assert objectMapper != null;
@@ -47,12 +50,18 @@ public class ReservePositionInvoker implements ReservePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws NoPositionUpdateForTransactionException, PositionLimitExceededException {
+    public Output execute(final Input input) throws
+                                             NoPositionUpdateForTransactionException,
+                                             PositionLimitExceededException,
+                                             PositionNotExistException {
 
         try {
 
-            return RetrofitService.invoke(this.positionCommand.reserve(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService.invoke(
+                this.positionCommand.reserve(input),
+                (status, errorResponseBody) -> RestErrorResponse.decode(
+                    errorResponseBody,
+                    this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -66,6 +75,7 @@ public class ReservePositionInvoker implements ReservePositionCommand {
                     case NoPositionUpdateForTransactionException e1 -> throw e1;
                     case PositionLimitExceededException e2 -> throw e2;
                     case UncheckedDomainException ude -> throw ude;
+                    case PositionNotExistException pne -> throw pne;
                     default -> {
                     }
                 }

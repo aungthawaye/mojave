@@ -34,7 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Primary
 public class ActivateAccountCommandHandler implements ActivateAccountCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateAccountCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ActivateAccountCommandHandler.class);
 
     private final AccountRepository accountRepository;
 
@@ -51,7 +52,9 @@ public class ActivateAccountCommandHandler implements ActivateAccountCommand {
 
         LOGGER.info("Executing ActivateAccountCommand with input: {}", input);
 
-        var account = this.accountRepository.findById(input.accountId()).orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
+        var account = this.accountRepository
+                          .findById(input.accountId())
+                          .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
         LOGGER.info("Found Account with id: {}", input.accountId());
 
         account.activate();

@@ -31,13 +31,15 @@ import org.springframework.stereotype.Service;
 @Service
 class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleGetPartiesRequestCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandleGetPartiesRequestCommandHandler.class.getName());
 
     private final FspCoreAdapter fspCoreAdapter;
 
     private final PutParties putParties;
 
-    public HandleGetPartiesRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutParties putParties) {
+    public HandleGetPartiesRequestCommandHandler(FspCoreAdapter fspCoreAdapter,
+                                                 PutParties putParties) {
 
         assert fspCoreAdapter != null;
         assert putParties != null;
@@ -55,12 +57,14 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
         try {
 
             LOGGER.info("Calling FSP adapter to get parties for : {}", input);
-            var response = this.fspCoreAdapter.getParties(payer, input.partyIdType(), input.partyId(), input.subId());
+            var response = this.fspCoreAdapter.getParties(
+                payer, input.partyIdType(), input.partyId(), input.subId());
             LOGGER.info("FSP adapter returned parties : {}", response);
 
             LOGGER.info("Responding the result to Hub : {}", response);
             if (hasSubId) {
-                this.putParties.putParties(payer, input.partyIdType(), input.partyId(), input.subId(), response);
+                this.putParties.putParties(
+                    payer, input.partyIdType(), input.partyId(), input.subId(), response);
             } else {
                 this.putParties.putParties(payer, input.partyIdType(), input.partyId(), response);
             }
@@ -69,9 +73,11 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
         } catch (FspiopException e) {
 
             if (hasSubId) {
-                this.putParties.putPartiesError(payer, input.partyIdType(), input.partyId(), input.subId(), e.toErrorObject());
+                this.putParties.putPartiesError(
+                    payer, input.partyIdType(), input.partyId(), input.subId(), e.toErrorObject());
             } else {
-                this.putParties.putPartiesError(payer, input.partyIdType(), input.partyId(), e.toErrorObject());
+                this.putParties.putPartiesError(
+                    payer, input.partyIdType(), input.partyId(), e.toErrorObject());
             }
         }
 

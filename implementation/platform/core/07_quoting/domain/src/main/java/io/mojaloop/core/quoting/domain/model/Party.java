@@ -27,6 +27,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 @Embeddable
-public record Party(@Column(name = "party_id_type", nullable = false) @Enumerated(EnumType.STRING) PartyIdType partyIdType,
+public record Party(@Column(name = "party_id_type",
+                            nullable = false) @Enumerated(EnumType.STRING) PartyIdType partyIdType,
                     @Column(name = "party_id", nullable = false) String partyId,
                     @Column(name = "sub_id") String subId) { }

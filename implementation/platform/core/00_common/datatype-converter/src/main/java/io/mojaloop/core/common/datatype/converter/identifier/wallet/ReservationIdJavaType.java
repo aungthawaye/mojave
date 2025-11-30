@@ -83,7 +83,8 @@ public class ReservationIdJavaType extends AbstractClassJavaType<ReservationId> 
             case null -> null;
             case ReservationId reservationId -> reservationId;
             case Number n -> new ReservationId(n.longValue());
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

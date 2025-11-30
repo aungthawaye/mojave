@@ -50,22 +50,20 @@ public class CloseTransactionListener {
         this.closeTransactionCommand = closeTransactionCommand;
     }
 
-    @KafkaListener(topics = TopicNames.CLOSE_TRANSACTION, containerFactory = LISTENER_CONTAINER_FACTORY, groupId = GROUP_ID)
+    @KafkaListener(topics = TopicNames.CLOSE_TRANSACTION,
+                   containerFactory = LISTENER_CONTAINER_FACTORY,
+                   groupId = GROUP_ID)
     public void handle(CloseTransactionCommand.Input input, Acknowledgment ack) {
 
         try {
-
-            LOGGER.info("Received CloseTransactionCommand with input: {}", input);
 
             this.closeTransactionCommand.execute(input);
 
             ack.acknowledge();
 
-            LOGGER.info("Acknowledged CloseTransactionCommand with input: {}", input);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling CloseTransactionCommand with input: {}", input, e);
+            LOGGER.error("Error:", e);
         }
     }
 
@@ -80,7 +78,9 @@ public class CloseTransactionListener {
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
-            super(bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs, autoCommit, ackMode);
+            super(
+                bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs,
+                autoCommit, ackMode);
         }
 
     }

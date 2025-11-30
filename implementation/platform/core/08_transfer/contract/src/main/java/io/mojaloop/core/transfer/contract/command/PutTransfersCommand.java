@@ -28,7 +28,9 @@ public interface PutTransfersCommand {
 
     Output execute(Input input);
 
-    record Input(FspiopHttpRequest request, UdfTransferId udfTransferId, TransfersIDPutResponse transfersIDPutResponse) { }
+    record Input(FspiopHttpRequest request,
+                 UdfTransferId udfTransferId,
+                 TransfersIDPutResponse transfersIDPutResponse) { }
 
     record Output() { }
 

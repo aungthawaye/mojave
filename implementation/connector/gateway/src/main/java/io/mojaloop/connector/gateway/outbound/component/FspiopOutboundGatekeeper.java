@@ -22,9 +22,8 @@ package io.mojaloop.connector.gateway.outbound.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.mojaloop.component.misc.crypto.Rs256;
-import io.mojaloop.component.misc.jwt.JwtBase64Util;
-import io.mojaloop.component.misc.jwt.Rs256Jwt;
+import io.mojaloop.component.misc.crypto.KeyPairs;
+import io.mojaloop.component.misc.jwt.Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
@@ -65,7 +64,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
         try {
 
-            this.publicKey = Rs256.publicKeyFromPem(outboundSettings.publicKeyPem());
+            this.publicKey = KeyPairs.Rsa.publicKeyOf(outboundSettings.publicKeyPem());
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
@@ -73,38 +72,46 @@ public class FspiopOutboundGatekeeper implements Authenticator {
     }
 
     @Override
-    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest) throws AuthenticationFailureException {
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
+        throws AuthenticationFailureException {
 
         if (!this.outboundSettings.secured()) {
 
-            return new UsernamePasswordAuthenticationToken("FSP", "skipped", new ArrayList<SimpleGrantedAuthority>() { });
+            return new UsernamePasswordAuthenticationToken(
+                "FSP", "skipped", new ArrayList<SimpleGrantedAuthority>() { });
         }
 
         var authorization = cachedServletRequest.getHeader("Authorization");
 
-        if (authorization == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (authorization == null ||
+                SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
-                new FspiopException(FspiopErrors.MISSING_MANDATORY_ELEMENT, "Authorization header or its value is missing."));
+            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(
+                HttpServletResponse.SC_UNAUTHORIZED, new FspiopException(
+                FspiopErrors.MISSING_MANDATORY_ELEMENT,
+                "Authorization header or its value is missing."));
         }
 
         var payload = cachedServletRequest.getCachedBodyAsString();
-        var base64Payload = JwtBase64Util.encode(payload);
+        var base64Payload = Jwt.encode(payload);
         var parts = authorization.split("\\.", -1);
         var header = parts[0];
         var signature = parts[2];
 
-        var verificationOk = Rs256Jwt.verify(this.publicKey, new Rs256Jwt.Token(header, base64Payload, signature));
+        var verificationOk = Jwt.verify(
+            this.publicKey, new Jwt.Token(header, base64Payload, signature));
 
         if (!verificationOk) {
 
             LOGGER.error("Signature verification failed when using FSP's public key.");
-            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(HttpServletResponse.SC_UNAUTHORIZED,
+            throw new FspiopOutboundGatekeeper.GatekeeperFailureException(
+                HttpServletResponse.SC_UNAUTHORIZED,
                 new FspiopException(FspiopErrors.INVALID_SIGNATURE, "Invalid signature."));
         }
 
         LOGGER.debug("Signature verification successful");
-        return new UsernamePasswordAuthenticationToken("FSP", authorization, new ArrayList<SimpleGrantedAuthority>() { });
+        return new UsernamePasswordAuthenticationToken(
+            "FSP", authorization, new ArrayList<SimpleGrantedAuthority>() { });
     }
 
     public static class GatekeeperFailureException extends AuthenticationFailureException {
@@ -155,8 +162,9 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
                 } else {
 
-                    var error = new ErrorInformationObject().errorInformation(
-                        new ErrorInformation(FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(), FspiopErrors.GENERIC_CLIENT_ERROR.description()));
+                    var error = new ErrorInformationObject().errorInformation(new ErrorInformation(
+                        FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(),
+                        FspiopErrors.GENERIC_CLIENT_ERROR.description()));
 
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     writer.write(this.objectMapper.writeValueAsString(error));
@@ -169,7 +177,8 @@ public class FspiopOutboundGatekeeper implements Authenticator {
                 String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.errorType().getCode();
                 String errorDescription = FspiopErrors.GENERIC_SERVER_ERROR.description();
 
-                var json = "{\"errorInformation\":{\"errorCode\": \"" + errorCode + "\",\"errorDescription\":\"" + errorDescription + "\"}}";
+                var json = "{\"errorInformation\":{\"errorCode\": \"" + errorCode +
+                               "\",\"errorDescription\":\"" + errorDescription + "\"}}";
 
                 LOGGER.error("Problem occurred :", e);
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

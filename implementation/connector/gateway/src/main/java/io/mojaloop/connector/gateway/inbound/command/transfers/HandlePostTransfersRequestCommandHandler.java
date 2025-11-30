@@ -30,13 +30,15 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersRequestCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePostTransfersRequestCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePostTransfersRequestCommandHandler.class.getName());
 
     private final FspCoreAdapter fspCoreAdapter;
 
     private final PutTransfers putTransfers;
 
-    public HandlePostTransfersRequestCommandHandler(FspCoreAdapter fspCoreAdapter, PutTransfers putTransfers) {
+    public HandlePostTransfersRequestCommandHandler(FspCoreAdapter fspCoreAdapter,
+                                                    PutTransfers putTransfers) {
 
         assert fspCoreAdapter != null;
         assert putTransfers != null;

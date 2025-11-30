@@ -34,13 +34,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeactivateHubCurrencyInvoker implements DeactivateHubCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateHubCurrencyInvoker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        DeactivateHubCurrencyInvoker.class);
 
     private final ParticipantAdminService.HubCommands hubCommands;
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateHubCurrencyInvoker(final ParticipantAdminService.HubCommands hubCommands, final ObjectMapper objectMapper) {
+    public DeactivateHubCurrencyInvoker(final ParticipantAdminService.HubCommands hubCommands,
+                                        final ObjectMapper objectMapper) {
 
         assert hubCommands != null;
         assert objectMapper != null;
@@ -54,8 +56,12 @@ public class DeactivateHubCurrencyInvoker implements DeactivateHubCurrencyComman
 
         try {
 
-            return RetrofitService.invoke(this.hubCommands.deactivateHubCurrency(input), (status, errorResponseBody) -> RestErrorResponse.decode(errorResponseBody, this.objectMapper))
-                                  .body();
+            return RetrofitService
+                       .invoke(
+                           this.hubCommands.deactivateHubCurrency(input),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
 
         } catch (RetrofitService.InvocationException e) {
 
@@ -73,4 +79,5 @@ public class DeactivateHubCurrencyInvoker implements DeactivateHubCurrencyComman
             throw new RuntimeException(e);
         }
     }
+
 }

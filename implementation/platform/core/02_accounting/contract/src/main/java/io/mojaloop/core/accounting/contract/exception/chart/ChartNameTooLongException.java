@@ -51,7 +51,9 @@ public class ChartNameTooLongException extends UncheckedDomainException {
 
     public static final String CODE = "CHART_NAME_TOO_LONG";
 
-    private static final String TEMPLATE = "Chart Name is too long. Must not exceed " + StringSizeConstraints.MAX_NAME_TITLE_LENGTH + " characters.";
+    private static final String TEMPLATE =
+        "Chart Name is too long. Must not exceed " + StringSizeConstraints.MAX_NAME_TITLE_LENGTH +
+            " characters.";
 
     public ChartNameTooLongException() {
 

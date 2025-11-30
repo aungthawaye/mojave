@@ -83,7 +83,9 @@ import static java.sql.Types.BIGINT;
  */
 @Getter
 @Entity
-@Table(name = "pcp_fsp", uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_fsp_code_UK", columnNames = {"fsp_code"})})
+@Table(name = "pcp_fsp",
+       uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_fsp_code_UK",
+                                              columnNames = {"fsp_code"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
@@ -101,11 +103,15 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "activation_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "activation_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(name = "termination_status",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
@@ -114,15 +120,26 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     protected Instant createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hub_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "fsp_hub_FK"))
+    @JoinColumn(name = "hub_id",
+                nullable = false,
+                updatable = false,
+                foreignKey = @ForeignKey(name = "fsp_hub_FK"))
     protected Hub hub;
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "fsp", cascade = {CascadeType.ALL}, orphanRemoval = true, targetEntity = FspCurrency.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "fsp",
+               cascade = {CascadeType.ALL},
+               orphanRemoval = true,
+               targetEntity = FspCurrency.class,
+               fetch = FetchType.EAGER)
     protected Set<FspCurrency> currencies = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "fsp", cascade = {CascadeType.ALL}, orphanRemoval = true, targetEntity = FspEndpoint.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "fsp",
+               cascade = {CascadeType.ALL},
+               orphanRemoval = true,
+               targetEntity = FspEndpoint.class,
+               fetch = FetchType.EAGER)
     protected Set<FspEndpoint> endpoints = new HashSet<>();
 
     public Fsp(Hub hub, FspCode fspCode, String name) {
@@ -140,7 +157,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public Optional<FspCurrency> activate(Currency currency) {
 
-        var fspCurrency = this.currencies.stream().filter(f -> f.getCurrency().equals(currency)).findFirst();
+        var fspCurrency = this.currencies
+                              .stream()
+                              .filter(f -> f.getCurrency().equals(currency))
+                              .findFirst();
 
         if (fspCurrency.isPresent()) {
 
@@ -202,7 +222,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         assert type != null;
         assert baseUrl != null;
 
-        var optEndpoint = this.endpoints.stream().filter(fspEndpoint -> fspEndpoint.getType() == type).findFirst();
+        var optEndpoint = this.endpoints
+                              .stream()
+                              .filter(fspEndpoint -> fspEndpoint.getType() == type)
+                              .findFirst();
 
         if (optEndpoint.isEmpty()) {
             return optEndpoint;
@@ -218,9 +241,17 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     @Override
     public FspData convert() {
 
-        return new FspData(this.getId(), this.getFspCode(), this.getName(), this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
-            this.getEndpoints().stream().map(FspEndpoint::convert).collect(Collectors.toMap(FspEndpointData::type, Function.identity(), (existing, replacement) -> replacement)),
-            this.activationStatus, this.terminationStatus);
+        return new FspData(
+            this.getId(), this.getFspCode(), this.getName(),
+            this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
+            this
+                .getEndpoints()
+                .stream()
+                .map(FspEndpoint::convert)
+                .collect(Collectors.toMap(
+                    FspEndpointData::type, Function.identity(),
+                    (existing, replacement) -> replacement)), this.activationStatus,
+            this.terminationStatus);
     }
 
     public void deactivate() {
@@ -234,7 +265,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
         assert currency != null;
 
-        var optSupportedCurrency = this.currencies.stream().filter(sc -> sc.getCurrency() == currency).findFirst();
+        var optSupportedCurrency = this.currencies
+                                       .stream()
+                                       .filter(sc -> sc.getCurrency() == currency)
+                                       .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
             return optSupportedCurrency;
@@ -249,7 +283,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
         assert type != null;
 
-        var optEndpoint = this.endpoints.stream().filter(fspEndpoint -> fspEndpoint.getType() == type).findFirst();
+        var optEndpoint = this.endpoints
+                              .stream()
+                              .filter(fspEndpoint -> fspEndpoint.getType() == type)
+                              .findFirst();
 
         if (optEndpoint.isEmpty()) {
             return optEndpoint;
@@ -314,7 +351,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
         assert currency != null;
 
-        return this.currencies.stream().anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
+        return this.currencies
+                   .stream()
+                   .anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
     }
 
     public Fsp name(String name) {

@@ -65,7 +65,8 @@ public class FailedToCommitReservationException extends CheckedDomainException {
 
     public static FailedToCommitReservationException from(final Map<String, String> extras) {
 
-        final var reservationId = new PositionUpdateId(Long.valueOf(extras.get(Keys.RESERVATION_ID)));
+        final var reservationId = new PositionUpdateId(
+            Long.valueOf(extras.get(Keys.RESERVATION_ID)));
 
         return new FailedToCommitReservationException(reservationId);
     }

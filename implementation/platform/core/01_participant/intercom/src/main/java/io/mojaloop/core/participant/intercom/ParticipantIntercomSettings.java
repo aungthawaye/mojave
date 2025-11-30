@@ -20,12 +20,14 @@
 
 package io.mojaloop.core.participant.intercom;
 
+import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import org.springframework.context.annotation.Bean;
 
-final class ParticipantIntercomSettings implements ParticipantIntercomConfiguration.RequiredSettings {
+final class ParticipantIntercomSettings
+    implements ParticipantIntercomConfiguration.RequiredSettings {
 
     @Bean
     @Override
@@ -36,14 +38,27 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
 
     @Bean
     @Override
+    public FlywayMigration.Settings participantFlywaySettings() {
+
+        return new FlywayMigration.Settings(
+            System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
+            System.getenv("PCP_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
+            new String[]{"classpath:migration/participant"});
+
+    }
+
+    @Bean
+    @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv().getOrDefault("PCP_READ_DB_URL", "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("PCP_READ_DB_USER", "root"), System.getenv().getOrDefault("PCP_READ_DB_PASSWORD", "password"), false);
+            System.getenv("PCP_READ_DB_URL"), System.getenv("PCP_READ_DB_USER"),
+            System.getenv("PCP_READ_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool("participant-intercom-read", Integer.parseInt(System.getenv().getOrDefault("PCP_READ_DB_MIN_POOL_SIZE", "2")),
-            Integer.parseInt(System.getenv().getOrDefault("PCP_READ_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
+            "participant-intercom-read",
+            Integer.parseInt(System.getenv("PCP_READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("PCP_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -53,11 +68,13 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv().getOrDefault("PCP_WRITE_DB_URL", "jdbc:mysql://localhost:3306/ml_participant?createDatabaseIfNotExist=true"),
-            System.getenv().getOrDefault("PCP_WRITE_DB_USER", "root"), System.getenv().getOrDefault("PCP_WRITE_DB_PASSWORD", "password"), false);
+            System.getenv("PCP_WRITE_DB_URL"), System.getenv("PCP_WRITE_DB_USER"),
+            System.getenv("PCP_WRITE_DB_PASSWORD"), false);
 
-        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool("participant-intercom-write",
-            Integer.parseInt(System.getenv().getOrDefault("PCP_WRITE_DB_MIN_POOL_SIZE", "2")), Integer.parseInt(System.getenv().getOrDefault("PCP_WRITE_DB_MAX_POOL_SIZE", "10")));
+        var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
+            "participant-intercom-write",
+            Integer.parseInt(System.getenv("PCP_WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("PCP_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -73,7 +90,8 @@ final class ParticipantIntercomSettings implements ParticipantIntercomConfigurat
     @Override
     public ParticipantIntercomConfiguration.TomcatSettings tomcatSettings() {
 
-        return new ParticipantIntercomConfiguration.TomcatSettings(Integer.parseInt(System.getenv().getOrDefault("PARTICIPANT_INTERCOM_PORT", "4202")));
+        return new ParticipantIntercomConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("PARTICIPANT_INTERCOM_PORT")));
     }
 
 }

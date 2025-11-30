@@ -62,7 +62,9 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {ChartEntryCacheUpdater.class})
-@Table(name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
+@Table(name = "acc_chart_entry",
+       uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK",
+                                             columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 
@@ -72,17 +74,24 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @Column(name = "chart_entry_id", nullable = false, updatable = false)
     protected ChartEntryId id;
 
-    @Column(name = "chart_entry_code", nullable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(name = "chart_entry_code",
+            nullable = false,
+            length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = ChartEntryCodeConverter.class)
     protected ChartEntryCode code;
 
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "description", nullable = false, length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(name = "description",
+            nullable = false,
+            length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
-    @Column(name = "account_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH, updatable = false)
+    @Column(name = "account_type",
+            nullable = false,
+            length = StringSizeConstraints.MAX_ENUM_LENGTH,
+            updatable = false)
     @Enumerated(EnumType.STRING)
     protected AccountType accountType;
 
@@ -91,10 +100,17 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     protected Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "chart_id", nullable = false, updatable = false, foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
+    @JoinColumn(name = "chart_id",
+                nullable = false,
+                updatable = false,
+                foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
     protected Chart chart;
 
-    public ChartEntry(Chart chart, ChartEntryCode code, String name, String description, AccountType accountType) {
+    public ChartEntry(Chart chart,
+                      ChartEntryCode code,
+                      String name,
+                      String description,
+                      AccountType accountType) {
 
         assert chart != null;
         assert code != null;
@@ -133,7 +149,9 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @Override
     public ChartEntryData convert() {
 
-        return new ChartEntryData(this.getId(), this.code, this.name, this.description, this.accountType, this.createdAt, this.chart.getId());
+        return new ChartEntryData(
+            this.getId(), this.code, this.name, this.description, this.accountType, this.createdAt,
+            this.chart.getId());
     }
 
     public ChartEntry description(String description) {

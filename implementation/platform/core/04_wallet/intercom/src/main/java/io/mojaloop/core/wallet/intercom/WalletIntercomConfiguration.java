@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,63 +23,94 @@ package io.mojaloop.core.wallet.intercom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
-import io.mojaloop.component.web.spring.mvc.JacksonWebMvcExtension;
+import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
+import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
+import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
 import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.WalletCache;
+import io.mojaloop.core.wallet.domain.cache.BalanceCache;
+import io.mojaloop.core.wallet.domain.cache.strategy.timer.BalanceTimerCache;
 import io.mojaloop.core.wallet.domain.cache.strategy.timer.PositionTimerCache;
-import io.mojaloop.core.wallet.domain.cache.strategy.timer.WalletTimerCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import io.mojaloop.core.wallet.domain.repository.BalanceRepository;
 import io.mojaloop.core.wallet.domain.repository.PositionRepository;
-import io.mojaloop.core.wallet.domain.repository.WalletRepository;
-import io.mojaloop.core.wallet.intercom.component.EmptyErrorWriter;
-import io.mojaloop.core.wallet.intercom.component.EmptyGatekeeper;
+import io.mojaloop.core.wallet.intercom.controller.component.EmptyErrorWriter;
+import io.mojaloop.core.wallet.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
+
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom")
-@Import(value = {OpenApiConfiguration.class, WalletDomainConfiguration.class, RestErrorConfiguration.class, SpringSecurityConfiguration.class})
-public class WalletIntercomConfiguration extends JacksonWebMvcExtension
-    implements WalletDomainConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredBeans, SpringSecurityConfiguration.RequiredSettings {
+@ComponentScan(basePackages = "io.mojaloop.core.wallet.intercom.controller")
+@Import(
+    value = {
+        OpenApiConfiguration.class,
+        DatatypeConfiguration.class,
+        RequestIdMdcConfiguration.class,
+        WalletDomainConfiguration.class,
+        RestErrorConfiguration.class,
+        SpringSecurityConfiguration.class})
+final class WalletIntercomConfiguration extends WebMvcExtension
+    implements WalletDomainConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredBeans,
+               SpringSecurityConfiguration.RequiredSettings {
 
     private final BalanceUpdater balanceUpdater;
 
     private final PositionUpdater positionUpdater;
 
-    private final WalletCache walletCache;
+    private final BalanceCache balanceCache;
 
     private final PositionCache positionCache;
 
     public WalletIntercomConfiguration(ObjectMapper objectMapper,
-                                       MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
-                                       MySqlPositionUpdater.PositionDbSettings positionDbSettings,
-                                       WalletRepository walletRepository,
+                                       BalanceRepository balanceRepository,
                                        PositionRepository positionRepository) {
 
         super(objectMapper);
-        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
-        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
 
-        this.walletCache = new WalletTimerCache(walletRepository, Integer.parseInt(System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-        this.positionCache = new PositionTimerCache(positionRepository, Integer.parseInt(System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
+            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
+                System.getenv("WLT_MYSQL_BALANCE_DB_URL"),
+                System.getenv("WLT_MYSQL_BALANCE_DB_USER"),
+                System.getenv("WLT_MYSQL_BALANCE_DB_PASSWORD")),
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance",
+                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
+
+        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
+            new MySqlPositionUpdater.PositionDbSettings.Connection(
+                System.getenv("WLT_MYSQL_POSITION_DB_URL"),
+                System.getenv("WLT_MYSQL_POSITION_DB_USER"),
+                System.getenv("WLT_MYSQL_POSITION_DB_PASSWORD")),
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position",
+                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
+
+        this.balanceCache = new BalanceTimerCache(
+            balanceRepository, Integer.parseInt(
+            System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+
+        this.positionCache = new PositionTimerCache(
+            positionRepository, Integer.parseInt(
+            System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
     }
 
     @Bean
@@ -126,18 +157,20 @@ public class WalletIntercomConfiguration extends JacksonWebMvcExtension
 
     @Bean
     @Override
-    public WalletCache walletCache() {
+    public BalanceCache walletCache() {
 
-        return this.walletCache;
+        return this.balanceCache;
     }
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(TomcatSettings settings) {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }
 
-    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings
+        extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

@@ -30,7 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 class HandlePutQuotesErrorCommandHandler implements HandlePutQuotesErrorCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandlePutQuotesErrorCommandHandler.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        HandlePutQuotesErrorCommandHandler.class.getName());
 
     private final PubSubClient pubSubClient;
 
@@ -47,7 +48,8 @@ class HandlePutQuotesErrorCommandHandler implements HandlePutQuotesErrorCommand 
         var channel = PubSubKeys.forQuotesError(input.quoteId());
         LOGGER.info("Publishing quotes error result to channel : {}", channel);
 
-        this.pubSubClient.publish(channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));
+        this.pubSubClient.publish(
+            channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));
         LOGGER.info("Published quotes error result to channel : {}", channel);
 
         return new Output();

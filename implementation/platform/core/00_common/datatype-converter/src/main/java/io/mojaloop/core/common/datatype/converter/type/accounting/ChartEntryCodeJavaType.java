@@ -79,7 +79,8 @@ public class ChartEntryCodeJavaType extends AbstractClassJavaType<ChartEntryCode
             case null -> null;
             case ChartEntryCode code -> code;
             case String s -> new ChartEntryCode(s);
-            default -> throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
+            default ->
+                throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
 
     }

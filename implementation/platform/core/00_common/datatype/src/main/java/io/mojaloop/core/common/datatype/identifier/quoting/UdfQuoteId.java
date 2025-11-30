@@ -68,6 +68,7 @@ public class UdfQuoteId extends EntityId<String> {
 
             return new UdfQuoteId(source);
         }
+
     }
 
 }

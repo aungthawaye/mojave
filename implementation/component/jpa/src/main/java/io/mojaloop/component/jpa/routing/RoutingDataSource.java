@@ -40,7 +40,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource implements Infr
 
         Object key = Context.get();
 
-        LOGGER.debug("determineCurrentLookupKey - key : [{}]", key);
+        LOGGER.debug("determineCurrentLookupKey - key : ({})", key);
 
         return key;
     }
