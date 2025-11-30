@@ -24,5 +24,5 @@ public enum BalanceAction {
 
     DEPOSIT,
     WITHDRAW,
-    REVERSE
+    REVERSE_WITHDRAW
 }

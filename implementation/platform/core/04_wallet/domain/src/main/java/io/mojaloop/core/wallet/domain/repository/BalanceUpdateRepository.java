@@ -35,7 +35,7 @@ public interface BalanceUpdateRepository
 
         public static Specification<BalanceUpdate> withReversalId(final BalanceUpdateId walletId) {
 
-            return (root, query, cb) -> cb.equal(root.get("reversalId"), walletId);
+            return (root, query, cb) -> cb.equal(root.get("withdrawId"), walletId);
         }
 
         public static Specification<BalanceUpdate> withWalletId(final BalanceUpdateId walletId) {

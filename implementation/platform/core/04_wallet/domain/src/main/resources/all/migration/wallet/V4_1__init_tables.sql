@@ -76,13 +76,13 @@ CREATE TABLE `wlt_balance_update`
     `description`       varchar(255) DEFAULT NULL,
     `transaction_at`    bigint       DEFAULT NULL,
     `created_at`        bigint       DEFAULT NULL,
-    `reversal_id`       bigint       DEFAULT NULL,
+    `withdraw_id`       bigint       DEFAULT NULL,
     `rec_created_at`    bigint       DEFAULT NULL,
     `rec_updated_at`    bigint       DEFAULT NULL,
     `rec_version`       int          DEFAULT NULL,
     PRIMARY KEY (`balance_update_id`),
     UNIQUE KEY `wlt_balance_update_balance_id_action_transaction_id_UK` (`balance_id`, `action`, `transaction_id`),
-    UNIQUE KEY `wlt_balance_update_reversal_id_UK` (`reversal_id`),
+    UNIQUE KEY `wlt_balance_update_withdraw_id_UK` (`withdraw_id`),
     KEY `wlt_balance_update_balance_id_action_transaction_at_idx` (`balance_id`, `action`, `transaction_at`),
     KEY `wlt_balance_update_transaction_at_idx` (`transaction_at`)
 ) ENGINE = InnoDB

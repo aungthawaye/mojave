@@ -61,7 +61,7 @@ import static java.sql.Types.BIGINT;
     @UniqueConstraint(
         name = "wlt_balance_update_balance_id_action_transaction_id_UK", columnNames = {
         "balance_id", "action", "transaction_id"}), @UniqueConstraint(
-    name = "wlt_balance_update_reversal_id_UK", columnNames = {"reversal_id"})}, indexes = {
+    name = "wlt_balance_update_withdraw_id_UK", columnNames = {"withdraw_id"})}, indexes = {
     @Index(
         name = "wlt_balance_update_balance_id_action_transaction_at_idx",
         columnList = "balance_id, action, transaction_at"), @Index(
@@ -112,9 +112,9 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId>
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @Column(name = "reversal_id")
+    @Column(name = "withdraw_id")
     @Convert(converter = BalanceUpdateIdConverter.class)
-    protected BalanceUpdateId reversalId;
+    protected BalanceUpdateId withdrawId;
 
     @Override
     public BalanceUpdateData convert() {
@@ -122,7 +122,7 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId>
         return new BalanceUpdateData(
             this.id, this.balanceId, this.action, this.transactionId, this.currency, this.amount,
             this.oldBalance, this.newBalance, this.description, this.transactionAt, this.createdAt,
-            this.reversalId);
+            this.withdrawId);
     }
 
     @Override

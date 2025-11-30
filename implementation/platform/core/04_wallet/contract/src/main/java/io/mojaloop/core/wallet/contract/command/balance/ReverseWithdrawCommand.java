@@ -35,11 +35,11 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public interface ReverseFundCommand {
+public interface ReverseWithdrawCommand {
 
     Output execute(Input input) throws ReversalFailedInWalletException;
 
-    record Input(@JsonProperty(required = true) @NotNull BalanceUpdateId reversalId,
+    record Input(@JsonProperty(required = true) @NotNull BalanceUpdateId withdrawId,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(BalanceUpdateId balanceUpdateId,
@@ -51,6 +51,6 @@ public interface ReverseFundCommand {
                   BigDecimal oldBalance,
                   BigDecimal newBalance,
                   Instant transactionAt,
-                  BalanceUpdateId reversalId) { }
+                  BalanceUpdateId withdrawId) { }
 
 }

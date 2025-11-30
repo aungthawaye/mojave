@@ -28,14 +28,14 @@ BEGIN
             SELECT 'ERROR'                       AS status,
                    p_balance_update_id           AS balance_update_id,
                    NULL                          AS balance_id,
-                   'REVERSE'                     AS action,
+                   'REVERSE_WITHDRAW'            AS action,
                    NULL                          AS transaction_id,
                    NULL                          AS currency,
                    0                             AS amount,
                    0                             AS old_balance,
                    0                             AS new_balance,
                    NULL                          AS transaction_at,
-                   p_reversing_balance_update_id AS reversal_id;
+                   p_reversing_balance_update_id AS withdraw_id;
         END;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
@@ -65,14 +65,14 @@ BEGIN
         SELECT 'REVERSAL_FAILED'             AS status,
                p_balance_update_id           AS balance_update_id,
                NULL                          AS balance_id,
-               'REVERSE'                     AS action,
+               'REVERSE_WITHDRAW'            AS action,
                NULL                          AS transaction_id,
                NULL                          AS currency,
                0                             AS amount,
                0                             AS old_balance,
                0                             AS new_balance,
                NULL                          AS transaction_at,
-               p_reversing_balance_update_id AS reversal_id;
+               p_reversing_balance_update_id AS withdraw_id;
 
         LEAVE proc_reverse;
     END IF;
@@ -100,14 +100,14 @@ BEGIN
             SELECT 'REVERSAL_FAILED'             AS status,
                    p_balance_update_id           AS balance_update_id,
                    NULL                          AS balance_id,
-                   'REVERSE'                     AS action,
+                   'REVERSE_WITHDRAW'            AS action,
                    NULL                          AS transaction_id,
                    NULL                          AS currency,
                    0                             AS amount,
                    0                             AS old_balance,
                    0                             AS new_balance,
                    NULL                          AS transaction_at,
-                   p_reversing_balance_update_id AS reversal_id;
+                   p_reversing_balance_update_id AS withdraw_id;
 
             LEAVE proc_reverse;
 
@@ -129,13 +129,13 @@ BEGIN
                                         description,
                                         transaction_at,
                                         created_at,
-                                        reversal_id,
+                                        withdraw_id,
                                         rec_created_at,
                                         rec_updated_at,
                                         rec_version)
         VALUES (p_balance_update_id,
                 v_balance_id,
-                'REVERSE',
+                'REVERSE_WITHDRAW',
                 v_transaction_id,
                 v_currency,
                 v_amount,
@@ -161,7 +161,7 @@ BEGIN
                bu.old_balance,
                bu.new_balance,
                bu.transaction_at,
-               bu.reversal_id
+               bu.withdraw_id
         FROM wlt_balance_update bu
         WHERE bu.balance_update_id = p_balance_update_id;
 
@@ -170,14 +170,14 @@ BEGIN
         SELECT 'REVERSAL_FAILED'             AS status,
                p_balance_update_id           AS balance_update_id,
                NULL                          AS balance_id,
-               'REVERSE'                     AS action,
+               'REVERSE_WITHDRAW'            AS action,
                NULL                          AS transaction_id,
                NULL                          AS currency,
                0                             AS amount,
                0                             AS old_balance,
                0                             AS new_balance,
                NULL                          AS transaction_at,
-               p_reversing_balance_update_id AS reversal_id;
+               p_reversing_balance_update_id AS withdraw_id;
 
     END IF;
 END $$

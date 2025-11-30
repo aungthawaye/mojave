@@ -18,9 +18,9 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.wallet.intercom.controller.api.command.balance;
+package io.mojaloop.core.wallet.admin.controller.api.command.balance;
 
-import io.mojaloop.core.wallet.contract.command.balance.ReverseFundCommand;
+import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import io.mojaloop.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,23 +31,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ReverseFundController {
+public class ReverseWithdrawController {
 
-    private final ReverseFundCommand reverseFundCommand;
+    private final ReverseWithdrawCommand reverseWithdrawCommand;
 
-    public ReverseFundController(final ReverseFundCommand reverseFundCommand) {
+    public ReverseWithdrawController(final ReverseWithdrawCommand reverseWithdrawCommand) {
 
-        assert reverseFundCommand != null;
+        assert reverseWithdrawCommand != null;
 
-        this.reverseFundCommand = reverseFundCommand;
+        this.reverseWithdrawCommand = reverseWithdrawCommand;
     }
 
-    @PostMapping("/balances/reverse-fund")
+    @PostMapping("/balances/reverse-withdraw")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ReverseFundCommand.Output execute(@Valid @RequestBody final ReverseFundCommand.Input input)
+    public ReverseWithdrawCommand.Output execute(@Valid @RequestBody final ReverseWithdrawCommand.Input input)
         throws ReversalFailedInWalletException {
-        return this.reverseFundCommand.execute(input);
+
+        return this.reverseWithdrawCommand.execute(input);
     }
 
 }

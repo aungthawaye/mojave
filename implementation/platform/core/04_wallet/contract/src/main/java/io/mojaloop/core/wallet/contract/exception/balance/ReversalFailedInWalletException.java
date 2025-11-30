@@ -52,7 +52,7 @@ public class ReversalFailedInWalletException extends CheckedDomainException {
 
     public static final String CODE = "REVERSAL_FAILED_IN_WALLET";
 
-    private static final String TEMPLATE = "Reversal failed : reversalId ({0}).";
+    private static final String TEMPLATE = "Reversal failed : withdrawId ({0}).";
 
     private final BalanceUpdateId reversalId;
 
@@ -65,7 +65,7 @@ public class ReversalFailedInWalletException extends CheckedDomainException {
 
     public static ReversalFailedInWalletException from(final Map<String, String> extras) {
 
-        final var reversalId = new BalanceUpdateId(Long.valueOf(extras.get(Keys.REVERSAL_ID)));
+        final var reversalId = new BalanceUpdateId(Long.valueOf(extras.get(Keys.WITHDRAW_ID)));
 
         return new ReversalFailedInWalletException(reversalId);
     }
@@ -75,14 +75,14 @@ public class ReversalFailedInWalletException extends CheckedDomainException {
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.REVERSAL_ID, this.reversalId.getId().toString());
+        extras.put(Keys.WITHDRAW_ID, this.reversalId.getId().toString());
 
         return extras;
     }
 
     public static class Keys {
 
-        public static final String REVERSAL_ID = "reversalId";
+        public static final String WITHDRAW_ID = "withdrawId";
 
     }
 

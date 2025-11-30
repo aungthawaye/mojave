@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.admin.client.service;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
@@ -32,7 +33,6 @@ import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.core.wallet.contract.command.balance.CreateBalanceCommand;
 import io.mojaloop.core.wallet.contract.command.balance.DepositFundCommand;
-import io.mojaloop.core.wallet.contract.command.balance.ReverseFundCommand;
 import io.mojaloop.core.wallet.contract.command.balance.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.data.PositionData;
 import io.mojaloop.core.wallet.contract.data.BalanceData;
@@ -55,8 +55,8 @@ public interface WalletAdminService {
         @POST("/balances/deposit-fund")
         Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);
 
-        @POST("/balances/reverse-fund")
-        Call<ReverseFundCommand.Output> reverseFund(@Body ReverseFundCommand.Input input);
+        @POST("/balances/reverse-withdraw")
+        Call<ReverseWithdrawCommand.Output> reverseWithdraw(@Body ReverseWithdrawCommand.Input input);
 
         @POST("/balances/withdraw-fund")
         Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);

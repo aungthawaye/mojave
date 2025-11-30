@@ -193,7 +193,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
     public BalanceHistory reverse(BalanceUpdateId reversalId, BalanceUpdateId balanceUpdateId)
         throws ReversalFailedException {
 
-        LOGGER.info("Reverse reversalId: {}, balanceUpdateId: {}", reversalId, balanceUpdateId);
+        LOGGER.info("Reverse withdrawId: {}, balanceUpdateId: {}", reversalId, balanceUpdateId);
 
         try {
 
@@ -225,11 +225,11 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
                                         rs.getBigDecimal("amount"), rs.getBigDecimal("old_balance"),
                                         rs.getBigDecimal("new_balance"),
                                         Instant.ofEpochSecond(rs.getLong("transaction_at")),
-                                        new BalanceUpdateId(rs.getLong("reversal_id")));
+                                        new BalanceUpdateId(rs.getLong("withdraw_id")));
                                 } else if ("REVERSAL_FAILED".equals(status)) {
 
                                     throw new RuntimeException(new ReversalFailedException(
-                                        new BalanceUpdateId(rs.getLong("reversal_id"))));
+                                        new BalanceUpdateId(rs.getLong("withdraw_id"))));
                                 }
                             }
 
@@ -245,7 +245,7 @@ public class MySqlBalanceUpdater implements BalanceUpdater {
         } catch (RuntimeException e) {
 
             LOGGER.error(
-                "Exception occurred while trying to reverse for reversalId : {}.",
+                "Exception occurred while trying to reverse for withdrawId : {}.",
                 reversalId.getId(), e);
 
             if (e.getCause() instanceof ReversalFailedException e1) {

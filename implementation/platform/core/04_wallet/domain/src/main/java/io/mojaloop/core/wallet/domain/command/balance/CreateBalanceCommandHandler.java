@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.balance;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.wallet.contract.command.balance.CreateBalanceCommand;
 import io.mojaloop.core.wallet.contract.exception.balance.BalanceAlreadyExistsException;
 import io.mojaloop.core.wallet.domain.model.Balance;
@@ -48,7 +49,7 @@ public class CreateBalanceCommandHandler implements CreateBalanceCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CreateBalanceCommand with input: {}", input);
+        LOGGER.info("CreateBalanceCommand : input: ({})", ObjectLogger.log(input));
 
         var spec = BalanceRepository.Filters
                        .withOwnerId(input.walletOwnerId())
@@ -56,20 +57,20 @@ public class CreateBalanceCommandHandler implements CreateBalanceCommand {
 
         if (this.balanceRepository.findOne(spec).isPresent()) {
             LOGGER.info(
-                "Balance already exists for ownerId: {} and currency: {}", input.walletOwnerId(),
-                input.currency());
+                "Balance already exists for ownerId: ({}) and currency: ({})",
+                input.walletOwnerId(), input.currency());
             throw new BalanceAlreadyExistsException(input.walletOwnerId(), input.currency());
         }
 
         var wallet = new Balance(input.walletOwnerId(), input.currency(), input.name());
-        LOGGER.info("Created Balance: {}", wallet);
 
         wallet = this.balanceRepository.save(wallet);
-        LOGGER.info("Saved Balance with id: {}", wallet.getId());
 
-        LOGGER.info("Completed CreateBalanceCommand with input: {}", input);
+        var output = new Output(wallet.getId());
 
-        return new Output(wallet.getId());
+        LOGGER.info("CreateBalanceCommand : output: ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

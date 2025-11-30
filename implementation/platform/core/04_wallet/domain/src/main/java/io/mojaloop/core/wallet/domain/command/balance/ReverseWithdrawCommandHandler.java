@@ -22,7 +22,7 @@ package io.mojaloop.core.wallet.domain.command.balance;
 
 import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import io.mojaloop.core.wallet.contract.command.balance.ReverseFundCommand;
+import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import io.mojaloop.core.wallet.contract.exception.balance.BalanceUpdateIdNotFoundException;
 import io.mojaloop.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
@@ -32,16 +32,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReverseFundCommandHandler implements ReverseFundCommand {
+public class ReverseWithdrawCommandHandler implements ReverseWithdrawCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReverseFundCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ReverseWithdrawCommandHandler.class);
 
     private final BalanceUpdateRepository balanceUpdateRepository;
 
     private final BalanceUpdater balanceUpdater;
 
-    public ReverseFundCommandHandler(BalanceUpdateRepository balanceUpdateRepository,
-                                     BalanceUpdater balanceUpdater) {
+    public ReverseWithdrawCommandHandler(BalanceUpdateRepository balanceUpdateRepository,
+                                         BalanceUpdater balanceUpdater) {
 
         assert balanceUpdateRepository != null;
         assert balanceUpdater != null;
@@ -53,40 +54,40 @@ public class ReverseFundCommandHandler implements ReverseFundCommand {
     @Override
     public Output execute(final Input input) throws ReversalFailedInWalletException {
 
-        LOGGER.info("Executing ReverseFundCommand with input: {}", input);
+        LOGGER.info("Executing ReverseWithdrawCommand with input: {}", input);
 
         this.balanceUpdateRepository
-            .findById(input.reversalId())
-            .orElseThrow(() -> new BalanceUpdateIdNotFoundException(input.reversalId()));
+            .findById(input.withdrawId())
+            .orElseThrow(() -> new BalanceUpdateIdNotFoundException(input.withdrawId()));
 
         var alreadyReversed = this.balanceUpdateRepository
                                   .findOne(BalanceUpdateRepository.Filters.withReversalId(
-                                      input.reversalId()))
+                                      input.withdrawId()))
                                   .isPresent();
 
         if (alreadyReversed) {
 
-            LOGGER.info("Balance update id: {} has already been reversed.", input.reversalId());
-            throw new ReversalFailedInWalletException(input.reversalId());
+            LOGGER.info("Balance update id: ({}) has already been reversed.", input.withdrawId());
+            throw new ReversalFailedInWalletException(input.withdrawId());
         }
 
         try {
 
             final var history = this.balanceUpdater.reverse(
-                input.reversalId(), new BalanceUpdateId(Snowflake.get().nextId()));
+                input.withdrawId(), new BalanceUpdateId(Snowflake.get().nextId()));
 
             var output = new Output(
                 history.balanceUpdateId(), history.balanceId(), history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt(), history.reversalId());
 
-            LOGGER.info("ReverseFundCommand executed successfully with output: {}", output);
+            LOGGER.info("ReverseWithdrawCommand executed successfully with output: {}", output);
 
             return output;
 
         } catch (BalanceUpdater.ReversalFailedException e) {
 
-            LOGGER.error("Failed to reverse funds for reversalId: {}", input.reversalId());
+            LOGGER.error("Failed to reverse funds for withdrawId: {}", input.withdrawId());
             throw new ReversalFailedInWalletException(e.getReversalId());
         }
     }

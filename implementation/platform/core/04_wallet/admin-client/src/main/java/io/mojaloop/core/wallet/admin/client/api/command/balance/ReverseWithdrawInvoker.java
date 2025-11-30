@@ -18,27 +18,27 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.wallet.intercom.client.api.command.balance;
+package io.mojaloop.core.wallet.admin.client.api.command.balance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.core.wallet.contract.command.balance.ReverseFundCommand;
+import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
+import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
 import io.mojaloop.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
-import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReverseFundInvoker implements ReverseFundCommand {
+public class ReverseWithdrawInvoker implements ReverseWithdrawCommand {
 
-    private final WalletIntercomService.BalanceCommand balanceCommand;
+    private final WalletAdminService.BalanceCommand balanceCommand;
 
     private final ObjectMapper objectMapper;
 
-    public ReverseFundInvoker(final WalletIntercomService.BalanceCommand balanceCommand,
-                              final ObjectMapper objectMapper) {
+    public ReverseWithdrawInvoker(final WalletAdminService.BalanceCommand balanceCommand,
+                                  final ObjectMapper objectMapper) {
 
         assert balanceCommand != null;
         assert objectMapper != null;
@@ -54,7 +54,7 @@ public class ReverseFundInvoker implements ReverseFundCommand {
 
             return RetrofitService
                        .invoke(
-                           this.balanceCommand.reverseFund(input),
+                           this.balanceCommand.reverseWithdraw(input),
                            (status, errorResponseBody) -> RestErrorResponse.decode(
                                errorResponseBody, this.objectMapper))
                        .body();
