@@ -44,6 +44,7 @@ import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
@@ -102,6 +103,9 @@ public interface AccountingIntercomService {
 
         @GET("/chart-entries/get-by-chart-id")
         Call<java.util.List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
+
+        @GET("/chart-entries/get-by-category")
+        Call<java.util.List<ChartEntryData>> getEntriesByCategory(@Query("category") ChartEntryCategory category);
 
     }
 

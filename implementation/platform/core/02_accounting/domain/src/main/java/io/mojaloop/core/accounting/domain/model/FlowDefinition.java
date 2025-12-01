@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,11 +65,12 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {FlowDefinitionCacheUpdater.class})
-@Table(name = "acc_flow_definition",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_flow_definition_currency_UK",
-                                              columnNames = {"currency"}),
-                            @UniqueConstraint(name = "acc_flow_definition_name_UK",
-                                              columnNames = {"name"})})
+@Table(
+    name = "acc_flow_definition", uniqueConstraints = {
+    @UniqueConstraint(
+        name = "acc_flow_definition_transaction_type_currency_UK",
+        columnNames = {"transaction_type", "currency"}), @UniqueConstraint(
+    name = "acc_flow_definition_name_UK", columnNames = {"name"})})
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FlowDefinition extends JpaEntity<FlowDefinitionId>
@@ -81,9 +82,8 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     @Column(name = "flow_definition_id", nullable = false, updatable = false)
     protected FlowDefinitionId id;
 
-    @Column(name = "transaction_type",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "transaction_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionType transactionType;
 
@@ -97,22 +97,25 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
-    @Column(name = "activation_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "activation_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "termination_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
-    @OneToMany(mappedBy = "definition",
-               orphanRemoval = true,
-               cascade = {jakarta.persistence.CascadeType.ALL},
-               fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "definition",
+        orphanRemoval = true,
+        cascade = {jakarta.persistence.CascadeType.ALL},
+        fetch = FetchType.EAGER)
     protected List<PostingDefinition> postings = new ArrayList<>();
 
     public FlowDefinition(TransactionType transactionType,

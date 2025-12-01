@@ -17,5 +17,18 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <dependencies>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-admin-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.accounting</groupId>
+            <artifactId>mod-accounting-admin-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-admin-client</artifactId>
+        </dependency>
+    </dependencies>
 </project>

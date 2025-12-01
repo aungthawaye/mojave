@@ -34,7 +34,7 @@ public enum TransactionType {
      */
 
     FUND_IN(
-        new Participants(Set.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name())),
+        new Participants(Set.of(FundInDimension.Participants.RECEIVING_FSP.name())),
         new Amounts(Set.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name()))),
 
     FUND_OUT(

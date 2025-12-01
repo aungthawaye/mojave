@@ -1,5 +1,5 @@
 /*-
- * ================================================================================
+ * ==============================================================================
  * Mojave
  * --------------------------------------------------------------------------------
  * Copyright (C) 2025 Open Source
@@ -15,34 +15,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ==============================================================================
  */
 
-package io.mojaloop.core.accounting.admin.client.api.command.definition;
+package io.mojaloop.core.accounting.admin.client.api.command.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
-import io.mojaloop.core.accounting.contract.command.definition.DeactivateFlowDefinitionCommand;
+import io.mojaloop.core.accounting.contract.command.account.CreateAccountInBulkCommand;
 import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinitionCommand {
+public class CreateAccountInBulkInvoker implements CreateAccountInBulkCommand {
 
-    private final AccountingAdminService.DefinitionCommand definitionCommand;
+    private final AccountingAdminService.AccountCommand accountCommand;
 
     private final ObjectMapper objectMapper;
 
-    public DeactivateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
-                                           final ObjectMapper objectMapper) {
+    public CreateAccountInBulkInvoker(final AccountingAdminService.AccountCommand accountCommand,
+                                      final ObjectMapper objectMapper) {
 
-        assert definitionCommand != null;
+        assert accountCommand != null;
         assert objectMapper != null;
 
-        this.definitionCommand = definitionCommand;
+        this.accountCommand = accountCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -53,7 +53,7 @@ public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinition
 
             return RetrofitService
                        .invoke(
-                           this.definitionCommand.deactivate(input),
+                           this.accountCommand.createInBulk(input),
                            (status, errorResponseBody) -> RestErrorResponse.decode(
                                errorResponseBody, this.objectMapper))
                        .body();
@@ -74,5 +74,4 @@ public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinition
             throw new RuntimeException(e);
         }
     }
-
 }

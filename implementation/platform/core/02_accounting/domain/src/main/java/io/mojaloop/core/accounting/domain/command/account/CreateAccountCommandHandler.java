@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.domain.command.account;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.accounting.domain.model.Account;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
@@ -54,25 +55,24 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CreateAccountCommand with input: {}", input);
+        LOGGER.info("CreateAccountCommand : input: ({})", ObjectLogger.log(input));
 
         var chartEntry = this.chartEntryRepository
                              .findById(input.chartEntryId())
                              .orElseThrow(() -> new IllegalArgumentException(
                                  "ChartEntry not found: " + input.chartEntryId()));
-        LOGGER.info("Found ChartEntry with id: {}", input.chartEntryId());
 
         var account = new Account(
             chartEntry, input.ownerId(), input.currency(), input.code(), input.name(),
             input.description(), input.overdraftMode(), input.overdraftLimit());
-        LOGGER.info("Created Account: {}", account);
 
         account = this.accountRepository.save(account);
-        LOGGER.info("Saved Account with id: {}", account.getId());
 
-        LOGGER.info("Completed CreateAccountCommand with input: {}", input);
+        var output = new Output(account.getId());
 
-        return new Output(account.getId());
+        LOGGER.info("CreateAccountCommand : output: ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

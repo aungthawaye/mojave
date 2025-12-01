@@ -31,7 +31,9 @@ import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalance
 import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import io.mojaloop.core.accounting.intercom.client.service.AccountingIntercomService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
 
     private final AccountingIntercomService.LedgerCommand ledgerCommand;

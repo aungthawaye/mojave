@@ -27,7 +27,9 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import io.mojaloop.core.accounting.contract.command.chart.ChangeChartNameCommand;
 import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ChangeChartNameInvoker implements ChangeChartNameCommand {
 
     private final AccountingAdminService.ChartCommand chartCommand;

@@ -27,6 +27,7 @@ import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
 import io.mojaloop.core.accounting.contract.query.ChartEntryQuery;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import org.slf4j.Logger;
@@ -110,13 +111,31 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
     }
 
     @Override
-    public List<ChartEntryData> getByNameContains(final String name) {
+    public List<ChartEntryData> get(final String name) {
 
         try {
 
             return RetrofitService
                        .invoke(
                            this.chartQuery.getChartEntriesByNameContains(name),
+                           (status, errorResponseBody) -> RestErrorResponse.decode(
+                               errorResponseBody, this.objectMapper))
+                       .body();
+
+        } catch (RetrofitService.InvocationException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<ChartEntryData> get(final ChartEntryCategory category) {
+
+        try {
+
+            return RetrofitService
+                       .invoke(
+                           this.chartQuery.getEntriesByCategory(category),
                            (status, errorResponseBody) -> RestErrorResponse.decode(
                                errorResponseBody, this.objectMapper))
                        .body();

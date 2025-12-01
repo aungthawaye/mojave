@@ -65,25 +65,25 @@ public class AccountQueryController {
     @GetMapping("/accounts/get-by-account-code")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public AccountData get(@RequestParam final AccountCode accountCode) {
+    public AccountData getByAccountCode(@RequestParam final String accountCode) {
 
-        return this.accountQuery.get(accountCode);
+        return this.accountQuery.get(new AccountCode(accountCode));
     }
 
     @GetMapping("/accounts/get-by-owner-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<AccountData> get(@RequestParam final AccountOwnerId ownerId) {
+    public List<AccountData> getByOwnerId(@RequestParam final String ownerId) {
 
-        return this.accountQuery.get(ownerId);
+        return this.accountQuery.get(new AccountOwnerId(Long.parseLong(ownerId)));
     }
 
     @GetMapping("/accounts/get-by-account-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public AccountData get(@RequestParam final AccountId accountId) {
+    public AccountData getByAccountId(@RequestParam final String accountId) {
 
-        return this.accountQuery.get(accountId);
+        return this.accountQuery.get(new AccountId(Long.parseLong(accountId)));
     }
 
     @GetMapping("/accounts/get-all-accounts")

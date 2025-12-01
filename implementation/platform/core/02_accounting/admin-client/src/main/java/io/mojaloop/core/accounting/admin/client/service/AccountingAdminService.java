@@ -42,6 +42,7 @@ package io.mojaloop.core.accounting.admin.client.service;
 import io.mojaloop.component.misc.query.PagedResult;
 import io.mojaloop.core.accounting.contract.command.account.ActivateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.account.ChangeAccountPropertiesCommand;
+import io.mojaloop.core.accounting.contract.command.account.CreateAccountInBulkCommand;
 import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.account.DeactivateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.account.TerminateAccountCommand;
@@ -61,6 +62,7 @@ import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
@@ -84,8 +86,11 @@ public interface AccountingAdminService {
         @POST("/accounts/change-properties")
         Call<ChangeAccountPropertiesCommand.Output> changeProperties(@Body ChangeAccountPropertiesCommand.Input input);
 
-        @POST("/accounts")
+        @POST("/accounts/create")
         Call<CreateAccountCommand.Output> create(@Body CreateAccountCommand.Input input);
+
+        @POST("/accounts/create-in-bulk")
+        Call<CreateAccountInBulkCommand.Output> createInBulk(@Body CreateAccountInBulkCommand.Input input);
 
         @POST("/accounts/deactivate")
         Call<DeactivateAccountCommand.Output> deactivate(@Body DeactivateAccountCommand.Input input);
@@ -154,6 +159,9 @@ public interface AccountingAdminService {
 
         @GET("/chart-entries/get-by-chart-id")
         Call<java.util.List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
+
+        @GET("/chart-entries/get-by-category")
+        Call<java.util.List<ChartEntryData>> getEntriesByCategory(@Query("category") ChartEntryCategory category);
 
     }
 

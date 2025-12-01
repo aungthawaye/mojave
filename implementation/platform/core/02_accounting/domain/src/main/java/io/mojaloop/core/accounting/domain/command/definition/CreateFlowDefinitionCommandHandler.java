@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,8 +41,8 @@ package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
+import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.model.FlowDefinition;
@@ -87,13 +87,20 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
         LOGGER.info("Executing CreateFlowDefinitionCommand with input: {}", input);
 
+        final var transactionType = input.transactionType();
         final var currency = input.currency();
 
+        final var withTransactionType = FlowDefinitionRepository.Filters.withTransactionType(
+            transactionType);
+        final var withCurrency = FlowDefinitionRepository.Filters.withCurrency(currency);
+
         if (this.flowDefinitionRepository
-                .findOne(FlowDefinitionRepository.Filters.withCurrency(currency))
+                .findOne(withTransactionType.and(withCurrency))
                 .isPresent()) {
-            LOGGER.info("Flow Definition with currency {} already exists", currency);
-            throw new FlowDefinitionWithCurrencyExistsException(currency);
+            LOGGER.info(
+                "Flow Definition with transactionType {} and currency {} already exists",
+                transactionType, currency);
+            throw new FlowDefinitionAlreadyConfiguredException(transactionType, currency);
         }
 
         if (this.flowDefinitionRepository
