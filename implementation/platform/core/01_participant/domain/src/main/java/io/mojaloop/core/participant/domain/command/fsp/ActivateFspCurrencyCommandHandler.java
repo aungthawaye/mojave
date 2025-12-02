@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.fsp.FspCurrency;
@@ -52,7 +53,7 @@ public class ActivateFspCurrencyCommandHandler implements ActivateFspCurrencyCom
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ActivateSupportedCurrencyCommand with input: {}", input);
+        LOGGER.info("ActivateFspCurrencyCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -62,15 +63,13 @@ public class ActivateFspCurrencyCommandHandler implements ActivateFspCurrencyCom
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ActivateSupportedCurrencyCommand with input: {}", input);
+        var output = optFspCurrency
+                         .map(currency -> new Output(currency.getId(), currency.isActive()))
+                         .orElse(new Output(null, false));
 
-        if (optFspCurrency.isPresent()) {
-            return new Output(
-                optFspCurrency.map(FspCurrency::getId).orElse(null),
-                optFspCurrency.get().isActive());
-        }
+        LOGGER.info("ActivateFspCurrencyCommand : output: ({})", ObjectLogger.log(output));
 
-        return new Output(null, false);
+        return output;
     }
 
 }

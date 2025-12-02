@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.AddFspCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
@@ -51,7 +52,7 @@ public class AddFspCurrencyCommandHandler implements AddFspCurrencyCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing AddSupportedCurrencyCommand with input: {}", input);
+        LOGGER.info("AddFspCurrencyCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -61,11 +62,11 @@ public class AddFspCurrencyCommandHandler implements AddFspCurrencyCommand {
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info(
-            "Completed AddSupportedCurrencyCommand with input: {} -> supportedCurrencyId={}", input,
-            supportedCurrency.getId());
+        var output = new Output(supportedCurrency.getId());
 
-        return new Output(supportedCurrency.getId());
+        LOGGER.info("AddFspCurrencyCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

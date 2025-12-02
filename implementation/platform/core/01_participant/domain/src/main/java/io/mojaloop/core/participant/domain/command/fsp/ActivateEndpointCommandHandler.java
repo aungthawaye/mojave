@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,9 +21,9 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.ActivateEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import io.mojaloop.core.participant.domain.model.fsp.FspEndpoint;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +52,7 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ActivateEndpointCommand with input: {}", input);
+        LOGGER.info("ActivateEndpointCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -62,15 +62,15 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ActivateEndpointCommand with input: {}", input);
+        ActivateEndpointCommand.Output output = optFspEndpoint
+                                                    .map(endpoint -> new Output(
+                                                        endpoint.getId(),
+                                                        endpoint.isActive()))
+                                                    .orElse(new Output(null, false));
 
-        if (optFspEndpoint.isPresent()) {
-            return new Output(
-                optFspEndpoint.map(FspEndpoint::getId).orElse(null),
-                optFspEndpoint.get().isActive());
-        }
+        LOGGER.info("ActivateEndpointCommand : output: ({})", ObjectLogger.log(output));
 
-        return new Output(null, false);
+        return output;
     }
 
 }

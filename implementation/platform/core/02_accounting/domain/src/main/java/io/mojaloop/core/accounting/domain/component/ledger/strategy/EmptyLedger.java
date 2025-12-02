@@ -35,7 +35,7 @@ public class EmptyLedger implements Ledger {
                                Instant transactionAt,
                                TransactionType transactionType) {
 
-        throw new UnsupportedOperationException("Ledger is empty");
+        throw new UnsupportedOperationException("Using EmptyLedger. Posting is not supported.");
     }
 
 }

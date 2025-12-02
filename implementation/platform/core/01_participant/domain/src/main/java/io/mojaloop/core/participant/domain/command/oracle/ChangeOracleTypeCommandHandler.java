@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.oracle.ChangeOracleTypeCommand;
 import io.mojaloop.core.participant.contract.exception.oracle.OracleAlreadyExistsException;
 import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
@@ -69,7 +70,7 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ChangeOracleTypeCommand with input: {}", input);
+        LOGGER.info("ChangeOracleTypeCommand : input: ({})", ObjectLogger.log(input));
 
         var oracle = this.oracleRepository
                          .findById(input.oracleId())
@@ -77,8 +78,9 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
 
         var newType = input.type();
         if (oracle.getType() != null && oracle.getType().equals(newType)) {
-            LOGGER.info("Oracle already has type {}. No change needed.", newType);
-            return new Output();
+            var output = new Output();
+            LOGGER.info("ChangeOracleTypeCommand : output : ({})", ObjectLogger.log(output));
+            return output;
         }
 
         // Check for conflict: any other oracle already holds this type
@@ -89,16 +91,15 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
                                                                  oracle.getId()))));
 
         if (existing.isPresent()) {
-
-            LOGGER.info("Oracle with type {} already exists", newType);
             throw new OracleAlreadyExistsException(newType);
         }
 
         oracle.type(newType);
         this.oracleRepository.save(oracle);
 
-        LOGGER.info("Completed ChangeOracleTypeCommand with input: {}", input);
-        return new Output();
+        var output = new Output();
+        LOGGER.info("ChangeOracleTypeCommand : output : ({})", ObjectLogger.log(output));
+        return output;
     }
 
 }

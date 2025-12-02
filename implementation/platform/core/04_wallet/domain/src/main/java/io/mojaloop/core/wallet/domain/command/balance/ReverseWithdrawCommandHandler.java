@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.balance;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import io.mojaloop.core.wallet.contract.exception.balance.BalanceUpdateIdNotFoundException;
@@ -54,7 +55,7 @@ public class ReverseWithdrawCommandHandler implements ReverseWithdrawCommand {
     @Override
     public Output execute(final Input input) throws ReversalFailedInWalletException {
 
-        LOGGER.info("Executing ReverseWithdrawCommand with input: {}", input);
+        LOGGER.info("ReverseWithdrawCommand : input: ({})", ObjectLogger.log(input));
 
         this.balanceUpdateRepository
             .findById(input.withdrawId())
@@ -66,8 +67,6 @@ public class ReverseWithdrawCommandHandler implements ReverseWithdrawCommand {
                                   .isPresent();
 
         if (alreadyReversed) {
-
-            LOGGER.info("Balance update id: ({}) has already been reversed.", input.withdrawId());
             throw new ReversalFailedInWalletException(input.withdrawId());
         }
 
@@ -76,18 +75,16 @@ public class ReverseWithdrawCommandHandler implements ReverseWithdrawCommand {
             final var history = this.balanceUpdater.reverse(
                 input.withdrawId(), new BalanceUpdateId(Snowflake.get().nextId()));
 
-            var output = new Output(
+            final var output = new Output(
                 history.balanceUpdateId(), history.balanceId(), history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt(), history.reversalId());
 
-            LOGGER.info("ReverseWithdrawCommand executed successfully with output: {}", output);
+            LOGGER.info("ReverseWithdrawCommand : output: ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (BalanceUpdater.ReversalFailedException e) {
-
-            LOGGER.error("Failed to reverse funds for withdrawId: {}", input.withdrawId());
             throw new ReversalFailedInWalletException(e.getReversalId());
         }
     }

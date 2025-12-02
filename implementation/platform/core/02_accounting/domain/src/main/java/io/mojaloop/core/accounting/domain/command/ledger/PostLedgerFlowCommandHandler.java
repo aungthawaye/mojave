@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.domain.command.ledger;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
@@ -78,16 +79,14 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                                        DuplicatePostingInLedgerException,
                                        RestoreFailedInAccountException {
 
-        LOGGER.info("Executing PostLedgerFlowCommand with input: {}", input);
+        LOGGER.info("PostLedgerFlowCommand : input: ({})", ObjectLogger.log(input));
 
         var transactionId = input.transactionId();
         var flowDefinition = this.flowDefinitionCache.get(
             input.transactionType(), input.currency());
 
         if (flowDefinition == null) {
-            LOGGER.info(
-                "Flow Definition not found for transaction type: {} and currency: {}",
-                input.transactionType(), input.currency());
+
             throw new FlowDefinitionNotConfiguredException(
                 input.transactionType(), input.currency());
         }
@@ -99,11 +98,6 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
             var amount = input.amounts().get(posting.amountName());
 
             if (amount == null) {
-
-                LOGGER.info(
-                    "Required amount name not found in transaction: amount name : {}, amounts : {}, transactionId : {}",
-                    posting.amountName(), input.amounts().keySet(),
-                    transactionId.getId().toString());
 
                 throw new RequiredAmountNameNotFoundInTransactionException(
                     posting.amountName(), input.amounts().keySet(), transactionId);
@@ -117,11 +111,6 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                 var accountOfParticipant = input.participants().get(posting.participant());
 
                 if (accountOfParticipant == null) {
-
-                    LOGGER.info(
-                        "Required participant ({}) not found in participants ({}) of Transaction Id ({})",
-                        posting.participant(), input.participants().keySet(),
-                        transactionId.getId().toString());
 
                     throw new RequiredParticipantNotFoundInTransactionException(
                         posting.participant(), input.participants().keySet(), transactionId);
@@ -138,14 +127,12 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                 accountData = this.accountCache.get(accountId);
 
                 if (accountData == null) {
-                    LOGGER.info("Account not found for account id: {}", accountId);
                     throw new AccountIdNotFoundException(accountId);
                 }
 
             }
 
             if (accountData.activationStatus() != ActivationStatus.ACTIVE) {
-                LOGGER.info("Account {} is not active", accountId);
                 throw new AccountNotActiveException(accountData.code());
             }
 
@@ -178,9 +165,13 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                         movement.movementStage(), movement.movementResult(), movement.createdAt()));
                 });
 
-            return new Output(
+            var output = new Output(
                 input.transactionId(), input.transactionAt(), input.transactionType(),
                 flowDefinition.flowDefinitionId(), movements);
+
+            LOGGER.info("PostLedgerFlowCommand : output: ({})", ObjectLogger.log(output));
+
+            return output;
 
         } catch (Ledger.InsufficientBalanceException e) {
 

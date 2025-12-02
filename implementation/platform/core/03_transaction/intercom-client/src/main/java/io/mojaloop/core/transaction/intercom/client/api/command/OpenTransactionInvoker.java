@@ -83,7 +83,7 @@ public class OpenTransactionInvoker implements OpenTransactionCommand {
 
         } catch (RetrofitService.InvocationException e) {
 
-            LOGGER.error("Error invoking open transaction : {}", e.getMessage());
+            LOGGER.error("Error:", e);
 
             final var decodedErrorResponse = e.getDecodedErrorResponse();
 

@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.TerminateFspCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
@@ -50,7 +51,7 @@ public class TerminateFspCommandHandler implements TerminateFspCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing TerminateFspCommand with input: {}", input);
+        LOGGER.info("TerminateFspCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -60,9 +61,11 @@ public class TerminateFspCommandHandler implements TerminateFspCommand {
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed TerminateFspCommand with input: {}", input);
+        var output = new Output();
 
-        return new Output();
+        LOGGER.info("TerminateFspCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

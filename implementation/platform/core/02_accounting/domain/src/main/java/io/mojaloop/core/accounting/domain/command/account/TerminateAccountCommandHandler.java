@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.domain.command.account;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.account.TerminateAccountCommand;
 import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
@@ -48,22 +49,21 @@ public class TerminateAccountCommandHandler implements TerminateAccountCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing TerminateAccountCommand with input: {}", input);
+        LOGGER.info("TerminateAccountCommand : input: ({})", ObjectLogger.log(input));
 
         var account = this.accountRepository
                           .findById(input.accountId())
                           .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
-        LOGGER.info("Found Account with id: {}", input.accountId());
 
         account.terminate();
-        LOGGER.info("Terminated Account with id: {}", account.getId());
 
         this.accountRepository.save(account);
-        LOGGER.info("Saved Account with id: {}", account.getId());
 
-        LOGGER.info("Completed TerminateAccountCommand with input: {}", input);
+        var output = new Output(account.getId());
 
-        return new Output(account.getId());
+        LOGGER.info("TerminateAccountCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

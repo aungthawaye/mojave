@@ -32,7 +32,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
     @Override
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
-        return new OpenApiConfiguration.ApiSettings("Mojave - 04 Wallet - Intercom", "1.0.0");
+        return new OpenApiConfiguration.ApiSettings("Mojave - Wallet - Intercom", "1.0.0");
     }
 
     @Bean

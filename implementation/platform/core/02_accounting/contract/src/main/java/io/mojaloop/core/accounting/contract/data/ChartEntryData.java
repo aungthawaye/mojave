@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.contract.data;
 
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
@@ -29,6 +30,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record ChartEntryData(ChartEntryId chartEntryId,
+                             ChartEntryCategory category,
                              ChartEntryCode code,
                              String name,
                              String description,

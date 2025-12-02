@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.domain.command.chart;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.chart.CreateChartEntryCommand;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.ChartRepository;
@@ -49,24 +50,22 @@ public class CreateChartEntryCommandHandler implements CreateChartEntryCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CreateChartEntryCommand with input: {}", input);
+        LOGGER.info("CreateChartEntryCommand : input: ({})", ObjectLogger.log(input));
 
         var chart = this.chartRepository
                         .findById(input.chartId())
                         .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
-        LOGGER.info("Found Chart with id: {}", input.chartId());
 
         var entry = chart.addEntry(
-            input.code(), input.name(), input.description(), input.accountType());
-        LOGGER.info("Created ChartEntry: {}", entry);
+            input.category(), input.code(), input.name(),
+            input.description(), input.accountType());
 
         this.chartRepository.save(chart);
-        LOGGER.info(
-            "Saved Chart with id: {} (persisted new ChartEntry {})", chart.getId(), entry.getId());
+        var output = new Output(entry.getId());
 
-        LOGGER.info("Completed CreateChartEntryCommand with input: {}", input);
+        LOGGER.info("CreateChartEntryCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(entry.getId());
+        return output;
     }
 
 }

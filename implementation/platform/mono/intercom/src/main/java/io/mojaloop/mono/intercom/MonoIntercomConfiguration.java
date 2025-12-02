@@ -36,8 +36,6 @@ import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCa
 import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
-import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -104,8 +102,6 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
 
     private final BalanceCache balanceCache;
 
-    private final AccountResolver accountResolver;
-
     private final Ledger ledger;
 
     private final BalanceUpdater balanceUpdater;
@@ -137,8 +133,6 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
         this.positionCache = new PositionLocalCache(positionRepository);
         this.balanceCache = new BalanceLocalCache(balanceRepository);
 
-        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
-
         this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
 
         this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
@@ -151,13 +145,6 @@ public class MonoIntercomConfiguration extends WebMvcExtension implements
     public AccountCache accountCache() {
 
         return this.accountCache;
-    }
-
-    @Bean
-    @Override
-    public AccountResolver accountResolver() {
-
-        return this.accountResolver;
     }
 
     @Bean

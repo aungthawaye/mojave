@@ -45,7 +45,7 @@ import io.mojaloop.core.accounting.contract.exception.definition.DefinitionNameT
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
+import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.ImmatureChartEntryException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
@@ -109,8 +109,8 @@ public class AccountingExceptionResolver {
                 FlowDefinitionNotConfiguredException.from(extra);
             case FlowDefinitionNotFoundException.CODE ->
                 FlowDefinitionNotFoundException.from(extra);
-            case FlowDefinitionWithCurrencyExistsException.CODE ->
-                FlowDefinitionWithCurrencyExistsException.from(extra);
+            case FlowDefinitionAlreadyConfiguredException.CODE ->
+                FlowDefinitionAlreadyConfiguredException.from(extra);
             case ImmatureChartEntryException.CODE -> ImmatureChartEntryException.from(extra);
             case InvalidAmountNameForTransactionTypeException.CODE ->
                 InvalidAmountNameForTransactionTypeException.from(extra);

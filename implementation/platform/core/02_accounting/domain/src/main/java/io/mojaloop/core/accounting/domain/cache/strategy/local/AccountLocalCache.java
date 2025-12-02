@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,6 +46,8 @@ public class AccountLocalCache implements AccountCache {
 
     private final Map<Long, Set<AccountData>> withOwnerId;
 
+    private final Map<Long, Set<AccountData>> withChartEntryId;
+
     private final Map<String, AccountData> withChartEntryIdOwnerIdCurrency;
 
     public AccountLocalCache(final AccountRepository accountRepository) {
@@ -57,6 +59,7 @@ public class AccountLocalCache implements AccountCache {
         this.withId = new ConcurrentHashMap<>();
         this.withCode = new ConcurrentHashMap<>();
         this.withOwnerId = new ConcurrentHashMap<>();
+        this.withChartEntryId = new ConcurrentHashMap<>();
         this.withChartEntryIdOwnerIdCurrency = new ConcurrentHashMap<>();
     }
 
@@ -94,20 +97,79 @@ public class AccountLocalCache implements AccountCache {
     @Override
     public AccountData get(final AccountCode accountCode) {
 
-        return this.withCode.get(accountCode.value());
+        if (accountCode == null) {
+            return null;
+        }
+
+        var data = this.withCode.get(accountCode.value());
+
+        if (data == null) {
+
+            var entity = this.accountRepository
+                             .findOne(AccountRepository.Filters.withCode(accountCode))
+                             .orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @Override
     public Set<AccountData> get(final AccountOwnerId ownerId) {
 
+        if (ownerId == null) {
+            return Set.of();
+        }
+
         final var set = this.withOwnerId.get(ownerId.getId());
-        return set == null ? Set.of() : new HashSet<>(set);
+
+        if (set == null) {
+
+            var set2 = new HashSet<AccountData>();
+
+            var entities = this.accountRepository.findAll(
+                AccountRepository.Filters.withOwnerId(ownerId));
+
+            entities.forEach((entity) -> {
+                var account = entity.convert();
+                this.save(account);
+                set2.add(account);
+            });
+
+            return set2;
+        }
+
+        return set;
     }
 
     @Override
     public AccountData get(final AccountId accountId) {
 
-        return this.withId.get(accountId.getId());
+        if (accountId == null) {
+            return null;
+        }
+
+        var data = this.withId.get(accountId.getId());
+
+        if (data == null) {
+
+            var entity = this.accountRepository.findById(accountId).orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @Override
@@ -115,19 +177,52 @@ public class AccountLocalCache implements AccountCache {
                            final AccountOwnerId ownerId,
                            final Currency currency) {
 
+        if (chartEntryId == null || ownerId == null || currency == null) {
+            return null;
+        }
+
         final var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
-        return this.withChartEntryIdOwnerIdCurrency.get(key);
+
+        var data = this.withChartEntryIdOwnerIdCurrency.get(key);
+
+        if (data == null) {
+
+            var entity = this.accountRepository
+                             .findOne(AccountRepository.Filters
+                                          .withChartEntryId(chartEntryId)
+                                          .and(AccountRepository.Filters.withOwnerId(ownerId))
+                                          .and(AccountRepository.Filters.withCurrency(currency)))
+                             .orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @Override
     public Set<AccountData> get(final ChartEntryId chartEntryId) {
 
-        final var result = new HashSet<AccountData>();
+        if (chartEntryId == null) {
+            return Set.of();
+        }
 
-        for (final var account : this.withId.values()) {
-            if (account.chartEntryId().equals(chartEntryId)) {
+        final var result = this.withChartEntryId.getOrDefault(chartEntryId.getId(), Set.of());
+
+        if (result.isEmpty()) {
+            final var entities = this.accountRepository.findAll(
+                AccountRepository.Filters.withChartEntryId(chartEntryId));
+
+            entities.forEach(entity -> {
+                final var account = entity.convert();
+                this.save(account);
                 result.add(account);
-            }
+            });
         }
 
         return result;
@@ -154,6 +249,11 @@ public class AccountLocalCache implements AccountCache {
         final var set = this.withOwnerId.computeIfAbsent(
             account.ownerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(account);
+
+        final var set2 = this.withChartEntryId.computeIfAbsent(
+            account.chartEntryId().getId(),
+            __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        set2.add(account);
 
         final var key = AccountCache.Keys.forChart(
             account.chartEntryId(), account.ownerId(), account.currency());

@@ -38,8 +38,6 @@ import io.mojaloop.core.accounting.domain.cache.strategy.timer.ChartEntryTimerCa
 import io.mojaloop.core.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
-import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -77,8 +75,6 @@ final class AccountingIntercomConfiguration extends WebMvcExtension implements
 
     private final AccountCache accountCache;
 
-    private final AccountResolver accountResolver;
-
     private final ChartEntryCache chartEntryCache;
 
     private final FlowDefinitionCache flowDefinitionCache;
@@ -108,8 +104,6 @@ final class AccountingIntercomConfiguration extends WebMvcExtension implements
             accountRepository, Integer.parseInt(
             System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
-        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
-
         this.chartEntryCache = new ChartEntryTimerCache(
             chartEntryRepository, Integer.parseInt(
             System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
@@ -128,13 +122,6 @@ final class AccountingIntercomConfiguration extends WebMvcExtension implements
     public AccountCache accountCache() {
 
         return this.accountCache;
-    }
-
-    @Bean
-    @Override
-    public AccountResolver accountResolver() {
-
-        return this.accountResolver;
     }
 
     @Bean

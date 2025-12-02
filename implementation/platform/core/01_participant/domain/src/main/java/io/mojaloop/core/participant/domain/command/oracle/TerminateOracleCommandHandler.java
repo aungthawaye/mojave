@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.oracle.TerminateOracleCommand;
 import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
@@ -67,7 +68,7 @@ public class TerminateOracleCommandHandler implements TerminateOracleCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing TerminateOracleCommand with input: {}", input);
+        LOGGER.info("TerminateOracleCommand : input: ({})", ObjectLogger.log(input));
 
         var oracle = this.oracleRepository
                          .findById(input.oracleId())
@@ -76,8 +77,9 @@ public class TerminateOracleCommandHandler implements TerminateOracleCommand {
         oracle.terminate();
         this.oracleRepository.save(oracle);
 
-        LOGGER.info("Completed TerminateOracleCommand with input: {}", input);
-        return new Output();
+        var output = new Output();
+        LOGGER.info("TerminateOracleCommand : output : ({})", ObjectLogger.log(output));
+        return output;
     }
 
 }

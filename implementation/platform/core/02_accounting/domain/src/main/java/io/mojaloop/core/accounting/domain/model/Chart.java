@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,6 +31,7 @@ import io.mojaloop.core.accounting.contract.exception.chart.ChartNameRequiredExc
 import io.mojaloop.core.accounting.contract.exception.chart.ChartNameTooLongException;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartIdJavaType;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
@@ -58,8 +59,9 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "acc_chart",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
+@Table(
+    name = "acc_chart",
+    uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartData> {
 
@@ -76,10 +78,11 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @OneToMany(mappedBy = "chart",
-               orphanRemoval = true,
-               cascade = CascadeType.ALL,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "chart",
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER)
     protected Set<ChartEntry> entries = new HashSet<>();
 
     public Chart(String name) {
@@ -89,12 +92,13 @@ public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartDat
         this.createdAt = Instant.now();
     }
 
-    public ChartEntry addEntry(ChartEntryCode code,
+    public ChartEntry addEntry(ChartEntryCategory category,
+                               ChartEntryCode code,
                                String name,
                                String description,
                                AccountType accountType) {
 
-        ChartEntry entry = new ChartEntry(this, code, name, description, accountType);
+        ChartEntry entry = new ChartEntry(this, category, code, name, description, accountType);
 
         this.entries.add(entry);
 

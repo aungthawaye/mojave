@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,9 +40,10 @@
 package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
+import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionWithCurrencyExistsException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.model.FlowDefinition;
@@ -85,33 +86,33 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Executing CreateFlowDefinitionCommand with input: {}", input);
+        LOGGER.info("CreateFlowDefinitionCommand : input: ({})", ObjectLogger.log(input));
 
+        final var transactionType = input.transactionType();
         final var currency = input.currency();
 
+        final var withTransactionType = FlowDefinitionRepository.Filters.withTransactionType(
+            transactionType);
+        final var withCurrency = FlowDefinitionRepository.Filters.withCurrency(currency);
+
         if (this.flowDefinitionRepository
-                .findOne(FlowDefinitionRepository.Filters.withCurrency(currency))
+                .findOne(withTransactionType.and(withCurrency))
                 .isPresent()) {
-            LOGGER.info("Flow Definition with currency {} already exists", currency);
-            throw new FlowDefinitionWithCurrencyExistsException(currency);
+            throw new FlowDefinitionAlreadyConfiguredException(transactionType, currency);
         }
 
         if (this.flowDefinitionRepository
                 .findOne(FlowDefinitionRepository.Filters.withNameEquals(input.name()))
                 .isPresent()) {
-            LOGGER.info("Flow Definition with name {} already exists", input.name());
             throw new FlowDefinitionNameTakenException(input.name());
         }
 
         var definition = new FlowDefinition(
             input.transactionType(), currency, input.name(), input.description());
-        LOGGER.info("Created Flow Definition: {}", definition);
 
         final var postingIds = new ArrayList<PostingDefinitionId>();
 
         for (final var posting : input.postings()) {
-
-            LOGGER.info("Adding posting: {}", posting);
 
             final var pd = definition.addPosting(
                 posting.receiveIn(), posting.receiveInId(), posting.participant(),
@@ -121,10 +122,11 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
         }
 
         definition = this.flowDefinitionRepository.save(definition);
+        var output = new Output(definition.getId(), postingIds);
 
-        LOGGER.info("Completed CreateFlowDefinitionCommand with input: {}", input);
+        LOGGER.info("CreateFlowDefinitionCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(definition.getId(), postingIds);
+        return output;
     }
 
 }

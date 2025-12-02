@@ -20,6 +20,7 @@ CREATE TABLE `acc_chart`
 CREATE TABLE `acc_chart_entry`
 (
     `chart_entry_id`   bigint       NOT NULL,
+    `category`         varchar(32)  NOT NULL,
     `chart_entry_code` varchar(32)  NOT NULL,
     `name`             varchar(64)  NOT NULL,
     `description`      varchar(256) NOT NULL,
@@ -142,8 +143,8 @@ CREATE TABLE `acc_flow_definition`
     `rec_updated_at`     bigint       DEFAULT NULL,
     `rec_version`        int          DEFAULT NULL,
     PRIMARY KEY (`flow_definition_id`),
-    UNIQUE KEY `acc_flow_definition_currency_UK` (`currency`),
-    UNIQUE KEY `acc_flow_definition_name_UK` (`name`)
+    UNIQUE KEY acc_flow_definition_transaction_currency_UK (`transaction_type`, `currency`),
+    UNIQUE KEY acc_flow_definition_name_UK (`name`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -153,19 +154,23 @@ CREATE TABLE `acc_flow_definition`
 
 CREATE TABLE `acc_posting_definition`
 (
-    `posting_definition_id`     bigint      NOT NULL,
-    `participant`               varchar(64) DEFAULT NULL,
-    `amount_name`               varchar(64) NOT NULL,
-    `side`                      varchar(32) NOT NULL,
-    `receive_in`                varchar(32) NOT NULL,
-    `receive_in_id`             bigint      NOT NULL,
-    `description`               varchar(256) DEFAULT NULL,
-    `definition_id`             bigint      NOT NULL,
-    `rec_created_at`            bigint       DEFAULT NULL,
-    `rec_updated_at`            bigint       DEFAULT NULL,
-    `rec_version`               int          DEFAULT NULL,
+    `posting_definition_id` bigint      NOT NULL,
+    `participant`           varchar(64)  DEFAULT NULL,
+    `amount_name`           varchar(64) NOT NULL,
+    `side`                  varchar(32) NOT NULL,
+    `receive_in`            varchar(32) NOT NULL,
+    `receive_in_id`         bigint      NOT NULL,
+    `description`           varchar(256) DEFAULT NULL,
+    `definition_id`         bigint      NOT NULL,
+    `rec_created_at`        bigint       DEFAULT NULL,
+    `rec_updated_at`        bigint       DEFAULT NULL,
+    `rec_version`           int          DEFAULT NULL,
     PRIMARY KEY (`posting_definition_id`),
-    UNIQUE KEY `acc_posting_definition_for_posting_UK` (`definition_id`, `participant`, `amount_name`, `side`, `receive_in`, `receive_in_id`),
+    UNIQUE KEY `acc_posting_definition_for_posting_UK` (`definition_id`,
+                                                        `participant`,
+                                                        `amount_name`, `side`,
+                                                        `receive_in`,
+                                                        `receive_in_id`),
     KEY `acc_posting_definition_acc_flow_definition_FK` (`definition_id`),
     CONSTRAINT `acc_posting_definition_acc_flow_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB

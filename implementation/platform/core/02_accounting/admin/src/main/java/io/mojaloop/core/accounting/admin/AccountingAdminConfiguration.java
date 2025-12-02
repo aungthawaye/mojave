@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,8 +40,7 @@ import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCa
 import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.EmptyLedger;
-import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
+import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -60,24 +59,26 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.admin.controller")
-@Import(value = {OpenApiConfiguration.class,
-                 DatatypeConfiguration.class,
-                 RequestIdMdcConfiguration.class,
-                 AccountingDomainConfiguration.class,
-                 RestErrorConfiguration.class,
-                 SpringSecurityConfiguration.class,})
+@Import(
+    value = {
+        OpenApiConfiguration.class,
+        DatatypeConfiguration.class,
+        RequestIdMdcConfiguration.class,
+        AccountingDomainConfiguration.class,
+        RestErrorConfiguration.class,
+        SpringSecurityConfiguration.class,})
 final class AccountingAdminConfiguration extends WebMvcExtension implements
-                                                                        AccountingDomainConfiguration.RequiredBeans,
-                                                                        SpringSecurityConfiguration.RequiredBeans,
-                                                                        SpringSecurityConfiguration.RequiredSettings {
+                                                                 AccountingDomainConfiguration.RequiredBeans,
+                                                                 SpringSecurityConfiguration.RequiredBeans,
+                                                                 SpringSecurityConfiguration.RequiredSettings {
 
     private final AccountCache accountCache;
-
-    private final AccountResolver accountResolver;
 
     private final ChartEntryCache chartEntryCache;
 
     private final FlowDefinitionCache flowDefinitionCache;
+
+    private final Ledger ledger;
 
     public AccountingAdminConfiguration(ObjectMapper objectMapper,
                                         AccountRepository accountRepository,
@@ -94,7 +95,16 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
         this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);
         this.flowDefinitionCache = new FlowDefinitionLocalCache(flowDefinitionRepository);
 
-        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
+        this.ledger = new MySqlLedger(
+            new MySqlLedger.LedgerDbSettings(
+                new MySqlLedger.LedgerDbSettings.Connection(
+                    System.getenv("ACC_LEDGER_DB_URL"),
+                    System.getenv("ACC_LEDGER_DB_USER"), System.getenv("ACC_LEDGER_DB_PASSWORD")),
+                new MySqlLedger.LedgerDbSettings.Pool(
+                    "accounting-ledger",
+                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE")))), objectMapper);
+
     }
 
     @Bean
@@ -102,13 +112,6 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
     public AccountCache accountCache() {
 
         return this.accountCache;
-    }
-
-    @Bean
-    @Override
-    public AccountResolver accountResolver() {
-
-        return this.accountResolver;
     }
 
     @Bean
@@ -143,7 +146,7 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
     @Override
     public Ledger ledger() {
 
-        return new EmptyLedger();
+        return this.ledger;
     }
 
     @Bean

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,28 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.operation.usecase;
 
-public class OperationUseCaseConfiguration { }
+import io.mojaloop.core.accounting.admin.client.AccountingAdminClientConfiguration;
+import io.mojaloop.core.participant.admin.client.ParticipantAdminClientConfiguration;
+import io.mojaloop.core.wallet.admin.client.WalletAdminClientConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+
+@ComponentScan(basePackages = {"io.mojaloop.operation.usecase"})
+@Import(
+    value = {
+        ParticipantAdminClientConfiguration.class,
+        AccountingAdminClientConfiguration.class,
+        WalletAdminClientConfiguration.class})
+public class OperationUseCaseConfiguration
+    implements ParticipantAdminClientConfiguration.RequiredBeans,
+               AccountingAdminClientConfiguration.RequiredBeans,
+               WalletAdminClientConfiguration.RequiredBeans {
+
+    public interface RequiredSettings extends ParticipantAdminClientConfiguration.RequiredSettings,
+                                              AccountingAdminClientConfiguration.RequiredSettings,
+                                              WalletAdminClientConfiguration.RequiredSettings { }
+
+}

@@ -22,6 +22,7 @@ package io.mojaloop.core.accounting.intercom.controller.api.query;
 
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
 import io.mojaloop.core.accounting.contract.query.ChartEntryQuery;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import org.slf4j.Logger;
@@ -79,7 +80,15 @@ public class ChartEntryQueryController {
     @ResponseBody
     public List<ChartEntryData> getByNameContains(@RequestParam final String name) {
 
-        return this.chartEntryQuery.getByNameContains(name);
+        return this.chartEntryQuery.get(name);
+    }
+
+    @GetMapping("/chart-entries/get-by-category")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<ChartEntryData> getByCategory(@RequestParam final ChartEntryCategory category) {
+
+        return this.chartEntryQuery.get(category);
     }
 
 }

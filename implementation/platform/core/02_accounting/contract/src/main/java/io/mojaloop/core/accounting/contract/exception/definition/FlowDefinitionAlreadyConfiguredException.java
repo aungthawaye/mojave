@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,6 +41,7 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.fspiop.spec.core.Currency;
 import lombok.Getter;
 
@@ -48,26 +49,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public class FlowDefinitionWithCurrencyExistsException extends UncheckedDomainException {
+public class FlowDefinitionAlreadyConfiguredException extends UncheckedDomainException {
 
-    public static final String CODE = "FLOW_DEFINITION_WITH_CURRENCY_EXISTS";
+    public static final String CODE = "FLOW_DEFINITION_ALREADY_CONFIGURED";
 
-    private static final String TEMPLATE = "Flow Definition with currency ({0}) already exists.";
+    private static final String TEMPLATE = "Flow Definition for transaction ({0}) and currency ({1}) is already configured.";
+
+    private final TransactionType transactionType;
 
     private final Currency currency;
 
-    public FlowDefinitionWithCurrencyExistsException(final Currency currency) {
+    public FlowDefinitionAlreadyConfiguredException(final TransactionType transactionType,
+                                                    Currency currency) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{currency.toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE,
+            new String[]{transactionType.toString(), currency.toString()}));
 
+        this.transactionType = transactionType;
         this.currency = currency;
     }
 
-    public static FlowDefinitionWithCurrencyExistsException from(final Map<String, String> extras) {
+    public static FlowDefinitionAlreadyConfiguredException from(final Map<String, String> extras) {
 
+        final var type = TransactionType.valueOf(extras.get(Keys.TRANSACTION_TYPE));
         final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
 
-        return new FlowDefinitionWithCurrencyExistsException(currency);
+        return new FlowDefinitionAlreadyConfiguredException(type, currency);
     }
 
     @Override
@@ -75,12 +83,15 @@ public class FlowDefinitionWithCurrencyExistsException extends UncheckedDomainEx
 
         final var extras = new HashMap<String, String>();
 
+        extras.put(Keys.TRANSACTION_TYPE, this.transactionType.name());
         extras.put(Keys.CURRENCY, this.currency.name());
 
         return extras;
     }
 
     public static class Keys {
+
+        public static final String TRANSACTION_TYPE = "transactionType";
 
         public static final String CURRENCY = "currency";
 

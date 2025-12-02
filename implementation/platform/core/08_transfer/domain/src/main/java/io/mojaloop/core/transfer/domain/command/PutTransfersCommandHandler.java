@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -425,10 +425,9 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             fulfilPositionsOutput.payeeCommitId(),
                             unwrapResponseOutput.completedAt()));
 
-                        this.postLedgerFlow.execute(
-                            new PostLedgerFlow.Input(
-                                transactionId, transactionAt, currency, payerFsp, payeeFsp,
-                                transferAmount));
+                        this.postLedgerFlow.execute(new PostLedgerFlow.Input(
+                            transactionId, transactionAt, currency, payerFsp, payeeFsp,
+                            transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
 
                     } catch (Exception e) {
 
@@ -467,7 +466,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                     this.disputeTransfer.execute(
                         new DisputeTransfer.Input(
-                            CONTEXT, transactionId, transferId, finalDispute));
+                            CONTEXT, transactionId, transferId,
+                            finalDispute));
                 }
 
             }

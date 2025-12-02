@@ -27,7 +27,9 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.accounting.admin.client.service.AccountingAdminService;
 import io.mojaloop.core.accounting.contract.command.definition.DeactivateFlowDefinitionCommand;
 import io.mojaloop.core.accounting.contract.exception.AccountingExceptionResolver;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinitionCommand {
 
     private final AccountingAdminService.DefinitionCommand definitionCommand;

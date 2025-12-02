@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryIdNotFound
 import io.mojaloop.core.accounting.contract.query.ChartEntryQuery;
 import io.mojaloop.core.accounting.domain.model.ChartEntry;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartId;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,16 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
                    .toList();
     }
 
+    @Override
+    public List<ChartEntryData> get(ChartEntryCategory category) {
+
+        return this.chartEntryRepository
+                   .findAll(ChartEntryRepository.Filters.withCategory(category))
+                   .stream()
+                   .map(ChartEntry::convert)
+                   .toList();
+    }
+
     @Transactional(readOnly = true)
     @Read
     @Override
@@ -80,7 +91,7 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<ChartEntryData> getByNameContains(final String name) {
+    public List<ChartEntryData> get(final String name) {
 
         return this.chartEntryRepository
                    .findAll(ChartEntryRepository.Filters.withNameContains(name))

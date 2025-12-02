@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,6 +35,7 @@ import io.mojaloop.core.accounting.domain.cache.updater.ChartEntryCacheUpdater;
 import io.mojaloop.core.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
 import io.mojaloop.core.common.datatype.converter.type.accounting.ChartEntryCodeConverter;
 import io.mojaloop.core.common.datatype.enums.accounting.AccountType;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
 import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import jakarta.persistence.Column;
@@ -62,9 +63,9 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {ChartEntryCacheUpdater.class})
-@Table(name = "acc_chart_entry",
-       uniqueConstraints = @UniqueConstraint(name = "acc_chart_entry_chart_entry_code_UK",
-                                             columnNames = {"chart_entry_code"}))
+@Table(
+    name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(
+    name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 
@@ -74,24 +75,29 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @Column(name = "chart_entry_id", nullable = false, updatable = false)
     protected ChartEntryId id;
 
-    @Column(name = "chart_entry_code",
-            nullable = false,
-            length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(name = "category", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected ChartEntryCategory category;
+
+    @Column(
+        name = "chart_entry_code", nullable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = ChartEntryCodeConverter.class)
     protected ChartEntryCode code;
 
     @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "description",
-            nullable = false,
-            length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "description",
+        nullable = false,
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
-    @Column(name = "account_type",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH,
-            updatable = false)
+    @Column(
+        name = "account_type",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH,
+        updatable = false)
     @Enumerated(EnumType.STRING)
     protected AccountType accountType;
 
@@ -100,19 +106,22 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     protected Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "chart_id",
-                nullable = false,
-                updatable = false,
-                foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
+    @JoinColumn(
+        name = "chart_id",
+        nullable = false,
+        updatable = false,
+        foreignKey = @ForeignKey(name = "chart_entry_chart_FK"))
     protected Chart chart;
 
     public ChartEntry(Chart chart,
+                      ChartEntryCategory category,
                       ChartEntryCode code,
                       String name,
                       String description,
                       AccountType accountType) {
 
         assert chart != null;
+        assert category != null;
         assert code != null;
         assert name != null;
         assert description != null;
@@ -120,9 +129,21 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
 
         this.id = new ChartEntryId(Snowflake.get().nextId());
         this.chart = chart;
+        this.category = category;
         this.code(code).name(name).description(description);
         this.accountType = accountType;
         this.createdAt = Instant.now();
+
+        if (this.chart.entries.stream().anyMatch(entry -> entry.getCode().equals(this.code))) {
+            throw new ChartEntryCodeAlreadyExistsException(this.code);
+        }
+
+        if (this.chart.entries
+                .stream()
+                .anyMatch(entry -> entry.getName().equalsIgnoreCase(this.name))) {
+
+            throw new ChartEntryNameAlreadyExistsException(this.name, this.chart.name);
+        }
     }
 
     public ChartEntry code(ChartEntryCode code) {
@@ -150,8 +171,8 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     public ChartEntryData convert() {
 
         return new ChartEntryData(
-            this.getId(), this.code, this.name, this.description, this.accountType, this.createdAt,
-            this.chart.getId());
+            this.getId(), this.category, this.code, this.name, this.description, this.accountType,
+            this.createdAt, this.chart.getId());
     }
 
     public ChartEntry description(String description) {

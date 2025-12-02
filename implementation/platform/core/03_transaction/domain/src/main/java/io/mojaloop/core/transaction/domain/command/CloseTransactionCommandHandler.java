@@ -21,6 +21,7 @@
 package io.mojaloop.core.transaction.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.contract.exception.TransactionIdNotFoundException;
 import io.mojaloop.core.transaction.domain.repository.TransactionRepository;
@@ -48,25 +49,22 @@ public class CloseTransactionCommandHandler implements CloseTransactionCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CloseTransactionCommand with input: {}", input);
+        LOGGER.info("CloseTransactionCommand : input: ({})", ObjectLogger.log(input));
 
         var transaction = this.transactionRepository
                               .findById(input.transactionId())
                               .orElseThrow(
                                   () -> new TransactionIdNotFoundException(input.transactionId()));
-        LOGGER.info("Found Transaction with id: {}", input.transactionId());
 
         transaction.close(input.error());
-        LOGGER.info(
-            "Closed Transaction with id: {}. Success: {}", transaction.getId(),
-            transaction.getSuccess());
 
         this.transactionRepository.save(transaction);
-        LOGGER.info("Saved Transaction with id: {}", transaction.getId());
 
-        LOGGER.info("Completed CloseTransactionCommand with input: {}", input);
+        var output = new Output(transaction.getId());
 
-        return new Output(transaction.getId());
+        LOGGER.info("CloseTransactionCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

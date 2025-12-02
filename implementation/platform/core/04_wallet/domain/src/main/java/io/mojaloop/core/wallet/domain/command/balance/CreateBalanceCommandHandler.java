@@ -56,9 +56,6 @@ public class CreateBalanceCommandHandler implements CreateBalanceCommand {
                        .and(BalanceRepository.Filters.withCurrency(input.currency()));
 
         if (this.balanceRepository.findOne(spec).isPresent()) {
-            LOGGER.info(
-                "Balance already exists for ownerId: ({}) and currency: ({})",
-                input.walletOwnerId(), input.currency());
             throw new BalanceAlreadyExistsException(input.walletOwnerId(), input.currency());
         }
 

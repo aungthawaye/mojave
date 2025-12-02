@@ -31,7 +31,9 @@ import io.mojaloop.core.accounting.contract.exception.ledger.DuplicatePostingInL
 import io.mojaloop.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
 import io.mojaloop.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
 
     private final AccountingAdminService.LedgerCommand ledgerCommand;

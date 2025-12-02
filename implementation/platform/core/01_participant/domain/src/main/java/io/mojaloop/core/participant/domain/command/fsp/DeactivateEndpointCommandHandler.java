@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.DeactivateEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.model.fsp.FspEndpoint;
@@ -52,7 +53,7 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing DeactivateEndpointCommand with input: {}", input);
+        LOGGER.info("DeactivateEndpointCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -62,15 +63,13 @@ public class DeactivateEndpointCommandHandler implements DeactivateEndpointComma
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed DeactivateEndpointCommand with input: {}", input);
+        var output = optFspEndpoint
+                         .map(endpoint -> new Output(endpoint.getId(), endpoint.isActive()))
+                         .orElse(new Output(null, false));
 
-        if (optFspEndpoint.isPresent()) {
-            return new Output(
-                optFspEndpoint.map(FspEndpoint::getId).orElse(null),
-                optFspEndpoint.get().isActive());
-        }
+        LOGGER.info("DeactivateEndpointCommand : output: ({})", ObjectLogger.log(output));
 
-        return new Output(null, false);
+        return output;
     }
 
 }

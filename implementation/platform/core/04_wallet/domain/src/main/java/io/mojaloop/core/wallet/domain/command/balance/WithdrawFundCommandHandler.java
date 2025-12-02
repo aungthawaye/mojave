@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.balance;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.balance.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.exception.balance.InsufficientBalanceException;
@@ -53,15 +54,11 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
     public Output execute(final Input input)
         throws NoBalanceUpdateForTransactionException, InsufficientBalanceException {
 
-        LOGGER.info("Executing WithdrawFundCommand with input: {}", input);
+        LOGGER.info("WithdrawFundCommand : input: ({})", ObjectLogger.log(input));
 
         var wallet = this.balanceCache.get(input.walletOwnerId(), input.currency());
 
         if (wallet == null) {
-
-            LOGGER.error(
-                "Balance does not exist for walletOwnerId: {} and currency: {}",
-                input.walletOwnerId(), input.currency());
             throw new RuntimeException(
                 "Balance does not exist for walletOwnerId: " + input.walletOwnerId() +
                     " and currency: " + input.currency());
@@ -75,25 +72,19 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
                 input.transactionId(), input.transactionAt(), balanceUpdateId, wallet.balanceId(),
                 input.amount(), "Withdraw funds");
 
-            var output = new Output(
+            final var output = new Output(
                 history.balanceUpdateId(), history.balanceId(), history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt());
 
-            LOGGER.info("WithdrawFundCommand executed successfully with output: {}", output);
+            LOGGER.info("WithdrawFundCommand : output: ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (final BalanceUpdater.NoBalanceUpdateException e) {
-
-            LOGGER.error("Failed to withdraw funds for transaction: {}", input.transactionId());
             throw new NoBalanceUpdateForTransactionException(input.transactionId());
 
         } catch (final BalanceUpdater.InsufficientBalanceException e) {
-
-            LOGGER.error(
-                "Failed to withdraw funds for transaction (insufficient balance): {}",
-                input.transactionId());
             throw new InsufficientBalanceException(
                 e.getBalanceId(), e.getAmount(), e.getOldBalance(), e.getTransactionId());
         }

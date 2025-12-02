@@ -48,7 +48,7 @@ public class AddStepCommandHandler implements AddStepCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("AddStepCommandHandler : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("AddStepCommand : input: ({})", ObjectLogger.log(input));
 
         var transaction = this.transactionRepository
                               .findById(input.transactionId())
@@ -60,7 +60,7 @@ public class AddStepCommandHandler implements AddStepCommand {
         this.transactionRepository.save(transaction);
 
         var output = new Output(transaction.getId());
-        LOGGER.info("AddStepCommandHandler : output : ({})", ObjectLogger.log(output));
+        LOGGER.info("AddStepCommand : output : ({})", ObjectLogger.log(output));
 
         return output;
     }

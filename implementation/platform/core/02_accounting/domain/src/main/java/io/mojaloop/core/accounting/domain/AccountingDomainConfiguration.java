@@ -26,7 +26,6 @@ import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
-import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -39,8 +38,6 @@ public class AccountingDomainConfiguration {
     public interface RequiredBeans {
 
         AccountCache accountCache();
-
-        AccountResolver accountResolver();
 
         ChartEntryCache chartEntryCache();
 

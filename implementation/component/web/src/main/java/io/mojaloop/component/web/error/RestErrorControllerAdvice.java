@@ -23,6 +23,8 @@ package io.mojaloop.component.web.error;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.CheckedDomainException;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -41,8 +43,12 @@ import java.util.StringJoiner;
 @ControllerAdvice
 public class RestErrorControllerAdvice {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestErrorControllerAdvice.class);
+
     @ExceptionHandler(CheckedDomainException.class)
     public ResponseEntity<RestErrorResponse> handle(CheckedDomainException e) {
+
+        LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
             new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
@@ -52,6 +58,8 @@ public class RestErrorControllerAdvice {
     @ExceptionHandler(UncheckedDomainException.class)
     public ResponseEntity<RestErrorResponse> handle(UncheckedDomainException e) {
 
+        LOGGER.error("Error:", e);
+
         return new ResponseEntity<>(
             new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
             HttpStatus.BAD_REQUEST);
@@ -59,6 +67,8 @@ public class RestErrorControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RestErrorResponse> handle(MethodArgumentNotValidException e) {
+
+        LOGGER.error("Error:", e);
 
         var errors = new StringJoiner(", ");
         var extra = new HashMap<String, String>();
@@ -76,6 +86,8 @@ public class RestErrorControllerAdvice {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<RestErrorResponse> handle(MethodArgumentTypeMismatchException e) {
 
+        LOGGER.error("Error:", e);
+
         return new ResponseEntity<>(
             new RestErrorResponse("ARGUMENT_TYPE_MISMATCH", e.getMessage(), Map.of()),
             HttpStatus.UNPROCESSABLE_ENTITY);
@@ -83,6 +95,8 @@ public class RestErrorControllerAdvice {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(NoHandlerFoundException e) {
+
+        LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
             new RestErrorResponse("NO_HANDLER_FOUND", e.getMessage(), Map.of()),
@@ -92,6 +106,8 @@ public class RestErrorControllerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<RestErrorResponse> handle(HttpMessageNotReadableException e) {
 
+        LOGGER.error("Error:", e);
+
         return new ResponseEntity<>(
             new RestErrorResponse("MESSAGE_NOT_READABLE", e.getMessage(), Map.of()),
             HttpStatus.UNPROCESSABLE_ENTITY);
@@ -99,6 +115,8 @@ public class RestErrorControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<RestErrorResponse> handle(RuntimeException e) {
+
+        LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
             new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
@@ -108,6 +126,8 @@ public class RestErrorControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<RestErrorResponse> handle(Exception e) {
 
+        LOGGER.error("Error:", e);
+
         return new ResponseEntity<>(
             new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
@@ -116,6 +136,8 @@ public class RestErrorControllerAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<RestErrorResponse> handle(MissingServletRequestParameterException e) {
 
+        LOGGER.error("Error:", e);
+
         return new ResponseEntity<>(
             new RestErrorResponse("MISSING_PARAMETER", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
@@ -123,6 +145,8 @@ public class RestErrorControllerAdvice {
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<RestErrorResponse> handle(BindException e) {
+
+        LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
             new RestErrorResponse("BINDING_FAILED", e.getMessage(), Map.of()),

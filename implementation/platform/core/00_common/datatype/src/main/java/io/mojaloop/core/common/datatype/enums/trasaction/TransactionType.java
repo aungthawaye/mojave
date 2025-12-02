@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,11 +34,13 @@ public enum TransactionType {
      */
 
     FUND_IN(
-        new Participants(Set.of(FundInDimension.Participants.DEPOSIT_INTO_FSP.name())),
+        new Participants(Set.of(
+            FundInDimension.Participants.HUB.name(),
+            FundInDimension.Participants.RECEIVING_FSP.name())),
         new Amounts(Set.of(FundInDimension.Amounts.LIQUIDITY_AMOUNT.name()))),
 
     FUND_OUT(
-        new Participants(Set.of(FundOutDimension.Participants.WITHDRAW_FROM_FSP.name())),
+        new Participants(Set.of(FundOutDimension.Participants.SOURCE_FSP.name())),
         new Amounts(Set.of(FundOutDimension.Amounts.LIQUIDITY_AMOUNT.name()))),
 
     FUND_TRANSFER(

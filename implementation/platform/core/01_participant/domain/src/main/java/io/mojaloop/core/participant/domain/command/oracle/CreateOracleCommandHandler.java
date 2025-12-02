@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.oracle.CreateOracleCommand;
 import io.mojaloop.core.participant.contract.exception.oracle.OracleAlreadyExistsException;
 import io.mojaloop.core.participant.domain.model.oracle.Oracle;
@@ -67,22 +68,21 @@ public class CreateOracleCommandHandler implements CreateOracleCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CreateOracleCommand with input: {}", input);
+        LOGGER.info("CreateOracleCommand : input: ({})", ObjectLogger.log(input));
 
         // Check if an Oracle already exists for the given PartyIdType
         if (this.oracleRepository
                 .findOne(OracleRepository.Filters.withType(input.type()))
                 .isPresent()) {
-
-            LOGGER.info("Oracle with type {} already exists", input.type());
             throw new OracleAlreadyExistsException(input.type());
         }
 
         var oracle = new Oracle(input.type(), input.name(), input.baseUrl());
         this.oracleRepository.save(oracle);
 
-        LOGGER.info("Completed CreateOracleCommand with input: {}", input);
-        return new Output(oracle.getId());
+        var output = new Output(oracle.getId());
+        LOGGER.info("CreateOracleCommand : output : ({})", ObjectLogger.log(output));
+        return output;
     }
 
 }

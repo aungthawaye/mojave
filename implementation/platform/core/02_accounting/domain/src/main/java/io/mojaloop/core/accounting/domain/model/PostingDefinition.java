@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,14 +62,11 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "acc_posting_definition",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_posting_definition_for_posting_UK",
-                                              columnNames = {"definition_id",
-                                                             "participant",
-                                                             "amount_name",
-                                                             "side",
-                                                             "receive_in",
-                                                             "receive_in_id"})})
+@Table(
+    name = "acc_posting_definition", uniqueConstraints = {
+    @UniqueConstraint(
+        name = "acc_posting_definition_for_posting_UK", columnNames = {
+        "definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
@@ -82,9 +79,10 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     @Column(name = "participant", length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String participant;
 
-    @Column(name = "amount_name",
-            nullable = false,
-            length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "amount_name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String amountName;
 
     @Column(name = "side", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
@@ -102,9 +100,10 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     protected String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "definition_id",
-                nullable = false,
-                foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
+    @JoinColumn(
+        name = "definition_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
     protected FlowDefinition definition;
 
     public PostingDefinition(FlowDefinition definition,
@@ -123,8 +122,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
         this
-            .forPosting(
-                receiveIn, receiveInId, participant, amountName, side, accountCache,
+            .forPosting(receiveIn, receiveInId, participant, amountName, side, accountCache,
                 chartEntryCache)
             .description(description);
     }
@@ -171,9 +169,18 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
             }
         }
 
-        if (receiveIn == ReceiveIn.CHART_ENTRY && (participant == null || participant.isBlank())) {
+        if (receiveIn == ReceiveIn.CHART_ENTRY) {
 
-            throw new RequireParticipantForReceiveInException();
+            if (participant == null || participant.isBlank()) {
+
+                throw new RequireParticipantForReceiveInException();
+            }
+
+            if (!this.definition.transactionType.getParticipants().types().contains(participant)) {
+
+                throw new InvalidParticipantForTransactionTypeException(
+                    this.definition.transactionType);
+            }
         }
 
         // Validate that the posting definition does not already exist for this flow definition.
@@ -183,16 +190,10 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
             throw new InvalidAmountNameForTransactionTypeException(this.definition.transactionType);
         }
 
-        if (!this.definition.transactionType.getParticipants().types().contains(participant)) {
-
-            throw new InvalidParticipantForTransactionTypeException(
-                this.definition.transactionType);
-        }
-
         // Now verify whether the newly adding posting conflicts with any of the existing posting definition.
         // Here we need to verify these things:
-        // 1. When BY_CHART_ENTRY, any account of the adding ChartEntryId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
-        // 2. When BY_ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
+        // 1. When CHART_ENTRY, any account of the adding ChartEntryId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
+        // 2. When ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
 
         // Find all the accounts, created under the same receiveInId in the accounting system, and previously added for the same Side and AmountName.
         var existingAccountIds = this.definition.postings
@@ -226,7 +227,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
             if (accounts == null || accounts.isEmpty()) {
 
-                throw new ImmatureChartEntryException();
+                var _chartEntry = chartEntryCache.get(_chartEntryId);
+                throw new ImmatureChartEntryException(_chartEntry.code());
 
             } else {
 

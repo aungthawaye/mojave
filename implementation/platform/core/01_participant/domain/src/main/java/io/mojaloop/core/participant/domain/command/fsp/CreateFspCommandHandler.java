@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.participant.HubId;
 import io.mojaloop.core.participant.contract.command.fsp.CreateFspCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
@@ -66,37 +67,33 @@ public class CreateFspCommandHandler implements CreateFspCommand {
                                                                          HubNotFoundException,
                                                                          FspCurrencyNotSupportedByHubException {
 
-        LOGGER.info("Executing CreateFspCommand with input: {}", input);
+        LOGGER.info("CreateFspCommand : input: ({})", ObjectLogger.log(input));
 
         var hub = this.hubRepository.findById(new HubId()).orElseThrow(HubNotFoundException::new);
 
         if (this.fspRepository
                 .findOne(FspRepository.Filters.withFspCode(input.fspCode()))
                 .isPresent()) {
-            LOGGER.info("FSP with FSP Code {} already exists", input.fspCode().value());
             throw new FspCodeAlreadyExistsException(input.fspCode());
         }
 
         var fsp = new Fsp(hub, input.fspCode(), input.name());
-        LOGGER.info("Created FSP: {}", fsp);
 
         for (var currency : input.currencies()) {
-            LOGGER.info("Adding supported currency: {}", currency);
             fsp.addCurrency(currency);
-            LOGGER.info("Added supported currency: {}", currency);
         }
 
         for (var endpoint : input.endpoints()) {
-            LOGGER.info("Adding endpoint: {}", endpoint);
             fsp.addEndpoint(endpoint.type(), endpoint.baseUrl());
-            LOGGER.info("Added endpoint: {}", endpoint);
         }
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed CreateFspCommand with input: {}", input);
+        var output = new Output(fsp.getId());
 
-        return new Output(fsp.getId());
+        LOGGER.info("CreateFspCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

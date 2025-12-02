@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transfer.domain.command.step.financial;
 
 import io.mojaloop.component.misc.logger.ObjectLogger;
@@ -66,10 +67,14 @@ public class PostLedgerFlow {
         var amounts = new HashMap<String, BigDecimal>();
 
         amounts.put(FundTransferDimension.Amounts.TRANSFER_AMOUNT.name(), input.transferAmount());
+        amounts.put(FundTransferDimension.Amounts.PAYEE_FSP_FEE.name(), input.payeeFspFee());
+        amounts.put(
+            FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name(), input.payeeFspCommission());
 
-        this.postLedgerFlowPublisher.publish(new PostLedgerFlowCommand.Input(
-            TransactionType.FUND_TRANSFER, input.currency(), input.transactionId,
-            input.transactionAt, participants, amounts));
+        this.postLedgerFlowPublisher.publish(
+            new PostLedgerFlowCommand.Input(
+                TransactionType.FUND_TRANSFER, input.currency(), input.transactionId,
+                input.transactionAt, participants, amounts));
 
         LOGGER.info("PostLedgerFlow : done");
     }
@@ -79,6 +84,8 @@ public class PostLedgerFlow {
                         Currency currency,
                         FspData payerFsp,
                         FspData payeeFsp,
-                        BigDecimal transferAmount) { }
+                        BigDecimal transferAmount,
+                        BigDecimal payeeFspFee,
+                        BigDecimal payeeFspCommission) { }
 
 }

@@ -22,6 +22,7 @@ package io.mojaloop.core.transaction.domain.command;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import io.mojaloop.core.transaction.domain.model.Transaction;
@@ -50,18 +51,18 @@ public class OpenTransactionCommandHandler implements OpenTransactionCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing OpenTransactionCommand with input: {}", input);
+        LOGGER.info("OpenTransactionCommand : input: ({})", ObjectLogger.log(input));
 
         var transactionId = new TransactionId(Snowflake.get().nextId());
         var transaction = new Transaction(transactionId, input.type());
-        LOGGER.info("Created Transaction: {}", transactionId);
 
         transaction = this.transactionRepository.save(transaction);
-        LOGGER.info("Saved Transaction with id: {}", transaction.getId());
 
-        LOGGER.info("Completed OpenTransactionCommand with input: {}", input);
+        var output = new Output(transaction.getId(), transaction.getOpenAt());
 
-        return new Output(transaction.getId(), transaction.getOpenAt());
+        LOGGER.info("OpenTransactionCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

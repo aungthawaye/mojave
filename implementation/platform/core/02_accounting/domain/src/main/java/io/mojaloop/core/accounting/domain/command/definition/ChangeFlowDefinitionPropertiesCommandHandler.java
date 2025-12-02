@@ -40,6 +40,7 @@
 package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
@@ -70,7 +71,7 @@ public class ChangeFlowDefinitionPropertiesCommandHandler
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Executing ChangeFlowDefinitionPropertiesCommand with input: {}", input);
+        LOGGER.info("ChangeFlowDefinitionPropertiesCommand : input: ({})", ObjectLogger.log(input));
 
         final var definition = this.flowDefinitionRepository
                                    .findById(input.flowDefinitionId())
@@ -87,7 +88,6 @@ public class ChangeFlowDefinitionPropertiesCommandHandler
                     .and(FlowDefinitionRepository.Filters.withIdNotEquals(definition.getId())));
 
             if (conflict.isPresent()) {
-                LOGGER.info("Flow Definition with name {} already exists", newName);
                 throw new FlowDefinitionNameTakenException(newName);
             }
         }
@@ -97,9 +97,11 @@ public class ChangeFlowDefinitionPropertiesCommandHandler
 
         this.flowDefinitionRepository.save(definition);
 
-        LOGGER.info("Completed ChangeFlowDefinitionPropertiesCommand with input: {}", input);
+        var output = new Output(definition.getId());
 
-        return new Output(definition.getId());
+        LOGGER.info("ChangeFlowDefinitionPropertiesCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }
