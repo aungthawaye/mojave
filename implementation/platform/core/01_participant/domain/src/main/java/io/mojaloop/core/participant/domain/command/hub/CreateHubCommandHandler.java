@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.hub.CreateHubCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import io.mojaloop.core.participant.domain.model.hub.Hub;
@@ -70,31 +71,26 @@ public class CreateHubCommandHandler implements CreateHubCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing CreateHubCommand with input: {}", input);
+        LOGGER.info("CreateHubCommand : input: ({})", ObjectLogger.log(input));
 
         long existing = this.hubRepository.count();
 
         if (existing >= 1) {
-
-            LOGGER.info(
-                "Hub limit reached. existing={} -> throwing HubLimitReachedException", existing);
             throw new HubCountLimitReachedException();
         }
 
         var hub = new Hub(input.name());
 
         for (var currency : input.currencies()) {
-
-            LOGGER.info("Adding supported currency: {}", currency);
             hub.addCurrency(currency);
-            LOGGER.info("Added supported currency: {}", currency);
         }
 
         this.hubRepository.save(hub);
+        var output = new Output(hub.getId());
 
-        LOGGER.info("Completed CreateHubCommand with input: {}", input);
+        LOGGER.info("CreateHubCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(hub.getId());
+        return output;
     }
 
 }

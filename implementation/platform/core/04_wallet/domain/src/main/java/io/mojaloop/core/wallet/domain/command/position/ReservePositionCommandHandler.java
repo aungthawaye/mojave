@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
@@ -58,15 +59,11 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
                                              NoPositionUpdateForTransactionException,
                                              PositionNotExistException {
 
-        LOGGER.info("Executing ReservePositionCommand with input: {}", input);
+        LOGGER.info("ReservePositionCommand : input: ({})", ObjectLogger.log(input));
 
         var position = this.positionCache.get(input.walletOwnerId(), input.currency());
 
         if (position == null) {
-
-            LOGGER.error(
-                "Position does not exist for walletOwnerId: {} and currency: {}",
-                input.walletOwnerId(), input.currency());
             throw new PositionNotExistException(input.walletOwnerId(), input.currency());
         }
 
@@ -84,20 +81,14 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
                 history.oldPosition(), history.newPosition(), history.oldReserved(),
                 history.newReserved(), history.netDebitCap(), history.transactionAt());
 
-            LOGGER.info("ReservePositionCommand executed successfully with output: {}", output);
+            LOGGER.info("ReservePositionCommand : output: ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (final PositionUpdater.NoPositionUpdateException e) {
-
-            LOGGER.error("No position update created for transaction: {}", input.transactionId());
             throw new NoPositionUpdateForTransactionException(e.getTransactionId());
 
         } catch (final PositionUpdater.LimitExceededException e) {
-
-            LOGGER.error(
-                "Position reservation exceeds limit for positionId: {} amount: {}",
-                e.getPositionId(), e.getAmount());
             throw new PositionLimitExceededException(
                 e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getOldReserved(),
                 e.getNetDebitCap(), e.getTransactionId());

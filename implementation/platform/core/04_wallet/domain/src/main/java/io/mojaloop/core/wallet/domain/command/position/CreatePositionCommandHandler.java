@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.position;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.wallet.contract.command.position.CreatePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.PositionAlreadyExistsException;
 import io.mojaloop.core.wallet.domain.model.Position;
@@ -49,7 +50,7 @@ public class CreatePositionCommandHandler implements CreatePositionCommand {
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Executing CreatePositionCommand with input: {}", input);
+        LOGGER.info("CreatePositionCommand : input: ({})", ObjectLogger.log(input));
 
         // Build uniqueness spec: walletOwnerId + currency
         final var spec = PositionRepository.Filters
@@ -57,22 +58,19 @@ public class CreatePositionCommandHandler implements CreatePositionCommand {
                              .and(PositionRepository.Filters.withCurrency(input.currency()));
 
         if (this.positionRepository.findOne(spec).isPresent()) {
-            LOGGER.info(
-                "Position already exists for ownerId: {} and currency: {}", input.walletOwnerId(),
-                input.currency());
             throw new PositionAlreadyExistsException(input.walletOwnerId(), input.currency());
         }
 
         final var position = new Position(
             input.walletOwnerId(), input.currency(), input.name(), input.netDebitCap());
-        LOGGER.info("Created Position: {}", position);
 
         final var saved = this.positionRepository.save(position);
-        LOGGER.info("Saved Position with id: {}", saved.getId());
 
-        LOGGER.info("Completed CreatePositionCommand with input: {}", input);
+        final var output = new Output(saved.getId());
 
-        return new Output(saved.getId());
+        LOGGER.info("CreatePositionCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

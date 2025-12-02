@@ -15,7 +15,6 @@ public interface CreateAccountInBulkCommand {
     record Input(AccountOwnerId ownerId,
                  FspCode fspCode,
                  Currency currency,
-                 String name,
                  ChartEntryCategory category) { }
 
     record Output(List<AccountId> accountIds) { }

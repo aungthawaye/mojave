@@ -21,6 +21,7 @@
 package io.mojaloop.core.accounting.domain.command.account;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.account.ActivateAccountCommand;
 import io.mojaloop.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
@@ -50,22 +51,21 @@ public class ActivateAccountCommandHandler implements ActivateAccountCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ActivateAccountCommand with input: {}", input);
+        LOGGER.info("ActivateAccountCommand : input: ({})", ObjectLogger.log(input));
 
         var account = this.accountRepository
                           .findById(input.accountId())
                           .orElseThrow(() -> new AccountIdNotFoundException(input.accountId()));
-        LOGGER.info("Found Account with id: {}", input.accountId());
 
         account.activate();
-        LOGGER.info("Activated Account with id: {}", account.getId());
 
         this.accountRepository.save(account);
-        LOGGER.info("Saved Account with id: {}", account.getId());
 
-        LOGGER.info("Completed ActivateAccountCommand with input: {}", input);
+        var output = new Output(account.getId());
 
-        return new Output(account.getId());
+        LOGGER.info("ActivateAccountCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

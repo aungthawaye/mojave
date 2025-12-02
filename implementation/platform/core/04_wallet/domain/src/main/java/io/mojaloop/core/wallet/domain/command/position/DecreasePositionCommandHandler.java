@@ -62,9 +62,6 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
         if (position == null) {
 
-            LOGGER.error(
-                "Position does not exist for walletOwnerId: {} and currency: {}",
-                input.walletOwnerId(), input.currency());
             throw new PositionNotExistException(input.walletOwnerId(), input.currency());
         }
 

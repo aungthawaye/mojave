@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.ChangeFspNameCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
@@ -49,7 +50,7 @@ public class ChangeFspNameCommandHandler implements ChangeFspNameCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ChangeFspNameCommand with input: {}", input);
+        LOGGER.info("ChangeFspNameCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -59,9 +60,11 @@ public class ChangeFspNameCommandHandler implements ChangeFspNameCommand {
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ChangeFspNameCommand with input: {}", input);
+        var output = new Output();
 
-        return new Output();
+        LOGGER.info("ChangeFspNameCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

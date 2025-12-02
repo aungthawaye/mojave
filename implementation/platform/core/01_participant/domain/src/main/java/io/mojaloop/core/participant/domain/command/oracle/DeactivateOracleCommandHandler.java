@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.oracle.DeactivateOracleCommand;
 import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
@@ -67,7 +68,7 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing DeactivateOracleCommand with input: {}", input);
+        LOGGER.info("DeactivateOracleCommand : input: ({})", ObjectLogger.log(input));
 
         var oracle = this.oracleRepository
                          .findById(input.oracleId())
@@ -76,8 +77,9 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
         oracle.deactivate();
         this.oracleRepository.save(oracle);
 
-        LOGGER.info("Completed DeactivateOracleCommand with input: {}", input);
-        return new Output();
+        var output = new Output();
+        LOGGER.info("DeactivateOracleCommand : output : ({})", ObjectLogger.log(output));
+        return output;
     }
 
 }

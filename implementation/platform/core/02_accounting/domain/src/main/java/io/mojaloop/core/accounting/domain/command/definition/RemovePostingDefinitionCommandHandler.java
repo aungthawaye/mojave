@@ -40,6 +40,7 @@
 package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.definition.RemovePostingDefinitionCommand;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -68,7 +69,7 @@ public class RemovePostingDefinitionCommandHandler implements RemovePostingDefin
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Executing RemovePostingDefinitionCommand with input: {}", input);
+        LOGGER.info("RemovePostingDefinitionCommand : input: ({})", ObjectLogger.log(input));
 
         final var definition = this.flowDefinitionRepository
                                    .findById(input.flowDefinitionId())
@@ -78,10 +79,11 @@ public class RemovePostingDefinitionCommandHandler implements RemovePostingDefin
         definition.removePosting(input.postingDefinitionId());
 
         this.flowDefinitionRepository.save(definition);
+        var output = new Output(definition.getId());
 
-        LOGGER.info("Completed RemovePostingDefinitionCommand with input: {}", input);
+        LOGGER.info("RemovePostingDefinitionCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(definition.getId());
+        return output;
     }
 
 }

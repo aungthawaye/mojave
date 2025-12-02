@@ -4,7 +4,6 @@ import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
 import io.mojaloop.core.accounting.contract.command.account.CreateAccountInBulkCommand;
-import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.common.datatype.enums.accounting.OverdraftMode;
 import io.mojaloop.core.common.datatype.type.accounting.AccountCode;
@@ -21,21 +20,16 @@ public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCom
     private static final Logger LOGGER = LoggerFactory.getLogger(
         CreateAccountInBulkCommandHandler.class);
 
-    private final AccountRepository accountRepository;
-
     private final CreateAccountCommand createAccountCommand;
 
     private final ChartEntryRepository chartEntryRepository;
 
-    public CreateAccountInBulkCommandHandler(AccountRepository accountRepository,
-                                             CreateAccountCommand createAccountCommand,
+    public CreateAccountInBulkCommandHandler(CreateAccountCommand createAccountCommand,
                                              ChartEntryRepository chartEntryRepository) {
 
-        assert accountRepository != null;
         assert createAccountCommand != null;
         assert chartEntryRepository != null;
 
-        this.accountRepository = accountRepository;
         this.createAccountCommand = createAccountCommand;
         this.chartEntryRepository = chartEntryRepository;
     }
@@ -62,7 +56,9 @@ public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCom
                 OverdraftMode.LIMITED, BigDecimal.ZERO);
 
             final var output = this.createAccountCommand.execute(createInput);
+
             return output.accountId();
+
         }).toList();
 
         final var output = new Output(accountIds);

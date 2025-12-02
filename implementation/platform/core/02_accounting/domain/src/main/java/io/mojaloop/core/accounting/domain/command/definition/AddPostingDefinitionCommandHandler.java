@@ -40,6 +40,7 @@
 package io.mojaloop.core.accounting.domain.command.definition;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
@@ -80,7 +81,7 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Executing AddPostingDefinitionCommand with input: {}", input);
+        LOGGER.info("AddPostingDefinitionCommand : input: ({})", ObjectLogger.log(input));
 
         final var definition = this.flowDefinitionRepository
                                    .findById(input.flowDefinitionId())
@@ -93,10 +94,11 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
             posting.side(), posting.description(), this.accountCache, this.chartEntryCache);
 
         this.flowDefinitionRepository.save(definition);
+        var output = new Output(definition.getId(), pd.getId());
 
-        LOGGER.info("Completed AddPostingDefinitionCommand with input: {}", input);
+        LOGGER.info("AddPostingDefinitionCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(definition.getId(), pd.getId());
+        return output;
     }
 
 }

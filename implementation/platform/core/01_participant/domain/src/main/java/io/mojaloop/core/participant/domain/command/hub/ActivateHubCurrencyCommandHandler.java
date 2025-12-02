@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
@@ -70,19 +71,19 @@ public class ActivateHubCurrencyCommandHandler implements ActivateHubCurrencyCom
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ActivateHubCurrencyCommand with input: {}", input);
+        LOGGER.info("ActivateHubCurrencyCommand : input: ({})", ObjectLogger.log(input));
 
         var hub = this.hubRepository.findById(input.hubId()).orElseThrow(HubNotFoundException::new);
 
-        boolean activated = hub.activateCurrency(input.currency());
+        var activated = hub.activateCurrency(input.currency());
 
         this.hubRepository.save(hub);
 
-        LOGGER.info(
-            "Completed ActivateHubCurrencyCommand with input: {} -> activated={} ", input,
-            activated);
+        var output = new Output(activated);
 
-        return new Output(activated);
+        LOGGER.info("ActivateHubCurrencyCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

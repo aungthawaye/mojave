@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.oracle;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.oracle.ChangeOracleNameCommand;
 import io.mojaloop.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.OracleRepository;
@@ -67,7 +68,7 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ChangeOracleNameCommand with input: {}", input);
+        LOGGER.info("ChangeOracleNameCommand : input: ({})", ObjectLogger.log(input));
 
         var oracle = this.oracleRepository
                          .findById(input.oracleId())
@@ -76,8 +77,10 @@ public class ChangeOracleNameCommandHandler implements ChangeOracleNameCommand {
         oracle.name(input.name());
         this.oracleRepository.save(oracle);
 
-        LOGGER.info("Completed ChangeOracleNameCommand with input: {}", input);
-        return new Output();
+        var output = new Output();
+
+        LOGGER.info("ChangeOracleNameCommand : output : ({})", ObjectLogger.log(output));
+        return output;
     }
 
 }

@@ -23,6 +23,7 @@ package io.mojaloop.core.accounting.domain.command.account;
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.account.CreateAccountCommand;
+import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
 import io.mojaloop.core.accounting.domain.model.Account;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
@@ -59,8 +60,8 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
 
         var chartEntry = this.chartEntryRepository
                              .findById(input.chartEntryId())
-                             .orElseThrow(() -> new IllegalArgumentException(
-                                 "ChartEntry not found: " + input.chartEntryId()));
+                             .orElseThrow(
+                                 () -> new ChartEntryIdNotFoundException(input.chartEntryId()));
 
         var account = new Account(
             chartEntry, input.ownerId(), input.currency(), input.code(), input.name(),

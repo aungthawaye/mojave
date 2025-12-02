@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.hub.DeactivateHubCurrencyCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.domain.model.hub.HubCurrency;
@@ -77,7 +78,7 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing DeactivateHubCurrencyCommand with input: {}", input);
+        LOGGER.info("DeactivateHubCurrencyCommand : input: ({})", ObjectLogger.log(input));
 
         var hub = this.hubRepository.findById(input.hubId()).orElseThrow(HubNotFoundException::new);
 
@@ -86,11 +87,6 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
         var fsps = this.fspRepository.findAll();
 
         for (var fsp : fsps) {
-
-            LOGGER.info(
-                "Deactivating currency of FSP: fspId : ({}), currency : ({})", fsp.getId(),
-                input.currency());
-
             fsp.deactivate(input.currency());
 
             this.fspRepository.save(fsp);
@@ -98,17 +94,13 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
 
         this.hubRepository.save(hub);
 
-        LOGGER.info(
-            "Completed DeactivateHubCurrencyCommand with input: {} -> deactivated={} ", input,
-            optHubCurrency);
+        var output = optHubCurrency
+                         .map(currency -> new Output(currency.getId(), !currency.isActive()))
+                         .orElse(new Output(null, false));
 
-        if (optHubCurrency.isPresent()) {
-            return new Output(
-                optHubCurrency.map(HubCurrency::getId).orElse(null),
-                !optHubCurrency.get().isActive());
-        }
+        LOGGER.info("DeactivateHubCurrencyCommand : output: ({})", ObjectLogger.log(output));
 
-        return new Output(null, false);
+        return output;
     }
 
 }

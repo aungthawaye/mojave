@@ -40,6 +40,7 @@
 package io.mojaloop.core.accounting.domain.command.chart;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.chart.ChangeChartNameCommand;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartIdNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.ChartRepository;
@@ -67,22 +68,20 @@ public class ChangeChartNameCommandHandler implements ChangeChartNameCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ChangeChartNameCommand with input: {}", input);
+        LOGGER.info("ChangeChartNameCommand : input: ({})", ObjectLogger.log(input));
 
         var chart = this.chartRepository
                         .findById(input.chartId())
                         .orElseThrow(() -> new ChartIdNotFoundException(input.chartId()));
-        LOGGER.info("Found Chart with id: {}", input.chartId());
 
         chart.name(input.name());
-        LOGGER.info("Updated name for Chart id: {}", chart.getId());
 
         this.chartRepository.save(chart);
-        LOGGER.info("Saved Chart with id: {}", chart.getId());
+        var output = new Output(chart.getId());
 
-        LOGGER.info("Completed ChangeChartNameCommand with input: {}", input);
+        LOGGER.info("ChangeChartNameCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(chart.getId());
+        return output;
     }
 
 }

@@ -21,6 +21,7 @@
 package io.mojaloop.core.wallet.domain.command.balance;
 
 import io.mojaloop.component.misc.handy.Snowflake;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.balance.DepositFundCommand;
 import io.mojaloop.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
@@ -51,15 +52,11 @@ public class DepositFundCommandHandler implements DepositFundCommand {
     @Override
     public Output execute(final Input input) throws NoBalanceUpdateForTransactionException {
 
-        LOGGER.info("Executing DepositFundCommand with input: {}", input);
+        LOGGER.info("DepositFundCommand : input: ({})", ObjectLogger.log(input));
 
         var wallet = this.balanceCache.get(input.walletOwnerId(), input.currency());
 
         if (wallet == null) {
-
-            LOGGER.error(
-                "Balance does not exist for walletOwnerId: {} and currency: {}",
-                input.walletOwnerId(), input.currency());
             throw new RuntimeException(
                 "Balance does not exist for walletOwnerId: " + input.walletOwnerId() +
                     " and currency: " + input.currency());
@@ -73,18 +70,16 @@ public class DepositFundCommandHandler implements DepositFundCommand {
                 input.transactionId(), input.transactionAt(), balanceUpdateId, wallet.balanceId(),
                 input.amount(), input.description());
 
-            var output = new Output(
+            final var output = new Output(
                 history.balanceUpdateId(), history.balanceId(), history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt());
 
-            LOGGER.info("DepositFundCommand executed successfully with output: {}", output);
+            LOGGER.info("DepositFundCommand : output: ({})", ObjectLogger.log(output));
 
             return output;
 
         } catch (final BalanceUpdater.NoBalanceUpdateException e) {
-
-            LOGGER.error("Failed to deposit funds for transaction: {}", input.transactionId());
             throw new NoBalanceUpdateForTransactionException(input.transactionId());
         }
     }

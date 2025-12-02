@@ -21,6 +21,7 @@
 package io.mojaloop.core.participant.domain.command.fsp;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.fsp.AddEndpointCommand;
 import io.mojaloop.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import io.mojaloop.core.participant.domain.repository.FspRepository;
@@ -50,7 +51,7 @@ public class AddEndpointCommandHandler implements AddEndpointCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ConfigureEndpointCommand with input: {}", input);
+        LOGGER.info("AddEndpointCommand : input: ({})", ObjectLogger.log(input));
 
         var fsp = this.fspRepository
                       .findById(input.fspId())
@@ -60,9 +61,11 @@ public class AddEndpointCommandHandler implements AddEndpointCommand {
 
         this.fspRepository.save(fsp);
 
-        LOGGER.info("Completed ConfigureEndpointCommand with input: {}", input);
+        var output = new Output(endpoint.getId());
 
-        return new Output(endpoint.getId());
+        LOGGER.info("AddEndpointCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }

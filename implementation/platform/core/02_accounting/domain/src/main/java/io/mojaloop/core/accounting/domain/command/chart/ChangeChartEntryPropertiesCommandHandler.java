@@ -40,6 +40,7 @@
 package io.mojaloop.core.accounting.domain.command.chart;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.chart.ChangeChartEntryPropertiesCommand;
 import io.mojaloop.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
@@ -67,29 +68,26 @@ public class ChangeChartEntryPropertiesCommandHandler implements ChangeChartEntr
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ChangeChartEntryPropertiesCommand with input: {}", input);
+        LOGGER.info("ChangeChartEntryPropertiesCommand : input: ({})", ObjectLogger.log(input));
 
         var entry = this.chartEntryRepository
                         .findById(input.chartEntryId())
                         .orElseThrow(() -> new ChartEntryIdNotFoundException(input.chartEntryId()));
-        LOGGER.info("Found ChartEntry with id: {}", input.chartEntryId());
 
         if (input.name() != null) {
-            LOGGER.info("Updating name for ChartEntry id: {}", entry.getId());
             entry.name(input.name());
         }
 
         if (input.description() != null) {
-            LOGGER.info("Updating description for ChartEntry id: {}", entry.getId());
             entry.description(input.description());
         }
 
         this.chartEntryRepository.save(entry);
-        LOGGER.info("Saved ChartEntry with id: {}", entry.getId());
+        var output = new Output(entry.getId());
 
-        LOGGER.info("Completed ChangeChartEntryPropertiesCommand with input: {}", input);
+        LOGGER.info("ChangeChartEntryPropertiesCommand : output : ({})", ObjectLogger.log(output));
 
-        return new Output(entry.getId());
+        return output;
     }
 
 }

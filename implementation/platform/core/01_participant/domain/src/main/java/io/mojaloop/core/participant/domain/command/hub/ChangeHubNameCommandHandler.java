@@ -40,6 +40,7 @@
 package io.mojaloop.core.participant.domain.command.hub;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.participant.contract.command.hub.ChangeHubNameCommand;
 import io.mojaloop.core.participant.contract.exception.hub.HubNotFoundException;
 import io.mojaloop.core.participant.domain.repository.HubRepository;
@@ -68,7 +69,7 @@ public class ChangeHubNameCommandHandler implements ChangeHubNameCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("Executing ChangeHubNameCommand with input: {}", input);
+        LOGGER.info("ChangeHubNameCommand : input: ({})", ObjectLogger.log(input));
 
         var hub = this.hubRepository.findById(input.hubId()).orElseThrow(HubNotFoundException::new);
 
@@ -76,9 +77,11 @@ public class ChangeHubNameCommandHandler implements ChangeHubNameCommand {
 
         this.hubRepository.save(hub);
 
-        LOGGER.info("Completed ChangeHubNameCommand with input: {}", input);
+        var output = new Output();
 
-        return new Output();
+        LOGGER.info("ChangeHubNameCommand : output : ({})", ObjectLogger.log(output));
+
+        return output;
     }
 
 }
