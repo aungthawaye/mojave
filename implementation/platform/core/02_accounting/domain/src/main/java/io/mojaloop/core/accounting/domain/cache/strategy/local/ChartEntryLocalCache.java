@@ -70,18 +70,57 @@ public class ChartEntryLocalCache implements ChartEntryCache {
 
     @Override
     public ChartEntryData get(final ChartEntryId chartEntryId) {
+        if (chartEntryId == null) {
+            return null;
+        }
 
-        return this.withId.get(chartEntryId.getId());
+        var data = this.withId.get(chartEntryId.getId());
+
+        if (data == null) {
+
+            var entity = this.chartEntryRepository.findById(chartEntryId).orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @Override
     public ChartEntryData get(final ChartEntryCode code) {
+        if (code == null) {
+            return null;
+        }
 
-        return this.withCode.get(code.value());
+        var data = this.withCode.get(code.value());
+
+        if (data == null) {
+
+            var entity = this.chartEntryRepository
+                             .findOne(ChartEntryRepository.Filters.withCode(code))
+                             .orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @Override
     public Set<ChartEntryData> get(final ChartId chartId) {
+        if (chartId == null) {
+            return Set.of();
+        }
 
         final var result = new HashSet<ChartEntryData>();
 
@@ -89,6 +128,19 @@ public class ChartEntryLocalCache implements ChartEntryCache {
             if (entry.chartId().equals(chartId)) {
                 result.add(entry);
             }
+        }
+
+        if (result.isEmpty()) {
+            var entities = this.chartEntryRepository.findAll(
+                ChartEntryRepository.Filters.withChartId(chartId));
+
+            entities.forEach(entity -> {
+                var converted = entity.convert();
+                this.save(converted);
+                if (converted.chartId().equals(chartId)) {
+                    result.add(converted);
+                }
+            });
         }
 
         return result;

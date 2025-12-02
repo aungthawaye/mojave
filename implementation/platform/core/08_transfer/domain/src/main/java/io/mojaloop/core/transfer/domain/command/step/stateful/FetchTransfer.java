@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.common.datatype.enums.transfer.TransferStatus;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -30,7 +31,6 @@ import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.Currency;
-import io.mojaloop.core.common.datatype.enums.transfer.TransferStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -73,7 +73,7 @@ public class FetchTransfer {
                     "Transfer not found for udfTransferId : ({})", input.udfTransferId.getId());
 
                 var endAt = System.nanoTime();
-                var output = new Output(null, null, null, null, null, null, null);
+                var output = new Output(null, null, null, null, null, null, null, null, null);
 
                 LOGGER.info(
                     "FetchTransfer : output : ({}) , took : {} ms", output,
@@ -88,8 +88,8 @@ public class FetchTransfer {
 
             var output = new Output(
                 transfer.getId(), transfer.getStatus(), transfer.getReservationId(),
-                transfer.getCurrency(), transfer.getTransferAmount(), transfer.getTransactionId(),
-                transfer.getTransactionAt());
+                transfer.getCurrency(), transfer.getTransferAmount(), BigDecimal.ZERO,
+                BigDecimal.ZERO, transfer.getTransactionId(), transfer.getTransactionAt());
 
             var endAt = System.nanoTime();
             LOGGER.info(
@@ -113,6 +113,8 @@ public class FetchTransfer {
                          PositionUpdateId reservationId,
                          Currency currency,
                          BigDecimal transferAmount,
+                         BigDecimal payeeFspFee,
+                         BigDecimal payeeFspCommission,
                          TransactionId transactionId,
                          Instant transactionAt) { }
 

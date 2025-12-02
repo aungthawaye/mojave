@@ -23,6 +23,7 @@ package io.mojaloop.core.common.datatype.enums.trasaction;
 public final class FundInDimension {
 
     public enum Participants {
+        HUB,
         RECEIVING_FSP
     }
 

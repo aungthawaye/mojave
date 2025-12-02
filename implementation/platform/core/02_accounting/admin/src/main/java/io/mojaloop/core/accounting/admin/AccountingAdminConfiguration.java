@@ -40,8 +40,7 @@ import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCa
 import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.EmptyLedger;
-import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
+import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -75,11 +74,11 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
 
     private final AccountCache accountCache;
 
-    private final AccountResolver accountResolver;
-
     private final ChartEntryCache chartEntryCache;
 
     private final FlowDefinitionCache flowDefinitionCache;
+
+    private final Ledger ledger;
 
     public AccountingAdminConfiguration(ObjectMapper objectMapper,
                                         AccountRepository accountRepository,
@@ -96,7 +95,16 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
         this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);
         this.flowDefinitionCache = new FlowDefinitionLocalCache(flowDefinitionRepository);
 
-        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
+        this.ledger = new MySqlLedger(
+            new MySqlLedger.LedgerDbSettings(
+                new MySqlLedger.LedgerDbSettings.Connection(
+                    System.getenv("ACC_LEDGER_DB_URL"),
+                    System.getenv("ACC_LEDGER_DB_USER"), System.getenv("ACC_LEDGER_DB_PASSWORD")),
+                new MySqlLedger.LedgerDbSettings.Pool(
+                    "accounting-ledger",
+                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE")))), objectMapper);
+
     }
 
     @Bean
@@ -104,13 +112,6 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
     public AccountCache accountCache() {
 
         return this.accountCache;
-    }
-
-    @Bean
-    @Override
-    public AccountResolver accountResolver() {
-
-        return this.accountResolver;
     }
 
     @Bean
@@ -145,7 +146,7 @@ final class AccountingAdminConfiguration extends WebMvcExtension implements
     @Override
     public Ledger ledger() {
 
-        return new EmptyLedger();
+        return this.ledger;
     }
 
     @Bean

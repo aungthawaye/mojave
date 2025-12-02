@@ -70,15 +70,54 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
     @Override
     public FlowDefinitionData get(final FlowDefinitionId flowDefinitionId) {
+        if (flowDefinitionId == null) {
+            return null;
+        }
 
-        return this.withId.get(flowDefinitionId.getId());
+        var data = this.withId.get(flowDefinitionId.getId());
+
+        if (data == null) {
+
+            var entity = this.flowDefinitionRepository.findById(flowDefinitionId).orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @Override
     public FlowDefinitionData get(final TransactionType transactionType, final Currency currency) {
+        if (transactionType == null || currency == null) {
+            return null;
+        }
 
         final var key = FlowDefinitionCache.Keys.forTransaction(transactionType, currency);
-        return this.withTxnTypeCurrency.get(key);
+
+        var data = this.withTxnTypeCurrency.get(key);
+
+        if (data == null) {
+
+            var entity = this.flowDefinitionRepository
+                             .findOne(FlowDefinitionRepository.Filters
+                                          .withTransactionType(transactionType)
+                                          .and(FlowDefinitionRepository.Filters.withCurrency(currency)))
+                             .orElse(null);
+
+            if (entity != null) {
+                data = entity.convert();
+                this.save(data);
+            }
+
+            return data;
+        }
+
+        return data;
     }
 
     @PostConstruct

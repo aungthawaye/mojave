@@ -37,29 +37,51 @@
  * ==============================================================================
  */
 
-package io.mojaloop.core.participant.domain.repository;
+package io.mojaloop.core.accounting.contract.exception.chart;
 
-import io.mojaloop.core.common.datatype.identifier.participant.HubId;
-import io.mojaloop.core.participant.domain.model.hub.Hub;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
+import io.mojaloop.component.misc.exception.ErrorTemplate;
+import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import lombok.Getter;
 
-@Repository
-public interface HubRepository extends JpaRepository<Hub, HubId>, JpaSpecificationExecutor<Hub> {
+import java.util.HashMap;
+import java.util.Map;
 
-    class Filters {
+@Getter
+public class ChartNameAlreadyExistsException extends UncheckedDomainException {
 
-        public static Specification<Hub> withNameContains(String name) {
+    public static final String CODE = "CHART_NAME_ALREADY_EXISTS";
 
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
-        }
+    private static final String TEMPLATE = "The Chart Name ({0}) already exists.";
 
-        public static Specification<Hub> withNameEquals(String name) {
+    private final String chartName;
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
-        }
+    public ChartNameAlreadyExistsException(final String chartName) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{chartName}));
+
+        this.chartName = chartName;
+    }
+
+    public static ChartNameAlreadyExistsException from(final Map<String, String> extras) {
+
+        final var name = extras.get(Keys.CHART_NAME);
+
+        return new ChartNameAlreadyExistsException(name);
+    }
+
+    @Override
+    public Map<String, String> extras() {
+
+        final var extras = new HashMap<String, String>();
+
+        extras.put(Keys.CHART_NAME, this.chartName);
+
+        return extras;
+    }
+
+    public static class Keys {
+
+        public static final String CHART_NAME = "chartName";
 
     }
 

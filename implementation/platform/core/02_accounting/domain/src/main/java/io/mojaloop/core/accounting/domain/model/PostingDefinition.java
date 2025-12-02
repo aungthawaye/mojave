@@ -227,7 +227,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
             if (accounts == null || accounts.isEmpty()) {
 
-                throw new ImmatureChartEntryException();
+                var _chartEntry = chartEntryCache.get(_chartEntryId);
+                throw new ImmatureChartEntryException(_chartEntry.code());
 
             } else {
 

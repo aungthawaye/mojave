@@ -33,8 +33,6 @@ import io.mojaloop.core.accounting.domain.cache.strategy.timer.ChartEntryTimerCa
 import io.mojaloop.core.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
-import io.mojaloop.core.accounting.domain.component.resolver.AccountResolver;
-import io.mojaloop.core.accounting.domain.component.resolver.strategy.CacheBasedAccountResolver;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;
 import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
@@ -54,8 +52,6 @@ final class AccountingConsumerConfiguration implements AccountingDomainConfigura
     private final Ledger ledger;
 
     private final AccountCache accountCache;
-
-    private final AccountResolver accountResolver;
 
     private final ChartEntryCache chartEntryCache;
 
@@ -85,8 +81,6 @@ final class AccountingConsumerConfiguration implements AccountingDomainConfigura
             accountRepository, Integer.parseInt(
             System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
-        this.accountResolver = new CacheBasedAccountResolver(this.accountCache);
-
         this.chartEntryCache = new ChartEntryTimerCache(
             chartEntryRepository, Integer.parseInt(
             System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
@@ -105,13 +99,6 @@ final class AccountingConsumerConfiguration implements AccountingDomainConfigura
     public AccountCache accountCache() {
 
         return this.accountCache;
-    }
-
-    @Bean
-    @Override
-    public AccountResolver accountResolver() {
-
-        return this.accountResolver;
     }
 
     @Bean(name = PostLedgerFlowListener.LISTENER_CONTAINER_FACTORY)

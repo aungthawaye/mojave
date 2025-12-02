@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,6 +41,7 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
+import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import lombok.Getter;
 
 import java.util.Map;
@@ -50,22 +51,33 @@ public class ImmatureChartEntryException extends UncheckedDomainException {
 
     public static final String CODE = "IMMATURE_CHART_ENTRY";
 
-    private static final String TEMPLATE = "Chart Entry is immature.No Accounts are configured for it.";
+    private static final String TEMPLATE = "Chart Entry ({0}) is immature. No Accounts have been configured for it.";
 
-    public ImmatureChartEntryException() {
+    private final ChartEntryCode chartEntryCode;
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[0]));
+    public ImmatureChartEntryException(ChartEntryCode chartEntryCode) {
+
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{chartEntryCode.value()}));
+
+        this.chartEntryCode = chartEntryCode;
     }
 
     public static ImmatureChartEntryException from(final Map<String, String> extras) {
 
-        return new ImmatureChartEntryException();
+        return new ImmatureChartEntryException(
+            new ChartEntryCode(extras.get(Keys.CHART_ENTRY_CODE)));
     }
 
     @Override
     public Map<String, String> extras() {
 
-        return Map.of();
+        return Map.of(Keys.CHART_ENTRY_CODE, chartEntryCode.value());
+    }
+
+    public static class Keys {
+
+        public static final String CHART_ENTRY_CODE = "chartEntryCode";
+
     }
 
 }
