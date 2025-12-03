@@ -6,6 +6,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup">
@@ -19,11 +21,11 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1">
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1" enabled="true">
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="hubOwnerId" elementType="Argument">
               <stringProp name="Argument.name">hubOwnerId</stringProp>
@@ -43,7 +45,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -65,14 +67,14 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">chartId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -99,14 +101,14 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">hubLiquidityChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -133,14 +135,14 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fspLiquidityChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -167,14 +169,14 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fspPositionChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -201,14 +203,14 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fspPayableChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -235,14 +237,14 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fspReceivableChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -267,7 +269,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -292,7 +294,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account" enabled="true">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -317,7 +319,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN defintion">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN definition">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -336,6 +338,7 @@
     &quot;name&quot;: &quot;FundIn-BYN&quot;,&#xd;
     &quot;postings&quot;: [&#xd;
         {&#xd;
+        	  &quot;step&quot;: 1,&#xd;
             &quot;amountName&quot;: &quot;LIQUIDITY_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - HUB Liquidity&quot;,&#xd;
             &quot;participant&quot;: &quot;HUB&quot;,&#xd;
@@ -344,6 +347,7 @@
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
+            &quot;step&quot;: 2,&#xd;
             &quot;amountName&quot;: &quot;LIQUIDITY_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payer Liquidity&quot;,&#xd;
             &quot;participant&quot;: &quot;RECEIVING_FSP&quot;,&#xd;
@@ -360,7 +364,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER defintion">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER definition">
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">4201</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -379,6 +383,7 @@
     &quot;name&quot;: &quot;FundTransfer-BYN&quot;,&#xd;
     &quot;postings&quot;: [&#xd;
         {&#xd;
+        	  &quot;step&quot;: 1,&#xd;
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - Payer Liquidity&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
@@ -387,6 +392,7 @@
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
+        	  &quot;step&quot;: 2,&#xd;
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payer Position&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
@@ -395,6 +401,7 @@
             &quot;side&quot;: &quot;CREDIT&quot;&#xd;
         },&#xd;
         {&#xd;
+        	  &quot;step&quot;: 3,&#xd;
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - Payer Position&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
@@ -403,6 +410,7 @@
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
+        	  &quot;step&quot;: 4,&#xd;
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payer Payable&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
@@ -411,6 +419,7 @@
             &quot;side&quot;: &quot;CREDIT&quot;&#xd;
         },&#xd;
         {&#xd;
+        	  &quot;step&quot;: 5,&#xd;
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - Payer Payable&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
@@ -419,6 +428,7 @@
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
+        	  &quot;step&quot;: 6,&#xd;
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payee Receivable&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYEE_FSP&quot;,&#xd;
@@ -450,7 +460,7 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
     &quot;amounts&quot;: {&#xd;
-        &quot;LIQUIDITY_AMOUNT&quot;: &quot;100000&quot;&#xd;
+        &quot;LIQUIDITY_AMOUNT&quot;: &quot;1000000&quot;&#xd;
     },&#xd;
     &quot;currency&quot;: &quot;BYN&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
@@ -482,8 +492,8 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
     &quot;amounts&quot;: {&#xd;
-        &quot;TRANSFER_AMOUNT&quot;: &quot;100000&quot;,&#xd;
-        &quot;PAYEE_FSP_FEE&quot;: &quot;10&quot;,&#xd;
+        &quot;TRANSFER_AMOUNT&quot;: &quot;10.0001&quot;,&#xd;
+        &quot;PAYEE_FSP_FEE&quot;: &quot;0&quot;,&#xd;
         &quot;PAYEE_FSP_COMMISSION&quot;: &quot;0&quot;&#xd;
     },&#xd;
     &quot;currency&quot;: &quot;BYN&quot;,&#xd;
@@ -501,7 +511,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -547,7 +557,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -584,7 +594,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table">
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

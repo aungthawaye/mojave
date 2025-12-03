@@ -83,6 +83,9 @@ public class LedgerMovement extends JpaEntity<LedgerMovementId> {
     @Column(name = "ledger_movement_id", nullable = false, updatable = false)
     protected LedgerMovementId id;
 
+    @Column(name = "step", nullable = false)
+    protected Integer step = 0;
+
     @Column(name = "account_id", nullable = false, updatable = false)
     @Convert(converter = AccountIdConverter.class)
     protected AccountId accountId;

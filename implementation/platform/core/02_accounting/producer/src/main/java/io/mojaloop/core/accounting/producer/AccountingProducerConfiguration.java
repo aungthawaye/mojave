@@ -38,7 +38,7 @@ public class AccountingProducerConfiguration {
 
     @Bean
     @Qualifier(PostLedgerFlowPublisher.QUALIFIER)
-    public KafkaTemplate<String, PostLedgerFlowCommand.Input> addStepKafkaTemplate(@Qualifier(
+    public KafkaTemplate<String, PostLedgerFlowCommand.Input> postLedgerFlowKafkaTemplate(@Qualifier(
         PostLedgerFlowPublisher.QUALIFIER) ProducerFactory<String, PostLedgerFlowCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
@@ -46,7 +46,7 @@ public class AccountingProducerConfiguration {
 
     @Bean
     @Qualifier(PostLedgerFlowPublisher.QUALIFIER)
-    public ProducerFactory<String, PostLedgerFlowCommand.Input> addStepProducerFactory(
+    public ProducerFactory<String, PostLedgerFlowCommand.Input> postLedgerFlowProducerFactory(
         KafkaProducerConfigurer.ProducerSettings settings,
         ObjectMapper objectMapper) {
 

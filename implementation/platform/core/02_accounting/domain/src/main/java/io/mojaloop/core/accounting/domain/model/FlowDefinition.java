@@ -137,7 +137,8 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
-    public PostingDefinition addPosting(ReceiveIn receiveIn,
+    public PostingDefinition addPosting(Integer index,
+                                        ReceiveIn receiveIn,
                                         Long receiveInId,
                                         String participant,
                                         String amountName,
@@ -147,8 +148,8 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                                         ChartEntryCache chartEntryCache) {
 
         var posting = new PostingDefinition(
-            this, receiveIn, receiveInId, participant, amountName, side, description, accountCache,
-            chartEntryCache);
+            this, index, receiveIn, receiveInId, participant, amountName, side, description,
+            accountCache, chartEntryCache);
 
         this.postings.add(posting);
 
@@ -162,8 +163,8 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         var postingData = this.postings
                               .stream()
                               .map(p -> new FlowDefinitionData.PostingDefinitionData(
-                                  p.id, p.receiveIn, p.receiveInId, p.participant, p.amountName,
-                                  p.side, p.description))
+                                  p.id, p.step, p.receiveIn, p.receiveInId, p.participant,
+                                  p.amountName, p.side, p.description))
                               .toList();
 
         return new FlowDefinitionData(

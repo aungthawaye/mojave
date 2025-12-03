@@ -130,7 +130,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
             Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
             rs.getBigDecimal("old_position"), rs.getBigDecimal("new_position"),
             rs.getBigDecimal("old_reserved"), rs.getBigDecimal("new_reserved"),
-            rs.getBigDecimal("net_debit_cap"), Instant.ofEpochSecond(rs.getLong("transaction_at")));
+            rs.getBigDecimal("ndc"), Instant.ofEpochSecond(rs.getLong("transaction_at")));
     }
 
     @Override
@@ -281,7 +281,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     throw new RuntimeException(new LimitExceededException(
                                         positionId, amount, rs.getBigDecimal("old_position"),
                                         rs.getBigDecimal("old_reserved"),
-                                        rs.getBigDecimal("net_debit_cap"), transactionId));
+                                        rs.getBigDecimal("ndc"), transactionId));
                                 }
                             }
                         }
@@ -343,7 +343,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     throw new RuntimeException(new LimitExceededException(
                                         positionId, amount, rs.getBigDecimal("old_position"),
                                         rs.getBigDecimal("old_reserved"),
-                                        rs.getBigDecimal("net_debit_cap"), transactionId));
+                                        rs.getBigDecimal("ndc"), transactionId));
                                 }
                             }
                         }

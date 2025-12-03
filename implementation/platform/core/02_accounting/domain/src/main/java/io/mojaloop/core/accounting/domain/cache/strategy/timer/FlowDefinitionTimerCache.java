@@ -22,6 +22,7 @@ package io.mojaloop.core.accounting.domain.cache.strategy.timer;
 
 import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
+import io.mojaloop.core.accounting.domain.model.FlowDefinition;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.FlowDefinitionId;
@@ -121,8 +122,8 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
         final var defs = this.flowDefinitionRepository.findAll();
         final var entries = defs
                                 .stream()
-                                .map(e -> e.convert())
-                                .collect(Collectors.toUnmodifiableList());
+                                .map(FlowDefinition::convert)
+                                .toList();
 
         var _withId = entries
                           .stream()
@@ -130,6 +131,7 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
                               Collectors.toUnmodifiableMap(
                                   FlowDefinitionData::flowDefinitionId, Function.identity(),
                                   (a, b) -> a));
+
         var _withTxnTypeCurrency = entries.stream().collect(Collectors.toUnmodifiableMap(
             e -> FlowDefinitionCache.Keys.forTransaction(e.transactionType(), e.currency()),
             Function.identity(), (a, b) -> a));

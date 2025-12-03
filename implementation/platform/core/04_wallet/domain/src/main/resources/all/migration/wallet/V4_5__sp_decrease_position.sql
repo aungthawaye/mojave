@@ -16,7 +16,7 @@ BEGIN
     DECLARE v_old_position DECIMAL(34, 4);
     DECLARE v_new_position DECIMAL(34, 4);
     DECLARE v_old_reserved DECIMAL(34, 4);
-    DECLARE v_net_debit_cap DECIMAL(34, 4);
+    DECLARE v_ndc DECIMAL(34, 4);
     DECLARE v_currency VARCHAR(3);
     DECLARE v_now BIGINT;
 
@@ -26,9 +26,9 @@ BEGIN
 
     SELECT position,
            reserved,
-           net_debit_cap,
+           ndc,
            currency
-    INTO v_old_position, v_old_reserved, v_net_debit_cap, v_currency
+    INTO v_old_position, v_old_reserved, v_ndc, v_currency
     FROM wlt_position
     WHERE position_id = p_position_id FOR
     UPDATE;
@@ -49,7 +49,7 @@ BEGIN
                                      new_position,
                                      old_reserved,
                                      new_reserved,
-                                     net_debit_cap,
+                                     ndc,
                                      description,
                                      transaction_at,
                                      created_at,
@@ -60,7 +60,7 @@ BEGIN
     VALUES (p_position_update_id, p_position_id,
             'DECREASE', p_transaction_id, v_currency,
             p_amount, v_old_position, v_new_position,
-            v_old_reserved, v_old_reserved, v_net_debit_cap, p_description,
+            v_old_reserved, v_old_reserved, v_ndc, p_description,
             p_transaction_at, v_now, NULL,
             v_now, v_now, 0);
     COMMIT;
@@ -76,7 +76,7 @@ BEGIN
            pu.new_position,
            pu.old_reserved,
            pu.new_reserved,
-           pu.net_debit_cap,
+           pu.ndc,
            pu.transaction_at
     FROM wlt_position_update pu
     WHERE pu.position_update_id = p_position_update_id;

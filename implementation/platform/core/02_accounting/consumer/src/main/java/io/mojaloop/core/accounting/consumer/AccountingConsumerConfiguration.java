@@ -151,7 +151,7 @@ final class AccountingConsumerConfiguration implements AccountingDomainConfigura
     @Override
     public Ledger ledger() {
 
-        return null;
+        return this.ledger;
     }
 
     public interface RequiredBeans { }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -154,24 +154,25 @@ public class MySqlLedger implements Ledger {
                 if (!added) {
                     throw new RuntimeException(
                         new DuplicatePostingException(
-                            request.accountId(), request.side(), transactionId));
+                            request.accountId(), request.side(),
+                            transactionId));
                 }
             });
 
             var posting = requests
                               .stream()
                               .map(request -> new Posting(
-                                  request.ledgerMovementId().getId(), request.accountId().getId(),
-                                  request.side().name(), request.currency().name(),
-                                  request.amount().toPlainString(), transactionId.getId(),
-                                  transactionAt.getEpochSecond(), transactionType.name(),
-                                  request.flowDefinitionId().getId(),
+                                  request.ledgerMovementId().getId(), request.step(),
+                                  request.accountId().getId(), request.side().name(),
+                                  request.currency().name(), request.amount().toPlainString(),
+                                  transactionId.getId(), transactionAt.getEpochSecond(),
+                                  transactionType.name(), request.flowDefinitionId().getId(),
                                   request.postingDefinitionId().getId()))
                               .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
-            LOGGER.debug("Posting to ledger: {}", postingJson);
+            LOGGER.info("Posting to MySqlLedger: {}", postingJson);
 
             return this.jdbcTemplate.execute((ConnectionCallback<List<Movement>>) con -> {
 
@@ -246,19 +247,21 @@ public class MySqlLedger implements Ledger {
 
     private void handleError(ResultSet rs, TransactionId transactionId) throws SQLException {
 
-        var code = rs.getString("code");
-        var accountId = rs.getLong("account_id");
-        var side = rs.getString("side");
-        var amount = rs.getBigDecimal("amount");
-        var debits = rs.getBigDecimal("debits");
-        var credits = rs.getBigDecimal("credits");
+        var code = rs.getString("err_code");
+        var accountId = rs.getLong("err_account_id");
+        var side = rs.getString("err_side");
+        var currency = rs.getString("err_currency");
+        var amount = rs.getBigDecimal("err_amount");
+        var debits = rs.getBigDecimal("err_debits");
+        var credits = rs.getBigDecimal("err_credits");
 
         switch (code) {
 
             case "DUPLICATE_POSTING": {
                 throw new RuntimeException(
                     new DuplicatePostingException(
-                        new AccountId(accountId), Side.valueOf(side), transactionId));
+                        new AccountId(accountId), Side.valueOf(side),
+                        transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {
@@ -295,6 +298,7 @@ public class MySqlLedger implements Ledger {
         do {
 
             var ledgerMovementId = rs.getLong("ledger_movement_id");
+            var step = rs.getInt("step");
             var accountId = rs.getLong("account_id");
             var side = rs.getString("side");
             var currency = Currency.valueOf(rs.getString("currency"));
@@ -313,7 +317,7 @@ public class MySqlLedger implements Ledger {
             var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
 
             var movement = new Movement(
-                new LedgerMovementId(ledgerMovementId), new AccountId(accountId),
+                new LedgerMovementId(ledgerMovementId), step, new AccountId(accountId),
                 Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
                 new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId,
                 postingDefinitionId, movementStage, movementResult, createdAt);
@@ -334,6 +338,7 @@ public class MySqlLedger implements Ledger {
     }
 
     private record Posting(long ledgerMovementId,
+                           int step,
                            long accountId,
                            String side,
                            String currency,

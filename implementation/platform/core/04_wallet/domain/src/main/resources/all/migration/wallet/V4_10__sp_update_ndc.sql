@@ -32,7 +32,7 @@ BEGIN
     END IF;
 
     UPDATE wlt_position
-    SET net_debit_cap = p_new_ndc
+    SET ndc = p_new_ndc
     WHERE position_id = p_position_id;
     COMMIT;
 

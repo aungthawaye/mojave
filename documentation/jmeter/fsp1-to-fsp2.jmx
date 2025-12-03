@@ -11,17 +11,17 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave">
-        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.num_threads">200</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">100</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="payerFsp" elementType="Argument">
               <stringProp name="Argument.name">payerFsp</stringProp>
@@ -35,13 +35,13 @@
             </elementProp>
             <elementProp name="currency" elementType="Argument">
               <stringProp name="Argument.name">currency</stringProp>
-              <stringProp name="Argument.value">USD</stringProp>
+              <stringProp name="Argument.value">BYN</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payer msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payer msisdn" enabled="true">
           <stringProp name="CounterConfig.start">9000000001</stringProp>
           <stringProp name="CounterConfig.end">9999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -50,7 +50,7 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payee msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payee msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8000000001</stringProp>
           <stringProp name="CounterConfig.end">8999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -176,7 +176,7 @@
     &quot;amountType&quot;: &quot;RECEIVE&quot;,&#xd;
     &quot;amount&quot;: {&#xd;
         &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
-        &quot;amount&quot;: &quot;1.01&quot;&#xd;
+        &quot;amount&quot;: &quot;1.001&quot;&#xd;
     },&#xd;
     &quot;payer&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
@@ -483,7 +483,7 @@
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>

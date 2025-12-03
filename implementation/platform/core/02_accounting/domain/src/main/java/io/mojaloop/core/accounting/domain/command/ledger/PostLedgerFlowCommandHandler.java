@@ -137,8 +137,8 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
             }
 
             var request = new Ledger.Request(
-                new LedgerMovementId(Snowflake.get().nextId()), accountId, posting.side(),
-                input.currency(), amount, flowDefinition.flowDefinitionId(),
+                new LedgerMovementId(Snowflake.get().nextId()), posting.step(), accountId,
+                posting.side(), input.currency(), amount, flowDefinition.flowDefinitionId(),
                 posting.postingDefinitionId());
 
             requests.add(request);
@@ -147,6 +147,8 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
         try {
 
             var movements = new ArrayList<Output.Movement>();
+
+            LOGGER.info("PostLedgerFlowCommand : posting requests: ({})", ObjectLogger.log(requests));
 
             this.ledger
                 .post(

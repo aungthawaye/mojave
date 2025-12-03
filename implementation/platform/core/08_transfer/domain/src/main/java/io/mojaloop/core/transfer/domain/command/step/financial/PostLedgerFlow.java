@@ -24,10 +24,15 @@ import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.producer.publisher.PostLedgerFlowPublisher;
 import io.mojaloop.core.common.datatype.enums.trasaction.FundTransferDimension;
+import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.participant.contract.data.FspData;
+import io.mojaloop.core.transaction.contract.command.AddStepCommand;
+import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
+import io.mojaloop.fspiop.common.error.FspiopErrors;
+import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,44 +47,78 @@ public class PostLedgerFlow {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlow.class);
 
+    private final AddStepPublisher addStepPublisher;
+
     private final PostLedgerFlowPublisher postLedgerFlowPublisher;
 
-    public PostLedgerFlow(PostLedgerFlowPublisher postLedgerFlowPublisher) {
+    public PostLedgerFlow(AddStepPublisher addStepPublisher,
+                          PostLedgerFlowPublisher postLedgerFlowPublisher) {
 
+        assert addStepPublisher != null;
         assert postLedgerFlowPublisher != null;
 
+        this.addStepPublisher = addStepPublisher;
         this.postLedgerFlowPublisher = postLedgerFlowPublisher;
     }
 
-    public void execute(Input input) {
+    public void execute(Input input) throws FspiopException {
+
+        var startAt = System.nanoTime();
+
+        var CONTEXT = input.context;
+        var STEP_NAME = "PostLedgerFlow";
 
         LOGGER.info("PostLedgerFlow : input : ({})", ObjectLogger.log(input));
+        try {
+            var participants = new HashMap<String, AccountOwnerId>();
 
-        var participants = new HashMap<String, AccountOwnerId>();
+            participants.put(
+                FundTransferDimension.Participants.PAYER_FSP.name(),
+                new AccountOwnerId(input.payerFsp().fspId().getId()));
+            participants.put(
+                FundTransferDimension.Participants.PAYEE_FSP.name(),
+                new AccountOwnerId(input.payeeFsp().fspId().getId()));
 
-        participants.put(
-            FundTransferDimension.Participants.PAYER_FSP.name(),
-            new AccountOwnerId(input.payerFsp().fspId().getId()));
-        participants.put(
-            FundTransferDimension.Participants.PAYEE_FSP.name(),
-            new AccountOwnerId(input.payeeFsp().fspId().getId()));
+            var amounts = new HashMap<String, BigDecimal>();
 
-        var amounts = new HashMap<String, BigDecimal>();
+            amounts.put(
+                FundTransferDimension.Amounts.TRANSFER_AMOUNT.name(), input.transferAmount());
+            amounts.put(FundTransferDimension.Amounts.PAYEE_FSP_FEE.name(), input.payeeFspFee());
+            amounts.put(
+                FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name(),
+                input.payeeFspCommission());
 
-        amounts.put(FundTransferDimension.Amounts.TRANSFER_AMOUNT.name(), input.transferAmount());
-        amounts.put(FundTransferDimension.Amounts.PAYEE_FSP_FEE.name(), input.payeeFspFee());
-        amounts.put(
-            FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name(), input.payeeFspCommission());
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                StepPhase.BEFORE));
 
-        this.postLedgerFlowPublisher.publish(
-            new PostLedgerFlowCommand.Input(
-                TransactionType.FUND_TRANSFER, input.currency(), input.transactionId,
-                input.transactionAt, participants, amounts));
+            this.postLedgerFlowPublisher.publish(
+                new PostLedgerFlowCommand.Input(
+                    TransactionType.FUND_TRANSFER, input.currency(), input.transactionId,
+                    input.transactionAt, participants, amounts));
 
-        LOGGER.info("PostLedgerFlow : done");
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    StepPhase.AFTER));
+
+            var endAt = System.nanoTime();
+            LOGGER.info("PostLedgerFlow : done , took {} ms", (endAt - startAt) / 1_000_000);
+
+        } catch (Exception e) {
+
+            LOGGER.error("Error:", e);
+
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+
+            throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+        }
     }
 
-    public record Input(TransactionId transactionId,
+    public record Input(String context,
+                        TransactionId transactionId,
                         Instant transactionAt,
                         Currency currency,
                         FspData payerFsp,

@@ -115,7 +115,7 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
         for (final var posting : input.postings()) {
 
             final var pd = definition.addPosting(
-                posting.receiveIn(), posting.receiveInId(), posting.participant(),
+                posting.step(), posting.receiveIn(), posting.receiveInId(), posting.participant(),
                 posting.amountName(), posting.side(), posting.description(), this.accountCache,
                 this.chartEntryCache);
             postingIds.add(pd.getId());

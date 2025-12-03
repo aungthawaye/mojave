@@ -97,6 +97,7 @@ CREATE TABLE `acc_ledger_balance`
 CREATE TABLE `acc_ledger_movement`
 (
     `ledger_movement_id`    bigint         NOT NULL,
+    `step`                  int            NOT NULL,
     `account_id`            bigint         NOT NULL,
     `side`                  varchar(32)    NOT NULL,
     `currency`              varchar(3)     NOT NULL,
@@ -155,22 +156,24 @@ CREATE TABLE `acc_flow_definition`
 CREATE TABLE `acc_posting_definition`
 (
     `posting_definition_id` bigint      NOT NULL,
-    `participant`           varchar(64)  DEFAULT NULL,
+    `participant`           varchar(64)          DEFAULT NULL,
     `amount_name`           varchar(64) NOT NULL,
     `side`                  varchar(32) NOT NULL,
     `receive_in`            varchar(32) NOT NULL,
     `receive_in_id`         bigint      NOT NULL,
-    `description`           varchar(256) DEFAULT NULL,
+    `description`           varchar(256)         DEFAULT NULL,
+    `step`                  int         NOT NULL DEFAULT 0,
     `definition_id`         bigint      NOT NULL,
-    `rec_created_at`        bigint       DEFAULT NULL,
-    `rec_updated_at`        bigint       DEFAULT NULL,
-    `rec_version`           int          DEFAULT NULL,
+    `rec_created_at`        bigint               DEFAULT NULL,
+    `rec_updated_at`        bigint               DEFAULT NULL,
+    `rec_version`           int                  DEFAULT NULL,
     PRIMARY KEY (`posting_definition_id`),
     UNIQUE KEY `acc_posting_definition_for_posting_UK` (`definition_id`,
                                                         `participant`,
                                                         `amount_name`, `side`,
                                                         `receive_in`,
                                                         `receive_in_id`),
+    UNIQUE KEY `acc_posting_definition_definition_id_step_UK` (`definition_id`, `step`),
     KEY `acc_posting_definition_acc_flow_definition_FK` (`definition_id`),
     CONSTRAINT `acc_posting_definition_acc_flow_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB

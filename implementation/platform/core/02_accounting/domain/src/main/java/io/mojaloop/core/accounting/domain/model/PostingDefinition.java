@@ -27,6 +27,7 @@ import io.mojaloop.core.accounting.contract.exception.definition.AccountConflict
 import io.mojaloop.core.accounting.contract.exception.definition.AmbiguousReceiveInConfigException;
 import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictInDefinitionException;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
+import io.mojaloop.core.accounting.contract.exception.definition.DuplicatePostingDefinitionIndexException;
 import io.mojaloop.core.accounting.contract.exception.definition.ImmatureChartEntryException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
@@ -66,7 +67,10 @@ import static java.sql.Types.BIGINT;
     name = "acc_posting_definition", uniqueConstraints = {
     @UniqueConstraint(
         name = "acc_posting_definition_for_posting_UK", columnNames = {
-        "definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"})})
+        "definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"}),
+    @UniqueConstraint(
+        name = "acc_posting_definition_definition_id_step_UK",
+        columnNames = {"definition_id", "step"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
@@ -99,6 +103,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
+    @Column(name = "step", nullable = false)
+    protected Integer step = 0;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "definition_id",
@@ -107,6 +114,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     protected FlowDefinition definition;
 
     public PostingDefinition(FlowDefinition definition,
+                             Integer step,
                              ReceiveIn receiveIn,
                              Long receiveInId,
                              String participant,
@@ -121,10 +129,9 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
-        this
-            .forPosting(receiveIn, receiveInId, participant, amountName, side, accountCache,
-                chartEntryCache)
-            .description(description);
+        this.forPosting(
+            step, receiveIn, receiveInId, participant, amountName, side, accountCache,
+            chartEntryCache).description(description);
     }
 
     public PostingDefinition description(String description) {
@@ -144,7 +151,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         return this;
     }
 
-    public PostingDefinition forPosting(ReceiveIn receiveIn,
+    public PostingDefinition forPosting(Integer step,
+                                        ReceiveIn receiveIn,
                                         Long receiveInId,
                                         String participant,
                                         String amountName,
@@ -152,12 +160,19 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
                                         AccountCache accountCache,
                                         ChartEntryCache chartEntryCache) {
 
+        assert step != null;
         assert amountName != null;
         assert side != null;
         assert receiveIn != null;
         assert receiveInId != null;
         assert accountCache != null;
         assert chartEntryCache != null;
+
+        if (this.definition.postings.stream().anyMatch(pd -> pd.step.equals(step))) {
+            throw new DuplicatePostingDefinitionIndexException(step);
+        }
+
+        this.step = step;
 
         var _amountName = amountName.trim().toUpperCase();
 

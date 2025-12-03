@@ -156,6 +156,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         LOGGER.info("PutTransfersCommandHandler : input: ({})", ObjectLogger.log(input));
 
         final var CONTEXT = "PutTransfers";
+        final var ABORTED_FLOW = "AbortedFlow";
+        final var COMMITED_FLOW = "CommitedFlow";
 
         var udfTransferId = input.udfTransferId();
 
@@ -304,6 +306,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
             if (unwrapResponseOutput.state() == TransferState.ABORTED) {
 
+                final var CONTEXT_ABORTED_FLOW = CONTEXT + "|" + ABORTED_FLOW;
+
                 // Oh, Payee aborted the transfer.
                 // Inform back to Payer that the transfer is ABORTED.
                 // We roll back the Payer position reservation.
@@ -318,18 +322,17 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                 try {
 
-                    this.forwardToDestination.execute(
-                        new ForwardToDestination.Input(
-                            CONTEXT, transactionId, payerFspCode.value(), payerBaseUrl,
-                            input.request()));
+                    this.forwardToDestination.execute(new ForwardToDestination.Input(
+                        CONTEXT_ABORTED_FLOW, transactionId, payerFspCode.value(), payerBaseUrl,
+                        input.request()));
 
                     LOGGER.info(
                         "Done forwarding request back to payer FSP (BaseUrl): ({})", payerBaseUrl);
 
                 } catch (Exception e) {
 
-                    LOGGER.error("(Ignored) Error:", e);
                     // 💡We don't worry because the Transfer is already aborted.
+                    LOGGER.error("(Ignored) Error:", e);
                     unreachablePayer = true;
                 }
 
@@ -340,7 +343,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     // Roll back the Payer position reservation.
                     rollbackReservationOutput = this.rollbackReservation.execute(
                         new RollbackReservation.Input(
-                            CONTEXT, transactionId, reservationId,
+                            CONTEXT_ABORTED_FLOW, transactionId, reservationId,
                             "Payee aborted the transfer."));
 
                 } catch (Exception e1) {
@@ -348,20 +351,22 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     // Failed to roll back Payer's position. This is dispute. ‼️
                     this.disputeTransfer.execute(
                         new DisputeTransfer.Input(
-                            CONTEXT, transactionId, transferId,
+                            CONTEXT_ABORTED_FLOW, transactionId, transferId,
                             DisputeReason.RESERVATION_ROLLBACK));
                 }
 
                 if (rollbackReservationOutput != null) {
 
                     this.abortTransfer.execute(new AbortTransfer.Input(
-                        CONTEXT, transactionId, transferId, AbortReason.PAYEE_ABORTED_TRANSFER,
-                        rollbackReservationOutput.rollbackId(), Direction.FROM_PAYEE,
-                        putTransfersResponse.getExtensionList()));
+                        CONTEXT_ABORTED_FLOW, transactionId, transferId,
+                        AbortReason.PAYEE_ABORTED_TRANSFER, rollbackReservationOutput.rollbackId(),
+                        Direction.FROM_PAYEE, putTransfersResponse.getExtensionList()));
 
                 }
 
             } else if (unwrapResponseOutput.state() == TransferState.RESERVED) {
+
+                final var CONTEXT_COMMITTED_FLOW = CONTEXT + "|" + COMMITED_FLOW;
 
                 LOGGER.info(
                     "Payee responded with the reserved transfer : udfTransferId : ({}).",
@@ -388,7 +393,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 try {
 
                     this.commitTransferToPayer.execute(new CommitTransferToPayer.Input(
-                        CONTEXT, transactionId, udfTransferId, payerFsp,
+                        CONTEXT_COMMITTED_FLOW, transactionId, udfTransferId, payerFsp,
                         putTransfersResponse.getFulfilment(),
                         putTransfersResponse.getCompletedTimestamp(),
                         putTransfersResponse.getExtensionList()));
@@ -414,43 +419,61 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                         finalDispute = DisputeReason.POSITIONS_FULFILMENT;
 
-                        fulfilPositionsOutput = fulfilPositions.execute(new FulfilPositions.Input(
-                            CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp,
-                            reservationId, currency, transferAmount));
+                        fulfilPositionsOutput = this.fulfilPositions.execute(
+                            new FulfilPositions.Input(
+                                CONTEXT_COMMITTED_FLOW, transactionId, transactionAt, payerFsp,
+                                payeeFsp, reservationId, currency, transferAmount));
+
+                        finalDispute = DisputeReason.COMMITING_TRANSFER;
 
                         this.commitTransfer.execute(new CommitTransfer.Input(
-                            CONTEXT, transactionId, transferId,
+                            CONTEXT_COMMITTED_FLOW, transactionId, transferId,
                             unwrapResponseOutput.ilpFulfilment(),
                             fulfilPositionsOutput.payerCommitId(),
                             fulfilPositionsOutput.payeeCommitId(),
                             unwrapResponseOutput.completedAt()));
 
+                        finalDispute = DisputeReason.POSTING_LEDGER_FLOW;
+
                         this.postLedgerFlow.execute(new PostLedgerFlow.Input(
-                            transactionId, transactionAt, currency, payerFsp, payeeFsp,
-                            transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
+                            CONTEXT_COMMITTED_FLOW, transactionId, transactionAt, currency,
+                            payerFsp, payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
+
+                        finalDispute = null;
 
                     } catch (Exception e) {
 
                         LOGGER.error("Error:", e);
+                        finalTransferState = TransferState.ABORTED;
                     }
 
                 } else {
 
                     // If we cannot commit Transfer to Payer, it is ABORTED.
                     // So, we need to roll back the Payer position reservation.
-                    this.rollbackReservation.execute(
-                        new RollbackReservation.Input(
-                            CONTEXT, transactionId, reservationId,
+
+                    try {
+
+                        finalDispute = DisputeReason.RESERVATION_ROLLBACK;
+
+                        this.rollbackReservation.execute(new RollbackReservation.Input(
+                            CONTEXT_COMMITTED_FLOW, transactionId, reservationId,
                             "Failed to COMMIT transfer to Payer."));
+
+                        finalDispute = null;
+
+                    } catch (Exception e) {
+
+                        LOGGER.error("Error:", e);
+                    }
 
                 }
 
                 try {
 
-                    this.patchTransferToPayee.execute(
-                        new PatchTransferToPayee.Input(
-                            CONTEXT, transactionId, udfTransferId, payeeFsp, finalTransferState,
-                            Map.of()));
+                    this.patchTransferToPayee.execute(new PatchTransferToPayee.Input(
+                        CONTEXT_COMMITTED_FLOW, transactionId, udfTransferId, payeeFsp,
+                        finalTransferState, Map.of()));
 
                 } catch (Exception e) {
 
@@ -458,7 +481,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                     if (finalTransferState == TransferState.COMMITTED) {
                         // if we cannot notify the Payee that the Transfer is COMMITTED, it is dispute.
-                        finalDispute = DisputeReason.COMMITING_PAYEE;
+                        finalDispute = DisputeReason.PATCHING_TO_PAYEE;
                     }
                 }
 
@@ -466,8 +489,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                     this.disputeTransfer.execute(
                         new DisputeTransfer.Input(
-                            CONTEXT, transactionId, transferId,
-                            finalDispute));
+                            CONTEXT_COMMITTED_FLOW, transactionId, transferId, finalDispute));
                 }
 
             }
