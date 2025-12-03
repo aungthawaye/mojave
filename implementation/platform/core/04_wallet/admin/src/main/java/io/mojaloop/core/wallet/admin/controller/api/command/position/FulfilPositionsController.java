@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,11 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.controller.api.command.position;
 
 import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
-import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
-import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -50,11 +50,9 @@ public class FulfilPositionsController {
     @PostMapping("/positions/fulfil")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public FulfilPositionsCommand.Output execute(@Valid @RequestBody final FulfilPositionsCommand.Input input)
-        throws
-        FailedToCommitReservationException,
-        NoPositionUpdateForTransactionException,
-        PositionNotExistException {
+    public FulfilPositionsCommand.Output execute(
+        @Valid @RequestBody final FulfilPositionsCommand.Input input)
+        throws PositionNotExistException, FailedToFulfilPositionsException {
 
         return this.fulfilPositionsCommand.execute(input);
     }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.wallet.admin.client.api.command.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,7 @@ import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.wallet.admin.client.service.WalletAdminService;
 import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
 import io.mojaloop.core.wallet.contract.exception.WalletExceptionResolver;
-import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import io.mojaloop.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -47,7 +48,7 @@ public class FulfilPositionsInvoker implements FulfilPositionsCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws FailedToCommitReservationException {
+    public Output execute(final Input input) throws FailedToFulfilPositionsException {
 
         try {
             return RetrofitService.invoke(
@@ -65,7 +66,7 @@ public class FulfilPositionsInvoker implements FulfilPositionsCommand {
                 final var throwable = WalletExceptionResolver.resolve(errorResponse);
 
                 switch (throwable) {
-                    case FailedToCommitReservationException ex -> throw ex;
+                    case FailedToFulfilPositionsException ex -> throw ex;
                     case UncheckedDomainException ude -> throw ude;
                     default -> {
                     }

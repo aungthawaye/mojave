@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,6 +41,12 @@ public interface PositionUpdater {
                              PositionId positionId,
                              BigDecimal amount,
                              String description) throws NoPositionUpdateException;
+
+    FulfilResult fulfil(PositionUpdateId reservationId,
+                        PositionUpdateId reservationCommitId,
+                        PositionUpdateId positionDecrementId,
+                        PositionId payeePositionId,
+                        String description) throws NoPositionFulfilmentException;
 
     PositionHistory increase(TransactionId transactionId,
                              Instant transactionAt,
@@ -74,6 +80,8 @@ public interface PositionUpdater {
                            BigDecimal netDebitCap,
                            Instant transactionAt) { }
 
+    record FulfilResult(PositionUpdateId payerCommitmentId, PositionUpdateId payeeCommitmentId) { }
+
     @Getter
     class NoPositionUpdateException extends Exception {
 
@@ -83,6 +91,19 @@ public interface PositionUpdater {
 
             super("No position update found for transactionId: " + transactionId);
             this.transactionId = transactionId;
+        }
+
+    }
+
+    @Getter
+    class NoPositionFulfilmentException extends Exception {
+
+        private final PositionUpdateId reservationId;
+
+        public NoPositionFulfilmentException(PositionUpdateId reservationId) {
+
+            super("No position fulfilment found for reservationId: " + reservationId);
+            this.reservationId = reservationId;
         }
 
     }

@@ -422,7 +422,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                         fulfilPositionsOutput = this.fulfilPositions.execute(
                             new FulfilPositions.Input(
                                 CONTEXT_COMMITTED_FLOW, transactionId, transactionAt, payerFsp,
-                                payeeFsp, reservationId, currency, transferAmount));
+                                payeeFsp, reservationId, currency, "-"));
 
                         finalDispute = DisputeReason.COMMITING_TRANSFER;
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -138,9 +138,6 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                   final PositionUpdateId positionUpdateId)
         throws CommitFailedException {
 
-        LOGGER.info(
-            "Commit reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
-
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
                 try (var stm = con.prepareStatement("CALL sp_commit_position(?, ?)")) {
@@ -192,12 +189,9 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     final BigDecimal amount,
                                     final String description) throws NoPositionUpdateException {
 
-        LOGGER.info(
-            "Decrease positionId: {}, amount: {}, transactionId: {}", positionId, amount,
-            transactionId);
-
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
+
                 try (
                     var stm = con.prepareStatement("CALL sp_decrease_position(?, ?, ?, ?, ?, ?)")) {
 
@@ -230,9 +224,73 @@ public class MySqlPositionUpdater implements PositionUpdater {
                 }
             });
         } catch (RuntimeException e) {
+
             if (e.getCause() instanceof NoPositionUpdateException e1) {
                 throw e1;
             }
+
+            throw e;
+        }
+    }
+
+    @Override
+    public FulfilResult fulfil(PositionUpdateId reservationId,
+                               PositionUpdateId reservationCommitId,
+                               PositionUpdateId positionDecrementId,
+                               PositionId payeePositionId,
+                               String description) throws NoPositionFulfilmentException {
+
+        try {
+
+            return this.jdbcTemplate.execute((ConnectionCallback<FulfilResult>) con -> {
+
+                try (var stm = con.prepareStatement("CALL sp_fulfil_positions(?, ?, ?, ?, ?)")) {
+
+                    stm.setLong(1, reservationId.getId());
+                    stm.setLong(2, reservationCommitId.getId());
+                    stm.setLong(3, positionDecrementId.getId());
+                    stm.setLong(4, payeePositionId.getId());
+                    stm.setString(5, description);
+
+                    var hasResults = stm.execute();
+
+                    while (hasResults) {
+                        try (var rs = stm.getResultSet()) {
+                            if (rs != null && rs.next()) {
+                                var status = rs.getString("status");
+
+                                if ("SUCCESS".equals(status)) {
+
+                                    var payerCommitId = new PositionUpdateId(
+                                        rs.getLong("payer_commit_id"));
+
+                                    var payeeCommitId = new PositionUpdateId(
+                                        rs.getLong("payee_commit_id"));
+
+                                    return new FulfilResult(payerCommitId, payeeCommitId);
+
+                                } else {
+
+                                    throw new RuntimeException(
+                                        new PositionUpdater.NoPositionFulfilmentException(
+                                            reservationId));
+                                }
+                            }
+                        }
+                        hasResults = stm.getMoreResults();
+                    }
+
+                    throw new RuntimeException(
+                        "No fulfil result returned for reservationId: " + reservationId);
+                }
+            });
+
+        } catch (RuntimeException e) {
+
+            if (e.getCause() instanceof NoPositionFulfilmentException e1) {
+                throw e1;
+            }
+
             throw e;
         }
     }
@@ -245,10 +303,6 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                     final BigDecimal amount,
                                     final String description)
         throws NoPositionUpdateException, LimitExceededException {
-
-        LOGGER.info(
-            "Increase positionId: {}, amount: {}, transactionId: {}", positionId, amount,
-            transactionId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
@@ -280,8 +334,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                     throw new RuntimeException(new LimitExceededException(
                                         positionId, amount, rs.getBigDecimal("old_position"),
-                                        rs.getBigDecimal("old_reserved"),
-                                        rs.getBigDecimal("ndc"), transactionId));
+                                        rs.getBigDecimal("old_reserved"), rs.getBigDecimal("ndc"),
+                                        transactionId));
                                 }
                             }
                         }
@@ -311,10 +365,6 @@ public class MySqlPositionUpdater implements PositionUpdater {
                                    final String description)
         throws NoPositionUpdateException, LimitExceededException {
 
-        LOGGER.info(
-            "Reserve positionId: {}, amount: {}, transactionId: {}", positionId, amount,
-            transactionId);
-
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
                 try (var stm = con.prepareStatement("CALL sp_reserve_position(?, ?, ?, ?, ?, ?)")) {
@@ -342,8 +392,8 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
                                     throw new RuntimeException(new LimitExceededException(
                                         positionId, amount, rs.getBigDecimal("old_position"),
-                                        rs.getBigDecimal("old_reserved"),
-                                        rs.getBigDecimal("ndc"), transactionId));
+                                        rs.getBigDecimal("old_reserved"), rs.getBigDecimal("ndc"),
+                                        transactionId));
                                 }
                             }
                         }
@@ -369,9 +419,6 @@ public class MySqlPositionUpdater implements PositionUpdater {
     public PositionHistory rollback(final PositionUpdateId reservationId,
                                     final PositionUpdateId positionUpdateId)
         throws RollbackFailedException {
-
-        LOGGER.info(
-            "Rollback reservationId: {}, positionUpdateId: {}", reservationId, positionUpdateId);
 
         try {
             return this.jdbcTemplate.execute((ConnectionCallback<PositionHistory>) con -> {
