@@ -1,7 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="accounting-consumer" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/02_accounting/consumer/src/main/java/io/mojaloop/core/accounting/consumer/.env" />
+      <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/consumer/src/main/java/io/mojaloop/core/accounting/consumer/.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="io.mojaloop.core.accounting.consumer.AccountingConsumerApplication" />
     <module name="mod-accounting-consumer" />

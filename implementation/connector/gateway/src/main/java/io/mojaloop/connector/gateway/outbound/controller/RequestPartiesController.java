@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,10 @@ package io.mojaloop.connector.gateway.outbound.controller;
 
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestPartiesCommand;
-import io.mojaloop.connector.gateway.outbound.event.RequestPartiesEvent;
+import io.mojaloop.connector.gateway.outbound.data.Parties;
+import io.mojaloop.connector.gateway.outbound.event.PartiesErrorEvent;
+import io.mojaloop.connector.gateway.outbound.event.PartiesRequestEvent;
+import io.mojaloop.connector.gateway.outbound.event.PartiesResponseEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
@@ -58,19 +61,37 @@ public class RequestPartiesController {
     public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request)
         throws FspiopException {
 
-        LOGGER.info(
-            "Received lookup request for partyId: {}, partyIdType: {}, destination: {}",
-            request.partyId(), request.partyIdType(), request.destination());
-        LOGGER.debug("Lookup request: {}", request);
+        LOGGER.info("Received parties lookup for destination: {}", request.destination());
+        LOGGER.debug("Parties lookup request: {}", request);
 
-        var input = new RequestPartiesCommand.Input(
-            new Payee(request.destination()), request.partyIdType, request.partyId, request.subId);
+        final var payee = new Payee(request.destination());
 
-        var output = this.requestPartiesCommand.execute(input);
+        try {
 
-        this.eventPublisher.publish(new RequestPartiesEvent(input));
+            final var input = new RequestPartiesCommand.Input(
+                payee, request.partyIdType, request.partyId, request.subId);
 
-        return ResponseEntity.ok(output.response());
+            final var partiesRequest = new Parties.Request(
+                payee, request.partyIdType, request.partyId, request.subId);
+
+            this.eventPublisher.publish(new PartiesRequestEvent(partiesRequest));
+
+            final var output = this.requestPartiesCommand.execute(input);
+
+            final var partiesResponse = new Parties.Response(
+                payee, request.partyIdType, request.partyId, request.subId, output.response());
+
+            this.eventPublisher.publish(new PartiesResponseEvent(partiesResponse));
+
+            return ResponseEntity.ok(output.response());
+
+        } catch (FspiopException e) {
+
+            this.eventPublisher.publish(new PartiesErrorEvent(new Parties.Error(
+                payee, request.partyIdType, request.partyId, request.subId, e.toErrorObject())));
+
+            throw e;
+        }
 
     }
 

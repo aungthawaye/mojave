@@ -54,7 +54,7 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
 
     @Override
     public Output execute(Input input)
-        throws PositionNotExistException, FailedToFulfilPositionsException {
+        throws FailedToFulfilPositionsException {
 
         LOGGER.info("FulfilPositionsCommand : input: ({})", ObjectLogger.log(input));
 

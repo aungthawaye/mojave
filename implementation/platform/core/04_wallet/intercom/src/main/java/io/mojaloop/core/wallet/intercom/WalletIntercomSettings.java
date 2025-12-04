@@ -44,8 +44,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
             System.getenv("WLT_READ_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "wallet-intercom-read",
-            Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
+            "wallet-intercom-read", Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WLT_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -60,8 +59,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
             System.getenv("WLT_WRITE_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "wallet-intercom-write",
-            Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
+            "wallet-intercom-write", Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WLT_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);

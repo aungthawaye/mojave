@@ -7,6 +7,7 @@
         <groupId>io.mojaloop.operation</groupId>
         <artifactId>operation-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>Mojaloop - Operation - Use Case</name>

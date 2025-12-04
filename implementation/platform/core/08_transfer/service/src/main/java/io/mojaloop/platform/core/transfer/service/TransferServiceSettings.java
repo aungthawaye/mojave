@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,12 +23,13 @@ package io.mojaloop.platform.core.transfer.service;
 import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.component.kafka.KafkaProducerConfigurer;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
+import io.mojaloop.core.accounting.producer.AccountingProducerConfiguration;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
+import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
@@ -42,10 +43,11 @@ import java.util.stream.Collectors;
 
 final class TransferServiceSettings implements TransferServiceConfiguration.RequiredSettings {
 
+    @Bean
     @Override
-    public KafkaProducerConfigurer.ProducerSettings accountingProducerSettings() {
+    public AccountingProducerConfiguration.ProducerSettings accountingProducerSettings() {
 
-        return new KafkaProducerConfigurer.ProducerSettings(
+        return new AccountingProducerConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
@@ -173,9 +175,9 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public KafkaProducerConfigurer.ProducerSettings transactionProducerSettings() {
+    public TransactionProducerConfiguration.ProducerSettings transactionProducerSettings() {
 
-        return new KafkaProducerConfigurer.ProducerSettings(
+        return new TransactionProducerConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 

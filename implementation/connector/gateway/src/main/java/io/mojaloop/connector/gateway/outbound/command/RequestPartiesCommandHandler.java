@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.outbound.command;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.PartiesErrorResult;
@@ -63,15 +64,18 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
-        LOGGER.info("Invoking GetParties : {}", input);
+        LOGGER.info("RequestPartiesCommand : input : ({})", ObjectLogger.log(input));
 
         assert input != null;
 
         var withSubId = input.subId() != null && !input.subId().isBlank();
+
         var resultTopic = PubSubKeys.forParties(
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
+
         var errorTopic = PubSubKeys.forPartiesError(
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
+
         var hubErrorTopic = PubSubKeys.forPartiesError(
             new Payee("hub"), input.partyIdType(),
             input.partyId(), input.subId());
@@ -93,12 +97,18 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
         resultListener.await();
 
         if (resultListener.getResponse() != null) {
-            return new Output(resultListener.getResponse().response());
+
+            var output = new Output(resultListener.getResponse().response());
+            LOGGER.info("RequestPartiesCommand : output : ({})", ObjectLogger.log(output));
+
+            return output;
         }
 
         var error = resultListener.getError();
         var errorDefinition = FspiopErrors.find(
             error.errorInformation().getErrorInformation().getErrorCode());
+
+        LOGGER.error("RequestPartiesCommand : error : ({})", ObjectLogger.log(error));
 
         throw new FspiopException(
             new ErrorDefinition(

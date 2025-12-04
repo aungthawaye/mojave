@@ -25,6 +25,10 @@
         </dependency>
         <dependency>
             <groupId>io.mojaloop.component</groupId>
+            <artifactId>mod-component-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-tomcat</artifactId>
         </dependency>
         <dependency>

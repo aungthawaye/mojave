@@ -9,6 +9,8 @@
         <option value="$PROJECT_DIR$/implementation/operation/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/accounting/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/consumer/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/core/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -21,7 +23,6 @@
         <option value="$PROJECT_DIR$/implementation/platform/common/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/component/http/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/connector/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/consumer/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/publisher/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/04_transaction/admin-client/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/04_transaction/admin/pom.xml" />

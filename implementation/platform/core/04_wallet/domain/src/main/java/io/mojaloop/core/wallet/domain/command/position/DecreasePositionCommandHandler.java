@@ -54,7 +54,7 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
     @Override
     public Output execute(final Input input)
-        throws PositionNotExistException, NoPositionUpdateForTransactionException {
+        throws NoPositionUpdateForTransactionException {
 
         LOGGER.info("DecreasePositionCommand : input: ({})", ObjectLogger.log(input));
 

@@ -23,12 +23,11 @@ package io.mojaloop.core.wallet.contract.command.position;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
-import io.mojaloop.core.wallet.contract.exception.position.PositionNotExistException;
 import io.mojaloop.fspiop.spec.core.Currency;
 
 public interface FulfilPositionsCommand {
 
-    Output execute(Input input) throws FailedToFulfilPositionsException, PositionNotExistException;
+    Output execute(Input input) throws FailedToFulfilPositionsException;
 
     record Input(PositionUpdateId reservationId,
                  WalletOwnerId payeeWalletOwnerId,

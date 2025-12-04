@@ -13,9 +13,9 @@
     <name>Mojaloop - Platform - Core</name>
     <modules>
         <module>00_common</module>
-        <module>01_participant</module>
-        <module>02_accounting</module>
-        <module>03_transaction</module>
+        <module>01_transaction</module>
+        <module>02_participant</module>
+        <module>03_accounting</module>
         <module>04_wallet</module>
         <module>05_settlement</module>
         <module>06_lookup</module>

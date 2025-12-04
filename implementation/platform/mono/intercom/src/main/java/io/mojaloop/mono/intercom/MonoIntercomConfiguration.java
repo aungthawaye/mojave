@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.mono.intercom;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,8 +52,8 @@ import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.PositionUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
-import io.mojaloop.core.wallet.domain.repository.PositionRepository;
 import io.mojaloop.core.wallet.domain.repository.BalanceRepository;
+import io.mojaloop.core.wallet.domain.repository.PositionRepository;
 import io.mojaloop.mono.intercom.controller.component.EmptyErrorWriter;
 import io.mojaloop.mono.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
@@ -66,31 +67,36 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = {"io.mojaloop.mono.intercom.controller",
-                               "io.mojaloop.core.participant.intercom.controller.api",
-                               "io.mojaloop.core.accounting.intercom.controller.api",
-                               "io.mojaloop.core.wallet.intercom.controller.api",
-                               "io.mojaloop.core.transaction.intercom.controller.api"},
-               excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-                                                       classes = {io.mojaloop.core.participant.intercom.controller.api.WelcomeController.class,
-                                                                  io.mojaloop.core.accounting.intercom.controller.api.WelcomeController.class,
-                                                                  io.mojaloop.core.wallet.intercom.controller.api.WelcomeController.class,
-                                                                  io.mojaloop.core.transaction.intercom.controller.api.WelcomeController.class})})
-@Import(value = {OpenApiConfiguration.class,
-                 DatatypeConfiguration.class,
-                 RestErrorConfiguration.class,
-                 SpringSecurityConfiguration.class,
-                 ParticipantDomainConfiguration.class,
-                 AccountingDomainConfiguration.class,
-                 WalletDomainConfiguration.class,
-                 TransactionDomainConfiguration.class})
+@ComponentScan(
+    basePackages = {
+        "io.mojaloop.mono.intercom.controller",
+        "io.mojaloop.core.participant.intercom.controller.api",
+        "io.mojaloop.core.accounting.intercom.controller.api",
+        "io.mojaloop.core.wallet.intercom.controller.api",
+        "io.mojaloop.core.transaction.intercom.controller.api"}, excludeFilters = {
+    @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, classes = {
+        io.mojaloop.core.participant.intercom.controller.api.WelcomeController.class,
+        io.mojaloop.core.accounting.intercom.controller.api.WelcomeController.class,
+        io.mojaloop.core.wallet.intercom.controller.api.WelcomeController.class,
+        io.mojaloop.core.transaction.intercom.controller.api.WelcomeController.class})})
+@Import(
+    value = {
+        OpenApiConfiguration.class,
+        DatatypeConfiguration.class,
+        RestErrorConfiguration.class,
+        SpringSecurityConfiguration.class,
+        ParticipantDomainConfiguration.class,
+        AccountingDomainConfiguration.class,
+        WalletDomainConfiguration.class,
+        TransactionDomainConfiguration.class})
 public class MonoIntercomConfiguration extends WebMvcExtension implements
-                                                                      SpringSecurityConfiguration.RequiredBeans,
-                                                                      ParticipantDomainConfiguration.RequiredBeans,
-                                                                      AccountingDomainConfiguration.RequiredBeans,
-                                                                      WalletDomainConfiguration.RequiredBeans,
-                                                                      TransactionDomainConfiguration.RequiredBeans,
-                                                                      SpringSecurityConfiguration.RequiredSettings {
+                                                               SpringSecurityConfiguration.RequiredBeans,
+                                                               ParticipantDomainConfiguration.RequiredBeans,
+                                                               AccountingDomainConfiguration.RequiredBeans,
+                                                               WalletDomainConfiguration.RequiredBeans,
+                                                               TransactionDomainConfiguration.RequiredBeans,
+                                                               SpringSecurityConfiguration.RequiredSettings {
 
     private final AccountCache accountCache;
 

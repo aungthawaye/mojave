@@ -75,7 +75,6 @@ public class ReservePositionInvoker implements ReservePositionCommand {
                     case NoPositionUpdateForTransactionException e1 -> throw e1;
                     case PositionLimitExceededException e2 -> throw e2;
                     case UncheckedDomainException ude -> throw ude;
-                    case PositionNotExistException pne -> throw pne;
                     default -> {
                     }
                 }
