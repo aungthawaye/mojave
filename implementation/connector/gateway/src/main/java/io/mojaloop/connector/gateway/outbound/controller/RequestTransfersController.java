@@ -82,9 +82,6 @@ public class RequestTransfersController {
     @PostMapping("/transfer")
     public ResponseEntity<?> transfer(@RequestBody @Valid Request request) throws FspiopException {
 
-        LOGGER.info("Received transfer request for destination: {}", request.destination());
-        LOGGER.debug("Transfer request: {}", request);
-
         final var transfersPostRequest = new TransfersPostRequest();
         final var extensionList = new ExtensionList();
 

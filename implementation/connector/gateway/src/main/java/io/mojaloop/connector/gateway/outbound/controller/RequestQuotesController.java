@@ -72,9 +72,6 @@ public class RequestQuotesController {
     @PostMapping("/quote")
     public ResponseEntity<?> quote(@RequestBody @Valid Request request) throws FspiopException {
 
-        LOGGER.info("Received quote request for destination: {}", request.destination());
-        LOGGER.debug("Quote request: {}", request);
-
         final var id = UUID.randomUUID().toString();
 
         final var quotesPostRequest = new QuotesPostRequest()

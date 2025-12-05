@@ -46,11 +46,9 @@ class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResp
     public Output execute(Input input) {
 
         var channel = PubSubKeys.forTransfers(input.transferId());
-        LOGGER.info("Publishing transfers result to channel : {}", channel);
 
         this.pubSubClient.publish(
             channel, new TransfersResult(input.transferId(), input.response()));
-        LOGGER.info("Published transfers result to channel : {}", channel);
 
         return new Output();
     }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -104,10 +104,9 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
             LOGGER.error("Error : ", e);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                new FspiopException(
-                    FspiopErrors.GENERIC_SERVER_ERROR,
-                    "An unexpected error occurred while authenticating the request."));
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR, new FspiopException(
+                FspiopErrors.GENERIC_SERVER_ERROR,
+                "An unexpected error occurred while authenticating the request."));
         }
     }
 
@@ -118,9 +117,10 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         if (!this.participantContext.verifyJws()) {
 
+            LOGGER.warn("JWS verification is disabled.");
             return new UsernamePasswordAuthenticationToken(
-                payer, new FspiopSignature.Header(null, null),
-                new ArrayList<SimpleGrantedAuthority>());
+                payer,
+                new FspiopSignature.Header(null, null), new ArrayList<SimpleGrantedAuthority>());
         }
 
         var getMethod = cachedServletRequest.getMethod().equalsIgnoreCase("GET");
@@ -137,13 +137,12 @@ public class FspiopServiceGatekeeper implements Authenticator {
         }
 
         var signature = this.objectMapper.readValue(signatureHeader, FspiopSignature.Header.class);
-        LOGGER.debug("FSPIOP_SIGNATURE : ({})", signature);
 
         var publicKey = this.participantContext.publicKeys().get(payer);
 
         if (publicKey == null) {
 
-            LOGGER.error("No public key found for Source FSP ({}).", payer);
+            LOGGER.warn("No public key found for Source FSP ({}).", payer);
             throw new GatekeeperFailureException(
                 HttpServletResponse.SC_UNAUTHORIZED,
                 new FspiopException(
@@ -153,10 +152,8 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         var payload = getMethod ? this.buildDummyPayload(cachedServletRequest) :
                           cachedServletRequest.getCachedBodyAsString();
-        LOGGER.debug("Payload : ({})", payload);
 
         var encodedPayload = Jwt.encode(payload);
-        LOGGER.debug("Encoded payload : ({})", encodedPayload);
 
         var verificationOk = FspiopSignature.verify(
             publicKey,
@@ -164,17 +161,15 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         if (!verificationOk) {
 
-            LOGGER.error(
+            LOGGER.info(
                 "Signature verification failed when using Source FSP ({})'s public key.", payer);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_UNAUTHORIZED,
-                new FspiopException(
-                    FspiopErrors.INVALID_SIGNATURE,
-                    "Signature verification failed when using Source FSP (" + payer +
-                        ")'s public key."));
+                HttpServletResponse.SC_UNAUTHORIZED, new FspiopException(
+                FspiopErrors.INVALID_SIGNATURE,
+                "Signature verification failed when using Source FSP (" + payer +
+                    ")'s public key."));
         }
 
-        LOGGER.debug("Signature verification successful");
         return new UsernamePasswordAuthenticationToken(
             new Payer(payer), signature, new ArrayList<SimpleGrantedAuthority>() { });
     }
@@ -187,37 +182,32 @@ public class FspiopServiceGatekeeper implements Authenticator {
     private void verifyFsps(CachedServletRequest cachedServletRequest) {
 
         var source = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_SOURCE);
-        LOGGER.debug("FSPIOP_SOURCE : ({})", source);
 
         if (source == null || source.isBlank()) {
 
-            LOGGER.error("The 'fspiop-source' header is missing.");
+            LOGGER.info("The 'fspiop-source' header is missing.");
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
-                new FspiopException(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT,
-                    "The 'fspiop-source' header or its value is missing."));
+                HttpServletResponse.SC_BAD_REQUEST, new FspiopException(
+                FspiopErrors.MISSING_MANDATORY_ELEMENT,
+                "The 'fspiop-source' header or its value is missing."));
         }
 
         var destination = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
-        LOGGER.debug("FSPIOP_DESTINATION : ({})", destination);
 
         if (destination == null || destination.isBlank()) {
 
-            LOGGER.error("The 'fspiop-destination' header is missing.");
+            LOGGER.info("The 'fspiop-destination' header is missing.");
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
-                new FspiopException(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT,
-                    "The 'fspiop-destination' header or its value is missing."));
+                HttpServletResponse.SC_BAD_REQUEST, new FspiopException(
+                FspiopErrors.MISSING_MANDATORY_ELEMENT,
+                "The 'fspiop-destination' header or its value is missing."));
         }
 
         var uri = cachedServletRequest.getRequestURI();
-        LOGGER.debug("URI : ({})", uri);
 
         if (!this.participantVerifier.fspExists(source)) {
 
-            LOGGER.error("The Source FSP ({}) does not exist.", source);
+            LOGGER.warn("The Source FSP ({}) does not exist.", source);
             throw new GatekeeperFailureException(
                 HttpServletResponse.SC_NOT_ACCEPTABLE,
                 new FspiopException(FspiopErrors.PAYER_FSP_ID_NOT_FOUND));
@@ -225,7 +215,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         if (!this.participantVerifier.fspExists(destination)) {
 
-            LOGGER.error("The Destination FSP ({}) does not exist.", destination);
+            LOGGER.warn("The Destination FSP ({}) does not exist.", destination);
             throw new GatekeeperFailureException(
                 HttpServletResponse.SC_NOT_ACCEPTABLE,
                 new FspiopException(FspiopErrors.PAYEE_FSP_ID_NOT_FOUND));
@@ -233,20 +223,19 @@ public class FspiopServiceGatekeeper implements Authenticator {
 
         if (source.equals(destination)) {
 
-            LOGGER.error(
+            LOGGER.info(
                 "The Source FSP ({}) and the destination FSP ({}) must not be the same.", source,
                 destination);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_NOT_ACCEPTABLE,
-                new FspiopException(
-                    FspiopErrors.DESTINATION_FSP_ERROR,
-                    "Source FSP (" + source + ") and Destination FSP (" + destination +
-                        ") must not be the same."));
+                HttpServletResponse.SC_NOT_ACCEPTABLE, new FspiopException(
+                FspiopErrors.DESTINATION_FSP_ERROR,
+                "Source FSP (" + source + ") and Destination FSP (" + destination +
+                    ") must not be the same."));
         }
 
         if (destination.equals(this.participantContext.fspCode())) {
 
-            LOGGER.error(
+            LOGGER.info(
                 "Destination FSP ({}) must not be Hub ({}).", destination,
                 this.participantContext.fspCode());
             throw new GatekeeperFailureException(
@@ -262,11 +251,10 @@ public class FspiopServiceGatekeeper implements Authenticator {
     private void verifyRequestAge(CachedServletRequest cachedServletRequest) {
 
         var date = cachedServletRequest.getHeader(FspiopHeaders.Names.DATE);
-        LOGGER.debug("Date : ({})", date);
 
         if (date == null || date.isBlank()) {
 
-            LOGGER.error("The 'date' header is missing.");
+            LOGGER.info("The 'date' header is missing.");
             throw new GatekeeperFailureException(
                 HttpServletResponse.SC_BAD_REQUEST,
                 new FspiopException(
@@ -279,7 +267,6 @@ public class FspiopServiceGatekeeper implements Authenticator {
         try {
 
             sentAt = FspiopDates.fromRequestHeader(date);
-            LOGGER.debug("Sent at : ({})", sentAt);
 
         } catch (FspiopException e) {
 

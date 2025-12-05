@@ -46,11 +46,9 @@ class HandlePutQuotesErrorCommandHandler implements HandlePutQuotesErrorCommand 
     public Output execute(Input input) {
 
         var channel = PubSubKeys.forQuotesError(input.quoteId());
-        LOGGER.info("Publishing quotes error result to channel : {}", channel);
 
         this.pubSubClient.publish(
             channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));
-        LOGGER.info("Published quotes error result to channel : {}", channel);
 
         return new Output();
     }

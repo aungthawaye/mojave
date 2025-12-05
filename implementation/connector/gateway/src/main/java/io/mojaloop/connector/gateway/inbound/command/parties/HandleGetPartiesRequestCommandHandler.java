@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.command.parties;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
@@ -51,26 +52,32 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
     @Override
     public void execute(Input input) throws FspiopException {
 
+        var startAt = System.nanoTime();
+        var endAt = 0L;
+
         var payer = new Payer(input.payer().fspCode());
         var hasSubId = input.subId() != null;
 
         try {
 
-            LOGGER.info("Calling FSP adapter to get parties for : {}", input);
+            LOGGER.info(
+                "HandleGetPartiesRequestCommandHandler : input : ({})", ObjectLogger.log(input));
             var response = this.fspCoreAdapter.getParties(
                 payer, input.partyIdType(), input.partyId(), input.subId());
-            LOGGER.info("FSP adapter returned parties : {}", response);
+            LOGGER.info(
+                "HandleGetPartiesRequestCommandHandler : FSP Core : response : ({})",
+                ObjectLogger.log(response));
 
-            LOGGER.info("Responding the result to Hub : {}", response);
             if (hasSubId) {
                 this.putParties.putParties(
                     payer, input.partyIdType(), input.partyId(), input.subId(), response);
             } else {
                 this.putParties.putParties(payer, input.partyIdType(), input.partyId(), response);
             }
-            LOGGER.info("Responded the result to Hub");
 
         } catch (FspiopException e) {
+
+            LOGGER.error("Error:", e);
 
             if (hasSubId) {
                 this.putParties.putPartiesError(
@@ -79,6 +86,13 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
                 this.putParties.putPartiesError(
                     payer, input.partyIdType(), input.partyId(), e.toErrorObject());
             }
+
+        } finally {
+
+            endAt = System.nanoTime();
+            LOGGER.info(
+                "HandleGetPartiesRequestCommandHandler : done : took {} ms",
+                (endAt - startAt) / 1000000);
         }
 
     }

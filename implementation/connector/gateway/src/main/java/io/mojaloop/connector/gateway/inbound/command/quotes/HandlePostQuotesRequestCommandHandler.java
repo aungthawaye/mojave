@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.command.quotes;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payer;
@@ -51,21 +52,33 @@ class HandlePostQuotesRequestCommandHandler implements HandlePostQuotesRequestCo
     @Override
     public void execute(Input input) throws FspiopException {
 
-        var payer = new Payer(input.payer().fspCode());
+        var startAt = System.nanoTime();
+        var endAt = 0L;
+
+        final var payer = new Payer(input.payer().fspCode());
 
         try {
 
-            LOGGER.info("Calling FSP adapter to get quote for : {}", input);
-            var response = this.fspCoreAdapter.postQuotes(payer, input.request());
-            LOGGER.info("FSP adapter returned quote : {}", response);
+            LOGGER.info(
+                "HandlePostQuotesRequestCommandHandler : input : ({})", ObjectLogger.log(input));
+            final var response = this.fspCoreAdapter.postQuotes(payer, input.request());
+            LOGGER.info(
+                "HandlePostQuotesRequestCommandHandler : FSP Core : response : ({})",
+                ObjectLogger.log(response));
 
-            LOGGER.info("Responding the result to Hub : {}", response);
             this.putQuotes.putQuotes(payer, input.quoteId(), response);
-            LOGGER.info("Responded the result to Hub");
 
         } catch (FspiopException e) {
 
+            LOGGER.error("Error:", e);
             this.putQuotes.putQuotesError(payer, input.quoteId(), e.toErrorObject());
+
+        } finally {
+
+            endAt = System.nanoTime();
+            LOGGER.info(
+                "HandlePostQuotesRequestCommandHandler : done : took {} ms",
+                (endAt - startAt) / 1000000);
         }
     }
 

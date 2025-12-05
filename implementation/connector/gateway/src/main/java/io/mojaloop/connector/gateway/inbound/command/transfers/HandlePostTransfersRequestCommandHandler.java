@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.invoker.api.transfers.PutTransfers;
@@ -50,21 +51,33 @@ class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersReq
     @Override
     public void execute(Input input) throws FspiopException {
 
-        var payer = input.payer();
+        var startAt = System.nanoTime();
+        var endAt = 0L;
+
+        final var payer = input.payer();
 
         try {
 
-            LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
-            var response = this.fspCoreAdapter.postTransfers(payer, input.request());
-            LOGGER.info("FSP adapter returned transfer response : {}", response);
+            LOGGER.info(
+                "HandlePostTransfersRequestCommandHandler : input : ({})", ObjectLogger.log(input));
+            final var response = this.fspCoreAdapter.postTransfers(payer, input.request());
+            LOGGER.info(
+                "HandlePostTransfersRequestCommandHandler : FSP Core : response : ({})",
+                ObjectLogger.log(response));
 
-            LOGGER.info("Responding the result to Hub : {}", response);
             this.putTransfers.putTransfers(payer, input.transferId(), response);
-            LOGGER.info("Responded the result to Hub");
 
         } catch (FspiopException e) {
 
+            LOGGER.error("Error:", e);
             this.putTransfers.putTransfersError(payer, input.transferId(), e.toErrorObject());
+
+        } finally {
+
+            endAt = System.nanoTime();
+            LOGGER.info(
+                "HandlePostTransfersRequestCommandHandler : done : took {} ms",
+                (endAt - startAt) / 1000000);
         }
     }
 

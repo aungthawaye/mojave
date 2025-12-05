@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.outbound.command;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.TransfersErrorResult;
@@ -62,36 +63,53 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
-        LOGGER.info("Invoking PostTransfers : {}", input);
+        final var startAt = System.nanoTime();
+        var endAt = 0L;
+
+        LOGGER.info("RequestTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
 
         assert input != null;
         assert input.request() != null;
 
-        var transferId = input.request().getTransferId();
-        var resultTopic = PubSubKeys.forTransfers(transferId);
-        var errorTopic = PubSubKeys.forTransfersError(transferId);
+        try {
 
-        // Listening to the pub/sub
-        var resultListener = new FspiopResultListener<>(
-            this.pubSubClient, this.outboundSettings, TransfersResult.class,
-            TransfersErrorResult.class);
-        resultListener.init(resultTopic, errorTopic);
+            final var transferId = input.request().getTransferId();
+            final var resultTopic = PubSubKeys.forTransfers(transferId);
+            final var errorTopic = PubSubKeys.forTransfersError(transferId);
 
-        this.postTransfers.postTransfers(input.payee(), input.request());
+            // Listening to the pub/sub
+            final var resultListener = new FspiopResultListener<>(
+                this.pubSubClient, this.outboundSettings, TransfersResult.class,
+                TransfersErrorResult.class);
+            resultListener.init(resultTopic, errorTopic);
 
-        resultListener.await();
+            this.postTransfers.postTransfers(input.payee(), input.request());
 
-        if (resultListener.getResponse() != null) {
-            return new Output(resultListener.getResponse());
+            resultListener.await();
+
+            if (resultListener.getResponse() != null) {
+                final var output = new Output(resultListener.getResponse());
+                LOGGER.info("RequestTransfersCommandHandler : output : ({})", ObjectLogger.log(output));
+                return output;
+            }
+
+            final var error = resultListener.getError();
+            final var errorDefinition = FspiopErrors.find(
+                error.errorInformation().getErrorInformation().getErrorCode());
+
+            LOGGER.error("RequestTransfersCommandHandler : error : ({})", ObjectLogger.log(error));
+
+            throw new FspiopException(new ErrorDefinition(
+                errorDefinition.errorType(),
+                error.errorInformation().getErrorInformation().getErrorDescription()));
+
+        } finally {
+
+            endAt = System.nanoTime();
+            LOGGER.info(
+                "RequestTransfersCommandHandler : done : took {} ms",
+                (endAt - startAt) / 1_000_000);
         }
-
-        var error = resultListener.getError();
-        var errorDefinition = FspiopErrors.find(
-            error.errorInformation().getErrorInformation().getErrorCode());
-
-        throw new FspiopException(new ErrorDefinition(
-            errorDefinition.errorType(),
-            error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

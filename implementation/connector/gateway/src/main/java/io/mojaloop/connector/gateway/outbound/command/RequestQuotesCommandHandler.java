@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.outbound.command;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.connector.gateway.component.PubSubKeys;
 import io.mojaloop.connector.gateway.data.QuotesErrorResult;
@@ -65,60 +66,77 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
-        LOGGER.info("Invoking PostQuotes : {}", input);
+        final var startAt = System.nanoTime();
+        var endAt = 0L;
+
+        LOGGER.info("RequestQuotesCommandHandler : input : ({})", ObjectLogger.log(input));
 
         assert input != null;
         assert input.request() != null;
 
-        var quoteId = input.request().getQuoteId();
-        var amount = input.request().getAmount();
-        var expiration = input.request().getExpiration();
-        var fees = input.request().getFees();
+        try {
 
-        if (expiration != null && !expiration.isBlank()) {
+            final var quoteId = input.request().getQuoteId();
+            final var amount = input.request().getAmount();
+            final var expiration = input.request().getExpiration();
+            final var fees = input.request().getFees();
 
-            var expireAt = FspiopDates.fromRequestBody(expiration);
+            if (expiration != null && !expiration.isBlank()) {
 
-            if (expireAt.isBefore(Instant.now())) {
-                throw new FspiopException(
-                    FspiopErrors.GENERIC_VALIDATION_ERROR,
-                    "Expiration date/time must be in the future.");
+                final var expireAt = FspiopDates.fromRequestBody(expiration);
+
+                if (expireAt.isBefore(Instant.now())) {
+                    throw new FspiopException(
+                        FspiopErrors.GENERIC_VALIDATION_ERROR,
+                        "Expiration date/time must be in the future.");
+                }
             }
-        }
 
-        if (fees != null) {
+            if (fees != null) {
 
-            if (fees.getCurrency() != amount.getCurrency()) {
+                if (fees.getCurrency() != amount.getCurrency()) {
 
-                throw new FspiopException(
-                    FspiopErrors.GENERIC_VALIDATION_ERROR,
-                    "Fees and Amount currency must have the same currency.");
+                    throw new FspiopException(
+                        FspiopErrors.GENERIC_VALIDATION_ERROR,
+                        "Fees and Amount currency must have the same currency.");
+                }
             }
+
+            final var resultTopic = PubSubKeys.forQuotes(quoteId);
+            final var errorTopic = PubSubKeys.forQuotesError(quoteId);
+
+            // Listening to the pub/sub
+            final var resultListener = new FspiopResultListener<>(
+                this.pubSubClient, this.outboundSettings, QuotesResult.class, QuotesErrorResult.class);
+            resultListener.init(resultTopic, errorTopic);
+
+            this.postQuotes.postQuotes(input.payee(), input.request());
+
+            resultListener.await();
+
+            if (resultListener.getResponse() != null) {
+                final var output = new Output(resultListener.getResponse());
+                LOGGER.info("RequestQuotesCommandHandler : output : ({})", ObjectLogger.log(output));
+                return output;
+            }
+
+            final var error = resultListener.getError();
+            final var errorDefinition = FspiopErrors.find(
+                error.errorInformation().getErrorInformation().getErrorCode());
+
+            LOGGER.error("RequestQuotesCommandHandler : error : ({})", ObjectLogger.log(error));
+
+            throw new FspiopException(new ErrorDefinition(
+                errorDefinition.errorType(),
+                error.errorInformation().getErrorInformation().getErrorDescription()));
+
+        } finally {
+
+            endAt = System.nanoTime();
+            LOGGER.info(
+                "RequestQuotesCommandHandler : done : took {} ms",
+                (endAt - startAt) / 1_000_000);
         }
-
-        var resultTopic = PubSubKeys.forQuotes(quoteId);
-        var errorTopic = PubSubKeys.forQuotesError(quoteId);
-
-        // Listening to the pub/sub
-        var resultListener = new FspiopResultListener<>(
-            this.pubSubClient, this.outboundSettings, QuotesResult.class, QuotesErrorResult.class);
-        resultListener.init(resultTopic, errorTopic);
-
-        this.postQuotes.postQuotes(input.payee(), input.request());
-
-        resultListener.await();
-
-        if (resultListener.getResponse() != null) {
-            return new Output(resultListener.getResponse());
-        }
-
-        var error = resultListener.getError();
-        var errorDefinition = FspiopErrors.find(
-            error.errorInformation().getErrorInformation().getErrorCode());
-
-        throw new FspiopException(new ErrorDefinition(
-            errorDefinition.errorType(),
-            error.errorInformation().getErrorInformation().getErrorDescription()));
 
     }
 

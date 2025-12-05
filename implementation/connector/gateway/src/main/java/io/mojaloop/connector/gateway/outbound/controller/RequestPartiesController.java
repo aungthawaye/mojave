@@ -61,9 +61,6 @@ public class RequestPartiesController {
     public ResponseEntity<?> lookup(@RequestBody @Valid RequestPartiesController.Request request)
         throws FspiopException {
 
-        LOGGER.info("Received parties lookup for destination: {}", request.destination());
-        LOGGER.debug("Parties lookup request: {}", request);
-
         final var payee = new Payee(request.destination());
 
         try {
