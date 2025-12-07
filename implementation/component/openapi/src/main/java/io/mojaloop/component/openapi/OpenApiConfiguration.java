@@ -70,6 +70,8 @@ public class OpenApiConfiguration {
         };
     }
 
+    public interface RequiredBeans { }
+
     public interface RequiredSettings {
 
         OpenApiConfiguration.ApiSettings apiSettings();

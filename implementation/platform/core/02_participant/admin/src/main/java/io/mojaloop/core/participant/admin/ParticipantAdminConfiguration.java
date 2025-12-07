@@ -25,18 +25,11 @@ import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
-import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
-import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
-import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
-import io.mojaloop.core.participant.admin.controller.component.EmptyErrorWriter;
-import io.mojaloop.core.participant.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.participant.domain.ParticipantDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -53,53 +46,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                  ParticipantDomainConfiguration.class,
                  RestErrorConfiguration.class,
                  SpringSecurityConfiguration.class})
-final class ParticipantAdminConfiguration extends WebMvcExtension implements
-                                                                  ParticipantDomainConfiguration.RequiredBeans,
-                                                                  SpringSecurityConfiguration.RequiredBeans,
-                                                                  SpringSecurityConfiguration.RequiredSettings {
+public final class ParticipantAdminConfiguration extends WebMvcExtension {
 
     public ParticipantAdminConfiguration(ObjectMapper objectMapper) {
 
         super(objectMapper);
     }
 
-    @Bean
-    @Override
-    public AuthenticationErrorWriter authenticationErrorWriter() {
-
-        return new EmptyErrorWriter();
-    }
-
-    @Bean
-    @Override
-    public Authenticator authenticator() {
-
-        return new EmptyGatekeeper();
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(null);
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return new WebServerFactoryCustomizer<ConfigurableWebServerFactory>() {
-
-            @Override
-            public void customize(ConfigurableWebServerFactory factory) {
-
-                factory.setPort(settings.portNo());
-            }
-        };
-    }
+    public interface RequiredDependencies extends ParticipantDomainConfiguration.RequiredBeans,
+                                                  SpringSecurityConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
-                                              OpenApiConfiguration.RequiredSettings {
+                                              OpenApiConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

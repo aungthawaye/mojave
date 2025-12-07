@@ -23,6 +23,7 @@ package io.mojaloop.core.transaction.intercom;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.transaction.domain.TransactionFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -73,6 +74,13 @@ final class TransactionIntercomSettings
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("transaction-intercom", false, false);
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean

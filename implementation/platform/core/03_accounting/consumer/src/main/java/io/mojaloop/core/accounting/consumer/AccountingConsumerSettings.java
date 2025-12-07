@@ -36,8 +36,8 @@ final class AccountingConsumerSettings implements AccountingConsumerConfiguratio
     public AccountingFlywayConfiguration.Settings accountingFlywaySettings() {
 
         return new AccountingFlywayConfiguration.Settings(
-            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
-            System.getenv("ACC_WRITE_DB_PASSWORD"));
+            System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
+            System.getenv("ACC_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean

@@ -12,7 +12,6 @@
         <module name="mod-transfer-contract" />
         <module name="mod-component-vault" />
         <module name="mod-settlement-domain" />
-        <module name="mod-wallet-store" />
         <module name="mod-transaction-intercom-client" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-component-web" />
@@ -107,6 +106,7 @@
       <module name="mod-shared-security" target="21" />
       <module name="mod-transaction-admin" target="21" />
       <module name="mod-transaction-admin-client" target="21" />
+      <module name="mod-wallet-store" target="21" />
       <module name="oracle-pom" target="21" />
       <module name="shared-pom" target="21" />
     </bytecodeTargetLevel>

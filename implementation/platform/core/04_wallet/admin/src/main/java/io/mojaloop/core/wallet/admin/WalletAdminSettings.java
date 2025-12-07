@@ -23,6 +23,7 @@ package io.mojaloop.core.wallet.admin;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -70,6 +71,13 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("wallet-admin", false, false);
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean

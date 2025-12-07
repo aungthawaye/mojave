@@ -21,11 +21,13 @@ package io.mojaloop.core.accounting.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
 import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 
 public class AccountingFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
+    @Qualifier("accountingFlyway")
     public Flyway accountingFlyway(AccountingFlywayConfiguration.Settings accountingFlywaySettings) {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(

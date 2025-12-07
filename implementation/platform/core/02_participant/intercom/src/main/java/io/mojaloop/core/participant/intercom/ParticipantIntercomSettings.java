@@ -23,6 +23,7 @@ package io.mojaloop.core.participant.intercom;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -83,6 +84,13 @@ final class ParticipantIntercomSettings
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("participant-intercom", false, false);
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean

@@ -22,11 +22,13 @@ package io.mojaloop.core.transaction.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
 import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 
 public class TransactionFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
+    @Qualifier("transactionFlyway")
     public Flyway transactionFlyway(TransactionFlywayConfiguration.Settings transactionFlywaySettings) {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(

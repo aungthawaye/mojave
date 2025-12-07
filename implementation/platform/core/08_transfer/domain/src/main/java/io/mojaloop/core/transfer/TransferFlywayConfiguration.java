@@ -22,11 +22,13 @@ package io.mojaloop.core.transfer;
 
 import io.mojaloop.component.flyway.FlywayMigration;
 import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 
 public class TransferFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
+    @Qualifier("transferFlyway")
     public Flyway transferFlyway(TransferFlywayConfiguration.Settings transferFlywaySettings) {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(

@@ -7,7 +7,11 @@ import org.springframework.context.annotation.Import;
 
 import java.util.concurrent.CountDownLatch;
 
-@Import(value = {MonoConsumerConfiguration.class, MonoConsumerSettings.class})
+@Import(
+    value = {
+        MonoConsumerConfiguration.class,
+        MonoConsumerDependencies.class,
+        MonoConsumerSettings.class})
 public class MonoConsumerApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MonoConsumerApplication.class);

@@ -45,8 +45,6 @@ import io.mojaloop.core.accounting.intercom.controller.component.EmptyErrorWrite
 import io.mojaloop.core.accounting.intercom.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -54,7 +52,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-
 @EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "io.mojaloop.core.accounting.intercom.controller")
@@ -66,116 +63,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         AccountingDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-final class AccountingIntercomConfiguration extends WebMvcExtension implements
-                                                                    AccountingDomainConfiguration.RequiredBeans,
-                                                                    SpringSecurityConfiguration.RequiredBeans,
-                                                                    SpringSecurityConfiguration.RequiredSettings {
+public final class AccountingIntercomConfiguration extends WebMvcExtension {
 
-    private final Ledger ledger;
-
-    private final AccountCache accountCache;
-
-    private final ChartEntryCache chartEntryCache;
-
-    private final FlowDefinitionCache flowDefinitionCache;
-
-    public AccountingIntercomConfiguration(AccountRepository accountRepository,
-                                           ChartEntryRepository chartEntryRepository,
-                                           FlowDefinitionRepository flowDefinitionRepository,
-                                           ObjectMapper objectMapper) {
+    public AccountingIntercomConfiguration(ObjectMapper objectMapper) {
 
         super(objectMapper);
-
-        assert accountRepository != null;
-        assert chartEntryRepository != null;
-        assert flowDefinitionRepository != null;
-        assert objectMapper != null;
-
-        this.ledger = new MySqlLedger(
-            new MySqlLedger.LedgerDbSettings(
-                new MySqlLedger.LedgerDbSettings.Connection(
-                    System.getenv("ACC_LEDGER_DB_URL"),
-                    System.getenv("ACC_LEDGER_DB_USER"), System.getenv("ACC_LEDGER_DB_PASSWORD")),
-                new MySqlLedger.LedgerDbSettings.Pool(
-                    "accounting-ledger",
-                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
-                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE")))), objectMapper);
-
-        this.accountCache = new AccountTimerCache(
-            accountRepository, Integer.parseInt(
-            System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
-        this.chartEntryCache = new ChartEntryTimerCache(
-            chartEntryRepository, Integer.parseInt(
-            System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
-        this.flowDefinitionCache = new FlowDefinitionTimerCache(
-            flowDefinitionRepository,
-            Integer.parseInt(System
-                                 .getenv()
-                                 .getOrDefault(
-                                     "FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
     }
 
-    @Bean
-    @Override
-    public AccountCache accountCache() {
-
-        return this.accountCache;
-    }
-
-    @Bean
-    @Override
-    public AuthenticationErrorWriter authenticationErrorWriter() {
-
-        return new EmptyErrorWriter();
-    }
-
-    @Bean
-    @Override
-    public Authenticator authenticator() {
-
-        return new EmptyGatekeeper();
-    }
-
-    @Bean
-    @Override
-    public ChartEntryCache chartEntryCache() {
-
-        return this.chartEntryCache;
-    }
-
-    @Bean
-    @Override
-    public FlowDefinitionCache flowDefinitionCache() {
-
-        return this.flowDefinitionCache;
-    }
-
-    @Bean
-    @Override
-    public Ledger ledger() {
-
-        return this.ledger;
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(null);
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return factory -> factory.setPort(settings.portNo());
-    }
+    public interface RequiredDependencies extends AccountingDomainConfiguration.RequiredBeans,
+                                                  SpringSecurityConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings,
-                                              OpenApiConfiguration.RequiredSettings {
+                                              OpenApiConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

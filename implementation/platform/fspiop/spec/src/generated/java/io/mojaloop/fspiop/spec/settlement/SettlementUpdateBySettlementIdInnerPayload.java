@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SettlementUpdateBySettlementIdInnerPayload")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-04T06:29:15.454469+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-07T16:42:44.988649+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class SettlementUpdateBySettlementIdInnerPayload   {
   private Integer id;
   private String reason;

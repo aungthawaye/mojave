@@ -23,6 +23,7 @@ package io.mojaloop.core.participant.admin;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -81,6 +82,13 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("participant-admin", false, false);
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean

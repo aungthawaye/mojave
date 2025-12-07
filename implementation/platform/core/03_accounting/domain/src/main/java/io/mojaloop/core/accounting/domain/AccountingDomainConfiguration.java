@@ -37,6 +37,10 @@ import org.springframework.context.annotation.Import;
         RoutingJpaConfiguration.class})
 public class AccountingDomainConfiguration {
 
+    public AccountingDomainConfiguration() {
+
+    }
+
     public interface RequiredBeans {
 
         AccountCache accountCache();

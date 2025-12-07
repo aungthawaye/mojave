@@ -68,7 +68,7 @@ CREATE TABLE `acc_account`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_accounting.acc_ledger_balance definition
+-- ml_accounting.MYSQL_LEDGER_balance definition
 
 CREATE TABLE `acc_ledger_balance`
 (
@@ -92,7 +92,7 @@ CREATE TABLE `acc_ledger_balance`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_accounting.acc_ledger_movement definition
+-- ml_accounting.MYSQL_LEDGER_movement definition
 
 CREATE TABLE `acc_ledger_movement`
 (
@@ -123,7 +123,7 @@ CREATE TABLE `acc_ledger_movement`
     KEY `acc_account_transaction_at_IDX` (`transaction_at`),
     KEY `acc_account_account_id_transaction_at_IDX` (`account_id`, `transaction_at`),
     KEY `acc_account_account_id` (`account_id`),
-    CONSTRAINT `acc_ledger_movement_acc_account_FK` FOREIGN KEY (`account_id`) REFERENCES `acc_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `MYSQL_LEDGER_movement_acc_account_FK` FOREIGN KEY (`account_id`) REFERENCES `acc_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

@@ -142,7 +142,7 @@ BEGIN
     /* ---------------- INITIATE the movements (with handlers) ---------------- */
     /* ---------- Detect duplicates before inserting ---------- */
     IF EXISTS (SELECT 1
-               FROM acc_ledger_movement m
+               FROM MYSQL_LEDGER_movement m
                         JOIN tmp_lines t
                              ON m.account_id = t.account_id
                                  AND m.side = t.side
@@ -157,7 +157,7 @@ BEGIN
                m.ledger_movement_id AS existing_ledger_movement_id
         INTO
             v_step, v_err_account_id, v_err_side, v_txn_id, v_err_amount, v_err_currency, v_ledger_movement_id
-        FROM acc_ledger_movement m
+        FROM MYSQL_LEDGER_movement m
                  JOIN tmp_lines t
                       ON m.account_id = t.account_id
                           AND m.side = t.side
@@ -197,7 +197,7 @@ BEGIN
         LEAVE proc_posting;
     END IF;
 
-    INSERT INTO acc_ledger_movement (ledger_movement_id, step, account_id, side,
+    INSERT INTO MYSQL_LEDGER_movement (ledger_movement_id, step, account_id, side,
                                      currency, amount,
                                      old_debits, old_credits, new_debits,
                                      new_credits,
@@ -288,7 +288,7 @@ BEGIN
                    COALESCE(overdraft_limit, 0)
             INTO
                 v_dr_curr, v_cr_curr, v_nature, v_mode, v_limit
-            FROM acc_ledger_balance
+            FROM MYSQL_LEDGER_balance
             WHERE ledger_balance_id = v_account_id FOR
             UPDATE;
 
@@ -335,14 +335,14 @@ BEGIN
             END IF;
 
             -- Apply update
-            UPDATE acc_ledger_balance
+            UPDATE MYSQL_LEDGER_balance
             SET posted_debits  = v_dr_new,
                 posted_credits = v_cr_new
             WHERE ledger_balance_id = v_account_id;
             -- Unlock the balance row and commit asap.
 
             -- Update the movement together. So that, something goes wrong, we can know which movement is missing.
-            UPDATE acc_ledger_movement
+            UPDATE MYSQL_LEDGER_movement
             SET old_debits      = v_dr_curr,
                 old_credits     = v_cr_curr,
                 new_debits      = v_dr_new,
@@ -389,7 +389,7 @@ BEGIN
     IF v_error <> 0 THEN
         -- There is an error. The last movement's ledger_movement_id must be marked as an error.
         START TRANSACTION;
-        UPDATE acc_ledger_movement
+        UPDATE MYSQL_LEDGER_movement
         SET movement_stage  = 'DEBIT_CREDIT',
             movement_result = v_error_code
         WHERE ledger_movement_id = v_ledger_movement_id;
@@ -466,19 +466,19 @@ BEGIN
                     -- Now we decrease it to restore.
                     IF r_side = 'DEBIT' THEN
                         -- Restore for DEBIT
-                        UPDATE acc_ledger_balance
+                        UPDATE MYSQL_LEDGER_balance
                         SET posted_debits = posted_debits - r_amount
                         WHERE ledger_balance_id = r_account_id;
                     ELSEIF r_side = 'CREDIT' THEN
                         -- Restore for CREDIT
-                        UPDATE acc_ledger_balance
+                        UPDATE MYSQL_LEDGER_balance
                         SET posted_credits = posted_credits - r_amount
                         WHERE ledger_balance_id = r_account_id;
                     END IF;
 
                     -- After successfully reversed the dr/cr
                     -- Update the ledger movement with the result REVERSED
-                    UPDATE acc_ledger_movement
+                    UPDATE MYSQL_LEDGER_movement
                     SET movement_stage  = 'DEBIT_CREDIT',
                         movement_result = 'REVERSED'
                     WHERE ledger_movement_id = r_ledger_movement_id;
@@ -519,7 +519,7 @@ BEGIN
         -- There is no error.
         -- Update all the movements' stage to COMMIT
         START TRANSACTION;
-        UPDATE acc_ledger_movement
+        UPDATE MYSQL_LEDGER_movement
         SET movement_stage  = 'COMMIT',
             movement_result = 'SUCCESS'
         WHERE transaction_id = v_txn_id;
@@ -552,7 +552,7 @@ BEGIN
                movement_stage,
                movement_result,
                created_at
-        FROM acc_ledger_movement
+        FROM MYSQL_LEDGER_movement
         WHERE transaction_id = v_txn_id
         ORDER BY ledger_movement_id;
     END IF;

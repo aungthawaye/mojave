@@ -23,6 +23,7 @@ package io.mojaloop.core.accounting.admin;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.domain.AccountingFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -80,6 +81,13 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("accounting-admin", false, false);
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean

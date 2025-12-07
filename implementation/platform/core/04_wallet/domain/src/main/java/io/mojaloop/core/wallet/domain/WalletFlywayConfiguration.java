@@ -21,11 +21,13 @@ package io.mojaloop.core.wallet.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
 import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 
 public class WalletFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
+    @Qualifier("walletFlyway")
     public Flyway walletFlyway(WalletFlywayConfiguration.Settings walletFlywaySettings) {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(
