@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,50 +20,29 @@
 
 package io.mojaloop.platform.core.transfer.service;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
-import io.mojaloop.component.kafka.KafkaProducerConfigurer;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.common.datatype.type.participant.FspCode;
+import io.mojaloop.core.accounting.producer.AccountingProducerConfiguration;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
-import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
+import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 final class TransferServiceSettings implements TransferServiceConfiguration.RequiredSettings {
 
-    @Override
-    public KafkaProducerConfigurer.ProducerSettings accountingProducerSettings() {
-
-        return new KafkaProducerConfigurer.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
-
     @Bean
     @Override
-    public TransferServiceConfiguration.FspCodeList fspCodeList() {
+    public AccountingProducerConfiguration.ProducerSettings accountingProducerSettings() {
 
-        var fspsEnv = System.getenv("FSPIOP_FSPS");
-
-        if (fspsEnv != null && !fspsEnv.isEmpty()) {
-            return new TransferServiceConfiguration.FspCodeList(Arrays
-                                                                    .stream(fspsEnv.split(","))
-                                                                    .map(String::trim)
-                                                                    .map(FspCode::new)
-                                                                    .collect(Collectors.toList()));
-        }
-
-        return new TransferServiceConfiguration.FspCodeList(List.of());
+        return new AccountingProducerConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean
@@ -100,14 +79,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new ParticipantIntercomService.Settings(
             System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
-    }
-
-    @Bean
-    @Override
-    public ParticipantStoreConfiguration.Settings participantStoreSettings() {
-
-        return new ParticipantStoreConfiguration.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
     }
 
     @Bean
@@ -173,20 +144,10 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public KafkaProducerConfigurer.ProducerSettings transactionProducerSettings() {
+    public TransactionProducerConfiguration.ProducerSettings transactionProducerSettings() {
 
-        return new KafkaProducerConfigurer.ProducerSettings(
+        return new TransactionProducerConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
-
-    @Bean
-    @Override
-    public FlywayMigration.Settings transferFlywaySettings() {
-
-        return new FlywayMigration.Settings(
-            System.getenv("TFR_FLYWAY_DB_URL"), System.getenv("TFR_FLYWAY_DB_USER"),
-            System.getenv("TFR_FLYWAY_DB_PASSWORD"), "flyway_transfer_history",
-            new String[]{"classpath:migration/transfer"});
     }
 
     @Bean

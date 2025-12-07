@@ -63,9 +63,6 @@ public class FspiopServiceErrorWriter implements AuthenticationErrorWriter {
             if (exception instanceof FspiopServiceGatekeeper.GatekeeperFailureException gke) {
 
                 var cause = (FspiopException) gke.getCause();
-
-                LOGGER.info("Error cause : {}", cause.toErrorObject());
-
                 response.setStatus(gke.getStatusCode());
                 writer.write(this.objectMapper.writeValueAsString(cause.toErrorObject()));
 
@@ -89,13 +86,13 @@ public class FspiopServiceErrorWriter implements AuthenticationErrorWriter {
             var json = "{\"errorInformation\":{\"errorCode\": \"" + errorCode +
                            "\",\"errorDescription\":\"" + errorDescription + "\"}}";
 
-            LOGGER.error("Problem occurred :", e);
+            LOGGER.error("Error:", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             writer.write(json);
 
         } catch (IOException e) {
 
-            LOGGER.error("Problem occurred :", e);
+            LOGGER.error("Error:", e);
             throw new RuntimeException(e);
         }
     }

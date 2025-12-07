@@ -63,7 +63,6 @@ public class HandleQuotesController {
     public ResponseEntity<?> postQuotes(@RequestHeader Map<String, String> headers,
                                         @RequestBody QuotesPostRequest request) {
 
-        LOGGER.debug("Received POST /quotes : request : {}", request);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PostQuotesEvent(
@@ -77,7 +76,6 @@ public class HandleQuotesController {
                                        @PathVariable String quoteId,
                                        @RequestBody QuotesIDPutResponse response) {
 
-        LOGGER.debug("Received PUT /quotes/{} : response : {}", quoteId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(
@@ -91,8 +89,6 @@ public class HandleQuotesController {
                                             @PathVariable String quoteId,
                                             @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug(
-            "Received PUT /quotes/{}/error : errorInformation : {}", quoteId, errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutQuotesErrorEvent(

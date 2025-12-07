@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,7 @@ import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import io.mojaloop.core.wallet.contract.command.balance.DepositFundCommand;
+import io.mojaloop.core.wallet.contract.exception.balance.BalanceNotExistException;
 import io.mojaloop.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
 import io.mojaloop.core.wallet.domain.cache.BalanceCache;
 import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
@@ -50,16 +51,15 @@ public class DepositFundCommandHandler implements DepositFundCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws NoBalanceUpdateForTransactionException {
+    public Output execute(final Input input)
+        throws NoBalanceUpdateForTransactionException, BalanceNotExistException {
 
         LOGGER.info("DepositFundCommand : input: ({})", ObjectLogger.log(input));
 
         var wallet = this.balanceCache.get(input.walletOwnerId(), input.currency());
 
         if (wallet == null) {
-            throw new RuntimeException(
-                "Balance does not exist for walletOwnerId: " + input.walletOwnerId() +
-                    " and currency: " + input.currency());
+            throw new BalanceNotExistException(input.walletOwnerId(), input.currency());
         }
 
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());

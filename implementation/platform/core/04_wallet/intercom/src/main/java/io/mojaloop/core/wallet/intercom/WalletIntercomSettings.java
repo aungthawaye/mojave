@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.wallet.intercom;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import org.springframework.context.annotation.Bean;
 
 final class WalletIntercomSettings implements WalletIntercomConfiguration.RequiredSettings {
@@ -44,8 +44,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
             System.getenv("WLT_READ_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "wallet-intercom-read",
-            Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
+            "wallet-intercom-read", Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WLT_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -60,8 +59,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
             System.getenv("WLT_WRITE_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "wallet-intercom-write",
-            Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
+            "wallet-intercom-write", Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WLT_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -74,22 +72,18 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
         return new RoutingEntityManagerConfigurer.Settings("wallet-intercom", false, false);
     }
 
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return null;
+    }
+
     @Bean
     @Override
     public WalletIntercomConfiguration.TomcatSettings tomcatSettings() {
 
         return new WalletIntercomConfiguration.TomcatSettings(
             Integer.parseInt(System.getenv("WALLET_INTERCOM_PORT")));
-    }
-
-    @Bean
-    @Override
-    public FlywayMigration.Settings walletFlywaySettings() {
-
-        return new FlywayMigration.Settings(
-            System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
-            System.getenv("WLT_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
-            new String[]{"classpath:migration/wallet"});
     }
 
 }

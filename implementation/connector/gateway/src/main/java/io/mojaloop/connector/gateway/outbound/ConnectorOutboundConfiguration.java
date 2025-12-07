@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ package io.mojaloop.connector.gateway.outbound;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
+import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -46,11 +47,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
     value = {
         MiscConfiguration.class,
         FspiopInvokerConfiguration.class,
+        OpenApiConfiguration.class,
         SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"io.mojaloop.connector.gateway.outbound"})
 public class ConnectorOutboundConfiguration implements MiscConfiguration.RequiredBeans,
                                                        FspiopInvokerConfiguration.RequiredBeans,
                                                        SpringSecurityConfiguration.RequiredBeans,
+                                                       OpenApiConfiguration.RequiredSettings,
                                                        SpringSecurityConfiguration.RequiredSettings {
 
     private final OutboundSettings outboundSettings;
@@ -66,6 +69,13 @@ public class ConnectorOutboundConfiguration implements MiscConfiguration.Require
         this.outboundSettings = outboundSettings;
         this.objectMapper = objectMapper;
 
+    }
+
+    @Bean
+    @Override
+    public OpenApiConfiguration.ApiSettings apiSettings() {
+
+        return new OpenApiConfiguration.ApiSettings("Connector - Outbound API", "1.0.0");
     }
 
     @Bean
@@ -117,7 +127,7 @@ public class ConnectorOutboundConfiguration implements MiscConfiguration.Require
 
         OutboundSettings outboundSettings();
 
-        TransferSettings transactionSettings();
+        TransferSettings transferSettings();
 
     }
 

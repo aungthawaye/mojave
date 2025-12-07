@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.wallet.admin;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import org.springframework.context.annotation.Bean;
 
 final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSettings {
@@ -74,20 +74,17 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
 
     @Bean
     @Override
-    public WalletAdminConfiguration.TomcatSettings tomcatSettings() {
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new WalletAdminConfiguration.TomcatSettings(
-            Integer.parseInt(System.getenv("WALLET_ADMIN_PORT")));
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean
     @Override
-    public FlywayMigration.Settings walletFlywaySettings() {
+    public WalletAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new FlywayMigration.Settings(
-            System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
-            System.getenv("WLT_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
-            new String[]{"classpath:migration/wallet"});
+        return new WalletAdminConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("WALLET_ADMIN_PORT")));
     }
 
 }

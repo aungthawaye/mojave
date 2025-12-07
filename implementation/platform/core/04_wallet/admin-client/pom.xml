@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.platform.core.wallet</groupId>
         <artifactId>wallet-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-wallet-admin-client</artifactId>
     <name>Mojaloop - Platform - Core - Wallet - Admin Client</name>

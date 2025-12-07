@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,12 +47,10 @@ class HandlePutPartiesResponseCommandHandler implements HandlePutPartiesResponse
 
         var channel = PubSubKeys.forParties(
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
-        LOGGER.info("Publishing parties result to channel : {}", channel);
 
         var result = new PartiesResult(
             input.partyIdType(), input.partyId(), input.subId(), input.response());
         this.pubSubClient.publish(channel, result);
-        LOGGER.info("Published parties result to channel : {}, result : {}", channel, result);
 
         return new Output();
     }

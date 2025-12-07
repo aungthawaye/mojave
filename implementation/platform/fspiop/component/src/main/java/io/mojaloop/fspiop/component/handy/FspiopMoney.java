@@ -36,7 +36,7 @@ public class FspiopMoney {
         var scale = FspiopCurrencies.get(money.getCurrency()).scale();
         var submittedScale = new BigDecimal(money.getAmount()).scale();
 
-        if (submittedScale != scale) {
+        if (submittedScale > scale) {
 
             throw new FspiopException(
                 FspiopErrors.GENERIC_VALIDATION_ERROR,

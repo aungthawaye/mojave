@@ -55,6 +55,4 @@ public class KafkaProducerConfigurer {
 
     }
 
-    public record ProducerSettings(String bootstrapServers, String ack) { }
-
 }

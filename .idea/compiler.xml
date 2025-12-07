@@ -12,7 +12,6 @@
         <module name="mod-transfer-contract" />
         <module name="mod-component-vault" />
         <module name="mod-settlement-domain" />
-        <module name="mod-wallet-store" />
         <module name="mod-transaction-intercom-client" />
         <module name="mod-participant-intercom-client" />
         <module name="mod-component-web" />
@@ -70,6 +69,7 @@
         <module name="mod-transaction-domain" />
         <module name="mod-participant-domain" />
         <module name="mod-accounting-producer" />
+        <module name="mod-mono-consumer" />
         <module name="mod-settlement-admin" />
         <module name="mod-fspiop-invoker" />
         <module name="mod-mono-intercom" />
@@ -106,6 +106,7 @@
       <module name="mod-shared-security" target="21" />
       <module name="mod-transaction-admin" target="21" />
       <module name="mod-transaction-admin-client" target="21" />
+      <module name="mod-wallet-store" target="21" />
       <module name="oracle-pom" target="21" />
       <module name="shared-pom" target="21" />
     </bytecodeTargetLevel>
@@ -172,6 +173,7 @@
       <module name="mod-lookup-routes-fspiop" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
       <module name="mod-mono-admin" options="-parameters" />
+      <module name="mod-mono-consumer" options="-parameters" />
       <module name="mod-mono-intercom" options="-parameters" />
       <module name="mod-mono-service" options="-parameters" />
       <module name="mod-operation-usecase" options="-parameters" />

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound.command.transfers;
 
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.connector.adapter.fsp.FspCoreAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,18 +44,28 @@ public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersC
     @Override
     public HandlePatchTransfersCommand.Output execute(HandlePatchTransfersCommand.Input input) {
 
+        var startAt = System.nanoTime();
+        var endAt = 0L;
+
         try {
 
-            LOGGER.info("Calling FSP adapter to initiate transfer for : {}", input);
+            LOGGER.info(
+                "HandlePatchTransfersCommandHandler : input : ({})",
+                ObjectLogger.log(input));
+
             this.fspCoreAdapter.patchTransfers(input.payer(), input.transferId(), input.response());
-            LOGGER.info("Done calling FSP adapter to initiate transfer for : {}", input);
 
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PatchTransfers", e);
+            LOGGER.error("Error:", e);
         }
 
-        return null;
+        endAt = System.nanoTime();
+        LOGGER.info(
+            "HandlePatchTransfersCommandHandler : done : took {} ms",
+            (endAt - startAt) / 1000000);
+
+        return new Output();
     }
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package io.mojaloop.connector.adapter.fsp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.connector.adapter.fsp.client.FspClient;
 import io.mojaloop.connector.adapter.fsp.payload.Parties;
 import io.mojaloop.connector.adapter.fsp.payload.Quotes;
@@ -87,12 +88,9 @@ public class FspCoreAdapter {
 
         try {
 
-            LOGGER.debug("Getting parties: {}", partyIdType);
-
-            LOGGER.info("Getting parties from FSP Core: {}", partyIdType);
             var result = fspClient.getParties(
                 payer, new Parties.Get.Request(partyIdType, partyId, subId));
-            LOGGER.info("Got parties from FSP Core: {}", result);
+            LOGGER.info("GotParties : FSP Core : result : ({})", ObjectLogger.log(result));
 
             var party = new Party()
                             .name(result.name())
@@ -105,17 +103,18 @@ public class FspCoreAdapter {
 
             var response = new PartiesTypeIDPutResponse(party);
 
-            LOGGER.debug("Returning parties: {}", response);
+            LOGGER.debug("GetParties: response : ({})", ObjectLogger.log(response));
+
             return response;
 
         } catch (FspiopException e) {
 
-            LOGGER.error("Error while getting parties", e);
+            LOGGER.error("Error:", e);
             throw e;
 
         } catch (Exception e) {
 
-            LOGGER.error("Error while getting parties", e);
+            LOGGER.error("Error:", e);
             throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e.getMessage());
         }
     }
@@ -125,22 +124,20 @@ public class FspCoreAdapter {
 
         try {
 
-            LOGGER.info("Confirming transfer: {}", response);
+            LOGGER.info("PatchTransfers: response : ({})", ObjectLogger.log(response));
             this.fspClient.patchTransfers(
-                payer,
-                new Transfers.Patch.Request(
+                payer, new Transfers.Patch.Request(
                     transferId, response.getTransferState(), response.getCompletedTimestamp(),
                     response.getExtensionList()));
-            LOGGER.info("Confirmed transfer: {}", response);
 
         } catch (FspiopException e) {
 
-            LOGGER.error("Error while posting transfers", e);
+            LOGGER.error("Error:", e);
             throw e;
 
         } catch (Exception e) {
 
-            LOGGER.error("Error while posting transfers", e);
+            LOGGER.error("Error:", e);
             throw new FspiopException(FspiopErrors.GENERIC_CLIENT_ERROR, e.getMessage());
         }
 
@@ -173,8 +170,7 @@ public class FspCoreAdapter {
 
             LOGGER.info("Getting quotes from FSP Core: {}", quoteId);
             var result = fspClient.postQuotes(
-                payer,
-                new Quotes.Post.Request(
+                payer, new Quotes.Post.Request(
                     quoteId, request.getPayer(), request.getPayee(), request.getAmountType(),
                     request.getAmount(), request.getExpiration()));
             LOGGER.info("Got quotes from FSP Core: {}", result);
@@ -205,9 +201,10 @@ public class FspCoreAdapter {
             var extensionList = new ExtensionList();
             // Payer related
             extensionList.addExtensionItem(new Extension("payerFspId", payer.fspCode()));
-            extensionList.addExtensionItem(new Extension(
-                "payerPartyIdType",
-                request.getPayer().getPartyIdInfo().getPartyIdType().toString()));
+            extensionList.addExtensionItem(
+                new Extension(
+                    "payerPartyIdType",
+                    request.getPayer().getPartyIdInfo().getPartyIdType().toString()));
             extensionList.addExtensionItem(new Extension(
                 "payerPartyId",
                 request.getPayer().getPartyIdInfo().getPartyIdentifier()));
@@ -215,9 +212,10 @@ public class FspCoreAdapter {
             // Payee related
             extensionList.addExtensionItem(
                 new Extension("payeeFspId", this.participantContext.fspCode()));
-            extensionList.addExtensionItem(new Extension(
-                "payeePartyIdType",
-                request.getPayee().getPartyIdInfo().getPartyIdType().toString()));
+            extensionList.addExtensionItem(
+                new Extension(
+                    "payeePartyIdType",
+                    request.getPayee().getPartyIdInfo().getPartyIdType().toString()));
             extensionList.addExtensionItem(new Extension(
                 "payeePartyId",
                 request.getPayee().getPartyIdInfo().getPartyIdentifier()));
@@ -342,8 +340,7 @@ public class FspCoreAdapter {
                 .completedTimestamp(FspiopDates.forRequestBody())
                 .extensionList(new ExtensionList()
                                    .addExtensionItem(new Extension(
-                                       "homeTransactionId",
-                                       UUID.randomUUID().toString()))
+                                       "homeTransactionId", UUID.randomUUID().toString()))
                                    .addExtensionItem(new Extension("transferId", transferId)));
 
             LOGGER.debug("Returning transfers: {}", response);

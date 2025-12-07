@@ -40,7 +40,7 @@ import java.time.Instant;
 public interface DecreasePositionCommand {
 
     Output execute(Input input)
-        throws PositionNotExistException, NoPositionUpdateForTransactionException;
+        throws NoPositionUpdateForTransactionException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
                  @JsonProperty(required = true) @NotNull Currency currency,

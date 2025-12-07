@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,7 +64,6 @@ public class HandlePartiesController {
                                         @PathVariable PartyIdType partyIdType,
                                         @PathVariable String partyId) {
 
-        LOGGER.debug("Received GET /parties/{}/{}", partyIdType, partyId);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new GetPartiesEvent(
@@ -79,7 +78,6 @@ public class HandlePartiesController {
                                         @PathVariable String partyId,
                                         @PathVariable String subId) {
 
-        LOGGER.debug("Received GET /parties/{}/{}/{}", partyIdType, partyId, subId);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new GetPartiesEvent(
@@ -94,7 +92,6 @@ public class HandlePartiesController {
                                         @PathVariable String partyId,
                                         @RequestBody PartiesTypeIDPutResponse response) {
 
-        LOGGER.debug("Received PUT /parties/{}/{} : response : {}", partyIdType, partyId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutPartiesEvent(
@@ -111,9 +108,6 @@ public class HandlePartiesController {
                                              @PathVariable String partyId,
                                              @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug(
-            "Received PUT /parties/{}/{}/error : response {}", partyIdType, partyId,
-            errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutPartiesErrorEvent(
@@ -131,9 +125,6 @@ public class HandlePartiesController {
                                              @PathVariable String subId,
                                              @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug(
-            "Received PUT /parties/{}/{}/{}/error : {}", partyIdType, partyId, subId,
-            errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutPartiesErrorEvent(
@@ -151,9 +142,6 @@ public class HandlePartiesController {
                                                  @PathVariable String subId,
                                                  @RequestBody PartiesTypeIDPutResponse response) {
 
-        LOGGER.debug(
-            "Received (withSubId) PUT /parties/{}/{}/{} : response : {}", partyIdType, partyId,
-            subId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutPartiesEvent(

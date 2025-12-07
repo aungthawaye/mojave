@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Import;
 
 @ComponentScan(basePackages = {"io.mojaloop.core.quoting.domain"})
 @Import(value = {MiscConfiguration.class,
-                 QuotingFlywayConfiguration.class,
                  FspiopCommonConfiguration.class,
                  ParticipantStoreConfiguration.class,
                  RoutingJpaConfiguration.class})
@@ -42,7 +41,6 @@ public class QuotingDomainConfiguration {
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              QuotingFlywayConfiguration.RequiredSettings,
                                               FspiopCommonConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {

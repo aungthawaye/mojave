@@ -23,7 +23,10 @@ package io.mojaloop.connector.gateway.outbound.controller;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestQuotesCommand;
-import io.mojaloop.connector.gateway.outbound.event.RequestQuotesEvent;
+import io.mojaloop.connector.gateway.outbound.data.Quotes;
+import io.mojaloop.connector.gateway.outbound.event.QuotesRequestEvent;
+import io.mojaloop.connector.gateway.outbound.event.QuotesResponseEvent;
+import io.mojaloop.connector.gateway.outbound.event.QuotesErrorEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.AmountType;
@@ -69,34 +72,48 @@ public class RequestQuotesController {
     @PostMapping("/quote")
     public ResponseEntity<?> quote(@RequestBody @Valid Request request) throws FspiopException {
 
-        LOGGER.info("Received quote request for destination: {}", request.destination());
-        LOGGER.debug("Quote request: {}", request);
+        final var id = UUID.randomUUID().toString();
 
-        var id = UUID.randomUUID().toString();
+        final var quotesPostRequest = new QuotesPostRequest()
+                                          .quoteId(id)
+                                          .transactionId(id)
+                                          .payee(new Party().partyIdInfo(request.payee()))
+                                          .payer(new Party().partyIdInfo(request.payer()))
+                                          .amountType(request.amountType())
+                                          .amount(request.amount())
+                                          .fees(request.fees())
+                                          .expiration(request.expiration())
+                                          .transactionType(new TransactionType()
+                                                               .scenario(TransactionScenario.TRANSFER)
+                                                               .initiator(TransactionInitiator.PAYER)
+                                                               .initiatorType(
+                                                                   TransactionInitiatorType.CONSUMER));
 
-        var quotesPostRequest = new QuotesPostRequest()
-                                    .quoteId(id)
-                                    .transactionId(id)
-                                    .payee(new Party().partyIdInfo(request.payee()))
-                                    .payer(new Party().partyIdInfo(request.payer()))
-                                    .amountType(request.amountType())
-                                    .amount(request.amount())
-                                    .fees(request.fees())
-                                    .expiration(request.expiration())
-                                    .transactionType(new TransactionType()
-                                                         .scenario(TransactionScenario.TRANSFER)
-                                                         .initiator(TransactionInitiator.PAYER)
-                                                         .initiatorType(
-                                                             TransactionInitiatorType.CONSUMER));
+        final var payee = new Payee(request.destination);
 
-        var input = new RequestQuotesCommand.Input(
-            new Payee(request.destination), quotesPostRequest);
+        try {
 
-        var output = this.requestQuotesCommand.execute(input);
+            // Publish request event
+            final var quotesRequest = new Quotes.Request(payee, quotesPostRequest);
+            this.eventPublisher.publish(new QuotesRequestEvent(quotesRequest));
 
-        this.eventPublisher.publish(new RequestQuotesEvent(input));
+            // Execute command
+            final var input = new RequestQuotesCommand.Input(payee, quotesPostRequest);
+            final var output = this.requestQuotesCommand.execute(input);
 
-        return ResponseEntity.ok(output.result());
+            // Publish response event
+            final var quotesResponse = new Quotes.Response(payee, id, output.result().response());
+            this.eventPublisher.publish(new QuotesResponseEvent(quotesResponse));
+
+            return ResponseEntity.ok(output.result());
+
+        } catch (FspiopException e) {
+
+            // Publish error event and rethrow
+            this.eventPublisher.publish(new QuotesErrorEvent(new Quotes.Error(
+                payee, id, e.toErrorObject())));
+            throw e;
+        }
 
     }
 

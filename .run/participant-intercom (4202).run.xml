@@ -1,0 +1,22 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="participant-intercom (4202)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="02 participant">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/02_participant/intercom/src/main/java/io/mojaloop/core/participant/intercom/.env" />
+    </option>
+    <module name="mod-participant-intercom" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.participant.intercom.ParticipantIntercomApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.mojaloop.core.participant.admin.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

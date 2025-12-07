@@ -67,7 +67,6 @@ public class HandleTransfersController {
     public ResponseEntity<?> postTransfers(@RequestHeader Map<String, String> headers,
                                            @RequestBody TransfersPostRequest request) {
 
-        LOGGER.debug("Received POST /transfers : request : {}", request);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PostTransfersEvent(
@@ -81,7 +80,6 @@ public class HandleTransfersController {
                                           @PathVariable String transferId,
                                           @RequestBody TransfersIDPutResponse response) {
 
-        LOGGER.debug("Received PUT /transfers/{} : response : {}", transferId, response);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutTransfersEvent(
@@ -95,7 +93,6 @@ public class HandleTransfersController {
                                           @PathVariable String transferId,
                                           @RequestBody TransfersIDPatchResponse response) {
 
-        LOGGER.debug("Received PATCH /transfers/{} : response : {}", transferId, response);
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PatchTransfersEvent(
@@ -109,9 +106,6 @@ public class HandleTransfersController {
                                                @PathVariable String transferId,
                                                @RequestBody ErrorInformationObject errorInformation) {
 
-        LOGGER.debug(
-            "Received PUT /transfers/{}/error : errorInformation : {}", transferId,
-            errorInformation);
         var payee = new Payee(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
         this.eventPublisher.publish(new PutTransfersErrorEvent(

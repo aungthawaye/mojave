@@ -25,25 +25,11 @@ import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
-import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
-import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
-import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
-import io.mojaloop.core.wallet.admin.controller.component.EmptyErrorWriter;
-import io.mojaloop.core.wallet.admin.controller.component.EmptyGatekeeper;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
-import io.mojaloop.core.wallet.domain.cache.BalanceCache;
-import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.strategy.local.BalanceLocalCache;
-import io.mojaloop.core.wallet.domain.cache.strategy.local.PositionLocalCache;
-import io.mojaloop.core.wallet.domain.component.BalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.PositionUpdater;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
-import io.mojaloop.core.wallet.domain.repository.BalanceRepository;
-import io.mojaloop.core.wallet.domain.repository.PositionRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -65,107 +51,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         WalletDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-final class WalletAdminConfiguration extends WebMvcExtension
-    implements WalletDomainConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredBeans,
-               SpringSecurityConfiguration.RequiredSettings {
+public final class WalletAdminConfiguration extends WebMvcExtension {
 
-    private final BalanceUpdater balanceUpdater;
-
-    private final PositionUpdater positionUpdater;
-
-    private final BalanceCache balanceCache;
-
-    private final PositionCache positionCache;
-
-    public WalletAdminConfiguration(ObjectMapper objectMapper,
-                                    BalanceRepository balanceRepository,
-                                    PositionRepository positionRepository) {
+    public WalletAdminConfiguration(ObjectMapper objectMapper) {
 
         super(objectMapper);
-
-        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
-            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-                System.getenv("WLT_MYSQL_BALANCE_DB_URL"),
-                System.getenv("WLT_MYSQL_BALANCE_DB_USER"),
-                System.getenv("WLT_MYSQL_BALANCE_DB_PASSWORD")),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
-                "wallet-balance",
-                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
-
-        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
-            new MySqlPositionUpdater.PositionDbSettings.Connection(
-                System.getenv("WLT_MYSQL_POSITION_DB_URL"),
-                System.getenv("WLT_MYSQL_POSITION_DB_USER"),
-                System.getenv("WLT_MYSQL_POSITION_DB_PASSWORD")),
-            new MySqlPositionUpdater.PositionDbSettings.Pool(
-                "wallet-position",
-                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
-
-        this.balanceCache = new BalanceLocalCache(balanceRepository);
-        this.positionCache = new PositionLocalCache(positionRepository);
     }
 
-    @Bean
-    @Override
-    public AuthenticationErrorWriter authenticationErrorWriter() {
+    public interface RequiredDependencies extends WalletDomainConfiguration.RequiredBeans,
+                                                  SpringSecurityConfiguration.RequiredBeans { }
 
-        return new EmptyErrorWriter();
-    }
-
-    @Bean
-    @Override
-    public Authenticator authenticator() {
-
-        return new EmptyGatekeeper();
-    }
-
-    @Bean
-    @Override
-    public BalanceUpdater balanceUpdater() {
-
-        return this.balanceUpdater;
-    }
-
-    @Bean
-    @Override
-    public PositionCache positionCache() {
-
-        return this.positionCache;
-    }
-
-    @Bean
-    @Override
-    public PositionUpdater positionUpdater() {
-
-        return this.positionUpdater;
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(null);
-    }
-
-    @Bean
-    @Override
-    public BalanceCache walletCache() {
-
-        return this.balanceCache;
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return factory -> factory.setPort(settings.portNo());
-    }
-
-    public interface RequiredSettings
-        extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings {
+    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

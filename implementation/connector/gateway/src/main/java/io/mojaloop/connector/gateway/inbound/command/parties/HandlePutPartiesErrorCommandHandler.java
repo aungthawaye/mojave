@@ -47,13 +47,11 @@ class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorComman
 
         var channel = PubSubKeys.forPartiesError(
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
-        LOGGER.info("Publishing parties error result to channel : {}", channel);
 
         this.pubSubClient.publish(
             channel, new PartiesErrorResult(
                 input.partyIdType(), input.partyId(), input.subId(),
                 input.errorInformationObject()));
-        LOGGER.info("Published parties error result to channel : {}", channel);
 
         return new Output();
     }

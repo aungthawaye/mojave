@@ -48,7 +48,7 @@ public class DecreasePositionInvoker implements DecreasePositionCommand {
     }
 
     @Override
-    public Output execute(final Input input) throws PositionNotExistException {
+    public Output execute(final Input input) {
 
         try {
 

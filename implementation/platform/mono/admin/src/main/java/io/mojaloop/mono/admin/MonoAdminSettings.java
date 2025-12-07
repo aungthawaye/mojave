@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,28 +17,19 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.mono.admin;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.springframework.context.annotation.Bean;
 
 public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSettings {
-
-    @Bean
-    @Override
-    public FlywayMigration.Settings accountingFlywaySettings() {
-
-        return new FlywayMigration.Settings(
-            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
-            new String[]{"classpath:migration/accounting"});
-    }
 
     @Bean
     @Override
@@ -70,16 +61,6 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
                 System.getenv("MONO_LEDGER_DB_PASSWORD")), new MySqlLedger.LedgerDbSettings.Pool(
             "accounting-ledger", Integer.parseInt(System.getenv("MONO_LEDGER_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("MONO_LEDGER_DB_MAX_POOL_SIZE"))));
-    }
-
-    @Bean
-    @Override
-    public FlywayMigration.Settings participantFlywaySettings() {
-
-        return new FlywayMigration.Settings(
-            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
-            new String[]{"classpath:migration/participant"});
     }
 
     @Bean
@@ -135,20 +116,17 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
 
     @Bean
     @Override
-    public MonoAdminConfiguration.TomcatSettings tomcatSettings() {
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new MonoAdminConfiguration.TomcatSettings(
-            Integer.parseInt(System.getenv("MOJAVE_ADMIN_PORT")));
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean
     @Override
-    public FlywayMigration.Settings walletFlywaySettings() {
+    public MonoAdminConfiguration.TomcatSettings tomcatSettings() {
 
-        return new FlywayMigration.Settings(
-            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
-            new String[]{"classpath:migration/wallet"});
+        return new MonoAdminConfiguration.TomcatSettings(
+            Integer.parseInt(System.getenv("MOJAVE_ADMIN_PORT")));
     }
 
 }

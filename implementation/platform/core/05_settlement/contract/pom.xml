@@ -5,6 +5,7 @@
         <groupId>io.mojaloop.platform.core.settlement</groupId>
         <artifactId>settlement-pom</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-settlement-contract</artifactId>
     <name>Mojaloop - Platform - Core - Settlement - Contract</name>

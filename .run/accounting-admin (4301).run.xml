@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="accounting-admin (4301)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="03 accounting">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/admin/src/main/java/io/mojaloop/core/accounting/admin/.env" />
+    </option>
+    <module name="mod-accounting-admin" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.accounting.admin.AccountingAdminApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

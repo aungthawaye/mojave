@@ -20,12 +20,12 @@
             <artifactId>mod-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.accounting</groupId>
-            <artifactId>mod-accounting-producer</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.mojaloop.component</groupId>
             <artifactId>mod-component-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.accounting</groupId>
+            <artifactId>mod-accounting-producer</artifactId>
         </dependency>
         <dependency>
             <groupId>io.mojaloop.platform.core.common</groupId>

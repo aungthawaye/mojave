@@ -77,14 +77,6 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
 
     @Bean
     @Override
-    public ParticipantStoreConfiguration.Settings participantStoreSettings() {
-
-        return new ParticipantStoreConfiguration.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
-    }
-
-    @Bean
-    @Override
     public FspiopServiceConfiguration.ServiceSettings serviceSettings() {
 
         return new FspiopServiceConfiguration.ServiceSettings(
