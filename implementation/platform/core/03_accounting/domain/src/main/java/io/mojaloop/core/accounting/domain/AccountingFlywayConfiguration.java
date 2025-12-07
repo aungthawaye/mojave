@@ -26,15 +26,24 @@ import org.springframework.context.annotation.Bean;
 public class AccountingFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
-    public Flyway accountingFlyway(FlywayMigration.Settings accountingFlywaySettings) {
+    public Flyway accountingFlyway(AccountingFlywayConfiguration.Settings accountingFlywaySettings) {
 
-        return FlywayMigration.configure(accountingFlywaySettings);
+        return FlywayMigration.configure(new FlywayMigration.Settings(
+            accountingFlywaySettings.url, accountingFlywaySettings.username,
+            accountingFlywaySettings.password, accountingFlywaySettings.table,
+            accountingFlywaySettings.locations));
     }
 
     public interface RequiredSettings {
 
-        FlywayMigration.Settings accountingFlywaySettings();
+        AccountingFlywayConfiguration.Settings accountingFlywaySettings();
 
     }
+
+    public record Settings(String url,
+                           String username,
+                           String password,
+                           String table,
+                           String[] locations) { }
 
 }

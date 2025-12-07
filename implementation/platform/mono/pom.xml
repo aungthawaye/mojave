@@ -15,6 +15,7 @@
         <module>admin</module>
         <module>intercom</module>
         <module>service</module>
+        <module>consumer</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

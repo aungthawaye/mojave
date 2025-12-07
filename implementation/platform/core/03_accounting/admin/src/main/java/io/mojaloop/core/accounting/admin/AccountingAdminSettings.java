@@ -20,19 +20,19 @@
 
 package io.mojaloop.core.accounting.admin;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.core.accounting.domain.AccountingFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class AccountingAdminSettings implements AccountingAdminConfiguration.RequiredSettings {
 
     @Bean
     @Override
-    public FlywayMigration.Settings accountingFlywaySettings() {
+    public AccountingFlywayConfiguration.Settings accountingFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new AccountingFlywayConfiguration.Settings(
             System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
             System.getenv("ACC_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
             new String[]{"classpath:migration/accounting"});

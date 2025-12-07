@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,6 +36,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -51,7 +52,9 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "txn_transaction_step")
+@Table(
+    name = "txn_transaction_step", indexes = @Index(
+    name = "idx_txn_transaction_phase_name_context", columnList = "phase,name,context"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TransactionStep extends JpaEntity<TransactionStepId>
     implements DataConversion<TransactionStepData> {
@@ -62,10 +65,11 @@ public class TransactionStep extends JpaEntity<TransactionStepId>
     @Column(name = "step_id", nullable = false, updatable = false)
     protected TransactionStepId id;
 
-    @Column(name = "phase",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "phase",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected StepPhase phase;
 
@@ -108,8 +112,8 @@ public class TransactionStep extends JpaEntity<TransactionStepId>
     public TransactionStepData convert() {
 
         return new TransactionStepData(
-            this.id, this.phase, this.name, this.context, this.payload, this.createdAt,
-            this.transaction.getId());
+            this.id, this.phase, this.name, this.context, this.payload,
+            this.createdAt, this.transaction.getId());
     }
 
     @Override

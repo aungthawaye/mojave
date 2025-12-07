@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.accounting.consumer;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.core.accounting.consumer.listener.PostLedgerFlowListener;
+import io.mojaloop.core.accounting.domain.AccountingFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 
@@ -33,9 +33,9 @@ final class AccountingConsumerSettings implements AccountingConsumerConfiguratio
 
     @Bean
     @Override
-    public FlywayMigration.Settings accountingFlywaySettings() {
+    public AccountingFlywayConfiguration.Settings accountingFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new AccountingFlywayConfiguration.Settings(
             System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
             System.getenv("ACC_WRITE_DB_PASSWORD"), "flyway_accounting_history",
             new String[]{"classpath:migration/accounting"});

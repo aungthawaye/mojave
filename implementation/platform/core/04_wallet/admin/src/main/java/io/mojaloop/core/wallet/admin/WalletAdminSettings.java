@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.wallet.admin;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSettings {
@@ -82,9 +82,9 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
 
     @Bean
     @Override
-    public FlywayMigration.Settings walletFlywaySettings() {
+    public WalletFlywayConfiguration.Settings walletFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new WalletFlywayConfiguration.Settings(
             System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
             System.getenv("WLT_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
             new String[]{"classpath:migration/wallet"});

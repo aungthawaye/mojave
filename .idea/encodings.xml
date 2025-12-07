@@ -177,6 +177,7 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/mono/admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/platform/mono/consumer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/mono/intercom/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/mono/service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/mono/src/main/java" charset="UTF-8" />

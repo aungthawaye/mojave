@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,6 +59,13 @@ public class RedissonPubSubClientConfigurer {
             settings.executorCount() != 0 ? settings.executorCount() :
                 Runtime.getRuntime().availableProcessors() * 2));
 
+        int subscriptionConnectionPoolSize =
+            settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64;
+
+        int subscriptionConnectionMinimumIdleSize =
+            settings.subscriptionMinimumIdleSize() != 0 ? settings.subscriptionMinimumIdleSize() :
+                64;
+
         if (!settings.cluster()) {
 
             config
@@ -68,11 +75,8 @@ public class RedissonPubSubClientConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setSubscriptionConnectionPoolSize(
-                    settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
-                .setSubscriptionConnectionMinimumIdleSize(
-                    settings.subscriptionMinimumIdleSize() != 0 ?
-                        settings.subscriptionMinimumIdleSize() : 64)
+                .setSubscriptionConnectionPoolSize(subscriptionConnectionPoolSize)
+                .setSubscriptionConnectionMinimumIdleSize(subscriptionConnectionMinimumIdleSize)
                 .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
                 .setPingConnectionInterval(10000);
 
@@ -86,11 +90,8 @@ public class RedissonPubSubClientConfigurer {
                 .setTimeout(3000)
                 .setIdleConnectionTimeout(10000)
                 .setRetryAttempts(3)
-                .setSubscriptionConnectionPoolSize(
-                    settings.subscriptionPoolSize() != 0 ? settings.subscriptionPoolSize() : 64)
-                .setSubscriptionConnectionMinimumIdleSize(
-                    settings.subscriptionMinimumIdleSize() != 0 ?
-                        settings.subscriptionMinimumIdleSize() : 64)
+                .setSubscriptionConnectionPoolSize(subscriptionConnectionPoolSize)
+                .setSubscriptionConnectionMinimumIdleSize(subscriptionConnectionMinimumIdleSize)
                 .setSubscriptionsPerConnection(settings.subscriptionPerConnection())
                 .setPingConnectionInterval(10000);
         }

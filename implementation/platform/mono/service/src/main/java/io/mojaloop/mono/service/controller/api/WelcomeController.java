@@ -17,17 +17,23 @@
  * limitations under the License.
  * ================================================================================
  */
+package io.mojaloop.mono.service.controller.api;
 
-package io.mojaloop.component.vault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.context.annotation.Bean;
+@RestController
+public class WelcomeController {
 
-public class VaultConfiguration {
+    @GetMapping("/**")
+    public ResponseEntity<Response> welcome() {
 
-    @Bean
-    public Vault vault(VaultConfigurer.Settings settings) {
-
-        return VaultConfigurer.configure(settings);
+        return ResponseEntity.ok(
+            new Response("1.0", "Welcome to the Mojave Intercom API."));
     }
 
+    public record Response(String version, String message) { }
+
 }
+

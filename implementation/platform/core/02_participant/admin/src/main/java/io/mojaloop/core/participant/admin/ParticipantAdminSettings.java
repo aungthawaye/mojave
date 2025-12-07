@@ -20,10 +20,10 @@
 
 package io.mojaloop.core.participant.admin;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class ParticipantAdminSettings implements ParticipantAdminConfiguration.RequiredSettings {
@@ -37,9 +37,9 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
 
     @Bean
     @Override
-    public FlywayMigration.Settings participantFlywaySettings() {
+    public ParticipantFlywayConfiguration.Settings participantFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new ParticipantFlywayConfiguration.Settings(
             System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
             System.getenv("PCP_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
             new String[]{"classpath:migration/participant"});

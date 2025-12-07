@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,20 +34,21 @@ import io.mojaloop.component.misc.logger.ObjectLoggerInitializer;
 import io.mojaloop.component.misc.spring.SpringContext;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.component.misc.spring.event.publisher.SpringEventPublisher;
+import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
-import org.springframework.core.task.TaskExecutor;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.security.Security;
 import java.time.Instant;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.Map;
+import java.util.concurrent.Executor;
 
 @EnableAsync
 public class MiscConfiguration {
@@ -58,45 +59,72 @@ public class MiscConfiguration {
     }
 
     @Bean(name = "applicationEventMulticaster")
-    public ApplicationEventMulticaster asyncEventMulticaster() {
+    public ApplicationEventMulticaster applicationEventMulticaster(Executor eventVirtualThreadExecutor) {
 
-        SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
-        //eventMulticaster.setTaskExecutor(asyncTaskExecutor);
+        var multicaster = new SimpleApplicationEventMulticaster();
 
-        return eventMulticaster;
-    }
+        multicaster.setTaskExecutor(eventVirtualThreadExecutor);
 
-    @Bean
-    public TaskExecutor asyncTaskExecutor() {
-
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-
-        int cores = Runtime.getRuntime().availableProcessors();
-
-        // Tune these based on your workload
-        executor.setCorePoolSize(cores);
-        executor.setMaxPoolSize(cores * 2);
-        executor.setQueueCapacity(10_000);
-        executor.setKeepAliveSeconds(60);
-        executor.setAllowCoreThreadTimeOut(true);
-        executor.setThreadNamePrefix("async-event-");
-
-        // Back-pressure strategy when the queue is full and threads are maxed
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        // Alternatives: AbortPolicy, DiscardPolicy, DiscardOldestPolicy
-
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(60);
-
-        executor.initialize();
-
-        return executor;
+        return multicaster;
     }
 
     @Bean
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 
         return new SpringEventPublisher(applicationEventPublisher);
+    }
+
+    @Bean(name = "eventVirtualThreadExecutor")
+    public Executor eventVirtualThreadExecutor(TaskDecorator mdcTaskDecorator) {
+
+        var executor = new SimpleAsyncTaskExecutor("event-vt-");
+
+        executor.setTaskDecorator(mdcTaskDecorator);
+        executor.setVirtualThreads(true); // 🔹 switch to virtual threads
+
+        return executor;
+    }
+
+    /**
+     * Copies MDC from the caller thread into the virtual thread.
+     */
+    @Bean
+    public TaskDecorator mdcTaskDecorator() {
+
+        return runnable -> {
+
+            Map<String, String> contextMap = MDC.getCopyOfContextMap();
+
+            return () -> {
+
+                Map<String, String> previous = MDC.getCopyOfContextMap();
+
+                if (contextMap != null) {
+
+                    MDC.setContextMap(contextMap);
+
+                } else {
+
+                    MDC.clear();
+                }
+
+                try {
+
+                    runnable.run();
+
+                } finally {
+
+                    if (previous != null) {
+
+                        MDC.setContextMap(previous);
+
+                    } else {
+
+                        MDC.clear();
+                    }
+                }
+            };
+        };
     }
 
     @Bean

@@ -18,18 +18,17 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.tomcat;
+package io.mojaloop.mono.service.controller.component;
 
-import org.apache.catalina.connector.Connector;
+import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import jakarta.servlet.http.HttpServletResponse;
 
-public interface ConnectorDecorator {
+public class EmptyErrorWriter implements AuthenticationErrorWriter {
 
-    void decorate(Connector connector);
+    @Override
+    public void write(HttpServletResponse response, AuthenticationFailureException exception) {
 
-    int getConnectionTimeout();
-
-    int getMaxThreads();
-
-    int getPort();
+    }
 
 }

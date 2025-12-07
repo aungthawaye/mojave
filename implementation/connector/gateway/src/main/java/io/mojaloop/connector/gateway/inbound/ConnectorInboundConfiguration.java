@@ -31,6 +31,7 @@ import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.connector.adapter.ConnectorAdapterConfiguration;
+import io.mojaloop.connector.adapter.fsp.client.FspClient;
 import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;

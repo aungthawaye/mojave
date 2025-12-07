@@ -26,15 +26,24 @@ import org.springframework.context.annotation.Bean;
 public class WalletFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
-    public Flyway walletFlyway(FlywayMigration.Settings walletFlywaySettings) {
+    public Flyway walletFlyway(WalletFlywayConfiguration.Settings walletFlywaySettings) {
 
-        return FlywayMigration.configure(walletFlywaySettings);
+        return FlywayMigration.configure(new FlywayMigration.Settings(
+            walletFlywaySettings.url, walletFlywaySettings.username,
+            walletFlywaySettings.password, walletFlywaySettings.table,
+            walletFlywaySettings.locations));
     }
 
     public interface RequiredSettings {
 
-        FlywayMigration.Settings walletFlywaySettings();
+        WalletFlywayConfiguration.Settings walletFlywaySettings();
 
     }
+
+    public record Settings(String url,
+                           String username,
+                           String password,
+                           String table,
+                           String[] locations) { }
 
 }

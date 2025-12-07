@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.core.transaction.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
@@ -26,15 +27,24 @@ import org.springframework.context.annotation.Bean;
 public class TransactionFlywayConfiguration {
 
     @Bean(initMethod = "migrate")
-    public Flyway transactionFlyway(FlywayMigration.Settings transactionFlywaySettings) {
+    public Flyway transactionFlyway(TransactionFlywayConfiguration.Settings transactionFlywaySettings) {
 
-        return FlywayMigration.configure(transactionFlywaySettings);
+        return FlywayMigration.configure(new FlywayMigration.Settings(
+            transactionFlywaySettings.url, transactionFlywaySettings.username,
+            transactionFlywaySettings.password, transactionFlywaySettings.table,
+            transactionFlywaySettings.locations));
     }
 
     public interface RequiredSettings {
 
-        FlywayMigration.Settings transactionFlywaySettings();
+        TransactionFlywayConfiguration.Settings transactionFlywaySettings();
 
     }
+
+    public record Settings(String url,
+                           String username,
+                           String password,
+                           String table,
+                           String[] locations) { }
 
 }

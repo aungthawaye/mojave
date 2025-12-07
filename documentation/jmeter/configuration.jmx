@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Mojave">
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
     </TestPlan>
     <hashTree>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Global Variables">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="hubOwnerId" elementType="Argument">
-            <stringProp name="Argument.name">hubOwnerId</stringProp>
-            <stringProp name="Argument.value">1</stringProp>
+          <elementProp name="participantAdminHost" elementType="Argument">
+            <stringProp name="Argument.name">participantAdminHost</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="fsp1OwnerId" elementType="Argument">
-            <stringProp name="Argument.name">fsp1OwnerId</stringProp>
-            <stringProp name="Argument.value">780144803527659520</stringProp>
+          <elementProp name="participantAdminPort" elementType="Argument">
+            <stringProp name="Argument.name">participantAdminPort</stringProp>
+            <stringProp name="Argument.value">5001</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="fsp2OwnerId" elementType="Argument">
-            <stringProp name="Argument.name">fsp2OwnerId</stringProp>
-            <stringProp name="Argument.value">780144926412378112</stringProp>
+          <elementProp name="accountingAdminHost" elementType="Argument">
+            <stringProp name="Argument.name">accountingAdminHost</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="accountingAdminPort" elementType="Argument">
+            <stringProp name="Argument.name">accountingAdminPort</stringProp>
+            <stringProp name="Argument.value">5001</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="walletAdminHost" elementType="Argument">
+            <stringProp name="Argument.name">walletAdminHost</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="walletAdminPort" elementType="Argument">
+            <stringProp name="Argument.name">walletAdminPort</stringProp>
+            <stringProp name="Argument.value">5001</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="currency" elementType="Argument">
@@ -30,10 +46,351 @@
             <stringProp name="Argument.value">BYN</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="amount" elementType="Argument">
+            <stringProp name="Argument.name">amount</stringProp>
+            <stringProp name="Argument.value">1.01</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="hubCode" elementType="Argument">
+            <stringProp name="Argument.name">hubCode</stringProp>
+            <stringProp name="Argument.value">hub</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp1InboundUrl" elementType="Argument">
+            <stringProp name="Argument.name">fsp1InboundUrl</stringProp>
+            <stringProp name="Argument.value">http://localhost:8080</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp1Code" elementType="Argument">
+            <stringProp name="Argument.name">fsp1Code</stringProp>
+            <stringProp name="Argument.value">fsp1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp1Name" elementType="Argument">
+            <stringProp name="Argument.name">fsp1Name</stringProp>
+            <stringProp name="Argument.value">fsp1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp2InboundUrl" elementType="Argument">
+            <stringProp name="Argument.name">fsp2InboundUrl</stringProp>
+            <stringProp name="Argument.value">http://localhost:9090</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp2Code" elementType="Argument">
+            <stringProp name="Argument.name">fsp2Code</stringProp>
+            <stringProp name="Argument.value">fsp2</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp2Name" elementType="Argument">
+            <stringProp name="Argument.name">fsp2Name</stringProp>
+            <stringProp name="Argument.value">fsp2</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1">
+          <stringProp name="ConstantTimer.delay">1000</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create HUB">
+          <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/hubs/create-hub</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;currencies&quot;: [&#xd;
+        &quot;USD&quot;,&#xd;
+        &quot;BHD&quot;,&#xd;
+        &quot;BYN&quot;&#xd;
+    ],&#xd;
+    &quot;name&quot;: &quot;MOJAVE&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">hubId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.hubId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">def val = vars.get(&apos;hubId&apos;)
+if (val != null) {
+    props.put(&apos;HUB_ID&apos;, val)
+}</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP1">
+          <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/fsps/create-fsp</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;currencies&quot;: [&#xd;
+        &quot;USD&quot;,&#xd;
+        &quot;BHD&quot;,&#xd;
+        &quot;BYN&quot;&#xd;
+    ],&#xd;
+    &quot;endpoints&quot;: [&#xd;
+        {&#xd;
+            &quot;baseUrl&quot;: &quot;${fsp1InboundUrl}&quot;,&#xd;
+            &quot;type&quot;: &quot;PARTIES&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;baseUrl&quot;: &quot;${fsp1InboundUrl}&quot;,&#xd;
+            &quot;type&quot;: &quot;QUOTES&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;baseUrl&quot;: &quot;${fsp1InboundUrl}&quot;,&#xd;
+            &quot;type&quot;: &quot;TRANSFERS&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;fspCode&quot;: &quot;${fsp1Code}&quot;,&#xd;
+    &quot;name&quot;: &quot;${fsp1Name}&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">fsp1Id</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.fspId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">def val = vars.get(&apos;fsp1Id&apos;)
+if (val != null) {
+    props.put(&apos;FSP1_ID&apos;, val)
+}</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create FSP2">
+          <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/fsps/create-fsp</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;currencies&quot;: [&#xd;
+        &quot;USD&quot;,&#xd;
+        &quot;BHD&quot;,&#xd;
+        &quot;BYN&quot;&#xd;
+    ],&#xd;
+    &quot;endpoints&quot;: [&#xd;
+        {&#xd;
+            &quot;baseUrl&quot;: &quot;${fsp2InboundUrl}&quot;,&#xd;
+            &quot;type&quot;: &quot;PARTIES&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;baseUrl&quot;: &quot;${fsp2InboundUrl}&quot;,&#xd;
+            &quot;type&quot;: &quot;QUOTES&quot;&#xd;
+        },&#xd;
+        {&#xd;
+            &quot;baseUrl&quot;: &quot;${fsp2InboundUrl}&quot;,&#xd;
+            &quot;type&quot;: &quot;TRANSFERS&quot;&#xd;
+        }&#xd;
+    ],&#xd;
+    &quot;fspCode&quot;: &quot;${fsp2Code}&quot;,&#xd;
+    &quot;name&quot;: &quot;${fsp2Name}&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">fsp2Id</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.fspId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">def val = vars.get(&apos;fsp2Id&apos;)
+if (val != null) {
+    props.put(&apos;FSP2_ID&apos;, val)
+}</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -49,8 +406,8 @@
         </ConstantTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/charts/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -78,8 +435,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -104,7 +461,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">hubLiquidityChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -112,8 +469,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -146,8 +503,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -180,8 +537,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -206,7 +563,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">fspPayableChartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.chartEntryId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -214,8 +571,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -248,8 +605,8 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/accounts/create-in-bulk</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -263,8 +620,8 @@
                 <stringProp name="Argument.value">{&#xd;
     &quot;category&quot;: &quot;FSP&quot;,&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
-    &quot;fspCode&quot;: &quot;fsp1&quot;,&#xd;
-    &quot;ownerId&quot;: &quot;${fsp1OwnerId}&quot;&#xd;
+    &quot;fspCode&quot;: &quot;${fsp1Code}&quot;,&#xd;
+    &quot;ownerId&quot;: &quot;${__property(FSP1_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -273,8 +630,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/accounts/create-in-bulk</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -288,8 +645,8 @@
                 <stringProp name="Argument.value">{&#xd;
     &quot;category&quot;: &quot;FSP&quot;,&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
-    &quot;fspCode&quot;: &quot;fsp2&quot;,&#xd;
-    &quot;ownerId&quot;: &quot;${fsp2OwnerId}&quot;&#xd;
+    &quot;fspCode&quot;: &quot;${fsp2Code}&quot;,&#xd;
+    &quot;ownerId&quot;: &quot;${__property(FSP2_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -298,8 +655,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/accounts/create-in-bulk</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -314,7 +671,7 @@
     &quot;category&quot;: &quot;HUB&quot;,&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;fspCode&quot;: &quot;hub&quot;,&#xd;
-    &quot;ownerId&quot;: &quot;${hubOwnerId}&quot;&#xd;
+    &quot;ownerId&quot;: &quot;${__property(HUB_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -323,8 +680,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN definition">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/flow-definitions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -368,8 +725,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER definition">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/flow-definitions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -449,8 +806,8 @@
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="12. do fsp1 FUND_IN">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -467,7 +824,7 @@
     },&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
-        &quot;RECEIVING_FSP&quot;: &quot;${fsp1OwnerId}&quot;,&#xd;
+        &quot;RECEIVING_FSP&quot;: &quot;${__property(FSP1_ID,)}&quot;,&#xd;
         &quot;HUB&quot;: &quot;1&quot;&#xd;
     },&#xd;
     &quot;transactionAt&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
@@ -480,9 +837,41 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp1 FUND_TRANSFER" enabled="false">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4301</stringProp>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN">
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;amounts&quot;: {&#xd;
+        &quot;LIQUIDITY_AMOUNT&quot;: &quot;1000000&quot;&#xd;
+    },&#xd;
+    &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
+    &quot;participants&quot;: {&#xd;
+        &quot;RECEIVING_FSP&quot;: &quot;${__property(FSP2_ID,)}&quot;,&#xd;
+        &quot;HUB&quot;: &quot;1&quot;&#xd;
+    },&#xd;
+    &quot;transactionAt&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
+    &quot;transactionId&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
+    &quot;transactionType&quot;: &quot;FUND_IN&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER" enabled="false">
+          <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -514,7 +903,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -523,7 +912,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -635,22 +1024,26 @@
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Wallet" enabled="false">
-        <intProp name="ThreadGroup.num_threads">6</intProp>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Balance Setup">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">1000</stringProp>
+          <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="reserve-balance" enabled="true">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4402</stringProp>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1">
+          <stringProp name="ConstantTimer.delay">1000</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 balance">
+          <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
+          <stringProp name="HTTPSampler.path">/balances/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -659,55 +1052,10 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{	&#xd;
-	&quot;currency&quot;: &quot;USD&quot;,&#xd;
-	&quot;transactionId&quot;: &quot;${transactionId}&quot;,&#xd;
-	&quot;transactionType&quot;: &quot;FUND_TRANSFER&quot;,&#xd;
-	&quot;transactionAt&quot;: &quot;1760322928&quot;,&#xd;
-	&quot;postings&quot;: [		&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${hubOwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${hubLiquidityCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;DEBIT&quot;,&#xd;
-			&quot;amount&quot;: 2&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${fsp1OwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${fspLiquidityCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;CREDIT&quot;,&#xd;
-			&quot;amount&quot;: 1&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${fsp2OwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${fspLiquidityCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;CREDIT&quot;,&#xd;
-			&quot;amount&quot;: 1&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${fsp1OwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${fspLiquidityCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;DEBIT&quot;,&#xd;
-			&quot;amount&quot;: 1&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${fsp1OwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${fspPositionCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;CREDIT&quot;,&#xd;
-			&quot;amount&quot;: 1&#xd;
-		},&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${fsp2OwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${fspLiquidityCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;DEBIT&quot;,&#xd;
-			&quot;amount&quot;: 1&#xd;
-		},		&#xd;
-		{&#xd;
-			&quot;ownerId&quot;: &quot;${fsp2OwnerId}&quot;,&#xd;
-			&quot;chartEntryId&quot;: &quot;${fspPositionCE}&quot;,&#xd;
-			&quot;side&quot;: &quot;CREDIT&quot;,&#xd;
-			&quot;amount&quot;: 1&#xd;
-		}&#xd;
-	]&#xd;
+                <stringProp name="Argument.value">{&#xd;
+    &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
+    &quot;name&quot;: &quot;FSP1-${currency}&quot;,&#xd;
+    &quot;walletOwnerId&quot;: &quot;${__property(FSP1_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -715,79 +1063,42 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>false</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-                <sentBytes>true</sentBytes>
-                <url>true</url>
-                <threadCounts>true</threadCounts>
-                <idleTime>true</idleTime>
-                <connectTime>true</connectTime>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">fsp1BalanceId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.balanceId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
           <hashTree/>
-          <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>false</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-                <sentBytes>true</sentBytes>
-                <url>true</url>
-                <threadCounts>true</threadCounts>
-                <idleTime>true</idleTime>
-                <connectTime>true</connectTime>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 balance">
+          <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/balances/create</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
+    &quot;name&quot;: &quot;FSP2-${currency}&quot;,&#xd;
+    &quot;walletOwnerId&quot;: &quot;${__property(FSP2_ID,)}&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">fsp2BalanceId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.balanceId</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+          </JSONPostProcessor>
           <hashTree/>
         </hashTree>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -911,7 +1222,7 @@
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Position Setup" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Position Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -927,8 +1238,8 @@
         </ConstantTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 position">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4401</stringProp>
+          <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/positions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -943,7 +1254,7 @@
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;name&quot;: &quot;FSP1-${currency}&quot;,&#xd;
     &quot;netDebitCap&quot;: &quot;700000&quot;,&#xd;
-    &quot;walletOwnerId&quot;: &quot;${fsp1OwnerId}&quot;&#xd;
+    &quot;walletOwnerId&quot;: &quot;${__property(FSP1_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -1026,9 +1337,9 @@
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP1 position">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">4401</stringProp>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 position">
+          <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.path">/positions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -1043,7 +1354,7 @@
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;name&quot;: &quot;FSP2-${currency}&quot;,&#xd;
     &quot;netDebitCap&quot;: &quot;700000&quot;,&#xd;
-    &quot;walletOwnerId&quot;: &quot;${fsp2OwnerId}&quot;&#xd;
+    &quot;walletOwnerId&quot;: &quot;${__property(FSP2_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -1126,7 +1437,7 @@
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -1135,7 +1446,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

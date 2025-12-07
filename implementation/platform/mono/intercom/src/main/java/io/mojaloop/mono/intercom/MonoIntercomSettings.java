@@ -20,22 +20,25 @@
 
 package io.mojaloop.mono.intercom;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
+import io.mojaloop.core.accounting.domain.AccountingFlywayConfiguration;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
+import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
+import io.mojaloop.core.transaction.domain.TransactionFlywayConfiguration;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
+import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredSettings {
 
     @Bean
     @Override
-    public FlywayMigration.Settings accountingFlywaySettings() {
+    public AccountingFlywayConfiguration.Settings accountingFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new AccountingFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
             System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
             new String[]{"classpath:migration/accounting"});
@@ -76,9 +79,9 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     // Implement Flyway RequiredSettings for imported domain configurations
     @Bean
     @Override
-    public FlywayMigration.Settings participantFlywaySettings() {
+    public ParticipantFlywayConfiguration.Settings participantFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new ParticipantFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
             System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
             new String[]{"classpath:migration/participant"});
@@ -107,7 +110,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
             System.getenv("MONO_READ_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "mojave-admin-read", Integer.parseInt(System.getenv("MONO_READ_DB_MIN_POOL_SIZE")),
+            "mojave-intercom-read", Integer.parseInt(System.getenv("MONO_READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("MONO_READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -122,7 +125,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
             System.getenv("MONO_WRITE_DB_PASSWORD"), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "mojave-admin-write", Integer.parseInt(System.getenv("MONO_WRITE_DB_MIN_POOL_SIZE")),
+            "mojave-intercom-write", Integer.parseInt(System.getenv("MONO_WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("MONO_WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -132,7 +135,7 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     @Override
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
-        return new RoutingEntityManagerConfigurer.Settings("mojave-admin", false, false);
+        return new RoutingEntityManagerConfigurer.Settings("mojave-intercom", false, false);
     }
 
     @Bean
@@ -145,9 +148,9 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
 
     @Bean
     @Override
-    public FlywayMigration.Settings transactionFlywaySettings() {
+    public TransactionFlywayConfiguration.Settings transactionFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new TransactionFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
             System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_transaction_history",
             new String[]{"classpath:migration/transaction"});
@@ -155,9 +158,9 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
 
     @Bean
     @Override
-    public FlywayMigration.Settings walletFlywaySettings() {
+    public WalletFlywayConfiguration.Settings walletFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new WalletFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
             System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
             new String[]{"classpath:migration/wallet"});

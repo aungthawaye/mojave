@@ -70,6 +70,7 @@
         <module name="mod-transaction-domain" />
         <module name="mod-participant-domain" />
         <module name="mod-accounting-producer" />
+        <module name="mod-mono-consumer" />
         <module name="mod-settlement-admin" />
         <module name="mod-fspiop-invoker" />
         <module name="mod-mono-intercom" />
@@ -172,6 +173,7 @@
       <module name="mod-lookup-routes-fspiop" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
       <module name="mod-mono-admin" options="-parameters" />
+      <module name="mod-mono-consumer" options="-parameters" />
       <module name="mod-mono-intercom" options="-parameters" />
       <module name="mod-mono-service" options="-parameters" />
       <module name="mod-operation-usecase" options="-parameters" />

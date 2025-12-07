@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,7 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.participant.store.timer;
+package io.mojaloop.core.participant.store.strategy.timer;
 
 import io.mojaloop.core.common.datatype.identifier.participant.FspId;
 import io.mojaloop.core.common.datatype.identifier.participant.OracleId;
@@ -28,12 +28,10 @@ import io.mojaloop.core.participant.contract.data.OracleData;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.fspiop.spec.core.PartyIdType;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -43,7 +41,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Component
 public class ParticipantTimerStore implements ParticipantStore {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantTimerStore.class);
@@ -52,35 +49,34 @@ public class ParticipantTimerStore implements ParticipantStore {
 
     private final OracleQuery oracleQuery;
 
-    private final ParticipantStoreConfiguration.Settings participantStoreSettings;
+    private final ParticipantTimerStore.Settings settings;
 
     private final AtomicReference<Snapshot> snapshotRef = new AtomicReference<>(Snapshot.empty());
 
-    private final Timer timer = new Timer("ParticipantLocalStoreRefreshTimer", true);
+    private final Timer timer = new Timer("ParticipantTimerStore", true);
 
     public ParticipantTimerStore(FspQuery fspQuery,
                                  OracleQuery oracleQuery,
-                                 ParticipantStoreConfiguration.Settings participantStoreSettings) {
+                                 ParticipantTimerStore.Settings settings) {
 
         assert fspQuery != null;
         assert oracleQuery != null;
-        assert participantStoreSettings != null;
+        assert settings != null;
 
         this.fspQuery = fspQuery;
         this.oracleQuery = oracleQuery;
-        this.participantStoreSettings = participantStoreSettings;
+        this.settings = settings;
 
     }
 
     @PostConstruct
     public void bootstrap() {
 
-        var interval = this.participantStoreSettings.refreshIntervalMs();
+        var interval = this.settings.refreshIntervalMs();
 
         LOGGER.info("Bootstrapping ParticipantTimerStore");
         this.refreshData();
 
-        // Schedule a timer to refresh data every 30 seconds
         this.timer.scheduleAtFixedRate(
             new TimerTask() {
 
@@ -145,8 +141,7 @@ public class ParticipantTimerStore implements ParticipantStore {
                              .stream()
                              .collect(
                                  Collectors.toUnmodifiableMap(
-                                     FspData::fspId, Function.identity(),
-                                     (a, b) -> a));
+                                     FspData::fspId, Function.identity(), (a, b) -> a));
 
         var _withFspCode = fsps
                                .stream()
@@ -183,5 +178,7 @@ public class ParticipantTimerStore implements ParticipantStore {
         }
 
     }
+
+    public record Settings(int refreshIntervalMs) { }
 
 }

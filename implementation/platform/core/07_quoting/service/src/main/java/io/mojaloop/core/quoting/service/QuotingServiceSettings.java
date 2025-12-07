@@ -20,13 +20,13 @@
 
 package io.mojaloop.core.quoting.service;
 
-import io.mojaloop.component.flyway.FlywayMigration;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
+import io.mojaloop.core.quoting.domain.QuotingFlywayConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -73,14 +73,6 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
 
     @Bean
     @Override
-    public ParticipantStoreConfiguration.Settings participantStoreSettings() {
-
-        return new ParticipantStoreConfiguration.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS")));
-    }
-
-    @Bean
-    @Override
     public QuotingDomainConfiguration.QuoteSettings quoteSettings() {
 
         return new QuotingDomainConfiguration.QuoteSettings(
@@ -89,9 +81,9 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
 
     @Bean
     @Override
-    public FlywayMigration.Settings quotingFlywaySettings() {
+    public QuotingFlywayConfiguration.Settings quotingFlywaySettings() {
 
-        return new FlywayMigration.Settings(
+        return new QuotingFlywayConfiguration.Settings(
             System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"),
             System.getenv("QOT_FLYWAY_DB_PASSWORD"), "flyway_quoting_history",
             new String[]{"classpath:migration/quoting"});

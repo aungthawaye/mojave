@@ -18,24 +18,22 @@
  * ================================================================================
  */
 
-package io.mojaloop.component.redis;
+package io.mojaloop.mono.service.controller.component;
 
-import org.springframework.context.annotation.Bean;
+import io.mojaloop.component.web.request.CachedServletRequest;
+import io.mojaloop.component.web.spring.security.AuthenticationFailureException;
+import io.mojaloop.component.web.spring.security.Authenticator;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class RedissonOpsClientConfiguration {
+import java.util.ArrayList;
 
-    @Bean
-    public RedissonOpsClient redissonOpsClient(RedissonOpsClientConfigurer.Settings settings) {
+public class EmptyGatekeeper implements Authenticator {
 
-        return RedissonOpsClientConfigurer.configure(settings);
-    }
+    @Override
+    public UsernamePasswordAuthenticationToken authenticate(CachedServletRequest cachedServletRequest)
+        throws AuthenticationFailureException {
 
-    public interface RequiredBeans { }
-
-    public interface RequiredSettings {
-
-        RedissonOpsClientConfigurer.Settings redissonOpsClientSettings();
-
+        return new UsernamePasswordAuthenticationToken("user", "password", new ArrayList<>());
     }
 
 }

@@ -42,6 +42,7 @@ CREATE TABLE `txn_transaction_step`
 
     PRIMARY KEY (`step_id`),
     KEY `txn_transaction_step_transaction_id_IDX` (`transaction_id`),
+    KEY `txn_transaction_step_phase_name_context_IDX` (`phase`, `name`, `context`),
     CONSTRAINT `txn_transaction_txn_transaction_step_FK` FOREIGN KEY (`transaction_id`) REFERENCES `txn_transaction` (`transaction_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
