@@ -24,7 +24,6 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class ParticipantAdminSettings implements ParticipantAdminConfiguration.RequiredSettings {
@@ -34,16 +33,6 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
         return new OpenApiConfiguration.ApiSettings("Mojave - Participant - Admin", "1.0.0");
-    }
-
-    @Bean
-    @Override
-    public ParticipantFlywayConfiguration.Settings participantFlywaySettings() {
-
-        return new ParticipantFlywayConfiguration.Settings(
-            System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
-            System.getenv("PCP_FLYWAY_DB_PASSWORD"));
-
     }
 
     @Bean

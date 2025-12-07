@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.accounting.consumer;
 
+import io.mojaloop.core.accounting.domain.AccountingFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -39,7 +40,12 @@ public class AccountingConsumerApplication {
 
     public static void main(String[] args) throws InterruptedException {
 
-        var context = new AnnotationConfigApplicationContext(AccountingConsumerApplication.class);
+        AccountingFlyway.migrate(
+            System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
+            System.getenv("ACC_FLYWAY_DB_PASSWORD"));
+
+        var context = new AnnotationConfigApplicationContext(
+            AccountingFlyway.class, AccountingConsumerApplication.class);
         var latch = new CountDownLatch(1);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

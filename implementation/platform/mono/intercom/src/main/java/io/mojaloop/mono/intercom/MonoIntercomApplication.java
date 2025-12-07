@@ -20,10 +20,15 @@
 
 package io.mojaloop.mono.intercom;
 
+import io.mojaloop.core.accounting.domain.AccountingFlyway;
+import io.mojaloop.core.participant.domain.ParticipantFlyway;
+import io.mojaloop.core.transaction.domain.TransactionFlyway;
+import io.mojaloop.core.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -33,7 +38,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration(
-    exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
+    exclude = {
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class,
+        FlywayAutoConfiguration.class})
 @Import(
     value = {
         MonoIntercomConfiguration.class,
@@ -44,6 +52,22 @@ public class MonoIntercomApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoIntercomApplication.class);
 
     public static void main(String[] args) {
+
+        TransactionFlyway.migrate(
+            System.getenv("MONO_FLYWAY_DB_URL"),
+            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+
+        ParticipantFlyway.migrate(
+            System.getenv("MONO_FLYWAY_DB_URL"),
+            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+
+        AccountingFlyway.migrate(
+            System.getenv("MONO_FLYWAY_DB_URL"),
+            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+
+        WalletFlyway.migrate(
+            System.getenv("MONO_FLYWAY_DB_URL"),
+            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(MonoIntercomApplication.class)
             .web(WebApplicationType.SERVLET)

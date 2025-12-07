@@ -26,24 +26,15 @@ import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
-import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.core.participant.store.strategy.timer.ParticipantTimerStore;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
-import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
-import io.mojaloop.core.transfer.domain.component.interledger.unwrapper.MojavePartyUnwrapper;
 import io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import io.mojaloop.fspiop.service.component.ParticipantVerifier;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -70,18 +61,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         ParticipantIntercomClientConfiguration.class,
         WalletIntercomClientConfiguration.class,
         TransactionIntercomClientConfiguration.class})
-public final class MonoServiceConfiguration extends WebMvcExtension implements
-                                                                    FspiopServiceConfiguration.RequiredBeans,
-                                                                    LookUpDomainConfiguration.RequiredBeans,
-                                                                    QuotingDomainConfiguration.RequiredBeans,
-                                                                    TransferDomainConfiguration.RequiredBeans,
-                                                                    ParticipantIntercomClientConfiguration.RequiredBeans,
-                                                                    WalletIntercomClientConfiguration.RequiredBeans,
-                                                                    TransactionIntercomClientConfiguration.RequiredBeans {
-
-    private final ObjectMapper objectMapper;
-
-    private final ParticipantStore participantStore;
+public final class MonoServiceConfiguration extends WebMvcExtension {
 
     public MonoServiceConfiguration(ObjectMapper objectMapper,
                                     FspQuery fspQuery,
@@ -89,45 +69,15 @@ public final class MonoServiceConfiguration extends WebMvcExtension implements
 
         super(objectMapper);
 
-        assert objectMapper != null;
-        assert fspQuery != null;
-        assert oracleQuery != null;
-
-        this.objectMapper = objectMapper;
-
-        this.participantStore = new ParticipantTimerStore(
-            fspQuery, oracleQuery, new ParticipantTimerStore.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
-
     }
 
-    @Bean
-    @Override
-    public ParticipantStore participantStore() {
-
-        return this.participantStore;
-    }
-
-    @Bean
-    @Override
-    public ParticipantVerifier participantVerifier() {
-
-        return fspCode -> this.participantStore.getFspData(new FspCode(fspCode)) != null;
-    }
-
-    @Bean
-    @Override
-    public PartyUnwrapper partyUnwrapper() {
-
-        return new MojavePartyUnwrapper(this.objectMapper);
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return factory -> factory.setPort(settings.portNo());
-    }
+    public interface RequiredDependencies extends FspiopServiceConfiguration.RequiredBeans,
+                                                  LookUpDomainConfiguration.RequiredBeans,
+                                                  QuotingDomainConfiguration.RequiredBeans,
+                                                  TransferDomainConfiguration.RequiredBeans,
+                                                  ParticipantIntercomClientConfiguration.RequiredBeans,
+                                                  WalletIntercomClientConfiguration.RequiredBeans,
+                                                  TransactionIntercomClientConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
                                               LookUpDomainConfiguration.RequiredSettings,

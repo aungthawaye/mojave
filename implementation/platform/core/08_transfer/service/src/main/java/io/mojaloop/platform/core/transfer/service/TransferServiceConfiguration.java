@@ -58,55 +58,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         WalletIntercomClientConfiguration.class,
         TransactionIntercomClientConfiguration.class,
         FspiopServiceConfiguration.class})
-final class TransferServiceConfiguration
-    implements TransferDomainConfiguration.RequiredBeans, FspiopServiceConfiguration.RequiredBeans {
+final class TransferServiceConfiguration {
 
-    private final ParticipantStore participantStore;
 
-    private final ObjectMapper objectMapper;
 
-    public TransferServiceConfiguration(FspQuery fspQuery,
-                                        OracleQuery oracleQuery,
-                                        ObjectMapper objectMapper) {
 
-        assert fspQuery != null;
-        assert oracleQuery != null;
-        assert objectMapper != null;
-
-        this.participantStore = new ParticipantTimerStore(
-            fspQuery, oracleQuery, new ParticipantTimerStore.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
-
-        this.objectMapper = objectMapper;
-    }
-
-    @Bean
-    @Override
-    public ParticipantStore participantStore() {
-
-        return this.participantStore;
-    }
-
-    @Bean
-    @Override
-    public ParticipantVerifier participantVerifier() {
-
-        return fspCode -> this.participantStore.getFspData(new FspCode(fspCode)) != null;
-    }
-
-    @Bean
-    @Override
-    public PartyUnwrapper partyUnwrapper() {
-
-        return new MojavePartyUnwrapper(this.objectMapper);
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return factory -> factory.setPort(settings.portNo());
-    }
+    public interface RequiredDependencies extends TransferDomainConfiguration.RequiredBeans,
+                                                  FspiopServiceConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends TransferDomainConfiguration.RequiredSettings,
                                               ParticipantIntercomClientConfiguration.RequiredSettings,

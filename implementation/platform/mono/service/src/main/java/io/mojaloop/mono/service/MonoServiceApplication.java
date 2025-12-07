@@ -20,24 +20,42 @@
 
 package io.mojaloop.mono.service;
 
+import io.mojaloop.core.quoting.domain.QuotingFlyway;
+import io.mojaloop.core.transfer.TransferFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration(
     exclude = {
-        SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
-@Import(value = {MonoServiceConfiguration.class, MonoServiceSettings.class})
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class,
+        FlywayAutoConfiguration.class})
+@Import(
+    value = {
+        MonoServiceConfiguration.class, MonoServiceDependencies.class, MonoServiceSettings.class})
 public class MonoServiceApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoServiceApplication.class);
 
     public static void main(String[] args) {
+
+        QuotingFlyway.migrate(
+            System.getenv("MONO_FLYWAY_DB_URL"),
+            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+
+        TransferFlyway.migrate(
+            System.getenv("MONO_FLYWAY_DB_URL"),
+            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(MonoServiceApplication.class)
             .web(WebApplicationType.SERVLET)
@@ -57,6 +75,13 @@ public class MonoServiceApplication {
                 "management.endpoint.health.show-details=always",
                 "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=MonoServiceApplication,context=mono-service")
             .run(args);
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
+        MonoServiceConfiguration.TomcatSettings settings) {
+
+        return factory -> factory.setPort(settings.portNo());
     }
 
 }

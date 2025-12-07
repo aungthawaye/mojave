@@ -24,7 +24,6 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.core.transaction.consumer.listener.AddStepListener;
 import io.mojaloop.core.transaction.consumer.listener.CloseTransactionListener;
-import io.mojaloop.core.transaction.domain.TransactionFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 
@@ -90,15 +89,6 @@ final class TransactionConsumerSettings
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("transaction-consumer", false, false);
-    }
-
-    @Bean
-    @Override
-    public TransactionFlywayConfiguration.Settings transactionFlywaySettings() {
-
-        return new TransactionFlywayConfiguration.Settings(
-            System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
-            System.getenv("TXN_WRITE_DB_PASSWORD"));
     }
 
 }

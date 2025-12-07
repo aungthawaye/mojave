@@ -20,22 +20,17 @@
 
 package io.mojaloop.core.transaction.domain;
 
-import io.mojaloop.component.jpa.routing.RoutingJpaConfiguration;
-import io.mojaloop.component.misc.MiscConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
+import io.mojaloop.component.flyway.FlywayMigration;
 
-@ComponentScan(basePackages = {"io.mojaloop.core.transaction.domain"})
-@Import(
-    value = {
-        MiscConfiguration.class, RoutingJpaConfiguration.class})
-public class TransactionDomainConfiguration {
+public class TransactionFlyway {
 
-    public interface RequiredBeans { }
+    public static void migrate(String url, String username, String password) {
 
-    public interface RequiredSettings
-        extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {
+        var flyway = FlywayMigration.configure(new FlywayMigration.Settings(
+            url, username, password, "flyway_transaction_history",
+            new String[]{"classpath:migration/transaction"}));
 
+        flyway.migrate();
     }
 
 }

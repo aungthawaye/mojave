@@ -20,6 +20,7 @@
 
 package io.mojaloop.core.transaction.consumer;
 
+import io.mojaloop.core.transaction.domain.TransactionFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -38,6 +39,10 @@ public class TransactionConsumerApplication {
         TransactionConsumerApplication.class);
 
     public static void main(String[] args) throws InterruptedException {
+
+        TransactionFlyway.migrate(
+            System.getenv("TXN_FLYWAY_DB_URL"), System.getenv("TXN_FLYWAY_DB_USER"),
+            System.getenv("TXN_FLYWAY_DB_PASSWORD"));
 
         var context = new AnnotationConfigApplicationContext(TransactionConsumerApplication.class);
         var latch = new CountDownLatch(1);

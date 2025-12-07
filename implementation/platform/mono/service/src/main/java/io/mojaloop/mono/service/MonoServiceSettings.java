@@ -27,11 +27,9 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.producer.AccountingProducerConfiguration;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
-import io.mojaloop.core.quoting.domain.QuotingFlywayConfiguration;
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
 import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
-import io.mojaloop.core.transfer.TransferFlywayConfiguration;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
@@ -98,15 +96,6 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new QuotingDomainConfiguration.QuoteSettings(
             Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
-    }
-
-    @Bean
-    @Override
-    public QuotingFlywayConfiguration.Settings quotingFlywaySettings() {
-
-        return new QuotingFlywayConfiguration.Settings(
-            System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"),
-            System.getenv("QOT_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean
@@ -185,15 +174,6 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new TransactionProducerConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
-
-    @Bean
-    @Override
-    public TransferFlywayConfiguration.Settings transferFlywaySettings() {
-
-        return new TransferFlywayConfiguration.Settings(
-            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,9 +24,7 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomService;
-import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
-import io.mojaloop.core.quoting.domain.QuotingFlywayConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -77,15 +75,6 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
 
         return new QuotingDomainConfiguration.QuoteSettings(
             Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
-    }
-
-    @Bean
-    @Override
-    public QuotingFlywayConfiguration.Settings quotingFlywaySettings() {
-
-        return new QuotingFlywayConfiguration.Settings(
-            System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"),
-            System.getenv("QOT_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean

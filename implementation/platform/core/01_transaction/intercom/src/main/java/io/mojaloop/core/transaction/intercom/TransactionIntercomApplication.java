@@ -20,10 +20,12 @@
 
 package io.mojaloop.core.transaction.intercom;
 
+import io.mojaloop.core.transaction.domain.TransactionFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -34,7 +36,9 @@ import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration(
     exclude = {
-        SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class,
+        FlywayAutoConfiguration.class})
 @Import(value = {TransactionIntercomConfiguration.class, TransactionIntercomSettings.class})
 public class TransactionIntercomApplication {
 
@@ -42,6 +46,10 @@ public class TransactionIntercomApplication {
         TransactionIntercomApplication.class.getName());
 
     public static void main(String[] args) {
+
+        TransactionFlyway.migrate(
+            System.getenv("TXN_FLYWAY_DB_URL"), System.getenv("TXN_FLYWAY_DB_USER"),
+            System.getenv("TXN_FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(TransactionIntercomApplication.class)
             .web(WebApplicationType.SERVLET)

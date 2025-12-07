@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Import;
 @ComponentScan(basePackages = {"io.mojaloop.core.wallet.domain"})
 @Import(
     value = {
-        MiscConfiguration.class, WalletFlywayConfiguration.class, RoutingJpaConfiguration.class})
+        MiscConfiguration.class, RoutingJpaConfiguration.class})
 public class WalletDomainConfiguration {
 
     public interface RequiredBeans {
@@ -48,7 +48,6 @@ public class WalletDomainConfiguration {
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              WalletFlywayConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {
 
     }

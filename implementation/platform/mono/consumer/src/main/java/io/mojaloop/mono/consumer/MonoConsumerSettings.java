@@ -3,25 +3,14 @@ package io.mojaloop.mono.consumer;
 import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.core.accounting.consumer.listener.PostLedgerFlowListener;
-import io.mojaloop.core.accounting.domain.AccountingFlywayConfiguration;
 import io.mojaloop.core.transaction.consumer.listener.AddStepListener;
 import io.mojaloop.core.transaction.consumer.listener.CloseTransactionListener;
-import io.mojaloop.core.transaction.domain.TransactionFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.UUID;
 
 public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredSettings {
-
-    @Bean
-    @Override
-    public AccountingFlywayConfiguration.Settings accountingFlywaySettings() {
-
-        return new AccountingFlywayConfiguration.Settings(
-            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
-    }
 
     @Bean
     @Override
@@ -90,15 +79,6 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("transaction-consumer", false, false);
-    }
-
-    @Bean
-    @Override
-    public TransactionFlywayConfiguration.Settings transactionFlywaySettings() {
-
-        return new TransactionFlywayConfiguration.Settings(
-            System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
     }
 
 }

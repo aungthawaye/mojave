@@ -24,7 +24,7 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.transaction.domain.TransactionFlywayConfiguration;
+import io.mojaloop.core.transaction.domain.TransactionFlyway;
 import org.springframework.context.annotation.Bean;
 
 final class TransactionIntercomSettings
@@ -89,15 +89,6 @@ final class TransactionIntercomSettings
 
         return new TransactionIntercomConfiguration.TomcatSettings(
             Integer.parseInt(System.getenv("TRANSACTION_INTERCOM_PORT")));
-    }
-
-    @Bean
-    @Override
-    public TransactionFlywayConfiguration.Settings transactionFlywaySettings() {
-
-        return new TransactionFlywayConfiguration.Settings(
-            System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
-            System.getenv("TXN_WRITE_DB_PASSWORD"));
     }
 
 }

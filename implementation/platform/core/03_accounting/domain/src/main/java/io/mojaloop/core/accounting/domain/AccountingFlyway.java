@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,31 +17,20 @@
  * limitations under the License.
  * ================================================================================
  */
-package io.mojaloop.core.quoting.domain;
+
+package io.mojaloop.core.accounting.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
-import org.flywaydb.core.Flyway;
-import org.springframework.context.annotation.Bean;
 
-public class QuotingFlywayConfiguration {
+public class AccountingFlyway {
 
-    @Bean(initMethod = "migrate")
-    public Flyway quotingFlyway(QuotingFlywayConfiguration.Settings quotingFlywaySettings) {
+    public static void migrate(String url, String username, String password) {
 
-        return FlywayMigration.configure(new FlywayMigration.Settings(
-            quotingFlywaySettings.url, quotingFlywaySettings.username,
-            quotingFlywaySettings.password, "flyway_quoting_history",
-            new String[]{"classpath:migration/quoting"}));
+        var flyway = FlywayMigration.configure(new FlywayMigration.Settings(
+            url, username, password, "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"}));
+
+        flyway.migrate();
     }
-
-    public interface RequiredSettings {
-
-        QuotingFlywayConfiguration.Settings quotingFlywaySettings();
-
-    }
-
-    public record Settings(String url,
-                           String username,
-                           String password) { }
 
 }

@@ -21,28 +21,16 @@
 package io.mojaloop.core.participant.domain;
 
 import io.mojaloop.component.flyway.FlywayMigration;
-import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 
-public class ParticipantFlywayConfiguration {
+public class ParticipantFlyway {
 
-    @Bean(initMethod = "migrate")
-    @Qualifier("participantFlyway")
-    public Flyway participantFlyway(ParticipantFlywayConfiguration.Settings participantFlywaySettings) {
+    public static void migrate(String url, String username, String password) {
 
-        return FlywayMigration.configure(new FlywayMigration.Settings(
-            participantFlywaySettings.url, participantFlywaySettings.username,
-            participantFlywaySettings.password, "flyway_participant_history",
+        var flyway = FlywayMigration.configure(new FlywayMigration.Settings(
+            url, username, password, "flyway_participant_history",
             new String[]{"classpath:migration/participant"}));
+
+        flyway.migrate();
     }
-
-    public interface RequiredSettings {
-
-        ParticipantFlywayConfiguration.Settings participantFlywaySettings();
-
-    }
-
-    public record Settings(String url, String username, String password) { }
 
 }

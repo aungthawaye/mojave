@@ -18,33 +18,19 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.transaction.domain;
+package io.mojaloop.core.transfer;
 
 import io.mojaloop.component.flyway.FlywayMigration;
-import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 
-public class TransactionFlywayConfiguration {
+public class TransferFlyway {
 
-    @Bean(initMethod = "migrate")
-    @Qualifier("transactionFlyway")
-    public Flyway transactionFlyway(TransactionFlywayConfiguration.Settings transactionFlywaySettings) {
+    public static void migrate(String url, String username, String password) {
 
-        return FlywayMigration.configure(new FlywayMigration.Settings(
-            transactionFlywaySettings.url, transactionFlywaySettings.username,
-            transactionFlywaySettings.password, "flyway_transaction_history",
-            new String[]{"classpath:migration/transaction"}));
+        var flyway = FlywayMigration.configure(new FlywayMigration.Settings(
+            url, username, password, "flyway_transfer_history",
+            new String[]{"classpath:migration/transfer"}));
+
+        flyway.migrate();
     }
-
-    public interface RequiredSettings {
-
-        TransactionFlywayConfiguration.Settings transactionFlywaySettings();
-
-    }
-
-    public record Settings(String url,
-                           String username,
-                           String password) { }
 
 }

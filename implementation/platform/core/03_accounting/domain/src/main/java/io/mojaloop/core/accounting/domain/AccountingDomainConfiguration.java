@@ -33,7 +33,6 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         MiscConfiguration.class,
-        AccountingFlywayConfiguration.class,
         RoutingJpaConfiguration.class})
 public class AccountingDomainConfiguration {
 
@@ -54,7 +53,6 @@ public class AccountingDomainConfiguration {
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              AccountingFlywayConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {
 
     }

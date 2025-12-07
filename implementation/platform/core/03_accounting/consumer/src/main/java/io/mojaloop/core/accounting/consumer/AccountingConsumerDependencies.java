@@ -14,7 +14,7 @@ import io.mojaloop.core.accounting.domain.repository.ChartEntryRepository;
 import io.mojaloop.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.springframework.context.annotation.Bean;
 
-public class AccountingConsumerDependencies
+class AccountingConsumerDependencies
     implements AccountingConsumerConfiguration.RequiredDependencies {
 
     private final Ledger ledger;

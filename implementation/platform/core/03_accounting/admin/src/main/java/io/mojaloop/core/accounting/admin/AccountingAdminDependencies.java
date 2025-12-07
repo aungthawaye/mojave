@@ -46,12 +46,14 @@ final class AccountingAdminDependencies
         this.ledger = new MySqlLedger(
             new MySqlLedger.LedgerDbSettings(
                 new MySqlLedger.LedgerDbSettings.Connection(
-                    System.getenv("MYSQL_LEDGER_DB_URL"),
-                    System.getenv("MYSQL_LEDGER_DB_USER"), System.getenv("MYSQL_LEDGER_DB_PASSWORD")),
+                    System.getenv("ACC_MYSQL_LEDGER_DB_URL"),
+                    System.getenv("ACC_MYSQL_LEDGER_DB_USER"),
+                    System.getenv("ACC_MYSQL_LEDGER_DB_PASSWORD")),
                 new MySqlLedger.LedgerDbSettings.Pool(
                     "accounting-ledger",
-                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
-                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))), objectMapper);
+                    Integer.parseInt(System.getenv("ACC_MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("ACC_MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
+            objectMapper);
 
     }
 

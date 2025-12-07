@@ -20,10 +20,12 @@
 
 package io.mojaloop.core.participant.admin;
 
+import io.mojaloop.core.participant.domain.ParticipantFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -34,7 +36,9 @@ import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration(
     exclude = {
-        SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class,
+        FlywayAutoConfiguration.class})
 @Import(
     value = {
         ParticipantAdminConfiguration.class,
@@ -45,6 +49,10 @@ public class ParticipantAdminApplication {
     private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantAdminApplication.class);
 
     public static void main(String[] args) {
+
+        ParticipantFlyway.migrate(
+            System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
+            System.getenv("PCP_FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(ParticipantAdminApplication.class)
             .web(WebApplicationType.SERVLET)

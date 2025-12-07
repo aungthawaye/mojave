@@ -28,7 +28,6 @@ import io.mojaloop.core.participant.intercom.client.service.ParticipantIntercomS
 import io.mojaloop.core.transaction.intercom.client.service.TransactionIntercomService;
 import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
-import io.mojaloop.core.transfer.TransferFlywayConfiguration;
 import io.mojaloop.core.wallet.intercom.client.service.WalletIntercomService;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
@@ -149,15 +148,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new TransactionProducerConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
-
-    @Bean
-    @Override
-    public TransferFlywayConfiguration.Settings transferFlywaySettings() {
-
-        return new TransferFlywayConfiguration.Settings(
-            System.getenv("TFR_FLYWAY_DB_URL"), System.getenv("TFR_FLYWAY_DB_USER"),
-            System.getenv("TFR_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean

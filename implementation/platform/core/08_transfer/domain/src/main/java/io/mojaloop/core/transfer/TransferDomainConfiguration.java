@@ -34,13 +34,12 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         MiscConfiguration.class,
-        TransferFlywayConfiguration.class,
         FspiopCommonConfiguration.class,
         AccountingProducerConfiguration.class,
         TransactionProducerConfiguration.class,
         ParticipantStoreConfiguration.class,
         RoutingJpaConfiguration.class})
-public class TransferDomainConfiguration implements TransferFlywayConfiguration.RequiredBeans {
+public class TransferDomainConfiguration {
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
                                            FspiopCommonConfiguration.RequiredBeans,
@@ -54,7 +53,6 @@ public class TransferDomainConfiguration implements TransferFlywayConfiguration.
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              TransferFlywayConfiguration.RequiredSettings,
                                               FspiopCommonConfiguration.RequiredSettings,
                                               AccountingProducerConfiguration.RequiredSettings,
                                               TransactionProducerConfiguration.RequiredSettings,

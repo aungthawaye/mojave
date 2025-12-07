@@ -24,7 +24,6 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class WalletIntercomSettings implements WalletIntercomConfiguration.RequiredSettings {
@@ -85,15 +84,6 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
 
         return new WalletIntercomConfiguration.TomcatSettings(
             Integer.parseInt(System.getenv("WALLET_INTERCOM_PORT")));
-    }
-
-    @Bean
-    @Override
-    public WalletFlywayConfiguration.Settings walletFlywaySettings() {
-
-        return new WalletFlywayConfiguration.Settings(
-            System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
-            System.getenv("WLT_FLYWAY_DB_PASSWORD"));
     }
 
 }

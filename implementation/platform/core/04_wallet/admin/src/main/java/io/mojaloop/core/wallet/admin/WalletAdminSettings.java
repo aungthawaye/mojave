@@ -24,7 +24,6 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSettings {
@@ -86,15 +85,6 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
 
         return new WalletAdminConfiguration.TomcatSettings(
             Integer.parseInt(System.getenv("WALLET_ADMIN_PORT")));
-    }
-
-    @Bean
-    @Override
-    public WalletFlywayConfiguration.Settings walletFlywaySettings() {
-
-        return new WalletFlywayConfiguration.Settings(
-            System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
-            System.getenv("WLT_FLYWAY_DB_PASSWORD"));
     }
 
 }

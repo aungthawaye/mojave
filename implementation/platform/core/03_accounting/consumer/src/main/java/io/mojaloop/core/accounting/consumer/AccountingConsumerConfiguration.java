@@ -36,7 +36,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.consumer"})
 @Import(value = {AccountingDomainConfiguration.class})
-public final class AccountingConsumerConfiguration {
+public class AccountingConsumerConfiguration {
 
     public AccountingConsumerConfiguration() {
 
