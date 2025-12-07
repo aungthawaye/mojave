@@ -47,7 +47,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.consumer"})
 @Import(value = {AccountingDomainConfiguration.class})
-final class AccountingConsumerConfiguration implements AccountingDomainConfiguration.RequiredBeans {
+public final class AccountingConsumerConfiguration
+    implements AccountingDomainConfiguration.RequiredBeans {
 
     private final Ledger ledger;
 

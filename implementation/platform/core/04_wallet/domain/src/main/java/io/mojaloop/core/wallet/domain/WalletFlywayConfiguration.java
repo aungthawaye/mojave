@@ -30,8 +30,8 @@ public class WalletFlywayConfiguration {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(
             walletFlywaySettings.url, walletFlywaySettings.username,
-            walletFlywaySettings.password, walletFlywaySettings.table,
-            walletFlywaySettings.locations));
+            walletFlywaySettings.password, "flyway_wallet_history",
+            new String[]{"classpath:migration/wallet"}));
     }
 
     public interface RequiredSettings {
@@ -42,8 +42,6 @@ public class WalletFlywayConfiguration {
 
     public record Settings(String url,
                            String username,
-                           String password,
-                           String table,
-                           String[] locations) { }
+                           String password) { }
 
 }

@@ -98,8 +98,7 @@ final class TransactionConsumerSettings
 
         return new TransactionFlywayConfiguration.Settings(
             System.getenv("TXN_WRITE_DB_URL"), System.getenv("TXN_WRITE_DB_USER"),
-            System.getenv("TXN_WRITE_DB_PASSWORD"), "flyway_transaction_history",
-            new String[]{"classpath:migration/transaction"});
+            System.getenv("TXN_WRITE_DB_PASSWORD"));
     }
 
 }

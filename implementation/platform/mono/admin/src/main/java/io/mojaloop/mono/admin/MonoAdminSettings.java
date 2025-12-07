@@ -24,11 +24,11 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.core.accounting.domain.AccountingFlywayConfiguration;
-import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
+import io.mojaloop.core.participant.domain.ParticipantFlywayConfiguration;
+import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import io.mojaloop.core.wallet.domain.component.mysql.MySqlPositionUpdater;
-import io.mojaloop.core.wallet.domain.WalletFlywayConfiguration;
 import org.springframework.context.annotation.Bean;
 
 public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSettings {
@@ -39,8 +39,7 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
 
         return new AccountingFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
-            new String[]{"classpath:migration/accounting"});
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean
@@ -81,8 +80,7 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
 
         return new ParticipantFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
-            new String[]{"classpath:migration/participant"});
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean
@@ -150,8 +148,7 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
 
         return new WalletFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
-            new String[]{"classpath:migration/wallet"});
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
     }
 
 }

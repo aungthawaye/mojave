@@ -34,8 +34,7 @@ final class AccountingIntercomSettings implements AccountingIntercomConfiguratio
 
         return new AccountingFlywayConfiguration.Settings(
             System.getenv("ACC_FLYWAY_DB_URL"), System.getenv("ACC_FLYWAY_DB_USER"),
-            System.getenv("ACC_FLYWAY_DB_PASSWORD"), "flyway_accounting_history",
-            new String[]{"classpath:migration/accounting"});
+            System.getenv("ACC_FLYWAY_DB_PASSWORD"));
 
     }
 

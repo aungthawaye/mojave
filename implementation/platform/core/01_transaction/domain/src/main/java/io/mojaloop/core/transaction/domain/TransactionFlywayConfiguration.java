@@ -31,8 +31,8 @@ public class TransactionFlywayConfiguration {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(
             transactionFlywaySettings.url, transactionFlywaySettings.username,
-            transactionFlywaySettings.password, transactionFlywaySettings.table,
-            transactionFlywaySettings.locations));
+            transactionFlywaySettings.password, "flyway_transaction_history",
+            new String[]{"classpath:migration/transaction"}));
     }
 
     public interface RequiredSettings {
@@ -43,8 +43,6 @@ public class TransactionFlywayConfiguration {
 
     public record Settings(String url,
                            String username,
-                           String password,
-                           String table,
-                           String[] locations) { }
+                           String password) { }
 
 }

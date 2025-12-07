@@ -30,8 +30,8 @@ public class AccountingFlywayConfiguration {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(
             accountingFlywaySettings.url, accountingFlywaySettings.username,
-            accountingFlywaySettings.password, accountingFlywaySettings.table,
-            accountingFlywaySettings.locations));
+            accountingFlywaySettings.password, "flyway_accounting_history",
+            new String[]{"classpath:migration/accounting"}));
     }
 
     public interface RequiredSettings {
@@ -42,8 +42,6 @@ public class AccountingFlywayConfiguration {
 
     public record Settings(String url,
                            String username,
-                           String password,
-                           String table,
-                           String[] locations) { }
+                           String password) { }
 
 }

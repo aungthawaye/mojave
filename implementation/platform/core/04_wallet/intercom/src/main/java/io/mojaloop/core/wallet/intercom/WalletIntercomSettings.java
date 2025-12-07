@@ -86,8 +86,7 @@ final class WalletIntercomSettings implements WalletIntercomConfiguration.Requir
 
         return new WalletFlywayConfiguration.Settings(
             System.getenv("WLT_FLYWAY_DB_URL"), System.getenv("WLT_FLYWAY_DB_USER"),
-            System.getenv("WLT_FLYWAY_DB_PASSWORD"), "flyway_wallet_history",
-            new String[]{"classpath:migration/wallet"});
+            System.getenv("WLT_FLYWAY_DB_PASSWORD"));
     }
 
 }

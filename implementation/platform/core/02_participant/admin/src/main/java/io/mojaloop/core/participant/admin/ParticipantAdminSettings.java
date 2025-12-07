@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,8 +41,7 @@ final class ParticipantAdminSettings implements ParticipantAdminConfiguration.Re
 
         return new ParticipantFlywayConfiguration.Settings(
             System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
-            System.getenv("PCP_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
-            new String[]{"classpath:migration/participant"});
+            System.getenv("PCP_FLYWAY_DB_PASSWORD"));
 
     }
 

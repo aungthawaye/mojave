@@ -31,8 +31,8 @@ public class TransferFlywayConfiguration {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(
             transferFlywaySettings.url, transferFlywaySettings.username,
-            transferFlywaySettings.password, transferFlywaySettings.table,
-            transferFlywaySettings.locations));
+            transferFlywaySettings.password, "flyway_transfer_history",
+            new String[]{"classpath:migration/transfer"}));
     }
 
     public interface RequiredBeans {
@@ -47,8 +47,6 @@ public class TransferFlywayConfiguration {
 
     public record Settings(String url,
                            String username,
-                           String password,
-                           String table,
-                           String[] locations) { }
+                           String password) { }
 
 }

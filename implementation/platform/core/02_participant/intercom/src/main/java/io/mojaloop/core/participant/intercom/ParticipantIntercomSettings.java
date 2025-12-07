@@ -42,8 +42,7 @@ final class ParticipantIntercomSettings
 
         return new ParticipantFlywayConfiguration.Settings(
             System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
-            System.getenv("PCP_FLYWAY_DB_PASSWORD"), "flyway_participant_history",
-            new String[]{"classpath:migration/participant"});
+            System.getenv("PCP_FLYWAY_DB_PASSWORD"));
 
     }
 

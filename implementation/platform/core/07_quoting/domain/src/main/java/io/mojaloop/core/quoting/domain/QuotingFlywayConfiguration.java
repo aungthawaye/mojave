@@ -30,8 +30,8 @@ public class QuotingFlywayConfiguration {
 
         return FlywayMigration.configure(new FlywayMigration.Settings(
             quotingFlywaySettings.url, quotingFlywaySettings.username,
-            quotingFlywaySettings.password, quotingFlywaySettings.table,
-            quotingFlywaySettings.locations));
+            quotingFlywaySettings.password, "flyway_quoting_history",
+            new String[]{"classpath:migration/quoting"}));
     }
 
     public interface RequiredSettings {
@@ -42,8 +42,6 @@ public class QuotingFlywayConfiguration {
 
     public record Settings(String url,
                            String username,
-                           String password,
-                           String table,
-                           String[] locations) { }
+                           String password) { }
 
 }

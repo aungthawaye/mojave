@@ -106,8 +106,7 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new QuotingFlywayConfiguration.Settings(
             System.getenv("QOT_FLYWAY_DB_URL"), System.getenv("QOT_FLYWAY_DB_USER"),
-            System.getenv("QOT_FLYWAY_DB_PASSWORD"), "flyway_quoting_history",
-            new String[]{"classpath:migration/quoting"});
+            System.getenv("QOT_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean
@@ -194,8 +193,7 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new TransferFlywayConfiguration.Settings(
             System.getenv("MONO_FLYWAY_DB_URL"), System.getenv("MONO_FLYWAY_DB_USER"),
-            System.getenv("MONO_FLYWAY_DB_PASSWORD"), "flyway_transfer_history",
-            new String[]{"classpath:migration/transfer"});
+            System.getenv("MONO_FLYWAY_DB_PASSWORD"));
     }
 
     @Bean
