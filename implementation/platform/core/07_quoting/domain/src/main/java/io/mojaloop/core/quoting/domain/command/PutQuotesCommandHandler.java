@@ -198,9 +198,9 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
             } else {
 
-                LOGGER.warn(
-                    "Quoting is not stateful. Ignore saving the quote. udfQuoteId : ({})",
-                    udfQuoteId.getId());
+//                LOGGER.warn(
+//                    "Quoting is not stateful. Ignore saving the quote. udfQuoteId : ({})",
+//                    udfQuoteId.getId());
             }
 
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.QUOTES).baseUrl();

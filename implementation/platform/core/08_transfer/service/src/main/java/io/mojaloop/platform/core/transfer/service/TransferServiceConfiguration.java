@@ -20,26 +20,14 @@
 
 package io.mojaloop.platform.core.transfer.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
-import io.mojaloop.core.common.datatype.type.participant.FspCode;
-import io.mojaloop.core.participant.contract.query.FspQuery;
-import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.core.participant.store.strategy.timer.ParticipantTimerStore;
 import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
-import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
-import io.mojaloop.core.transfer.domain.component.interledger.unwrapper.MojavePartyUnwrapper;
 import io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -58,10 +46,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         WalletIntercomClientConfiguration.class,
         TransactionIntercomClientConfiguration.class,
         FspiopServiceConfiguration.class})
-final class TransferServiceConfiguration {
-
-
-
+public final class TransferServiceConfiguration {
 
     public interface RequiredDependencies extends TransferDomainConfiguration.RequiredBeans,
                                                   FspiopServiceConfiguration.RequiredBeans { }

@@ -51,43 +51,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         RequestIdMdcConfiguration.class,
         ParticipantIntercomClientConfiguration.class,
         FspiopServiceConfiguration.class})
-final class LookUpServiceConfiguration implements LookUpDomainConfiguration.RequiredBeans,
+public final class LookUpServiceConfiguration {
+
+
+
+
+    public interface RequiredDependencies extends LookUpDomainConfiguration.RequiredBeans,
                                                   RequestIdMdcConfiguration.RequiredBeans,
                                                   ParticipantIntercomClientConfiguration.RequiredBeans,
-                                                  FspiopServiceConfiguration.RequiredBeans {
-
-    private final ParticipantStore participantStore;
-
-    public LookUpServiceConfiguration(FspQuery fspQuery, OracleQuery oracleQuery) {
-
-        assert fspQuery != null;
-        assert oracleQuery != null;
-
-        this.participantStore = new ParticipantTimerStore(
-            fspQuery, oracleQuery, new ParticipantTimerStore.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
-    }
-
-    @Bean
-    @Override
-    public ParticipantStore participantStore() {
-
-        return this.participantStore;
-    }
-
-    @Bean
-    @Override
-    public ParticipantVerifier participantVerifier() {
-
-        return fspCode -> this.participantStore.getFspData(new FspCode(fspCode)) != null;
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        TomcatSettings settings) {
-
-        return factory -> factory.setPort(settings.portNo());
-    }
+                                                  FspiopServiceConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings,
                                               RequestIdMdcConfiguration.RequiredSettings,

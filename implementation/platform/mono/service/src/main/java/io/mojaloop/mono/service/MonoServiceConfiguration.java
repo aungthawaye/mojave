@@ -27,14 +27,17 @@ import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
+import io.mojaloop.core.lookup.service.LookUpServiceConfiguration;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
+import io.mojaloop.core.quoting.service.QuotingServiceConfiguration;
 import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientConfiguration;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
+import io.mojaloop.platform.core.transfer.service.TransferServiceConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -44,10 +47,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAsync
 @ComponentScan(
     basePackages = {
-        "io.mojaloop.mono.service.controller",
-        "io.mojaloop.core.lookup.service.controller",
-        "io.mojaloop.core.quoting.service.controller",
-        "io.mojaloop.core.transfer.service.controller"})
+        "io.mojaloop.mono.service.controller"})
 @Import(
     value = {
         OpenApiConfiguration.class,
@@ -55,12 +55,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         RequestIdMdcConfiguration.class,
         RestErrorConfiguration.class,
         FspiopServiceConfiguration.class,
-        LookUpDomainConfiguration.class,
-        QuotingDomainConfiguration.class,
-        TransferDomainConfiguration.class,
-        ParticipantIntercomClientConfiguration.class,
-        WalletIntercomClientConfiguration.class,
-        TransactionIntercomClientConfiguration.class})
+        LookUpServiceConfiguration.class,
+        QuotingServiceConfiguration.class,
+        TransferServiceConfiguration.class})
 public final class MonoServiceConfiguration extends WebMvcExtension {
 
     public MonoServiceConfiguration(ObjectMapper objectMapper,
@@ -72,12 +69,9 @@ public final class MonoServiceConfiguration extends WebMvcExtension {
     }
 
     public interface RequiredDependencies extends FspiopServiceConfiguration.RequiredBeans,
-                                                  LookUpDomainConfiguration.RequiredBeans,
-                                                  QuotingDomainConfiguration.RequiredBeans,
-                                                  TransferDomainConfiguration.RequiredBeans,
-                                                  ParticipantIntercomClientConfiguration.RequiredBeans,
-                                                  WalletIntercomClientConfiguration.RequiredBeans,
-                                                  TransactionIntercomClientConfiguration.RequiredBeans { }
+                                                  LookUpServiceConfiguration.RequiredDependencies,
+                                                  QuotingServiceConfiguration.RequiredDependencies,
+                                                  TransferServiceConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
                                               LookUpDomainConfiguration.RequiredSettings,

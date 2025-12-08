@@ -79,7 +79,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
         config.addDataSourceProperty("useServerPrepStmts", "true");
         // If you still hit CALL issues, set to false and keep callableStmtCacheSize = 0
         // config.addDataSourceProperty("useServerPrepStmts", "false");
-        config.addDataSourceProperty("callableStmtCacheSize", "0");
+        config.addDataSourceProperty("callableStmtCacheSize", "100");
 
         // Optional: keep your previous "useResetSession" behaviour
         config.addDataSourceProperty("useResetSession", "true");

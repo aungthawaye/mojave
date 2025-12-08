@@ -21,17 +21,11 @@
 package io.mojaloop.core.quoting.service;
 
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
-import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.quoting.domain.QuotingDomainConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -48,11 +42,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         RequestIdMdcConfiguration.class,
         ParticipantIntercomClientConfiguration.class,
         FspiopServiceConfiguration.class})
-final class QuotingServiceConfiguration {
-
-
-
-
+public final class QuotingServiceConfiguration {
 
     public interface RequiredDependencies extends QuotingDomainConfiguration.RequiredBeans,
                                                   FspiopServiceConfiguration.RequiredBeans { }

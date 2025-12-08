@@ -13,7 +13,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="info">
+        <Root level="warn">
             <AppenderRef ref="ASYNC_CONSOLE"/>
         </Root>
     </Loggers>

@@ -21,6 +21,7 @@
 package io.mojaloop.mono.service;
 
 import io.mojaloop.core.quoting.domain.QuotingFlyway;
+import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.TransferFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,8 @@ public class MonoServiceApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoServiceApplication.class);
 
     public static void main(String[] args) {
+
+        AddStepPublisher.ENABLED = false;
 
         QuotingFlyway.migrate(
             System.getenv("MONO_FLYWAY_DB_URL"),

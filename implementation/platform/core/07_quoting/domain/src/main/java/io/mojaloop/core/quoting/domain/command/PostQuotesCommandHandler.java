@@ -205,9 +205,9 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             } else {
 
-                LOGGER.warn(
-                    "Quoting is not stateful. Ignoring saving the quote. udfQuoteId : ({})",
-                    udfQuoteId.getId());
+//                LOGGER.warn(
+//                    "Quoting is not stateful. Ignoring saving the quote. udfQuoteId : ({})",
+//                    udfQuoteId.getId());
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();
