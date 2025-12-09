@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -92,10 +92,9 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
             LOGGER.error("Error : ", e);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                new FspiopException(
-                    FspiopErrors.GENERIC_SERVER_ERROR,
-                    "An unexpected error occurred while authenticating the request."));
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR, new FspiopException(
+                FspiopErrors.GENERIC_SERVER_ERROR,
+                "An unexpected error occurred while authenticating the request."));
         }
     }
 
@@ -107,8 +106,8 @@ public class FspiopInboundGatekeeper implements Authenticator {
         if (!this.participantContext.verifyJws()) {
 
             return new UsernamePasswordAuthenticationToken(
-                payer, new FspiopSignature.Header(null, null),
-                new ArrayList<SimpleGrantedAuthority>());
+                payer,
+                new FspiopSignature.Header(null, null), new ArrayList<SimpleGrantedAuthority>());
         }
 
         var getMethod = cachedServletRequest.getMethod().equalsIgnoreCase("GET");
@@ -155,11 +154,10 @@ public class FspiopInboundGatekeeper implements Authenticator {
             LOGGER.error(
                 "Signature verification failed when using Source FSP ({})'s public key.", payer);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_UNAUTHORIZED,
-                new FspiopException(
-                    FspiopErrors.INVALID_SIGNATURE,
-                    "Signature verification failed when using Source FSP (" + payer +
-                        ")'s public key."));
+                HttpServletResponse.SC_UNAUTHORIZED, new FspiopException(
+                FspiopErrors.INVALID_SIGNATURE,
+                "Signature verification failed when using Source FSP (" + payer +
+                    ")'s public key."));
         }
 
         LOGGER.debug("Signature verification successful");
@@ -181,10 +179,9 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
             LOGGER.error("The 'fspiop-payer' header is missing.");
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
-                new FspiopException(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT,
-                    "The 'fspiop-payer' header or its value is missing."));
+                HttpServletResponse.SC_BAD_REQUEST, new FspiopException(
+                FspiopErrors.MISSING_MANDATORY_ELEMENT,
+                "The 'fspiop-payer' header or its value is missing."));
         }
 
         var destination = cachedServletRequest.getHeader(FspiopHeaders.Names.FSPIOP_DESTINATION);
@@ -194,21 +191,19 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
             LOGGER.error("The 'fspiop-destination' header is missing.");
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_BAD_REQUEST,
-                new FspiopException(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT,
-                    "The 'fspiop-destination' header or its value is missing."));
+                HttpServletResponse.SC_BAD_REQUEST, new FspiopException(
+                FspiopErrors.MISSING_MANDATORY_ELEMENT,
+                "The 'fspiop-destination' header or its value is missing."));
         }
 
         if (!this.participantContext.fspCode().equalsIgnoreCase(destination)) {
 
             LOGGER.error("The Destination FSP ({}) is not valid.", payer);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_NOT_ACCEPTABLE,
-                new FspiopException(
-                    FspiopErrors.GENERIC_PAYEE_REJECTION,
-                    "Destination FSP (" + destination + ") is different from the current FSP (" +
-                        this.participantContext.fspCode() + ")."));
+                HttpServletResponse.SC_NOT_ACCEPTABLE, new FspiopException(
+                FspiopErrors.GENERIC_PAYEE_REJECTION,
+                "Destination FSP (" + destination + ") is different from the current FSP (" +
+                    this.participantContext.fspCode() + ")."));
         }
 
         if (payer.equals(destination)) {
@@ -217,11 +212,10 @@ public class FspiopInboundGatekeeper implements Authenticator {
                 "The Source FSP ({}) and the destination FSP ({}) must not be the same.", payer,
                 destination);
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_NOT_ACCEPTABLE,
-                new FspiopException(
-                    FspiopErrors.DESTINATION_FSP_ERROR,
-                    "Source FSP (" + payer + ") and Destination FSP (" + destination +
-                        ") must not be the same."));
+                HttpServletResponse.SC_NOT_ACCEPTABLE, new FspiopException(
+                FspiopErrors.DESTINATION_FSP_ERROR,
+                "Source FSP (" + payer + ") and Destination FSP (" + destination +
+                    ") must not be the same."));
         }
     }
 
@@ -273,9 +267,10 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
                 } else {
 
-                    var error = new ErrorInformationObject().errorInformation(new ErrorInformation(
-                        FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(),
-                        FspiopErrors.GENERIC_CLIENT_ERROR.description()));
+                    var error = new ErrorInformationObject().errorInformation(
+                        new ErrorInformation(
+                            FspiopErrors.GENERIC_CLIENT_ERROR.errorType().getCode(),
+                            FspiopErrors.GENERIC_CLIENT_ERROR.description()));
 
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     writer.write(this.objectMapper.writeValueAsString(error));

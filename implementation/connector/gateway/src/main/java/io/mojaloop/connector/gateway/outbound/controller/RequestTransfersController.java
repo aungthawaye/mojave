@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,9 +24,9 @@ import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import io.mojaloop.connector.gateway.outbound.command.RequestTransfersCommand;
 import io.mojaloop.connector.gateway.outbound.data.Transfers;
+import io.mojaloop.connector.gateway.outbound.event.TransfersErrorEvent;
 import io.mojaloop.connector.gateway.outbound.event.TransfersRequestEvent;
 import io.mojaloop.connector.gateway.outbound.event.TransfersResponseEvent;
-import io.mojaloop.connector.gateway.outbound.event.TransfersErrorEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.common.type.Payee;
@@ -86,18 +86,25 @@ public class RequestTransfersController {
         final var extensionList = new ExtensionList();
 
         // Payer related
-        extensionList.addExtensionItem(new Extension("payerFspId", this.participantContext.fspCode()));
-        extensionList.addExtensionItem(new Extension("payerPartyIdType", request.payer.getPartyIdType().toString()));
-        extensionList.addExtensionItem(new Extension("payerPartyId", request.payer.getPartyIdentifier()));
+        extensionList.addExtensionItem(
+            new Extension("payerFspId", this.participantContext.fspCode()));
+        extensionList.addExtensionItem(
+            new Extension("payerPartyIdType", request.payer.getPartyIdType().toString()));
+        extensionList.addExtensionItem(
+            new Extension("payerPartyId", request.payer.getPartyIdentifier()));
 
         // Payee related
         extensionList.addExtensionItem(new Extension("payeeFspId", request.destination));
-        extensionList.addExtensionItem(new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
-        extensionList.addExtensionItem(new Extension("payeePartyId", request.payee.getPartyIdentifier()));
+        extensionList.addExtensionItem(
+            new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
+        extensionList.addExtensionItem(
+            new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
         final var expireAfterSeconds = new Date(Instant
                                                     .now()
-                                                    .plus(this.transferSettings.transferRequestExpirySeconds(), ChronoUnit.SECONDS)
+                                                    .plus(
+                                                        this.transferSettings.transferRequestExpirySeconds(),
+                                                        ChronoUnit.SECONDS)
                                                     .toEpochMilli());
 
         transfersPostRequest
@@ -122,15 +129,16 @@ public class RequestTransfersController {
             final var output = this.requestTransfersCommand.execute(input);
 
             // Publish response event
-            final var transfersResponse = new Transfers.Response(payee, request.transferId(), output.result().response());
+            final var transfersResponse = new Transfers.Response(
+                payee, request.transferId(), output.result().response());
             this.eventPublisher.publish(new TransfersResponseEvent(transfersResponse));
 
             return ResponseEntity.ok(output.result());
 
         } catch (FspiopException e) {
             // Publish error event and rethrow
-            this.eventPublisher.publish(new TransfersErrorEvent(new Transfers.Error(
-                payee, request.transferId(), e.toErrorObject())));
+            this.eventPublisher.publish(new TransfersErrorEvent(
+                new Transfers.Error(payee, request.transferId(), e.toErrorObject())));
             throw e;
         }
 

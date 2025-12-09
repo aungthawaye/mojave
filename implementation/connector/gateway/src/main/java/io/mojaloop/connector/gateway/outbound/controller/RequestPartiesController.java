@@ -84,8 +84,10 @@ public class RequestPartiesController {
 
         } catch (FspiopException e) {
 
-            this.eventPublisher.publish(new PartiesErrorEvent(new Parties.Error(
-                payee, request.partyIdType, request.partyId, request.subId, e.toErrorObject())));
+            this.eventPublisher.publish(new PartiesErrorEvent(
+                new Parties.Error(
+                    payee, request.partyIdType, request.partyId, request.subId,
+                    e.toErrorObject())));
 
             throw e;
         }

@@ -96,8 +96,10 @@ public class ConnectorOutboundConfiguration implements MiscConfiguration.Require
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(
-            new String[]{"/lookup", "/quote", "/transfer"});
+        return new SpringSecurityConfigurer.Settings(new String[]{
+            "/lookup",
+            "/quote",
+            "/transfer"});
     }
 
     @Bean

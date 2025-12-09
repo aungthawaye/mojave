@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -89,7 +89,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
             if (resultListener.getResponse() != null) {
                 final var output = new Output(resultListener.getResponse());
-                LOGGER.info("RequestTransfersCommandHandler : output : ({})", ObjectLogger.log(output));
+                LOGGER.info(
+                    "RequestTransfersCommandHandler : output : ({})", ObjectLogger.log(output));
                 return output;
             }
 
@@ -99,9 +100,10 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
 
             LOGGER.error("RequestTransfersCommandHandler : error : ({})", ObjectLogger.log(error));
 
-            throw new FspiopException(new ErrorDefinition(
-                errorDefinition.errorType(),
-                error.errorInformation().getErrorInformation().getErrorDescription()));
+            throw new FspiopException(
+                new ErrorDefinition(
+                    errorDefinition.errorType(),
+                    error.errorInformation().getErrorInformation().getErrorDescription()));
 
         } finally {
 

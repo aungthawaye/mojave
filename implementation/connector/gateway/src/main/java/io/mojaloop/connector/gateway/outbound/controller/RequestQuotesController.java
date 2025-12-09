@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
 import io.mojaloop.connector.gateway.outbound.command.RequestQuotesCommand;
 import io.mojaloop.connector.gateway.outbound.data.Quotes;
+import io.mojaloop.connector.gateway.outbound.event.QuotesErrorEvent;
 import io.mojaloop.connector.gateway.outbound.event.QuotesRequestEvent;
 import io.mojaloop.connector.gateway.outbound.event.QuotesResponseEvent;
-import io.mojaloop.connector.gateway.outbound.event.QuotesErrorEvent;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.common.type.Payee;
 import io.mojaloop.fspiop.spec.core.AmountType;
@@ -84,8 +84,10 @@ public class RequestQuotesController {
                                           .fees(request.fees())
                                           .expiration(request.expiration())
                                           .transactionType(new TransactionType()
-                                                               .scenario(TransactionScenario.TRANSFER)
-                                                               .initiator(TransactionInitiator.PAYER)
+                                                               .scenario(
+                                                                   TransactionScenario.TRANSFER)
+                                                               .initiator(
+                                                                   TransactionInitiator.PAYER)
                                                                .initiatorType(
                                                                    TransactionInitiatorType.CONSUMER));
 
@@ -110,8 +112,8 @@ public class RequestQuotesController {
         } catch (FspiopException e) {
 
             // Publish error event and rethrow
-            this.eventPublisher.publish(new QuotesErrorEvent(new Quotes.Error(
-                payee, id, e.toErrorObject())));
+            this.eventPublisher.publish(
+                new QuotesErrorEvent(new Quotes.Error(payee, id, e.toErrorObject())));
             throw e;
         }
 
