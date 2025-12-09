@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package io.mojaloop.component.misc.crypto;
 
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class PemUT {
     private static final Logger LOGGER = LoggerFactory.getLogger(PemUT.class);
 
     @Test
-    public void test(){
+    public void test() {
 
         var pem = "-----BEGIN PUBLIC KEY-----\n" +
                       "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr+f0vHYEtU4z+VCFWCA5\n" +
@@ -41,4 +42,5 @@ public class PemUT {
 
         byte[] data = Pem.from(pem);
     }
+
 }

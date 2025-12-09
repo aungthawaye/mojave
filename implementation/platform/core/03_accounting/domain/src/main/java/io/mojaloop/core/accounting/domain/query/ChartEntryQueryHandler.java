@@ -83,14 +83,6 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<ChartEntryData> getAll() {
-
-        return this.chartEntryRepository.findAll().stream().map(ChartEntry::convert).toList();
-    }
-
-    @Transactional(readOnly = true)
-    @Read
-    @Override
     public List<ChartEntryData> get(final String name) {
 
         return this.chartEntryRepository
@@ -98,6 +90,14 @@ public class ChartEntryQueryHandler implements ChartEntryQuery {
                    .stream()
                    .map(ChartEntry::convert)
                    .toList();
+    }
+
+    @Transactional(readOnly = true)
+    @Read
+    @Override
+    public List<ChartEntryData> getAll() {
+
+        return this.chartEntryRepository.findAll().stream().map(ChartEntry::convert).toList();
     }
 
 }

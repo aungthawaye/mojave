@@ -68,7 +68,8 @@ public class FetchTransferStepHandler implements FetchTransferStep {
                     "Transfer not found for udfTransferId : ({})", input.udfTransferId().getId());
 
                 var endAt = System.nanoTime();
-                var output = new FetchTransferStep.Output(null, null, null, null, null, null, null, null, null);
+                var output = new FetchTransferStep.Output(
+                    null, null, null, null, null, null, null, null, null);
 
                 LOGGER.info(
                     "FetchTransferStep : output : ({}) , took : {} ms", output,
@@ -100,7 +101,5 @@ public class FetchTransferStepHandler implements FetchTransferStep {
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
-
-    
 
 }

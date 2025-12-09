@@ -32,8 +32,12 @@ import org.springframework.context.annotation.Import;
 
 @EnableAutoConfiguration(
     exclude = {
-        SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
-@Import(value = {LookUpServiceConfiguration.class, LookUpServiceSettings.class})
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class})
+@Import(
+    value = {
+        LookUpServiceConfiguration.class,
+        LookUpServiceSettings.class})
 public class LookUpServiceApplication {
 
     public static void main(String[] args) {

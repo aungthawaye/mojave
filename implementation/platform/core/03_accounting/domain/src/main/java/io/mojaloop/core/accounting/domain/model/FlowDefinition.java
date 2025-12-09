@@ -66,11 +66,16 @@ import static java.sql.Types.BIGINT;
 @Entity
 @EntityListeners(value = {FlowDefinitionCacheUpdater.class})
 @Table(
-    name = "acc_flow_definition", uniqueConstraints = {
-    @UniqueConstraint(
-        name = "acc_flow_definition_transaction_type_currency_UK",
-        columnNames = {"transaction_type", "currency"}), @UniqueConstraint(
-    name = "acc_flow_definition_name_UK", columnNames = {"name"})})
+    name = "acc_flow_definition",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "acc_flow_definition_transaction_type_currency_UK",
+            columnNames = {
+                "transaction_type",
+                "currency"}),
+        @UniqueConstraint(
+            name = "acc_flow_definition_name_UK",
+            columnNames = {"name"})})
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FlowDefinition extends JpaEntity<FlowDefinitionId>
@@ -79,22 +84,35 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     @Id
     @JavaType(FlowDefinitionIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "flow_definition_id", nullable = false, updatable = false)
+    @Column(
+        name = "flow_definition_id",
+        nullable = false,
+        updatable = false)
     protected FlowDefinitionId id;
 
     @Column(
-        name = "transaction_type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+        name = "transaction_type",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionType transactionType;
 
-    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(
+        name = "currency",
+        nullable = false,
+        length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "description",
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
     @Column(

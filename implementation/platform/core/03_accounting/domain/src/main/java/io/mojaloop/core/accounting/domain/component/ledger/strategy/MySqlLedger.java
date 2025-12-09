@@ -157,8 +157,7 @@ public class MySqlLedger implements Ledger {
                 if (!added) {
                     throw new RuntimeException(
                         new DuplicatePostingException(
-                            request.accountId(), request.side(),
-                            transactionId));
+                            request.accountId(), request.side(), transactionId));
                 }
             });
 
@@ -264,8 +263,7 @@ public class MySqlLedger implements Ledger {
             case "DUPLICATE_POSTING": {
                 throw new RuntimeException(
                     new DuplicatePostingException(
-                        new AccountId(accountId), Side.valueOf(side),
-                        transactionId));
+                        new AccountId(accountId), Side.valueOf(side), transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {

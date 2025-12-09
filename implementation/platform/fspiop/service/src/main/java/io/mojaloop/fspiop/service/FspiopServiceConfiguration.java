@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,10 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @ComponentScan(basePackages = {"io.mojaloop.fspiop.service"})
-@Import(value = {FspiopComponentConfiguration.class, SpringSecurityConfiguration.class})
+@Import(
+    value = {
+        FspiopComponentConfiguration.class,
+        SpringSecurityConfiguration.class})
 public class FspiopServiceConfiguration implements SpringSecurityConfiguration.RequiredBeans {
 
     private final SpringSecurityConfigurer.Settings springSecuritySettings;
@@ -89,8 +92,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
     public Authenticator authenticator() {
 
         return new FspiopServiceGatekeeper(
-            this.springSecuritySettings, this.participantContext, this.participantVerifier,
-            this.objectMapper, this.serviceSettings);
+            this.springSecuritySettings, this.participantContext,
+            this.participantVerifier, this.objectMapper, this.serviceSettings);
     }
 
     @Bean
@@ -100,8 +103,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .newBuilder(RetrofitService.ForwardingService.class, "https://2ne1.com")
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withConverterFactories(
-                       new NullOrEmptyConverterFactory(),
-                       ScalarsConverterFactory.create(),
+                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
                        JacksonConverterFactory.create(objectMapper))
                    .build();
     }
@@ -114,8 +116,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withInterceptors(fspiopSigningInterceptor)
                    .withConverterFactories(
-                       new NullOrEmptyConverterFactory(),
-                       ScalarsConverterFactory.create(), JacksonConverterFactory.create())
+                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
+                       JacksonConverterFactory.create())
                    .build();
     }
 
@@ -127,8 +129,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withInterceptors(fspiopSigningInterceptor)
                    .withConverterFactories(
-                       new NullOrEmptyConverterFactory(),
-                       ScalarsConverterFactory.create(), JacksonConverterFactory.create())
+                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
+                       JacksonConverterFactory.create())
                    .build();
     }
 
@@ -140,8 +142,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withInterceptors(fspiopSigningInterceptor)
                    .withConverterFactories(
-                       new NullOrEmptyConverterFactory(),
-                       ScalarsConverterFactory.create(), JacksonConverterFactory.create())
+                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
+                       JacksonConverterFactory.create())
                    .build();
     }
 

@@ -64,27 +64,40 @@ import static java.sql.Types.BIGINT;
 @Entity
 @EntityListeners(value = {ChartEntryCacheUpdater.class})
 @Table(
-    name = "acc_chart_entry", uniqueConstraints = @UniqueConstraint(
-    name = "acc_chart_entry_chart_entry_code_UK", columnNames = {"chart_entry_code"}))
+    name = "acc_chart_entry",
+    uniqueConstraints = @UniqueConstraint(
+        name = "acc_chart_entry_chart_entry_code_UK",
+        columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {
 
     @Id
     @JavaType(ChartEntryIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "chart_entry_id", nullable = false, updatable = false)
+    @Column(
+        name = "chart_entry_id",
+        nullable = false,
+        updatable = false)
     protected ChartEntryId id;
 
-    @Column(name = "category", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "category",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ChartEntryCategory category;
 
     @Column(
-        name = "chart_entry_code", nullable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+        name = "chart_entry_code",
+        nullable = false,
+        length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = ChartEntryCodeConverter.class)
     protected ChartEntryCode code;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
     @Column(
@@ -101,7 +114,10 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
     @Enumerated(EnumType.STRING)
     protected AccountType accountType;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(
+        name = "created_at",
+        nullable = false,
+        updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 

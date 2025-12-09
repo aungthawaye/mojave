@@ -41,8 +41,7 @@ public class UpdateNetDebitCapCommandHandler implements UpdateNetDebitCapCommand
 
         this.positionRepository.save(position);
 
-        var output = new Output(
-            position.getPosition(), position.getReserved(), position.getNdc());
+        var output = new Output(position.getPosition(), position.getReserved(), position.getNdc());
 
         LOGGER.info("UpdateNetDebitCapCommand : output : ({})", ObjectLogger.log(output));
 

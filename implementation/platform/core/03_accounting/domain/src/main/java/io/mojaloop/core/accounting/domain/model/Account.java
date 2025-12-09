@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -73,78 +73,110 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @EntityListeners(value = {AccountCacheUpdater.class})
-@Table(name = "acc_account",
-       uniqueConstraints = {@UniqueConstraint(name = "acc_account_owner_id_currency_chart_entry_id_UK",
-                                              columnNames = {"owner_id",
-                                                             "currency",
-                                                             "chart_entry_id"})},
-       indexes = {@Index(name = "acc_account_owner_id_IDX", columnList = "owner_id"),
-                  @Index(name = "acc_account_currency_IDX", columnList = "currency")})
+@Table(
+    name = "acc_account",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "acc_account_owner_id_currency_chart_entry_id_UK",
+            columnNames = {
+                "owner_id",
+                "currency",
+                "chart_entry_id"})},
+    indexes = {
+        @Index(
+            name = "acc_account_owner_id_IDX",
+            columnList = "owner_id"),
+        @Index(
+            name = "acc_account_currency_IDX",
+            columnList = "currency")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends JpaEntity<AccountId> implements DataConversion<AccountData> {
 
     @Id
     @JavaType(AccountIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "account_id", nullable = false, updatable = false)
+    @Column(
+        name = "account_id",
+        nullable = false,
+        updatable = false)
     protected AccountId id;
 
     @Basic
     @JavaType(OwnerIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "owner_id", nullable = false, updatable = false)
+    @Column(
+        name = "owner_id",
+        nullable = false,
+        updatable = false)
     protected AccountOwnerId ownerId;
 
-    @Column(name = "type",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "type",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected AccountType type;
 
-    @Column(name = "currency",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(
+        name = "currency",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
     @Basic
-    @Column(name = "code", nullable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(
+        name = "code",
+        nullable = false,
+        length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = AccountCodeConverter.class)
     protected AccountCode code;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "description",
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(
+        name = "created_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @Column(name = "activation_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "activation_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "termination_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
-    @Column(name = "chart_entry_id", nullable = false)
+    @Column(
+        name = "chart_entry_id",
+        nullable = false)
     @Convert(converter = ChartEntryIdConverter.class)
     protected ChartEntryId chartEntryId;
 
-    @OneToOne(mappedBy = "account",
-              orphanRemoval = true,
-              cascade = CascadeType.ALL,
-              fetch = FetchType.EAGER,
-              optional = false)
+    @OneToOne(
+        mappedBy = "account",
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER,
+        optional = false)
     protected LedgerBalance ledgerBalance;
 
     public Account(ChartEntry chartEntry,

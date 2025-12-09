@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -167,24 +167,17 @@ public class AccountTimerCache implements AccountCache {
                             .stream()
                             .collect(
                                 Collectors.toUnmodifiableMap(
-                                    AccountData::code, Function.identity(),
-                                    (a, b) -> a));
+                                    AccountData::code, Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(accounts
-                                                           .stream()
-                                                           .collect(Collectors.groupingBy(
-                                                               AccountData::ownerId,
-                                                               Collectors.collectingAndThen(
-                                                                   Collectors.toSet(),
-                                                                   Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(
+                AccountData::ownerId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-        var _withChartEntryId = Collections.unmodifiableMap(accounts
-                                                                .stream()
-                                                                .collect(Collectors.groupingBy(
-                                                                    AccountData::chartEntryId,
-                                                                    Collectors.collectingAndThen(
-                                                                        Collectors.toSet(),
-                                                                        Collections::unmodifiableSet))));
+        var _withChartEntryId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(
+                AccountData::chartEntryId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
         var _withChartEntryIdOwnerIdCurrency = accounts
                                                    .stream()

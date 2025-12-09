@@ -43,7 +43,9 @@ import org.springframework.context.annotation.Import;
         FlywayAutoConfiguration.class})
 @Import(
     value = {
-        MonoAdminConfiguration.class, MonoAdminDependencies.class, MonoAdminSettings.class})
+        MonoAdminConfiguration.class,
+        MonoAdminDependencies.class,
+        MonoAdminSettings.class})
 public class MonoAdminApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoAdminApplication.class);

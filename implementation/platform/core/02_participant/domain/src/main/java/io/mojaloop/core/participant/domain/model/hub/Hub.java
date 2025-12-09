@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,30 +83,40 @@ public class Hub extends JpaEntity<HubId>
     @Id
     @JavaType(HubIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "hub_id", nullable = false, updatable = false)
+    @Column(
+        name = "hub_id",
+        nullable = false,
+        updatable = false)
     protected HubId id;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(
+        name = "created_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "hub",
-               cascade = {CascadeType.ALL},
-               orphanRemoval = true,
-               targetEntity = HubCurrency.class,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "hub",
+        cascade = {CascadeType.ALL},
+        orphanRemoval = true,
+        targetEntity = HubCurrency.class,
+        fetch = FetchType.EAGER)
     protected Set<HubCurrency> currencies = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "hub",
-               cascade = {CascadeType.ALL},
-               orphanRemoval = true,
-               targetEntity = Fsp.class,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "hub",
+        cascade = {CascadeType.ALL},
+        orphanRemoval = true,
+        targetEntity = Fsp.class,
+        fetch = FetchType.EAGER)
     protected Set<Fsp> fsps = new HashSet<>();
 
     public Hub(String name) {
@@ -155,12 +165,12 @@ public class Hub extends JpaEntity<HubId>
     @Override
     public HubData convert() {
 
-        return new HubData(this.getId(), this.getName(), this
-                                                             .getCurrencies()
-                                                             .stream()
-                                                             .map(HubCurrency::convert)
-                                                             .toArray(
-                                                                 HubData.HubCurrencyData[]::new));
+        return new HubData(
+            this.getId(), this.getName(), this
+                                              .getCurrencies()
+                                              .stream()
+                                              .map(HubCurrency::convert)
+                                              .toArray(HubData.HubCurrencyData[]::new));
     }
 
     public Optional<HubCurrency> deactivate(Currency currency) {

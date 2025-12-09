@@ -239,11 +239,9 @@ public class FspiopServiceGatekeeper implements Authenticator {
                 "Destination FSP ({}) must not be Hub ({}).", destination,
                 this.participantContext.fspCode());
             throw new GatekeeperFailureException(
-                HttpServletResponse.SC_NOT_ACCEPTABLE,
-                new FspiopException(
-                    FspiopErrors.DESTINATION_FSP_ERROR,
-                    "Destination FSP must not be Hub (" + this.participantContext.fspCode() +
-                        ")."));
+                HttpServletResponse.SC_NOT_ACCEPTABLE, new FspiopException(
+                FspiopErrors.DESTINATION_FSP_ERROR,
+                "Destination FSP must not be Hub (" + this.participantContext.fspCode() + ")."));
         }
 
     }
@@ -281,8 +279,7 @@ public class FspiopServiceGatekeeper implements Authenticator {
             throw new GatekeeperFailureException(
                 HttpServletResponse.SC_BAD_REQUEST,
                 new FspiopException(
-                    FspiopErrors.GENERIC_VALIDATION_ERROR,
-                    "The request is too old."));
+                    FspiopErrors.GENERIC_VALIDATION_ERROR, "The request is too old."));
         }
     }
 

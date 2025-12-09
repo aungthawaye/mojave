@@ -9,7 +9,6 @@ import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;
 import io.mojaloop.core.accounting.domain.cache.strategy.local.AccountLocalCache;
 import io.mojaloop.core.accounting.domain.cache.strategy.local.ChartEntryLocalCache;
 import io.mojaloop.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
-import io.mojaloop.core.accounting.domain.cache.strategy.timer.AccountTimerCache;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
 import io.mojaloop.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import io.mojaloop.core.accounting.domain.repository.AccountRepository;

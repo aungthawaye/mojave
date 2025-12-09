@@ -36,8 +36,8 @@ public interface ChartEntryQuery {
 
     List<ChartEntryData> get(ChartEntryCategory category);
 
-    List<ChartEntryData> getAll();
-
     List<ChartEntryData> get(String name);
+
+    List<ChartEntryData> getAll();
 
 }

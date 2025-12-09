@@ -29,9 +29,6 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.transaction.domain.TransactionDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -56,7 +53,6 @@ public final class TransactionIntercomConfiguration extends WebMvcExtension {
 
         super(objectMapper);
     }
-
 
     public interface RequiredDependencies extends TransactionDomainConfiguration.RequiredBeans,
                                                   SpringSecurityConfiguration.RequiredBeans { }

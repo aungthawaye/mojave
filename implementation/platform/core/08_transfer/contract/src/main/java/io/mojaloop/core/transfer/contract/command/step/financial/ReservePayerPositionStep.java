@@ -13,8 +13,10 @@ import java.time.Instant;
 
 public interface ReservePayerPositionStep {
 
-    Output execute(Input input)
-        throws FspiopException, NoPositionUpdateForTransactionException, PositionLimitExceededException;
+    Output execute(Input input) throws
+                                FspiopException,
+                                NoPositionUpdateForTransactionException,
+                                PositionLimitExceededException;
 
     record Input(String context,
                  TransactionId transactionId,
@@ -25,4 +27,5 @@ public interface ReservePayerPositionStep {
                  BigDecimal transferAmount) { }
 
     record Output(PositionUpdateId positionReservationId) { }
+
 }

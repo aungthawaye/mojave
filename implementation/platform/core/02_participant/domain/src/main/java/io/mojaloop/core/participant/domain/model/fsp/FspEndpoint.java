@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,9 +57,14 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_fsp_endpoint",
-       uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK",
-                                              columnNames = {"fsp_endpoint_id", "type"})})
+@Table(
+    name = "pcp_fsp_endpoint",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK",
+            columnNames = {
+                "fsp_endpoint_id",
+                "type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspEndpoint extends JpaEntity<FspEndpointId>
     implements DataConversion<FspEndpointData> {
@@ -68,19 +73,29 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId>
 
     @JavaType(FspEndpointIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "fsp_endpoint_id", nullable = false, updatable = false)
+    @Column(
+        name = "fsp_endpoint_id",
+        nullable = false,
+        updatable = false)
     private FspEndpointId id;
 
-    @Column(name = "type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "type",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private EndpointType type;
 
-    @Column(name = "base_url", nullable = false, length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
+    @Column(
+        name = "base_url",
+        nullable = false,
+        length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
     private String baseUrl;
 
-    @Column(name = "activation_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "activation_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
@@ -89,9 +104,10 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId>
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "fsp_id",
-                nullable = false,
-                foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
+    @JoinColumn(
+        name = "fsp_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
     private Fsp fsp;
 
     public FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) {

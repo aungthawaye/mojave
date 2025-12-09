@@ -39,7 +39,10 @@ import org.springframework.context.annotation.Import;
         SecurityAutoConfiguration.class,
         UserDetailsServiceAutoConfiguration.class,
         FlywayAutoConfiguration.class})
-@Import(value = {TransactionIntercomConfiguration.class, TransactionIntercomSettings.class})
+@Import(
+    value = {
+        TransactionIntercomConfiguration.class,
+        TransactionIntercomSettings.class})
 public class TransactionIntercomApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(
@@ -48,8 +51,8 @@ public class TransactionIntercomApplication {
     public static void main(String[] args) {
 
         TransactionFlyway.migrate(
-            System.getenv("TXN_FLYWAY_DB_URL"), System.getenv("TXN_FLYWAY_DB_USER"),
-            System.getenv("TXN_FLYWAY_DB_PASSWORD"));
+            System.getenv("TXN_FLYWAY_DB_URL"),
+            System.getenv("TXN_FLYWAY_DB_USER"), System.getenv("TXN_FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(TransactionIntercomApplication.class)
             .web(WebApplicationType.SERVLET)

@@ -340,7 +340,8 @@ public class FspCoreAdapter {
                 .completedTimestamp(FspiopDates.forRequestBody())
                 .extensionList(new ExtensionList()
                                    .addExtensionItem(new Extension(
-                                       "homeTransactionId", UUID.randomUUID().toString()))
+                                       "homeTransactionId",
+                                       UUID.randomUUID().toString()))
                                    .addExtensionItem(new Extension("transferId", transferId)));
 
             LOGGER.debug("Returning transfers: {}", response);

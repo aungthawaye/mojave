@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,20 +62,20 @@ public class AccountQueryController {
         return this.accountQuery.find(criteria);
     }
 
+    @GetMapping("/accounts/get-all-accounts")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<AccountData> getAll() {
+
+        return this.accountQuery.getAll();
+    }
+
     @GetMapping("/accounts/get-by-account-code")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AccountData getByAccountCode(@RequestParam final String accountCode) {
 
         return this.accountQuery.get(new AccountCode(accountCode));
-    }
-
-    @GetMapping("/accounts/get-by-owner-id")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public List<AccountData> getByOwnerId(@RequestParam final String ownerId) {
-
-        return this.accountQuery.get(new AccountOwnerId(Long.parseLong(ownerId)));
     }
 
     @GetMapping("/accounts/get-by-account-id")
@@ -86,12 +86,12 @@ public class AccountQueryController {
         return this.accountQuery.get(new AccountId(Long.parseLong(accountId)));
     }
 
-    @GetMapping("/accounts/get-all-accounts")
+    @GetMapping("/accounts/get-by-owner-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<AccountData> getAll() {
+    public List<AccountData> getByOwnerId(@RequestParam final String ownerId) {
 
-        return this.accountQuery.getAll();
+        return this.accountQuery.get(new AccountOwnerId(Long.parseLong(ownerId)));
     }
 
 }

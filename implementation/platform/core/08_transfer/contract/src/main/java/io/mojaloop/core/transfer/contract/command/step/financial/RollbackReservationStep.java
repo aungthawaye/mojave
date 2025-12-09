@@ -14,4 +14,5 @@ public interface RollbackReservationStep {
                  String error) { }
 
     record Output(PositionUpdateId rollbackId) { }
+
 }

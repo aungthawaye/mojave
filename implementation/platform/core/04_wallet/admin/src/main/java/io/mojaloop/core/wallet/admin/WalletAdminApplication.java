@@ -41,7 +41,9 @@ import org.springframework.context.annotation.Import;
         FlywayAutoConfiguration.class})
 @Import(
     value = {
-        WalletAdminConfiguration.class, WalletAdminDependencies.class, WalletAdminSettings.class})
+        WalletAdminConfiguration.class,
+        WalletAdminDependencies.class,
+        WalletAdminSettings.class})
 public class WalletAdminApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WalletAdminApplication.class);

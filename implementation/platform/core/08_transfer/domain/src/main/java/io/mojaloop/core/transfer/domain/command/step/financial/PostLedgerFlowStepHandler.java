@@ -27,9 +27,9 @@ import io.mojaloop.core.common.datatype.enums.trasaction.FundTransferDimension;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
-import io.mojaloop.core.transfer.contract.command.step.financial.PostLedgerFlowStep;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
+import io.mojaloop.core.transfer.contract.command.step.financial.PostLedgerFlowStep;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import org.slf4j.Logger;
@@ -97,8 +97,7 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, "-",
-                    StepPhase.AFTER));
+                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             var endAt = System.nanoTime();
             LOGGER.info("PostLedgerFlowStep : done , took {} ms", (endAt - startAt) / 1_000_000);
@@ -109,7 +108,8 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

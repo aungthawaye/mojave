@@ -174,8 +174,7 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
             if (transactionId != null) {
                 this.addStepPublisher.publish(
                     new AddStepCommand.Input(
-                        transactionId, STEP_NAME, CONTEXT, e.getMessage(),
-                        StepPhase.ERROR));
+                        transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
             }
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());

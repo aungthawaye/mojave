@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,8 +44,8 @@ import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand
 import io.mojaloop.core.accounting.contract.data.AccountData;
 import io.mojaloop.core.accounting.contract.data.ChartData;
 import io.mojaloop.core.accounting.contract.data.ChartEntryData;
-import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.accounting.contract.data.FlowDefinitionData;
+import io.mojaloop.core.common.datatype.enums.accounting.ChartEntryCategory;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountId;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
 import io.mojaloop.core.common.datatype.identifier.accounting.ChartEntryId;
@@ -63,7 +63,8 @@ public interface AccountingIntercomService {
     interface AccountQuery {
 
         @POST("/accounts/find-accounts")
-        Call<PagedResult<AccountData>> find(@Body io.mojaloop.core.accounting.contract.query.AccountQuery.Criteria criteria);
+        Call<PagedResult<AccountData>> find(
+            @Body io.mojaloop.core.accounting.contract.query.AccountQuery.Criteria criteria);
 
         @GET("/accounts/get-all-accounts")
         Call<java.util.List<AccountData>> getAll();
@@ -96,16 +97,18 @@ public interface AccountingIntercomService {
         Call<ChartData> getByChartId(@Query("chartId") ChartId chartId);
 
         @GET("/chart-entries/get-by-name-contains")
-        Call<java.util.List<ChartEntryData>> getChartEntriesByNameContains(@Query("name") String name);
+        Call<java.util.List<ChartEntryData>> getChartEntriesByNameContains(
+            @Query("name") String name);
 
         @GET("/charts/get-by-name-contains")
         Call<java.util.List<ChartData>> getChartsByNameContains(@Query("name") String name);
 
+        @GET("/chart-entries/get-by-category")
+        Call<java.util.List<ChartEntryData>> getEntriesByCategory(
+            @Query("category") ChartEntryCategory category);
+
         @GET("/chart-entries/get-by-chart-id")
         Call<java.util.List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
-
-        @GET("/chart-entries/get-by-category")
-        Call<java.util.List<ChartEntryData>> getEntriesByCategory(@Query("category") ChartEntryCategory category);
 
     }
 
@@ -115,10 +118,12 @@ public interface AccountingIntercomService {
         Call<java.util.List<FlowDefinitionData>> getAllFlowDefinitions();
 
         @GET("/flow-definitions/get-by-flow-definition-id")
-        Call<FlowDefinitionData> getByFlowDefinitionId(@Query("flowDefinitionId") FlowDefinitionId flowDefinitionId);
+        Call<FlowDefinitionData> getByFlowDefinitionId(
+            @Query("flowDefinitionId") FlowDefinitionId flowDefinitionId);
 
         @GET("/flow-definitions/get-by-name-contains")
-        Call<java.util.List<FlowDefinitionData>> getFlowDefinitionsByNameContains(@Query("name") String name);
+        Call<java.util.List<FlowDefinitionData>> getFlowDefinitionsByNameContains(
+            @Query("name") String name);
 
     }
 

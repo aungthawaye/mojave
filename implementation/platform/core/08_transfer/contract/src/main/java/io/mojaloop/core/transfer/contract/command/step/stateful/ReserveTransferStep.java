@@ -13,4 +13,5 @@ public interface ReserveTransferStep {
                  TransactionId transactionId,
                  TransferId transferId,
                  PositionUpdateId positionReservationId) { }
+
 }

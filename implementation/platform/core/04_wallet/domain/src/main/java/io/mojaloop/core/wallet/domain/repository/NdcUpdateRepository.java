@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NdcUpdateRepository
-    extends JpaRepository<NdcUpdate, NetDebitCapUpdateId>,
-            JpaSpecificationExecutor<NdcUpdate> { }
+    extends JpaRepository<NdcUpdate, NetDebitCapUpdateId>, JpaSpecificationExecutor<NdcUpdate> { }

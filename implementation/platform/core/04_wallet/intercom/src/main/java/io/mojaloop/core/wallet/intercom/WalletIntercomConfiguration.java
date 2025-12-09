@@ -28,8 +28,6 @@ import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
 import io.mojaloop.core.common.datatype.DatatypeConfiguration;
 import io.mojaloop.core.wallet.domain.WalletDomainConfiguration;
-import io.mojaloop.core.wallet.domain.cache.PositionCache;
-import io.mojaloop.core.wallet.domain.cache.BalanceCache;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -59,9 +57,9 @@ public final class WalletIntercomConfiguration extends WebMvcExtension {
     public interface RequiredDependencies extends WalletDomainConfiguration.RequiredBeans,
                                                   SpringSecurityConfiguration.RequiredBeans { }
 
-    public interface RequiredSettings
-        extends WalletDomainConfiguration.RequiredSettings, OpenApiConfiguration.RequiredSettings,
-                SpringSecurityConfiguration.RequiredSettings {
+    public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings,
+                                              OpenApiConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

@@ -43,30 +43,41 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "tfr_transfer_ilp_packet", uniqueConstraints = {
-    @UniqueConstraint(name = "tfr_transfer_ilp_packet_ilp_condition_UK",
-                      columnNames = {"ilp_condition"})})
+@Table(
+    name = "tfr_transfer_ilp_packet",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "tfr_transfer_ilp_packet_ilp_condition_UK",
+            columnNames = {"ilp_condition"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TransferIlpPacket extends JpaEntity<TransferId> {
 
     @Id
     @JavaType(TransferIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "transfer_id", nullable = false, updatable = false)
+    @Column(
+        name = "transfer_id",
+        nullable = false,
+        updatable = false)
     protected TransferId id;
 
-    @Column(name = "ilp_packet", length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH)
+    @Column(
+        name = "ilp_packet",
+        length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH)
     protected String ilpPacket;
 
-    @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
+    @Column(
+        name = "ilp_condition",
+        length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String condition;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "transfer_id",
-                nullable = false,
-                updatable = false,
-                foreignKey = @ForeignKey(name = "transfer_ilp_packet_transfer_FK"))
+    @JoinColumn(
+        name = "transfer_id",
+        nullable = false,
+        updatable = false,
+        foreignKey = @ForeignKey(name = "transfer_ilp_packet_transfer_FK"))
     protected Transfer transfer;
 
     public TransferIlpPacket(Transfer transfer, String ilpPacket, String ilpCondition) {

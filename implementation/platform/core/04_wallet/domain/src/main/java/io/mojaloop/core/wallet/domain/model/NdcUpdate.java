@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,18 +48,26 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "wlt_net_debit_cap_update",
-       uniqueConstraints = {@UniqueConstraint(name = "wlt_net_debit_cap_update_transaction_id_UK",
-                                              columnNames = {"transaction_id"})},
-       indexes = {@Index(name = "wlt_net_debit_cap_update_position_id_transaction_at_IDX",
-                         columnList = "position_id, transaction_at")})
+@Table(
+    name = "wlt_net_debit_cap_update",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "wlt_net_debit_cap_update_transaction_id_UK",
+            columnNames = {"transaction_id"})},
+    indexes = {
+        @Index(
+            name = "wlt_net_debit_cap_update_position_id_transaction_at_IDX",
+            columnList = "position_id, transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NdcUpdate extends JpaEntity<NetDebitCapUpdateId> {
 
     @Id
     @JavaType(NetDebitCapUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "net_debit_cap_update_id", nullable = false, updatable = false)
+    @Column(
+        name = "net_debit_cap_update_id",
+        nullable = false,
+        updatable = false)
     protected NetDebitCapUpdateId id;
 
     @Column(name = "position_id")
@@ -70,17 +78,24 @@ public class NdcUpdate extends JpaEntity<NetDebitCapUpdateId> {
     @Convert(converter = TransactionIdConverter.class)
     protected TransactionId transactionId;
 
-    @Column(name = "old_net_debit_cap",
-            precision = 34,
-            scale = 4,
-            nullable = false,
-            updatable = false)
+    @Column(
+        name = "old_net_debit_cap",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal oldNetDebitCap;
 
-    @Column(name = "new_net_debit_cap", precision = 34, scale = 4, nullable = false)
+    @Column(
+        name = "new_net_debit_cap",
+        precision = 34,
+        scale = 4,
+        nullable = false)
     protected BigDecimal newNetDebitCap;
 
-    @Column(name = "transaction_at", nullable = false)
+    @Column(
+        name = "transaction_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant transactionAt;
 

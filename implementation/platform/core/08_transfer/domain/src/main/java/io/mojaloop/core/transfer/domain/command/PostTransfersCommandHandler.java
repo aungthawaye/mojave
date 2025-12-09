@@ -221,8 +221,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId,
-                        positionReservationId));
+                        CONTEXT, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
 

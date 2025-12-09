@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,10 +22,7 @@ package io.mojaloop.core.transfer.domain.command.step.financial;
 
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
-import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.contract.command.step.financial.ReservePayerPositionStep;
@@ -34,13 +31,9 @@ import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTr
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.Instant;
 
 @Service
 public class ReservePayerPositionStepHandler implements ReservePayerPositionStep {
@@ -64,9 +57,9 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
     @Override
     public ReservePayerPositionStep.Output execute(ReservePayerPositionStep.Input input) throws
-                                       FspiopException,
-                                       NoPositionUpdateForTransactionException,
-                                       PositionLimitExceededException {
+                                                                                         FspiopException,
+                                                                                         NoPositionUpdateForTransactionException,
+                                                                                         PositionLimitExceededException {
 
         var startAt = System.nanoTime();
 
@@ -112,7 +105,8 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
                     transactionId, STEP_NAME, CONTEXT,
                     ObjectLogger.log(reservePositionOutput).toString(), StepPhase.AFTER));
 
-            var output = new ReservePayerPositionStep.Output(reservePositionOutput.positionUpdateId());
+            var output = new ReservePayerPositionStep.Output(
+                reservePositionOutput.positionUpdateId());
 
             var endAt = System.nanoTime();
             LOGGER.info(
@@ -127,7 +121,8 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
 
@@ -137,7 +132,8 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw e;
 
@@ -147,7 +143,8 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

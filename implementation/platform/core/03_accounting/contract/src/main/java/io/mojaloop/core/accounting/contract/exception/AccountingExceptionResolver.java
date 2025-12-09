@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,10 +42,10 @@ import io.mojaloop.core.accounting.contract.exception.definition.AmbiguousReceiv
 import io.mojaloop.core.accounting.contract.exception.definition.ChartEntryConflictInDefinitionException;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import io.mojaloop.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
+import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import io.mojaloop.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import io.mojaloop.core.accounting.contract.exception.definition.ImmatureChartEntryException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import io.mojaloop.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;

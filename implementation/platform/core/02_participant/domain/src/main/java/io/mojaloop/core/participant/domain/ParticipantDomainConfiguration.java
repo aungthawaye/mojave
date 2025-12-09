@@ -28,7 +28,8 @@ import org.springframework.context.annotation.Import;
 @ComponentScan(basePackages = {"io.mojaloop.core.participant.domain"})
 @Import(
     value = {
-        MiscConfiguration.class, RoutingJpaConfiguration.class})
+        MiscConfiguration.class,
+        RoutingJpaConfiguration.class})
 public class ParticipantDomainConfiguration
     implements MiscConfiguration.RequiredBeans, RoutingJpaConfiguration.RequiredBeans {
 

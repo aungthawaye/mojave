@@ -43,8 +43,9 @@ public class BalanceNotExistException extends UncheckedDomainException {
     public BalanceNotExistException(final WalletOwnerId walletOwnerId, final Currency currency) {
 
         super(new ErrorTemplate(
-            CODE, TEMPLATE,
-            new String[]{walletOwnerId.getId().toString(), currency.name()}));
+            CODE, TEMPLATE, new String[]{
+            walletOwnerId.getId().toString(),
+            currency.name()}));
 
         this.walletOwnerId = walletOwnerId;
         this.currency = currency;

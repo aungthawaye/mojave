@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,9 +52,13 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "wlt_balance",
-       uniqueConstraints = @UniqueConstraint(name = "wlt_balance_wallet_owner_id_currency_UK",
-                                             columnNames = {"wallet_owner_id", "currency"}))
+@Table(
+    name = "wlt_balance",
+    uniqueConstraints = @UniqueConstraint(
+        name = "wlt_balance_wallet_owner_id_currency_UK",
+        columnNames = {
+            "wallet_owner_id",
+            "currency"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Balance extends JpaEntity<BalanceId> implements DataConversion<BalanceData> {
 
@@ -68,20 +72,26 @@ public class Balance extends JpaEntity<BalanceId> implements DataConversion<Bala
     @Convert(converter = WalletOwnerIdConverter.class)
     protected WalletOwnerId walletOwnerId;
 
-    @Column(name = "currency",
-            length = StringSizeConstraints.MAX_CURRENCY_LENGTH,
-            nullable = false,
-            updatable = false)
+    @Column(
+        name = "currency",
+        length = StringSizeConstraints.MAX_CURRENCY_LENGTH,
+        nullable = false,
+        updatable = false)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "name",
-            length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH,
-            nullable = false,
-            updatable = false)
+    @Column(
+        name = "name",
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH,
+        nullable = false,
+        updatable = false)
     protected String name;
 
-    @Column(name = "balance", nullable = false, precision = 34, scale = 4)
+    @Column(
+        name = "balance",
+        nullable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal balance = BigDecimal.ZERO;
 
     @Column(name = "created_at")

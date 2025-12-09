@@ -63,8 +63,9 @@ public class FlowDefinitionAlreadyConfiguredException extends UncheckedDomainExc
                                                     Currency currency) {
 
         super(new ErrorTemplate(
-            CODE, TEMPLATE,
-            new String[]{transactionType.toString(), currency.toString()}));
+            CODE, TEMPLATE, new String[]{
+            transactionType.toString(),
+            currency.toString()}));
 
         this.transactionType = transactionType;
         this.currency = currency;

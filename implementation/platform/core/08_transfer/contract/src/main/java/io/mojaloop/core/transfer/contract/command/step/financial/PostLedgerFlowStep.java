@@ -21,4 +21,5 @@ public interface PostLedgerFlowStep {
                  BigDecimal transferAmount,
                  BigDecimal payeeFspFee,
                  BigDecimal payeeFspCommission) { }
+
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -72,9 +72,14 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_hub_currency",
-       uniqueConstraints = {@UniqueConstraint(name = "pcp_hub_currency_hub_currency_id_currency_UK",
-                                              columnNames = {"hub_currency_id", "currency"})})
+@Table(
+    name = "pcp_hub_currency",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "pcp_hub_currency_hub_currency_id_currency_UK",
+            columnNames = {
+                "hub_currency_id",
+                "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class HubCurrency extends JpaEntity<HubCurrencyId>
     implements DataConversion<HubData.HubCurrencyData> {
@@ -85,24 +90,31 @@ public final class HubCurrency extends JpaEntity<HubCurrencyId>
     @Column(name = "hub_currency_id")
     private HubCurrencyId id;
 
-    @Column(name = "currency", nullable = false, length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(
+        name = "currency",
+        nullable = false,
+        length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @Column(name = "activation_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "activation_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(
+        name = "created_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "hub_id",
-                nullable = false,
-                foreignKey = @ForeignKey(name = "hub_currency_hub_FK"))
+    @JoinColumn(
+        name = "hub_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "hub_currency_hub_FK"))
     private Hub hub;
 
     HubCurrency(Hub hub, Currency currency) {

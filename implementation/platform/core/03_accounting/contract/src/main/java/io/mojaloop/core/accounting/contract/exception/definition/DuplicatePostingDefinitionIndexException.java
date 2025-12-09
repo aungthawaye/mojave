@@ -41,7 +41,6 @@ package io.mojaloop.core.accounting.contract.exception.definition;
 
 import io.mojaloop.component.misc.exception.ErrorTemplate;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
-import io.mojaloop.core.common.datatype.type.accounting.ChartEntryCode;
 import lombok.Getter;
 
 import java.util.Map;

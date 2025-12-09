@@ -24,7 +24,6 @@ import io.mojaloop.component.jpa.routing.RoutingDataSourceConfigurer;
 import io.mojaloop.component.jpa.routing.RoutingEntityManagerConfigurer;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
-import io.mojaloop.core.transaction.domain.TransactionFlyway;
 import org.springframework.context.annotation.Bean;
 
 final class TransactionIntercomSettings

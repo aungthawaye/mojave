@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,13 +57,15 @@ public interface ParticipantAdminService {
     interface FspCommand {
 
         @POST("fsps/activate-endpoint")
-        Call<ActivateEndpointCommand.Output> activateEndpoint(@Body ActivateEndpointCommand.Input input);
+        Call<ActivateEndpointCommand.Output> activateEndpoint(
+            @Body ActivateEndpointCommand.Input input);
 
         @POST("fsps/activate-fsp")
         Call<ActivateFspCommand.Output> activateFsp(@Body ActivateFspCommand.Input input);
 
         @POST("fsps/activate-currency")
-        Call<ActivateFspCurrencyCommand.Output> activateFspCurrency(@Body ActivateFspCurrencyCommand.Input input);
+        Call<ActivateFspCurrencyCommand.Output> activateFspCurrency(
+            @Body ActivateFspCurrencyCommand.Input input);
 
         @POST("fsps/add-endpoint")
         Call<AddEndpointCommand.Output> addEndpoint(@Body AddEndpointCommand.Input input);
@@ -81,13 +83,15 @@ public interface ParticipantAdminService {
         Call<CreateFspCommand.Output> createFsp(@Body CreateFspCommand.Input input);
 
         @POST("fsps/deactivate-endpoint")
-        Call<DeactivateEndpointCommand.Output> deactivateEndpoint(@Body DeactivateEndpointCommand.Input input);
+        Call<DeactivateEndpointCommand.Output> deactivateEndpoint(
+            @Body DeactivateEndpointCommand.Input input);
 
         @POST("fsps/deactivate-fsp")
         Call<DeactivateFspCommand.Output> deactivateFsp(@Body DeactivateFspCommand.Input input);
 
         @POST("fsps/deactivate-currency")
-        Call<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(@Body DeactivateFspCurrencyCommand.Input input);
+        Call<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(
+            @Body DeactivateFspCurrencyCommand.Input input);
 
     }
 
@@ -123,23 +127,27 @@ public interface ParticipantAdminService {
         Call<ActivateOracleCommand.Output> activateOracle(@Body ActivateOracleCommand.Input input);
 
         @POST("oracles/change-name")
-        Call<ChangeOracleNameCommand.Output> changeOracleName(@Body ChangeOracleNameCommand.Input input);
+        Call<ChangeOracleNameCommand.Output> changeOracleName(
+            @Body ChangeOracleNameCommand.Input input);
 
         @POST("oracles/change-type")
-        Call<ChangeOracleTypeCommand.Output> changeOracleType(@Body ChangeOracleTypeCommand.Input input);
+        Call<ChangeOracleTypeCommand.Output> changeOracleType(
+            @Body ChangeOracleTypeCommand.Input input);
 
         @POST("oracles/create-oracle")
         Call<CreateOracleCommand.Output> createOracle(@Body CreateOracleCommand.Input input);
 
         @POST("oracles/deactivate-oracle")
-        Call<DeactivateOracleCommand.Output> deactivateOracle(@Body DeactivateOracleCommand.Input input);
+        Call<DeactivateOracleCommand.Output> deactivateOracle(
+            @Body DeactivateOracleCommand.Input input);
 
     }
 
     interface HubCommands {
 
         @POST("hubs/activate-currency")
-        Call<ActivateHubCurrencyCommand.Output> activateHubCurrency(@Body ActivateHubCurrencyCommand.Input input);
+        Call<ActivateHubCurrencyCommand.Output> activateHubCurrency(
+            @Body ActivateHubCurrencyCommand.Input input);
 
         @POST("hubs/add-currency")
         Call<AddHubCurrencyCommand.Output> addHubCurrency(@Body AddHubCurrencyCommand.Input input);
@@ -151,7 +159,8 @@ public interface ParticipantAdminService {
         Call<CreateHubCommand.Output> createHub(@Body CreateHubCommand.Input input);
 
         @POST("hubs/deactivate-currency")
-        Call<DeactivateHubCurrencyCommand.Output> deactivateHubCurrency(@Body DeactivateHubCurrencyCommand.Input input);
+        Call<DeactivateHubCurrencyCommand.Output> deactivateHubCurrency(
+            @Body DeactivateHubCurrencyCommand.Input input);
 
     }
 

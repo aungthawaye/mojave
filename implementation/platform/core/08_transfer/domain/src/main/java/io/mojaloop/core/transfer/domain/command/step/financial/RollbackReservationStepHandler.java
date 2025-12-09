@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,8 +22,6 @@ package io.mojaloop.core.transfer.domain.command.step.financial;
 
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.contract.command.step.financial.RollbackReservationStep;
@@ -55,7 +53,8 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
     }
 
     @Override
-    public RollbackReservationStep.Output execute(RollbackReservationStep.Input input) throws FspiopException {
+    public RollbackReservationStep.Output execute(RollbackReservationStep.Input input)
+        throws FspiopException {
 
         var startAt = System.nanoTime();
 
@@ -82,7 +81,8 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
                     input.transactionId(), STEP_NAME, CONTEXT,
                     ObjectLogger.log(rollbackReservationOutput).toString(), StepPhase.AFTER));
 
-            var output = new RollbackReservationStep.Output(rollbackReservationOutput.positionUpdateId());
+            var output = new RollbackReservationStep.Output(
+                rollbackReservationOutput.positionUpdateId());
 
             var endAt = System.nanoTime();
             LOGGER.info(
@@ -97,12 +97,11 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
-
-    
 
 }

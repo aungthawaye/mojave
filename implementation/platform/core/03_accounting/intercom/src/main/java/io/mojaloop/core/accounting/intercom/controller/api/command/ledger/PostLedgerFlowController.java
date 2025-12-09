@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,12 +43,12 @@ public class PostLedgerFlowController {
     }
 
     @PostMapping("/ledgers/post-ledger-flow")
-    public PostLedgerFlowCommand.Output execute(@Valid @RequestBody PostLedgerFlowCommand.Input input)
-        throws
-        InsufficientBalanceInAccountException,
-        DuplicatePostingInLedgerException,
-        RestoreFailedInAccountException,
-        OverdraftLimitReachedInAccountException {
+    public PostLedgerFlowCommand.Output execute(
+        @Valid @RequestBody PostLedgerFlowCommand.Input input) throws
+                                                               InsufficientBalanceInAccountException,
+                                                               DuplicatePostingInLedgerException,
+                                                               RestoreFailedInAccountException,
+                                                               OverdraftLimitReachedInAccountException {
 
         return this.postLedgerFlowCommand.execute(input);
     }

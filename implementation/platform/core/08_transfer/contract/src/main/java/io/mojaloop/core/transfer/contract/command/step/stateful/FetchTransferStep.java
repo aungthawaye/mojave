@@ -25,4 +25,5 @@ public interface FetchTransferStep {
                   BigDecimal payeeFspCommission,
                   TransactionId transactionId,
                   Instant transactionAt) { }
+
 }

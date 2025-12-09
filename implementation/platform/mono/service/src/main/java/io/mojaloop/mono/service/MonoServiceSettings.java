@@ -148,8 +148,10 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
     @Override
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
-        return new SpringSecurityConfigurer.Settings(
-            new String[]{"/parties/**", "/quotes/**", "/transfers/**"});
+        return new SpringSecurityConfigurer.Settings(new String[]{
+            "/parties/**",
+            "/quotes/**",
+            "/transfers/**"});
     }
 
     @Bean

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,6 @@ import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.spec.core.TransferState;
-import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,8 @@ public class UnwrapResponseStepHandler implements UnwrapResponseStep {
     @Transactional
     @Read
     @Override
-    public UnwrapResponseStep.Output execute(UnwrapResponseStep.Input input) throws FspiopException {
+    public UnwrapResponseStep.Output execute(UnwrapResponseStep.Input input)
+        throws FspiopException {
 
         var startAt = System.nanoTime();
         LOGGER.info("UnwrapResponseStep : input : ({})", ObjectLogger.log(input));
@@ -77,4 +77,5 @@ public class UnwrapResponseStepHandler implements UnwrapResponseStep {
 
         return output;
     }
+
 }

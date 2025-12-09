@@ -141,7 +141,8 @@ public class ParticipantTimerStore implements ParticipantStore {
                              .stream()
                              .collect(
                                  Collectors.toUnmodifiableMap(
-                                     FspData::fspId, Function.identity(), (a, b) -> a));
+                                     FspData::fspId, Function.identity(),
+                                     (a, b) -> a));
 
         var _withFspCode = fsps
                                .stream()

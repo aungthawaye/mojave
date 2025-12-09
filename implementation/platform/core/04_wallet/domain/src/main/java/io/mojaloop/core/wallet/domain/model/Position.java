@@ -54,8 +54,12 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(
-    name = "wlt_position", uniqueConstraints = @UniqueConstraint(
-    name = "wlt_balance_owner_id_currency_UK", columnNames = {"wallet_owner_id", "currency"}))
+    name = "wlt_position",
+    uniqueConstraints = @UniqueConstraint(
+        name = "wlt_balance_owner_id_currency_UK",
+        columnNames = {
+            "wallet_owner_id",
+            "currency"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Position extends JpaEntity<PositionId> implements DataConversion<PositionData> {
 
@@ -84,13 +88,25 @@ public class Position extends JpaEntity<PositionId> implements DataConversion<Po
         updatable = false)
     protected String name;
 
-    @Column(name = "position", nullable = false, precision = 34, scale = 4)
+    @Column(
+        name = "position",
+        nullable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal position = BigDecimal.ZERO;
 
-    @Column(name = "reserved", nullable = false, precision = 34, scale = 4)
+    @Column(
+        name = "reserved",
+        nullable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal reserved = BigDecimal.ZERO;
 
-    @Column(name = "ndc", nullable = false, precision = 34, scale = 4)
+    @Column(
+        name = "ndc",
+        nullable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal ndc = BigDecimal.ZERO;
 
     @Column(name = "created_at")
@@ -151,7 +167,7 @@ public class Position extends JpaEntity<PositionId> implements DataConversion<Po
 
         var total = this.position.add(this.reserved);
 
-        if(ndc.subtract(total).signum() < 0){
+        if (ndc.subtract(total).signum() < 0) {
 
             throw new FailedToUpdateNdcException(ndc, this.position, this.reserved);
         }

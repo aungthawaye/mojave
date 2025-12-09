@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,36 +55,58 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "pcp_oracle",
-       uniqueConstraints = {@UniqueConstraint(name = "pcp_oracle_type_UK", columnNames = {"type"})})
+@Table(
+    name = "pcp_oracle",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "pcp_oracle_type_UK",
+            columnNames = {"type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Oracle extends JpaEntity<OracleId> implements DataConversion<OracleData> {
 
     @Id
     @JavaType(OracleIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "oracle_id", nullable = false, updatable = false)
+    @Column(
+        name = "oracle_id",
+        nullable = false,
+        updatable = false)
     protected OracleId id;
 
-    @Column(name = "type", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "type",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected PartyIdType type;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "baseUrl", nullable = false, length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
+    @Column(
+        name = "baseUrl",
+        nullable = false,
+        length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
     protected String baseUrl;
 
-    @Column(name = "activation_status", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "activation_status",
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status", length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "termination_status",
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(
+        name = "created_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 

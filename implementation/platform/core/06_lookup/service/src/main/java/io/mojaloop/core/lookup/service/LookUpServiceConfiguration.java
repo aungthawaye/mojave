@@ -21,20 +21,11 @@
 package io.mojaloop.core.lookup.service;
 
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
-import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.lookup.domain.LookUpDomainConfiguration;
-import io.mojaloop.core.participant.contract.query.FspQuery;
-import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import io.mojaloop.core.participant.store.ParticipantStore;
-import io.mojaloop.core.participant.store.strategy.timer.ParticipantTimerStore;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -52,9 +43,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         ParticipantIntercomClientConfiguration.class,
         FspiopServiceConfiguration.class})
 public final class LookUpServiceConfiguration {
-
-
-
 
     public interface RequiredDependencies extends LookUpDomainConfiguration.RequiredBeans,
                                                   RequestIdMdcConfiguration.RequiredBeans,

@@ -53,8 +53,7 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
     }
 
     @Override
-    public Output execute(Input input)
-        throws FailedToFulfilPositionsException {
+    public Output execute(Input input) throws FailedToFulfilPositionsException {
 
         LOGGER.info("FulfilPositionsCommand : input: ({})", ObjectLogger.log(input));
 
@@ -70,8 +69,9 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
 
         try {
             final var result = this.positionUpdater.fulfil(
-                input.reservationId(), reservationCommitId, payeePositionCommitId,
-                payeePosition.positionId(), input.description());
+                input.reservationId(),
+                reservationCommitId, payeePositionCommitId, payeePosition.positionId(),
+                input.description());
 
             final var output = new FulfilPositionsCommand.Output(
                 result.payerCommitmentId(), result.payeeCommitmentId());

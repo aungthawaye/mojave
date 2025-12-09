@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,8 @@ package io.mojaloop.core.quoting.domain.model;
 import io.mojaloop.component.jpa.JpaEntity;
 import io.mojaloop.component.jpa.JpaInstantConverter;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
-import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.component.misc.data.DataConversion;
+import io.mojaloop.component.misc.handy.Snowflake;
 import io.mojaloop.core.common.datatype.converter.identifier.participant.FspIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.quoting.QuoteIdJavaType;
 import io.mojaloop.core.common.datatype.converter.identifier.quoting.UdfQuoteIdJavaType;
@@ -79,121 +79,177 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "qot_quote",
-       uniqueConstraints = {@UniqueConstraint(name = "qot_udf_quote_id_UK",
-                                              columnNames = {"udf_quote_id"})},
-       indexes = {@Index(name = "qot_quote_requested_at_IDX", columnList = "requested_at"),
-                  @Index(name = "qot_quote_responded_at_IDX", columnList = "responded_at"),
-                  @Index(name = "qot_quote_currency_IDX", columnList = "currency"),
-                  @Index(name = "qot_quote_amount_type_IDX", columnList = "amount_type"),
-                  @Index(name = "qot_quote_payer_fsp_id_payee_fsp_id_IDX",
-                         columnList = "payer_fsp_id, payee_fsp_id")})
+@Table(
+    name = "qot_quote",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "qot_udf_quote_id_UK",
+            columnNames = {"udf_quote_id"})},
+    indexes = {
+        @Index(
+            name = "qot_quote_requested_at_IDX",
+            columnList = "requested_at"),
+        @Index(
+            name = "qot_quote_responded_at_IDX",
+            columnList = "responded_at"),
+        @Index(
+            name = "qot_quote_currency_IDX",
+            columnList = "currency"),
+        @Index(
+            name = "qot_quote_amount_type_IDX",
+            columnList = "amount_type"),
+        @Index(
+            name = "qot_quote_payer_fsp_id_payee_fsp_id_IDX",
+            columnList = "payer_fsp_id, payee_fsp_id")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteData> {
 
     @Id
     @JavaType(QuoteIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "quote_id", nullable = false, updatable = false)
+    @Column(
+        name = "quote_id",
+        nullable = false,
+        updatable = false)
     protected QuoteId id;
 
     @Basic
     @JavaType(FspIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "payer_fsp_id", nullable = false, updatable = false)
+    @Column(
+        name = "payer_fsp_id",
+        nullable = false,
+        updatable = false)
     protected FspId payerFspId;
 
     @Basic
     @JavaType(FspIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "payee_fsp_id", nullable = false, updatable = false)
+    @Column(
+        name = "payee_fsp_id",
+        nullable = false,
+        updatable = false)
     protected FspId payeeFspId;
 
     @Basic
     @JavaType(UdfQuoteIdJavaType.class)
     @JdbcTypeCode(Types.VARCHAR)
-    @Column(name = "udf_quote_id",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_UDF_QUOTE_ID_LENGTH)
+    @Column(
+        name = "udf_quote_id",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_UDF_QUOTE_ID_LENGTH)
     protected UdfQuoteId udfQuoteId;
 
-    @Column(name = "currency",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
+    @Column(
+        name = "currency",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_CURRENCY_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "amount", nullable = false, updatable = false, precision = 34, scale = 4)
+    @Column(
+        name = "amount",
+        nullable = false,
+        updatable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal amount;
 
-    @Column(name = "fees", updatable = false, precision = 34, scale = 4)
+    @Column(
+        name = "fees",
+        updatable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal fees;
 
-    @Column(name = "amount_type",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "amount_type",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected AmountType amountType;
 
-    @Column(name = "scenario",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "scenario",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionScenario scenario;
 
-    @Column(name = "sub_scenario",
-            updatable = false,
-            length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "sub_scenario",
+        updatable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String subScenario;
 
-    @Column(name = "initiator",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "initiator",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionInitiator initiator;
 
-    @Column(name = "initiator_type",
-            nullable = false,
-            updatable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "initiator_type",
+        nullable = false,
+        updatable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TransactionInitiatorType initiatorType;
 
-    @Column(name = "request_expiration", updatable = false)
+    @Column(
+        name = "request_expiration",
+        updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant requestExpiration;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
-                                                    column = @Column(name = "payer_party_type",
-                                                                     nullable = false,
-                                                                     length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId",
-                                                    column = @Column(name = "payer_party_id",
-                                                                     nullable = false,
-                                                                     length = 48)),
-                                 @AttributeOverride(name = "subId",
-                                                    column = @Column(name = "payer_sub_id",
-                                                                     length = 48))})
+    @AttributeOverrides(
+        value = {
+            @AttributeOverride(
+                name = "partyIdType",
+                column = @Column(
+                    name = "payer_party_type",
+                    nullable = false,
+                    length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+            @AttributeOverride(
+                name = "partyId",
+                column = @Column(
+                    name = "payer_party_id",
+                    nullable = false,
+                    length = 48)),
+            @AttributeOverride(
+                name = "subId",
+                column = @Column(
+                    name = "payer_sub_id",
+                    length = 48))})
     protected Party payer;
 
     @Embedded
-    @AttributeOverrides(value = {@AttributeOverride(name = "partyIdType",
-                                                    column = @Column(name = "payee_party_type",
-                                                                     nullable = false,
-                                                                     length = StringSizeConstraints.MAX_ENUM_LENGTH)),
-                                 @AttributeOverride(name = "partyId",
-                                                    column = @Column(name = "payee_party_id",
-                                                                     nullable = false,
-                                                                     length = 48)),
-                                 @AttributeOverride(name = "subId",
-                                                    column = @Column(name = "payee_sub_id",
-                                                                     length = 48))})
+    @AttributeOverrides(
+        value = {
+            @AttributeOverride(
+                name = "partyIdType",
+                column = @Column(
+                    name = "payee_party_type",
+                    nullable = false,
+                    length = StringSizeConstraints.MAX_ENUM_LENGTH)),
+            @AttributeOverride(
+                name = "partyId",
+                column = @Column(
+                    name = "payee_party_id",
+                    nullable = false,
+                    length = 48)),
+            @AttributeOverride(
+                name = "subId",
+                column = @Column(
+                    name = "payee_sub_id",
+                    length = 48))})
 
     protected Party payee;
 
@@ -201,19 +257,36 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
     @Convert(converter = JpaInstantConverter.class)
     protected Instant responseExpiration;
 
-    @Column(name = "transfer_amount", nullable = false, precision = 34, scale = 4)
+    @Column(
+        name = "transfer_amount",
+        nullable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal transferAmount;
 
-    @Column(name = "payee_fsp_fee", precision = 34, scale = 4)
+    @Column(
+        name = "payee_fsp_fee",
+        precision = 34,
+        scale = 4)
     protected BigDecimal payeeFspFee;
 
-    @Column(name = "payee_fsp_commission", precision = 34, scale = 4)
+    @Column(
+        name = "payee_fsp_commission",
+        precision = 34,
+        scale = 4)
     protected BigDecimal payeeFspCommission;
 
-    @Column(name = "payee_receive_amount", nullable = false, precision = 34, scale = 4)
+    @Column(
+        name = "payee_receive_amount",
+        nullable = false,
+        precision = 34,
+        scale = 4)
     protected BigDecimal payeeReceiveAmount;
 
-    @Column(name = "requested_at", nullable = false, updatable = false)
+    @Column(
+        name = "requested_at",
+        nullable = false,
+        updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant requestedAt;
 
@@ -221,18 +294,29 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
     @Convert(converter = JpaInstantConverter.class)
     protected Instant respondedAt;
 
-    @Column(name = "stage", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "stage",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected QuotingStage stage;
 
-    @Column(name = "error", length = StringSizeConstraints.MAX_PARAGRAPH_LENGTH)
+    @Column(
+        name = "error",
+        length = StringSizeConstraints.MAX_PARAGRAPH_LENGTH)
     protected String error;
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "quote",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
     protected List<QuoteExtension> extensions = new ArrayList<>();
 
-    @OneToOne(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(
+        mappedBy = "quote",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
     @PrimaryKeyJoinColumn
     protected QuoteIlpPacket ilpPacket;
 
@@ -294,6 +378,35 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
         this.extensions.add(new QuoteExtension(this, direction, key, value));
     }
 
+    @Override
+    public QuoteData convert() {
+
+        final var payerData = new QuoteData.PartyData(
+            this.payer.partyIdType(), this.payer.partyId(), this.payer.subId());
+        final var payeeData = new QuoteData.PartyData(
+            this.payee.partyIdType(), this.payee.partyId(), this.payee.subId());
+
+        final var extData = this.extensions
+                                .stream()
+                                .map(x -> new QuoteData.QuoteExtensionData(
+                                    x.getDirection(),
+                                    x.getKey(), x.getValue()))
+                                .toList();
+
+        final var ilpData = this.ilpPacket == null ? null :
+                                new QuoteData.QuoteIlpPacketData(
+                                    this.ilpPacket.getIlpPacket(),
+                                    this.ilpPacket.getCondition());
+
+        return new QuoteData(
+            this.id, this.payerFspId, this.payeeFspId, this.udfQuoteId, this.currency, this.amount,
+            this.fees, this.amountType, this.scenario, this.subScenario, this.initiator,
+            this.initiatorType, this.requestExpiration, payerData, payeeData,
+            this.responseExpiration, this.transferAmount, this.payeeFspFee, this.payeeFspCommission,
+            this.payeeReceiveAmount, this.requestedAt, this.respondedAt, this.stage, this.error,
+            extData, ilpData);
+    }
+
     public void error(String reason) {
 
         this.error = reason;
@@ -342,48 +455,6 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
             new Money(this.currency, this.transferAmount.stripTrailingZeros().toPlainString()),
             FspiopDates.forRequestBody(Date.from(this.responseExpiration)),
             this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
-    }
-
-    @Override
-    public QuoteData convert() {
-
-        final var payerData = new QuoteData.PartyData(this.payer.partyIdType(), this.payer.partyId(), this.payer.subId());
-        final var payeeData = new QuoteData.PartyData(this.payee.partyIdType(), this.payee.partyId(), this.payee.subId());
-
-        final var extData = this.extensions.stream()
-            .map(x -> new QuoteData.QuoteExtensionData(x.getDirection(), x.getKey(), x.getValue()))
-            .toList();
-
-        final var ilpData = this.ilpPacket == null ? null : new QuoteData.QuoteIlpPacketData(this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
-
-        return new QuoteData(
-            this.id,
-            this.payerFspId,
-            this.payeeFspId,
-            this.udfQuoteId,
-            this.currency,
-            this.amount,
-            this.fees,
-            this.amountType,
-            this.scenario,
-            this.subScenario,
-            this.initiator,
-            this.initiatorType,
-            this.requestExpiration,
-            payerData,
-            payeeData,
-            this.responseExpiration,
-            this.transferAmount,
-            this.payeeFspFee,
-            this.payeeFspCommission,
-            this.payeeReceiveAmount,
-            this.requestedAt,
-            this.respondedAt,
-            this.stage,
-            this.error,
-            extData,
-            ilpData
-        );
     }
 
 }

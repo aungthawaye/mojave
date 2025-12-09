@@ -43,7 +43,9 @@ import org.springframework.context.annotation.Import;
         FlywayAutoConfiguration.class})
 @Import(
     value = {
-        MonoServiceConfiguration.class, MonoServiceDependencies.class, MonoServiceSettings.class})
+        MonoServiceConfiguration.class,
+        MonoServiceDependencies.class,
+        MonoServiceSettings.class})
 public class MonoServiceApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoServiceApplication.class);

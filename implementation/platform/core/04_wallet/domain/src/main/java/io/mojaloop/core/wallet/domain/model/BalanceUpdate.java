@@ -57,15 +57,24 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(
-    name = "wlt_balance_update", uniqueConstraints = {
-    @UniqueConstraint(
-        name = "wlt_balance_update_balance_id_action_transaction_id_UK", columnNames = {
-        "balance_id", "action", "transaction_id"}), @UniqueConstraint(
-    name = "wlt_balance_update_withdraw_id_UK", columnNames = {"withdraw_id"})}, indexes = {
-    @Index(
-        name = "wlt_balance_update_balance_id_action_transaction_at_idx",
-        columnList = "balance_id, action, transaction_at"), @Index(
-    name = "wlt_balance_update_transaction_at_idx", columnList = "transaction_at")})
+    name = "wlt_balance_update",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "wlt_balance_update_balance_id_action_transaction_id_UK",
+            columnNames = {
+                "balance_id",
+                "action",
+                "transaction_id"}),
+        @UniqueConstraint(
+            name = "wlt_balance_update_withdraw_id_UK",
+            columnNames = {"withdraw_id"})},
+    indexes = {
+        @Index(
+            name = "wlt_balance_update_balance_id_action_transaction_at_idx",
+            columnList = "balance_id, action, transaction_at"),
+        @Index(
+            name = "wlt_balance_update_transaction_at_idx",
+            columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BalanceUpdate extends JpaEntity<BalanceUpdateId>
     implements DataConversion<BalanceUpdateData> {
@@ -92,16 +101,33 @@ public class BalanceUpdate extends JpaEntity<BalanceUpdateId>
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "amount", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "amount",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal amount;
 
-    @Column(name = "old_balance", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "old_balance",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal oldBalance;
 
-    @Column(name = "new_balance", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "new_balance",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal newBalance;
 
-    @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "description",
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
     @Column(name = "transaction_at")

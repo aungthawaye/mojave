@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,17 +56,25 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "wlt_position_update",
-       uniqueConstraints = {@UniqueConstraint(name = "wlt_position_update_position_id_action_transaction_id_UK",
-                                              columnNames = {"position_id",
-                                                             "action",
-                                                             "transaction_id"}),
-                            @UniqueConstraint(name = "wlt_balance_update_reversed_id_UK",
-                                              columnNames = {"reservation_id"})},
-       indexes = {@Index(name = "wlt_position_update_position_id_action_transaction_at_idx",
-                         columnList = "position_id, action, transaction_at"),
-                  @Index(name = "wlt_position_update_transaction_at_idx",
-                         columnList = "transaction_at")})
+@Table(
+    name = "wlt_position_update",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "wlt_position_update_position_id_action_transaction_id_UK",
+            columnNames = {
+                "position_id",
+                "action",
+                "transaction_id"}),
+        @UniqueConstraint(
+            name = "wlt_balance_update_reversed_id_UK",
+            columnNames = {"reservation_id"})},
+    indexes = {
+        @Index(
+            name = "wlt_position_update_position_id_action_transaction_at_idx",
+            columnList = "position_id, action, transaction_at"),
+        @Index(
+            name = "wlt_position_update_transaction_at_idx",
+            columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PositionUpdate extends JpaEntity<PositionUpdateId>
     implements DataConversion<PositionUpdateData> {
@@ -93,25 +101,57 @@ public class PositionUpdate extends JpaEntity<PositionUpdateId>
     @Enumerated(EnumType.STRING)
     protected Currency currency;
 
-    @Column(name = "amount", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "amount",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal amount;
 
-    @Column(name = "old_position", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "old_position",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal oldPosition;
 
-    @Column(name = "new_position", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "new_position",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal newPosition;
 
-    @Column(name = "old_reserved", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "old_reserved",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal oldReserved;
 
-    @Column(name = "new_reserved", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "new_reserved",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal newReserved;
 
-    @Column(name = "net_debit_cap", precision = 34, scale = 4, nullable = false, updatable = false)
+    @Column(
+        name = "net_debit_cap",
+        precision = 34,
+        scale = 4,
+        nullable = false,
+        updatable = false)
     protected BigDecimal netDebitCap;
 
-    @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "description",
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
     @Column(name = "transaction_at")

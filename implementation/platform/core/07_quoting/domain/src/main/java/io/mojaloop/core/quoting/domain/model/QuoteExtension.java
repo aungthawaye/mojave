@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,25 +52,36 @@ public class QuoteExtension extends JpaEntity<QuoteExtensionId> {
     @Id
     @JavaType(QuoteExtensionIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "quote_extension_id", nullable = false, updatable = false)
+    @Column(
+        name = "quote_extension_id",
+        nullable = false,
+        updatable = false)
     protected QuoteExtensionId id;
 
-    @Column(name = "direction", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "direction",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Direction direction;
 
-    @Column(name = "x_key", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "x_key",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String key;
 
-    @Column(name = "x_value",
-            nullable = false,
-            length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "x_value",
+        nullable = false,
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String value;
 
     @ManyToOne
-    @JoinColumn(name = "quote_id",
-                nullable = false,
-                foreignKey = @ForeignKey(name = "quote_extension_quote_FK"))
+    @JoinColumn(
+        name = "quote_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "quote_extension_quote_FK"))
     protected Quote quote;
 
     public QuoteExtension(Quote quote, Direction direction, String key, String value) {

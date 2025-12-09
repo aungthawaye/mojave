@@ -61,20 +61,31 @@ import static java.sql.Types.BIGINT;
 @Entity
 @Table(
     name = "acc_chart",
-    uniqueConstraints = {@UniqueConstraint(name = "acc_chart_name_UK", columnNames = {"name"})})
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "acc_chart_name_UK",
+            columnNames = {"name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chart extends JpaEntity<ChartId> implements DataConversion<ChartData> {
 
     @Id
     @JavaType(ChartIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "chart_id", nullable = false, updatable = false)
+    @Column(
+        name = "chart_id",
+        nullable = false,
+        updatable = false)
     protected ChartId id;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(
+        name = "created_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 

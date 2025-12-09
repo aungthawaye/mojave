@@ -30,7 +30,8 @@ public class SampleConnectorApplication {
         SpringLauncher.launch(
             (String[] params) -> ConnectorGatewayApplication.run(
                 args, new Class<?>[]{
-                    SampleConnectorSharedConfiguration.class, SampleConnectorSharedSettings.class},
+                    SampleConnectorSharedConfiguration.class,
+                    SampleConnectorSharedSettings.class},
                 new Class<?>[]{SampleConnectorInExtraConfiguration.class}, new Class<?>[]{
                     SampleConnectorOutExtraConfiguration.class}), args);
     }

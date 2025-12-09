@@ -100,7 +100,8 @@ public class ChangeFlowDefinitionCurrencyCommandHandler
         this.flowDefinitionRepository.save(definition);
         var output = new Output(definition.getId());
 
-        LOGGER.info("ChangeFlowDefinitionCurrencyCommand : output : ({})", ObjectLogger.log(output));
+        LOGGER.info(
+            "ChangeFlowDefinitionCurrencyCommand : output : ({})", ObjectLogger.log(output));
 
         return output;
     }

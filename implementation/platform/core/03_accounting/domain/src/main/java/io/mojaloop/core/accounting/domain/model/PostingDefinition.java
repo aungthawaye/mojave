@@ -64,23 +64,36 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(
-    name = "acc_posting_definition", uniqueConstraints = {
-    @UniqueConstraint(
-        name = "acc_posting_definition_for_posting_UK", columnNames = {
-        "definition_id", "participant", "amount_name", "side", "receive_in", "receive_in_id"}),
-    @UniqueConstraint(
-        name = "acc_posting_definition_definition_id_step_UK",
-        columnNames = {"definition_id", "step"})})
+    name = "acc_posting_definition",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "acc_posting_definition_for_posting_UK",
+            columnNames = {
+                "definition_id",
+                "participant",
+                "amount_name",
+                "side",
+                "receive_in",
+                "receive_in_id"}),
+        @UniqueConstraint(
+            name = "acc_posting_definition_definition_id_step_UK",
+            columnNames = {
+                "definition_id",
+                "step"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
     @Id
     @JavaType(PostingDefinitionIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "posting_definition_id", nullable = false)
+    @Column(
+        name = "posting_definition_id",
+        nullable = false)
     protected PostingDefinitionId id;
 
-    @Column(name = "participant", length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "participant",
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String participant;
 
     @Column(
@@ -89,21 +102,33 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String amountName;
 
-    @Column(name = "side", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "side",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected Side side;
 
-    @Column(name = "receive_in", nullable = false, length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "receive_in",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ReceiveIn receiveIn;
 
-    @Column(name = "receive_in_id", nullable = false)
+    @Column(
+        name = "receive_in_id",
+        nullable = false)
     protected Long receiveInId;
 
-    @Column(name = "description", length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
+    @Column(
+        name = "description",
+        length = StringSizeConstraints.MAX_DESCRIPTION_LENGTH)
     protected String description;
 
-    @Column(name = "step", nullable = false)
+    @Column(
+        name = "step",
+        nullable = false)
     protected Integer step = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)

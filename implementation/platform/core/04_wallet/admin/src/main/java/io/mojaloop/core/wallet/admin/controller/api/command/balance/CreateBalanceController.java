@@ -44,7 +44,8 @@ public class CreateBalanceController {
     @PostMapping("/balances/create")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateBalanceCommand.Output execute(@Valid @RequestBody final CreateBalanceCommand.Input input) {
+    public CreateBalanceCommand.Output execute(
+        @Valid @RequestBody final CreateBalanceCommand.Input input) {
 
         return this.createBalanceCommand.execute(input);
     }

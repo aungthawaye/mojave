@@ -3,7 +3,6 @@ package io.mojaloop.mono.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
-import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +45,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(),
-                    e.getMessage())), HttpStatus.BAD_REQUEST);
+                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(), e.getMessage())),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -55,8 +55,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(),
-                    e.getMessage())), HttpStatus.BAD_REQUEST);
+                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(), e.getMessage())),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -65,8 +65,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.UNKNOWN_URI.errorType().getCode(),
-                    e.getMessage())), HttpStatus.NOT_ACCEPTABLE);
+                    FspiopErrors.UNKNOWN_URI.errorType().getCode(), e.getMessage())),
+            HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -75,8 +75,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(),
-                    e.getMessage())), HttpStatus.BAD_REQUEST);
+                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(), e.getMessage())),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -90,8 +90,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(),
-                    e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
+                    FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(FspiopCommunicationException.class)
@@ -117,8 +117,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(),
-                    e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
+                    FspiopErrors.INTERNAL_SERVER_ERROR.errorType().getCode(), e.getMessage())),
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -127,8 +127,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(),
-                    e.getMessage())), HttpStatus.BAD_REQUEST);
+                    FspiopErrors.MISSING_MANDATORY_ELEMENT.errorType().getCode(), e.getMessage())),
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BindException.class)
@@ -137,8 +137,8 @@ public class FspiopServiceControllerAdvice {
         return new ResponseEntity<>(
             new ErrorInformationObject().errorInformation(
                 new ErrorInformation(
-                    FspiopErrors.UNKNOWN_URI.errorType().getCode(),
-                    e.getMessage())), HttpStatus.NOT_ACCEPTABLE);
+                    FspiopErrors.UNKNOWN_URI.errorType().getCode(), e.getMessage())),
+            HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

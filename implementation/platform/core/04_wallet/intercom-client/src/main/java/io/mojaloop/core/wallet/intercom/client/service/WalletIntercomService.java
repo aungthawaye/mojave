@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,17 +23,17 @@ package io.mojaloop.core.wallet.intercom.client.service;
 import io.mojaloop.core.common.datatype.identifier.wallet.BalanceId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
+import io.mojaloop.core.wallet.contract.command.balance.DepositFundCommand;
 import io.mojaloop.core.wallet.contract.command.balance.ReverseWithdrawCommand;
+import io.mojaloop.core.wallet.contract.command.balance.WithdrawFundCommand;
 import io.mojaloop.core.wallet.contract.command.position.CommitReservationCommand;
 import io.mojaloop.core.wallet.contract.command.position.DecreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
 import io.mojaloop.core.wallet.contract.command.position.IncreasePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
-import io.mojaloop.core.wallet.contract.command.balance.DepositFundCommand;
-import io.mojaloop.core.wallet.contract.command.balance.WithdrawFundCommand;
-import io.mojaloop.core.wallet.contract.data.PositionData;
 import io.mojaloop.core.wallet.contract.data.BalanceData;
+import io.mojaloop.core.wallet.contract.data.PositionData;
 import io.mojaloop.fspiop.spec.core.Currency;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -51,7 +51,8 @@ public interface WalletIntercomService {
         Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);
 
         @POST("/balances/reverse-withdraw")
-        Call<ReverseWithdrawCommand.Output> reverseWithdraw(@Body ReverseWithdrawCommand.Input input);
+        Call<ReverseWithdrawCommand.Output> reverseWithdraw(
+            @Body ReverseWithdrawCommand.Input input);
 
         @POST("/balances/withdraw-fund")
         Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);
@@ -90,7 +91,8 @@ public interface WalletIntercomService {
         Call<ReservePositionCommand.Output> reserve(@Body ReservePositionCommand.Input input);
 
         @POST("/positions/rollback")
-        Call<RollbackReservationCommand.Output> rollback(@Body RollbackReservationCommand.Input input);
+        Call<RollbackReservationCommand.Output> rollback(
+            @Body RollbackReservationCommand.Input input);
 
     }
 

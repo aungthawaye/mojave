@@ -53,8 +53,10 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(
-    name = "txn_transaction_step", indexes = @Index(
-    name = "idx_txn_transaction_phase_name_context", columnList = "phase,name,context"))
+    name = "txn_transaction_step",
+    indexes = @Index(
+        name = "idx_txn_transaction_phase_name_context",
+        columnList = "phase,name,context"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TransactionStep extends JpaEntity<TransactionStepId>
     implements DataConversion<TransactionStepData> {
@@ -62,7 +64,10 @@ public class TransactionStep extends JpaEntity<TransactionStepId>
     @Id
     @JavaType(TransactionStepIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "step_id", nullable = false, updatable = false)
+    @Column(
+        name = "step_id",
+        nullable = false,
+        updatable = false)
     protected TransactionStepId id;
 
     @Column(
@@ -73,21 +78,30 @@ public class TransactionStep extends JpaEntity<TransactionStepId>
     @Enumerated(EnumType.STRING)
     protected StepPhase phase;
 
-    @Column(name = "name", nullable = false)
+    @Column(
+        name = "name",
+        nullable = false)
     protected String name;
 
     @Column(name = "context")
     protected String context;
 
-    @Column(name = "payload", length = StringSizeConstraints.MAX_PARAGRAPH_LENGTH)
+    @Column(
+        name = "payload",
+        length = StringSizeConstraints.MAX_PARAGRAPH_LENGTH)
     protected String payload;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(
+        name = "created_at",
+        nullable = false,
+        updatable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "transaction_id", nullable = false)
+    @JoinColumn(
+        name = "transaction_id",
+        nullable = false)
     protected Transaction transaction;
 
     public TransactionStep(Transaction transaction,

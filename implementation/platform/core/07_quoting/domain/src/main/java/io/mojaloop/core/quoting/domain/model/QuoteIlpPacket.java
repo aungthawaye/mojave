@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,21 +49,29 @@ public class QuoteIlpPacket extends JpaEntity<QuoteId> {
     @Id
     @JavaType(QuoteIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "quote_id", nullable = false, updatable = false)
+    @Column(
+        name = "quote_id",
+        nullable = false,
+        updatable = false)
     protected QuoteId id;
 
-    @Column(name = "ilp_packet", length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH)
+    @Column(
+        name = "ilp_packet",
+        length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH)
     protected String ilpPacket;
 
-    @Column(name = "ilp_condition", length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
+    @Column(
+        name = "ilp_condition",
+        length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String condition;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "quote_id",
-                nullable = false,
-                updatable = false,
-                foreignKey = @ForeignKey(name = "quote_ilp_packet_quote_FK"))
+    @JoinColumn(
+        name = "quote_id",
+        nullable = false,
+        updatable = false,
+        foreignKey = @ForeignKey(name = "quote_ilp_packet_quote_FK"))
     protected Quote quote;
 
     public QuoteIlpPacket(Quote quote) {

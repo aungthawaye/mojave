@@ -20,10 +20,8 @@
 
 package io.mojaloop.core.participant.admin.controller.api;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 //@RestController
 public class WelcomeController {

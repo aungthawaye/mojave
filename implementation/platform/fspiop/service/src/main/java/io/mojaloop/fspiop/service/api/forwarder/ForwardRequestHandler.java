@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -72,32 +72,32 @@ public class ForwardRequestHandler implements ForwardRequest {
                         this.forwardingService.post(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(), MediaType.get(request.contentType()))),
-                        this.fspiopErrorDecoder);
+                                request.payload(),
+                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
                     break;
                 case "PUT":
                     RetrofitService.invoke(
                         this.forwardingService.put(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(), MediaType.get(request.contentType()))),
-                        this.fspiopErrorDecoder);
+                                request.payload(),
+                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
                     break;
                 case "PATCH":
                     RetrofitService.invoke(
                         this.forwardingService.patch(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(), MediaType.get(request.contentType()))),
-                        this.fspiopErrorDecoder);
+                                request.payload(),
+                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
                     break;
                 case "DELETE":
                     RetrofitService.invoke(
                         this.forwardingService.delete(
                             url, request.headers(), request.params(),
                             RequestBody.create(
-                                request.payload(), MediaType.get(request.contentType()))),
-                        this.fspiopErrorDecoder);
+                                request.payload(),
+                                MediaType.get(request.contentType()))), this.fspiopErrorDecoder);
                     break;
                 default:
                     throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR);

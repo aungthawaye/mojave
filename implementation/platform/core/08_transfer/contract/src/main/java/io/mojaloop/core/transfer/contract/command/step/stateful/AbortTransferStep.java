@@ -19,4 +19,5 @@ public interface AbortTransferStep {
                  PositionUpdateId rollbackId,
                  Direction direction,
                  ExtensionList extensionList) { }
+
 }

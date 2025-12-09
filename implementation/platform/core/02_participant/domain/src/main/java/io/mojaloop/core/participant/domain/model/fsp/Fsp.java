@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,63 +83,82 @@ import static java.sql.Types.BIGINT;
  */
 @Getter
 @Entity
-@Table(name = "pcp_fsp",
-       uniqueConstraints = {@UniqueConstraint(name = "pcp_fsp_fsp_code_UK",
-                                              columnNames = {"fsp_code"})})
+@Table(
+    name = "pcp_fsp",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "pcp_fsp_fsp_code_UK",
+            columnNames = {"fsp_code"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     @Id
     @JavaType(FspIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "fsp_id", nullable = false, updatable = false)
+    @Column(
+        name = "fsp_id",
+        nullable = false,
+        updatable = false)
     protected FspId id;
 
     @Basic
-    @Column(name = "fsp_code", nullable = false, length = StringSizeConstraints.MAX_CODE_LENGTH)
+    @Column(
+        name = "fsp_code",
+        nullable = false,
+        length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = FspCodeConverter.class)
     protected FspCode fspCode;
 
-    @Column(name = "name", nullable = false, length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    @Column(
+        name = "name",
+        nullable = false,
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @Column(name = "activation_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "activation_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus = ActivationStatus.ACTIVE;
 
-    @Column(name = "termination_status",
-            nullable = false,
-            length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Column(
+        name = "termination_status",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(
+        name = "created_at",
+        nullable = false)
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hub_id",
-                nullable = false,
-                updatable = false,
-                foreignKey = @ForeignKey(name = "fsp_hub_FK"))
+    @JoinColumn(
+        name = "hub_id",
+        nullable = false,
+        updatable = false,
+        foreignKey = @ForeignKey(name = "fsp_hub_FK"))
     protected Hub hub;
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "fsp",
-               cascade = {CascadeType.ALL},
-               orphanRemoval = true,
-               targetEntity = FspCurrency.class,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "fsp",
+        cascade = {CascadeType.ALL},
+        orphanRemoval = true,
+        targetEntity = FspCurrency.class,
+        fetch = FetchType.EAGER)
     protected Set<FspCurrency> currencies = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "fsp",
-               cascade = {CascadeType.ALL},
-               orphanRemoval = true,
-               targetEntity = FspEndpoint.class,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "fsp",
+        cascade = {CascadeType.ALL},
+        orphanRemoval = true,
+        targetEntity = FspEndpoint.class,
+        fetch = FetchType.EAGER)
     protected Set<FspEndpoint> endpoints = new HashSet<>();
 
     public Fsp(Hub hub, FspCode fspCode, String name) {
