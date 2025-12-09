@@ -22,16 +22,10 @@ package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.component.misc.logger.ObjectLogger;
-import io.mojaloop.core.common.datatype.enums.transfer.TransferStatus;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
-import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
-import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.transfer.contract.command.step.stateful.FetchTransferStep;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,7 +33,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
 @Service
 public class FetchTransferStepHandler implements FetchTransferStep {
@@ -90,7 +83,7 @@ public class FetchTransferStepHandler implements FetchTransferStep {
 
             var output = new FetchTransferStep.Output(
                 transfer.getId(), transfer.getStatus(), transfer.getReservationId(),
-                transfer.getCurrency(), transfer.getTransferAmount(), BigDecimal.ZERO,
+                transfer.getTransferCurrency(), transfer.getTransferAmount(), BigDecimal.ZERO,
                 BigDecimal.ZERO, transfer.getTransactionId(), transfer.getTransactionAt());
 
             var endAt = System.nanoTime();

@@ -25,7 +25,7 @@ import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.accounting.producer.AccountingProducerConfiguration;
 import io.mojaloop.core.participant.store.ParticipantStoreConfiguration;
 import io.mojaloop.core.transaction.producer.TransactionProducerConfiguration;
-import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
+import io.mojaloop.core.transfer.contract.component.interledger.AgreementUnwrapper;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -48,7 +48,7 @@ public class TransferDomainConfiguration {
                                            RoutingJpaConfiguration.RequiredBeans,
                                            ParticipantStoreConfiguration.RequiredBeans {
 
-        PartyUnwrapper partyUnwrapper();
+        AgreementUnwrapper partyUnwrapper();
 
     }
 

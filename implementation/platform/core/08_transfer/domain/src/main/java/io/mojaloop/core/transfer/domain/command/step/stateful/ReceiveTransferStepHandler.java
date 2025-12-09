@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,9 +26,6 @@ import io.mojaloop.core.common.datatype.enums.Direction;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
-import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
-import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
@@ -36,19 +33,16 @@ import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.transfer.contract.command.step.stateful.ReceiveTransferStep;
 import io.mojaloop.core.transfer.domain.model.Party;
 import io.mojaloop.core.transfer.domain.model.Transfer;
+import io.mojaloop.core.transfer.domain.repository.TransferIlpPacketRepository;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.Currency;
-import io.mojaloop.fspiop.spec.core.ExtensionList;
-import io.mojaloop.fspiop.spec.core.PartyIdInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Service
@@ -64,26 +58,32 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
 
     private final TransferRepository transferRepository;
 
+    private final TransferIlpPacketRepository transferIlpPacketRepository;
+
     public ReceiveTransferStepHandler(OpenTransactionCommand openTransactionCommand,
                                       TransferDomainConfiguration.TransferSettings transferSettings,
                                       AddStepPublisher addStepPublisher,
-                                      TransferRepository transferRepository) {
+                                      TransferRepository transferRepository,
+                                      TransferIlpPacketRepository transferIlpPacketRepository) {
 
         assert openTransactionCommand != null;
         assert transferSettings != null;
         assert addStepPublisher != null;
         assert transferRepository != null;
+        assert transferIlpPacketRepository != null;
 
         this.openTransactionCommand = openTransactionCommand;
         this.transferSettings = transferSettings;
         this.addStepPublisher = addStepPublisher;
         this.transferRepository = transferRepository;
+        this.transferIlpPacketRepository = transferIlpPacketRepository;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Write
     @Override
-    public ReceiveTransferStep.Output execute(ReceiveTransferStep.Input input) throws FspiopException {
+    public ReceiveTransferStep.Output execute(ReceiveTransferStep.Input input)
+        throws FspiopException {
 
         var startAt = System.nanoTime();
 
@@ -97,17 +97,27 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
 
         try {
 
+            var optExistingIlp = this.transferIlpPacketRepository.findOne(
+                TransferIlpPacketRepository.Filters.withIlpCondition(input.ilpCondition()));
+
+            if (optExistingIlp.isPresent()) {
+
+                LOGGER.warn("Duplicate ILP condition : ({})", input.ilpCondition());
+
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR, "Duplicate ILP condition.");
+            }
+
             var payerFsp = input.payerFsp();
             var payeeFsp = input.payeeFsp();
 
-            var payerPartyIdInfo = input.payerPartyIdInfo();
-            var payeePartyIdInfo = input.payeePartyIdInfo();
+            var payerPartyIdInfo = input.agreement().payer();
+            var payeePartyIdInfo = input.agreement().payee();
 
             var openTransactionOutput = this.openTransactionCommand.execute(
                 new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
 
             transactionId = openTransactionOutput.transactionId();
-            var transactionIdString = transactionId.getId().toString();
 
             transactionAt = openTransactionOutput.transactionAt();
             var reservationTimeoutAt = Instant
@@ -125,8 +135,10 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
                 payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(),
                 payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspCode(), new Party(
                 payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(),
-                payeePartyIdInfo.getPartySubIdOrType()), input.currency(), input.transferAmount(),
-                input.ilpPacket(), input.ilpCondition(), input.requestExpiration(), reservationTimeoutAt);
+                payeePartyIdInfo.getPartySubIdOrType()), input.agreement().transferAmount(),
+                input.agreement().payeeFspFee(), input.agreement().payeeFspCommission(),
+                input.agreement().payeeReceiveAmount(), input.ilpPacket(), input.ilpCondition(),
+                input.requestExpiration(), reservationTimeoutAt);
 
             var extensionList = input.extensionList();
 
@@ -140,7 +152,8 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
 
             this.transferRepository.save(transfer);
 
-            var output = new ReceiveTransferStep.Output(transactionId, transactionAt, transfer.getId());
+            var output = new ReceiveTransferStep.Output(
+                transactionId, transactionAt, transfer.getId());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
@@ -169,7 +182,5 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
         }
 
     }
-
-    
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,17 +20,18 @@
 
 package io.mojaloop.fspiop.common.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.mojaloop.fspiop.spec.core.AmountType;
 import io.mojaloop.fspiop.spec.core.Money;
 import io.mojaloop.fspiop.spec.core.PartyIdInfo;
 
-public record Agreement(String quoteId,
-                        PartyIdInfo payer,
-                        PartyIdInfo payee,
-                        AmountType amountType,
-                        Money originalAmount,
-                        Money payeeFspFee,
-                        Money payeeFspCommission,
-                        Money payeeReceiveAmount,
-                        Money transferAmount,
-                        String expiration) { }
+public record Agreement(@JsonProperty(required = true) String quoteId,
+                        @JsonProperty(required = true) PartyIdInfo payer,
+                        @JsonProperty(required = true) PartyIdInfo payee,
+                        @JsonProperty(required = true) AmountType amountType,
+                        @JsonProperty(required = true) Money originalAmount,
+                        @JsonProperty(required = true) Money payeeFspFee,
+                        @JsonProperty(required = true) Money payeeFspCommission,
+                        @JsonProperty(required = true) Money payeeReceiveAmount,
+                        @JsonProperty(required = true) Money transferAmount,
+                        @JsonProperty(required = true) String expiration) { }

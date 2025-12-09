@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,6 +32,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,9 @@ import static java.sql.Types.BIGINT;
 
 @Getter
 @Entity
-@Table(name = "tfr_transfer_ilp_packet")
+@Table(name = "tfr_transfer_ilp_packet", uniqueConstraints = {
+    @UniqueConstraint(name = "tfr_transfer_ilp_packet_ilp_condition_UK",
+                      columnNames = {"ilp_condition"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TransferIlpPacket extends JpaEntity<TransferId> {
 

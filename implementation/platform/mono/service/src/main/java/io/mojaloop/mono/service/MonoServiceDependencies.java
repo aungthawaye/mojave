@@ -6,8 +6,8 @@ import io.mojaloop.core.participant.contract.query.FspQuery;
 import io.mojaloop.core.participant.contract.query.OracleQuery;
 import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.participant.store.strategy.timer.ParticipantTimerStore;
-import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
-import io.mojaloop.core.transfer.domain.component.interledger.unwrapper.MojavePartyUnwrapper;
+import io.mojaloop.core.transfer.contract.component.interledger.AgreementUnwrapper;
+import io.mojaloop.core.transfer.domain.component.interledger.unwrapper.MojaveAgreementUnwrapper;
 import io.mojaloop.fspiop.service.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
 
@@ -49,9 +49,9 @@ public class MonoServiceDependencies implements MonoServiceConfiguration.Require
 
     @Bean
     @Override
-    public PartyUnwrapper partyUnwrapper() {
+    public AgreementUnwrapper partyUnwrapper() {
 
-        return new MojavePartyUnwrapper(this.objectMapper);
+        return new MojaveAgreementUnwrapper(this.objectMapper);
     }
 
 }

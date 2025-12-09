@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,6 @@ import io.mojaloop.core.transfer.contract.command.step.financial.RollbackReserva
 import io.mojaloop.core.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
 import io.mojaloop.core.transfer.contract.command.step.fspiop.UnwrapRequestStep;
 import io.mojaloop.core.transfer.contract.command.step.stateful.AbortTransferStep;
-import io.mojaloop.core.transfer.domain.command.step.stateful.DisputeTransferStepHandler;
 import io.mojaloop.core.transfer.contract.command.step.stateful.ReceiveTransferStep;
 import io.mojaloop.core.transfer.contract.command.step.stateful.ReserveTransferStep;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
@@ -57,6 +56,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Service
@@ -161,13 +161,15 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             var unwrapRequestOutput = this.unwrapRequestStep.execute(
                 new UnwrapRequestStep.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, request));
 
+            var ilpCondition = unwrapRequestOutput.ilpCondition();
+            var ilpPacket = unwrapRequestOutput.ilpPacket();
+            var agreement = unwrapRequestOutput.agreement();
+
             // 2. Open a transaction. And receive the Transfer.
-            var receiveTransferOutput = this.receiveTransferStep.execute(new ReceiveTransferStep.Input(
-                CONTEXT, udfTransferId, payerFsp, payeeFsp, unwrapRequestOutput.payerPartyIdInfo(),
-                unwrapRequestOutput.payeePartyIdInfo(), unwrapRequestOutput.currency(),
-                unwrapRequestOutput.transferAmount(), unwrapRequestOutput.ilpPacket(),
-                unwrapRequestOutput.ilpCondition(), unwrapRequestOutput.requestExpiration(),
-                request.getExtensionList()));
+            var receiveTransferOutput = this.receiveTransferStep.execute(
+                new ReceiveTransferStep.Input(
+                    CONTEXT, udfTransferId, payerFsp, payeeFsp, ilpCondition, ilpPacket, agreement,
+                    unwrapRequestOutput.requestExpiration(), request.getExtensionList()));
 
             transactionId = receiveTransferOutput.transactionId();
             transactionAt = receiveTransferOutput.transactionAt();
@@ -181,7 +183,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
                 reservePayerPositionOutput = this.reservePayerPositionStep.execute(
                     new ReservePayerPositionStep.Input(
                         CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp,
-                        unwrapRequestOutput.currency(), unwrapRequestOutput.transferAmount()));
+                        agreement.transferAmount().getCurrency(),
+                        new BigDecimal(agreement.transferAmount().getAmount())));
 
                 positionReservationId = reservePayerPositionOutput.positionReservationId();
 
@@ -218,7 +221,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId, positionReservationId));
+                        CONTEXT, transactionId, transferId,
+                        positionReservationId));
 
             } catch (Exception e) {
 
