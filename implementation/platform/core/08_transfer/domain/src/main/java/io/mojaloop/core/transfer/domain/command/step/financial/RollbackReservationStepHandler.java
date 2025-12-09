@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,75 +24,69 @@ import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
-import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
-import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
-import io.mojaloop.core.wallet.contract.command.position.FulfilPositionsCommand;
-import io.mojaloop.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import io.mojaloop.core.transfer.contract.command.step.financial.RollbackReservationStep;
+import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
-public class FulfilPositions {
+public class RollbackReservationStepHandler implements RollbackReservationStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FulfilPositions.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        RollbackReservationStepHandler.class);
 
-    private final FulfilPositionsCommand fulfilPositionsCommand;
+    private final RollbackReservationCommand rollbackReservationCommand;
 
     private final AddStepPublisher addStepPublisher;
 
-    public FulfilPositions(FulfilPositionsCommand fulfilPositionsCommand,
-                           AddStepPublisher addStepPublisher) {
+    public RollbackReservationStepHandler(RollbackReservationCommand rollbackReservationCommand,
+                                          AddStepPublisher addStepPublisher) {
 
-        assert fulfilPositionsCommand != null;
+        assert rollbackReservationCommand != null;
         assert addStepPublisher != null;
 
-        this.fulfilPositionsCommand = fulfilPositionsCommand;
+        this.rollbackReservationCommand = rollbackReservationCommand;
         this.addStepPublisher = addStepPublisher;
     }
 
-    public FulfilPositions.Output execute(FulfilPositions.Input input)
-        throws FailedToCommitReservationException, FspiopException {
+    @Override
+    public RollbackReservationStep.Output execute(RollbackReservationStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("FulfilPositions : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("RollbackReservationStep : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context();
-        final var STEP_NAME = "FulfilPositions";
+        final var STEP_NAME = "RollbackReservationStep";
 
         try {
 
-            var fulfilPositionsInput = new FulfilPositionsCommand.Input(
-                input.positionReservationId(), new WalletOwnerId(input.payeeFsp().fspId().getId()),
-                input.currency(), input.description());
+            var rollbackReservationInput = new RollbackReservationCommand.Input(
+                input.positionReservationId(), "Roll back due to : " + input.error());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
                     input.transactionId(), STEP_NAME, CONTEXT,
-                    ObjectLogger.log(fulfilPositionsInput).toString(), StepPhase.BEFORE));
+                    ObjectLogger.log(rollbackReservationInput).toString(), StepPhase.BEFORE));
 
-            var fulfilPositionsOutput = this.fulfilPositionsCommand.execute(fulfilPositionsInput);
+            var rollbackReservationOutput = this.rollbackReservationCommand.execute(
+                rollbackReservationInput);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
                     input.transactionId(), STEP_NAME, CONTEXT,
-                    ObjectLogger.log(fulfilPositionsOutput).toString(), StepPhase.AFTER));
+                    ObjectLogger.log(rollbackReservationOutput).toString(), StepPhase.AFTER));
 
-            var output = new FulfilPositions.Output(
-                fulfilPositionsOutput.payerCommitId(),
-                fulfilPositionsOutput.payeeCommitId());
+            var output = new RollbackReservationStep.Output(rollbackReservationOutput.positionUpdateId());
 
             var endAt = System.nanoTime();
             LOGGER.info(
-                "FulfilPositions : output : ({}) , took : {} ms", ObjectLogger.log(output),
+                "RollbackReservationStep : output : ({}) , took : {} ms", output,
                 (endAt - startAt) / 1_000_000);
 
             return output;
@@ -103,22 +97,12 @@ public class FulfilPositions {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context,
-                        TransactionId transactionId,
-                        Instant transactionAt,
-                        FspData payerFsp,
-                        FspData payeeFsp,
-                        PositionUpdateId positionReservationId,
-                        Currency currency,
-                        String description) { }
-
-    public record Output(PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) { }
+    
 
 }

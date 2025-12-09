@@ -22,6 +22,7 @@ package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
 import io.mojaloop.component.jpa.routing.annotation.Read;
 import io.mojaloop.component.misc.logger.ObjectLogger;
+import io.mojaloop.core.transfer.contract.command.step.fspiop.UnwrapResponseStep;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopDates;
@@ -35,20 +36,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 
 @Service
-public class UnwrapResponse {
+public class UnwrapResponseStepHandler implements UnwrapResponseStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnwrapResponse.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnwrapResponseStepHandler.class);
 
-    public UnwrapResponse() {
-
-    }
+    public UnwrapResponseStepHandler() { }
 
     @Transactional
     @Read
-    public Output execute(Input input) throws FspiopException {
+    @Override
+    public UnwrapResponseStep.Output execute(UnwrapResponseStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
-        LOGGER.info("UnwrapResponse : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("UnwrapResponseStep : input : ({})", ObjectLogger.log(input));
 
         var response = input.response();
         var state = response.getTransferState();
@@ -68,18 +68,13 @@ public class UnwrapResponse {
             completedAt = FspiopDates.fromRequestBody(completedTimestamp);
         } catch (Exception ignored) { }
 
-        var output = new Output(state, response.getFulfilment(), completedAt);
+        var output = new UnwrapResponseStep.Output(state, response.getFulfilment(), completedAt);
 
         var endAt = System.nanoTime();
         LOGGER.info(
-            "UnwrapResponse : output : ({}), took {} ms", ObjectLogger.log(output),
+            "UnwrapResponseStep : output : ({}), took {} ms", ObjectLogger.log(output),
             (endAt - startAt) / 1_000_000);
 
         return output;
     }
-
-    public record Input(TransfersIDPutResponse response) { }
-
-    public record Output(TransferState state, String ilpFulfilment, Instant completedAt) { }
-
 }

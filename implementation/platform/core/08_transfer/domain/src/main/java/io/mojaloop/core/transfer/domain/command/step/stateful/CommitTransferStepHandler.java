@@ -37,17 +37,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class ReserveTransfer {
+import java.time.Instant;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReserveTransfer.class);
+@Service
+public class CommitTransferStepHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransferStepHandler.class);
 
     private final TransferRepository transferRepository;
 
     private final AddStepPublisher addStepPublisher;
 
-    public ReserveTransfer(TransferRepository transferRepository,
-                           AddStepPublisher addStepPublisher) {
+    public CommitTransferStepHandler(TransferRepository transferRepository,
+                                     AddStepPublisher addStepPublisher) {
 
         assert transferRepository != null;
         assert addStepPublisher != null;
@@ -62,29 +64,30 @@ public class ReserveTransfer {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("ReserveTransfer : input : ({})", ObjectLogger.log(input));
-
         var CONTEXT = input.context;
-        var STEP_NAME = "ReserveTransfer";
+        var STEP_NAME = "CommitTransferStep";
+
+        LOGGER.info("CommitTransferStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
+            var transfer = this.transferRepository.getReferenceById(input.transferId);
+
             this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId(), STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
-            var transfer = this.transferRepository.getReferenceById(input.transferId());
-
-            transfer.reserved(input.positionReservationId());
+            transfer.committed(
+                input.ilpFulfilment, input.payerCommitId, input.payeeCommitId, input.completedAt);
 
             this.transferRepository.save(transfer);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             var endAt = System.nanoTime();
-            LOGGER.info("ReservedTransfer : done, took {} ms", (endAt - startAt) / 1_000_000);
+            LOGGER.info("CommitTransferStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
@@ -92,8 +95,7 @@ public class ReserveTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -102,6 +104,9 @@ public class ReserveTransfer {
     public record Input(String context,
                         TransactionId transactionId,
                         TransferId transferId,
-                        PositionUpdateId positionReservationId) { }
+                        String ilpFulfilment,
+                        PositionUpdateId payerCommitId,
+                        PositionUpdateId payeeCommitId,
+                        Instant completedAt) { }
 
 }

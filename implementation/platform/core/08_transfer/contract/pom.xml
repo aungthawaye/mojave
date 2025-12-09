@@ -23,5 +23,13 @@
             <groupId>io.mojaloop.platform.fspiop</groupId>
             <artifactId>mod-fspiop-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <artifactId>mod-participant-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <artifactId>mod-wallet-contract</artifactId>
+        </dependency>
     </dependencies>
 </project>

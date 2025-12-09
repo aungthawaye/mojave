@@ -30,33 +30,28 @@ import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Payee;
-import io.mojaloop.fspiop.component.handy.FspiopDates;
+import io.mojaloop.fspiop.common.type.Payer;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.transfers.RespondTransfers;
-import io.mojaloop.fspiop.spec.core.Extension;
 import io.mojaloop.fspiop.spec.core.ExtensionList;
 import io.mojaloop.fspiop.spec.core.TransferState;
-import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
+import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-
 @Service
-public class PatchTransferToPayee {
+public class CommitTransferToPayerStepHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PatchTransferToPayee.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        CommitTransferToPayerStepHandler.class);
 
     private final RespondTransfers respondTransfers;
 
     private final AddStepPublisher addStepPublisher;
 
-    public PatchTransferToPayee(RespondTransfers respondTransfers,
-                                AddStepPublisher addStepPublisher) {
+    public CommitTransferToPayerStepHandler(RespondTransfers respondTransfers,
+                                            AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -65,44 +60,49 @@ public class PatchTransferToPayee {
         this.addStepPublisher = addStepPublisher;
     }
 
-    public Output execute(Input input) throws FspiopException {
+    public void execute(Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("PatchTransferToPayee : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("CommitTransferToPayerStep : input : ({})", ObjectLogger.log(input));
 
-        var CONTEXT = input.context;
-        var STEP_NAME = "PatchTransferToPayee";
+        final var CONTEXT = input.context;
+        final var STEP_NAME = "CommitTransferToPayerStep";
+
+        var payerFsp = input.payerFsp;
 
         try {
 
-            var patchResponse = new TransfersIDPatchResponse(
-                FspiopDates.forRequestBody(new Date()), input.state);
+            var response = new TransfersIDPutResponse()
+                               .transferState(TransferState.COMMITTED)
+                               .fulfilment(input.ilpFulfilment)
+                               .completedTimestamp(input.completedTimestamp)
+                               .extensionList(input.extensionList);
 
-            var extensions = new ArrayList<Extension>();
-            input.extensions.forEach((k, v) -> extensions.add(new Extension(k, v)));
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(response).toString(),
+                StepPhase.BEFORE));
 
-            var extensionList = new ExtensionList(extensions);
-            patchResponse.setExtensionList(extensionList);
+            var sendBackTo = new Payer(input.payerFsp.fspCode().value());
+            var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
+            var url = FspiopUrls.Transfers.putTransfers(
+                payerBaseUrl, input.udfTransferId().getId());
 
-            var payeeBaseUrl = input.payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-            var url = FspiopUrls.Transfers.patchTransfers(
-                payeeBaseUrl, input.udfTransferId.getId());
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT,
-                    ObjectLogger.log(patchResponse).toString(), StepPhase.BEFORE));
-
-            this.respondTransfers.patchTransfers(
-                new Payee(input.payeeFsp.fspCode().value()), url, patchResponse);
+            this.respondTransfers.putTransfers(sendBackTo, url, response);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    StepPhase.AFTER));
 
-            var endAt = System.nanoTime();
-            LOGGER.info("PatchTransferToPayee : done , took {} ms", (endAt - startAt) / 1_000_000);
+            LOGGER.info(
+                "CommitTransferToPayerStep : done , took {} ms", (System.nanoTime() - startAt) / 1_000_000);
+
+        } catch (FspiopException e) {
+
+            LOGGER.error("Error:", e);
+
+            throw e;
 
         } catch (Exception e) {
 
@@ -110,22 +110,22 @@ public class PatchTransferToPayee {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
+                    input.transactionId, STEP_NAME, CONTEXT, "-",
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 
-        return new Output();
     }
 
     public record Input(String context,
                         TransactionId transactionId,
                         UdfTransferId udfTransferId,
-                        FspData payeeFsp,
-                        TransferState state,
-                        Map<String, String> extensions) { }
+                        FspData payerFsp,
+                        String ilpFulfilment,
+                        String completedTimestamp,
+                        ExtensionList extensionList) {
 
-    public record Output() { }
+    }
 
 }

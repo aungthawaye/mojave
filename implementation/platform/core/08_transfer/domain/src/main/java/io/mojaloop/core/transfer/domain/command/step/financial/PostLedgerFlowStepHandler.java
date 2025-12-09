@@ -27,32 +27,29 @@ import io.mojaloop.core.common.datatype.enums.trasaction.FundTransferDimension;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.enums.trasaction.TransactionType;
 import io.mojaloop.core.common.datatype.identifier.accounting.AccountOwnerId;
-import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.participant.contract.data.FspData;
+import io.mojaloop.core.transfer.contract.command.step.financial.PostLedgerFlowStep;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.HashMap;
 
 @Service
-public class PostLedgerFlow {
+public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlow.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlowStepHandler.class);
 
     private final AddStepPublisher addStepPublisher;
 
     private final PostLedgerFlowPublisher postLedgerFlowPublisher;
 
-    public PostLedgerFlow(AddStepPublisher addStepPublisher,
-                          PostLedgerFlowPublisher postLedgerFlowPublisher) {
+    public PostLedgerFlowStepHandler(AddStepPublisher addStepPublisher,
+                                     PostLedgerFlowPublisher postLedgerFlowPublisher) {
 
         assert addStepPublisher != null;
         assert postLedgerFlowPublisher != null;
@@ -61,14 +58,15 @@ public class PostLedgerFlow {
         this.postLedgerFlowPublisher = postLedgerFlowPublisher;
     }
 
-    public void execute(Input input) throws FspiopException {
+    @Override
+    public void execute(PostLedgerFlowStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        var CONTEXT = input.context;
-        var STEP_NAME = "PostLedgerFlow";
+        var CONTEXT = input.context();
+        var STEP_NAME = "PostLedgerFlowStep";
 
-        LOGGER.info("PostLedgerFlow : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("PostLedgerFlowStep : input : ({})", ObjectLogger.log(input));
         try {
             var participants = new HashMap<String, AccountOwnerId>();
 
@@ -89,21 +87,21 @@ public class PostLedgerFlow {
                 input.payeeFspCommission());
 
             this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                input.transactionId(), STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
             this.postLedgerFlowPublisher.publish(
                 new PostLedgerFlowCommand.Input(
-                    TransactionType.FUND_TRANSFER, input.currency(), input.transactionId,
-                    input.transactionAt, participants, amounts));
+                    TransactionType.FUND_TRANSFER, input.currency(), input.transactionId(),
+                    input.transactionAt(), participants, amounts));
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    input.transactionId(), STEP_NAME, CONTEXT, "-",
                     StepPhase.AFTER));
 
             var endAt = System.nanoTime();
-            LOGGER.info("PostLedgerFlow : done , took {} ms", (endAt - startAt) / 1_000_000);
+            LOGGER.info("PostLedgerFlowStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
@@ -111,20 +109,10 @@ public class PostLedgerFlow {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
-
-    public record Input(String context,
-                        TransactionId transactionId,
-                        Instant transactionAt,
-                        Currency currency,
-                        FspData payerFsp,
-                        FspData payeeFsp,
-                        BigDecimal transferAmount,
-                        BigDecimal payeeFspFee,
-                        BigDecimal payeeFspCommission) { }
 
 }

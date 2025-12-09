@@ -33,6 +33,7 @@ import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.OpenTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
+import io.mojaloop.core.transfer.contract.command.step.stateful.ReceiveTransferStep;
 import io.mojaloop.core.transfer.domain.model.Party;
 import io.mojaloop.core.transfer.domain.model.Transfer;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
@@ -51,9 +52,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Service
-public class ReceiveTransfer {
+public class ReceiveTransferStepHandler implements ReceiveTransferStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReceiveTransfer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReceiveTransferStepHandler.class);
 
     private final OpenTransactionCommand openTransactionCommand;
 
@@ -63,10 +64,10 @@ public class ReceiveTransfer {
 
     private final TransferRepository transferRepository;
 
-    public ReceiveTransfer(OpenTransactionCommand openTransactionCommand,
-                           TransferDomainConfiguration.TransferSettings transferSettings,
-                           AddStepPublisher addStepPublisher,
-                           TransferRepository transferRepository) {
+    public ReceiveTransferStepHandler(OpenTransactionCommand openTransactionCommand,
+                                      TransferDomainConfiguration.TransferSettings transferSettings,
+                                      AddStepPublisher addStepPublisher,
+                                      TransferRepository transferRepository) {
 
         assert openTransactionCommand != null;
         assert transferSettings != null;
@@ -81,14 +82,15 @@ public class ReceiveTransfer {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Write
-    public Output execute(Input input) throws FspiopException {
+    @Override
+    public ReceiveTransferStep.Output execute(ReceiveTransferStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("ReceiveTransfer : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("ReceiveTransferStep : input : ({})", ObjectLogger.log(input));
 
-        final var CONTEXT = input.context;
-        final var STEP_NAME = "ReceiveTransfer";
+        final var CONTEXT = input.context();
+        final var STEP_NAME = "ReceiveTransferStep";
 
         TransactionId transactionId = null;
         Instant transactionAt = null;
@@ -119,12 +121,12 @@ public class ReceiveTransfer {
                     StepPhase.BEFORE));
 
             var transfer = new Transfer(
-                transactionId, transactionAt, input.udfTransferId, payerFsp.fspCode(), new Party(
+                transactionId, transactionAt, input.udfTransferId(), payerFsp.fspCode(), new Party(
                 payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(),
                 payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspCode(), new Party(
                 payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(),
-                payeePartyIdInfo.getPartySubIdOrType()), input.currency, input.transferAmount,
-                input.ilpPacket, input.ilpCondition, input.requestExpiration, reservationTimeoutAt);
+                payeePartyIdInfo.getPartySubIdOrType()), input.currency(), input.transferAmount(),
+                input.ilpPacket(), input.ilpCondition(), input.requestExpiration(), reservationTimeoutAt);
 
             var extensionList = input.extensionList();
 
@@ -138,7 +140,7 @@ public class ReceiveTransfer {
 
             this.transferRepository.save(transfer);
 
-            var output = new Output(transactionId, transactionAt, transfer.getId());
+            var output = new ReceiveTransferStep.Output(transactionId, transactionAt, transfer.getId());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
@@ -168,21 +170,6 @@ public class ReceiveTransfer {
 
     }
 
-    public record Input(String context,
-                        UdfTransferId udfTransferId,
-                        FspData payerFsp,
-                        FspData payeeFsp,
-                        PartyIdInfo payerPartyIdInfo,
-                        PartyIdInfo payeePartyIdInfo,
-                        Currency currency,
-                        BigDecimal transferAmount,
-                        String ilpPacket,
-                        String ilpCondition,
-                        Instant requestExpiration,
-                        ExtensionList extensionList) { }
-
-    public record Output(TransactionId transactionId,
-                         Instant transactionAt,
-                         TransferId transferId) { }
+    
 
 }

@@ -30,27 +30,34 @@ import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.common.type.Payer;
+import io.mojaloop.fspiop.common.type.Payee;
+import io.mojaloop.fspiop.component.handy.FspiopDates;
 import io.mojaloop.fspiop.component.handy.FspiopUrls;
 import io.mojaloop.fspiop.service.api.transfers.RespondTransfers;
+import io.mojaloop.fspiop.spec.core.Extension;
 import io.mojaloop.fspiop.spec.core.ExtensionList;
 import io.mojaloop.fspiop.spec.core.TransferState;
-import io.mojaloop.fspiop.spec.core.TransfersIDPutResponse;
+import io.mojaloop.fspiop.spec.core.TransfersIDPatchResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CommitTransferToPayer {
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransferToPayer.class);
+@Service
+public class PatchTransferToPayeeStepHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        PatchTransferToPayeeStepHandler.class);
 
     private final RespondTransfers respondTransfers;
 
     private final AddStepPublisher addStepPublisher;
 
-    public CommitTransferToPayer(RespondTransfers respondTransfers,
-                                 AddStepPublisher addStepPublisher) {
+    public PatchTransferToPayeeStepHandler(RespondTransfers respondTransfers,
+                                           AddStepPublisher addStepPublisher) {
 
         assert respondTransfers != null;
         assert addStepPublisher != null;
@@ -59,49 +66,44 @@ public class CommitTransferToPayer {
         this.addStepPublisher = addStepPublisher;
     }
 
-    public void execute(Input input) throws FspiopException {
+    public Output execute(Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("CommitTransferToPayer : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("PatchTransferToPayeeStep : input : ({})", ObjectLogger.log(input));
 
-        final var CONTEXT = input.context;
-        final var STEP_NAME = "CommitTransferToPayer";
-
-        var payerFsp = input.payerFsp;
+        var CONTEXT = input.context;
+        var STEP_NAME = "PatchTransferToPayeeStep";
 
         try {
 
-            var response = new TransfersIDPutResponse()
-                               .transferState(TransferState.COMMITTED)
-                               .fulfilment(input.ilpFulfilment)
-                               .completedTimestamp(input.completedTimestamp)
-                               .extensionList(input.extensionList);
+            var patchResponse = new TransfersIDPatchResponse(
+                FspiopDates.forRequestBody(new Date()), input.state);
 
-            this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(response).toString(),
-                StepPhase.BEFORE));
+            var extensions = new ArrayList<Extension>();
+            input.extensions.forEach((k, v) -> extensions.add(new Extension(k, v)));
 
-            var sendBackTo = new Payer(input.payerFsp.fspCode().value());
-            var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
-            var url = FspiopUrls.Transfers.putTransfers(
-                payerBaseUrl, input.udfTransferId().getId());
+            var extensionList = new ExtensionList(extensions);
+            patchResponse.setExtensionList(extensionList);
 
-            this.respondTransfers.putTransfers(sendBackTo, url, response);
+            var payeeBaseUrl = input.payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
+            var url = FspiopUrls.Transfers.patchTransfers(
+                payeeBaseUrl, input.udfTransferId.getId());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
-                    StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT,
+                    ObjectLogger.log(patchResponse).toString(), StepPhase.BEFORE));
 
-            LOGGER.info(
-                "CommitTransferToPayer : done , took {} ms", (System.nanoTime() - startAt) / 1_000_000);
+            this.respondTransfers.patchTransfers(
+                new Payee(input.payeeFsp.fspCode().value()), url, patchResponse);
 
-        } catch (FspiopException e) {
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
-            LOGGER.error("Error:", e);
-
-            throw e;
+            var endAt = System.nanoTime();
+            LOGGER.info("PatchTransferToPayeeStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
@@ -109,22 +111,22 @@ public class CommitTransferToPayer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
                     StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 
+        return new Output();
     }
 
     public record Input(String context,
                         TransactionId transactionId,
                         UdfTransferId udfTransferId,
-                        FspData payerFsp,
-                        String ilpFulfilment,
-                        String completedTimestamp,
-                        ExtensionList extensionList) {
+                        FspData payeeFsp,
+                        TransferState state,
+                        Map<String, String> extensions) { }
 
-    }
+    public record Output() { }
 
 }

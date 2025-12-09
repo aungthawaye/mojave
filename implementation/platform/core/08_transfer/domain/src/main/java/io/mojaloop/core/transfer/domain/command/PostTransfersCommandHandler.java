@@ -36,14 +36,14 @@ import io.mojaloop.core.participant.store.ParticipantStore;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import io.mojaloop.core.transfer.contract.command.PostTransfersCommand;
-import io.mojaloop.core.transfer.domain.command.step.financial.ReservePayerPosition;
-import io.mojaloop.core.transfer.domain.command.step.financial.RollbackReservation;
-import io.mojaloop.core.transfer.domain.command.step.fspiop.ForwardToDestination;
-import io.mojaloop.core.transfer.domain.command.step.fspiop.UnwrapRequest;
-import io.mojaloop.core.transfer.domain.command.step.stateful.AbortTransfer;
-import io.mojaloop.core.transfer.domain.command.step.stateful.DisputeTransfer;
-import io.mojaloop.core.transfer.domain.command.step.stateful.ReceiveTransfer;
-import io.mojaloop.core.transfer.domain.command.step.stateful.ReserveTransfer;
+import io.mojaloop.core.transfer.contract.command.step.financial.ReservePayerPositionStep;
+import io.mojaloop.core.transfer.contract.command.step.financial.RollbackReservationStep;
+import io.mojaloop.core.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
+import io.mojaloop.core.transfer.contract.command.step.fspiop.UnwrapRequestStep;
+import io.mojaloop.core.transfer.contract.command.step.stateful.AbortTransferStep;
+import io.mojaloop.core.transfer.domain.command.step.stateful.DisputeTransferStepHandler;
+import io.mojaloop.core.transfer.contract.command.step.stateful.ReceiveTransferStep;
+import io.mojaloop.core.transfer.contract.command.step.stateful.ReserveTransferStep;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
@@ -67,61 +67,56 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     private final ParticipantStore participantStore;
 
     // Stateful steps
-    private final ReceiveTransfer receiveTransfer;
+    private final ReceiveTransferStep receiveTransferStep;
 
-    private final ReserveTransfer reserveTransfer;
+    private final ReserveTransferStep reserveTransferStep;
 
-    private final AbortTransfer abortTransfer;
-
-    private final DisputeTransfer disputeTransfer;
+    private final AbortTransferStep abortTransferStep;
 
     // Financial steps
-    private final ReservePayerPosition reservePayerPosition;
+    private final ReservePayerPositionStep reservePayerPositionStep;
 
-    private final RollbackReservation rollbackReservation;
+    private final RollbackReservationStep rollbackReservationStep;
 
     // FSPIOP steps
-    private final UnwrapRequest unwrapRequest;
+    private final UnwrapRequestStep unwrapRequestStep;
 
-    private final ForwardToDestination forwardToDestination;
+    private final ForwardToDestinationStep forwardToDestinationStep;
 
     private final RespondTransfers respondTransfers;
 
     private final CloseTransactionPublisher closeTransactionPublisher;
 
     public PostTransfersCommandHandler(ParticipantStore participantStore,
-                                       ReceiveTransfer receiveTransfer,
-                                       ReserveTransfer reserveTransfer,
-                                       AbortTransfer abortTransfer,
-                                       DisputeTransfer disputeTransfer,
-                                       ReservePayerPosition reservePayerPosition,
-                                       RollbackReservation rollbackReservation,
-                                       UnwrapRequest unwrapRequest,
-                                       ForwardToDestination forwardToDestination,
+                                       ReceiveTransferStep receiveTransferStep,
+                                       ReserveTransferStep reserveTransferStep,
+                                       AbortTransferStep abortTransferStep,
+                                       ReservePayerPositionStep reservePayerPositionStep,
+                                       RollbackReservationStep rollbackReservationStep,
+                                       UnwrapRequestStep unwrapRequestStep,
+                                       ForwardToDestinationStep forwardToDestinationStep,
                                        RespondTransfers respondTransfers,
                                        CloseTransactionPublisher closeTransactionPublisher) {
 
         assert participantStore != null;
-        assert receiveTransfer != null;
-        assert reserveTransfer != null;
-        assert abortTransfer != null;
-        assert disputeTransfer != null;
-        assert reservePayerPosition != null;
-        assert rollbackReservation != null;
-        assert unwrapRequest != null;
-        assert forwardToDestination != null;
+        assert receiveTransferStep != null;
+        assert reserveTransferStep != null;
+        assert abortTransferStep != null;
+        assert reservePayerPositionStep != null;
+        assert rollbackReservationStep != null;
+        assert unwrapRequestStep != null;
+        assert forwardToDestinationStep != null;
         assert respondTransfers != null;
         assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
-        this.receiveTransfer = receiveTransfer;
-        this.reserveTransfer = reserveTransfer;
-        this.abortTransfer = abortTransfer;
-        this.disputeTransfer = disputeTransfer;
-        this.reservePayerPosition = reservePayerPosition;
-        this.rollbackReservation = rollbackReservation;
-        this.unwrapRequest = unwrapRequest;
-        this.forwardToDestination = forwardToDestination;
+        this.receiveTransferStep = receiveTransferStep;
+        this.reserveTransferStep = reserveTransferStep;
+        this.abortTransferStep = abortTransferStep;
+        this.reservePayerPositionStep = reservePayerPositionStep;
+        this.rollbackReservationStep = rollbackReservationStep;
+        this.unwrapRequestStep = unwrapRequestStep;
+        this.forwardToDestinationStep = forwardToDestinationStep;
         this.respondTransfers = respondTransfers;
         this.closeTransactionPublisher = closeTransactionPublisher;
     }
@@ -163,11 +158,11 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             var request = input.transfersPostRequest();
 
             // 1. Unwrap the request.
-            var unwrapRequestOutput = this.unwrapRequest.execute(
-                new UnwrapRequest.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, request));
+            var unwrapRequestOutput = this.unwrapRequestStep.execute(
+                new UnwrapRequestStep.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, request));
 
             // 2. Open a transaction. And receive the Transfer.
-            var receiveTransferOutput = this.receiveTransfer.execute(new ReceiveTransfer.Input(
+            var receiveTransferOutput = this.receiveTransferStep.execute(new ReceiveTransferStep.Input(
                 CONTEXT, udfTransferId, payerFsp, payeeFsp, unwrapRequestOutput.payerPartyIdInfo(),
                 unwrapRequestOutput.payeePartyIdInfo(), unwrapRequestOutput.currency(),
                 unwrapRequestOutput.transferAmount(), unwrapRequestOutput.ilpPacket(),
@@ -179,12 +174,12 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             transferId = receiveTransferOutput.transferId();
 
             // 3. Reserve a position of Payer.
-            ReservePayerPosition.Output reservePayerPositionOutput = null;
+            ReservePayerPositionStep.Output reservePayerPositionOutput = null;
 
             try {
 
-                reservePayerPositionOutput = this.reservePayerPosition.execute(
-                    new ReservePayerPosition.Input(
+                reservePayerPositionOutput = this.reservePayerPositionStep.execute(
+                    new ReservePayerPositionStep.Input(
                         CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp,
                         unwrapRequestOutput.currency(), unwrapRequestOutput.transferAmount()));
 
@@ -194,8 +189,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.abortTransfer.execute(
-                    new AbortTransfer.Input(
+                this.abortTransferStep.execute(
+                    new AbortTransferStep.Input(
                         CONTEXT, transactionId, transferId,
                         AbortReason.POSITION_RESERVATION_FAILURE, null, Direction.TO_PAYEE, null));
 
@@ -205,8 +200,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.abortTransfer.execute(
-                    new AbortTransfer.Input(
+                this.abortTransferStep.execute(
+                    new AbortTransferStep.Input(
                         CONTEXT, transactionId, transferId, AbortReason.POSITION_LIMIT_EXCEEDED,
                         null, Direction.TO_PAYEE, null));
 
@@ -221,8 +216,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             // 4. Update the Transfer as RESERVED
             try {
 
-                this.reserveTransfer.execute(
-                    new ReserveTransfer.Input(
+                this.reserveTransferStep.execute(
+                    new ReserveTransferStep.Input(
                         CONTEXT, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
@@ -237,8 +232,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
 
-                this.forwardToDestination.execute(
-                    new ForwardToDestination.Input(
+                this.forwardToDestinationStep.execute(
+                    new ForwardToDestinationStep.Input(
                         CONTEXT, transactionId, payeeFspCode.value(), payeeBaseUrl,
                         input.request()));
 
@@ -246,12 +241,12 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.rollbackReservation.execute(
-                    new RollbackReservation.Input(
+                this.rollbackReservationStep.execute(
+                    new RollbackReservationStep.Input(
                         CONTEXT, transactionId, reservePayerPositionOutput.positionReservationId(),
                         e.getMessage()));
 
-                this.abortTransfer.execute(new AbortTransfer.Input(
+                this.abortTransferStep.execute(new AbortTransferStep.Input(
                     CONTEXT, transactionId, transferId, AbortReason.UNABLE_TO_REACH_PAYEE, null,
                     Direction.TO_PAYEE, null));
 

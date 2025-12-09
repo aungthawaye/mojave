@@ -18,75 +18,71 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.transfer.domain.command.step.financial;
+package io.mojaloop.core.transfer.domain.command.step.fspiop;
 
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
-import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
-import io.mojaloop.core.wallet.contract.command.position.RollbackReservationCommand;
+import io.mojaloop.core.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
+import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
+import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RollbackReservation {
+public class ForwardToDestinationStepHandler implements ForwardToDestinationStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RollbackReservation.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ForwardToDestinationStepHandler.class);
 
-    private final RollbackReservationCommand rollbackReservationCommand;
+    private final ForwardRequest forwardRequest;
 
     private final AddStepPublisher addStepPublisher;
 
-    public RollbackReservation(RollbackReservationCommand rollbackReservationCommand,
-                               AddStepPublisher addStepPublisher) {
+    public ForwardToDestinationStepHandler(ForwardRequest forwardRequest, AddStepPublisher addStepPublisher) {
 
-        assert rollbackReservationCommand != null;
+        assert forwardRequest != null;
         assert addStepPublisher != null;
 
-        this.rollbackReservationCommand = rollbackReservationCommand;
+        this.forwardRequest = forwardRequest;
         this.addStepPublisher = addStepPublisher;
     }
 
-    public Output execute(Input input) throws FspiopException {
+    @Override
+    public void execute(ForwardToDestinationStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("RollbackReservation : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("ForwardToDestinationStep : input : ({})", ObjectLogger.log(input));
 
-        final var CONTEXT = input.context;
-        final var STEP_NAME = "RollbackReservation";
+        final var CONTEXT = input.context();
+        final var STEP_NAME = "ForwardToDestinationStep";
 
         try {
 
-            var rollbackReservationInput = new RollbackReservationCommand.Input(
-                input.positionReservationId(), "Roll back due to : " + input.error());
+            this.addStepPublisher.publish(
+                new AddStepCommand.Input(
+                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.BEFORE));
+
+            this.forwardRequest.forward(input.baseUrl(), input.request());
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT,
-                    ObjectLogger.log(rollbackReservationInput).toString(), StepPhase.BEFORE));
-
-            var rollbackReservationOutput = this.rollbackReservationCommand.execute(
-                rollbackReservationInput);
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT,
-                    ObjectLogger.log(rollbackReservationOutput).toString(), StepPhase.AFTER));
-
-            var output = new Output(rollbackReservationOutput.positionUpdateId());
+                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             var endAt = System.nanoTime();
-            LOGGER.info(
-                "RollbackReservation : output : ({}) , took : {} ms", output,
-                (endAt - startAt) / 1_000_000);
+            LOGGER.info("ForwardToDestinationStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
-            return output;
+        } catch (FspiopException e) {
+
+            LOGGER.error("Error:", e);
+
+            throw e;
 
         } catch (Exception e) {
 
@@ -94,17 +90,13 @@ public class RollbackReservation {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
 
-    public record Input(String context,
-                        TransactionId transactionId,
-                        PositionUpdateId positionReservationId,
-                        String error) { }
-
-    public record Output(PositionUpdateId rollbackId) { }
+    
 
 }

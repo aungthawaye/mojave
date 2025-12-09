@@ -17,23 +17,19 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package io.mojaloop.core.transfer.domain.command.step.stateful;
 
 import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
-import io.mojaloop.core.common.datatype.enums.Direction;
-import io.mojaloop.core.common.datatype.enums.transfer.AbortReason;
+import io.mojaloop.core.common.datatype.enums.transfer.DisputeReason;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
-import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.spec.core.ExtensionList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,15 +37,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AbortTransfer {
+public class DisputeTransferStepHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbortTransfer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbortTransferStepHandler.class);
 
     private final TransferRepository transferRepository;
 
     private final AddStepPublisher addStepPublisher;
 
-    public AbortTransfer(TransferRepository transferRepository, AddStepPublisher addStepPublisher) {
+    public DisputeTransferStepHandler(TransferRepository transferRepository,
+                                      AddStepPublisher addStepPublisher) {
 
         assert transferRepository != null;
         assert addStepPublisher != null;
@@ -60,14 +57,14 @@ public class AbortTransfer {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Write
-    public void execute(Input input) throws FspiopException {
+    public void execute(DisputeTransferStepHandler.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
         var CONTEXT = input.context;
-        var STEP_NAME = "AbortTransfer";
+        var STEP_NAME = "DisputeTransferStep";
 
-        LOGGER.info("AbortTransfer : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("DisputeTransferStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
@@ -77,27 +74,16 @@ public class AbortTransfer {
                 input.transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
                 StepPhase.BEFORE));
 
-            transfer.aborted(input.abortReason, input.rollbackId);
-
-            var extensionList = input.extensionList();
-
-            if (extensionList != null) {
-
-                for (var extension : extensionList.getExtension()) {
-                    transfer.addExtension(
-                        input.direction(), extension.getKey(), extension.getValue());
-                }
-            }
+            transfer.disputed(input.disputeReason);
 
             this.transferRepository.save(transfer);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
-                    StepPhase.AFTER));
+                    input.transactionId, STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             var endAt = System.nanoTime();
-            LOGGER.info("AbortTransfer : done , took {} ms", (endAt - startAt) / 1_000_000);
+            LOGGER.info("DisputeTransferStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
@@ -105,7 +91,8 @@ public class AbortTransfer {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(),
+                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
@@ -114,9 +101,6 @@ public class AbortTransfer {
     public record Input(String context,
                         TransactionId transactionId,
                         TransferId transferId,
-                        AbortReason abortReason,
-                        PositionUpdateId rollbackId,
-                        Direction direction,
-                        ExtensionList extensionList) { }
+                        DisputeReason disputeReason) { }
 
 }

@@ -24,6 +24,7 @@ import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transfer.contract.component.interledger.PartyUnwrapper;
+import io.mojaloop.core.transfer.contract.command.step.fspiop.UnwrapRequestStep;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
 import io.mojaloop.fspiop.component.handy.FspiopCurrencies;
@@ -41,24 +42,25 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Service
-public class UnwrapRequest {
+public class UnwrapRequestStepHandler implements UnwrapRequestStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnwrapRequest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnwrapRequestStepHandler.class);
 
     private final PartyUnwrapper partyUnwrapper;
 
-    public UnwrapRequest(PartyUnwrapper partyUnwrapper) {
+    public UnwrapRequestStepHandler(PartyUnwrapper partyUnwrapper) {
 
         assert partyUnwrapper != null;
 
         this.partyUnwrapper = partyUnwrapper;
     }
 
-    public Output execute(Input input) throws FspiopException {
+    @Override
+    public UnwrapRequestStep.Output execute(UnwrapRequestStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("UnwrapRequest : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("UnwrapRequestStep : input : ({})", ObjectLogger.log(input));
 
         var payerFspCode = input.payerFsp().fspCode();
         var payeeFspCode = input.payeeFsp().fspCode();
@@ -128,30 +130,18 @@ public class UnwrapRequest {
                                        FspiopErrors.GENERIC_VALIDATION_ERROR,
                                        "Payee information is missing in the ILP packet."));
 
-        var output = new Output(
+        var output = new UnwrapRequestStep.Output(
             payerPartyIdInfo, payeePartyIdInfo, currency, transferAmount, ilpPacketString,
             ilpCondition, requestExpiration);
 
         var endAt = System.nanoTime();
         LOGGER.info(
-            "UnwrapRequest : output : ({}), took {} ms", ObjectLogger.log(output),
+            "UnwrapRequestStep : output : ({}), took {} ms", ObjectLogger.log(output),
             (endAt - startAt) / 1_000_000);
 
         return output;
     }
 
-    public record Input(String context,
-                        UdfTransferId udfTransferId,
-                        FspData payerFsp,
-                        FspData payeeFsp,
-                        TransfersPostRequest request) { }
-
-    public record Output(PartyIdInfo payerPartyIdInfo,
-                         PartyIdInfo payeePartyIdInfo,
-                         Currency currency,
-                         BigDecimal transferAmount,
-                         String ilpPacket,
-                         String ilpCondition,
-                         Instant requestExpiration) { }
+    
 
 }

@@ -18,68 +18,75 @@
  * ================================================================================
  */
 
-package io.mojaloop.core.transfer.domain.command.step.fspiop;
+package io.mojaloop.core.transfer.domain.command.step.stateful;
 
+import io.mojaloop.component.jpa.routing.annotation.Write;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.core.common.datatype.enums.trasaction.StepPhase;
 import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
+import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
+import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
+import io.mojaloop.core.transfer.contract.command.step.stateful.ReserveTransferStep;
+import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
-import io.mojaloop.fspiop.service.api.forwarder.ForwardRequest;
-import io.mojaloop.fspiop.service.component.FspiopHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ForwardToDestination {
+public class ReserveTransferStepHandler implements ReserveTransferStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ForwardToDestination.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReserveTransferStepHandler.class);
 
-    private final ForwardRequest forwardRequest;
+    private final TransferRepository transferRepository;
 
     private final AddStepPublisher addStepPublisher;
 
-    public ForwardToDestination(ForwardRequest forwardRequest, AddStepPublisher addStepPublisher) {
+    public ReserveTransferStepHandler(TransferRepository transferRepository,
+                                      AddStepPublisher addStepPublisher) {
 
-        assert forwardRequest != null;
+        assert transferRepository != null;
         assert addStepPublisher != null;
 
-        this.forwardRequest = forwardRequest;
+        this.transferRepository = transferRepository;
         this.addStepPublisher = addStepPublisher;
     }
 
-    public void execute(Input input) throws FspiopException {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Write
+    @Override
+    public void execute(ReserveTransferStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("ForwardToDestination : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("ReserveTransferStep : input : ({})", ObjectLogger.log(input));
 
-        final var CONTEXT = input.context;
-        final var STEP_NAME = "ForwardToDestination";
+        var CONTEXT = input.context();
+        var STEP_NAME = "ReserveTransferStep";
 
         try {
 
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.BEFORE));
+            this.addStepPublisher.publish(new AddStepCommand.Input(
+                input.transactionId(), STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
+                StepPhase.BEFORE));
 
-            this.forwardRequest.forward(input.baseUrl(), input.request());
+            var transfer = this.transferRepository.getReferenceById(input.transferId());
+
+            transfer.reserved(input.positionReservationId());
+
+            this.transferRepository.save(transfer);
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
                     input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
 
             var endAt = System.nanoTime();
-            LOGGER.info("ForwardToDestination : done , took {} ms", (endAt - startAt) / 1_000_000);
-
-        } catch (FspiopException e) {
-
-            LOGGER.error("Error:", e);
-
-            throw e;
+            LOGGER.info("ReservedTransfer : done, took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
@@ -94,10 +101,6 @@ public class ForwardToDestination {
         }
     }
 
-    public record Input(String context,
-                        TransactionId transactionId,
-                        String destinationFspCode,
-                        String baseUrl,
-                        FspiopHttpRequest request) { }
+    
 
 }

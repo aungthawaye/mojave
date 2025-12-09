@@ -27,6 +27,7 @@ import io.mojaloop.core.common.datatype.identifier.transaction.TransactionId;
 import io.mojaloop.core.common.datatype.identifier.transfer.TransferId;
 import io.mojaloop.core.common.datatype.identifier.transfer.UdfTransferId;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionUpdateId;
+import io.mojaloop.core.transfer.contract.command.step.stateful.FetchTransferStep;
 import io.mojaloop.core.transfer.domain.repository.TransferRepository;
 import io.mojaloop.fspiop.common.error.FspiopErrors;
 import io.mojaloop.fspiop.common.exception.FspiopException;
@@ -41,13 +42,13 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Service
-public class FetchTransfer {
+public class FetchTransferStepHandler implements FetchTransferStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FetchTransfer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FetchTransferStepHandler.class);
 
     private final TransferRepository transferRepository;
 
-    public FetchTransfer(TransferRepository transferRepository) {
+    public FetchTransferStepHandler(TransferRepository transferRepository) {
 
         assert transferRepository != null;
 
@@ -56,27 +57,28 @@ public class FetchTransfer {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Read
-    public Output execute(Input input) throws FspiopException {
+    @Override
+    public FetchTransferStep.Output execute(FetchTransferStep.Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("FetchTransfer: input : ({})", ObjectLogger.log(input));
+        LOGGER.info("FetchTransferStep: input : ({})", ObjectLogger.log(input));
 
         try {
 
             var optTransfer = this.transferRepository.findOne(
-                TransferRepository.Filters.withUdfTransferId(input.udfTransferId));
+                TransferRepository.Filters.withUdfTransferId(input.udfTransferId()));
 
             if (optTransfer.isEmpty()) {
 
                 LOGGER.info(
-                    "Transfer not found for udfTransferId : ({})", input.udfTransferId.getId());
+                    "Transfer not found for udfTransferId : ({})", input.udfTransferId().getId());
 
                 var endAt = System.nanoTime();
-                var output = new Output(null, null, null, null, null, null, null, null, null);
+                var output = new FetchTransferStep.Output(null, null, null, null, null, null, null, null, null);
 
                 LOGGER.info(
-                    "FetchTransfer : output : ({}) , took : {} ms", output,
+                    "FetchTransferStep : output : ({}) , took : {} ms", output,
                     (endAt - startAt) / 1_000_000);
 
                 return output;
@@ -84,16 +86,16 @@ public class FetchTransfer {
 
             var transfer = optTransfer.get();
 
-            LOGGER.info("Transfer found for udfTransferId : ({})", input.udfTransferId.getId());
+            LOGGER.info("Transfer found for udfTransferId : ({})", input.udfTransferId().getId());
 
-            var output = new Output(
+            var output = new FetchTransferStep.Output(
                 transfer.getId(), transfer.getStatus(), transfer.getReservationId(),
                 transfer.getCurrency(), transfer.getTransferAmount(), BigDecimal.ZERO,
                 BigDecimal.ZERO, transfer.getTransactionId(), transfer.getTransactionAt());
 
             var endAt = System.nanoTime();
             LOGGER.info(
-                "FetchTransfer : output : ({}) , took : {} ms", output,
+                "FetchTransferStep : output : ({}) , took : {} ms", output,
                 (endAt - startAt) / 1_000_000);
 
             return output;
@@ -106,16 +108,6 @@ public class FetchTransfer {
         }
     }
 
-    public record Input(UdfTransferId udfTransferId) { }
-
-    public record Output(TransferId transferId,
-                         TransferStatus state,
-                         PositionUpdateId reservationId,
-                         Currency currency,
-                         BigDecimal transferAmount,
-                         BigDecimal payeeFspFee,
-                         BigDecimal payeeFspCommission,
-                         TransactionId transactionId,
-                         Instant transactionAt) { }
+    
 
 }

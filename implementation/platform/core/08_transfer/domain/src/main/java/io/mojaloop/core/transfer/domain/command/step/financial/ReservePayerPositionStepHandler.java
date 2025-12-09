@@ -28,6 +28,7 @@ import io.mojaloop.core.common.datatype.identifier.wallet.WalletOwnerId;
 import io.mojaloop.core.participant.contract.data.FspData;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
+import io.mojaloop.core.transfer.contract.command.step.financial.ReservePayerPositionStep;
 import io.mojaloop.core.wallet.contract.command.position.ReservePositionCommand;
 import io.mojaloop.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import io.mojaloop.core.wallet.contract.exception.position.PositionLimitExceededException;
@@ -42,16 +43,17 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Service
-public class ReservePayerPosition {
+public class ReservePayerPositionStepHandler implements ReservePayerPositionStep {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReservePayerPosition.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        ReservePayerPositionStepHandler.class);
 
     private final ReservePositionCommand reservePositionCommand;
 
     private final AddStepPublisher addStepPublisher;
 
-    public ReservePayerPosition(ReservePositionCommand reservePositionCommand,
-                                AddStepPublisher addStepPublisher) {
+    public ReservePayerPositionStepHandler(ReservePositionCommand reservePositionCommand,
+                                           AddStepPublisher addStepPublisher) {
 
         assert reservePositionCommand != null;
         assert addStepPublisher != null;
@@ -60,24 +62,25 @@ public class ReservePayerPosition {
         this.addStepPublisher = addStepPublisher;
     }
 
-    public Output execute(Input input) throws
+    @Override
+    public ReservePayerPositionStep.Output execute(ReservePayerPositionStep.Input input) throws
                                        FspiopException,
                                        NoPositionUpdateForTransactionException,
                                        PositionLimitExceededException {
 
         var startAt = System.nanoTime();
 
-        LOGGER.info("ReservePayerPosition : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("ReservePayerPositionStep : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = input.context();
-        final var STEP_NAME = "ReservePayerPosition";
+        final var STEP_NAME = "ReservePayerPositionStep";
 
         try {
 
-            var payerFsp = input.payerFsp;
+            var payerFsp = input.payerFsp();
             var payerFspCode = payerFsp.fspCode();
 
-            var payeeFsp = input.payeeFsp;
+            var payeeFsp = input.payeeFsp();
             var payeeFspCode = payeeFsp.fspCode();
 
             var currency = input.currency();
@@ -109,11 +112,11 @@ public class ReservePayerPosition {
                     transactionId, STEP_NAME, CONTEXT,
                     ObjectLogger.log(reservePositionOutput).toString(), StepPhase.AFTER));
 
-            var output = new Output(reservePositionOutput.positionUpdateId());
+            var output = new ReservePayerPositionStep.Output(reservePositionOutput.positionUpdateId());
 
             var endAt = System.nanoTime();
             LOGGER.info(
-                "ReservePayerPosition : output : ({}) , took : {} ms",
+                "ReservePayerPositionStep : output : ({}) , took : {} ms",
                 ObjectLogger.log(output), (endAt - startAt) / 1_000_000);
 
             return output;
@@ -144,21 +147,11 @@ public class ReservePayerPosition {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 
     }
-
-    public record Input(String context,
-                        TransactionId transactionId,
-                        Instant transactionAt,
-                        FspData payerFsp,
-                        FspData payeeFsp,
-                        Currency currency,
-                        BigDecimal transferAmount) { }
-
-    public record Output(PositionUpdateId positionReservationId) { }
 
 }
