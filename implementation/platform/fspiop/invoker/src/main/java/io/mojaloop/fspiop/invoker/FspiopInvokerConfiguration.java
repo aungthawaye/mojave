@@ -20,8 +20,8 @@
 
 package io.mojaloop.fspiop.invoker;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.RetrofitService;
+import io.mojaloop.component.retrofit.converter.Jackson3ConverterFactory;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.fspiop.component.FspiopComponentConfiguration;
 import io.mojaloop.fspiop.component.retrofit.FspiopSigningInterceptor;
@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
@@ -58,7 +58,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                           .withInterceptors(fspiopSigningInterceptor)
                           .withConverterFactories(
                               new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                              JacksonConverterFactory.create(objectMapper));
+                              Jackson3ConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -99,7 +99,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                           .withInterceptors(fspiopSigningInterceptor)
                           .withConverterFactories(
                               new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                              JacksonConverterFactory.create(objectMapper));
+                              Jackson3ConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 
@@ -139,7 +139,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
                           .withInterceptors(fspiopSigningInterceptor)
                           .withConverterFactories(
                               new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                              JacksonConverterFactory.create(objectMapper));
+                              Jackson3ConverterFactory.create(objectMapper));
 
         if (transportSettings.useMutualTls()) {
 

@@ -21,15 +21,7 @@
 package io.mojaloop.component.misc;
 
 import com.amazon.corretto.crypto.provider.AmazonCorrettoCryptoProvider;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.mojaloop.component.misc.jackson.conversion.BigDecimalConversion;
-import io.mojaloop.component.misc.jackson.conversion.InstantConversion;
+import io.mojaloop.component.misc.jackson.ObjectMapperFactory;
 import io.mojaloop.component.misc.logger.ObjectLoggerInitializer;
 import io.mojaloop.component.misc.spring.SpringContext;
 import io.mojaloop.component.misc.spring.event.EventPublisher;
@@ -43,10 +35,8 @@ import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.annotation.EnableAsync;
+import tools.jackson.databind.ObjectMapper;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
@@ -137,33 +127,7 @@ public class MiscConfiguration {
     @Primary
     public ObjectMapper objectMapper() {
 
-        var objectMapper = JsonMapper.builder().build();
-
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-
-        objectMapper.findAndRegisterModules();
-
-        var module = new SimpleModule()
-                         .addSerializer(Instant.class, new InstantConversion.Serializer())
-                         .addDeserializer(Instant.class, new InstantConversion.Deserializer())
-                         .addSerializer(BigDecimal.class, new BigDecimalConversion.Serializer())
-                         .addDeserializer(BigDecimal.class, new BigDecimalConversion.Deserializer())
-                         .addSerializer(Long.class, ToStringSerializer.instance)
-                         .addSerializer(Long.TYPE, ToStringSerializer.instance)
-                         .addSerializer(Integer.class, ToStringSerializer.instance)
-                         .addSerializer(Integer.TYPE, ToStringSerializer.instance)
-                         .addSerializer(Boolean.class, ToStringSerializer.instance)
-                         .addSerializer(Boolean.TYPE, ToStringSerializer.instance)
-                         .addSerializer(BigInteger.class, ToStringSerializer.instance);
-
-        objectMapper.registerModule(module);
-
-        // Force millis, not seconds.nanos
-        objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
-        objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
-
-        return objectMapper;
+        return ObjectMapperFactory.createJsonMapper();
     }
 
     @Bean

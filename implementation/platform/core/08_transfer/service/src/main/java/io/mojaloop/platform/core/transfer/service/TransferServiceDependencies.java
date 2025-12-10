@@ -1,6 +1,6 @@
 package io.mojaloop.platform.core.transfer.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.core.common.datatype.type.participant.FspCode;
 import io.mojaloop.core.participant.contract.query.FspQuery;
 import io.mojaloop.core.participant.contract.query.OracleQuery;

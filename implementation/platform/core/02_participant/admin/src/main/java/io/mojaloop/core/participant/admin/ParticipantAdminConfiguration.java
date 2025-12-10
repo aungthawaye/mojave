@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.participant.admin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
@@ -33,6 +32,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import tools.jackson.databind.ObjectMapper;
 
 @EnableAutoConfiguration
 

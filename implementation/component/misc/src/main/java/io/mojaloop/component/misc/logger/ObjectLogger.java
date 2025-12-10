@@ -20,8 +20,7 @@
 
 package io.mojaloop.component.misc.logger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 public class ObjectLogger {
 
@@ -55,18 +54,14 @@ public class ObjectLogger {
                 case Boolean b -> {
                     return String.valueOf(value);
                 }
-                case Enum anEnum -> {
+                case Enum<?> anEnum -> {
                     return String.valueOf(value);
                 }
                 case Exception e -> {
                     return e.getMessage();
                 }
                 default -> {
-                    try {
-                        return OBJECT_MAPPER.writeValueAsString(value);
-                    } catch (JsonProcessingException e) {
-                        return String.valueOf(value);
-                    }
+                    return OBJECT_MAPPER.writeValueAsString(value);
                 }
             }
 

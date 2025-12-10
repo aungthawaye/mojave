@@ -20,18 +20,20 @@
 
 package io.mojaloop.core.accounting.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.kafka.KafkaConsumerConfigurer;
 import io.mojaloop.core.accounting.consumer.listener.PostLedgerFlowListener;
 import io.mojaloop.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import io.mojaloop.core.accounting.domain.AccountingDomainConfiguration;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.accounting.consumer"})
@@ -49,12 +51,13 @@ public class AccountingConsumerConfiguration {
         ObjectMapper objectMapper) {
 
         return KafkaConsumerConfigurer.configure(
-            settings, new KafkaConsumerConfigurer.Deserializer<>() {
+            settings, new KafkaConsumerConfigurer.Deserializers<>() {
 
                 @Override
-                public JsonDeserializer<String> forKey() {
+                public Deserializer<String> forKey() {
 
-                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        String.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -62,10 +65,10 @@ public class AccountingConsumerConfiguration {
                 }
 
                 @Override
-                public JsonDeserializer<PostLedgerFlowCommand.Input> forValue() {
+                public Deserializer<PostLedgerFlowCommand.Input> forValue() {
 
-                    var deserializer = new JsonDeserializer<>(
-                        PostLedgerFlowCommand.Input.class, objectMapper);
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        PostLedgerFlowCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 

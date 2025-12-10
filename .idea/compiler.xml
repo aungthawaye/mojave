@@ -18,8 +18,8 @@
         <module name="mod-connector-gateway" />
         <module name="mod-accounting-admin-client" />
         <module name="mod-common-datatype" />
-        <module name="mod-participant-intercom" />
         <module name="mod-connector-adapter" />
+        <module name="mod-participant-intercom" />
         <module name="mod-settlement-admin-client" />
         <module name="mod-fspiop-spec" />
         <module name="mod-wallet-admin" />
@@ -44,8 +44,8 @@
         <module name="mod-accounting-intercom" />
         <module name="mod-common-datatype-converter" />
         <module name="mod-settlement-producer" />
-        <module name="mod-quoting-domain" />
         <module name="mod-accounting-store" />
+        <module name="mod-quoting-domain" />
         <module name="mod-participant-admin" />
         <module name="mod-wallet-contract" />
         <module name="mod-connector-sample" />
@@ -53,11 +53,11 @@
         <module name="mod-transaction-producer" />
         <module name="mod-quoting-service" />
         <module name="mod-settlement-contract" />
-        <module name="mod-fspiop-common" />
         <module name="mod-component-misc" />
+        <module name="mod-fspiop-common" />
         <module name="mod-accounting-domain" />
-        <module name="mod-accounting-intercom-client" />
         <module name="mod-accounting-consumer" />
+        <module name="mod-accounting-intercom-client" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
         <module name="mod-wallet-domain" />

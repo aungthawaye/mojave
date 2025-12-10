@@ -20,7 +20,7 @@
 
 package io.mojaloop.mono.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;

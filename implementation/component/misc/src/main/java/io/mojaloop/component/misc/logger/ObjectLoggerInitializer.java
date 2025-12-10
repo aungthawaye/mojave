@@ -20,7 +20,7 @@
 
 package io.mojaloop.component.misc.logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 public class ObjectLoggerInitializer {
 

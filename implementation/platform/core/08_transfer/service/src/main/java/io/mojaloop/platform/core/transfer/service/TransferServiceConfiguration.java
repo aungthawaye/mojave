@@ -26,14 +26,10 @@ import io.mojaloop.core.transaction.intercom.client.TransactionIntercomClientCon
 import io.mojaloop.core.transfer.TransferDomainConfiguration;
 import io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration;
 import io.mojaloop.fspiop.service.FspiopServiceConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 
 @EnableWebMvc
 @EnableAsync

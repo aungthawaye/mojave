@@ -21,16 +21,15 @@
 package io.mojaloop.core.common.datatype.identifier.participant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = FspCurrencyId.Deserializer.class)
 public class FspCurrencyId extends EntityId<Long> {
@@ -41,11 +40,11 @@ public class FspCurrencyId extends EntityId<Long> {
         super(id);
     }
 
-    public static class Deserializer extends JsonDeserializer<FspCurrencyId> {
+    public static class Deserializer extends ValueDeserializer<FspCurrencyId> {
 
         @Override
-        public FspCurrencyId deserialize(JsonParser p, DeserializationContext ctx)
-            throws IOException {
+        public FspCurrencyId deserialize(JsonParser p, DeserializationContext ctxt)
+            throws JacksonException {
 
             var field = p.currentName();
             var text = p.getValueAsString();

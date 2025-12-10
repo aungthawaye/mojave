@@ -20,9 +20,7 @@
 
 package io.mojaloop.fspiop.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.RetrofitService;
-import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;
@@ -40,8 +38,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import retrofit2.converter.jackson.JacksonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import tools.jackson.databind.ObjectMapper;
 
 @ComponentScan(basePackages = {"io.mojaloop.fspiop.service"})
 @Import(
@@ -102,9 +99,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
         return RetrofitService
                    .newBuilder(RetrofitService.ForwardingService.class, "https://2ne1.com")
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                   .withConverterFactories(
-                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                       JacksonConverterFactory.create(objectMapper))
+                   .withDefaultFactories(objectMapper)
                    .build();
     }
 
@@ -115,9 +110,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .newBuilder(PartiesResponseService.class, "https://2ne1.com")
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withInterceptors(fspiopSigningInterceptor)
-                   .withConverterFactories(
-                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                       JacksonConverterFactory.create())
+                   .withDefaultFactories(this.objectMapper)
                    .build();
     }
 
@@ -128,9 +121,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .newBuilder(QuotesResponseService.class, "https://2ne1.com")
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withInterceptors(fspiopSigningInterceptor)
-                   .withConverterFactories(
-                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                       JacksonConverterFactory.create())
+                   .withDefaultFactories(this.objectMapper)
                    .build();
     }
 
@@ -141,9 +132,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .newBuilder(TransfersResponseService.class, "https://2ne1.com")
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withInterceptors(fspiopSigningInterceptor)
-                   .withConverterFactories(
-                       new NullOrEmptyConverterFactory(), ScalarsConverterFactory.create(),
-                       JacksonConverterFactory.create())
+                   .withDefaultFactories(this.objectMapper)
                    .build();
     }
 

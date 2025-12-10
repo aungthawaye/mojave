@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.wallet.admin.client.api.query;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.common.datatype.identifier.wallet.PositionId;

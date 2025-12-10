@@ -20,7 +20,6 @@
 
 package io.mojaloop.component.jpa.routing;
 
-import org.hibernate.dialect.MySQLDialect;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
@@ -41,7 +40,6 @@ public class RoutingEntityManagerConfigurer {
 
         Properties jpaProperties = new Properties();
 
-        jpaProperties.put("hibernate.dialect", MySQLDialect.class);
         jpaProperties.put("hibernate.show_sql", settings.showSql);
         jpaProperties.put("hibernate.format_sql", settings.formatSql);
         jpaProperties.put("hibernate.hibernate.connection.provider_disables_autocommit", true);

@@ -20,7 +20,7 @@
 
 package io.mojaloop.component.retrofit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.mojaloop.component.retrofit.converter.Jackson3ConverterFactory;
 import io.mojaloop.component.retrofit.converter.NullOrEmptyConverterFactory;
 import io.mojaloop.component.retrofit.debug.DnsDebug;
 import io.mojaloop.component.retrofit.interceptor.HandshakeLoggingInterceptor;
@@ -37,7 +37,6 @@ import retrofit2.Call;
 import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -48,6 +47,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
+import tools.jackson.databind.ObjectMapper;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -239,7 +239,7 @@ public class RetrofitService {
 
             this.retrofitBuilder.addConverterFactory(new NullOrEmptyConverterFactory());
             this.retrofitBuilder.addConverterFactory(ScalarsConverterFactory.create());
-            this.retrofitBuilder.addConverterFactory(JacksonConverterFactory.create(objectMapper));
+            this.retrofitBuilder.addConverterFactory(Jackson3ConverterFactory.create(objectMapper));
 
             return this;
         }

@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.wallet.admin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
@@ -33,6 +33,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 @EnableAutoConfiguration
 
@@ -49,9 +50,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         SpringSecurityConfiguration.class})
 public final class WalletAdminConfiguration extends WebMvcExtension {
 
-    public WalletAdminConfiguration(ObjectMapper objectMapper) {
+    public WalletAdminConfiguration(JsonMapper jsonMapper) {
 
-        super(objectMapper);
+        super(jsonMapper);
     }
 
     public interface RequiredDependencies extends WalletDomainConfiguration.RequiredBeans,

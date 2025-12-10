@@ -39,7 +39,7 @@
 
 package io.mojaloop.core.transaction.intercom.client.api.command;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.exception.UncheckedDomainException;
 import io.mojaloop.component.retrofit.RetrofitService;

@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.outbound;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
@@ -31,8 +31,8 @@ import io.mojaloop.component.web.spring.security.SpringSecurityConfigurer;
 import io.mojaloop.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

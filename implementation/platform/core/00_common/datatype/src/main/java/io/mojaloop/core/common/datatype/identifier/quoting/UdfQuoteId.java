@@ -21,15 +21,14 @@
 package io.mojaloop.core.common.datatype.identifier.quoting;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.mojaloop.component.misc.ddd.EntityId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(using = UdfQuoteId.Deserializer.class)
 public class UdfQuoteId extends EntityId<String> {
@@ -40,10 +39,10 @@ public class UdfQuoteId extends EntityId<String> {
         super(id);
     }
 
-    public static class Deserializer extends JsonDeserializer<UdfQuoteId> {
+    public static class Deserializer extends ValueDeserializer<UdfQuoteId> {
 
         @Override
-        public UdfQuoteId deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public UdfQuoteId deserialize(JsonParser p, DeserializationContext ctx) throws JacksonException {
 
             var text = p.getValueAsString();
 

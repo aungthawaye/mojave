@@ -20,10 +20,9 @@
 
 package io.mojaloop.fspiop.component.retrofit;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.fspiop.spec.core.ErrorInformationResponse;
+import tools.jackson.databind.ObjectMapper;
 
 public class FspiopErrorDecoder implements RetrofitService.ErrorDecoder<ErrorInformationResponse> {
 
@@ -39,14 +38,7 @@ public class FspiopErrorDecoder implements RetrofitService.ErrorDecoder<ErrorInf
     @Override
     public ErrorInformationResponse decode(int status, String errorResponseBody) {
 
-        try {
-
-            return this.objectMapper.readValue(errorResponseBody, ErrorInformationResponse.class);
-
-        } catch (JsonProcessingException e) {
-
-            throw new RuntimeException(e);
-        }
+        return this.objectMapper.readValue(errorResponseBody, ErrorInformationResponse.class);
     }
 
 }

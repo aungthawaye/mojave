@@ -20,20 +20,22 @@
 
 package io.mojaloop.core.transaction.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.kafka.KafkaConsumerConfigurer;
 import io.mojaloop.core.transaction.consumer.listener.AddStepListener;
 import io.mojaloop.core.transaction.consumer.listener.CloseTransactionListener;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
 import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.domain.TransactionDomainConfiguration;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @EnableKafka
 @ComponentScan(basePackages = {"io.mojaloop.core.transaction.consumer"})
@@ -47,12 +49,13 @@ public final class TransactionConsumerConfiguration {
         ObjectMapper objectMapper) {
 
         return KafkaConsumerConfigurer.configure(
-            settings, new KafkaConsumerConfigurer.Deserializer<>() {
+            settings, new KafkaConsumerConfigurer.Deserializers<>() {
 
                 @Override
-                public JsonDeserializer<String> forKey() {
+                public Deserializer<String> forKey() {
 
-                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        String.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -60,10 +63,10 @@ public final class TransactionConsumerConfiguration {
                 }
 
                 @Override
-                public JsonDeserializer<AddStepCommand.Input> forValue() {
+                public Deserializer<AddStepCommand.Input> forValue() {
 
-                    var deserializer = new JsonDeserializer<>(
-                        AddStepCommand.Input.class, objectMapper);
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        AddStepCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -79,12 +82,13 @@ public final class TransactionConsumerConfiguration {
         ObjectMapper objectMapper) {
 
         return KafkaConsumerConfigurer.configure(
-            settings, new KafkaConsumerConfigurer.Deserializer<>() {
+            settings, new KafkaConsumerConfigurer.Deserializers<>() {
 
                 @Override
-                public JsonDeserializer<String> forKey() {
+                public Deserializer<String> forKey() {
 
-                    var deserializer = new JsonDeserializer<>(String.class, objectMapper);
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        String.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -92,10 +96,10 @@ public final class TransactionConsumerConfiguration {
                 }
 
                 @Override
-                public JsonDeserializer<CloseTransactionCommand.Input> forValue() {
+                public Deserializer<CloseTransactionCommand.Input> forValue() {
 
-                    var deserializer = new JsonDeserializer<>(
-                        CloseTransactionCommand.Input.class, objectMapper);
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        CloseTransactionCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 

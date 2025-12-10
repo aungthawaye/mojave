@@ -20,31 +20,26 @@
 
 package io.mojaloop.component.misc.jackson.conversion;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 
 public class InstantConversion {
 
-    public static class Serializer extends StdSerializer<Instant> {
-
-        public Serializer() {
-
-            super(Instant.class);
-        }
+    public static class Serializer extends ValueSerializer<Instant> {
 
         @Override
-        public void serialize(Instant value, JsonGenerator gen, SerializerProvider provider)
-            throws IOException {
+        public void serialize(Instant value, JsonGenerator gen, SerializationContext ctxt)
+            throws JacksonException {
 
             if (value == null) {
                 gen.writeNull();
@@ -59,12 +54,13 @@ public class InstantConversion {
     }
 
     /** Deserialize epoch second (Long or numeric string) OR ISO-8601 string -> Instant */
-    public static class Deserializer extends JsonDeserializer<Instant> {
+    public static class Deserializer extends ValueDeserializer<Instant> {
 
         @Override
-        public Instant deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public Instant deserialize(JsonParser p, DeserializationContext ctxt)
+            throws JacksonException {
 
-            JsonToken t = p.getCurrentToken();
+            JsonToken t = p.currentToken();
 
             if (t == JsonToken.VALUE_NUMBER_INT) {
                 // direct number -> epoch seconds
@@ -73,7 +69,7 @@ public class InstantConversion {
 
             if (t == JsonToken.VALUE_STRING) {
 
-                String s = p.getText().trim();
+                String s = p.getString().trim();
 
                 if (s.isEmpty()) {
                     return null;
@@ -93,7 +89,7 @@ public class InstantConversion {
                 try {
                     return Instant.parse(s);
                 } catch (DateTimeParseException ex) {
-                    throw ctx.weirdStringException(
+                    throw ctxt.weirdStringException(
                         s, Instant.class, "Expected epoch seconds (long) or ISO-8601 instant");
                 }
             }
@@ -102,7 +98,7 @@ public class InstantConversion {
                 return null;
             }
 
-            throw new JsonMappingException(p, "Expected epoch seconds (long) or ISO-8601 instant");
+            throw DatabindException.from(p, "Expected epoch seconds (long) or ISO-8601 instant");
         }
 
     }

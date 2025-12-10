@@ -20,8 +20,6 @@
 
 package io.mojaloop.core.accounting.domain.component.ledger.strategy;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.mojaloop.core.accounting.domain.component.ledger.Ledger;
@@ -39,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
+import tools.jackson.databind.ObjectMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -157,7 +156,8 @@ public class MySqlLedger implements Ledger {
                 if (!added) {
                     throw new RuntimeException(
                         new DuplicatePostingException(
-                            request.accountId(), request.side(), transactionId));
+                            request.accountId(), request.side(),
+                            transactionId));
                 }
             });
 
@@ -174,7 +174,7 @@ public class MySqlLedger implements Ledger {
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
-            var result = this.jdbcTemplate.execute((ConnectionCallback<List<Movement>>) con -> {
+            return this.jdbcTemplate.execute((ConnectionCallback<List<Movement>>) con -> {
 
                 var movements = new ArrayList<Movement>();
 
@@ -216,8 +216,6 @@ public class MySqlLedger implements Ledger {
 
             });
 
-            return result;
-
         } catch (RuntimeException e) {
 
             LOGGER.error("Exception:", e);
@@ -241,10 +239,6 @@ public class MySqlLedger implements Ledger {
 
             throw e;
 
-        } catch (JsonProcessingException e) {
-
-            LOGGER.error("Unable to serialize ledger movement request", e);
-            throw new RuntimeException(e);
         }
     }
 
@@ -263,7 +257,8 @@ public class MySqlLedger implements Ledger {
             case "DUPLICATE_POSTING": {
                 throw new RuntimeException(
                     new DuplicatePostingException(
-                        new AccountId(accountId), Side.valueOf(side), transactionId));
+                        new AccountId(accountId), Side.valueOf(side),
+                        transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {

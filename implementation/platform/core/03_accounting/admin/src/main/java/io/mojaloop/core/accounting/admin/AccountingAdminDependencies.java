@@ -1,6 +1,6 @@
 package io.mojaloop.core.accounting.admin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.web.spring.security.AuthenticationErrorWriter;
 import io.mojaloop.component.web.spring.security.Authenticator;
 import io.mojaloop.core.accounting.admin.controller.component.EmptyErrorWriter;

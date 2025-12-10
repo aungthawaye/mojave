@@ -20,7 +20,7 @@
 
 package io.mojaloop.component.misc.error;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 

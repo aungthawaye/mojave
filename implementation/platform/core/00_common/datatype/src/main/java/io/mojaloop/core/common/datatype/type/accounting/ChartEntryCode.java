@@ -23,10 +23,6 @@ package io.mojaloop.core.common.datatype.type.accounting;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.mojaloop.component.misc.constraint.StringSizeConstraints;
 import io.mojaloop.core.common.datatype.exception.accounting.ChartEntryCodeValueRequiredException;
 import io.mojaloop.core.common.datatype.exception.accounting.ChartEntryCodeValueTooLargeException;
@@ -35,8 +31,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
-import java.io.IOException;
 import java.util.Objects;
 
 @JsonDeserialize(using = ChartEntryCode.Deserializer.class)
@@ -67,11 +66,10 @@ public record ChartEntryCode(@JsonValue @JsonProperty(required = true) @NotNull 
         return Objects.equals(this.value, code);
     }
 
-    public static class Deserializer extends JsonDeserializer<ChartEntryCode> {
+    public static class Deserializer extends ValueDeserializer<ChartEntryCode> {
 
         @Override
-        public ChartEntryCode deserialize(JsonParser p, DeserializationContext ctx)
-            throws IOException {
+        public ChartEntryCode deserialize(JsonParser p, DeserializationContext ctx) {
 
             var text = p.getValueAsString();
 

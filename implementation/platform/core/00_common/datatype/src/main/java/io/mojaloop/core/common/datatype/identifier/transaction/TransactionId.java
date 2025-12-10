@@ -21,16 +21,15 @@
 package io.mojaloop.core.common.datatype.identifier.transaction;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.mojaloop.component.misc.ddd.EntityId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = TransactionId.Deserializer.class)
 public class TransactionId extends EntityId<Long> {
@@ -41,11 +40,11 @@ public class TransactionId extends EntityId<Long> {
         super(id);
     }
 
-    public static class Deserializer extends JsonDeserializer<TransactionId> {
+    public static class Deserializer extends ValueDeserializer<TransactionId> {
 
         @Override
         public TransactionId deserialize(JsonParser p, DeserializationContext ctx)
-            throws IOException {
+            throws JacksonException {
 
             var field = p.currentName();
             var text = p.getValueAsString();

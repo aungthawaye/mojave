@@ -20,7 +20,6 @@
 
 package io.mojaloop.core.transaction.producer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.kafka.KafkaProducerConfigurer;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.core.transaction.contract.command.AddStepCommand;
@@ -28,6 +27,7 @@ import io.mojaloop.core.transaction.contract.command.CloseTransactionCommand;
 import io.mojaloop.core.transaction.producer.publisher.AddStepPublisher;
 import io.mojaloop.core.transaction.producer.publisher.CloseTransactionPublisher;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.common.serialization.Serializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,7 +35,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.HashMap;
 
@@ -59,18 +61,18 @@ public class TransactionProducerConfiguration {
 
         return KafkaProducerConfigurer.configure(
             settings.bootstrapServers(), settings.ack(),
-            new KafkaProducerConfigurer.Serializer<>() {
+            new KafkaProducerConfigurer.Serializers<>() {
 
                 @Override
-                public JsonSerializer<String> forKey() {
+                public JacksonJsonSerializer<String> forKey() {
 
-                    return new JsonSerializer<>(objectMapper);
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }
 
                 @Override
-                public JsonSerializer<AddStepCommand.Input> forValue() {
+                public JacksonJsonSerializer<AddStepCommand.Input> forValue() {
 
-                    return new JsonSerializer<>(objectMapper);
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }
             });
     }
@@ -93,18 +95,18 @@ public class TransactionProducerConfiguration {
 
         return KafkaProducerConfigurer.configure(
             settings.bootstrapServers(), settings.ack(),
-            new KafkaProducerConfigurer.Serializer<>() {
+            new KafkaProducerConfigurer.Serializers<>() {
 
                 @Override
-                public JsonSerializer<String> forKey() {
+                public Serializer<String> forKey() {
 
-                    return new JsonSerializer<>(objectMapper);
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }
 
                 @Override
-                public JsonSerializer<CloseTransactionCommand.Input> forValue() {
+                public Serializer<CloseTransactionCommand.Input> forValue() {
 
-                    return new JsonSerializer<>(objectMapper);
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }
             });
     }

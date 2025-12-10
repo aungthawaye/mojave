@@ -19,8 +19,6 @@
  */
 
 package io.mojaloop.core.accounting.intercom;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
@@ -48,9 +46,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         SpringSecurityConfiguration.class})
 public final class AccountingIntercomConfiguration extends WebMvcExtension {
 
-    public AccountingIntercomConfiguration(ObjectMapper objectMapper) {
+    public AccountingIntercomConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 
-        super(objectMapper);
+        super(jsonMapper);
     }
 
     public interface RequiredDependencies extends AccountingDomainConfiguration.RequiredBeans,

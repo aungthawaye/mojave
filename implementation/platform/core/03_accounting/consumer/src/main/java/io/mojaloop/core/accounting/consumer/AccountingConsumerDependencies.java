@@ -1,6 +1,6 @@
 package io.mojaloop.core.accounting.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.core.accounting.domain.cache.AccountCache;
 import io.mojaloop.core.accounting.domain.cache.ChartEntryCache;
 import io.mojaloop.core.accounting.domain.cache.FlowDefinitionCache;

@@ -20,7 +20,7 @@
 
 package io.mojaloop.mono.admin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.spring.mvc.WebMvcExtension;
 import io.mojaloop.component.web.spring.security.SpringSecurityConfiguration;

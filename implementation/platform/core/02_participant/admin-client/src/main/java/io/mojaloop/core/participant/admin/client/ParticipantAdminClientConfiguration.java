@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.participant.admin.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.retrofit.RetrofitService;
 import io.mojaloop.core.participant.admin.client.service.ParticipantAdminService;

@@ -1,350 +1,286 @@
 package io.mojaloop.fspiop.spec.core;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.mojaloop.fspiop.spec.core.ErrorInformation;
+import io.mojaloop.fspiop.spec.core.ExtensionList;
+import io.mojaloop.fspiop.spec.core.Money;
+import io.mojaloop.fspiop.spec.core.Party;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Data model for the complex type IndividualQuoteResult.
  **/
 
 @JsonTypeName("IndividualQuoteResult")
-@jakarta.annotation.Generated(
-    value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
-    comments = "Generator version: 7.13.0")
-public class IndividualQuoteResult {
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.13.0")
+public class IndividualQuoteResult   {
+  private String quoteId;
+  private Party payee;
+  private Money transferAmount;
+  private Money payeeReceiveAmount;
+  private Money payeeFspFee;
+  private Money payeeFspCommission;
+  private String ilpPacket;
+  private String condition;
+  private ErrorInformation errorInformation;
+  private ExtensionList extensionList;
 
-    private String quoteId;
+  public IndividualQuoteResult() {
+  }
 
-    private Party payee;
+  @JsonCreator
+  public IndividualQuoteResult(
+    @JsonProperty(required = true, value = "quoteId") String quoteId
+  ) {
+    this.quoteId = quoteId;
+  }
 
-    private Money transferAmount;
+  /**
+   * Identifier that correlates all messages of the same sequence. The API data type UUID (Universally Unique Identifier) is a JSON String in canonical format, conforming to [RFC 4122](https://tools.ietf.org/html/rfc4122), that is restricted by a regular expression for interoperability reasons. A UUID is always 36 characters long, 32 hexadecimal symbols and 4 dashes (‘-‘).
+   **/
+  public IndividualQuoteResult quoteId(String quoteId) {
+    this.quoteId = quoteId;
+    return this;
+  }
 
-    private Money payeeReceiveAmount;
+  
+  @JsonProperty(required = true, value = "quoteId")
+  @NotNull  @Pattern(regexp="^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")public String getQuoteId() {
+    return quoteId;
+  }
 
-    private Money payeeFspFee;
+  @JsonProperty(required = true, value = "quoteId")
+  public void setQuoteId(String quoteId) {
+    this.quoteId = quoteId;
+  }
 
-    private Money payeeFspCommission;
+  /**
+   **/
+  public IndividualQuoteResult payee(Party payee) {
+    this.payee = payee;
+    return this;
+  }
 
-    private String ilpPacket;
+  
+  @JsonProperty("payee")
+  @Valid public Party getPayee() {
+    return payee;
+  }
 
-    private String condition;
+  @JsonProperty("payee")
+  public void setPayee(Party payee) {
+    this.payee = payee;
+  }
 
-    private ErrorInformation errorInformation;
+  /**
+   **/
+  public IndividualQuoteResult transferAmount(Money transferAmount) {
+    this.transferAmount = transferAmount;
+    return this;
+  }
 
-    private ExtensionList extensionList;
+  
+  @JsonProperty("transferAmount")
+  @Valid public Money getTransferAmount() {
+    return transferAmount;
+  }
 
-    public IndividualQuoteResult() {
+  @JsonProperty("transferAmount")
+  public void setTransferAmount(Money transferAmount) {
+    this.transferAmount = transferAmount;
+  }
 
+  /**
+   **/
+  public IndividualQuoteResult payeeReceiveAmount(Money payeeReceiveAmount) {
+    this.payeeReceiveAmount = payeeReceiveAmount;
+    return this;
+  }
+
+  
+  @JsonProperty("payeeReceiveAmount")
+  @Valid public Money getPayeeReceiveAmount() {
+    return payeeReceiveAmount;
+  }
+
+  @JsonProperty("payeeReceiveAmount")
+  public void setPayeeReceiveAmount(Money payeeReceiveAmount) {
+    this.payeeReceiveAmount = payeeReceiveAmount;
+  }
+
+  /**
+   **/
+  public IndividualQuoteResult payeeFspFee(Money payeeFspFee) {
+    this.payeeFspFee = payeeFspFee;
+    return this;
+  }
+
+  
+  @JsonProperty("payeeFspFee")
+  @Valid public Money getPayeeFspFee() {
+    return payeeFspFee;
+  }
+
+  @JsonProperty("payeeFspFee")
+  public void setPayeeFspFee(Money payeeFspFee) {
+    this.payeeFspFee = payeeFspFee;
+  }
+
+  /**
+   **/
+  public IndividualQuoteResult payeeFspCommission(Money payeeFspCommission) {
+    this.payeeFspCommission = payeeFspCommission;
+    return this;
+  }
+
+  
+  @JsonProperty("payeeFspCommission")
+  @Valid public Money getPayeeFspCommission() {
+    return payeeFspCommission;
+  }
+
+  @JsonProperty("payeeFspCommission")
+  public void setPayeeFspCommission(Money payeeFspCommission) {
+    this.payeeFspCommission = payeeFspCommission;
+  }
+
+  /**
+   * Information for recipient (transport layer information).
+   **/
+  public IndividualQuoteResult ilpPacket(String ilpPacket) {
+    this.ilpPacket = ilpPacket;
+    return this;
+  }
+
+  
+  @JsonProperty("ilpPacket")
+   @Pattern(regexp="^[A-Za-z0-9-_]+[=]{0,2}$") @Size(min=1,max=32768)public String getIlpPacket() {
+    return ilpPacket;
+  }
+
+  @JsonProperty("ilpPacket")
+  public void setIlpPacket(String ilpPacket) {
+    this.ilpPacket = ilpPacket;
+  }
+
+  /**
+   * Condition that must be attached to the transfer by the Payer.
+   **/
+  public IndividualQuoteResult condition(String condition) {
+    this.condition = condition;
+    return this;
+  }
+
+  
+  @JsonProperty("condition")
+   @Pattern(regexp="^[A-Za-z0-9-_]{43}$") @Size(max=48)public String getCondition() {
+    return condition;
+  }
+
+  @JsonProperty("condition")
+  public void setCondition(String condition) {
+    this.condition = condition;
+  }
+
+  /**
+   **/
+  public IndividualQuoteResult errorInformation(ErrorInformation errorInformation) {
+    this.errorInformation = errorInformation;
+    return this;
+  }
+
+  
+  @JsonProperty("errorInformation")
+  @Valid public ErrorInformation getErrorInformation() {
+    return errorInformation;
+  }
+
+  @JsonProperty("errorInformation")
+  public void setErrorInformation(ErrorInformation errorInformation) {
+    this.errorInformation = errorInformation;
+  }
+
+  /**
+   **/
+  public IndividualQuoteResult extensionList(ExtensionList extensionList) {
+    this.extensionList = extensionList;
+    return this;
+  }
+
+  
+  @JsonProperty("extensionList")
+  @Valid public ExtensionList getExtensionList() {
+    return extensionList;
+  }
+
+  @JsonProperty("extensionList")
+  public void setExtensionList(ExtensionList extensionList) {
+    this.extensionList = extensionList;
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    @JsonCreator
-    public IndividualQuoteResult(@JsonProperty(
-        required = true,
-        value = "quoteId") String quoteId) {
-
-        this.quoteId = quoteId;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    IndividualQuoteResult individualQuoteResult = (IndividualQuoteResult) o;
+    return Objects.equals(this.quoteId, individualQuoteResult.quoteId) &&
+        Objects.equals(this.payee, individualQuoteResult.payee) &&
+        Objects.equals(this.transferAmount, individualQuoteResult.transferAmount) &&
+        Objects.equals(this.payeeReceiveAmount, individualQuoteResult.payeeReceiveAmount) &&
+        Objects.equals(this.payeeFspFee, individualQuoteResult.payeeFspFee) &&
+        Objects.equals(this.payeeFspCommission, individualQuoteResult.payeeFspCommission) &&
+        Objects.equals(this.ilpPacket, individualQuoteResult.ilpPacket) &&
+        Objects.equals(this.condition, individualQuoteResult.condition) &&
+        Objects.equals(this.errorInformation, individualQuoteResult.errorInformation) &&
+        Objects.equals(this.extensionList, individualQuoteResult.extensionList);
+  }
 
-    /**
-     * Condition that must be attached to the transfer by the Payer.
-     **/
-    public IndividualQuoteResult condition(String condition) {
+  @Override
+  public int hashCode() {
+    return Objects.hash(quoteId, payee, transferAmount, payeeReceiveAmount, payeeFspFee, payeeFspCommission, ilpPacket, condition, errorInformation, extensionList);
+  }
 
-        this.condition = condition;
-        return this;
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class IndividualQuoteResult {\n");
+    
+    sb.append("    quoteId: ").append(toIndentedString(quoteId)).append("\n");
+    sb.append("    payee: ").append(toIndentedString(payee)).append("\n");
+    sb.append("    transferAmount: ").append(toIndentedString(transferAmount)).append("\n");
+    sb.append("    payeeReceiveAmount: ").append(toIndentedString(payeeReceiveAmount)).append("\n");
+    sb.append("    payeeFspFee: ").append(toIndentedString(payeeFspFee)).append("\n");
+    sb.append("    payeeFspCommission: ").append(toIndentedString(payeeFspCommission)).append("\n");
+    sb.append("    ilpPacket: ").append(toIndentedString(ilpPacket)).append("\n");
+    sb.append("    condition: ").append(toIndentedString(condition)).append("\n");
+    sb.append("    errorInformation: ").append(toIndentedString(errorInformation)).append("\n");
+    sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
     }
+    return o.toString().replace("\n", "\n    ");
+  }
 
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        IndividualQuoteResult individualQuoteResult = (IndividualQuoteResult) o;
-        return Objects.equals(this.quoteId, individualQuoteResult.quoteId) &&
-                   Objects.equals(this.payee, individualQuoteResult.payee) &&
-                   Objects.equals(this.transferAmount, individualQuoteResult.transferAmount) &&
-                   Objects.equals(
-                       this.payeeReceiveAmount,
-                       individualQuoteResult.payeeReceiveAmount) &&
-                   Objects.equals(this.payeeFspFee, individualQuoteResult.payeeFspFee) &&
-                   Objects.equals(
-                       this.payeeFspCommission,
-                       individualQuoteResult.payeeFspCommission) &&
-                   Objects.equals(this.ilpPacket, individualQuoteResult.ilpPacket) &&
-                   Objects.equals(this.condition, individualQuoteResult.condition) &&
-                   Objects.equals(this.errorInformation, individualQuoteResult.errorInformation) &&
-                   Objects.equals(this.extensionList, individualQuoteResult.extensionList);
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult errorInformation(ErrorInformation errorInformation) {
-
-        this.errorInformation = errorInformation;
-        return this;
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult extensionList(ExtensionList extensionList) {
-
-        this.extensionList = extensionList;
-        return this;
-    }
-
-    @JsonProperty("condition")
-    @Pattern(regexp = "^[A-Za-z0-9-_]{43}$")
-    @Size(max = 48)
-    public String getCondition() {
-
-        return condition;
-    }
-
-    @JsonProperty("condition")
-    public void setCondition(String condition) {
-
-        this.condition = condition;
-    }
-
-    @JsonProperty("errorInformation")
-    @Valid
-    public ErrorInformation getErrorInformation() {
-
-        return errorInformation;
-    }
-
-    @JsonProperty("errorInformation")
-    public void setErrorInformation(ErrorInformation errorInformation) {
-
-        this.errorInformation = errorInformation;
-    }
-
-    @JsonProperty("extensionList")
-    @Valid
-    public ExtensionList getExtensionList() {
-
-        return extensionList;
-    }
-
-    @JsonProperty("extensionList")
-    public void setExtensionList(ExtensionList extensionList) {
-
-        this.extensionList = extensionList;
-    }
-
-    @JsonProperty("ilpPacket")
-    @Pattern(regexp = "^[A-Za-z0-9-_]+[=]{0,2}$")
-    @Size(
-        min = 1,
-        max = 32768)
-    public String getIlpPacket() {
-
-        return ilpPacket;
-    }
-
-    @JsonProperty("ilpPacket")
-    public void setIlpPacket(String ilpPacket) {
-
-        this.ilpPacket = ilpPacket;
-    }
-
-    @JsonProperty("payee")
-    @Valid
-    public Party getPayee() {
-
-        return payee;
-    }
-
-    @JsonProperty("payee")
-    public void setPayee(Party payee) {
-
-        this.payee = payee;
-    }
-
-    @JsonProperty("payeeFspCommission")
-    @Valid
-    public Money getPayeeFspCommission() {
-
-        return payeeFspCommission;
-    }
-
-    @JsonProperty("payeeFspCommission")
-    public void setPayeeFspCommission(Money payeeFspCommission) {
-
-        this.payeeFspCommission = payeeFspCommission;
-    }
-
-    @JsonProperty("payeeFspFee")
-    @Valid
-    public Money getPayeeFspFee() {
-
-        return payeeFspFee;
-    }
-
-    @JsonProperty("payeeFspFee")
-    public void setPayeeFspFee(Money payeeFspFee) {
-
-        this.payeeFspFee = payeeFspFee;
-    }
-
-    @JsonProperty("payeeReceiveAmount")
-    @Valid
-    public Money getPayeeReceiveAmount() {
-
-        return payeeReceiveAmount;
-    }
-
-    @JsonProperty("payeeReceiveAmount")
-    public void setPayeeReceiveAmount(Money payeeReceiveAmount) {
-
-        this.payeeReceiveAmount = payeeReceiveAmount;
-    }
-
-    @JsonProperty(
-        required = true,
-        value = "quoteId")
-    @NotNull
-    @Pattern(regexp = "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
-    public String getQuoteId() {
-
-        return quoteId;
-    }
-
-    @JsonProperty(
-        required = true,
-        value = "quoteId")
-    public void setQuoteId(String quoteId) {
-
-        this.quoteId = quoteId;
-    }
-
-    @JsonProperty("transferAmount")
-    @Valid
-    public Money getTransferAmount() {
-
-        return transferAmount;
-    }
-
-    @JsonProperty("transferAmount")
-    public void setTransferAmount(Money transferAmount) {
-
-        this.transferAmount = transferAmount;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(
-            quoteId, payee, transferAmount, payeeReceiveAmount, payeeFspFee, payeeFspCommission,
-            ilpPacket, condition, errorInformation, extensionList);
-    }
-
-    /**
-     * Information for recipient (transport layer information).
-     **/
-    public IndividualQuoteResult ilpPacket(String ilpPacket) {
-
-        this.ilpPacket = ilpPacket;
-        return this;
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult payee(Party payee) {
-
-        this.payee = payee;
-        return this;
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult payeeFspCommission(Money payeeFspCommission) {
-
-        this.payeeFspCommission = payeeFspCommission;
-        return this;
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult payeeFspFee(Money payeeFspFee) {
-
-        this.payeeFspFee = payeeFspFee;
-        return this;
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult payeeReceiveAmount(Money payeeReceiveAmount) {
-
-        this.payeeReceiveAmount = payeeReceiveAmount;
-        return this;
-    }
-
-    /**
-     * Identifier that correlates all messages of the same sequence. The API data type UUID (Universally Unique Identifier) is a JSON String in canonical format, conforming to [RFC 4122](https://tools.ietf.org/html/rfc4122), that is restricted by a regular expression for interoperability reasons. A UUID is always 36 characters long, 32 hexadecimal symbols and 4 dashes (‘-‘).
-     **/
-    public IndividualQuoteResult quoteId(String quoteId) {
-
-        this.quoteId = quoteId;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("class IndividualQuoteResult {\n");
-
-        sb.append("    quoteId: ").append(toIndentedString(quoteId)).append("\n");
-        sb.append("    payee: ").append(toIndentedString(payee)).append("\n");
-        sb.append("    transferAmount: ").append(toIndentedString(transferAmount)).append("\n");
-        sb
-            .append("    payeeReceiveAmount: ")
-            .append(toIndentedString(payeeReceiveAmount))
-            .append("\n");
-        sb.append("    payeeFspFee: ").append(toIndentedString(payeeFspFee)).append("\n");
-        sb
-            .append("    payeeFspCommission: ")
-            .append(toIndentedString(payeeFspCommission))
-            .append("\n");
-        sb.append("    ilpPacket: ").append(toIndentedString(ilpPacket)).append("\n");
-        sb.append("    condition: ").append(toIndentedString(condition)).append("\n");
-        sb.append("    errorInformation: ").append(toIndentedString(errorInformation)).append("\n");
-        sb.append("    extensionList: ").append(toIndentedString(extensionList)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /**
-     **/
-    public IndividualQuoteResult transferAmount(Money transferAmount) {
-
-        this.transferAmount = transferAmount;
-        return this;
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
-    }
 
 }
 

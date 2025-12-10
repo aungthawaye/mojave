@@ -19,8 +19,6 @@
  */
 
 package io.mojaloop.core.transaction.intercom;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
@@ -49,9 +47,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         SpringSecurityConfiguration.class})
 public final class TransactionIntercomConfiguration extends WebMvcExtension {
 
-    public TransactionIntercomConfiguration(ObjectMapper objectMapper) {
+    public TransactionIntercomConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 
-        super(objectMapper);
+        super(jsonMapper);
     }
 
     public interface RequiredDependencies extends TransactionDomainConfiguration.RequiredBeans,

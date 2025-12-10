@@ -95,13 +95,13 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
                 "Agreement cannot be unwrapped from ILP packet data.");
         }
 
-        if (agreement.quoteId().equals(request.getTransferId())) {
+        if (!agreement.quoteId().equals(request.getTransferId())) {
 
-            LOGGER.warn("Agreement quoteId does not match transferId");
+            LOGGER.warn("QuoteId from Agreement does not match the transferId of Transfer request.");
 
             throw new FspiopException(
                 FspiopErrors.GENERIC_VALIDATION_ERROR,
-                "QuoteId from Agreement does not match transferId.");
+                "QuoteId from Agreement does not match the transferId of Transfer request.");
         }
 
         if (ilpTransferAmount.subtract(transferAmount).signum() != 0) {

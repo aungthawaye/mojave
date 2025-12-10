@@ -19,8 +19,6 @@
  */
 
 package io.mojaloop.core.participant.intercom;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.component.openapi.OpenApiConfiguration;
 import io.mojaloop.component.web.error.RestErrorConfiguration;
 import io.mojaloop.component.web.logging.RequestIdMdcConfiguration;
@@ -49,9 +47,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         SpringSecurityConfiguration.class})
 public final class ParticipantIntercomConfiguration extends WebMvcExtension {
 
-    public ParticipantIntercomConfiguration(ObjectMapper objectMapper) {
+    public ParticipantIntercomConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 
-        super(objectMapper);
+        super(jsonMapper);
     }
 
     public interface RequiredDependencies extends ParticipantDomainConfiguration.RequiredBeans,

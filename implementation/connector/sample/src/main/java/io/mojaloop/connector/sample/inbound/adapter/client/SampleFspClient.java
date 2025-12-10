@@ -80,14 +80,14 @@ public class SampleFspClient implements FspClient {
         if (request.amountType() == AmountType.SEND) {
 
             // Dummy fee 5USD.
-            //payeeReceiveAmount = originalAmount.subtract(new BigDecimal("5"));
             transferAmount = originalAmount;
+            payeeReceiveAmount = transferAmount.subtract(payeeFspFee);
 
         } else {
 
             // Dummy fee 5USD.
-            //payeeReceiveAmount = originalAmount;
-            transferAmount = originalAmount.add(new BigDecimal("0"));
+            payeeReceiveAmount = originalAmount;
+            transferAmount = originalAmount.add(payeeFspFee);
 
         }
 

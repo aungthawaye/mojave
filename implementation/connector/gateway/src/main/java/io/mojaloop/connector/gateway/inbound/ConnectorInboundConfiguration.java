@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.gateway.inbound;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.component.misc.crypto.KeyStores;
 import io.mojaloop.component.misc.pubsub.PubSubClient;
@@ -35,8 +35,8 @@ import io.mojaloop.connector.gateway.inbound.component.FspiopInboundGatekeeper;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;
 import io.mojaloop.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

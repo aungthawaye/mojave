@@ -21,9 +21,9 @@
 package io.mojaloop.component.kafka;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.Serializer;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class KafkaProducerConfigurer {
 
     public static <K, V> ProducerFactory<K, V> configure(String bootstrapServers,
                                                          String ack,
-                                                         Serializer<K, V> serializer) {
+                                                         Serializers<K, V> serializers) {
 
         Map<String, Object> props = new HashMap<>();
 
@@ -41,17 +41,17 @@ public class KafkaProducerConfigurer {
 
         var factory = new DefaultKafkaProducerFactory<K, V>(props);
 
-        factory.setValueSerializer(serializer.forValue());
-        factory.setKeySerializer(serializer.forKey());
+        factory.setValueSerializer(serializers.forValue());
+        factory.setKeySerializer(serializers.forKey());
 
         return factory;
     }
 
-    public interface Serializer<K, V> {
+    public interface Serializers<K, V> {
 
-        JsonSerializer<K> forKey();
+        Serializer<K> forKey();
 
-        JsonSerializer<V> forValue();
+        Serializer<V> forValue();
 
     }
 

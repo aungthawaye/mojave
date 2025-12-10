@@ -23,17 +23,17 @@ package io.mojaloop.component.kafka;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 
 public class KafkaConsumerConfigurer {
 
     public static <K, V> ConcurrentKafkaListenerContainerFactory<K, V> configure(ConsumerSettings opts,
-                                                                                 Deserializer<K, V> deserializer) {
+                                                                                 Deserializers<K, V> deserializer) {
 
         var props = new HashMap<String, Object>();
 
@@ -68,11 +68,11 @@ public class KafkaConsumerConfigurer {
         return listenerContainerFactory;
     }
 
-    public interface Deserializer<K, V> {
+    public interface Deserializers<K, V> {
 
-        JsonDeserializer<K> forKey();
+        Deserializer<K> forKey();
 
-        JsonDeserializer<V> forValue();
+        Deserializer<V> forValue();
 
     }
 

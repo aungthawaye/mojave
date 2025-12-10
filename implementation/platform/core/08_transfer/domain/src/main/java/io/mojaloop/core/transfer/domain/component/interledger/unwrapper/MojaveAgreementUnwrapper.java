@@ -20,12 +20,11 @@
 
 package io.mojaloop.core.transfer.domain.component.interledger.unwrapper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.mojaloop.core.transfer.contract.component.interledger.AgreementUnwrapper;
 import io.mojaloop.fspiop.common.data.Agreement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.databind.ObjectMapper;
 
 import java.nio.charset.StandardCharsets;
 
@@ -56,7 +55,7 @@ public class MojaveAgreementUnwrapper implements AgreementUnwrapper {
 
             return agreement;
 
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
 
             LOGGER.warn("Failed to unwrap ILP packet data: {}", e.getMessage());
             return null;

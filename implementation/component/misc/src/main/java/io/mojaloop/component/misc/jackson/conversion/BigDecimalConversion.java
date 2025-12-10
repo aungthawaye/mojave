@@ -20,30 +20,25 @@
 
 package io.mojaloop.component.misc.jackson.conversion;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 public class BigDecimalConversion {
 
-    public static class Serializer extends StdSerializer<BigDecimal> {
-
-        public Serializer() {
-
-            super(BigDecimal.class);
-        }
+    public static class Serializer extends ValueSerializer<BigDecimal> {
 
         @Override
-        public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider provider)
-            throws IOException {
+        public void serialize(BigDecimal value, JsonGenerator gen, SerializationContext ctxt)
+            throws JacksonException {
 
             if (value == null) {
                 gen.writeNull();
@@ -55,13 +50,13 @@ public class BigDecimalConversion {
 
     }
 
-    /** Deserialize epochMillis (Long or numeric string) OR ISO-8601 string -> Instant */
-    public static class Deserializer extends JsonDeserializer<BigDecimal> {
+    public static class Deserializer extends ValueDeserializer<BigDecimal> {
 
         @Override
-        public BigDecimal deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+        public BigDecimal deserialize(JsonParser p, DeserializationContext ctxt)
+            throws JacksonException {
 
-            JsonToken t = p.getCurrentToken();
+            JsonToken t = p.currentToken();
 
             if (t == JsonToken.VALUE_NUMBER_INT) {
                 // direct number -> epoch millis
@@ -70,12 +65,12 @@ public class BigDecimalConversion {
 
             if (t == JsonToken.VALUE_NUMBER_FLOAT) {
 
-                return new BigDecimal(p.getText());
+                return new BigDecimal(p.getString());
             }
 
             if (t == JsonToken.VALUE_STRING) {
 
-                String s = p.getText().trim();
+                String s = p.getString().trim();
 
                 if (s.isEmpty()) {
                     return null;
@@ -84,7 +79,7 @@ public class BigDecimalConversion {
                 try {
                     return new BigDecimal(s);
                 } catch (NumberFormatException ignore) {
-                    throw ctx.weirdStringException(
+                    throw ctxt.weirdStringException(
                         s, BigDecimal.class, "Expected integer or decimal number");
                 }
             }
@@ -93,7 +88,7 @@ public class BigDecimalConversion {
                 return null;
             }
 
-            throw new JsonMappingException(p, "Expected integer or decimal number");
+            throw DatabindException.from(p, "Expected integer or decimal number");
         }
 
     }

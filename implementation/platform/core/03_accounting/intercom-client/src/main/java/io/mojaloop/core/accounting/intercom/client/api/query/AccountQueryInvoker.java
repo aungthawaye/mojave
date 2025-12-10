@@ -20,7 +20,7 @@
 
 package io.mojaloop.core.accounting.intercom.client.api.query;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.error.RestErrorResponse;
 import io.mojaloop.component.misc.query.PagedResult;
 import io.mojaloop.component.retrofit.RetrofitService;

@@ -20,7 +20,7 @@
 
 package io.mojaloop.fspiop.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.MiscConfiguration;
 import io.mojaloop.fspiop.common.FspiopCommonConfiguration;
 import io.mojaloop.fspiop.common.participant.ParticipantContext;

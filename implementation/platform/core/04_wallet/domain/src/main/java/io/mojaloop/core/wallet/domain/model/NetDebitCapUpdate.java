@@ -59,7 +59,7 @@ import static java.sql.Types.BIGINT;
             name = "wlt_net_debit_cap_update_position_id_transaction_at_IDX",
             columnList = "position_id, transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NdcUpdate extends JpaEntity<NetDebitCapUpdateId> {
+public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {
 
     @Id
     @JavaType(NetDebitCapUpdateIdJavaType.class)

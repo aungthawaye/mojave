@@ -20,14 +20,13 @@
 
 package io.mojaloop.component.web.spring.mvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.http.converter.HttpMessageConverters;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.util.List;
-
-public class WebMvcExtension implements WebMvcConfigurer {
+public class WebMvcExtension extends WebMvcConfigurationSupport {
 
     private final ObjectMapper objectMapper;
 
@@ -37,20 +36,12 @@ public class WebMvcExtension implements WebMvcConfigurer {
     }
 
     @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(HttpMessageConverters.ServerBuilder builder) {
 
-        for (int i = 0; i < converters.size(); i++) {
+        builder.registerDefaults();
+        builder.withJsonConverter(
+            new JacksonJsonHttpMessageConverter((JsonMapper) this.objectMapper));
 
-            HttpMessageConverter<?> c = converters.get(i);
-
-            if (c instanceof MappingJackson2HttpMessageConverter) {
-
-                converters.set(i, new MappingJackson2HttpMessageConverter(this.objectMapper));
-                return;
-            }
-        }
-
-        converters.addFirst(new MappingJackson2HttpMessageConverter(this.objectMapper));
     }
 
 }

@@ -21,11 +21,20 @@
 package io.mojaloop.component.misc.jwt;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.DeserializationException;
+import io.jsonwebtoken.io.Deserializer;
+import io.jsonwebtoken.io.SerializationException;
+import io.jsonwebtoken.io.Serializer;
 import io.jsonwebtoken.security.SignatureAlgorithm;
+import io.mojaloop.component.misc.jackson.ObjectMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.ObjectMapper;
 
 import javax.crypto.SecretKey;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -39,6 +48,8 @@ public final class Jwt {
     private static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 
     private static final Base64.Decoder DECODER = Base64.getUrlDecoder();
+
+    private static final ObjectMapper OBJECT_MAPPER = ObjectMapperFactory.createJsonMapper();
 
     private Jwt() { }
 
@@ -70,27 +81,6 @@ public final class Jwt {
         String token = Jwts
                            .builder()
                            .signWith(privateKey, alg)
-                           .header()
-                           .add("typ", "JWT")
-                           .add(headers)
-                           .and()
-                           .content(payload, "application/json")
-                           .compact();
-
-        String[] parts = token.split("\\.");
-
-        return new Jwt.Token(parts[0], parts[1], parts[2], token);
-    }
-
-    public static Jwt.Token sign(SecretKey secretKey, Map<String, ?> headers, String payload) {
-
-        if (payload.isEmpty()) {
-            payload = "{}";
-        }
-
-        String token = Jwts
-                           .builder()
-                           .signWith(secretKey)
                            .header()
                            .add("typ", "JWT")
                            .add(headers)

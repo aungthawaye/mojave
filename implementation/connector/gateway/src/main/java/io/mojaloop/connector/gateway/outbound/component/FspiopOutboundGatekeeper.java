@@ -21,7 +21,7 @@
 package io.mojaloop.connector.gateway.outbound.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.crypto.KeyPairs;
 import io.mojaloop.component.misc.jwt.Jwt;
 import io.mojaloop.component.web.request.CachedServletRequest;

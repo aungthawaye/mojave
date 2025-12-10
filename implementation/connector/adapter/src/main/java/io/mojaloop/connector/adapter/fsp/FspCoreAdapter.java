@@ -20,7 +20,7 @@
 
 package io.mojaloop.connector.adapter.fsp;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.mojaloop.component.misc.logger.ObjectLogger;
 import io.mojaloop.connector.adapter.fsp.client.FspClient;
 import io.mojaloop.connector.adapter.fsp.payload.Parties;
