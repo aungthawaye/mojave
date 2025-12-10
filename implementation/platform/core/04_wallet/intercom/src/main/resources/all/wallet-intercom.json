@@ -3,7 +3,7 @@
     "_postman_id": "a3e6f3b8-1b52-4f4a-9c7b-7f1b8d6a9c22",
     "name": "Wallet Intercom API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Postman collection for io.mojaloop.core.wallet.intercom.controller endpoints."
+    "description": "Postman collection for org.mojave.core.wallet.intercom.controller endpoints."
   },
   "variable": [
     {

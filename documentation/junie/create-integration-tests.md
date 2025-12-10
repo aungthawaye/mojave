@@ -1,6 +1,6 @@
-Create integration tests **IT for all the **CommandHandler inside io.mojaloop.core.quoting.domain.command. 
+Create integration tests **IT for all the **CommandHandler inside org.mojave.core.quoting.domain.command. 
 If needed to organize by the same nature and found more than one nature, you need to create a subpackage 
-like in io.mojaloop.core.account.domain.command.account too when you create **IT accordingly.
+like in org.mojave.core.account.domain.command.account too when you create **IT accordingly.
 
 When you create a test, make sure you follow these:
 1. All tests must clear the database table before each test is run.
@@ -13,4 +13,4 @@ When you create a test, make sure you follow these:
 8. Create a test based on these Commands and for these Commands and using these Commands only.
 9. Test method name must be in snake cases.
 
-You can refer to what you have done previously in this package: io.mojaloop.core.participant.domain.command
+You can refer to what you have done previously in this package: org.mojave.core.participant.domain.command

@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.platform.mono</groupId>
+        <groupId>org.mojave.platform.mono</groupId>
         <artifactId>mono-pom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -24,31 +24,31 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-openapi</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.accounting</groupId>
+            <groupId>org.mojave.platform.core.accounting</groupId>
             <artifactId>mod-accounting-intercom</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.participant</groupId>
+            <groupId>org.mojave.platform.core.participant</groupId>
             <artifactId>mod-participant-intercom</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.transaction</groupId>
+            <groupId>org.mojave.platform.core.transaction</groupId>
             <artifactId>mod-transaction-intercom</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.wallet</groupId>
+            <groupId>org.mojave.platform.core.wallet</groupId>
             <artifactId>mod-wallet-intercom</artifactId>
         </dependency>
         <dependency>

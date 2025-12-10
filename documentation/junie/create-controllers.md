@@ -1,6 +1,6 @@
-Create controllers inside the "io.mojaloop.core.accounting.intercom.controller" package for 
-the **Command in "io.mojaloop.core.accounting.domain.command.ledger" package. 
-You can refer to the implementation here in "io.mojaloop.core.accounting.admin.controller.account" as a sample.
+Create controllers inside the "org.mojave.core.accounting.intercom.controller" package for 
+the **Command in "org.mojave.core.accounting.domain.command.ledger" package. 
+You can refer to the implementation here in "org.mojave.core.accounting.admin.controller.account" as a sample.
 
 You must follow the rules below:
 - Use proper naming conventions for classes, methods, and variables.

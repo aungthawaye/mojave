@@ -7,10 +7,10 @@
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.mono.admin.MonoAdminApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.mono.admin.MonoAdminApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.mono.admin.*" />
+        <option name="PATTERN" value="org.mojave.mono.admin.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -2,7 +2,7 @@
   "info": {
     "name": "Accounting Intercom APIs",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Postman collection for io.mojaloop.core.accounting.intercom.controller endpoints with sample requests and responses."
+    "description": "Postman collection for org.mojave.core.accounting.intercom.controller endpoints with sample requests and responses."
   },
   "variable": [
     {

@@ -8,10 +8,10 @@
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.participant.admin.ParticipantAdminApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.participant.admin.ParticipantAdminApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.core.participant.admin.*" />
+        <option name="PATTERN" value="org.mojave.core.participant.admin.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

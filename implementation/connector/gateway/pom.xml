@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.connector</groupId>
+        <groupId>org.mojave.connector</groupId>
         <artifactId>connector-pom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-connector-gateway</artifactId>
-    <name>Mojaloop - Connector - Gateway</name>
+    <name>Mojave - Connector - Gateway</name>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -24,27 +24,27 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-openapi</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-tomcat</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-vault</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.connector</groupId>
+            <groupId>org.mojave.connector</groupId>
             <artifactId>mod-connector-adapter</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.fspiop</groupId>
+            <groupId>org.mojave.platform.fspiop</groupId>
             <artifactId>mod-fspiop-invoker</artifactId>
         </dependency>
         <dependency>

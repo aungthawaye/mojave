@@ -7,10 +7,10 @@
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.lookup.service.LookUpServiceApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.lookup.service.LookUpServiceApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.core.lookup.service.*" />
+        <option name="PATTERN" value="org.mojave.core.lookup.service.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

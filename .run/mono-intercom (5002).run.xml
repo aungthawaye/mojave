@@ -7,10 +7,10 @@
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.mono.intercom.MonoIntercomApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.mono.intercom.MonoIntercomApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.mono.intercom.*" />
+        <option name="PATTERN" value="org.mojave.mono.intercom.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

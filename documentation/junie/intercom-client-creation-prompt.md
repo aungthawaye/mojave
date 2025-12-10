@@ -1,7 +1,7 @@
-Create clients inside the "io.mojaloop.core.wallet.intercom.client" package for
-the **Controllers in "io.mojaloop.core.wallet.intercom.controller" package.
-You can refer to the implementation here in "io.mojaloop.core.participant.intercom.client" as a sample.
-You also need to implement the "io.mojaloop.core.wallet.intercom.client.WalletIntercomClientConfiguration".
+Create clients inside the "org.mojave.core.wallet.intercom.client" package for
+the **Controllers in "org.mojave.core.wallet.intercom.controller" package.
+You can refer to the implementation here in "org.mojave.core.participant.intercom.client" as a sample.
+You also need to implement the "org.mojave.core.wallet.intercom.client.WalletIntercomClientConfiguration".
 
 You must follow the rules below:
 - Use proper naming conventions for classes, methods, and variables.

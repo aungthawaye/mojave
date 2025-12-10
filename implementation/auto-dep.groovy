@@ -27,8 +27,8 @@ def rootAid       = pomXml.artifactId?.text()?.trim() ?: ''
 
 def ownGid    = pomXml.groupId?.text()?.trim() ?: ''
 def parentGid = pomXml.parent?.groupId?.text()?.trim() ?: ''
-if (!(ownGid.startsWith('io.mojaloop') || parentGid.startsWith('io.mojaloop'))) {
-    System.out.println("Skipping: groupId not in io.mojaloop")
+if (!(ownGid.startsWith('org.mojave') || parentGid.startsWith('org.mojave'))) {
+    System.out.println("Skipping: groupId not in org.mojave")
     System.exit(0)
 }
 
@@ -37,7 +37,7 @@ def depsNode = dmNode.dependencies?.getAt(0)             ?: dmNode.appendNode('d
 
 declarationCleanup:
 depsNode.dependency.findAll { dep ->
-    dep.groupId.text().startsWith('io.mojaloop')
+    dep.groupId.text().startsWith('org.mojave')
 }.each { dep ->
     depsNode.remove(dep)
 }
@@ -75,7 +75,7 @@ if (rootPackaging != 'pom') {
             def aid = cXml.artifactId?.text()?.trim()
             def ver = cXml.version?.text()?.trim() ?: pomXml.version?.text()?.trim() ?: ''
 
-            if (pkg != 'pom' && gid.startsWith('io.mojaloop')) {
+            if (pkg != 'pom' && gid.startsWith('org.mojave')) {
                 addDep(gid, aid, ver)
             }
             processModules(cXml, mDir)
