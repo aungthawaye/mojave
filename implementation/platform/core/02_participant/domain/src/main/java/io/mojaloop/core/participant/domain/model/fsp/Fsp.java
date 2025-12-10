@@ -71,16 +71,6 @@ import java.util.stream.Collectors;
 
 import static java.sql.Types.BIGINT;
 
-/**
- * Financial Service Provider (FSP) entity representing a participant in the Mojaloop network.
- *
- * <p>An FSP can support multiple currencies and endpoints for different types of operations.
- * The FSP has activation and termination statuses that control its operational state within
- * the Mojaloop ecosystem.</p>
- *
- * @author Mojave
- * @since 1.0
- */
 @Getter
 @Entity
 @Table(
@@ -263,13 +253,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         return new FspData(
             this.getId(), this.getFspCode(), this.getName(),
             this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
-            this
-                .getEndpoints()
-                .stream()
-                .map(FspEndpoint::convert)
-                .collect(Collectors.toMap(
-                    FspEndpointData::type, Function.identity(),
-                    (existing, replacement) -> replacement)), this.activationStatus,
+            this.getEndpoints().stream().map(FspEndpoint::convert).collect(Collectors.toMap(
+                FspEndpointData::type, Function.identity(),
+                (existing, replacement) -> replacement)), this.activationStatus,
             this.terminationStatus);
     }
 
