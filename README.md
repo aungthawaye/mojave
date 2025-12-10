@@ -1,7 +1,3 @@
-Here’s a polished, more professional version you can drop into your README:
-
----
-
 # Mojave
 
 **Mojave** is an open-source, interoperable **Instant Payment Switch** implemented in Java.
@@ -23,8 +19,6 @@ Mojave is designed with two primary goals:
 ---
 
 ## Getting Started
-
-Refer to the `documentation/` directory for setup instructions, tools, and usage examples.
 
 Key directories include:
 
