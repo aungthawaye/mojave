@@ -8,10 +8,10 @@
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.mojaloop.core.wallet.intercom.WalletIntercomApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.wallet.intercom.WalletIntercomApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.core.wallet.intercom.*" />
+        <option name="PATTERN" value="org.mojave.core.wallet.intercom.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

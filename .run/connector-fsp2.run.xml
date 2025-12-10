@@ -3,11 +3,11 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/connector/sample/src/main/java/io/mojaloop/connector/sample/fsp2.env" />
     </option>
-    <option name="MAIN_CLASS_NAME" value="io.mojaloop.connector.sample.SampleConnectorApplication" />
+    <option name="MAIN_CLASS_NAME" value="org.mojave.connector.sample.SampleConnectorApplication" />
     <module name="mod-connector-sample" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.mojaloop.connector.sample.*" />
+        <option name="PATTERN" value="org.mojave.connector.sample.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

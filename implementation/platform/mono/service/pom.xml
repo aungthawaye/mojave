@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.platform.mono</groupId>
+        <groupId>org.mojave.platform.mono</groupId>
         <artifactId>mono-pom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -24,27 +24,27 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-openapi</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.component</groupId>
+            <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.lookup</groupId>
+            <groupId>org.mojave.platform.core.lookup</groupId>
             <artifactId>mod-lookup-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.quoting</groupId>
+            <groupId>org.mojave.platform.core.quoting</groupId>
             <artifactId>mod-quoting-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.mojaloop.platform.core.transfer</groupId>
+            <groupId>org.mojave.platform.core.transfer</groupId>
             <artifactId>mod-transfer-service</artifactId>
         </dependency>
         <dependency>

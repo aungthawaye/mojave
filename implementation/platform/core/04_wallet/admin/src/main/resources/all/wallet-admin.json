@@ -3,7 +3,7 @@
     "_postman_id": "8e3a4a8e-2a42-4a2f-9d9a-bf3f6b2e1c11",
     "name": "Wallet Admin API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Postman collection for io.mojaloop.core.wallet.admin.controller endpoints."
+    "description": "Postman collection for org.mojave.core.wallet.admin.controller endpoints."
   },
   "variable": [
     {

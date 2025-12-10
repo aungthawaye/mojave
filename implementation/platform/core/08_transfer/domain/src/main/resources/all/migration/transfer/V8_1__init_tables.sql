@@ -16,8 +16,17 @@ CREATE TABLE `tfr_transfer`
     `payee_party_id`         varchar(48)  DEFAULT NULL,
     `payee_sub_id`           varchar(48)  DEFAULT NULL,
 
-    `currency`               varchar(3)     NOT NULL,
+    `transfer_currency`      varchar(3)     NOT NULL,
     `transfer_amount`        decimal(34, 4) NOT NULL,
+
+    `payee_fsp_fee_currency`        varchar(3)     NOT NULL,
+    `payee_fsp_fee_amount`          decimal(34, 4) DEFAULT NULL,
+
+    `payee_fsp_commission_currency` varchar(3)     NOT NULL,
+    `payee_fsp_commission_amount`   decimal(34, 4) DEFAULT NULL,
+
+    `payee_receive_currency`        varchar(3)     NOT NULL,
+    `payee_receive_amount`          decimal(34, 4) DEFAULT NULL,
 
     `request_expiration`     bigint       DEFAULT NULL,
 
@@ -111,6 +120,7 @@ CREATE TABLE `tfr_transfer_ilp_packet`
     `rec_version`    int         DEFAULT NULL,
 
     PRIMARY KEY (`transfer_id`),
+    UNIQUE KEY `tfr_transfer_ilp_packet_ilp_condition_UK` (`ilp_condition`),
     CONSTRAINT `transfer_ilp_packet_transfer_FK` FOREIGN KEY (`transfer_id`) REFERENCES `tfr_transfer` (`transfer_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

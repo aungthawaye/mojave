@@ -1,6 +1,6 @@
-Implement **CommandHandler by referring to the previously implemented **CommandHandler in this package, `io.mojaloop.core.accounting.domain.command.account`.
-Now, create the similar commands inside this package, `io.mojaloop.core.transaction.domain.command` accordingly
-based on its domain/model class in `io.mojaloop.core.transaction.domain.model`.
+Implement **CommandHandler by referring to the previously implemented **CommandHandler in this package, `org.mojave.core.accounting.domain.command.account`.
+Now, create the similar commands inside this package, `org.mojave.core.transaction.domain.command` accordingly
+based on its domain/model class in `org.mojave.core.transaction.domain.model`.
 
 You must do the following:
 - Analyze the behavior of the domain/model classes and implement the logic accordingly.

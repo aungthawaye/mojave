@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.mojaloop.platform.fspiop</groupId>
+        <groupId>org.mojave.platform.fspiop</groupId>
         <artifactId>fspiop-pom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -56,7 +56,7 @@
                             <generateModelTests>false</generateModelTests>
                             <generateModelDocumentation>false</generateModelDocumentation>
                             <generateSupportingFiles>false</generateSupportingFiles>
-                            <modelPackage>io.mojaloop.fspiop.spec.core</modelPackage>
+                            <modelPackage>org.mojave.fspiop.spec.core</modelPackage>
                             <configOptions>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <useJakartaEe>true</useJakartaEe>
@@ -86,7 +86,7 @@
                             <generateModelTests>false</generateModelTests>
                             <generateModelDocumentation>false</generateModelDocumentation>
                             <generateSupportingFiles>false</generateSupportingFiles>
-                            <modelPackage>io.mojaloop.fspiop.spec.settlement</modelPackage>
+                            <modelPackage>org.mojave.fspiop.spec.settlement</modelPackage>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
                                 <sourceFolder>src/generated/java</sourceFolder>

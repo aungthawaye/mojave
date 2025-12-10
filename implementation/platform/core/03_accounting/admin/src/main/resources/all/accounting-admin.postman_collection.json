@@ -3,7 +3,7 @@
     "_postman_id": "f5f0c5a0-2d7c-4b03-9b77-7a9aa1c3d001",
     "name": "Accounting Admin API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Postman collection for io.mojaloop.core.accounting.admin.controller endpoints."
+    "description": "Postman collection for org.mojave.core.accounting.admin.controller endpoints."
   },
   "variable": [
     {
