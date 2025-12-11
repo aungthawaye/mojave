@@ -143,7 +143,7 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
         name = "hub_id",
         nullable = false,
         updatable = false,
-        foreignKey = @ForeignKey(name = "fsp_hub_FK"))
+        foreignKey = @ForeignKey(name = "ssp_hub_FK"))
     protected Hub hub;
 
     public Ssp(final Hub hub, final SspCode code, final String name, final String baseUrl) {

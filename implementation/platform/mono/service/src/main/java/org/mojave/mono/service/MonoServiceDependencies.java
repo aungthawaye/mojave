@@ -22,6 +22,7 @@ package org.mojave.mono.service;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
+import org.mojave.core.participant.contract.query.SspQuery;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.core.participant.store.strategy.timer.ParticipantTimerStore;
 import org.mojave.core.transfer.contract.component.interledger.AgreementUnwrapper;
@@ -38,16 +39,18 @@ public class MonoServiceDependencies implements MonoServiceConfiguration.Require
 
     public MonoServiceDependencies(ObjectMapper objectMapper,
                                    FspQuery fspQuery,
+                                   SspQuery sspQuery,
                                    OracleQuery oracleQuery) {
 
         assert objectMapper != null;
         assert fspQuery != null;
+        assert sspQuery != null;
         assert oracleQuery != null;
 
         this.objectMapper = objectMapper;
 
         this.participantStore = new ParticipantTimerStore(
-            fspQuery, oracleQuery, new ParticipantTimerStore.Settings(
+            fspQuery, sspQuery, oracleQuery, new ParticipantTimerStore.Settings(
             Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
 
     }

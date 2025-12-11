@@ -20,7 +20,7 @@
 package org.mojave.core.participant.admin.controller.api.command.fsp;
 
 import jakarta.validation.Valid;
-import org.mojave.core.participant.contract.command.fsp.ChangeEndpointCommand;
+import org.mojave.core.participant.contract.command.fsp.ChangeFspEndpointCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,25 +30,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ChangeEndpointController {
+public class ChangeFspEndpointController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeEndpointController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFspEndpointController.class);
 
-    private final ChangeEndpointCommand changeEndpointCommand;
+    private final ChangeFspEndpointCommand changeFspEndpointCommand;
 
-    public ChangeEndpointController(ChangeEndpointCommand changeEndpointCommand) {
+    public ChangeFspEndpointController(ChangeFspEndpointCommand changeFspEndpointCommand) {
 
-        assert changeEndpointCommand != null;
+        assert changeFspEndpointCommand != null;
 
-        this.changeEndpointCommand = changeEndpointCommand;
+        this.changeFspEndpointCommand = changeFspEndpointCommand;
     }
 
     @PostMapping("/fsps/change-endpoint")
     @ResponseStatus(HttpStatus.OK)
-    public ChangeEndpointCommand.Output execute(
-        @Valid @RequestBody ChangeEndpointCommand.Input input) {
+    public ChangeFspEndpointCommand.Output execute(
+        @Valid @RequestBody ChangeFspEndpointCommand.Input input) {
 
-        return this.changeEndpointCommand.execute(input);
+        return this.changeFspEndpointCommand.execute(input);
     }
 
 }

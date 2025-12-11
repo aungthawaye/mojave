@@ -25,6 +25,7 @@ import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.contract.command.ssp.CreateSspCommand;
 import org.mojave.core.participant.contract.exception.hub.HubNotFoundException;
+import org.mojave.core.participant.contract.exception.ssp.SspCodeAlreadyExistsException;
 import org.mojave.core.participant.domain.model.ssp.Ssp;
 import org.mojave.core.participant.domain.repository.HubRepository;
 import org.mojave.core.participant.domain.repository.SspRepository;
@@ -63,6 +64,13 @@ public class CreateSspCommandHandler implements CreateSspCommand {
 
         var hub = this.hubRepository.findById(new HubId()).orElseThrow(HubNotFoundException::new);
 
+        if (this.sspRepository
+                .findOne(SspRepository.Filters.withSspCode(input.sspCode()))
+                .isPresent()) {
+
+            throw new SspCodeAlreadyExistsException(input.sspCode());
+        }
+
         var ssp = new Ssp(hub, input.sspCode(), input.name(), input.baseUrl());
 
         for (var currency : input.currencies()) {
@@ -77,4 +85,5 @@ public class CreateSspCommandHandler implements CreateSspCommand {
 
         return output;
     }
+
 }

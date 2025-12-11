@@ -21,9 +21,12 @@ package org.mojave.core.participant.store;
 
 import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.identifier.participant.OracleId;
+import org.mojave.core.common.datatype.identifier.participant.SspId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.core.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.OracleData;
+import org.mojave.core.participant.contract.data.SspData;
 import org.mojave.fspiop.spec.core.PartyIdType;
 
 public interface ParticipantStore {
@@ -31,6 +34,10 @@ public interface ParticipantStore {
     FspData getFspData(FspId fspId);
 
     FspData getFspData(FspCode fspCode);
+
+    SspData getSspData(SspId sspId);
+
+    SspData getSspData(SspCode sspCode);
 
     OracleData getOracleData(OracleId oracleId);
 

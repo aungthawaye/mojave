@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,12 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.core.participant.intercom.client.service;
 
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.OracleData;
+import org.mojave.core.participant.contract.data.SspData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -52,6 +54,19 @@ public interface ParticipantIntercomService {
 
         @GET("oracles/get-by-party-id-type")
         Call<OracleData> getByPartyIdType(@Query("partyIdType") String partyIdType);
+
+    }
+
+    interface SspQuery {
+
+        @GET("ssps/get-all-ssps")
+        Call<List<SspData>> getAllSsps();
+
+        @GET("ssps/get-by-ssp-code")
+        Call<SspData> getBySspCode(@Query("code") String sspCode);
+
+        @GET("ssps/get-by-ssp-id")
+        Call<SspData> getBySspId(@Query("sspId") String sspId);
 
     }
 

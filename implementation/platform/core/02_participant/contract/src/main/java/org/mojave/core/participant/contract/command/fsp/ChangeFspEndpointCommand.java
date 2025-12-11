@@ -28,7 +28,7 @@ import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
 import org.mojave.core.common.datatype.identifier.participant.FspEndpointId;
 import org.mojave.core.common.datatype.identifier.participant.FspId;
 
-public interface ChangeEndpointCommand {
+public interface ChangeFspEndpointCommand {
 
     Output execute(Input input);
 

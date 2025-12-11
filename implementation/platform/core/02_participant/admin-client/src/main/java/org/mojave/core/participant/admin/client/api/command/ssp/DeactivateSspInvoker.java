@@ -17,13 +17,13 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.core.participant.admin.client.api.command.fsp;
+package org.mojave.core.participant.admin.client.api.command.ssp;
 
 import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.retrofit.RetrofitService;
 import org.mojave.core.participant.admin.client.service.ParticipantAdminService;
-import org.mojave.core.participant.contract.command.fsp.ChangeEndpointCommand;
+import org.mojave.core.participant.contract.command.ssp.DeactivateSspCommand;
 import org.mojave.core.participant.contract.exception.ParticipantExceptionResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,21 +31,21 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 @Component
-public class ChangeEndpointInvoker implements ChangeEndpointCommand {
+public class DeactivateSspInvoker implements DeactivateSspCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeEndpointInvoker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateSspInvoker.class);
 
-    private final ParticipantAdminService.FspCommand fspCommand;
+    private final ParticipantAdminService.SspCommand sspCommand;
 
     private final ObjectMapper objectMapper;
 
-    public ChangeEndpointInvoker(final ParticipantAdminService.FspCommand fspCommand,
-                                 final ObjectMapper objectMapper) {
+    public DeactivateSspInvoker(final ParticipantAdminService.SspCommand sspCommand,
+                                final ObjectMapper objectMapper) {
 
-        assert fspCommand != null;
+        assert sspCommand != null;
         assert objectMapper != null;
 
-        this.fspCommand = fspCommand;
+        this.sspCommand = sspCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -55,7 +55,7 @@ public class ChangeEndpointInvoker implements ChangeEndpointCommand {
         try {
 
             return RetrofitService.invoke(
-                this.fspCommand.changeEndpoint(input),
+                this.sspCommand.deactivateSsp(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(
                     errorResponseBody,
                     this.objectMapper)).body();
@@ -76,5 +76,4 @@ public class ChangeEndpointInvoker implements ChangeEndpointCommand {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -22,6 +22,7 @@ package org.mojave.platform.core.transfer.service;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
+import org.mojave.core.participant.contract.query.SspQuery;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.core.participant.store.strategy.timer.ParticipantTimerStore;
 import org.mojave.core.transfer.contract.component.interledger.AgreementUnwrapper;
@@ -38,15 +39,17 @@ public class TransferServiceDependencies
     private final ObjectMapper objectMapper;
 
     public TransferServiceDependencies(FspQuery fspQuery,
+                                       SspQuery sspQuery,
                                        OracleQuery oracleQuery,
                                        ObjectMapper objectMapper) {
 
         assert fspQuery != null;
+        assert sspQuery != null;
         assert oracleQuery != null;
         assert objectMapper != null;
 
         this.participantStore = new ParticipantTimerStore(
-            fspQuery, oracleQuery, new ParticipantTimerStore.Settings(
+            fspQuery, sspQuery, oracleQuery, new ParticipantTimerStore.Settings(
             Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
 
         this.objectMapper = objectMapper;

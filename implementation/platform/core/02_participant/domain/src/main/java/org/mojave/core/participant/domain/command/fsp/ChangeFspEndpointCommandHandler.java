@@ -22,7 +22,7 @@ package org.mojave.core.participant.domain.command.fsp;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.participant.contract.command.fsp.ChangeEndpointCommand;
+import org.mojave.core.participant.contract.command.fsp.ChangeFspEndpointCommand;
 import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import org.mojave.core.participant.domain.model.fsp.FspEndpoint;
 import org.mojave.core.participant.domain.repository.FspRepository;
@@ -34,14 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Primary
-public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
+public class ChangeFspEndpointCommandHandler implements ChangeFspEndpointCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        ChangeEndpointCommandHandler.class);
+        ChangeFspEndpointCommandHandler.class);
 
     private final FspRepository fspRepository;
 
-    public ChangeEndpointCommandHandler(FspRepository fspRepository) {
+    public ChangeFspEndpointCommandHandler(FspRepository fspRepository) {
 
         assert fspRepository != null;
         this.fspRepository = fspRepository;
@@ -52,7 +52,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("ChangeEndpointCommand : input: ({})", ObjectLogger.log(input));
+        LOGGER.info("ChangeFspEndpointCommand : input: ({})", ObjectLogger.log(input));
 
         var withId = FspRepository.Filters.withId(input.fspId());
         var alive = FspRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
@@ -68,7 +68,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
         var output = new Output(
             optFspEndpoint.map(FspEndpoint::getId).orElse(null), optFspEndpoint.isPresent());
 
-        LOGGER.info("ChangeEndpointCommand : output : ({})", ObjectLogger.log(output));
+        LOGGER.info("ChangeFspEndpointCommand : output : ({})", ObjectLogger.log(output));
 
         return output;
     }

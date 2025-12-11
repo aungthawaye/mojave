@@ -20,7 +20,7 @@
 package org.mojave.core.participant.admin.controller.api.command.ssp;
 
 import jakarta.validation.Valid;
-import org.mojave.core.participant.contract.command.ssp.ChangeEndpointCommand;
+import org.mojave.core.participant.contract.command.ssp.ChangeSspEndpointCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -31,25 +31,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ChangeEndpointController {
+public class ChangeSspEndpointController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeEndpointController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeSspEndpointController.class);
 
-    private final ChangeEndpointCommand changeEndpointCommand;
+    private final ChangeSspEndpointCommand changeSspEndpointCommand;
 
-    public ChangeEndpointController(final ChangeEndpointCommand changeEndpointCommand) {
+    public ChangeSspEndpointController(final ChangeSspEndpointCommand changeSspEndpointCommand) {
 
-        assert changeEndpointCommand != null;
+        assert changeSspEndpointCommand != null;
 
-        this.changeEndpointCommand = changeEndpointCommand;
+        this.changeSspEndpointCommand = changeSspEndpointCommand;
     }
 
     @PostMapping("/ssps/change-endpoint")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ChangeEndpointCommand.Output execute(
-        @Valid @RequestBody final ChangeEndpointCommand.Input input) {
+    public ChangeSspEndpointCommand.Output execute(
+        @Valid @RequestBody final ChangeSspEndpointCommand.Input input) {
 
-        return this.changeEndpointCommand.execute(input);
+        return this.changeSspEndpointCommand.execute(input);
     }
 }

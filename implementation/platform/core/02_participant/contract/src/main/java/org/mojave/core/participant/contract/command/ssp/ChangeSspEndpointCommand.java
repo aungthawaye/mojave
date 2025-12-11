@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.core.common.datatype.identifier.participant.SspId;
 
-public interface ChangeEndpointCommand {
+public interface ChangeSspEndpointCommand {
 
     Output execute(Input input);
 

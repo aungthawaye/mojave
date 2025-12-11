@@ -22,6 +22,7 @@ package org.mojave.core.lookup.service;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
+import org.mojave.core.participant.contract.query.SspQuery;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.core.participant.store.strategy.timer.ParticipantTimerStore;
 import org.mojave.fspiop.service.component.ParticipantVerifier;
@@ -31,13 +32,14 @@ public class LookUpServiceDependencies implements LookUpServiceConfiguration.Req
 
     private final ParticipantStore participantStore;
 
-    public LookUpServiceDependencies(FspQuery fspQuery, OracleQuery oracleQuery) {
+    public LookUpServiceDependencies(FspQuery fspQuery, SspQuery sspQuery, OracleQuery oracleQuery) {
 
         assert fspQuery != null;
+        assert sspQuery != null;
         assert oracleQuery != null;
 
         this.participantStore = new ParticipantTimerStore(
-            fspQuery, oracleQuery, new ParticipantTimerStore.Settings(
+            fspQuery, sspQuery, oracleQuery, new ParticipantTimerStore.Settings(
             Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
     }
 

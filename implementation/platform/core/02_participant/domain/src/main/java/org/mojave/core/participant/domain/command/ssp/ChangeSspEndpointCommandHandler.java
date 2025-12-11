@@ -23,7 +23,7 @@ package org.mojave.core.participant.domain.command.ssp;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.participant.contract.command.ssp.ChangeEndpointCommand;
+import org.mojave.core.participant.contract.command.ssp.ChangeSspEndpointCommand;
 import org.mojave.core.participant.contract.exception.ssp.SspIdNotFoundException;
 import org.mojave.core.participant.domain.repository.SspRepository;
 import org.slf4j.Logger;
@@ -34,14 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Primary
-public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
+public class ChangeSspEndpointCommandHandler implements ChangeSspEndpointCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        ChangeEndpointCommandHandler.class);
+        ChangeSspEndpointCommandHandler.class);
 
     private final SspRepository sspRepository;
 
-    public ChangeEndpointCommandHandler(final SspRepository sspRepository) {
+    public ChangeSspEndpointCommandHandler(final SspRepository sspRepository) {
 
         assert sspRepository != null;
         this.sspRepository = sspRepository;
@@ -52,7 +52,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("Ssp.ChangeEndpointCommand : input: ({})", ObjectLogger.log(input));
+        LOGGER.info("Ssp.ChangeFspEndpointCommand : input: ({})", ObjectLogger.log(input));
 
         var withId = SspRepository.Filters.withId(input.sspId());
         var alive = SspRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
@@ -68,7 +68,7 @@ public class ChangeEndpointCommandHandler implements ChangeEndpointCommand {
 
         var output = new Output(true);
 
-        LOGGER.info("Ssp.ChangeEndpointCommand : output : ({})", ObjectLogger.log(output));
+        LOGGER.info("Ssp.ChangeFspEndpointCommand : output : ({})", ObjectLogger.log(output));
 
         return output;
     }
