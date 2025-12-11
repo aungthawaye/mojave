@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.participant.admin.client.service;
 
 import org.mojave.core.participant.contract.command.fsp.ActivateEndpointCommand;
@@ -114,7 +113,7 @@ public interface ParticipantAdminService {
         Call<List<FspData>> getAllFsps();
 
         @GET("fsps/get-by-fsp-code")
-        Call<FspData> getByFspCode(@Query("fspCode") String fspCode);
+        Call<FspData> getByFspCode(@Query("code") String fspCode);
 
         @GET("fsps/get-by-fsp-id")
         Call<FspData> getByFspId(@Query("fspId") String fspId);

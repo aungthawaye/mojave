@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
@@ -71,10 +70,10 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
         try {
 
             var payerFsp = input.payerFsp();
-            var payerFspCode = payerFsp.fspCode();
+            var payerFspCode = payerFsp.code();
 
             var payeeFsp = input.payeeFsp();
-            var payeeFspCode = payeeFsp.fspCode();
+            var payeeFspCode = payeeFsp.code();
 
             var currency = input.currency();
 
@@ -121,8 +120,7 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
 
@@ -132,8 +130,7 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    e.getTransactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw e;
 
@@ -143,8 +140,7 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

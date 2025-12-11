@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.common.datatype.identifier.participant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,20 +30,19 @@ import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
-@JsonDeserialize(using = SettlementEngineId.Deserializer.class)
-public class SettlementEngineId extends EntityId<Long> {
+@JsonDeserialize(using = SspId.Deserializer.class)
+public class SspId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public SettlementEngineId(Long id) {
+    public SspId(Long id) {
 
         super(id);
     }
 
-    public static class Deserializer extends ValueDeserializer<SettlementEngineId> {
+    public static class Deserializer extends ValueDeserializer<SspId> {
 
         @Override
-        public SettlementEngineId deserialize(JsonParser p, DeserializationContext ctx)
-            throws JacksonException {
+        public SspId deserialize(JsonParser p, DeserializationContext ctx) throws JacksonException {
 
             var field = p.currentName();
             var text = p.getValueAsString();
@@ -54,7 +52,7 @@ public class SettlementEngineId extends EntityId<Long> {
             }
 
             try {
-                return new SettlementEngineId(Long.parseLong(text));
+                return new SspId(Long.parseLong(text));
             } catch (NumberFormatException e) {
                 throw InvalidFormatException.from(
                     p, "'" + field + "' has invalid format. Must be number.", e);
@@ -64,12 +62,12 @@ public class SettlementEngineId extends EntityId<Long> {
     }
 
     @Component
-    public static class ParamConverter implements Converter<String, SettlementEngineId> {
+    public static class ParamConverter implements Converter<String, SspId> {
 
         @Override
-        public SettlementEngineId convert(String source) {
+        public SspId convert(String source) {
 
-            return new SettlementEngineId(Long.parseLong(source));
+            return new SspId(Long.parseLong(source));
         }
 
     }

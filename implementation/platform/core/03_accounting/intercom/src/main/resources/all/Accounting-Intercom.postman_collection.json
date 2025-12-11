@@ -21,12 +21,19 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/accounts",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "accounts" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
             }
           },
           "response": [
@@ -35,18 +42,30 @@
               "originalRequest": {
                 "method": "GET",
                 "header": [
-                  { "key": "Accept", "value": "application/json" }
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/accounts",
-                  "host": [ "{{baseUrl}}" ],
-                  "path": [ "accounts" ]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ]
                 }
               },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
-              "header": [ { "key": "Content-Type", "value": "application/json" } ],
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "[\n  {\n    \"accountId\": 1001,\n    \"ownerId\": 2001,\n    \"type\": \"ASSET\",\n    \"currency\": \"USD\",\n    \"code\": \"1000-001\",\n    \"name\": \"Hub Settlement Liquidity\",\n    \"description\": \"Liquidity account for settlements\",\n    \"createdAt\": \"2025-01-01T10:15:30Z\",\n    \"activationStatus\": \"ACTIVE\",\n    \"terminationStatus\": \"NONE\",\n    \"chartEntryId\": 3001,\n    \"ledgerBalance\": {\n      \"accountId\": 1001,\n      \"currency\": \"USD\",\n      \"scale\": 2,\n      \"nature\": \"DEBIT\",\n      \"postedDebits\": 100000.00,\n      \"postedCredits\": 25000.00,\n      \"overdraftMode\": \"BLOCK\",\n      \"overdraftLimit\": 0,\n      \"createdAt\": \"2025-01-01T10:15:30Z\"\n    }\n  }\n]"
             }
           ]
@@ -62,8 +81,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -71,8 +96,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/ledgers/post-ledger-flow",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "ledgers", "post-ledger-flow" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ledgers",
+                "post-ledger-flow"
+              ]
             }
           },
           "response": [
@@ -81,8 +111,14 @@
               "originalRequest": {
                 "method": "POST",
                 "header": [
-                  { "key": "Content-Type", "value": "application/json" },
-                  { "key": "Accept", "value": "application/json" }
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
                 ],
                 "body": {
                   "mode": "raw",
@@ -90,14 +126,24 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/ledgers/post-ledger-flow",
-                  "host": [ "{{baseUrl}}" ],
-                  "path": [ "ledgers", "post-ledger-flow" ]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ledgers",
+                    "post-ledger-flow"
+                  ]
                 }
               },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
-              "header": [ { "key": "Content-Type", "value": "application/json" } ],
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"flows\": [\n    {\n      \"accountId\": 5001,\n      \"ownerId\": 2001,\n      \"chartEntryId\": 3001,\n      \"ledgerMovementId\": 90001,\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00,\n      \"oldDrCr\": { \"debits\": 1000.00, \"credits\": 100.00 },\n      \"newDrCr\": { \"debits\": 1100.00, \"credits\": 100.00 },\n      \"movementStage\": \"POSTED\",\n      \"movementResult\": \"APPLIED\"\n    },\n    {\n      \"accountId\": 5002,\n      \"ownerId\": 2002,\n      \"chartEntryId\": 3002,\n      \"ledgerMovementId\": 90002,\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00,\n      \"oldDrCr\": { \"debits\": 200.00, \"credits\": 50.00 },\n      \"newDrCr\": { \"debits\": 200.00, \"credits\": 150.00 },\n      \"movementStage\": \"POSTED\",\n      \"movementResult\": \"APPLIED\"\n    }\n  ]\n}"
             },
             {
@@ -105,8 +151,14 @@
               "originalRequest": {
                 "method": "POST",
                 "header": [
-                  { "key": "Content-Type", "value": "application/json" },
-                  { "key": "Accept", "value": "application/json" }
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
                 ],
                 "body": {
                   "mode": "raw",
@@ -114,14 +166,24 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/ledgers/post-ledger-flow",
-                  "host": [ "{{baseUrl}}" ],
-                  "path": [ "ledgers", "post-ledger-flow" ]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ledgers",
+                    "post-ledger-flow"
+                  ]
                 }
               },
               "status": "Bad Request",
               "code": 400,
               "_postman_previewlanguage": "json",
-              "header": [ { "key": "Content-Type", "value": "application/json" } ],
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"timestamp\": \"2025-10-13T08:49:30Z\",\n  \"status\": 400,\n  \"error\": \"Bad Request\",\n  \"message\": \"Posting account not found\",\n  \"path\": \"/ledgers/post-ledger-flow\"\n}"
             }
           ]

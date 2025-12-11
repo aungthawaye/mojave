@@ -20,20 +20,6 @@
 
 package org.mojave.core.participant.domain.model.fsp;
 
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.participant.FspEndpointIdJavaType;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.identifier.participant.FspEndpointId;
-import org.mojave.core.participant.contract.data.FspEndpointData;
-import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
-import org.mojave.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
-import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlRequiredException;
-import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlTooLongException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -50,6 +36,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.common.datatype.converter.identifier.participant.FspEndpointIdJavaType;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.core.common.datatype.identifier.participant.FspEndpointId;
+import org.mojave.core.participant.contract.data.FspEndpointData;
+import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
+import org.mojave.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
+import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlRequiredException;
+import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlTooLongException;
 
 import java.time.Instant;
 
@@ -167,7 +167,7 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId>
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateFspEndpointException(this.fsp.fspCode, this.type);
+            throw new CannotActivateFspEndpointException(this.fsp.code, this.type);
         }
 
         this.activationStatus = ActivationStatus.ACTIVE;

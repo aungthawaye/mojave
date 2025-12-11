@@ -40,7 +40,7 @@ CREATE TABLE `pcp_hub_currency`
 CREATE TABLE `pcp_fsp`
 (
     `fsp_id`             bigint      NOT NULL,
-    `fsp_code`           varchar(32) NOT NULL,
+    `code`               varchar(32) NOT NULL,
     `name`               varchar(64) NOT NULL,
     `activation_status`  varchar(32) NOT NULL,
     `termination_status` varchar(32) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `pcp_fsp`
     `rec_updated_at`     bigint DEFAULT NULL,
     `rec_version`        int    DEFAULT NULL,
     PRIMARY KEY (`fsp_id`),
-    UNIQUE KEY `pcp_fsp_fsp_code_UK` (`fsp_code`),
+    UNIQUE KEY `pcp_fsp_code_UK` (`code`),
     KEY `pcp_fsp_pcp_hub_FK` (`hub_id`),
     CONSTRAINT `fsp_hub_FK` FOREIGN KEY (`hub_id`) REFERENCES `pcp_hub` (`hub_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB

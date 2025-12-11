@@ -20,6 +20,8 @@
 
 package org.mojave.core.participant.domain.repository;
 
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
 import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.domain.model.fsp.Fsp;
@@ -33,14 +35,34 @@ public interface FspRepository extends JpaRepository<Fsp, FspId>, JpaSpecificati
 
     class Filters {
 
+        public static Specification<Fsp> withActivationStatus(ActivationStatus status) {
+
+            return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
+        }
+
         public static Specification<Fsp> withFspCode(FspCode fspCode) {
 
-            return (root, query, cb) -> cb.equal(root.get("fspCode"), fspCode);
+            return (root, query, cb) -> cb.equal(root.get("code"), fspCode);
+        }
+
+        public static Specification<Fsp> withId(FspId id) {
+
+            return (root, query, cb) -> cb.equal(root.get("id"), id);
         }
 
         public static Specification<Fsp> withNameContains(String name) {
 
             return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+        }
+
+        public static Specification<Fsp> withNameEquals(String name) {
+
+            return (root, query, cb) -> cb.equal(root.get("name"), name);
+        }
+
+        public static Specification<Fsp> withTerminationStatus(TerminationStatus status) {
+
+            return (root, query, cb) -> cb.equal(root.get("terminationStatus"), status);
         }
 
     }

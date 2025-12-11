@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,8 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transaction.domain.model;
 
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.transaction.contract.data.TransactionData;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -46,6 +35,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
+import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
+import org.mojave.core.common.datatype.enums.trasaction.TransactionPhase;
+import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.transaction.contract.data.TransactionData;
 
 import java.time.Instant;
 import java.util.ArrayList;

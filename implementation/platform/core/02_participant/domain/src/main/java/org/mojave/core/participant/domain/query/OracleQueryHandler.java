@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,11 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.participant.domain.query;
 
+import org.mojave.component.jpa.routing.annotation.Read;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
 import org.mojave.core.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.exception.oracle.OracleIdNotFoundException;
@@ -32,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,9 +55,17 @@ public class OracleQueryHandler implements OracleQuery {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Read
     public Optional<OracleData> find(PartyIdType type) {
 
-        var existing = this.oracleRepository.findOne(OracleRepository.Filters.withType(type));
+        var activationStatus =
+            OracleRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus =
+            OracleRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
+
+        var existing = this.oracleRepository.findOne(
+            activationStatus.and(terminationStatus).and(OracleRepository.Filters.withType(type)));
 
         if (existing.isEmpty()) {
             LOGGER.debug("No oracle found for type: {}", type);
@@ -65,27 +76,55 @@ public class OracleQueryHandler implements OracleQuery {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Read
     public OracleData get(PartyIdType type) {
 
+        var activationStatus =
+            OracleRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus =
+            OracleRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
+
         return this.oracleRepository
-                   .findOne(OracleRepository.Filters.withType(type))
+                   .findOne(activationStatus
+                                .and(terminationStatus)
+                                .and(OracleRepository.Filters.withType(type)))
                    .orElseThrow(() -> new OracleTypeNotFoundException(type))
                    .convert();
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Read
     public OracleData get(OracleId oracleId) {
 
+        var activationStatus =
+            OracleRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus =
+            OracleRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
+
         return this.oracleRepository
-                   .findById(oracleId)
+                   .findOne(activationStatus
+                                .and(terminationStatus)
+                                .and(OracleRepository.Filters.withId(oracleId)))
                    .orElseThrow(() -> new OracleIdNotFoundException(oracleId))
                    .convert();
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Read
     public List<OracleData> getAll() {
 
-        return this.oracleRepository.findAll().stream().map(Oracle::convert).toList();
+        var activationStatus =
+            OracleRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus =
+            OracleRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
+
+        return this.oracleRepository.findAll(activationStatus.and(terminationStatus))
+                   .stream()
+                   .map(Oracle::convert)
+                   .toList();
     }
 
 }

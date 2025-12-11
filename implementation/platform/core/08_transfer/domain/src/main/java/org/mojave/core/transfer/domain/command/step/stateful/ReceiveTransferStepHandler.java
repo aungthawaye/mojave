@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transfer.domain.command.step.stateful;
 
 import org.mojave.component.jpa.routing.annotation.Write;
@@ -131,9 +130,9 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
                     StepPhase.BEFORE));
 
             var transfer = new Transfer(
-                transactionId, transactionAt, input.udfTransferId(), payerFsp.fspCode(), new Party(
+                transactionId, transactionAt, input.udfTransferId(), payerFsp.code(), new Party(
                 payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(),
-                payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspCode(), new Party(
+                payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.code(), new Party(
                 payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(),
                 payeePartyIdInfo.getPartySubIdOrType()), input.agreement().transferAmount(),
                 input.agreement().payeeFspFee(), input.agreement().payeeFspCommission(),
@@ -174,7 +173,8 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
             if (transactionId != null) {
                 this.addStepPublisher.publish(
                     new AddStepCommand.Input(
-                        transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
+                        transactionId, STEP_NAME, CONTEXT, e.getMessage(),
+                        StepPhase.ERROR));
             }
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());

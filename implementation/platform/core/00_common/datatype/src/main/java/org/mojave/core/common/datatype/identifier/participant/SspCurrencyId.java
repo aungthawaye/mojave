@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.common.datatype.identifier.participant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,19 +30,19 @@ import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
-@JsonDeserialize(using = SettlementEngineCurrencyId.Deserializer.class)
-public class SettlementEngineCurrencyId extends EntityId<Long> {
+@JsonDeserialize(using = SspCurrencyId.Deserializer.class)
+public class SspCurrencyId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public SettlementEngineCurrencyId(Long id) {
+    public SspCurrencyId(Long id) {
 
         super(id);
     }
 
-    public static class Deserializer extends ValueDeserializer<SettlementEngineCurrencyId> {
+    public static class Deserializer extends ValueDeserializer<SspCurrencyId> {
 
         @Override
-        public SettlementEngineCurrencyId deserialize(JsonParser p, DeserializationContext ctxt)
+        public SspCurrencyId deserialize(JsonParser p, DeserializationContext ctxt)
             throws JacksonException {
 
             var field = p.currentName();
@@ -54,7 +53,7 @@ public class SettlementEngineCurrencyId extends EntityId<Long> {
             }
 
             try {
-                return new SettlementEngineCurrencyId(Long.parseLong(text));
+                return new SspCurrencyId(Long.parseLong(text));
             } catch (NumberFormatException e) {
                 throw InvalidFormatException.from(
                     p, "'" + field + "' has invalid format. Must be number.", e);
@@ -64,12 +63,12 @@ public class SettlementEngineCurrencyId extends EntityId<Long> {
     }
 
     @Component
-    public static class ParamConverter implements Converter<String, SettlementEngineCurrencyId> {
+    public static class ParamConverter implements Converter<String, SspCurrencyId> {
 
         @Override
-        public SettlementEngineCurrencyId convert(String source) {
+        public SspCurrencyId convert(String source) {
 
-            return new SettlementEngineCurrencyId(Long.parseLong(source));
+            return new SspCurrencyId(Long.parseLong(source));
         }
 
     }
