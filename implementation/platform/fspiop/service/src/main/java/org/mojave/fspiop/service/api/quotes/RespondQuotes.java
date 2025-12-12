@@ -19,8 +19,8 @@
  */
 package org.mojave.fspiop.service.api.quotes;
 
-import org.mojave.fspiop.common.exception.FspiopException;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 import org.mojave.fspiop.spec.core.QuotesIDPutResponse;
 

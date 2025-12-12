@@ -23,7 +23,7 @@ import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.spec.core.Currency;
 
 import java.math.BigDecimal;

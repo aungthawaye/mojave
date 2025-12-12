@@ -26,8 +26,8 @@ import org.mojave.connector.gateway.inbound.command.parties.HandlePutPartiesResp
 import org.mojave.connector.gateway.inbound.event.GetPartiesEvent;
 import org.mojave.connector.gateway.inbound.event.PutPartiesErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutPartiesEvent;
-import org.mojave.fspiop.common.type.Payee;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.type.Payee;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopHeaders;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 import org.mojave.fspiop.spec.core.PartiesTypeIDPutResponse;

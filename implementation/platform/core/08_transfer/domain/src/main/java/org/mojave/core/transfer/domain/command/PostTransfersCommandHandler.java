@@ -44,9 +44,9 @@ import org.mojave.core.transfer.contract.command.step.stateful.ReceiveTransferSt
 import org.mojave.core.transfer.contract.command.step.stateful.ReserveTransferStep;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
-import org.mojave.fspiop.common.error.FspiopErrors;
-import org.mojave.fspiop.common.exception.FspiopException;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.error.FspiopErrors;
+import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.fspiop.component.handy.FspiopUrls;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;

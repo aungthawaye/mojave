@@ -54,7 +54,6 @@
         <module name="mod-quoting-service" />
         <module name="mod-settlement-contract" />
         <module name="mod-component-misc" />
-        <module name="mod-fspiop-common" />
         <module name="mod-accounting-domain" />
         <module name="mod-accounting-consumer" />
         <module name="mod-accounting-intercom-client" />
@@ -94,6 +93,7 @@
       <module name="mod-connector-fspclient" target="21" />
       <module name="mod-datatype" target="21" />
       <module name="mod-fspiop" target="21" />
+      <module name="mod-fspiop-common" target="21" />
       <module name="mod-fspiop-contract" target="21" />
       <module name="mod-http-security" target="21" />
       <module name="mod-lookup-infra" target="21" />

@@ -19,8 +19,8 @@
  */
 package org.mojave.fspiop.component.handy;
 
-import org.mojave.fspiop.common.error.FspiopErrors;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.error.FspiopErrors;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.spec.core.Money;
 
 import java.math.BigDecimal;

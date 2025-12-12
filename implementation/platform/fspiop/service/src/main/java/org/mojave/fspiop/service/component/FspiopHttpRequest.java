@@ -21,8 +21,8 @@ package org.mojave.fspiop.service.component;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.mojave.component.web.request.CachedServletRequest;
-import org.mojave.fspiop.common.type.Payee;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.type.Payee;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

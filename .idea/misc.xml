@@ -33,6 +33,7 @@
         <option value="$PROJECT_DIR$/implementation/platform/core/participant/routes-admin/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/participant/utility/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/platform/core/shared/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/platform/fspiop/common/pom.xml" />
       </set>
     </option>
   </component>

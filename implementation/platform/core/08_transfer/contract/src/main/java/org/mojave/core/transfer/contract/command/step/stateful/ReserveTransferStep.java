@@ -22,7 +22,7 @@ package org.mojave.core.transfer.contract.command.step.stateful;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.exception.FspiopException;
 
 public interface ReserveTransferStep {
 

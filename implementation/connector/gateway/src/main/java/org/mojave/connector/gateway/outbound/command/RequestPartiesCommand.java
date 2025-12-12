@@ -19,8 +19,8 @@
  */
 package org.mojave.connector.gateway.outbound.command;
 
-import org.mojave.fspiop.common.exception.FspiopException;
-import org.mojave.fspiop.common.type.Payee;
+import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.component.type.Payee;
 import org.mojave.fspiop.spec.core.PartiesTypeIDPutResponse;
 import org.mojave.fspiop.spec.core.PartyIdType;
 

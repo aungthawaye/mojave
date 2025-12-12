@@ -21,7 +21,7 @@ package org.mojave.connector.gateway.inbound.command.transfers;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.connector.adapter.fsp.FspCoreAdapter;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.invoker.api.transfers.PutTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

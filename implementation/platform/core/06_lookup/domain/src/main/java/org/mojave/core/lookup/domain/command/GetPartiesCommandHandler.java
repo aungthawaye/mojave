@@ -25,7 +25,7 @@ import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.lookup.contract.command.GetPartiesCommand;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.fspiop.component.handy.FspiopUrls;
 import org.mojave.fspiop.service.api.forwarder.ForwardRequest;

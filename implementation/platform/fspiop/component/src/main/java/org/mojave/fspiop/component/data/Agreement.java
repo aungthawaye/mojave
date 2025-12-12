@@ -17,7 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.data;
+package org.mojave.fspiop.component.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.mojave.fspiop.spec.core.AmountType;

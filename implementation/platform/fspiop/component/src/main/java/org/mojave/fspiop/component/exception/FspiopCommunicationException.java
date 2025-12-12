@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,37 +17,26 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.type;
 
-public record Payee(String fspCode) {
+package org.mojave.fspiop.component.exception;
 
-    public Payee {
+import org.mojave.fspiop.component.error.ErrorDefinition;
 
-        if (fspCode == null) {
-            throw new IllegalArgumentException("Payee FSP code cannot be null");
-        }
+public class FspiopCommunicationException extends FspiopException {
 
+    public FspiopCommunicationException(ErrorDefinition errorDefinition) {
+
+        super(errorDefinition);
     }
 
-    public static Payee EMPTY() {
+    public FspiopCommunicationException(ErrorDefinition errorDefinition, String message) {
 
-        return new Payee("");
+        super(errorDefinition, message);
     }
 
-    public static Payee of(String fspCode) {
+    public FspiopCommunicationException(ErrorDefinition errorDefinition, Throwable e) {
 
-        return fspCode != null ? new Payee(fspCode) : EMPTY();
-    }
-
-    public boolean isEmpty() {
-
-        return this.fspCode.isEmpty();
-    }
-
-    @Override
-    public String toString() {
-
-        return this.fspCode;
+        super(errorDefinition, e);
     }
 
 }

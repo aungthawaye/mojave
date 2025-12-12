@@ -17,25 +17,37 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.exception;
+package org.mojave.fspiop.component.type;
 
-import org.mojave.fspiop.common.error.ErrorDefinition;
+public record Payer(String fspCode) {
 
-public class FspiopCommunicationException extends FspiopException {
+    public Payer {
 
-    public FspiopCommunicationException(ErrorDefinition errorDefinition) {
+        if (fspCode == null) {
+            throw new IllegalArgumentException("Payer FSP code cannot be null");
+        }
 
-        super(errorDefinition);
     }
 
-    public FspiopCommunicationException(ErrorDefinition errorDefinition, String message) {
+    public static Payer EMPTY() {
 
-        super(errorDefinition, message);
+        return new Payer("");
     }
 
-    public FspiopCommunicationException(ErrorDefinition errorDefinition, Throwable e) {
+    public static Payer of(String fspCode) {
 
-        super(errorDefinition, e);
+        return fspCode != null ? new Payer(fspCode) : EMPTY();
+    }
+
+    public boolean isEmpty() {
+
+        return this.fspCode.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+
+        return this.fspCode;
     }
 
 }

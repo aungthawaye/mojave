@@ -30,7 +30,7 @@ import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.connector.adapter.ConnectorAdapterConfiguration;
 import org.mojave.connector.gateway.inbound.component.FspiopInboundGatekeeper;
-import org.mojave.fspiop.common.participant.ParticipantContext;
+import org.mojave.fspiop.component.participant.ParticipantContext;
 import org.mojave.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;

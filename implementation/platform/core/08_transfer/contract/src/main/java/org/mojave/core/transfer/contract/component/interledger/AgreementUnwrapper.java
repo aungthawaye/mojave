@@ -19,7 +19,7 @@
  */
 package org.mojave.core.transfer.contract.component.interledger;
 
-import org.mojave.fspiop.common.data.Agreement;
+import org.mojave.fspiop.component.data.Agreement;
 
 public interface AgreementUnwrapper {
 

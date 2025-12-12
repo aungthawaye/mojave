@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.core.transfer;
 
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
@@ -25,7 +26,7 @@ import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
 import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.contract.component.interledger.AgreementUnwrapper;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
+import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -33,7 +34,7 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         MiscConfiguration.class,
-        FspiopCommonConfiguration.class,
+        FspiopComponentConfiguration.class,
         AccountingProducerConfiguration.class,
         TransactionProducerConfiguration.class,
         ParticipantStoreConfiguration.class,
@@ -41,7 +42,7 @@ import org.springframework.context.annotation.Import;
 public class TransferDomainConfiguration {
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
-                                           FspiopCommonConfiguration.RequiredBeans,
+                                           FspiopComponentConfiguration.RequiredBeans,
                                            AccountingProducerConfiguration.RequiredBeans,
                                            TransactionProducerConfiguration.RequiredBeans,
                                            RoutingJpaConfiguration.RequiredBeans,
@@ -52,7 +53,7 @@ public class TransferDomainConfiguration {
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              FspiopCommonConfiguration.RequiredSettings,
+                                              FspiopComponentConfiguration.RequiredSettings,
                                               AccountingProducerConfiguration.RequiredSettings,
                                               TransactionProducerConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,

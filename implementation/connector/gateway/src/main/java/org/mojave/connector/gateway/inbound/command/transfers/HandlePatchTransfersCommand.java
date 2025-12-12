@@ -19,7 +19,7 @@
  */
 package org.mojave.connector.gateway.inbound.command.transfers;
 
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.spec.core.TransfersIDPatchResponse;
 
 public interface HandlePatchTransfersCommand {

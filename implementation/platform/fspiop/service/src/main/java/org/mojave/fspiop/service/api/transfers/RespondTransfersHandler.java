@@ -20,10 +20,10 @@
 package org.mojave.fspiop.service.api.transfers;
 
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.fspiop.common.exception.FspiopException;
-import org.mojave.fspiop.common.participant.ParticipantContext;
-import org.mojave.fspiop.common.type.Payee;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.component.participant.ParticipantContext;
+import org.mojave.fspiop.component.type.Payee;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopHeaders;
 import org.mojave.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.fspiop.component.retrofit.FspiopInvocationExceptionResolver;

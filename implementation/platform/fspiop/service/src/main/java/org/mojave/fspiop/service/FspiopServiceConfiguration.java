@@ -25,7 +25,7 @@ import org.mojave.component.web.spring.security.AuthenticationErrorWriter;
 import org.mojave.component.web.spring.security.Authenticator;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
-import org.mojave.fspiop.common.participant.ParticipantContext;
+import org.mojave.fspiop.component.participant.ParticipantContext;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.component.retrofit.FspiopSigningInterceptor;
 import org.mojave.fspiop.service.api.PartiesResponseService;

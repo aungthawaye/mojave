@@ -20,7 +20,7 @@
 package org.mojave.core.transfer.contract.command.step.fspiop;
 
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
 
 public interface ForwardToDestinationStep {

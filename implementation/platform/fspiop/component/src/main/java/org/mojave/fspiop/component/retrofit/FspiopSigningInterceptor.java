@@ -20,7 +20,7 @@
 package org.mojave.fspiop.component.retrofit;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.fspiop.common.participant.ParticipantContext;
+import org.mojave.fspiop.component.participant.ParticipantContext;
 import org.mojave.fspiop.component.handy.FspiopHeaders;
 import org.mojave.fspiop.component.handy.FspiopSignature;
 import org.slf4j.Logger;

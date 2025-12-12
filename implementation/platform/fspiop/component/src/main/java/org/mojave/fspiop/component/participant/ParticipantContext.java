@@ -17,7 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.participant;
+package org.mojave.fspiop.component.participant;
 
 import org.mojave.component.misc.crypto.KeyPairs;
 import org.slf4j.Logger;

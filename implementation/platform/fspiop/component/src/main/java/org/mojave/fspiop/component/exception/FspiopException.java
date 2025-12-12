@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,17 +17,39 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.error;
 
-import org.mojave.fspiop.spec.core.ErrorInformation;
+package org.mojave.fspiop.component.exception;
+
+import lombok.Getter;
+import org.mojave.fspiop.component.error.ErrorDefinition;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 
-public record ErrorDefinition(FspiopErrorType errorType, String description) {
+public class FspiopException extends Exception {
+
+    @Getter
+    private final ErrorDefinition errorDefinition;
+
+    public FspiopException(ErrorDefinition errorDefinition) {
+
+        super(errorDefinition.description());
+        this.errorDefinition = errorDefinition;
+    }
+
+    public FspiopException(ErrorDefinition errorDefinition, String message) {
+
+        super(message);
+        this.errorDefinition = new ErrorDefinition(errorDefinition.errorType(), message);
+    }
+
+    public FspiopException(ErrorDefinition errorDefinition, Throwable e) {
+
+        super(e);
+        this.errorDefinition = errorDefinition;
+    }
 
     public ErrorInformationObject toErrorObject() {
 
-        return new ErrorInformationObject().errorInformation(
-            new ErrorInformation(this.errorType.getCode(), this.description()));
+        return this.errorDefinition.toErrorObject();
     }
 
 }

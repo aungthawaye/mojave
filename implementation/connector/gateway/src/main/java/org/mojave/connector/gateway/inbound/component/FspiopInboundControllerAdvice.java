@@ -19,8 +19,8 @@
  */
 package org.mojave.connector.gateway.inbound.component;
 
-import org.mojave.fspiop.common.error.FspiopErrors;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.error.FspiopErrors;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.spec.core.ErrorInformation;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 import org.springframework.http.HttpStatus;

@@ -19,9 +19,9 @@
  */
 package org.mojave.fspiop.service.api.transfers;
 
-import org.mojave.fspiop.common.exception.FspiopException;
-import org.mojave.fspiop.common.type.Payee;
-import org.mojave.fspiop.common.type.Payer;
+import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.component.type.Payee;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 import org.mojave.fspiop.spec.core.TransfersIDPatchResponse;
 import org.mojave.fspiop.spec.core.TransfersIDPutResponse;

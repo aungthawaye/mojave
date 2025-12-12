@@ -19,7 +19,7 @@
  */
 package org.mojave.connector.gateway.outbound.data;
 
-import org.mojave.fspiop.common.type.Payee;
+import org.mojave.fspiop.component.type.Payee;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 import org.mojave.fspiop.spec.core.PartiesTypeIDPutResponse;
 import org.mojave.fspiop.spec.core.PartyIdType;

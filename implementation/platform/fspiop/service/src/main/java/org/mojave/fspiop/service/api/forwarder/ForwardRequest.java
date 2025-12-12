@@ -19,7 +19,7 @@
  */
 package org.mojave.fspiop.service.api.forwarder;
 
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
 
 public interface ForwardRequest {

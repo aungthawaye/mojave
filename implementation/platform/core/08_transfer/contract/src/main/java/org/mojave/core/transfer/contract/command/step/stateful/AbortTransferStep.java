@@ -24,7 +24,7 @@ import org.mojave.core.common.datatype.enums.transfer.AbortReason;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.spec.core.ExtensionList;
 
 public interface AbortTransferStep {

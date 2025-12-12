@@ -17,7 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.error;
+package org.mojave.fspiop.component.error;
 
 public enum FspiopErrorType {
 

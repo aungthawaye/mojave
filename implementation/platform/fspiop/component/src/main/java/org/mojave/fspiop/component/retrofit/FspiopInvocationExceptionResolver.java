@@ -20,10 +20,10 @@
 package org.mojave.fspiop.component.retrofit;
 
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.fspiop.common.error.ErrorDefinition;
-import org.mojave.fspiop.common.error.FspiopErrors;
-import org.mojave.fspiop.common.exception.FspiopCommunicationException;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.error.ErrorDefinition;
+import org.mojave.fspiop.component.error.FspiopErrors;
+import org.mojave.fspiop.component.exception.FspiopCommunicationException;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.spec.core.ErrorInformationResponse;
 
 import javax.net.ssl.SSLException;

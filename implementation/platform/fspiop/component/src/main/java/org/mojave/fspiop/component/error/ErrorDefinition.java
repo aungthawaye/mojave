@@ -17,37 +17,17 @@
  * limitations under the License.
  * ================================================================================
  */
-package org.mojave.fspiop.common.type;
+package org.mojave.fspiop.component.error;
 
-public record Payer(String fspCode) {
+import org.mojave.fspiop.spec.core.ErrorInformation;
+import org.mojave.fspiop.spec.core.ErrorInformationObject;
 
-    public Payer {
+public record ErrorDefinition(FspiopErrorType errorType, String description) {
 
-        if (fspCode == null) {
-            throw new IllegalArgumentException("Payer FSP code cannot be null");
-        }
+    public ErrorInformationObject toErrorObject() {
 
-    }
-
-    public static Payer EMPTY() {
-
-        return new Payer("");
-    }
-
-    public static Payer of(String fspCode) {
-
-        return fspCode != null ? new Payer(fspCode) : EMPTY();
-    }
-
-    public boolean isEmpty() {
-
-        return this.fspCode.isEmpty();
-    }
-
-    @Override
-    public String toString() {
-
-        return this.fspCode;
+        return new ErrorInformationObject().errorInformation(
+            new ErrorInformation(this.errorType.getCode(), this.description()));
     }
 
 }
