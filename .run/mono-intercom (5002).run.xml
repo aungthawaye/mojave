@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="mono-intercom (5002)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="00 mono">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/mono/intercom/src/main/java/io/mojaloop/mono/intercom/.env" />
+      <option value="$PROJECT_DIR$/implementation/platform/mono/intercom/src/main/java/org/mojave/mono/intercom/.env" />
     </option>
     <module name="mod-mono-intercom" />
     <selectedOptions>

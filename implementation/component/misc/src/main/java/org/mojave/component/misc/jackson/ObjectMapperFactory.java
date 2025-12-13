@@ -61,7 +61,7 @@ public class ObjectMapperFactory {
                           .build();
 
         return JsonMapper
-                   .builder(factory)
+                   .builder()
                    .changeDefaultPropertyInclusion(
                        incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
                    .changeDefaultPropertyInclusion(

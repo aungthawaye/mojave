@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,13 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.connector.gateway.outbound.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.mojave.component.misc.spring.event.EventPublisher;
 import org.mojave.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import org.mojave.connector.gateway.outbound.command.RequestTransfersCommand;
@@ -28,9 +32,9 @@ import org.mojave.connector.gateway.outbound.event.TransfersErrorEvent;
 import org.mojave.connector.gateway.outbound.event.TransfersRequestEvent;
 import org.mojave.connector.gateway.outbound.event.TransfersResponseEvent;
 import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.component.handy.FspiopDates;
 import org.mojave.fspiop.component.participant.ParticipantContext;
 import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.component.handy.FspiopDates;
 import org.mojave.fspiop.spec.core.AmountType;
 import org.mojave.fspiop.spec.core.Extension;
 import org.mojave.fspiop.spec.core.ExtensionList;
@@ -93,7 +97,7 @@ public class RequestTransfersController {
             new Extension("payerPartyId", request.payer.getPartyIdentifier()));
 
         // Payee related
-        extensionList.addExtensionItem(new Extension("payeeFspId", request.destination));
+        extensionList.addExtensionItem(new Extension("payeeFspId", request.payeeFsp()));
         extensionList.addExtensionItem(
             new Extension("payeePartyIdType", request.payee.getPartyIdType().toString()));
         extensionList.addExtensionItem(
@@ -109,14 +113,14 @@ public class RequestTransfersController {
         transfersPostRequest
             .transferId(request.transferId())
             .payerFsp(this.participantContext.fspCode())
-            .payeeFsp(request.destination)
+            .payeeFsp(request.payeeFsp())
             .amount(request.amount)
             .ilpPacket(request.ilpPacket)
             .condition(request.condition)
             .expiration(FspiopDates.forRequestBody(expireAfterSeconds))
             .extensionList(extensionList);
 
-        final var payee = new Payee(request.destination());
+        final var payee = new Payee(request.payeeFsp());
 
         try {
             // Publish request event
@@ -143,13 +147,13 @@ public class RequestTransfersController {
 
     }
 
-    public record Request(String destination,
-                          String transferId,
-                          AmountType amountType,
-                          Money amount,
-                          PartyIdInfo payer,
-                          PartyIdInfo payee,
-                          String ilpPacket,
-                          String condition) { }
+    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
+                          @JsonProperty(required = true) @NotNull @NotBlank String transferId,
+                          @JsonProperty(required = true) @NotNull AmountType amountType,
+                          @JsonProperty(required = true) @NotNull Money amount,
+                          @JsonProperty(required = true) @NotNull PartyIdInfo payer,
+                          @JsonProperty(required = true) @NotNull PartyIdInfo payee,
+                          @JsonProperty(required = true) @NotNull String ilpPacket,
+                          @JsonProperty(required = true) @NotNull String condition) { }
 
 }
