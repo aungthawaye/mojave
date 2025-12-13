@@ -22,6 +22,7 @@ package org.mojave.core.participant.intercom.client.service;
 
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.OracleData;
+import org.mojave.core.participant.contract.data.SspData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -36,7 +37,7 @@ public interface ParticipantIntercomService {
         Call<List<FspData>> getAllFsps();
 
         @GET("fsps/get-by-fsp-id")
-        Call<FspData> getByFspCode(@Query("fspCode") String fspCode);
+        Call<FspData> getByFspCode(@Query("code") String fspCode);
 
         @GET("fsps/get-by-fsp-id")
         Call<FspData> getByFspId(@Query("fspId") String fspId);
@@ -53,6 +54,19 @@ public interface ParticipantIntercomService {
 
         @GET("oracles/get-by-party-id-type")
         Call<OracleData> getByPartyIdType(@Query("partyIdType") String partyIdType);
+
+    }
+
+    interface SspQuery {
+
+        @GET("ssps/get-all-ssps")
+        Call<List<SspData>> getAllSsps();
+
+        @GET("ssps/get-by-ssp-code")
+        Call<SspData> getBySspCode(@Query("code") String sspCode);
+
+        @GET("ssps/get-by-ssp-id")
+        Call<SspData> getBySspId(@Query("sspId") String sspId);
 
     }
 

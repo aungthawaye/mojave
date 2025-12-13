@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,22 +17,8 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.accounting.domain.model.ledger;
 
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.core.accounting.contract.data.LedgerBalanceData;
-import org.mojave.core.accounting.domain.model.Account;
-import org.mojave.core.accounting.domain.model.DrCr;
-import org.mojave.core.common.datatype.converter.identifier.accounting.AccountIdJavaType;
-import org.mojave.core.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.fspiop.component.handy.FspiopCurrencies;
-import org.mojave.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -49,6 +35,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.core.accounting.contract.data.LedgerBalanceData;
+import org.mojave.core.accounting.domain.model.Account;
+import org.mojave.core.accounting.domain.model.DrCr;
+import org.mojave.core.common.datatype.converter.identifier.accounting.AccountIdJavaType;
+import org.mojave.core.common.datatype.enums.accounting.OverdraftMode;
+import org.mojave.core.common.datatype.enums.accounting.Side;
+import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.fspiop.component.handy.FspiopCurrencies;
+import org.mojave.fspiop.spec.core.Currency;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -157,9 +156,8 @@ public class LedgerBalance extends JpaEntity<AccountId>
     public LedgerBalanceData convert() {
 
         return new LedgerBalanceData(
-            this.getId(), this.currency, this.scale, this.nature,
-            this.postedDebits, this.postedCredits, this.overdraftMode, this.overdraftLimit,
-            this.createdAt);
+            this.getId(), this.currency, this.scale, this.nature, this.postedDebits,
+            this.postedCredits, this.overdraftMode, this.overdraftLimit, this.createdAt);
     }
 
     public DrCr getDrCr() {

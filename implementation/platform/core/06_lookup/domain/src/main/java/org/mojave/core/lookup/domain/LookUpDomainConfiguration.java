@@ -22,7 +22,6 @@ package org.mojave.core.lookup.domain;
 
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -30,16 +29,13 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         MiscConfiguration.class,
-        FspiopCommonConfiguration.class,
         ParticipantStoreConfiguration.class})
 public class LookUpDomainConfiguration {
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
-                                           FspiopCommonConfiguration.RequiredBeans,
-                                           ParticipantStoreConfiguration.RequiredBeans { }
+    public interface RequiredBeans
+        extends MiscConfiguration.RequiredBeans, ParticipantStoreConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends ParticipantStoreConfiguration.RequiredSettings,
-                                              MiscConfiguration.RequiredSettings,
-                                              FspiopCommonConfiguration.RequiredSettings { }
+                                              MiscConfiguration.RequiredSettings { }
 
 }

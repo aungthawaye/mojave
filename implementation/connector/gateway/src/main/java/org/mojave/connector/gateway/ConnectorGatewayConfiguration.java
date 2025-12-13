@@ -23,13 +23,13 @@ package org.mojave.connector.gateway;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.connector.gateway.inbound.ConnectorInboundConfiguration;
 import org.mojave.connector.gateway.outbound.ConnectorOutboundConfiguration;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
+import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.Import;
 
 @Import(
     value = {
         MiscConfiguration.class,
-        FspiopCommonConfiguration.class})
+        FspiopComponentConfiguration.class})
 public class ConnectorGatewayConfiguration {
 
     public interface RequiredBeans extends ConnectorInboundConfiguration.RequiredBeans,

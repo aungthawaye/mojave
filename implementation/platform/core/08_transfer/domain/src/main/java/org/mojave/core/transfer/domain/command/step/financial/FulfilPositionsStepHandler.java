@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
@@ -28,8 +27,8 @@ import org.mojave.core.transaction.producer.publisher.AddStepPublisher;
 import org.mojave.core.transfer.contract.command.step.financial.FulfilPositionsStep;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
-import org.mojave.fspiop.common.error.FspiopErrors;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.error.FspiopErrors;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -98,8 +97,7 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
             this.addStepPublisher.publish(
                 new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
+                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

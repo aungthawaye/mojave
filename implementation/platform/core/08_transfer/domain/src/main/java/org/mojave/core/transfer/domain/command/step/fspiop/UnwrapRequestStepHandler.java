@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,13 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.transfer.contract.command.step.fspiop.UnwrapRequestStep;
 import org.mojave.core.transfer.contract.component.interledger.AgreementUnwrapper;
-import org.mojave.fspiop.common.error.FspiopErrors;
-import org.mojave.fspiop.common.exception.FspiopException;
+import org.mojave.fspiop.component.error.FspiopErrors;
+import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.handy.FspiopCurrencies;
 import org.mojave.fspiop.component.handy.FspiopDates;
 import org.mojave.fspiop.component.handy.FspiopMoney;
@@ -57,8 +56,8 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
 
         LOGGER.info("UnwrapRequestStep : input : ({})", ObjectLogger.log(input));
 
-        var payerFspCode = input.payerFsp().fspCode();
-        var payeeFspCode = input.payeeFsp().fspCode();
+        var payerFspCode = input.payerFsp().code();
+        var payeeFspCode = input.payeeFsp().code();
 
         var request = input.request();
 
@@ -97,7 +96,8 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
 
         if (!agreement.quoteId().equals(request.getTransferId())) {
 
-            LOGGER.warn("QuoteId from Agreement does not match the transferId of Transfer request.");
+            LOGGER.warn(
+                "QuoteId from Agreement does not match the transferId of Transfer request.");
 
             throw new FspiopException(
                 FspiopErrors.GENERIC_VALIDATION_ERROR,

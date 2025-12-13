@@ -4,39 +4,9 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/implementation/platform/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/connector/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/operation/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/accounting/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/consumer/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/pom.xml" />
       </list>
     </option>
-    <option name="ignoredFiles">
-      <set>
-        <option value="$PROJECT_DIR$/implementation/component/jackson/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/component/logging/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/connector/core/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/common/central-cache/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/common/http-security/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/common/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/component/http/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/connector/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/publisher/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/04_transaction/admin-client/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/04_transaction/admin/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/04_wallet/store/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/lookup/infra/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/lookup/routes-fspiop/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/oracle/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/participant/routes-admin/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/participant/utility/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/core/shared/pom.xml" />
-      </set>
-    </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="25" project-jdk-type="JavaSDK" />
 </project>

@@ -58,7 +58,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payer msisdn" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn" enabled="true">
           <stringProp name="CounterConfig.start">9000000001</stringProp>
           <stringProp name="CounterConfig.end">9999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -67,7 +67,7 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payee msisdn" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8000000001</stringProp>
           <stringProp name="CounterConfig.end">8999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -195,12 +195,12 @@
         &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
         &quot;amount&quot;: &quot;1.001&quot;&#xd;
     },&#xd;
-    &quot;payer&quot;: {&#xd;
+    &quot;source&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payerMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payerFsp}&quot;&#xd;
     },&#xd;
-    &quot;payee&quot;: {&#xd;
+    &quot;destination&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payeeMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payeeFsp}&quot;&#xd;
@@ -369,12 +369,12 @@
         &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
         &quot;amount&quot;: &quot;${transferAmount}&quot;&#xd;
     },&#xd;
-    &quot;payer&quot;: {&#xd;
+    &quot;source&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payerMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payerFsp}&quot;&#xd;
     },&#xd;
-    &quot;payee&quot;: {&#xd;
+    &quot;destination&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payeeMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payeeFsp}&quot;&#xd;
@@ -641,7 +641,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="payee msisdn" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8000000001</stringProp>
           <stringProp name="CounterConfig.end">8999999999</stringProp>
           <stringProp name="CounterConfig.incr">1</stringProp>

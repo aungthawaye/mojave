@@ -21,6 +21,8 @@
 package org.mojave.core.participant.domain.query;
 
 import org.mojave.component.jpa.routing.annotation.Read;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
 import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
@@ -57,10 +59,12 @@ public class FspQueryHandler implements FspQuery {
     @Override
     public FspData get(FspId fspId) {
 
-        return this.fspRepository
-                   .findById(fspId)
-                   .orElseThrow(() -> new FspIdNotFoundException(fspId))
-                   .convert();
+        var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus = FspRepository.Filters.withTerminationStatus(
+            TerminationStatus.ALIVE);
+
+        return this.fspRepository.findOne(activationStatus.and(terminationStatus)).orElseThrow(
+            () -> new FspIdNotFoundException(fspId)).convert();
     }
 
     @Transactional(readOnly = true)
@@ -68,8 +72,14 @@ public class FspQueryHandler implements FspQuery {
     @Override
     public FspData get(FspCode fspCode) {
 
+        var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus = FspRepository.Filters.withTerminationStatus(
+            TerminationStatus.ALIVE);
+
         return this.fspRepository
-                   .findOne(FspRepository.Filters.withFspCode(fspCode))
+                   .findOne(activationStatus
+                                .and(terminationStatus)
+                                .and(FspRepository.Filters.withFspCode(fspCode)))
                    .orElseThrow(() -> new FspCodeNotFoundException(fspCode))
                    .convert();
     }
@@ -79,7 +89,12 @@ public class FspQueryHandler implements FspQuery {
     @Override
     public List<FspData> getAll() {
 
-        return this.fspRepository.findAll().stream().map(Fsp::convert).toList();
+        var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
+        var terminationStatus = FspRepository.Filters.withTerminationStatus(
+            TerminationStatus.ALIVE);
+
+        return this.fspRepository.findAll(activationStatus.and(terminationStatus)).stream().map(
+            Fsp::convert).toList();
     }
 
 }

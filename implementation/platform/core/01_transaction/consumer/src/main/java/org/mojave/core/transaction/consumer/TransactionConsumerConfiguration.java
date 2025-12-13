@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,16 +17,15 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transaction.consumer;
 
+import org.apache.kafka.common.serialization.Deserializer;
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
 import org.mojave.core.transaction.consumer.listener.AddStepListener;
 import org.mojave.core.transaction.consumer.listener.CloseTransactionListener;
 import org.mojave.core.transaction.contract.command.AddStepCommand;
 import org.mojave.core.transaction.contract.command.CloseTransactionCommand;
 import org.mojave.core.transaction.domain.TransactionDomainConfiguration;
-import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

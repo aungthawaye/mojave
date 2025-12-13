@@ -46,6 +46,13 @@ import org.mojave.core.participant.contract.exception.oracle.OracleIdNotFoundExc
 import org.mojave.core.participant.contract.exception.oracle.OracleNameRequiredException;
 import org.mojave.core.participant.contract.exception.oracle.OracleNameTooLongException;
 import org.mojave.core.participant.contract.exception.oracle.OracleTypeNotFoundException;
+import org.mojave.core.participant.contract.exception.ssp.SspCodeRequiredException;
+import org.mojave.core.participant.contract.exception.ssp.SspCurrencyNotSupportedByHubException;
+import org.mojave.core.participant.contract.exception.ssp.SspEndpointBaseUrlRequiredException;
+import org.mojave.core.participant.contract.exception.ssp.SspEndpointBaseUrlTooLongException;
+import org.mojave.core.participant.contract.exception.ssp.SspIdNotFoundException;
+import org.mojave.core.participant.contract.exception.ssp.SspNameRequiredException;
+import org.mojave.core.participant.contract.exception.ssp.SspNameTooLongException;
 
 public class ParticipantExceptionResolver {
 
@@ -94,6 +101,18 @@ public class ParticipantExceptionResolver {
             case OracleNameRequiredException.CODE -> OracleNameRequiredException.from(extra);
             case OracleNameTooLongException.CODE -> OracleNameTooLongException.from(extra);
             case OracleTypeNotFoundException.CODE -> OracleTypeNotFoundException.from(extra);
+
+            // ssp
+            case SspEndpointBaseUrlRequiredException.CODE ->
+                SspEndpointBaseUrlRequiredException.from(extra);
+            case SspEndpointBaseUrlTooLongException.CODE ->
+                SspEndpointBaseUrlTooLongException.from(extra);
+            case SspIdNotFoundException.CODE -> SspIdNotFoundException.from(extra);
+            case SspNameRequiredException.CODE -> SspNameRequiredException.from(extra);
+            case SspNameTooLongException.CODE -> SspNameTooLongException.from(extra);
+            case SspCodeRequiredException.CODE -> SspCodeRequiredException.from(extra);
+            case SspCurrencyNotSupportedByHubException.CODE ->
+                SspCurrencyNotSupportedByHubException.from(extra);
 
             default -> throw new RuntimeException("Unknown exception code: " + code);
         };

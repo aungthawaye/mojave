@@ -10,27 +10,23 @@
     <artifactId>mod-fspiop-service</artifactId>
     <name>Mojaloop - Platform - FSPIOP - Service</name>
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
             <artifactId>mod-fspiop-component</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

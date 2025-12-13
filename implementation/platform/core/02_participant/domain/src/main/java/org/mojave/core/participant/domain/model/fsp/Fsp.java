@@ -20,26 +20,6 @@
 
 package org.mojave.core.participant.domain.model.fsp;
 
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.participant.FspIdJavaType;
-import org.mojave.core.common.datatype.converter.type.fspiop.FspCodeConverter;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
-import org.mojave.core.participant.contract.data.FspCurrencyData;
-import org.mojave.core.participant.contract.data.FspData;
-import org.mojave.core.participant.contract.data.FspEndpointData;
-import org.mojave.core.participant.contract.exception.fsp.FspCodeRequiredException;
-import org.mojave.core.participant.contract.exception.fsp.FspNameRequiredException;
-import org.mojave.core.participant.contract.exception.fsp.FspNameTooLongException;
-import org.mojave.core.participant.domain.model.hub.Hub;
-import org.mojave.fspiop.spec.core.Currency;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -60,6 +40,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.common.datatype.converter.identifier.participant.FspIdJavaType;
+import org.mojave.core.common.datatype.converter.type.fspiop.FspCodeConverter;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.core.common.datatype.identifier.participant.FspId;
+import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.core.participant.contract.data.FspCurrencyData;
+import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.core.participant.contract.data.FspEndpointData;
+import org.mojave.core.participant.contract.exception.fsp.FspCodeRequiredException;
+import org.mojave.core.participant.contract.exception.fsp.FspNameRequiredException;
+import org.mojave.core.participant.contract.exception.fsp.FspNameTooLongException;
+import org.mojave.core.participant.domain.model.hub.Hub;
+import org.mojave.fspiop.spec.core.Currency;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -77,8 +77,8 @@ import static java.sql.Types.BIGINT;
     name = "pcp_fsp",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "pcp_fsp_fsp_code_UK",
-            columnNames = {"fsp_code"})})
+            name = "pcp_fsp_code_UK",
+            columnNames = {"code"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
@@ -93,11 +93,11 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     @Basic
     @Column(
-        name = "fsp_code",
+        name = "code",
         nullable = false,
         length = StringSizeConstraints.MAX_CODE_LENGTH)
     @Convert(converter = FspCodeConverter.class)
-    protected FspCode fspCode;
+    protected FspCode code;
 
     @Column(
         name = "name",
@@ -125,14 +125,6 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "hub_id",
-        nullable = false,
-        updatable = false,
-        foreignKey = @ForeignKey(name = "fsp_hub_FK"))
-    protected Hub hub;
-
     @Getter(AccessLevel.NONE)
     @OneToMany(
         mappedBy = "fsp",
@@ -151,15 +143,23 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         fetch = FetchType.EAGER)
     protected Set<FspEndpoint> endpoints = new HashSet<>();
 
-    public Fsp(Hub hub, FspCode fspCode, String name) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "hub_id",
+        nullable = false,
+        updatable = false,
+        foreignKey = @ForeignKey(name = "fsp_hub_FK"))
+    protected Hub hub;
+
+    public Fsp(Hub hub, FspCode code, String name) {
 
         assert hub != null;
-        assert fspCode != null;
+        assert code != null;
         assert name != null;
 
         this.id = new FspId(Snowflake.get().nextId());
         this.hub = hub;
-        this.fspCode(fspCode).name(name);
+        this.fspCode(code).name(name);
         this.activationStatus = ActivationStatus.ACTIVE;
         this.createdAt = Instant.now();
     }
@@ -251,7 +251,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     public FspData convert() {
 
         return new FspData(
-            this.getId(), this.getFspCode(), this.getName(),
+            this.getId(), this.getCode(), this.getName(),
             this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
             this.getEndpoints().stream().map(FspEndpoint::convert).collect(Collectors.toMap(
                 FspEndpointData::type, Function.identity(),
@@ -309,7 +309,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
             throw new FspCodeRequiredException();
         }
 
-        this.fspCode = fspCode;
+        this.code = fspCode;
 
         return this;
     }

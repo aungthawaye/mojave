@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.accounting.domain.model;
 
 import jakarta.persistence.Column;
@@ -29,10 +28,9 @@ import java.math.BigDecimal;
 public record DrCr(@Column(
     name = "debits",
     precision = 34,
-    scale = 4) BigDecimal debits,
-                   @Column(
-                       name = "credits",
-                       precision = 34,
-                       scale = 4) BigDecimal credits) {
+    scale = 4) BigDecimal debits, @Column(
+    name = "credits",
+    precision = 34,
+    scale = 4) BigDecimal credits) {
 
 }

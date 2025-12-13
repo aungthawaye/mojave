@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.participant.admin.client.service;
 
 import org.mojave.core.participant.contract.command.fsp.ActivateEndpointCommand;
@@ -25,12 +24,21 @@ import org.mojave.core.participant.contract.command.fsp.ActivateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
 import org.mojave.core.participant.contract.command.fsp.AddEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.AddFspCurrencyCommand;
-import org.mojave.core.participant.contract.command.fsp.ChangeEndpointCommand;
+import org.mojave.core.participant.contract.command.fsp.ChangeFspEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.ChangeFspNameCommand;
 import org.mojave.core.participant.contract.command.fsp.CreateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateFspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.ActivateSspCommand;
+import org.mojave.core.participant.contract.command.ssp.ActivateSspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.AddSspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.ChangeSspEndpointCommand;
+import org.mojave.core.participant.contract.command.ssp.ChangeSspNameCommand;
+import org.mojave.core.participant.contract.command.ssp.CreateSspCommand;
+import org.mojave.core.participant.contract.command.ssp.DeactivateSspCommand;
+import org.mojave.core.participant.contract.command.ssp.DeactivateSspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.TerminateSspCommand;
 import org.mojave.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
 import org.mojave.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import org.mojave.core.participant.contract.command.hub.ChangeHubNameCommand;
@@ -42,6 +50,7 @@ import org.mojave.core.participant.contract.command.oracle.ChangeOracleTypeComma
 import org.mojave.core.participant.contract.command.oracle.CreateOracleCommand;
 import org.mojave.core.participant.contract.command.oracle.DeactivateOracleCommand;
 import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.core.participant.contract.data.SspData;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.data.OracleData;
 import retrofit2.Call;
@@ -74,7 +83,7 @@ public interface ParticipantAdminService {
         Call<AddFspCurrencyCommand.Output> addFspCurrency(@Body AddFspCurrencyCommand.Input input);
 
         @POST("fsps/change-endpoint")
-        Call<ChangeEndpointCommand.Output> changeEndpoint(@Body ChangeEndpointCommand.Input input);
+        Call<ChangeFspEndpointCommand.Output> changeEndpoint(@Body ChangeFspEndpointCommand.Input input);
 
         @POST("fsps/change-name")
         Call<ChangeFspNameCommand.Output> changeFspName(@Body ChangeFspNameCommand.Input input);
@@ -92,6 +101,46 @@ public interface ParticipantAdminService {
         @POST("fsps/deactivate-currency")
         Call<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(
             @Body DeactivateFspCurrencyCommand.Input input);
+
+    }
+
+    interface SspCommand {
+
+        @POST("ssps/activate-ssp")
+        Call<ActivateSspCommand.Output> activateSsp(
+            @Body ActivateSspCommand.Input input);
+
+        @POST("ssps/deactivate-ssp")
+        Call<DeactivateSspCommand.Output> deactivateSsp(
+            @Body DeactivateSspCommand.Input input);
+
+        @POST("ssps/terminate-ssp")
+        Call<TerminateSspCommand.Output> terminateSsp(
+            @Body TerminateSspCommand.Input input);
+
+        @POST("ssps/create-ssp")
+        Call<CreateSspCommand.Output> createSsp(
+            @Body CreateSspCommand.Input input);
+
+        @POST("ssps/change-name")
+        Call<ChangeSspNameCommand.Output> changeSspName(
+            @Body ChangeSspNameCommand.Input input);
+
+        @POST("ssps/change-endpoint")
+        Call<ChangeSspEndpointCommand.Output> changeSspEndpoint(
+            @Body ChangeSspEndpointCommand.Input input);
+
+        @POST("ssps/add-currency")
+        Call<AddSspCurrencyCommand.Output> addSspCurrency(
+            @Body AddSspCurrencyCommand.Input input);
+
+        @POST("ssps/activate-currency")
+        Call<ActivateSspCurrencyCommand.Output> activateSspCurrency(
+            @Body ActivateSspCurrencyCommand.Input input);
+
+        @POST("ssps/deactivate-currency")
+        Call<DeactivateSspCurrencyCommand.Output> deactivateSspCurrency(
+            @Body DeactivateSspCurrencyCommand.Input input);
 
     }
 
@@ -114,10 +163,23 @@ public interface ParticipantAdminService {
         Call<List<FspData>> getAllFsps();
 
         @GET("fsps/get-by-fsp-code")
-        Call<FspData> getByFspCode(@Query("fspCode") String fspCode);
+        Call<FspData> getByFspCode(@Query("code") String fspCode);
 
         @GET("fsps/get-by-fsp-id")
         Call<FspData> getByFspId(@Query("fspId") String fspId);
+
+    }
+
+    interface SspQuery {
+
+        @GET("ssps/get-all-ssps")
+        Call<List<SspData>> getAllSsps();
+
+        @GET("ssps/get-by-ssp-code")
+        Call<SspData> getBySspCode(@Query("code") String sspCode);
+
+        @GET("ssps/get-by-ssp-id")
+        Call<SspData> getBySspId(@Query("sspId") String sspId);
 
     }
 

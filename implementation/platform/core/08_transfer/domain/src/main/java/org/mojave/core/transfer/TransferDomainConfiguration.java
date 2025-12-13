@@ -26,7 +26,7 @@ import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
 import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.contract.component.interledger.AgreementUnwrapper;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
+import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         MiscConfiguration.class,
-        FspiopCommonConfiguration.class,
+        FspiopComponentConfiguration.class,
         AccountingProducerConfiguration.class,
         TransactionProducerConfiguration.class,
         ParticipantStoreConfiguration.class,
@@ -42,7 +42,7 @@ import org.springframework.context.annotation.Import;
 public class TransferDomainConfiguration {
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
-                                           FspiopCommonConfiguration.RequiredBeans,
+                                           FspiopComponentConfiguration.RequiredBeans,
                                            AccountingProducerConfiguration.RequiredBeans,
                                            TransactionProducerConfiguration.RequiredBeans,
                                            RoutingJpaConfiguration.RequiredBeans,
@@ -53,7 +53,7 @@ public class TransferDomainConfiguration {
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              FspiopCommonConfiguration.RequiredSettings,
+                                              FspiopComponentConfiguration.RequiredSettings,
                                               AccountingProducerConfiguration.RequiredSettings,
                                               TransactionProducerConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,

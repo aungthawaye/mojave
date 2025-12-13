@@ -20,19 +20,6 @@
 
 package org.mojave.core.participant.domain.model.fsp;
 
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.participant.FspCurrencyIdJavaType;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.identifier.participant.FspCurrencyId;
-import org.mojave.core.participant.contract.data.FspCurrencyData;
-import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
-import org.mojave.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
-import org.mojave.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
-import org.mojave.fspiop.spec.core.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -49,6 +36,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.common.datatype.converter.identifier.participant.FspCurrencyIdJavaType;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.identifier.participant.FspCurrencyId;
+import org.mojave.core.participant.contract.data.FspCurrencyData;
+import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
+import org.mojave.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
+import org.mojave.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
+import org.mojave.fspiop.spec.core.Currency;
 
 import java.time.Instant;
 
@@ -137,7 +137,7 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId>
 
         if (!this.fsp.isActive()) {
 
-            throw new CannotActivateFspCurrencyException(this.fsp.fspCode, this.currency);
+            throw new CannotActivateFspCurrencyException(this.fsp.code, this.currency);
         }
 
         if (!this.fsp.getHub().isCurrencySupported(this.currency)) {

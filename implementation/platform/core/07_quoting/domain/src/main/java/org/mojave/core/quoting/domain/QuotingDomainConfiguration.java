@@ -23,7 +23,7 @@ package org.mojave.core.quoting.domain;
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
+import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -31,19 +31,19 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         MiscConfiguration.class,
-        FspiopCommonConfiguration.class,
+        FspiopComponentConfiguration.class,
         ParticipantStoreConfiguration.class,
         RoutingJpaConfiguration.class})
 public class QuotingDomainConfiguration {
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
-                                           FspiopCommonConfiguration.RequiredBeans,
+                                           FspiopComponentConfiguration.RequiredBeans,
                                            RoutingJpaConfiguration.RequiredBeans {
 
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
-                                              FspiopCommonConfiguration.RequiredSettings,
+                                              FspiopComponentConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {
 

@@ -23,7 +23,7 @@ package org.mojave.connector.sample;
 import org.mojave.connector.gateway.ConnectorGatewayConfiguration;
 import org.mojave.connector.gateway.inbound.ConnectorInboundConfiguration;
 import org.mojave.connector.gateway.outbound.ConnectorOutboundConfiguration;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
+import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.invoker.FspiopInvokerConfiguration;
 import org.mojave.fspiop.invoker.api.PartiesService;
 import org.mojave.fspiop.invoker.api.QuotesService;
@@ -35,33 +35,6 @@ import java.util.HashMap;
 
 public class SampleConnectorSharedSettings
     implements ConnectorGatewayConfiguration.RequiredSettings {
-
-    @Bean
-    @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
-
-        var fspCode = System.getenv("FSPIOP_FSP_CODE");
-        var fspName = System.getenv("FSPIOP_FSP_NAME");
-        var ilpSecret = System.getenv("FSPIOP_ILP_SECRET");
-        var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
-        var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
-        var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
-        var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
-        var fspPublicKeyPem = new HashMap<String, String>();
-
-        for (var fsp : fsps) {
-
-            var env = "FSPIOP_PUBLIC_KEY_PEM_OF_" + fsp.toUpperCase();
-            var publicKeyPem = System.getenv(env);
-
-            if (publicKeyPem != null) {
-                fspPublicKeyPem.put(fsp, publicKeyPem);
-            }
-        }
-
-        return new FspiopCommonConfiguration.ParticipantSettings(
-            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
-    }
 
     @Bean
     @Override
@@ -119,6 +92,33 @@ public class SampleConnectorSharedSettings
             Integer.parseInt(System.getenv("FSPIOP_OUTBOUND_PUBSUB_TIMEOUT")),
             System.getenv("FSPIOP_OUTBOUND_PUBLIC_KEY_PEM"),
             Boolean.parseBoolean(System.getenv("FSPIOP_OUTBOUND_SECURED")));
+    }
+
+    @Bean
+    @Override
+    public FspiopComponentConfiguration.ParticipantSettings participantSettings() {
+
+        var fspCode = System.getenv("FSPIOP_FSP_CODE");
+        var fspName = System.getenv("FSPIOP_FSP_NAME");
+        var ilpSecret = System.getenv("FSPIOP_ILP_SECRET");
+        var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
+        var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
+        var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
+        var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
+        var fspPublicKeyPem = new HashMap<String, String>();
+
+        for (var fsp : fsps) {
+
+            var env = "FSPIOP_PUBLIC_KEY_PEM_OF_" + fsp.toUpperCase();
+            var publicKeyPem = System.getenv(env);
+
+            if (publicKeyPem != null) {
+                fspPublicKeyPem.put(fsp, publicKeyPem);
+            }
+        }
+
+        return new FspiopComponentConfiguration.ParticipantSettings(
+            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
     }
 
     @Bean

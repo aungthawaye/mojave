@@ -7,6 +7,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for Mojave - IIPS" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+        </processorPath>
         <module name="mod-operation-usecase" />
         <module name="mod-component-flyway" />
         <module name="mod-transfer-contract" />
@@ -54,7 +63,6 @@
         <module name="mod-quoting-service" />
         <module name="mod-settlement-contract" />
         <module name="mod-component-misc" />
-        <module name="mod-fspiop-common" />
         <module name="mod-accounting-domain" />
         <module name="mod-accounting-consumer" />
         <module name="mod-accounting-intercom-client" />
@@ -77,43 +85,9 @@
         <module name="mod-mono-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="account-pom" target="21" />
-      <module name="mod-account-admin" target="21" />
-      <module name="mod-account-admin-client" target="21" />
-      <module name="mod-account-contract" target="21" />
-      <module name="mod-account-domain" target="21" />
-      <module name="mod-account-intercom" target="21" />
-      <module name="mod-accounting-publisher" target="21" />
-      <module name="mod-central-cache" target="21" />
-      <module name="mod-component" target="21" />
-      <module name="mod-component-http" target="21" />
-      <module name="mod-component-jackson" target="21" />
-      <module name="mod-component-logging" target="21" />
-      <module name="mod-connector-core" target="21" />
-      <module name="mod-connector-fspclient" target="21" />
-      <module name="mod-datatype" target="21" />
-      <module name="mod-fspiop" target="21" />
-      <module name="mod-fspiop-contract" target="21" />
-      <module name="mod-http-security" target="21" />
-      <module name="mod-lookup-infra" target="21" />
-      <module name="mod-lookup-routes-fspiop" target="21" />
-      <module name="mod-oracle-domain" target="21" />
-      <module name="mod-oracle-routes-admin" target="21" />
-      <module name="mod-participant-routes-admin" target="21" />
-      <module name="mod-participant-util" target="21" />
-      <module name="mod-participant-utility" target="21" />
-      <module name="mod-shared-security" target="21" />
-      <module name="mod-transaction-admin" target="21" />
-      <module name="mod-transaction-admin-client" target="21" />
-      <module name="mod-wallet-store" target="21" />
-      <module name="oracle-pom" target="21" />
-      <module name="shared-pom" target="21" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="account-pom" options="-parameters" />
       <module name="accounting-pom" options="-parameters" />
       <module name="common-pom" options="-parameters" />
       <module name="component-pom" options="-parameters" />
@@ -122,11 +96,6 @@
       <module name="fspiop-pom" options="-parameters" />
       <module name="iso20022-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
-      <module name="mod-account-admin" options="-parameters" />
-      <module name="mod-account-admin-client" options="-parameters" />
-      <module name="mod-account-contract" options="-parameters" />
-      <module name="mod-account-domain" options="-parameters" />
-      <module name="mod-account-intercom" options="-parameters" />
       <module name="mod-accounting-admin" options="-parameters" />
       <module name="mod-accounting-admin-client" options="-parameters" />
       <module name="mod-accounting-consumer" options="-parameters" />
@@ -135,18 +104,12 @@
       <module name="mod-accounting-intercom" options="-parameters" />
       <module name="mod-accounting-intercom-client" options="-parameters" />
       <module name="mod-accounting-producer" options="-parameters" />
-      <module name="mod-accounting-publisher" options="-parameters" />
       <module name="mod-accounting-store" options="-parameters" />
-      <module name="mod-central-cache" options="-parameters" />
       <module name="mod-common-datatype" options="-parameters" />
       <module name="mod-common-datatype-converter" options="-parameters" />
-      <module name="mod-component" options="-parameters" />
       <module name="mod-component-flyway" options="-parameters" />
-      <module name="mod-component-http" options="-parameters" />
-      <module name="mod-component-jackson" options="-parameters" />
       <module name="mod-component-jpa" options="-parameters" />
       <module name="mod-component-kafka" options="-parameters" />
-      <module name="mod-component-logging" options="-parameters" />
       <module name="mod-component-misc" options="-parameters" />
       <module name="mod-component-openapi" options="-parameters" />
       <module name="mod-component-redis" options="-parameters" />
@@ -155,41 +118,27 @@
       <module name="mod-component-vault" options="-parameters" />
       <module name="mod-component-web" options="-parameters" />
       <module name="mod-connector-adapter" options="-parameters" />
-      <module name="mod-connector-core" options="-parameters" />
-      <module name="mod-connector-fspclient" options="-parameters" />
       <module name="mod-connector-gateway" options="-parameters" />
       <module name="mod-connector-sample" options="-parameters" />
-      <module name="mod-datatype" options="-parameters" />
-      <module name="mod-fspiop" options="-parameters" />
-      <module name="mod-fspiop-common" options="-parameters" />
       <module name="mod-fspiop-component" options="-parameters" />
-      <module name="mod-fspiop-contract" options="-parameters" />
       <module name="mod-fspiop-invoker" options="-parameters" />
       <module name="mod-fspiop-service" options="-parameters" />
       <module name="mod-fspiop-spec" options="-parameters" />
-      <module name="mod-http-security" options="-parameters" />
       <module name="mod-lookup-contract" options="-parameters" />
       <module name="mod-lookup-domain" options="-parameters" />
-      <module name="mod-lookup-infra" options="-parameters" />
-      <module name="mod-lookup-routes-fspiop" options="-parameters" />
       <module name="mod-lookup-service" options="-parameters" />
       <module name="mod-mono-admin" options="-parameters" />
       <module name="mod-mono-consumer" options="-parameters" />
       <module name="mod-mono-intercom" options="-parameters" />
       <module name="mod-mono-service" options="-parameters" />
       <module name="mod-operation-usecase" options="-parameters" />
-      <module name="mod-oracle-domain" options="-parameters" />
-      <module name="mod-oracle-routes-admin" options="-parameters" />
       <module name="mod-participant-admin" options="-parameters" />
       <module name="mod-participant-admin-client" options="-parameters" />
       <module name="mod-participant-contract" options="-parameters" />
       <module name="mod-participant-domain" options="-parameters" />
       <module name="mod-participant-intercom" options="-parameters" />
       <module name="mod-participant-intercom-client" options="-parameters" />
-      <module name="mod-participant-routes-admin" options="-parameters" />
       <module name="mod-participant-store" options="-parameters" />
-      <module name="mod-participant-util" options="-parameters" />
-      <module name="mod-participant-utility" options="-parameters" />
       <module name="mod-quoting-contract" options="-parameters" />
       <module name="mod-quoting-domain" options="-parameters" />
       <module name="mod-quoting-service" options="-parameters" />
@@ -199,9 +148,6 @@
       <module name="mod-settlement-contract" options="-parameters" />
       <module name="mod-settlement-domain" options="-parameters" />
       <module name="mod-settlement-producer" options="-parameters" />
-      <module name="mod-shared-security" options="-parameters" />
-      <module name="mod-transaction-admin" options="-parameters" />
-      <module name="mod-transaction-admin-client" options="-parameters" />
       <module name="mod-transaction-consumer" options="-parameters" />
       <module name="mod-transaction-contract" options="-parameters" />
       <module name="mod-transaction-domain" options="-parameters" />
@@ -217,16 +163,13 @@
       <module name="mod-wallet-domain" options="-parameters" />
       <module name="mod-wallet-intercom" options="-parameters" />
       <module name="mod-wallet-intercom-client" options="-parameters" />
-      <module name="mod-wallet-store" options="-parameters" />
       <module name="mono-pom" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
-      <module name="oracle-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
       <module name="participant-pom" options="-parameters" />
       <module name="platform-pom" options="-parameters" />
       <module name="quoting-pom" options="-parameters" />
       <module name="settlement-pom" options="-parameters" />
-      <module name="shared-pom" options="-parameters" />
       <module name="transaction-pom" options="-parameters" />
       <module name="transfer-pom" options="-parameters" />
       <module name="wallet-pom" options="-parameters" />

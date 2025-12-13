@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,9 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.lookup.service.controller.api;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.mojave.component.misc.spring.event.EventPublisher;
 import org.mojave.component.web.request.CachedServletRequest;
 import org.mojave.core.lookup.contract.command.GetPartiesCommand;
@@ -32,7 +32,6 @@ import org.mojave.fspiop.service.component.FspiopHttpRequest;
 import org.mojave.fspiop.spec.core.ErrorInformationObject;
 import org.mojave.fspiop.spec.core.PartiesTypeIDPutResponse;
 import org.mojave.fspiop.spec.core.PartyIdType;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -160,8 +159,7 @@ public class PartiesController {
 
         var event = new PutPartiesErrorEvent(
             new PutPartiesErrorCommand.Input(
-                fspiopHttpRequest, partyIdType, partyId, subId,
-                error));
+                fspiopHttpRequest, partyIdType, partyId, subId, error));
 
         LOGGER.info("Publishing PutPartiesErrorEvent (subId) : ({})", event);
         this.eventPublisher.publish(event);

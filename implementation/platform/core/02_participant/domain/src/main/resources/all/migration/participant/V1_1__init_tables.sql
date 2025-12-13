@@ -40,7 +40,7 @@ CREATE TABLE `pcp_hub_currency`
 CREATE TABLE `pcp_fsp`
 (
     `fsp_id`             bigint      NOT NULL,
-    `fsp_code`           varchar(32) NOT NULL,
+    `code`               varchar(32) NOT NULL,
     `name`               varchar(64) NOT NULL,
     `activation_status`  varchar(32) NOT NULL,
     `termination_status` varchar(32) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `pcp_fsp`
     `rec_updated_at`     bigint DEFAULT NULL,
     `rec_version`        int    DEFAULT NULL,
     PRIMARY KEY (`fsp_id`),
-    UNIQUE KEY `pcp_fsp_fsp_code_UK` (`fsp_code`),
+    UNIQUE KEY `pcp_fsp_code_UK` (`code`),
     KEY `pcp_fsp_pcp_hub_FK` (`hub_id`),
     CONSTRAINT `fsp_hub_FK` FOREIGN KEY (`hub_id`) REFERENCES `pcp_hub` (`hub_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB
@@ -117,6 +117,51 @@ CREATE TABLE `pcp_oracle`
     `rec_version`        int    DEFAULT NULL,
     PRIMARY KEY (`oracle_id`),
     UNIQUE KEY `pcp_oracle_type_UK` (`type`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- ml_participant.pcp_ssp definition
+
+CREATE TABLE `pcp_ssp`
+(
+    `ssp_id`             bigint       NOT NULL,
+    `code`               varchar(32)  NOT NULL,
+    `name`               varchar(64)  NOT NULL,
+    `base_url`           varchar(256) NOT NULL,
+    `activation_status`  varchar(32)  NOT NULL,
+    `termination_status` varchar(32)  NOT NULL,
+    `created_at`         bigint       NOT NULL,
+    `hub_id`             bigint       NOT NULL,
+    `rec_created_at`     bigint DEFAULT NULL,
+    `rec_updated_at`     bigint DEFAULT NULL,
+    `rec_version`        int    DEFAULT NULL,
+    PRIMARY KEY (`ssp_id`),
+    UNIQUE KEY `pcp_ssp_code_UK` (`code`),
+    KEY `pcp_ssp_pcp_hub_FK` (`hub_id`),
+    CONSTRAINT `ssp_hub_FK` FOREIGN KEY (`hub_id`) REFERENCES `pcp_hub` (`hub_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- ml_participant.pcp_ssp_currency definition
+
+CREATE TABLE `pcp_ssp_currency`
+(
+    `ssp_currency_id`   bigint      NOT NULL,
+    `currency`          varchar(3)  NOT NULL,
+    `activation_status` varchar(32) NOT NULL,
+    `created_at`        bigint      NOT NULL,
+    `ssp_id`            bigint      NOT NULL,
+    `rec_created_at`    bigint DEFAULT NULL,
+    `rec_updated_at`    bigint DEFAULT NULL,
+    `rec_version`       int    DEFAULT NULL,
+    PRIMARY KEY (`ssp_currency_id`),
+    UNIQUE KEY `pcp_ssp_currency_ssp_currency_id_currency_UK` (`ssp_currency_id`, `currency`),
+    KEY `pcp_ssp_currency_pcp_ssp_FK` (`ssp_id`),
+    CONSTRAINT `ssp_currency_ssp_FK` FOREIGN KEY (`ssp_id`) REFERENCES `pcp_ssp` (`ssp_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

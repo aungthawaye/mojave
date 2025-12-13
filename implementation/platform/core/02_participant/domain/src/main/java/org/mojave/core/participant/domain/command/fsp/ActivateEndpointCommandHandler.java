@@ -22,6 +22,7 @@ package org.mojave.core.participant.domain.command.fsp;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
 import org.mojave.core.participant.contract.command.fsp.ActivateEndpointCommand;
 import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import org.mojave.core.participant.domain.repository.FspRepository;
@@ -54,8 +55,11 @@ public class ActivateEndpointCommandHandler implements ActivateEndpointCommand {
 
         LOGGER.info("ActivateEndpointCommand : input: ({})", ObjectLogger.log(input));
 
+        var withId = FspRepository.Filters.withId(input.fspId());
+        var alive = FspRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
+
         var fsp = this.fspRepository
-                      .findById(input.fspId())
+                      .findOne(withId.and(alive))
                       .orElseThrow(() -> new FspIdNotFoundException(input.fspId()));
 
         var optFspEndpoint = fsp.activate(input.type());

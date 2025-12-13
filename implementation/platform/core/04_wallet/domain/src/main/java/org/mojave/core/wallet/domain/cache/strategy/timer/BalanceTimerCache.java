@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,16 +17,15 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.wallet.domain.cache.strategy.timer;
 
+import jakarta.annotation.PostConstruct;
 import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.domain.cache.BalanceCache;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
 import org.mojave.fspiop.spec.core.Currency;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,8 +126,7 @@ public class BalanceTimerCache implements BalanceCache {
         var _withId = entries
                           .stream()
                           .collect(Collectors.toUnmodifiableMap(
-                              BalanceData::balanceId,
-                              Function.identity(), (a, b) -> a));
+                              BalanceData::balanceId, Function.identity(), (a, b) -> a));
 
         var _withOwnerCurrency = entries
                                      .stream()
@@ -136,10 +134,13 @@ public class BalanceTimerCache implements BalanceCache {
                                          e -> key(e.walletOwnerId(), e.currency()),
                                          Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(
-            entries.stream().collect(Collectors.groupingBy(
-                BalanceData::walletOwnerId,
-                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(entries
+                                                           .stream()
+                                                           .collect(Collectors.groupingBy(
+                                                               BalanceData::walletOwnerId,
+                                                               Collectors.collectingAndThen(
+                                                                   Collectors.toSet(),
+                                                                   Collections::unmodifiableSet))));
 
         LOGGER.info("Refreshed Balance cache data, count: {}", entries.size());
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,31 +17,8 @@
  * limitations under the License.
  * ================================================================================
  */
-
 package org.mojave.core.transfer.domain.model;
 
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
-import org.mojave.core.common.datatype.converter.identifier.transfer.TransferIdJavaType;
-import org.mojave.core.common.datatype.converter.identifier.transfer.UdfTransferIdJavaType;
-import org.mojave.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
-import org.mojave.core.common.datatype.converter.type.fspiop.FspCodeConverter;
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.transfer.AbortReason;
-import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
-import org.mojave.core.transfer.contract.data.TransferData;
-import org.mojave.fspiop.spec.core.Currency;
-import org.mojave.fspiop.spec.core.Money;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Basic;
@@ -64,6 +41,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
+import org.mojave.core.common.datatype.converter.identifier.transfer.TransferIdJavaType;
+import org.mojave.core.common.datatype.converter.identifier.transfer.UdfTransferIdJavaType;
+import org.mojave.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
+import org.mojave.core.common.datatype.converter.type.fspiop.FspCodeConverter;
+import org.mojave.core.common.datatype.enums.Direction;
+import org.mojave.core.common.datatype.enums.transfer.AbortReason;
+import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
+import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.core.transfer.contract.data.TransferData;
+import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.fspiop.spec.core.Money;
 
 import java.math.BigDecimal;
 import java.sql.Types;

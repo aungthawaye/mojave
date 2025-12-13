@@ -29,7 +29,7 @@ import org.mojave.core.transaction.intercom.client.service.TransactionIntercomSe
 import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.TransferDomainConfiguration;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
-import org.mojave.fspiop.common.FspiopCommonConfiguration;
+import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -47,7 +47,15 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public FspiopCommonConfiguration.ParticipantSettings fspiopCommonParticipantSettings() {
+    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
+
+        return new ParticipantIntercomService.Settings(
+            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+    }
+
+    @Bean
+    @Override
+    public FspiopComponentConfiguration.ParticipantSettings participantSettings() {
 
         var fspCode = System.getenv("FSPIOP_FSP_CODE");
         var fspName = System.getenv("FSPIOP_FSP_NAME");
@@ -69,16 +77,8 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
             }
         }
 
-        return new FspiopCommonConfiguration.ParticipantSettings(
+        return new FspiopComponentConfiguration.ParticipantSettings(
             fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
-    }
-
-    @Bean
-    @Override
-    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
-
-        return new ParticipantIntercomService.Settings(
-            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
