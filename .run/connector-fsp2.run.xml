@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="connector-fsp2" type="Application" factoryName="Application">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/connector/sample/src/main/java/io/mojaloop/connector/sample/fsp2.env" />
+      <option value="$PROJECT_DIR$/implementation/connector/sample/src/main/java/org/mojave/connector/sample/fsp2.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.connector.sample.SampleConnectorApplication" />
     <module name="mod-connector-sample" />

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.platform.fspiop</groupId>
@@ -12,8 +10,8 @@
     <artifactId>mod-fspiop-spec</artifactId>
     <name>Mojaloop - Platform - FSPIOP - Spec</name>
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -48,34 +46,26 @@
                         </goals>
                         <configuration>
                             <generatorName>jaxrs-spec</generatorName>
-                            <inputSpec>
-                                ${project.basedir}/interface/fspiop_v2.0.yaml
-                            </inputSpec>
+                            <inputSpec>${project.basedir}/interface/fspiop_v2.0.yaml</inputSpec>
                             <output>${project.basedir}</output>
                             <strictSpec>false</strictSpec>
                             <generateApis>false</generateApis>
                             <generateApiTests>false</generateApiTests>
-                            <generateApiDocumentation>false
-                            </generateApiDocumentation>
+                            <generateApiDocumentation>false</generateApiDocumentation>
                             <generateModels>true</generateModels>
                             <generateModelTests>false</generateModelTests>
-                            <generateModelDocumentation>false
-                            </generateModelDocumentation>
-                            <generateSupportingFiles>false
-                            </generateSupportingFiles>
-                            <modelPackage>org.mojave.fspiop.spec.core
-                            </modelPackage>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <modelPackage>org.mojave.fspiop.spec.core</modelPackage>
                             <configOptions>
-                                <hideGenerationTimestamp>true
-                                </hideGenerationTimestamp>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <useJakartaEe>true</useJakartaEe>
                                 <sourceFolder>src/generated/java</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <returnResponse>false</returnResponse>
                                 <generatePom>false</generatePom>
-                                <useSwaggerAnnotations>false
-                                </useSwaggerAnnotations>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -86,23 +76,17 @@
                         </goals>
                         <configuration>
                             <generatorName>jaxrs-spec</generatorName>
-                            <inputSpec>
-                                ${project.basedir}/interface/settlement_v1.1.json
-                            </inputSpec>
+                            <inputSpec>${project.basedir}/interface/settlement_v1.1.json</inputSpec>
                             <output>${project.basedir}</output>
                             <strictSpec>false</strictSpec>
                             <generateApis>false</generateApis>
                             <generateApiTests>false</generateApiTests>
-                            <generateApiDocumentation>false
-                            </generateApiDocumentation>
+                            <generateApiDocumentation>false</generateApiDocumentation>
                             <generateModels>true</generateModels>
                             <generateModelTests>false</generateModelTests>
-                            <generateModelDocumentation>false
-                            </generateModelDocumentation>
-                            <generateSupportingFiles>false
-                            </generateSupportingFiles>
-                            <modelPackage>org.mojave.fspiop.spec.settlement
-                            </modelPackage>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <modelPackage>org.mojave.fspiop.spec.settlement</modelPackage>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
                                 <sourceFolder>src/generated/java</sourceFolder>
@@ -110,8 +94,7 @@
                                 <interfaceOnly>true</interfaceOnly>
                                 <returnResponse>false</returnResponse>
                                 <generatePom>false</generatePom>
-                                <useSwaggerAnnotations>false
-                                </useSwaggerAnnotations>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>

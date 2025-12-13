@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SettlementUpdateBySettlementIdPayload")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-12T21:40:10.731738+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-13T16:06:26.790603+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class SettlementUpdateBySettlementIdPayload   {
   public enum StateEnum {
 
