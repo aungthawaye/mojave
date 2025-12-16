@@ -22,7 +22,7 @@ package org.mojave.core.wallet.intercom;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
@@ -45,7 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         WalletDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-public final class WalletIntercomConfiguration extends WebMvcExtension {
+public final class WalletIntercomConfiguration extends JsonWebMvcConfigurationSupport {
 
     public WalletIntercomConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 

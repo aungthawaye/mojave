@@ -324,12 +324,13 @@ public class FspCoreAdapter {
                 }
             }
 
-            LOGGER.info("Posting transfers to FSP Core: {}", agreement);
+
             var result = this.fspClient.postTransfers(
                 payer, new Transfers.Post.Request(
                     request.getTransferId(), agreement,
                     request.getExtensionList()));
-            LOGGER.info("Got transfers from FSP Core: {}", result);
+
+            LOGGER.info("Got transfers from FSP Core: {}", ObjectLogger.log(result));
 
             var response = new TransfersIDPutResponse();
 

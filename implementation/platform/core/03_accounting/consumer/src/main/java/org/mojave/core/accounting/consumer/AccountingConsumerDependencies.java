@@ -57,12 +57,19 @@ class AccountingConsumerDependencies
         this.ledger = new MySqlLedger(
             new MySqlLedger.LedgerDbSettings(
                 new MySqlLedger.LedgerDbSettings.Connection(
-                    System.getenv("ACC_LEDGER_DB_URL"),
-                    System.getenv("ACC_LEDGER_DB_USER"), System.getenv("ACC_LEDGER_DB_PASSWORD")),
+                    System.getenv("MYSQL_LEDGER_DB_URL"),
+                    System.getenv("MYSQL_LEDGER_DB_USER"),
+                    System.getenv("MYSQL_LEDGER_DB_PASSWORD"),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_CONNECTION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_VALIDATION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_MAX_LIFETIME_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_IDLE_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_KEEPALIVE_TIMEOUT")), false),
                 new MySqlLedger.LedgerDbSettings.Pool(
                     "accounting-ledger",
-                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MIN_POOL_SIZE")),
-                    Integer.parseInt(System.getenv("ACC_LEDGER_DB_MAX_POOL_SIZE")))), objectMapper);
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
+            objectMapper);
 
         this.accountCache = new AccountLocalCache(accountRepository);
 

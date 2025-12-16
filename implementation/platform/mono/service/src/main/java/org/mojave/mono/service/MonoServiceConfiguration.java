@@ -22,7 +22,7 @@ package org.mojave.mono.service;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.lookup.domain.LookUpDomainConfiguration;
 import org.mojave.core.lookup.service.LookUpServiceConfiguration;
@@ -57,7 +57,7 @@ import tools.jackson.databind.ObjectMapper;
         LookUpServiceConfiguration.class,
         QuotingServiceConfiguration.class,
         TransferServiceConfiguration.class})
-public final class MonoServiceConfiguration extends WebMvcExtension {
+public final class MonoServiceConfiguration extends JsonWebMvcConfigurationSupport {
 
     public MonoServiceConfiguration(ObjectMapper objectMapper,
                                     FspQuery fspQuery,

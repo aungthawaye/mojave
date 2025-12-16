@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,9 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.core.transfer.domain.command;
 
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
@@ -46,9 +45,9 @@ import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTra
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.fspiop.component.handy.FspiopUrls;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,18 +120,17 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     }
 
     @Override
-    @Write
     public Output execute(Input input) {
 
-        MDC.put("REQ_ID", String.valueOf(Snowflake.get().nextId()));
+        final var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
+
+        MDC.put("REQ_ID", udfTransferId.getId());
 
         var startAt = System.nanoTime();
 
         LOGGER.info("PostTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = "PostTransfers";
-
-        var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
 
         TransactionId transactionId = null;
         Instant transactionAt = null;
@@ -220,8 +218,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId,
-                        positionReservationId));
+                        CONTEXT, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
 

@@ -29,8 +29,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -388,7 +390,8 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
     @OneToMany(
         mappedBy = "transfer",
         cascade = CascadeType.ALL,
-        orphanRemoval = true)
+        orphanRemoval = true,
+        fetch = FetchType.LAZY)
     protected List<TransferExtension> extensions = new ArrayList<>();
 
     @Column(
@@ -400,7 +403,6 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         mappedBy = "transfer",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
-    @PrimaryKeyJoinColumn
     protected TransferIlpPacket ilpPacket;
 
     public Transfer(TransactionId transactionId,

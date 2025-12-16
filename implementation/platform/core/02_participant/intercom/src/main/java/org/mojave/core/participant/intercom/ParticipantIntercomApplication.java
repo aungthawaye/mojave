@@ -51,15 +51,13 @@ public class ParticipantIntercomApplication {
     public static void main(String[] args) {
 
         ParticipantFlyway.migrate(
-            System.getenv("PCP_FLYWAY_DB_URL"), System.getenv("PCP_FLYWAY_DB_USER"),
-            System.getenv("PCP_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(ParticipantIntercomApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=participant-intercom", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=participant-intercom",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=participant-intercom",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -69,8 +67,7 @@ public class ParticipantIntercomApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=ParticipantIntercomApplication,context=participant-intercom")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

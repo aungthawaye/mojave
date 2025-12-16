@@ -86,12 +86,12 @@ public class MySqlPositionUpdater implements PositionUpdater {
         // ---- Hikari pool sizing ----
         config.setMaximumPoolSize(settings.pool().maxPool());
         // For no permanent idle connections: pool can shrink to 0 when app is idle
-        config.setMinimumIdle(0);
+        config.setMinimumIdle(settings.pool().minPool());
 
         // ---- Timeouts (fail fast under high TPS) ----
-        config.setConnectionTimeout(250);         // ms – tune (200–500ms typical)
-        config.setValidationTimeout(1000);        // ms – how long isValid() may take
-        config.setAutoCommit(true);               // fine for most OLTP workloads
+        config.setConnectionTimeout(settings.connection().connectionTimeout());
+        config.setValidationTimeout(settings.connection().validationTimeout());
+        config.setAutoCommit(settings.connection().autoCommit());
 
         // ---- Idle behaviour & “no idle wakeup” to DB ----
 
@@ -99,22 +99,18 @@ public class MySqlPositionUpdater implements PositionUpdater {
         //    Hikari will use connection.isValid() only when a connection is borrowed.
 
         // 2) Disable keepalive pings – no queries while idle.
-        config.setKeepaliveTime(0L);              // default, but set explicitly for clarity
+        config.setKeepaliveTime(settings.connection().keepaliveTime());
 
         // 3) Let the pool close connections when app is idle, so DB sees *zero* connections
         //    after some quiet period. No idle queries because there are no connections.
         //
         //    Example: after 60s of zero usage, shrink pool to 0.
-        config.setIdleTimeout(60_000L);           // 60s – adjust as you like
+        config.setIdleTimeout(settings.connection().idleTimeout());
 
         // 4) Reasonable max lifetime to avoid stale connections,
         //    but still no idle test queries.
         //    Make this a bit less than MySQL wait_timeout if you changed it.
-        config.setMaxLifetime(30 * 60_000L);      // 30 minutes
-
-        // If you want to *never* recycle connections proactively (not generally recommended):
-        // config.setIdleTimeout(0L);             // don't reap idles
-        // config.setMaxLifetime(0L);            // infinite lifetime; DB/firewall will close
+        config.setMaxLifetime(settings.connection().maxLifetime());
 
         this.jdbcTemplate = new JdbcTemplate(new HikariDataSource(config));
     }
@@ -465,7 +461,15 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
     public record PositionDbSettings(Connection connection, Pool pool) {
 
-        public record Connection(String url, String username, String password) { }
+        public record Connection(String url,
+                                 String username,
+                                 String password,
+                                 long connectionTimeout,
+                                 long validationTimeout,
+                                 long maxLifetime,
+                                 long idleTimeout,
+                                 long keepaliveTime,
+                                 boolean autoCommit) { }
 
         public record Pool(String name, int minPool, int maxPool) { }
 

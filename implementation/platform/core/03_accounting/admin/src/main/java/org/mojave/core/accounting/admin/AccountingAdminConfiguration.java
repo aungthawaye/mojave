@@ -22,7 +22,7 @@ package org.mojave.core.accounting.admin;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
@@ -45,7 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         AccountingDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class,})
-public final class AccountingAdminConfiguration extends WebMvcExtension {
+public final class AccountingAdminConfiguration extends JsonWebMvcConfigurationSupport {
 
     public AccountingAdminConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 

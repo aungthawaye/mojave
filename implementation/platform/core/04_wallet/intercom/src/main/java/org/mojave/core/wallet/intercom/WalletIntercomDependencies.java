@@ -53,23 +53,30 @@ final class WalletIntercomDependencies implements WalletIntercomConfiguration.Re
 
         this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
             new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-                System.getenv("WLT_MYSQL_BALANCE_DB_URL"),
-                System.getenv("WLT_MYSQL_BALANCE_DB_USER"),
-                System.getenv("WLT_MYSQL_BALANCE_DB_PASSWORD")),
+                System.getenv("MYSQL_BALANCE_DB_URL"), System.getenv("MYSQL_BALANCE_DB_USER"),
+                System.getenv("MYSQL_BALANCE_DB_PASSWORD"),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_CONNECTION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_VALIDATION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_MAX_LIFETIME_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_IDLE_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_KEEPALIVE_TIMEOUT")), false),
             new MySqlBalanceUpdater.BalanceDbSettings.Pool(
-                "wallet-balance",
-                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
+                "wallet-balance", Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
 
         this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
             new MySqlPositionUpdater.PositionDbSettings.Connection(
-                System.getenv("WLT_MYSQL_POSITION_DB_URL"),
-                System.getenv("WLT_MYSQL_POSITION_DB_USER"),
-                System.getenv("WLT_MYSQL_POSITION_DB_PASSWORD")),
+                System.getenv("MYSQL_POSITION_DB_URL"), System.getenv("MYSQL_POSITION_DB_USER"),
+                System.getenv("MYSQL_POSITION_DB_PASSWORD"),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_CONNECTION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_VALIDATION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_MAX_LIFETIME_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_IDLE_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_KEEPALIVE_TIMEOUT")), false),
             new MySqlPositionUpdater.PositionDbSettings.Pool(
                 "wallet-position",
-                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("WLT_MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
+                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
 
         this.balanceCache = new BalanceTimerCache(
             balanceRepository, Integer.parseInt(

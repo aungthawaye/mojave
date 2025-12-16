@@ -46,9 +46,7 @@ public class LookUpServiceApplication {
         new SpringApplicationBuilder(LookUpServiceApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=lookup-service", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=lookup-service",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=lookup-service",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -58,8 +56,7 @@ public class LookUpServiceApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=LookUpServiceApplication,context=lookup-service")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

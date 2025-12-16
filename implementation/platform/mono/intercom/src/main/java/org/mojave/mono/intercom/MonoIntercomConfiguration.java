@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,14 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.mono.intercom;
 
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
-import org.mojave.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import org.mojave.core.accounting.intercom.AccountingIntercomConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
@@ -32,8 +32,6 @@ import org.mojave.core.participant.intercom.ParticipantIntercomConfiguration;
 import org.mojave.core.transaction.domain.TransactionDomainConfiguration;
 import org.mojave.core.transaction.intercom.TransactionIntercomConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
-import org.mojave.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import org.mojave.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.mojave.core.wallet.intercom.WalletIntercomConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -55,7 +53,7 @@ import tools.jackson.databind.ObjectMapper;
         AccountingIntercomConfiguration.class,
         WalletIntercomConfiguration.class,
         TransactionIntercomConfiguration.class})
-public class MonoIntercomConfiguration extends WebMvcExtension {
+public class MonoIntercomConfiguration extends JsonWebMvcConfigurationSupport {
 
     public MonoIntercomConfiguration(ObjectMapper objectMapper) {
 
@@ -75,12 +73,6 @@ public class MonoIntercomConfiguration extends WebMvcExtension {
                                               AccountingDomainConfiguration.RequiredSettings,
                                               WalletDomainConfiguration.RequiredSettings,
                                               TransactionDomainConfiguration.RequiredSettings {
-
-        MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings();
-
-        MySqlLedger.LedgerDbSettings ledgerDbSettings();
-
-        MySqlPositionUpdater.PositionDbSettings positionDbSettings();
 
         TomcatSettings tomcatSettings();
 

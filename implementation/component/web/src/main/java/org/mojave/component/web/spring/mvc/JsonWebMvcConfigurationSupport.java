@@ -25,11 +25,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
-public class WebMvcExtension extends WebMvcConfigurationSupport {
+public class JsonWebMvcConfigurationSupport extends WebMvcConfigurationSupport {
 
     private final ObjectMapper objectMapper;
 
-    public WebMvcExtension(ObjectMapper objectMapper) {
+    public JsonWebMvcConfigurationSupport(ObjectMapper objectMapper) {
 
         this.objectMapper = objectMapper;
     }

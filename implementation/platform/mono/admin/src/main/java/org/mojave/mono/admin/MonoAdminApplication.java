@@ -52,23 +52,21 @@ public class MonoAdminApplication {
     public static void main(String[] args) {
 
         ParticipantFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         AccountingFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         WalletFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(MonoAdminApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=mono-admin", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=mono-admin",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=mono-admin",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -78,8 +76,7 @@ public class MonoAdminApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=MonoAdminApplication,context=mono-admin")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

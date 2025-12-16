@@ -149,7 +149,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     @Write
     public Output execute(Input input) {
 
-        MDC.put("REQ_ID", String.valueOf(Snowflake.get().nextId()));
+        MDC.put("REQ_ID", input.udfTransferId().getId());
 
         var startAt = System.nanoTime();
 

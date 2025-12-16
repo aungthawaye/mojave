@@ -50,15 +50,13 @@ public class WalletAdminApplication {
     public static void main(String[] args) {
 
         WalletFlyway.migrate(
-            System.getenv("WLT_FLYWAY_DB_URL"),
-            System.getenv("WLT_FLYWAY_DB_USER"), System.getenv("WLT_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(WalletAdminApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=wallet-admin", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=wallet-admin",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=wallet-admin",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -68,8 +66,7 @@ public class WalletAdminApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=WalletAdminApplication,context=wallet-admin")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

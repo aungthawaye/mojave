@@ -66,7 +66,9 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
         var STEP_NAME = "PostLedgerFlowStep";
 
         LOGGER.info("PostLedgerFlowStep : input : ({})", ObjectLogger.log(input));
+
         try {
+
             var participants = new HashMap<String, AccountOwnerId>();
 
             participants.put(

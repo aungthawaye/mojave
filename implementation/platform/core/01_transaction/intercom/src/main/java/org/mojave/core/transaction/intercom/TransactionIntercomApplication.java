@@ -56,9 +56,7 @@ public class TransactionIntercomApplication {
         new SpringApplicationBuilder(TransactionIntercomApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=transaction-intercom", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=transaction-intercom",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=transaction-intercom",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -68,8 +66,7 @@ public class TransactionIntercomApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=TransactionIntercomApplication,context=transaction-intercom")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

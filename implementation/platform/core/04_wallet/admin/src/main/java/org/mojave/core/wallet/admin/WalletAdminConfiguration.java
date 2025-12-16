@@ -22,7 +22,7 @@ package org.mojave.core.wallet.admin;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
@@ -46,7 +46,7 @@ import tools.jackson.databind.json.JsonMapper;
         WalletDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-public final class WalletAdminConfiguration extends WebMvcExtension {
+public final class WalletAdminConfiguration extends JsonWebMvcConfigurationSupport {
 
     public WalletAdminConfiguration(JsonMapper jsonMapper) {
 

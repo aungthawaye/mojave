@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.component.web.spring.security;
 
 import jakarta.servlet.FilterChain;
@@ -74,8 +75,9 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        var method = request.getMethod();
         var uri = request.getRequestURI();
-        LOGGER.debug("Received request for URI : ({})", uri);
+        LOGGER.debug("Received request for URI ({}) : ({})", method, uri);
 
         var match = false;
 
@@ -94,17 +96,17 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
         if (match && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            LOGGER.info("Authentication is required for URI : ({})", uri);
+            LOGGER.info("Authentication is required for URI ({}) : ({})", method, uri);
 
             try {
 
                 var authenticationToken = this.authenticator.authenticate(requestWrapper);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                LOGGER.info("Authentication is successful for URI : ({})", uri);
+                LOGGER.info("Authentication is successful for URI ({}) : ({})", method, uri);
 
             } catch (AuthenticationFailureException e) {
 
-                LOGGER.error("Authentication error : ({})", e.getMessage());
+                LOGGER.error("Error:", e);
                 SecurityContextHolder.clearContext();
                 throw e;
             }

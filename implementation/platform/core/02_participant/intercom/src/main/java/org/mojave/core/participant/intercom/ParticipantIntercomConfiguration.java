@@ -22,7 +22,7 @@ package org.mojave.core.participant.intercom;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
@@ -45,7 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         ParticipantDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-public final class ParticipantIntercomConfiguration extends WebMvcExtension {
+public final class ParticipantIntercomConfiguration extends JsonWebMvcConfigurationSupport {
 
     public ParticipantIntercomConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 

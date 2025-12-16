@@ -68,7 +68,7 @@ public class MiscConfiguration {
 
         var executor = new SimpleAsyncTaskExecutor("event-vt-");
 
-        executor.setTaskDecorator(mdcTaskDecorator);
+        //executor.setTaskDecorator(mdcTaskDecorator);
         executor.setVirtualThreads(true); // 🔹 switch to virtual threads
 
         return executor;

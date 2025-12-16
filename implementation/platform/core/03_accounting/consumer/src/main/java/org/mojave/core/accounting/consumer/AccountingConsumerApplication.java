@@ -40,8 +40,8 @@ public class AccountingConsumerApplication {
     public static void main(String[] args) throws InterruptedException {
 
         AccountingFlyway.migrate(
-            System.getenv("ACC_FLYWAY_DB_URL"),
-            System.getenv("ACC_FLYWAY_DB_USER"), System.getenv("ACC_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         var context = new AnnotationConfigApplicationContext(
             AccountingFlyway.class, AccountingConsumerApplication.class);

@@ -32,7 +32,7 @@ CREATE TABLE `acc_chart_entry`
     `rec_version`      int    DEFAULT NULL,
     PRIMARY KEY (`chart_entry_id`),
     UNIQUE KEY `acc_chart_entry_chart_entry_code_UK` (`chart_entry_code`),
-    KEY                `acc_chart_entry_acc_chart_FK` (`chart_id`),
+    KEY `acc_chart_entry_acc_chart_FK` (`chart_id`),
     CONSTRAINT `acc_chart_entry_acc_chart_FK` FOREIGN KEY (`chart_id`) REFERENCES `acc_chart` (`chart_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -59,9 +59,9 @@ CREATE TABLE `acc_account`
     `rec_version`        int          DEFAULT NULL,
     PRIMARY KEY (`account_id`),
     UNIQUE KEY `acc_account_owner_id_currency_chart_entry_id_UK` (`owner_id`, `currency`, `chart_entry_id`),
-    KEY                  `acc_account_owner_id_IDX` (`owner_id`),
-    KEY                  `acc_account_currency_IDX` (`currency`),
-    KEY                  `acc_account_acc_chart_entry_FK` (`chart_entry_id`),
+    KEY `acc_account_owner_id_IDX` (`owner_id`),
+    KEY `acc_account_currency_IDX` (`currency`),
+    KEY `acc_account_acc_chart_entry_FK` (`chart_entry_id`),
     CONSTRAINT `acc_account_acc_chart_entry_FK` FOREIGN KEY (`chart_entry_id`) REFERENCES `acc_chart_entry` (`chart_entry_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -85,7 +85,7 @@ CREATE TABLE `acc_ledger_balance`
     `rec_updated_at`    bigint         DEFAULT NULL,
     `rec_version`       int            DEFAULT NULL,
     PRIMARY KEY (`ledger_balance_id`),
-    KEY                 `ledger_balance_account_FK` (`ledger_balance_id`),
+    KEY `ledger_balance_account_FK` (`ledger_balance_id`),
     CONSTRAINT `ledger_balance_account_FK` FOREIGN KEY (`ledger_balance_id`) REFERENCES `acc_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -119,10 +119,10 @@ CREATE TABLE `acc_ledger_movement`
     `rec_version`           int            DEFAULT NULL,
     PRIMARY KEY (`ledger_movement_id`),
     UNIQUE KEY `acc_account_account_id_side_transaction_id_UK` (`account_id`, `side`, `transaction_id`),
-    KEY                     `acc_account_transaction_id_IDX` (`transaction_id`),
-    KEY                     `acc_account_transaction_at_IDX` (`transaction_at`),
-    KEY                     `acc_account_account_id_transaction_at_IDX` (`account_id`, `transaction_at`),
-    KEY                     `acc_account_account_id` (`account_id`),
+    KEY `acc_account_transaction_id_IDX` (`transaction_id`),
+    KEY `acc_account_transaction_at_IDX` (`transaction_at`),
+    KEY `acc_account_account_id_transaction_at_IDX` (`account_id`, `transaction_at`),
+    KEY `acc_account_account_id` (`account_id`),
     CONSTRAINT `MYSQL_LEDGER_movement_acc_account_FK` FOREIGN KEY (`account_id`) REFERENCES `acc_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -144,8 +144,8 @@ CREATE TABLE `acc_flow_definition`
     `rec_updated_at`     bigint       DEFAULT NULL,
     `rec_version`        int          DEFAULT NULL,
     PRIMARY KEY (`flow_definition_id`),
-    UNIQUE KEY acc_flow_definition_transaction_currency_UK (`transaction_type`, `currency`),
-    UNIQUE KEY acc_flow_definition_name_UK (`name`)
+    UNIQUE KEY acc_flow_definition_transaction_currency_uk (`transaction_type`, `currency`),
+    UNIQUE KEY acc_flow_definition_name_uk (`name`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -169,12 +169,12 @@ CREATE TABLE `acc_posting_definition`
     `rec_version`           int                  DEFAULT NULL,
     PRIMARY KEY (`posting_definition_id`),
     UNIQUE KEY `acc_posting_definition_for_posting_UK` (`definition_id`,
-        `participant`,
-        `amount_name`, `side`,
-        `receive_in`,
-        `receive_in_id`),
+                                                        `participant`,
+                                                        `amount_name`, `side`,
+                                                        `receive_in`,
+                                                        `receive_in_id`),
     UNIQUE KEY `acc_posting_definition_definition_id_step_UK` (`definition_id`, `step`),
-    KEY                     `acc_posting_definition_acc_flow_definition_FK` (`definition_id`),
+    KEY `acc_posting_definition_acc_flow_definition_FK` (`definition_id`),
     CONSTRAINT `acc_posting_definition_acc_flow_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

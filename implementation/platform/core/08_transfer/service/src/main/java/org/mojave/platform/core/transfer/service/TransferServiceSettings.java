@@ -86,12 +86,17 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv("TFR_READ_DB_URL"), System.getenv("TFR_READ_DB_USER"),
-            System.getenv("TFR_READ_DB_PASSWORD"), false);
+            System.getenv("READ_DB_URL"), System.getenv("READ_DB_USER"),
+            System.getenv("READ_DB_PASSWORD"),
+            Long.parseLong(System.getenv("READ_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "transfer-service-read", Integer.parseInt(System.getenv("TFR_READ_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("TFR_READ_DB_MAX_POOL_SIZE")));
+            "transfer-service-read", Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -101,12 +106,17 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv("TFR_WRITE_DB_URL"), System.getenv("TFR_WRITE_DB_USER"),
-            System.getenv("TFR_WRITE_DB_PASSWORD"), false);
+            System.getenv("WRITE_DB_URL"), System.getenv("WRITE_DB_USER"),
+            System.getenv("WRITE_DB_PASSWORD"),
+            Long.parseLong(System.getenv("WRITE_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "transfer-service-write", Integer.parseInt(System.getenv("TFR_WRITE_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("TFR_WRITE_DB_MAX_POOL_SIZE")));
+            "transfer-service-write", Integer.parseInt(System.getenv("WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }

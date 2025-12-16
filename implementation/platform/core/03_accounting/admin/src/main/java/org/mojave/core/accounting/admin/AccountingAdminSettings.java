@@ -39,12 +39,17 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv("ACC_READ_DB_URL"), System.getenv("ACC_READ_DB_USER"),
-            System.getenv("ACC_READ_DB_PASSWORD"), false);
+            System.getenv("READ_DB_URL"), System.getenv("READ_DB_USER"),
+            System.getenv("READ_DB_PASSWORD"),
+            Long.parseLong(System.getenv("READ_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "accounting-admin-read", Integer.parseInt(System.getenv("ACC_READ_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("ACC_READ_DB_MAX_POOL_SIZE")));
+            "accounting-admin-read", Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -54,12 +59,17 @@ final class AccountingAdminSettings implements AccountingAdminConfiguration.Requ
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv("ACC_WRITE_DB_URL"), System.getenv("ACC_WRITE_DB_USER"),
-            System.getenv("ACC_WRITE_DB_PASSWORD"), false);
+            System.getenv("WRITE_DB_URL"), System.getenv("WRITE_DB_USER"),
+            System.getenv("WRITE_DB_PASSWORD"),
+            Long.parseLong(System.getenv("WRITE_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "accounting-admin-write", Integer.parseInt(System.getenv("ACC_WRITE_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("ACC_WRITE_DB_MAX_POOL_SIZE")));
+            "accounting-admin-write", Integer.parseInt(System.getenv("WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }

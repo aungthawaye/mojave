@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,15 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.core.transfer.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -62,7 +63,8 @@ public class TransferIlpPacket extends JpaEntity<TransferId> {
 
     @Column(
         name = "ilp_packet",
-        length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH)
+        length = StringSizeConstraints.MAX_ILP_PACKET_LENGTH,
+        updatable = false)
     protected String ilpPacket;
 
     @Column(
@@ -70,8 +72,7 @@ public class TransferIlpPacket extends JpaEntity<TransferId> {
         length = StringSizeConstraints.MAX_ILP_PACKET_CONDITION_LENGTH)
     protected String condition;
 
-    @MapsId
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "transfer_id",
         nullable = false,

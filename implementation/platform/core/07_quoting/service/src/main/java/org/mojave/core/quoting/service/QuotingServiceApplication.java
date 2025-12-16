@@ -50,15 +50,13 @@ public class QuotingServiceApplication {
     public static void main(String[] args) {
 
         QuotingFlyway.migrate(
-            System.getenv("QOT_FLYWAY_DB_URL"),
-            System.getenv("QOT_FLYWAY_DB_USER"), System.getenv("QOT_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(QuotingServiceApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=quoting-service", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=quoting-service",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=quoting-service",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -68,8 +66,7 @@ public class QuotingServiceApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=QuotingServiceApplication,context=quoting-service")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

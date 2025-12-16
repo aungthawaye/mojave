@@ -9,10 +9,22 @@
     <option name="NEW_LINE_WHEN_BODY_IS_PRESENTED" value="true" />
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="20" />
     <option name="RECORD_COMPONENTS_WRAP" value="5" />
-    <option name="DECONSTRUCTION_LIST_WRAP" value="5" />
-    <option name="NEW_LINE_AFTER_LPAREN_IN_DECONSTRUCTION_PATTERN" value="false" />
+    <option name="DECONSTRUCTION_LIST_WRAP" value="2" />
+    <option name="ALIGN_MULTILINE_DECONSTRUCTION_LIST_COMPONENTS" value="false" />
     <option name="ENABLE_JAVADOC_FORMATTING" value="false" />
   </JavaCodeStyleSettings>
+  <MySQLCodeStyleSettings version="7">
+    <option name="USE_GENERAL_STYLE" value="false" />
+    <option name="KEYWORD_CASE" value="2" />
+    <option name="IDENTIFIER_CASE" value="1" />
+  </MySQLCodeStyleSettings>
+  <SqlCodeStyleSettings version="7">
+    <option name="KEYWORD_CASE" value="2" />
+    <option name="IDENTIFIER_CASE" value="1" />
+    <option name="TYPE_CASE" value="3" />
+    <option name="IMP_DECLARE_CONTENT_WRAP" value="false" />
+    <option name="IMP_DECLARE_EL_WRAP" value="3" />
+  </SqlCodeStyleSettings>
   <codeStyleSettings language="JAVA">
     <option name="RIGHT_MARGIN" value="100" />
     <option name="KEEP_LINE_BREAKS" value="false" />

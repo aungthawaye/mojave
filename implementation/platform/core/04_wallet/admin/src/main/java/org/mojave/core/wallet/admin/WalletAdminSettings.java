@@ -39,12 +39,17 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv("WLT_READ_DB_URL"), System.getenv("WLT_READ_DB_USER"),
-            System.getenv("WLT_READ_DB_PASSWORD"), false);
+            System.getenv("READ_DB_URL"), System.getenv("READ_DB_USER"),
+            System.getenv("READ_DB_PASSWORD"),
+            Long.parseLong(System.getenv("READ_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "wallet-admin-read", Integer.parseInt(System.getenv("WLT_READ_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("WLT_READ_DB_MAX_POOL_SIZE")));
+            "wallet-admin-read", Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -54,12 +59,17 @@ final class WalletAdminSettings implements WalletAdminConfiguration.RequiredSett
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv("WLT_WRITE_DB_URL"), System.getenv("WLT_WRITE_DB_USER"),
-            System.getenv("WLT_WRITE_DB_PASSWORD"), false);
+            System.getenv("WRITE_DB_URL"), System.getenv("WRITE_DB_USER"),
+            System.getenv("WRITE_DB_PASSWORD"),
+            Long.parseLong(System.getenv("WRITE_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "wallet-admin-write", Integer.parseInt(System.getenv("WLT_WRITE_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("WLT_WRITE_DB_MAX_POOL_SIZE")));
+            "wallet-admin-write", Integer.parseInt(System.getenv("WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }

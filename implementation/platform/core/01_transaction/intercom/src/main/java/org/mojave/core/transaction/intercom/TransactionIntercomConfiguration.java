@@ -22,7 +22,7 @@ package org.mojave.core.transaction.intercom;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.transaction.domain.TransactionDomainConfiguration;
@@ -45,7 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         TransactionDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-public final class TransactionIntercomConfiguration extends WebMvcExtension {
+public final class TransactionIntercomConfiguration extends JsonWebMvcConfigurationSupport {
 
     public TransactionIntercomConfiguration(tools.jackson.databind.json.JsonMapper jsonMapper) {
 

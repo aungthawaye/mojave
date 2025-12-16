@@ -40,12 +40,12 @@ public class MonoConsumerApplication {
     public static void main(String[] args) throws InterruptedException {
 
         TransactionFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         AccountingFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         var context = new AnnotationConfigApplicationContext(MonoConsumerApplication.class);
         var latch = new CountDownLatch(1);

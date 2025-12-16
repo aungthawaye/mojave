@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,140 +17,240 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.component.misc.handy;
 
 import java.net.NetworkInterface;
-import java.security.SecureRandom;
 import java.util.Enumeration;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.zip.CRC32;
 
-/**
- * Distributed Sequence Generator. Inspired by Twitter snowflake:
- * <p>
- * <a href="https://github.com/twitter/snowflake/tree/snowflake-2010">...</a>
- */
 public final class Snowflake {
 
-    private static final int TOTAL_BITS = 64;
-
-    private static final int EPOCH_BITS = 42;
+    // Layout: [timestamp | nodeId | sequence]
+    private static final int TIMESTAMP_BITS = 42;
 
     private static final int NODE_ID_BITS = 10;
 
     private static final int SEQUENCE_BITS = 12;
 
-    private static final int MAX_NODE_ID = (int) (Math.pow(2, NODE_ID_BITS) - 1);
+    private static final int MAX_NODE_ID = (1 << NODE_ID_BITS) - 1;      // 1023
 
-    private static final int MAX_SEQUENCE = (int) (Math.pow(2, SEQUENCE_BITS) - 1);
+    private static final Snowflake INSTANCE = new Snowflake(resolveNodeId());
 
-    private static final long BIG_BANG = 1577813400000L;
+    private static final int MAX_SEQUENCE = (1 << SEQUENCE_BITS) - 1;    // 4095
 
-    private final static Snowflake INSTANCE = new Snowflake();
+    private static final int NODE_ID_SHIFT = SEQUENCE_BITS;
+
+    private static final int TIMESTAMP_SHIFT = NODE_ID_BITS + SEQUENCE_BITS;
+
+    private static final long CUSTOM_EPOCH_MILLIS = 1577813400000L;
+
+    private static final long MAX_TIMESTAMP = (1L << TIMESTAMP_BITS) - 1;
+
+    // state encodes: (timestamp << SEQUENCE_BITS) | sequence
+    // initial -1 means "uninitialized"
+    private final AtomicLong state = new AtomicLong(-1L);
 
     private final int nodeId;
 
-    private long lastTimestamp = -1L;
-
-    private long sequence = 0L;
-
     public Snowflake() {
 
-        this.nodeId = this.createNodeId();
+        this(resolveNodeId());
+    }
 
+    public Snowflake(int nodeId) {
+
+        if (nodeId < 0 || nodeId > MAX_NODE_ID) {
+            throw new IllegalArgumentException(
+                "nodeId must be between 0 and " + MAX_NODE_ID + " (inclusive)");
+        }
+        this.nodeId = nodeId;
+    }
+
+    private static int createNodeIdFromMac() {
+
+        try {
+
+            CRC32 crc = new CRC32();
+            boolean found = false;
+
+            var networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+            while (networkInterfaces.hasMoreElements()) {
+
+                NetworkInterface ni = networkInterfaces.nextElement();
+
+                if (ni == null || !ni.isUp() || ni.isLoopback() || ni.isVirtual()) {
+                    continue;
+                }
+
+                byte[] mac = ni.getHardwareAddress();
+
+                if (mac != null && mac.length > 0) {
+                    crc.update(mac);
+                    found = true;
+                }
+            }
+
+            int base = found ? (int) crc.getValue() : ThreadLocalRandom.current().nextInt();
+
+            return base & MAX_NODE_ID;
+
+        } catch (Exception e) {
+
+            return ThreadLocalRandom.current().nextInt() & MAX_NODE_ID;
+        }
     }
 
     public static Snowflake get() {
 
         return INSTANCE;
+    }
 
+    /**
+     * Prefer explicit node id in distributed systems.
+     * -Dsnowflake.nodeId=123 OR SNOWFLAKE_NODE_ID=123
+     */
+    private static int resolveNodeId() {
+
+        String s = System.getProperty("snowflake.nodeId");
+
+        if (s == null || s.isBlank()) {
+            s = System.getenv("SNOWFLAKE_NODE_ID");
+        }
+
+        if (s == null || s.isBlank()) {
+            return createNodeIdFromMac(); // last resort
+        }
+
+        // If it's a plain int, use it
+        try {
+            return Integer.parseInt(s.trim()) & MAX_NODE_ID;
+        } catch (NumberFormatException ignored) { }
+
+        // Otherwise extract trailing "-<number>" (StatefulSet pod name)
+        int dash = s.lastIndexOf('-');
+
+        if (dash >= 0 && dash + 1 < s.length()) {
+
+            try {
+
+                int ordinal = Integer.parseInt(s.substring(dash + 1));
+                return ordinal & MAX_NODE_ID;
+
+            } catch (NumberFormatException ignored) { }
+        }
+
+        // fallback
+        return createNodeIdFromMac();
     }
 
     private static long timestamp() {
 
-        return System.currentTimeMillis() - BIG_BANG;
-
+        return System.currentTimeMillis() - CUSTOM_EPOCH_MILLIS;
     }
 
-    public synchronized long nextId() {
+    private static long waitNextMillis(long lastTimestamp) {
 
-        long currentTimestamp = timestamp();
+        long ts;
 
-        if (currentTimestamp < lastTimestamp) {
+        do {
 
-            throw new IllegalStateException("Invalid System Clock!");
+            ts = timestamp();
+            // polite spinning when throughput is extremely high
+            Thread.onSpinWait();
 
-        }
+        } while (ts <= lastTimestamp);
 
-        if (currentTimestamp == lastTimestamp) {
+        return ts;
+    }
 
-            sequence = (sequence + 1) & MAX_SEQUENCE;
+    public long nextId() {
 
-            if (sequence == 0) {
+        for (; ; ) {
 
-                currentTimestamp = waitNextMillis(currentTimestamp);
+            final long now = timestamp();
 
+            if (now < 0) {
+                throw new IllegalStateException("Epoch is in the future (system clock incorrect).");
             }
 
-        } else {
+            if (now > MAX_TIMESTAMP) {
+                throw new IllegalStateException(
+                    "Timestamp overflow: exceeded " + TIMESTAMP_BITS + " bits.");
+            }
 
-            sequence = 0;
+            final long prev = state.get();
 
-        }
+            final long lastTs;
+            final int lastSeq;
 
-        lastTimestamp = currentTimestamp;
+            if (prev < 0) {
 
-        long id = currentTimestamp << (TOTAL_BITS - EPOCH_BITS);
-        id |= ((long) nodeId << (TOTAL_BITS - EPOCH_BITS - NODE_ID_BITS));
-        id |= sequence;
+                lastTs = -1L;
+                lastSeq = 0;
 
-        return id;
-    }
+            } else {
 
-    private int createNodeId() {
+                lastTs = prev >>> SEQUENCE_BITS;
+                lastSeq = (int) (prev & MAX_SEQUENCE);
+            }
 
-        int nodeId;
+            // If your infra can move time backwards (NTP / VM), waiting is usually better than crashing.
+            // If you prefer the old behavior, replace this block with: if (now < lastTs) throw ...
+            if (now < lastTs) {
+                final long waited = waitNextMillis(lastTs);
+                return composeAndSet(prev, waited, 0);
+            }
 
-        try {
+            final long ts;
+            final int seq;
 
-            StringBuilder sb = new StringBuilder();
+            if (now == lastTs) {
 
-            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+                int nextSeq = (lastSeq + 1) & MAX_SEQUENCE;
 
-            while (networkInterfaces.hasMoreElements()) {
+                if (nextSeq == 0) {
 
-                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                    ts = waitNextMillis(lastTs);
+                    seq = 0;
 
-                byte[] mac = networkInterface.getHardwareAddress();
+                } else {
 
-                if (mac != null) {
-
-                    for (byte b : mac) {
-                        sb.append(String.format("%02X", b));
-                    }
+                    ts = now;
+                    seq = nextSeq;
                 }
+            } else {
+
+                ts = now;
+                seq = 0;
             }
 
-            nodeId = sb.toString().hashCode();
+            final long nextState = (ts << SEQUENCE_BITS) | (seq & MAX_SEQUENCE);
 
-        } catch (Exception ex) {
+            if (state.compareAndSet(prev, nextState)) {
 
-            nodeId = (new SecureRandom().nextInt());
+                return (ts << TIMESTAMP_SHIFT) | ((long) nodeId << NODE_ID_SHIFT) |
+                           (seq & MAX_SEQUENCE);
+            }
         }
-
-        nodeId = nodeId & MAX_NODE_ID;
-
-        return nodeId;
     }
 
-    private long waitNextMillis(long currentTimestamp) {
+    private long composeAndSet(long prev, long ts, int seq) {
 
-        while (currentTimestamp == lastTimestamp) {
+        final long nextState = (ts << SEQUENCE_BITS) | (seq & MAX_SEQUENCE);
+        // best effort: if CAS fails, just retry via public loop
 
-            currentTimestamp = timestamp();
+        if (state.compareAndSet(prev, nextState)) {
 
+            return (ts << TIMESTAMP_SHIFT) | ((long) nodeId << NODE_ID_SHIFT) |
+                       (seq & MAX_SEQUENCE);
         }
 
-        return currentTimestamp;
-
+        return nextId();
     }
 
 }
+
