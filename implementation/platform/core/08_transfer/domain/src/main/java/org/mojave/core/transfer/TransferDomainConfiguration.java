@@ -26,6 +26,7 @@ import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
 import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.contract.component.interledger.AgreementUnwrapper;
+import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.Import;
         MiscConfiguration.class,
         FspiopComponentConfiguration.class,
         AccountingProducerConfiguration.class,
+        WalletProducerConfiguration.class,
         TransactionProducerConfiguration.class,
         ParticipantStoreConfiguration.class,
         RoutingJpaConfiguration.class})
@@ -44,6 +46,7 @@ public class TransferDomainConfiguration {
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
                                            FspiopComponentConfiguration.RequiredBeans,
                                            AccountingProducerConfiguration.RequiredBeans,
+                                           WalletProducerConfiguration.RequiredBeans,
                                            TransactionProducerConfiguration.RequiredBeans,
                                            RoutingJpaConfiguration.RequiredBeans,
                                            ParticipantStoreConfiguration.RequiredBeans {
@@ -55,6 +58,7 @@ public class TransferDomainConfiguration {
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
                                               FspiopComponentConfiguration.RequiredSettings,
                                               AccountingProducerConfiguration.RequiredSettings,
+                                              WalletProducerConfiguration.RequiredSettings,
                                               TransactionProducerConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {

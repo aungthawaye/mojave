@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-mono-service</artifactId>
-    <name>Mojaloop - Platform - Mono - Service</name>
+    <name>Mojave - Platform - Mono - Service</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

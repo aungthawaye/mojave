@@ -45,6 +45,7 @@
         <module name="mod-mono-admin" />
         <module name="mod-component-redis" />
         <module name="mod-lookup-contract" />
+        <module name="mod-wallet-consumer" />
         <module name="mod-transfer-service" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
@@ -60,6 +61,7 @@
         <module name="mod-accounting-admin" />
         <module name="mod-transaction-producer" />
         <module name="mod-quoting-service" />
+        <module name="mod-wallet-producer" />
         <module name="mod-settlement-contract" />
         <module name="mod-component-misc" />
         <module name="mod-accounting-domain" />
@@ -158,10 +160,12 @@
       <module name="mod-transfer-service" options="-parameters" />
       <module name="mod-wallet-admin" options="-parameters" />
       <module name="mod-wallet-admin-client" options="-parameters" />
+      <module name="mod-wallet-consumer" options="-parameters" />
       <module name="mod-wallet-contract" options="-parameters" />
       <module name="mod-wallet-domain" options="-parameters" />
       <module name="mod-wallet-intercom" options="-parameters" />
       <module name="mod-wallet-intercom-client" options="-parameters" />
+      <module name="mod-wallet-producer" options="-parameters" />
       <module name="mono-pom" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />

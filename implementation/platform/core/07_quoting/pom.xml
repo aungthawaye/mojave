@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.core.quoting</groupId>
     <artifactId>quoting-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core - 07 Quoting</name>
+    <name>Mojave - Platform - Core - 07 Quoting</name>
     <modules>
         <module>contract</module>
         <module>domain</module>

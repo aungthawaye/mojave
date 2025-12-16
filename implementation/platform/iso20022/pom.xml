@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.iso20022</groupId>
     <artifactId>iso20022-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - ISO20022</name>
+    <name>Mojave - Platform - ISO20022</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

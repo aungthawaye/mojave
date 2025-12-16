@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.core.transfer</groupId>
     <artifactId>transfer-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core - 08 Transfer</name>
+    <name>Mojave - Platform - Core - 08 Transfer</name>
     <modules>
         <module>contract</module>
         <module>domain</module>

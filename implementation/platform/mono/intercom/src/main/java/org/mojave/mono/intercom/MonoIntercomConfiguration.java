@@ -24,8 +24,6 @@ import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
-import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
-import org.mojave.core.accounting.intercom.AccountingIntercomConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
 import org.mojave.core.participant.intercom.ParticipantIntercomConfiguration;
@@ -50,7 +48,6 @@ import tools.jackson.databind.ObjectMapper;
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class,
         ParticipantIntercomConfiguration.class,
-        AccountingIntercomConfiguration.class,
         WalletIntercomConfiguration.class,
         TransactionIntercomConfiguration.class})
 public class MonoIntercomConfiguration extends JsonWebMvcConfigurationSupport {
@@ -63,14 +60,12 @@ public class MonoIntercomConfiguration extends JsonWebMvcConfigurationSupport {
     public interface RequiredDependencies extends OpenApiConfiguration.RequiredBeans,
                                                   SpringSecurityConfiguration.RequiredBeans,
                                                   ParticipantIntercomConfiguration.RequiredDependencies,
-                                                  AccountingIntercomConfiguration.RequiredDependencies,
                                                   WalletIntercomConfiguration.RequiredDependencies,
                                                   TransactionIntercomConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
                                               SpringSecurityConfiguration.RequiredSettings,
                                               ParticipantDomainConfiguration.RequiredSettings,
-                                              AccountingDomainConfiguration.RequiredSettings,
                                               WalletDomainConfiguration.RequiredSettings,
                                               TransactionDomainConfiguration.RequiredSettings {
 

@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-accounting-admin</artifactId>
-    <name>Mojaloop - Platform - Core - Accounting - Admin</name>
+    <name>Mojave - Platform - Core - Accounting - Admin</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

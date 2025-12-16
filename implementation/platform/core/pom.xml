@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.core</groupId>
     <artifactId>core-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core</name>
+    <name>Mojave - Platform - Core</name>
     <modules>
         <module>00_common</module>
         <module>01_transaction</module>

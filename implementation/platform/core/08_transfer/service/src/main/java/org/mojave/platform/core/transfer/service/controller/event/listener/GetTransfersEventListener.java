@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,10 @@
  * limitations under the License.
  * ================================================================================
  */
+
 package org.mojave.platform.core.transfer.service.controller.event.listener;
 
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.transfer.contract.command.GetTransfersCommand;
 import org.mojave.platform.core.transfer.service.controller.event.GetTransfersEvent;
 import org.slf4j.Logger;
@@ -45,11 +47,13 @@ public class GetTransfersEventListener {
     @EventListener
     public void onGetTransfersEvent(GetTransfersEvent event) {
 
-        LOGGER.info("Start handling GetTransfersEvent : ({})", event);
+        LOGGER.info("GetTransfersEvent : event : ({})", ObjectLogger.log(event));
 
         var output = this.getTransfers.execute(event.getPayload());
 
-        LOGGER.info("Done handling GetTransfersEvent : ({}), output : ({})", event, output);
+        LOGGER.info(
+            "GetTransfersEvent : ({}), output : ({})", ObjectLogger.log(event),
+            ObjectLogger.log(output));
     }
 
 }

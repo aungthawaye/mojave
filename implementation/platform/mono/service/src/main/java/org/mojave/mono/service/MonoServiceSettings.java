@@ -31,6 +31,7 @@ import org.mojave.core.transaction.intercom.client.service.TransactionIntercomSe
 import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.TransferDomainConfiguration;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
+import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -112,7 +113,8 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
             Long.parseLong(System.getenv("READ_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "mojave-service-read", Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
+            "mojave-service-read",
+            Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -202,6 +204,14 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
     public WalletIntercomService.Settings walletIntercomServiceSettings() {
 
         return new WalletIntercomService.Settings(System.getenv("WALLET_INTERCOM_BASE_URL"));
+    }
+
+    @Bean
+    @Override
+    public WalletProducerConfiguration.ProducerSettings walletProducerSettings() {
+
+        return new WalletProducerConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
 }

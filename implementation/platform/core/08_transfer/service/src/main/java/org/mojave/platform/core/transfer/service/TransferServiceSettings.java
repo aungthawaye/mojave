@@ -29,6 +29,7 @@ import org.mojave.core.transaction.intercom.client.service.TransactionIntercomSe
 import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.TransferDomainConfiguration;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
+import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -183,6 +184,14 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new WalletIntercomService.Settings(System.getenv("WALLET_INTERCOM_BASE_URL"));
 
+    }
+
+    @Bean
+    @Override
+    public WalletProducerConfiguration.ProducerSettings walletProducerSettings() {
+
+        return new WalletProducerConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
 }

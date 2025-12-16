@@ -9,9 +9,8 @@
     </parent>
     <groupId>org.mojave.platform.core.participant</groupId>
     <artifactId>participant-pom</artifactId>
-    <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core - 01 Participant</name>
+    <name>Mojave - Platform - Core - 02 Participant</name>
     <modules>
         <module>contract</module>
         <module>domain</module>

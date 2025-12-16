@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-settlement-domain</artifactId>
-    <name>Mojaloop - Platform - Core - Settlement - Domain</name>
+    <name>Mojave - Platform - Core - Settlement - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

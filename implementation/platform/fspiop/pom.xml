@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.fspiop</groupId>
     <artifactId>fspiop-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - FSPIOP</name>
+    <name>Mojave - Platform - FSPIOP</name>
     <modules>
         <module>spec</module>
         <module>component</module>

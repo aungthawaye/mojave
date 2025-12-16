@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.mono</groupId>
     <artifactId>mono-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Mono</name>
+    <name>Mojave - Platform - Mono</name>
     <modules>
         <module>admin</module>
         <module>intercom</module>

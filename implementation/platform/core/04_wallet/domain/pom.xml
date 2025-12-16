@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-wallet-domain</artifactId>
-    <name>Mojaloop - Platform - Core - Wallet - Domain</name>
+    <name>Mojave - Platform - Core - Wallet - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

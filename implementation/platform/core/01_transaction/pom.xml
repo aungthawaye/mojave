@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.core.transaction</groupId>
     <artifactId>transaction-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Platform - Core - 03 Transaction</name>
+    <name>Mojave - Platform - Core - 01 Transaction</name>
     <modules>
         <module>contract</module>
         <module>domain</module>

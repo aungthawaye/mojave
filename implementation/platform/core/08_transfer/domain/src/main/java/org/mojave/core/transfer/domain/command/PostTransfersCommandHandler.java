@@ -124,10 +124,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
         final var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
 
-        MDC.put("REQ_ID", udfTransferId.getId());
-
-        var startAt = System.nanoTime();
-
         LOGGER.info("PostTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = "PostTransfers";
@@ -292,12 +288,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             }
         }
-
-        var endAt = System.nanoTime();
-        LOGGER.info(
-            "PostTransfersCommandHandler : done : took {} ms", (endAt - startAt) / 1_000_000);
-
-        MDC.remove("REQ_ID");
 
         return new Output();
     }
