@@ -608,9 +608,9 @@
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
                     <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-                    <processStartTag>================================================================================</processStartTag>
-                    <sectionDelimiter>--------------------------------------------------------------------------------</sectionDelimiter>
-                    <processEndTag>================================================================================</processEndTag>
+                    <processStartTag>===</processStartTag>
+                    <sectionDelimiter>---</sectionDelimiter>
+                    <processEndTag>===</processEndTag>
                     <includes>
                         <include>**/*.java</include>
                     </includes>

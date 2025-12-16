@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.core.accounting.contract.command.account;
 
@@ -36,12 +36,6 @@ import java.math.BigDecimal;
 public interface CreateAccountCommand {
 
     Output execute(Input input);
-
-    /**
-     * Input for creating an Account. Note: where the Account constructor in the domain would accept
-     * other model instances (e.g., ChartEntry, Owner), here we accept only their Ids or primitive
-     * representations to keep the contract decoupled from domain models, as requested.
-     */
     record Input(@JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
                  @JsonProperty(required = true) @NotNull AccountOwnerId ownerId,
                  @JsonProperty(required = true) @NotNull Currency currency,

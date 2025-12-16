@@ -14,6 +14,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="mod-operation-usecase" />
         <module name="mod-component-flyway" />
@@ -82,8 +83,8 @@
         <module name="mod-settlement-admin" />
         <module name="mod-fspiop-invoker" />
         <module name="mod-mono-intercom" />
-        <module name="mod-participant-contract" />
         <module name="mod-mono-service" />
+        <module name="mod-participant-contract" />
       </profile>
     </annotationProcessing>
   </component>

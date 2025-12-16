@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.core.common.datatype.enums.trasaction;
 
@@ -25,12 +25,6 @@ import java.util.Collections;
 import java.util.Set;
 
 public enum TransactionType {
-
-    /**
-     * Define the type of Transaction. Each transaction will have its own requirements regarding
-     * 1. Who (is/are) involved.
-     * 2. What (amounts) are involved?
-     */
 
     FUND_IN(
         new Participants(Set.of(

@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.core.accounting.contract.command.definition;
 
@@ -23,10 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
-
-/**
- * Command contract for creating a Fund-In Definition.
- */
 public interface RemovePostingDefinitionCommand {
 
     Output execute(Input input);

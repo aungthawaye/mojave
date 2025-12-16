@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.component.jpa.transaction;
 
@@ -34,11 +34,6 @@ public final class TransactionContext {
     private static final ThreadLocal<TransactionStatus> CURRENT = new ThreadLocal<>();
 
     private static final ThreadLocal<PlatformTransactionManager> TX_MANAGER = new ThreadLocal<>();
-
-    /**
-     * Holds the previous routing key so we can restore it when the transaction ends.
-     * This keeps behaviour sane if you switch routing key inside a transaction scope.
-     */
     private static final ThreadLocal<String> PREVIOUS_LOOKUP_KEY = new ThreadLocal<>();
 
     private TransactionContext() {

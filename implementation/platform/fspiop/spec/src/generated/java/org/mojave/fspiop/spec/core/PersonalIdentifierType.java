@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.fspiop.spec.core;
 
@@ -24,10 +24,6 @@ import jakarta.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
-/**
- * Below are the allowed values for the enumeration. - PASSPORT - A passport number is used as reference to a Party. - NATIONAL_REGISTRATION - A national registration number is used as reference to a Party. - DRIVING_LICENSE - A driving license is used as reference to a Party. - ALIEN_REGISTRATION - An alien registration number is used as reference to a Party. - NATIONAL_ID_CARD - A national ID card number is used as reference to a Party. - EMPLOYER_ID - A tax identification number is used as reference to a Party. - TAX_ID_NUMBER - A tax identification number is used as reference to a Party. - SENIOR_CITIZENS_CARD - A senior citizens card number is used as reference to a Party. - MARRIAGE_CERTIFICATE - A marriage certificate number is used as reference to a Party. - HEALTH_CARD - A health card number is used as reference to a Party. - VOTERS_ID - A voter’s identification number is used as reference to a Party. - UNITED_NATIONS - An UN (United Nations) number is used as reference to a Party. - OTHER_ID - Any other type of identification type number is used as reference to a Party.
- */
 public enum PersonalIdentifierType {
   
   PASSPORT("PASSPORT"),
