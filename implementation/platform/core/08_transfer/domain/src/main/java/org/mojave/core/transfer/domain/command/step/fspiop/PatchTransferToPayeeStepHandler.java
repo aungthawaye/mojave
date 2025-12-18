@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,12 +22,9 @@ package org.mojave.core.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
-import org.mojave.core.transaction.contract.command.AddStepCommand;
-import org.mojave.core.transaction.producer.publisher.AddStepPublisher;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.handy.FspiopDates;
@@ -54,16 +51,11 @@ public class PatchTransferToPayeeStepHandler {
 
     private final RespondTransfers respondTransfers;
 
-    private final AddStepPublisher addStepPublisher;
-
-    public PatchTransferToPayeeStepHandler(RespondTransfers respondTransfers,
-                                           AddStepPublisher addStepPublisher) {
+    public PatchTransferToPayeeStepHandler(RespondTransfers respondTransfers) {
 
         assert respondTransfers != null;
-        assert addStepPublisher != null;
 
         this.respondTransfers = respondTransfers;
-        this.addStepPublisher = addStepPublisher;
     }
 
     public Output execute(Input input) throws FspiopException {
@@ -93,18 +85,8 @@ public class PatchTransferToPayeeStepHandler {
             var url = FspiopUrls.Transfers.patchTransfers(
                 payeeBaseUrl, input.udfTransferId.getId());
 
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT,
-                    ObjectLogger.log(patchResponse).toString(), StepPhase.BEFORE));
-
             this.respondTransfers.patchTransfers(
                 new Payee(input.payeeFsp.code().value()), url, patchResponse);
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, "-",
-                    StepPhase.AFTER));
 
             var endAt = System.nanoTime();
             LOGGER.info(
@@ -113,10 +95,6 @@ public class PatchTransferToPayeeStepHandler {
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId, STEP_NAME, CONTEXT, e.getMessage(), StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

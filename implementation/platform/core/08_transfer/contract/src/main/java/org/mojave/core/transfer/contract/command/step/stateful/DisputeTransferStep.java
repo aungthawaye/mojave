@@ -19,4 +19,18 @@
  */
 package org.mojave.core.transfer.contract.command.step.stateful;
 
-public interface DisputeTransferStep { }
+import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import org.mojave.fspiop.component.exception.FspiopException;
+
+public interface DisputeTransferStep {
+
+    void execute(Input input) throws FspiopException;
+
+    record Input(String context,
+                 TransactionId transactionId,
+                 TransferId transferId,
+                 DisputeReason disputeReason) { }
+
+}

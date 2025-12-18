@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,13 +17,11 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.transfer.domain.command.step.stateful;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.transaction.contract.command.AddStepCommand;
-import org.mojave.core.transaction.producer.publisher.AddStepPublisher;
 import org.mojave.core.transfer.contract.command.step.stateful.ReserveTransferStep;
 import org.mojave.core.transfer.domain.repository.TransferRepository;
 import org.mojave.fspiop.component.error.FspiopErrors;
@@ -41,16 +39,11 @@ public class ReserveTransferStepHandler implements ReserveTransferStep {
 
     private final TransferRepository transferRepository;
 
-    private final AddStepPublisher addStepPublisher;
-
-    public ReserveTransferStepHandler(TransferRepository transferRepository,
-                                      AddStepPublisher addStepPublisher) {
+    public ReserveTransferStepHandler(TransferRepository transferRepository) {
 
         assert transferRepository != null;
-        assert addStepPublisher != null;
 
         this.transferRepository = transferRepository;
-        this.addStepPublisher = addStepPublisher;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -62,14 +55,7 @@ public class ReserveTransferStepHandler implements ReserveTransferStep {
 
         LOGGER.info("ReserveTransferStep : input : ({})", ObjectLogger.log(input));
 
-        var CONTEXT = input.context();
-        var STEP_NAME = "ReserveTransferStep";
-
         try {
-
-            this.addStepPublisher.publish(new AddStepCommand.Input(
-                input.transactionId(), STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
-                StepPhase.BEFORE));
 
             var transfer = this.transferRepository.getReferenceById(input.transferId());
 
@@ -77,21 +63,12 @@ public class ReserveTransferStepHandler implements ReserveTransferStep {
 
             this.transferRepository.save(transfer);
 
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, "-", StepPhase.AFTER));
-
             var endAt = System.nanoTime();
             LOGGER.info("ReservedTransfer : done, took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

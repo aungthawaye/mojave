@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@
 
 package org.mojave.core.transfer.domain.command;
 
-import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
@@ -33,8 +32,6 @@ import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.core.transaction.contract.command.CloseTransactionCommand;
-import org.mojave.core.transaction.producer.publisher.CloseTransactionPublisher;
 import org.mojave.core.transfer.contract.command.PutTransfersCommand;
 import org.mojave.core.transfer.contract.command.step.financial.FulfilPositionsStep;
 import org.mojave.core.transfer.contract.command.step.financial.PostLedgerFlowStep;
@@ -96,8 +93,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final RespondTransfers respondTransfers;
 
-    private final CloseTransactionPublisher closeTransactionPublisher;
-
     public PutTransfersCommandHandler(ParticipantStore participantStore,
                                       FetchTransferStep fetchTransferStep,
                                       AbortTransferStep abortTransferStep,
@@ -110,8 +105,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       CommitTransferToPayerStepHandler commitTransferToPayerStep,
                                       ForwardToDestinationStepHandler forwardToDestinationStep,
                                       PatchTransferToPayeeStepHandler patchTransferToPayeeStep,
-                                      RespondTransfers respondTransfers,
-                                      CloseTransactionPublisher closeTransactionPublisher) {
+                                      RespondTransfers respondTransfers) {
 
         assert participantStore != null;
         assert fetchTransferStep != null;
@@ -126,7 +120,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         assert forwardToDestinationStep != null;
         assert patchTransferToPayeeStep != null;
         assert respondTransfers != null;
-        assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
         this.fetchTransferStep = fetchTransferStep;
@@ -141,7 +134,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.forwardToDestinationStep = forwardToDestinationStep;
         this.patchTransferToPayeeStep = patchTransferToPayeeStep;
         this.respondTransfers = respondTransfers;
-        this.closeTransactionPublisher = closeTransactionPublisher;
     }
 
     @Override
@@ -162,7 +154,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         BigDecimal transferAmount = null;
         TransactionId transactionId = null;
         Instant transactionAt = null;
-        Exception errorOccurred = null;
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -264,22 +255,19 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             CONTEXT, transactionId, reservationId,
                             e.getMessage()));
 
-                } catch (Exception e1) {
-
-                    // Failed to roll back Payer's position. This is dispute. ‼️
-                    this.disputeTransferStep.execute(
-                        new DisputeTransferStepHandler.Input(
-                            CONTEXT, transactionId, transferId,
-                            DisputeReason.RESERVATION_ROLLBACK));
-                }
-
-                if (rollbackReservationOutput != null) {
-
                     this.abortTransferStep.execute(new AbortTransferStep.Input(
                         CONTEXT, transactionId, transferId, AbortReason.PAYEE_RESPONDED_WITH_ERROR,
                         rollbackReservationOutput.rollbackId(), Direction.FROM_PAYEE,
                         putTransfersResponse.getExtensionList()));
 
+                } catch (Exception e1) {
+
+                    // Failed to roll back Payer's position. This is dispute. ‼️
+                    if (rollbackReservationOutput == null) {
+                        this.disputeTransferStep.execute(new DisputeTransferStepHandler.Input(
+                            CONTEXT, transactionId, transferId,
+                            DisputeReason.RESERVATION_ROLLBACK));
+                    }
                 }
 
                 // Although Payee responded with an error, we still need to inform back
@@ -488,8 +476,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
             LOGGER.error("Error:", e);
 
-            errorOccurred = e;
-
             if (payerFsp != null && !unreachablePayer) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
@@ -508,23 +494,10 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 } catch (Exception e1) {
 
                     LOGGER.error("Error:", e1);
-
-                    errorOccurred = e1;
                 }
 
             }
 
-        } finally {
-
-            if (transferId != null) {
-
-                LOGGER.info("Closing transaction : udfTransferId : ({})", udfTransferId.getId());
-
-                this.closeTransactionPublisher.publish(
-                    new CloseTransactionCommand.Input(
-                        transactionId,
-                        errorOccurred != null ? errorOccurred.getMessage() : null));
-            }
         }
 
         return new Output();

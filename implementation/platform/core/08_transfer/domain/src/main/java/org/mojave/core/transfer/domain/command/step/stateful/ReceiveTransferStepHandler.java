@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,17 +17,14 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.transfer.domain.command.step.stateful;
 
 import org.mojave.component.jpa.routing.annotation.Write;
+import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.transaction.contract.command.AddStepCommand;
-import org.mojave.core.transaction.contract.command.OpenTransactionCommand;
-import org.mojave.core.transaction.producer.publisher.AddStepPublisher;
 import org.mojave.core.transfer.TransferDomainConfiguration;
 import org.mojave.core.transfer.contract.command.step.stateful.ReceiveTransferStep;
 import org.mojave.core.transfer.domain.model.Party;
@@ -49,31 +46,21 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReceiveTransferStepHandler.class);
 
-    private final OpenTransactionCommand openTransactionCommand;
-
     private final TransferDomainConfiguration.TransferSettings transferSettings;
-
-    private final AddStepPublisher addStepPublisher;
 
     private final TransferRepository transferRepository;
 
     private final TransferIlpPacketRepository transferIlpPacketRepository;
 
-    public ReceiveTransferStepHandler(OpenTransactionCommand openTransactionCommand,
-                                      TransferDomainConfiguration.TransferSettings transferSettings,
-                                      AddStepPublisher addStepPublisher,
+    public ReceiveTransferStepHandler(TransferDomainConfiguration.TransferSettings transferSettings,
                                       TransferRepository transferRepository,
                                       TransferIlpPacketRepository transferIlpPacketRepository) {
 
-        assert openTransactionCommand != null;
         assert transferSettings != null;
-        assert addStepPublisher != null;
         assert transferRepository != null;
         assert transferIlpPacketRepository != null;
 
-        this.openTransactionCommand = openTransactionCommand;
         this.transferSettings = transferSettings;
-        this.addStepPublisher = addStepPublisher;
         this.transferRepository = transferRepository;
         this.transferIlpPacketRepository = transferIlpPacketRepository;
     }
@@ -87,9 +74,6 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
         var startAt = System.nanoTime();
 
         LOGGER.info("ReceiveTransferStep : input : ({})", ObjectLogger.log(input));
-
-        final var CONTEXT = input.context();
-        final var STEP_NAME = "ReceiveTransferStep";
 
         TransactionId transactionId = null;
         Instant transactionAt = null;
@@ -113,21 +97,14 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
             var payerPartyIdInfo = input.agreement().payer();
             var payeePartyIdInfo = input.agreement().payee();
 
-            var openTransactionOutput = this.openTransactionCommand.execute(
-                new OpenTransactionCommand.Input(TransactionType.FUND_TRANSFER));
+            transactionId = new TransactionId(Snowflake.get().nextId());
 
-            transactionId = openTransactionOutput.transactionId();
+            transactionAt = Instant.now();
 
-            transactionAt = openTransactionOutput.transactionAt();
             var reservationTimeoutAt = Instant
                                            .now()
                                            .plusMillis(
                                                this.transferSettings.reservationTimeoutMs());
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(input).toString(),
-                    StepPhase.BEFORE));
 
             var transfer = new Transfer(
                 transactionId, transactionAt, input.udfTransferId(), payerFsp.code(), new Party(
@@ -154,11 +131,6 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
             var output = new ReceiveTransferStep.Output(
                 transactionId, transactionAt, transfer.getId());
 
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    transactionId, STEP_NAME, CONTEXT, ObjectLogger.log(output).toString(),
-                    StepPhase.AFTER));
-
             var endAt = System.nanoTime();
             LOGGER.info(
                 "ReceivedTransfer : output : ({}) , took : {} ms", output,
@@ -169,14 +141,6 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
-
-            if (transactionId != null) {
-                this.addStepPublisher.publish(
-                    new AddStepCommand.Input(
-                        transactionId, STEP_NAME, CONTEXT, e.getMessage(),
-                        StepPhase.ERROR));
-            }
-
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
 

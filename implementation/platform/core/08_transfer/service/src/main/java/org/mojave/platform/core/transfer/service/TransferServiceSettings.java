@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,6 @@ import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.core.transaction.intercom.client.service.TransactionIntercomService;
-import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.TransferDomainConfiguration;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
@@ -151,14 +150,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new TransactionIntercomService.Settings(
             System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
-    }
-
-    @Bean
-    @Override
-    public TransactionProducerConfiguration.ProducerSettings transactionProducerSettings() {
-
-        return new TransactionProducerConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean

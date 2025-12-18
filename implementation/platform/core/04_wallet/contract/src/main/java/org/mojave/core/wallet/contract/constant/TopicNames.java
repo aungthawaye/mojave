@@ -22,5 +22,6 @@ package org.mojave.core.wallet.contract.constant;
 public class TopicNames {
 
     public static final String FULFIL_POSITIONS = "fulfil-positions-command";
+    public static final String ROLLBACK_RESERVATION = "rollback-reservation-command";
 
 }

@@ -16,6 +16,7 @@
         <module>platform</module>
         <module>operation</module>
         <module>connector</module>
+        <module>provider</module>
     </modules>
     <properties>
         <java.version>25</java.version>
@@ -464,6 +465,16 @@
             <dependency>
                 <groupId>org.mojave.platform.mono</groupId>
                 <artifactId>mod-mono-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.provider.forex</groupId>
+                <artifactId>forex-provider-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.provider.settlement</groupId>
+                <artifactId>settlement-provider-pom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

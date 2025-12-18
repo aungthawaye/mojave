@@ -22,6 +22,7 @@ package org.mojave.core.wallet.consumer;
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.core.wallet.consumer.listener.FulfilPositionsListener;
+import org.mojave.core.wallet.consumer.listener.RollbackReservationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 
@@ -35,6 +36,16 @@ public class WalletConsumerSettings implements WalletConsumerConfiguration.Requi
 
         return new FulfilPositionsListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), FulfilPositionsListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public RollbackReservationListener.Settings rollbackReservationListenerSettings() {
+
+        return new RollbackReservationListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), RollbackReservationListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }

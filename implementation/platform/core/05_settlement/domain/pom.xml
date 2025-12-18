@@ -14,4 +14,14 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.mojave.platform.core.common</groupId>
+            <artifactId>mod-common-datatype</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.platform.fspiop</groupId>
+            <artifactId>mod-fspiop-spec</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -23,7 +23,9 @@ import org.apache.kafka.common.serialization.Serializer;
 import org.mojave.component.kafka.KafkaProducerConfigurer;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
+import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.core.wallet.producer.publisher.FulfilPositionsPublisher;
+import org.mojave.core.wallet.producer.publisher.RollbackReservationPublisher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -49,6 +51,16 @@ public class WalletProducerConfiguration {
     }
 
     @Bean
+    @Qualifier(RollbackReservationPublisher.QUALIFIER)
+    public KafkaTemplate<String, RollbackReservationCommand.Input> rollbackReservationKafkaTemplate(
+        @Qualifier(
+            RollbackReservationPublisher.QUALIFIER)
+        ProducerFactory<String, RollbackReservationCommand.Input> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
     @Qualifier(FulfilPositionsPublisher.QUALIFIER)
     public ProducerFactory<String, FulfilPositionsCommand.Input> fulfilPositionsProducerFactory(
         WalletProducerConfiguration.ProducerSettings settings,
@@ -66,6 +78,30 @@ public class WalletProducerConfiguration {
 
                 @Override
                 public Serializer<FulfilPositionsCommand.Input> forValue() {
+
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
+                }
+            });
+    }
+
+    @Bean
+    @Qualifier(RollbackReservationPublisher.QUALIFIER)
+    public ProducerFactory<String, RollbackReservationCommand.Input> rollbackReservationProducerFactory(
+        WalletProducerConfiguration.ProducerSettings settings,
+        ObjectMapper objectMapper) {
+
+        return KafkaProducerConfigurer.configure(
+            settings.bootstrapServers(), settings.ack(),
+            new KafkaProducerConfigurer.Serializers<>() {
+
+                @Override
+                public Serializer<String> forKey() {
+
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
+                }
+
+                @Override
+                public Serializer<RollbackReservationCommand.Input> forValue() {
 
                     return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }

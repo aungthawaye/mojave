@@ -27,8 +27,8 @@ export MYSQL_POSITION_DB_VALIDATION_TIMEOUT="5000"
 export MYSQL_POSITION_DB_MAX_LIFETIME_TIMEOUT="1800000"
 export MYSQL_POSITION_DB_IDLE_TIMEOUT="600000"
 export MYSQL_POSITION_DB_KEEPALIVE_TIMEOUT="300000"
-export MYSQL_POSITION_DB_MIN_POOL_SIZE="36"
-export MYSQL_POSITION_DB_MAX_POOL_SIZE="36"
+export MYSQL_POSITION_DB_MIN_POOL_SIZE="10"
+export MYSQL_POSITION_DB_MAX_POOL_SIZE="10"
 
 # Ledger Database Configuration
 export MYSQL_LEDGER_DB_URL="jdbc:mysql://localhost:3306/ml_mojave?createDatabaseIfNotExist=true"
@@ -63,12 +63,12 @@ export WRITE_DB_VALIDATION_TIMEOUT="5000"
 export WRITE_DB_MAX_LIFETIME_TIMEOUT="1800000"
 export WRITE_DB_IDLE_TIMEOUT="600000"
 export WRITE_DB_KEEPALIVE_TIMEOUT="300000"
-export WRITE_DB_MIN_POOL_SIZE="36"
-export WRITE_DB_MAX_POOL_SIZE="36"
+export WRITE_DB_MIN_POOL_SIZE="10"
+export WRITE_DB_MAX_POOL_SIZE="10"
 
 # Flyway
 export FLYWAY_DB_URL="jdbc:mysql://localhost:3306/ml_mojave?createDatabaseIfNotExist=true"
 export FLYWAY_DB_USER="root"
 export FLYWAY_DB_PASSWORD="password"
 
-java -cp "./*:./lib/*" -Dlog4j.configurationFile=classpath:mono-intercom-log4j2.xml org.mojave.mono.intercom.MonoIntercomApplication
+java -cp "./*:./lib/*" -Dsnowflake.nodeId=2 -Dlog4j.configurationFile=classpath:mono-intercom-log4j2.xml org.mojave.mono.intercom.MonoIntercomApplication

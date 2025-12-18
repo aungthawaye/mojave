@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.component.tomcat;
 
 import org.apache.coyote.http11.Http11NioProtocol;
@@ -42,12 +43,12 @@ public class SimpleTomcatFactoryConfigurer {
 
                 // Connection limits
                 protocol.setMaxConnections(settings.maxConnections());   // e.g. 10_000
-                protocol.setConnectionTimeout(settings.connectionTimeoutMillis()); // e.g. 30_000
+                protocol.setConnectionTimeout(settings.connectionTimeoutMs()); // e.g. 30_000
 
                 Optionally:
                 protocol.setAcceptCount(
                     settings.acceptCount());  // queue size when all threads busy
-                protocol.setKeepAliveTimeout(20_000);
+                protocol.setKeepAliveTimeout(settings.keepAliveTimeoutMs());
             });
 
         };
@@ -57,7 +58,8 @@ public class SimpleTomcatFactoryConfigurer {
                                  int maxThreads,
                                  int minSpareThreads,
                                  int maxConnections,
-                                 int connectionTimeoutMillis,
-                                 int acceptCount) { }
+                                 int connectionTimeoutMs,
+                                 int acceptCount,
+                                 int keepAliveTimeoutMs) { }
 
 }

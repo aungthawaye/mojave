@@ -52,7 +52,7 @@ export READ_DB_VALIDATION_TIMEOUT="5000"
 export READ_DB_MAX_LIFETIME_TIMEOUT="1800000"
 export READ_DB_IDLE_TIMEOUT="600000"
 export READ_DB_KEEPALIVE_TIMEOUT="300000"
-export READ_DB_MIN_POOL_SIZE="1"
+export READ_DB_MIN_POOL_SIZE="2"
 export READ_DB_MAX_POOL_SIZE="2"
 
 # Write Database Configuration
@@ -72,4 +72,4 @@ export FLYWAY_DB_URL="jdbc:mysql://localhost:3306/ml_mojave?createDatabaseIfNotE
 export FLYWAY_DB_USER="root"
 export FLYWAY_DB_PASSWORD="password"
 
-java -cp "./*:./lib/*" -Dlog4j.configurationFile=classpath:mono-consumer-log4j2.xml org.mojave.mono.consumer.MonoConsumerApplication
+java -cp "./*:./lib/*" -Dsnowflake.nodeId=4 -Dlog4j.configurationFile=classpath:mono-consumer-log4j2.xml org.mojave.mono.consumer.MonoConsumerApplication

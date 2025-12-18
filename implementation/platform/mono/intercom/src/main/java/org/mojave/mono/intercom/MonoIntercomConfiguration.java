@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,6 @@ import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
 import org.mojave.core.participant.intercom.ParticipantIntercomConfiguration;
-import org.mojave.core.transaction.domain.TransactionDomainConfiguration;
-import org.mojave.core.transaction.intercom.TransactionIntercomConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
 import org.mojave.core.wallet.intercom.WalletIntercomConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,8 +46,7 @@ import tools.jackson.databind.ObjectMapper;
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class,
         ParticipantIntercomConfiguration.class,
-        WalletIntercomConfiguration.class,
-        TransactionIntercomConfiguration.class})
+        WalletIntercomConfiguration.class})
 public class MonoIntercomConfiguration extends JsonWebMvcConfigurationSupport {
 
     public MonoIntercomConfiguration(ObjectMapper objectMapper) {
@@ -60,14 +57,12 @@ public class MonoIntercomConfiguration extends JsonWebMvcConfigurationSupport {
     public interface RequiredDependencies extends OpenApiConfiguration.RequiredBeans,
                                                   SpringSecurityConfiguration.RequiredBeans,
                                                   ParticipantIntercomConfiguration.RequiredDependencies,
-                                                  WalletIntercomConfiguration.RequiredDependencies,
-                                                  TransactionIntercomConfiguration.RequiredDependencies { }
+                                                  WalletIntercomConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
                                               SpringSecurityConfiguration.RequiredSettings,
                                               ParticipantDomainConfiguration.RequiredSettings,
-                                              WalletDomainConfiguration.RequiredSettings,
-                                              TransactionDomainConfiguration.RequiredSettings {
+                                              WalletDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

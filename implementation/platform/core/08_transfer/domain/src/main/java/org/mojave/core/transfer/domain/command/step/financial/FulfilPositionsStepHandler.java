@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,10 +21,7 @@
 package org.mojave.core.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
 import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.core.transaction.contract.command.AddStepCommand;
-import org.mojave.core.transaction.producer.publisher.AddStepPublisher;
 import org.mojave.core.transfer.contract.command.step.financial.FulfilPositionsStep;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
@@ -40,23 +37,13 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FulfilPositionsStepHandler.class);
 
-    private final FulfilPositionsCommand fulfilPositionsCommand;
-
     private final FulfilPositionsPublisher fulfilPositionsPublisher;
 
-    private final AddStepPublisher addStepPublisher;
+    public FulfilPositionsStepHandler(FulfilPositionsPublisher fulfilPositionsPublisher) {
 
-    public FulfilPositionsStepHandler(FulfilPositionsCommand fulfilPositionsCommand,
-                                      FulfilPositionsPublisher fulfilPositionsPublisher,
-                                      AddStepPublisher addStepPublisher) {
-
-        assert fulfilPositionsCommand != null;
         assert fulfilPositionsPublisher != null;
-        assert addStepPublisher != null;
 
-        this.fulfilPositionsCommand = fulfilPositionsCommand;
         this.fulfilPositionsPublisher = fulfilPositionsPublisher;
-        this.addStepPublisher = addStepPublisher;
     }
 
     @Override
@@ -66,9 +53,6 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
         var startAt = System.nanoTime();
 
         LOGGER.info("FulfilPositionsStep : input : ({})", ObjectLogger.log(input));
-
-        final var CONTEXT = input.context();
-        final var STEP_NAME = "FulfilPositionsStep";
 
         try {
 
@@ -90,11 +74,6 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
-
-            this.addStepPublisher.publish(
-                new AddStepCommand.Input(
-                    input.transactionId(), STEP_NAME, CONTEXT, e.getMessage(),
-                    StepPhase.ERROR));
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }

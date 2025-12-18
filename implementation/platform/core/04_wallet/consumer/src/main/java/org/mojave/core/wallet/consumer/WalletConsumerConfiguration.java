@@ -22,7 +22,9 @@ package org.mojave.core.wallet.consumer;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
 import org.mojave.core.wallet.consumer.listener.FulfilPositionsListener;
+import org.mojave.core.wallet.consumer.listener.RollbackReservationListener;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
+import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -76,11 +78,46 @@ public class WalletConsumerConfiguration {
             });
     }
 
+    @Bean(name = RollbackReservationListener.LISTENER_CONTAINER_FACTORY)
+    @Qualifier(RollbackReservationListener.QUALIFIER)
+    public ConcurrentKafkaListenerContainerFactory<String, RollbackReservationCommand.Input> rollbackReservationListenerContainerFactory(
+        RollbackReservationListener.Settings settings,
+        ObjectMapper objectMapper) {
+
+        return KafkaConsumerConfigurer.configure(
+            settings, new KafkaConsumerConfigurer.Deserializers<>() {
+
+                @Override
+                public Deserializer<String> forKey() {
+
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        String.class, (JsonMapper) objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+
+                @Override
+                public Deserializer<RollbackReservationCommand.Input> forValue() {
+
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        RollbackReservationCommand.Input.class, (JsonMapper) objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+            });
+    }
+
     public interface RequiredDependencies extends WalletDomainConfiguration.RequiredBeans { }
 
     public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings {
 
         FulfilPositionsListener.Settings fulfilPositionsListenerSettings();
+
+        RollbackReservationListener.Settings rollbackReservationListenerSettings();
 
     }
 

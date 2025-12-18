@@ -19,4 +19,23 @@
  */
 package org.mojave.core.transfer.contract.command.step.stateful;
 
-public interface CommitTransferStep { }
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.fspiop.component.exception.FspiopException;
+
+import java.time.Instant;
+
+public interface CommitTransferStep {
+
+    void execute(Input input) throws FspiopException;
+
+    record Input(String context,
+                 TransactionId transactionId,
+                 TransferId transferId,
+                 String ilpFulfilment,
+                 PositionUpdateId payerCommitId,
+                 PositionUpdateId payeeCommitId,
+                 Instant completedAt) { }
+
+}

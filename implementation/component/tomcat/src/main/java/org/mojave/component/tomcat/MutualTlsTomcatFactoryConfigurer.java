@@ -69,12 +69,12 @@ public class MutualTlsTomcatFactoryConfigurer {
 
                 // Connection limits
                 protocol.setMaxConnections(settings.maxConnections());   // e.g. 10_000
-                protocol.setConnectionTimeout(settings.connectionTimeoutMillis()); // e.g. 30_000
+                protocol.setConnectionTimeout(settings.connectionTimeoutMs()); // e.g. 30_000
 
                 Optionally:
                 protocol.setAcceptCount(
                     settings.acceptCount());  // queue size when all threads busy
-                protocol.setKeepAliveTimeout(20_000);
+                protocol.setKeepAliveTimeout(settings.keepAliveTimeoutMs());
             });
 
         };
@@ -84,7 +84,8 @@ public class MutualTlsTomcatFactoryConfigurer {
                                  int maxThreads,
                                  int minSpareThreads,
                                  int maxConnections,
-                                 int connectionTimeoutMillis,
-                                 int acceptCount) { }
+                                 int connectionTimeoutMs,
+                                 int acceptCount,
+                                 int keepAliveTimeoutMs) { }
 
 }

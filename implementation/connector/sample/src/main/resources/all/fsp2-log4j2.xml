@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <!-- OS user's home directory -->
+        <Property name="LOG_DIR">${sys:user.home}/logs/mojave/fsp2</Property>
+
+        <!-- main active log file -->
+        <Property name="LOG_FILE">${LOG_DIR}/fsp2.log</Property>
+
+        <!-- rolled file pattern (compressed) -->
+        <Property name="LOG_FILE_PATTERN">${LOG_DIR}/fsp2-%d{yyyy-MM-dd}-%i.log.gz</Property>
+
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss}{GMT+06:30}|%level|REQ_ID=%X{REQ_ID}|%t|%logger{36} - %msg%xEx%n</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Rolling file -->
+        <RollingFile name="ROLLING_FILE"
+                     fileName="${LOG_FILE}"
+                     filePattern="${LOG_FILE_PATTERN}"
+                     immediateFlush="false"
+                     append="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+
+            <!-- Roll when file exceeds 500MB -->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+
+            <!-- Keep index increasing per day; also limits how many to keep -->
+            <DefaultRolloverStrategy fileIndex="min" max="30"/>
+        </RollingFile>
+
+        <!-- Optional: async wrapper around the rolling file -->
+        <Async name="ASYNC_FILE" bufferSize="262144" blocking="true">
+            <AppenderRef ref="ROLLING_FILE"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ASYNC_FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>

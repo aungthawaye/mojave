@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,8 +31,6 @@ import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.core.transaction.contract.command.CloseTransactionCommand;
-import org.mojave.core.transaction.producer.publisher.CloseTransactionPublisher;
 import org.mojave.core.transfer.contract.command.PostTransfersCommand;
 import org.mojave.core.transfer.contract.command.step.financial.ReservePayerPositionStep;
 import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
@@ -51,7 +49,6 @@ import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -83,8 +80,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
     private final RespondTransfers respondTransfers;
 
-    private final CloseTransactionPublisher closeTransactionPublisher;
-
     public PostTransfersCommandHandler(ParticipantStore participantStore,
                                        ReceiveTransferStep receiveTransferStep,
                                        ReserveTransferStep reserveTransferStep,
@@ -93,8 +88,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
                                        RollbackReservationStep rollbackReservationStep,
                                        UnwrapRequestStep unwrapRequestStep,
                                        ForwardToDestinationStep forwardToDestinationStep,
-                                       RespondTransfers respondTransfers,
-                                       CloseTransactionPublisher closeTransactionPublisher) {
+                                       RespondTransfers respondTransfers) {
 
         assert participantStore != null;
         assert receiveTransferStep != null;
@@ -105,7 +99,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         assert unwrapRequestStep != null;
         assert forwardToDestinationStep != null;
         assert respondTransfers != null;
-        assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
         this.receiveTransferStep = receiveTransferStep;
@@ -116,7 +109,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         this.unwrapRequestStep = unwrapRequestStep;
         this.forwardToDestinationStep = forwardToDestinationStep;
         this.respondTransfers = respondTransfers;
-        this.closeTransactionPublisher = closeTransactionPublisher;
     }
 
     @Override
@@ -132,8 +124,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         Instant transactionAt = null;
         TransferId transferId;
         PositionUpdateId positionReservationId;
-
-        Exception errorOccurred = null;
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -214,7 +204,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId, positionReservationId));
+                        CONTEXT, transactionId, transferId,
+                        positionReservationId));
 
             } catch (Exception e) {
 
@@ -253,8 +244,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             LOGGER.error("Error:", e);
 
-            errorOccurred = e;
-
             if (payerFsp != null) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
@@ -276,17 +265,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             }
 
-        } finally {
-
-            if (transactionId != null && errorOccurred != null) {
-
-                LOGGER.info(
-                    "PostTransfersCommandHandler : error : ({})", errorOccurred.getMessage());
-
-                this.closeTransactionPublisher.publish(
-                    new CloseTransactionCommand.Input(transactionId, errorOccurred.getMessage()));
-
-            }
         }
 
         return new Output();

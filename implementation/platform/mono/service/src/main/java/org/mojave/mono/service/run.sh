@@ -61,8 +61,8 @@ export WRITE_DB_VALIDATION_TIMEOUT="5000"
 export WRITE_DB_MAX_LIFETIME_TIMEOUT="1800000"
 export WRITE_DB_IDLE_TIMEOUT="600000"
 export WRITE_DB_KEEPALIVE_TIMEOUT="300000"
-export WRITE_DB_MIN_POOL_SIZE="36"
-export WRITE_DB_MAX_POOL_SIZE="36"
+export WRITE_DB_MIN_POOL_SIZE="10"
+export WRITE_DB_MAX_POOL_SIZE="10"
 
 # Flyway
 export FLYWAY_DB_URL="jdbc:mysql://localhost:3306/ml_mojave?createDatabaseIfNotExist=true"
@@ -73,4 +73,4 @@ export FLYWAY_DB_PASSWORD="password"
 export TRANSFER_RESERVATION_TIMEOUT_MS="15000"
 export TRANSFER_EXPIRY_TIMEOUT_MS="30000"
 
-java -cp "./*:./lib/*" -Dlog4j.configurationFile=classpath:mono-service-log4j2.xml org.mojave.mono.service.MonoServiceApplication
+java -cp "./*:./lib/*" -Dsnowflake.nodeId=3 -Dlog4j.configurationFile=classpath:mono-service-log4j2.xml org.mojave.mono.service.MonoServiceApplication

@@ -28,7 +28,6 @@ import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.core.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.core.transaction.intercom.client.service.TransactionIntercomService;
-import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.TransferDomainConfiguration;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
@@ -180,14 +179,6 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new TransactionIntercomService.Settings(
             System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
-    }
-
-    @Bean
-    @Override
-    public TransactionProducerConfiguration.ProducerSettings transactionProducerSettings() {
-
-        return new TransactionProducerConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean

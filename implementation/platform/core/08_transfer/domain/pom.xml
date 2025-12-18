@@ -36,14 +36,6 @@
             <artifactId>mod-participant-store</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-contract</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-producer</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.platform.core.transfer</groupId>
             <artifactId>mod-transfer-contract</artifactId>
         </dependency>

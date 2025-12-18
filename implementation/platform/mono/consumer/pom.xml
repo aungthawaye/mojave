@@ -23,9 +23,5 @@
             <groupId>org.mojave.platform.core.wallet</groupId>
             <artifactId>mod-wallet-consumer</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.mojave.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-consumer</artifactId>
-        </dependency>
     </dependencies>
 </project>
