@@ -6,6 +6,7 @@ export MOJAVE_SERVICE_PORT="5003"
 
 # Kafka
 export KAFKA_BOOTSTRAP_SERVERS="localhost:9092"
+export KAFKA_BROKER_URL="localhost:9092"
 
 # FSPIOP Service Settings
 export FSPIOP_SERVICE_REQUEST_AGE_MS="300000"

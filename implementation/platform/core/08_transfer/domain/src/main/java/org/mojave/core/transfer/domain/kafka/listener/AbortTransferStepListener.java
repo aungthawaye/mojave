@@ -6,6 +6,7 @@ import org.mojave.core.transfer.contract.command.step.stateful.AbortTransferStep
 import org.mojave.core.transfer.domain.kafka.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
@@ -27,7 +28,8 @@ public class AbortTransferStepListener {
 
     private final AbortTransferStep abortTransferStep;
 
-    public AbortTransferStepListener(AbortTransferStep abortTransferStep) {
+    public AbortTransferStepListener(
+        @Qualifier(AbortTransferStep.Qualifiers.HANDLER) AbortTransferStep abortTransferStep) {
 
         assert abortTransferStep != null;
 
@@ -44,7 +46,7 @@ public class AbortTransferStepListener {
 
         try {
 
-            for( AbortTransferStep.Input input : inputs) {
+            for (AbortTransferStep.Input input : inputs) {
                 this.abortTransferStep.execute(input);
             }
 

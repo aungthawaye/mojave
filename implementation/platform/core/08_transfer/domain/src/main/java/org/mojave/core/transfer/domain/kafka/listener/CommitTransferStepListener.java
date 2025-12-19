@@ -6,6 +6,7 @@ import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferSte
 import org.mojave.core.transfer.domain.kafka.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
@@ -27,7 +28,8 @@ public class CommitTransferStepListener {
 
     private final CommitTransferStep commitTransferStep;
 
-    public CommitTransferStepListener(CommitTransferStep commitTransferStep) {
+    public CommitTransferStepListener(
+        @Qualifier(CommitTransferStep.Qualifiers.HANDLER) CommitTransferStep commitTransferStep) {
 
         assert commitTransferStep != null;
 
@@ -44,11 +46,13 @@ public class CommitTransferStepListener {
 
         try {
 
+            LOGGER.info("CommitTransferStep : Received ({}) messages.", inputs.size());
             for (CommitTransferStep.Input input : inputs) {
                 this.commitTransferStep.execute(input);
             }
 
             ack.acknowledge();
+            LOGGER.info("CommitTransferStep : Done.");
 
         } catch (Exception e) {
 

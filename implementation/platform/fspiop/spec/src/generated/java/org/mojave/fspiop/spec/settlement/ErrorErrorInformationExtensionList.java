@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Error_errorInformation_extensionList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-18T07:57:02.792104+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-19T08:08:16.532720+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class ErrorErrorInformationExtensionList   {
   private @Valid List<@Valid Extension> extension = new ArrayList<>();
 

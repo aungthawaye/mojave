@@ -49,8 +49,8 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new AbortTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), AbortTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
+            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            ContainerProperties.AckMode.BATCH);
     }
 
     @Bean
@@ -67,8 +67,8 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new CommitTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), CommitTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
+            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            ContainerProperties.AckMode.BATCH);
     }
 
     @Bean
@@ -77,8 +77,8 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new DisputeTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), DisputeTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
+            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            ContainerProperties.AckMode.BATCH);
     }
 
     @Bean
