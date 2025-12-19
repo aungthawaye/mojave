@@ -29,7 +29,6 @@ import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -46,7 +45,7 @@ public class ReserveTransferStepHandler implements ReserveTransferStep {
         this.transferRepository = transferRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Write
     @Override
     public void execute(ReserveTransferStep.Input input) throws FspiopException {

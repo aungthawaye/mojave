@@ -49,6 +49,7 @@ import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -83,6 +84,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     public PostTransfersCommandHandler(ParticipantStore participantStore,
                                        ReceiveTransferStep receiveTransferStep,
                                        ReserveTransferStep reserveTransferStep,
+                                       @Qualifier(AbortTransferStep.Qualifiers.PUBLISHER)
                                        AbortTransferStep abortTransferStep,
                                        ReservePayerPositionStep reservePayerPositionStep,
                                        RollbackReservationStep rollbackReservationStep,
@@ -204,8 +206,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId,
-                        positionReservationId));
+                        CONTEXT, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
 

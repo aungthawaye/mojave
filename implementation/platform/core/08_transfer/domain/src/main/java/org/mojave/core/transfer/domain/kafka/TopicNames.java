@@ -1,4 +1,4 @@
-package org.mojave.core.transfer.domain.event;
+package org.mojave.core.transfer.domain.kafka;
 
 public class TopicNames {
 

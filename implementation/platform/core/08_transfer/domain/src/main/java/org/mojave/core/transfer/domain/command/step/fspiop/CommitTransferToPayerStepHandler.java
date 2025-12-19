@@ -22,15 +22,12 @@ package org.mojave.core.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.core.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.handy.FspiopUrls;
 import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
-import org.mojave.fspiop.spec.core.ExtensionList;
 import org.mojave.fspiop.spec.core.TransferState;
 import org.mojave.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
@@ -38,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommitTransferToPayerStepHandler {
+public class CommitTransferToPayerStepHandler implements CommitTransferToPayerStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
         CommitTransferToPayerStepHandler.class);
@@ -52,26 +49,24 @@ public class CommitTransferToPayerStepHandler {
         this.respondTransfers = respondTransfers;
     }
 
+    @Override
     public void execute(Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
         LOGGER.info("CommitTransferToPayerStep : input : ({})", ObjectLogger.log(input));
 
-        final var CONTEXT = input.context;
-        final var STEP_NAME = "CommitTransferToPayerStep";
-
-        var payerFsp = input.payerFsp;
+        var payerFsp = input.payerFsp();
 
         try {
 
             var response = new TransfersIDPutResponse()
                                .transferState(TransferState.COMMITTED)
-                               .fulfilment(input.ilpFulfilment)
-                               .completedTimestamp(input.completedTimestamp)
-                               .extensionList(input.extensionList);
+                               .fulfilment(input.ilpFulfilment())
+                               .completedTimestamp(input.completedTimestamp())
+                               .extensionList(input.extensionList());
 
-            var sendBackTo = new Payer(input.payerFsp.code().value());
+            var sendBackTo = new Payer(input.payerFsp().code().value());
             var payerBaseUrl = payerFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
             var url = FspiopUrls.Transfers.putTransfers(
                 payerBaseUrl, input.udfTransferId().getId());
@@ -94,16 +89,6 @@ public class CommitTransferToPayerStepHandler {
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
-
-    }
-
-    public record Input(String context,
-                        TransactionId transactionId,
-                        UdfTransferId udfTransferId,
-                        FspData payerFsp,
-                        String ilpFulfilment,
-                        String completedTimestamp,
-                        ExtensionList extensionList) {
 
     }
 

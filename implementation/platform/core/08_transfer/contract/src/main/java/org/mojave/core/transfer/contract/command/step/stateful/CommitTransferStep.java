@@ -28,6 +28,15 @@ import java.time.Instant;
 
 public interface CommitTransferStep {
 
+
+    class Qualifiers {
+
+        public static final String PUBLISHER = "publisher";
+
+        public static final String HANDLER = "handler";
+
+    }
+
     void execute(Input input) throws FspiopException;
 
     record Input(String context,

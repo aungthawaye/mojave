@@ -48,7 +48,7 @@ public class FetchTransferStepHandler implements FetchTransferStep {
         this.transferRepository = transferRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Write
     @Override
     public FetchTransferStep.Output execute(FetchTransferStep.Input input) throws FspiopException {

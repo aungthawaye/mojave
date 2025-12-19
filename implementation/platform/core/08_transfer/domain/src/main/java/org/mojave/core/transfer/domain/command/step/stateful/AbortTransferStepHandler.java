@@ -28,11 +28,13 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Qualifier(AbortTransferStep.Qualifiers.HANDLER)
 public class AbortTransferStepHandler implements AbortTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbortTransferStepHandler.class);
@@ -46,7 +48,7 @@ public class AbortTransferStepHandler implements AbortTransferStep {
         this.transferRepository = transferRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Write
     @Override
     public void execute(AbortTransferStep.Input input) throws FspiopException {

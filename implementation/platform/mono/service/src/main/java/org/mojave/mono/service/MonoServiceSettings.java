@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,15 +29,31 @@ import org.mojave.core.participant.intercom.client.service.ParticipantIntercomSe
 import org.mojave.core.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.core.transaction.intercom.client.service.TransactionIntercomService;
 import org.mojave.core.transfer.TransferDomainConfiguration;
+import org.mojave.core.transfer.TransferKafkaConfiguration;
+import org.mojave.core.transfer.domain.kafka.listener.AbortTransferStepListener;
+import org.mojave.core.transfer.domain.kafka.listener.CommitTransferStepListener;
+import org.mojave.core.transfer.domain.kafka.listener.DisputeTransferStepListener;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public AbortTransferStepListener.Settings abortTransferStepListenerSettings() {
+
+        return new AbortTransferStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), AbortTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
 
     @Bean
     @Override
@@ -52,6 +68,26 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
         return new OpenApiConfiguration.ApiSettings("Mojave - Service", "1.0.0");
+    }
+
+    @Bean
+    @Override
+    public CommitTransferStepListener.Settings commitTransferStepListenerSettings() {
+
+        return new CommitTransferStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), CommitTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public DisputeTransferStepListener.Settings disputeTransferStepListenerSettings() {
+
+        return new DisputeTransferStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), DisputeTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -179,6 +215,14 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new TransactionIntercomService.Settings(
             System.getenv("TRANSACTION_INTERCOM_BASE_URL"));
+    }
+
+    @Bean
+    @Override
+    public TransferKafkaConfiguration.ProducerSettings transferProducerSettings() {
+
+        return new TransferKafkaConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean

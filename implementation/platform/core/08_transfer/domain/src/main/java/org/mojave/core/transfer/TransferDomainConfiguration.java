@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Import;
     value = {
         MiscConfiguration.class,
         FspiopComponentConfiguration.class,
+        TransferKafkaConfiguration.class,
         AccountingProducerConfiguration.class,
         WalletProducerConfiguration.class,
         ParticipantStoreConfiguration.class,
@@ -43,6 +44,7 @@ public class TransferDomainConfiguration {
 
     public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
                                            FspiopComponentConfiguration.RequiredBeans,
+                                           TransferKafkaConfiguration.RequiredBeans,
                                            AccountingProducerConfiguration.RequiredBeans,
                                            WalletProducerConfiguration.RequiredBeans,
                                            RoutingJpaConfiguration.RequiredBeans,
@@ -56,6 +58,7 @@ public class TransferDomainConfiguration {
                                               FspiopComponentConfiguration.RequiredSettings,
                                               AccountingProducerConfiguration.RequiredSettings,
                                               WalletProducerConfiguration.RequiredSettings,
+                                              TransferKafkaConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {
 

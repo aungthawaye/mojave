@@ -36,9 +36,13 @@ import org.mojave.core.transfer.contract.command.PutTransfersCommand;
 import org.mojave.core.transfer.contract.command.step.financial.FulfilPositionsStep;
 import org.mojave.core.transfer.contract.command.step.financial.PostLedgerFlowStep;
 import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
+import org.mojave.core.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.core.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
+import org.mojave.core.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
 import org.mojave.core.transfer.contract.command.step.fspiop.UnwrapResponseStep;
 import org.mojave.core.transfer.contract.command.step.stateful.AbortTransferStep;
+import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferStep;
+import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.core.transfer.contract.command.step.stateful.FetchTransferStep;
 import org.mojave.core.transfer.domain.command.step.fspiop.CommitTransferToPayerStepHandler;
 import org.mojave.core.transfer.domain.command.step.fspiop.ForwardToDestinationStepHandler;
@@ -53,6 +57,7 @@ import org.mojave.fspiop.spec.core.Currency;
 import org.mojave.fspiop.spec.core.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -71,9 +76,9 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final AbortTransferStep abortTransferStep;
 
-    private final CommitTransferStepHandler commitTransferStep;
+    private final CommitTransferStep commitTransferStep;
 
-    private final DisputeTransferStepHandler disputeTransferStep;
+    private final DisputeTransferStep disputeTransferStep;
 
     // Financial steps
     private final FulfilPositionsStep fulfilPositionsStep;
@@ -85,26 +90,29 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     // FSPIOP steps
     private final UnwrapResponseStep unwrapResponseStep;
 
-    private final CommitTransferToPayerStepHandler commitTransferToPayerStep;
+    private final CommitTransferToPayerStep commitTransferToPayerStep;
 
-    private final ForwardToDestinationStepHandler forwardToDestinationStep;
+    private final ForwardToDestinationStep forwardToDestinationStep;
 
-    private final PatchTransferToPayeeStepHandler patchTransferToPayeeStep;
+    private final PatchTransferToPayeeStep patchTransferToPayeeStep;
 
     private final RespondTransfers respondTransfers;
 
     public PutTransfersCommandHandler(ParticipantStore participantStore,
                                       FetchTransferStep fetchTransferStep,
+                                      @Qualifier(AbortTransferStep.Qualifiers.PUBLISHER)
                                       AbortTransferStep abortTransferStep,
-                                      CommitTransferStepHandler commitTransferStep,
-                                      DisputeTransferStepHandler disputeTransferStep,
+                                      @Qualifier(CommitTransferStep.Qualifiers.PUBLISHER)
+                                      CommitTransferStep commitTransferStep,
+                                      @Qualifier(DisputeTransferStep.Qualifiers.PUBLISHER)
+                                      DisputeTransferStep disputeTransferStep,
                                       FulfilPositionsStep fulfilPositionsStep,
                                       RollbackReservationStep rollbackReservationStep,
                                       PostLedgerFlowStep postLedgerFlowStep,
                                       UnwrapResponseStep unwrapResponseStep,
-                                      CommitTransferToPayerStepHandler commitTransferToPayerStep,
-                                      ForwardToDestinationStepHandler forwardToDestinationStep,
-                                      PatchTransferToPayeeStepHandler patchTransferToPayeeStep,
+                                      CommitTransferToPayerStep commitTransferToPayerStep,
+                                      ForwardToDestinationStep forwardToDestinationStep,
+                                      PatchTransferToPayeeStep patchTransferToPayeeStep,
                                       RespondTransfers respondTransfers) {
 
         assert participantStore != null;

@@ -31,11 +31,13 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Qualifier(DisputeTransferStep.Qualifiers.HANDLER)
 public class DisputeTransferStepHandler implements DisputeTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DisputeTransferStepHandler.class);
@@ -49,7 +51,7 @@ public class DisputeTransferStepHandler implements DisputeTransferStep {
         this.transferRepository = transferRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Write
     @Override
     public void execute(DisputeTransferStep.Input input) throws FspiopException {

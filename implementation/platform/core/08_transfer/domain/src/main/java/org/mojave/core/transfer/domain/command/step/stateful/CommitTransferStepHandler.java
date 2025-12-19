@@ -22,22 +22,18 @@ package org.mojave.core.transfer.domain.command.step.stateful;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferStep;
 import org.mojave.core.transfer.domain.repository.TransferRepository;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-
 @Service
+@Qualifier(CommitTransferStep.Qualifiers.HANDLER)
 public class CommitTransferStepHandler implements CommitTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransferStepHandler.class);
@@ -51,7 +47,7 @@ public class CommitTransferStepHandler implements CommitTransferStep {
         this.transferRepository = transferRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Write
     @Override
     public void execute(CommitTransferStep.Input input) throws FspiopException {
@@ -65,7 +61,8 @@ public class CommitTransferStepHandler implements CommitTransferStep {
             var transfer = this.transferRepository.getReferenceById(input.transferId());
 
             transfer.committed(
-                input.ilpFulfilment(), input.payerCommitId(), input.payeeCommitId(), input.completedAt());
+                input.ilpFulfilment(), input.payerCommitId(), input.payeeCommitId(),
+                input.completedAt());
 
             this.transferRepository.save(transfer);
 
@@ -79,6 +76,5 @@ public class CommitTransferStepHandler implements CommitTransferStep {
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
         }
     }
-
 
 }

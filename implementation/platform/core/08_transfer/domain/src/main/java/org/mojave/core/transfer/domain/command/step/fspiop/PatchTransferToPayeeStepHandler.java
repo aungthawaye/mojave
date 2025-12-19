@@ -22,9 +22,7 @@ package org.mojave.core.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.core.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.handy.FspiopDates;
@@ -33,7 +31,6 @@ import org.mojave.fspiop.component.type.Payee;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.mojave.fspiop.spec.core.Extension;
 import org.mojave.fspiop.spec.core.ExtensionList;
-import org.mojave.fspiop.spec.core.TransferState;
 import org.mojave.fspiop.spec.core.TransfersIDPatchResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +38,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 @Service
-public class PatchTransferToPayeeStepHandler {
+public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
         PatchTransferToPayeeStepHandler.class);
@@ -58,22 +54,20 @@ public class PatchTransferToPayeeStepHandler {
         this.respondTransfers = respondTransfers;
     }
 
+    @Override
     public Output execute(Input input) throws FspiopException {
 
         var startAt = System.nanoTime();
 
         LOGGER.info("PatchTransferToPayeeStep : input : ({})", ObjectLogger.log(input));
 
-        var CONTEXT = input.context;
-        var STEP_NAME = "PatchTransferToPayeeStep";
-
         try {
 
             var patchResponse = new TransfersIDPatchResponse(
-                FspiopDates.forRequestBody(new Date()), input.state);
+                FspiopDates.forRequestBody(new Date()), input.state());
 
             var extensions = new ArrayList<Extension>();
-            input.extensions.forEach((k, v) -> extensions.add(new Extension(k, v)));
+            input.extensions().forEach((k, v) -> extensions.add(new Extension(k, v)));
 
             var extensionList = new ExtensionList(extensions);
 
@@ -81,12 +75,12 @@ public class PatchTransferToPayeeStepHandler {
                 patchResponse.setExtensionList(extensionList);
             }
 
-            var payeeBaseUrl = input.payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
+            var payeeBaseUrl = input.payeeFsp().endpoints().get(EndpointType.TRANSFERS).baseUrl();
             var url = FspiopUrls.Transfers.patchTransfers(
-                payeeBaseUrl, input.udfTransferId.getId());
+                payeeBaseUrl, input.udfTransferId().getId());
 
             this.respondTransfers.patchTransfers(
-                new Payee(input.payeeFsp.code().value()), url, patchResponse);
+                new Payee(input.payeeFsp().code().value()), url, patchResponse);
 
             var endAt = System.nanoTime();
             LOGGER.info(
@@ -101,14 +95,5 @@ public class PatchTransferToPayeeStepHandler {
 
         return new Output();
     }
-
-    public record Input(String context,
-                        TransactionId transactionId,
-                        UdfTransferId udfTransferId,
-                        FspData payeeFsp,
-                        TransferState state,
-                        Map<String, String> extensions) { }
-
-    public record Output() { }
 
 }

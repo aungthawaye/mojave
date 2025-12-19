@@ -1,14 +1,18 @@
-package org.mojave.core.transfer.domain.event.listener;
+package org.mojave.core.transfer.domain.kafka.listener;
 
+import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
 import org.mojave.core.transfer.contract.command.step.stateful.AbortTransferStep;
-import org.mojave.core.transfer.domain.event.TopicNames;
+import org.mojave.core.transfer.domain.kafka.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 public class AbortTransferStepListener {
@@ -34,11 +38,15 @@ public class AbortTransferStepListener {
         topics = TopicNames.ABORT_TRANSFER_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(AbortTransferStep.Input input, Acknowledgment ack) {
+    @Transactional
+    @Write
+    public void handle(List<AbortTransferStep.Input> inputs, Acknowledgment ack) {
 
         try {
 
-            this.abortTransferStep.execute(input);
+            for( AbortTransferStep.Input input : inputs) {
+                this.abortTransferStep.execute(input);
+            }
 
             ack.acknowledge();
 
@@ -54,14 +62,15 @@ public class AbortTransferStepListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
+                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, concurrency, pollTimeoutMs,
-                autoCommit, ackMode);
+                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                pollTimeoutMs, autoCommit, ackMode);
         }
 
     }

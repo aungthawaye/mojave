@@ -65,7 +65,7 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
         this.transferIlpPacketRepository = transferIlpPacketRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     @Write
     @Override
     public ReceiveTransferStep.Output execute(ReceiveTransferStep.Input input)
