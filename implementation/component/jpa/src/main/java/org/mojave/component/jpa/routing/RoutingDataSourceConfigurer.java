@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,8 +15,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.component.jpa.routing;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -107,12 +108,12 @@ public class RoutingDataSourceConfigurer {
         // ---- Hikari pool sizing ----
         config.setMaximumPoolSize(readSettings.pool().maxPool());
         // For no permanent idle connections: pool can shrink to 0 when app is idle
-        config.setMinimumIdle(0);
+        config.setMinimumIdle(readSettings.pool().minPool());
 
         // ---- Timeouts (fail fast under high TPS) ----
-        config.setConnectionTimeout(250);         // ms – tune (200–500ms typical)
-        config.setValidationTimeout(1000);        // ms – how long isValid() may take
-        config.setAutoCommit(true);               // fine for most OLTP workloads
+        config.setConnectionTimeout(readSettings.connection().connectionTimeout());
+        config.setValidationTimeout(readSettings.connection().validationTimeout());
+        config.setAutoCommit(readSettings.connection().autoCommit());
 
         // ---- Idle behaviour & “no idle wakeup” to DB ----
 
@@ -120,18 +121,18 @@ public class RoutingDataSourceConfigurer {
         //    Hikari will use connection.isValid() only when a connection is borrowed.
 
         // 2) Disable keepalive pings – no queries while idle.
-        config.setKeepaliveTime(0L);              // default, but set explicitly for clarity
+        config.setKeepaliveTime(readSettings.connection().keepaliveTime());
 
         // 3) Let the pool close connections when app is idle, so DB sees *zero* connections
         //    after some quiet period. No idle queries because there are no connections.
         //
         //    Example: after 60s of zero usage, shrink pool to 0.
-        config.setIdleTimeout(60_000L);           // 60s – adjust as you like
+        config.setIdleTimeout(readSettings.connection().idleTimeout());
 
         // 4) Reasonable max lifetime to avoid stale connections,
         //    but still no idle test queries.
         //    Make this a bit less than MySQL wait_timeout if you changed it.
-        config.setMaxLifetime(30 * 60_000L);      // 30 minutes
+        config.setMaxLifetime(readSettings.connection().maxLifetime());      // 30 minutes
 
         // If you want to *never* recycle connections proactively (not generally recommended):
         // config.setIdleTimeout(0L);             // don't reap idles
@@ -172,39 +173,36 @@ public class RoutingDataSourceConfigurer {
         config.addDataSourceProperty("useServerPrepStmts", "true");
         // If you still hit CALL issues, set to false and keep callableStmtCacheSize = 0
         // config.addDataSourceProperty("useServerPrepStmts", "false");
-        config.addDataSourceProperty("callableStmtCacheSize", "0");
-
-        // Optional: keep your previous "useResetSession" behaviour
-        config.addDataSourceProperty("useResetSession", "true");
+        config.addDataSourceProperty("callableStmtCacheSize", "100");
 
         // ---- Hikari pool sizing ----
         config.setMaximumPoolSize(writeSettings.pool().maxPool());
         // For no permanent idle connections: pool can shrink to 0 when app is idle
-        config.setMinimumIdle(0);
+        config.setMinimumIdle(writeSettings.pool().minPool());
 
         // ---- Timeouts (fail fast under high TPS) ----
-        config.setConnectionTimeout(250);         // ms – tune (200–500ms typical)
-        config.setValidationTimeout(1000);        // ms – how long isValid() may take
-        config.setAutoCommit(true);               // fine for most OLTP workloads
+        config.setConnectionTimeout(writeSettings.connection().connectionTimeout());
+        config.setValidationTimeout(writeSettings.connection().validationTimeout());
+        config.setAutoCommit(writeSettings.connection().autoCommit());
 
-        // ---- Idle behaviour & “no idle wakeup” to DB ----
+        // ---- Idle behavior & “no idle wakeup” to DB ----
 
         // 1) Do NOT set a connectionTestQuery
         //    Hikari will use connection.isValid() only when a connection is borrowed.
 
         // 2) Disable keepalive pings – no queries while idle.
-        config.setKeepaliveTime(0L);              // default, but set explicitly for clarity
+        config.setKeepaliveTime(writeSettings.connection().keepaliveTime());
 
         // 3) Let the pool close connections when app is idle, so DB sees *zero* connections
         //    after some quiet period. No idle queries because there are no connections.
         //
         //    Example: after 60s of zero usage, shrink pool to 0.
-        config.setIdleTimeout(60_000L);           // 60s – adjust as you like
+        config.setIdleTimeout(writeSettings.connection().idleTimeout());
 
         // 4) Reasonable max lifetime to avoid stale connections,
         //    but still no idle test queries.
         //    Make this a bit less than MySQL wait_timeout if you changed it.
-        config.setMaxLifetime(30 * 60_000L);      // 30 minutes
+        config.setMaxLifetime(writeSettings.connection().maxLifetime());      // 30 minutes
 
         // If you want to *never* recycle connections proactively (not generally recommended):
         // config.setIdleTimeout(0L);             // don't reap idles
@@ -218,17 +216,27 @@ public class RoutingDataSourceConfigurer {
         public record Connection(String url,
                                  String username,
                                  String password,
+                                 long connectionTimeout,
+                                 long validationTimeout,
+                                 long maxLifetime,
+                                 long idleTimeout,
+                                 long keepaliveTime,
                                  boolean autoCommit) { }
 
         public record Pool(String name, int minPool, int maxPool) { }
 
     }
 
-    public record ReadSettings(ReadSettings.Connection connection, ReadSettings.Pool pool) {
+    public record ReadSettings(Connection connection, Pool pool) {
 
         public record Connection(String url,
                                  String username,
                                  String password,
+                                 long connectionTimeout,
+                                 long validationTimeout,
+                                 long maxLifetime,
+                                 long idleTimeout,
+                                 long keepaliveTime,
                                  boolean autoCommit) { }
 
         public record Pool(String name, int minPool, int maxPool) { }

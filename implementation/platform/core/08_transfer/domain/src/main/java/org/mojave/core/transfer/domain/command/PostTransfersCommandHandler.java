@@ -1,26 +1,25 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.core.transfer.domain.command;
 
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
@@ -32,8 +31,6 @@ import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.core.transaction.contract.command.CloseTransactionCommand;
-import org.mojave.core.transaction.producer.publisher.CloseTransactionPublisher;
 import org.mojave.core.transfer.contract.command.PostTransfersCommand;
 import org.mojave.core.transfer.contract.command.step.financial.ReservePayerPositionStep;
 import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
@@ -46,13 +43,13 @@ import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTra
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.fspiop.component.handy.FspiopUrls;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -84,18 +81,16 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
     private final RespondTransfers respondTransfers;
 
-    private final CloseTransactionPublisher closeTransactionPublisher;
-
     public PostTransfersCommandHandler(ParticipantStore participantStore,
                                        ReceiveTransferStep receiveTransferStep,
                                        ReserveTransferStep reserveTransferStep,
+                                       @Qualifier(AbortTransferStep.Qualifiers.PUBLISHER)
                                        AbortTransferStep abortTransferStep,
                                        ReservePayerPositionStep reservePayerPositionStep,
                                        RollbackReservationStep rollbackReservationStep,
                                        UnwrapRequestStep unwrapRequestStep,
                                        ForwardToDestinationStep forwardToDestinationStep,
-                                       RespondTransfers respondTransfers,
-                                       CloseTransactionPublisher closeTransactionPublisher) {
+                                       RespondTransfers respondTransfers) {
 
         assert participantStore != null;
         assert receiveTransferStep != null;
@@ -106,7 +101,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         assert unwrapRequestStep != null;
         assert forwardToDestinationStep != null;
         assert respondTransfers != null;
-        assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
         this.receiveTransferStep = receiveTransferStep;
@@ -117,29 +111,21 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         this.unwrapRequestStep = unwrapRequestStep;
         this.forwardToDestinationStep = forwardToDestinationStep;
         this.respondTransfers = respondTransfers;
-        this.closeTransactionPublisher = closeTransactionPublisher;
     }
 
     @Override
-    @Write
     public Output execute(Input input) {
 
-        MDC.put("REQ_ID", String.valueOf(Snowflake.get().nextId()));
-
-        var startAt = System.nanoTime();
+        final var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
 
         LOGGER.info("PostTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
 
         final var CONTEXT = "PostTransfers";
 
-        var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
-
         TransactionId transactionId = null;
         Instant transactionAt = null;
         TransferId transferId;
         PositionUpdateId positionReservationId;
-
-        Exception errorOccurred = null;
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -220,8 +206,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId,
-                        positionReservationId));
+                        CONTEXT, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
 
@@ -260,8 +245,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             LOGGER.error("Error:", e);
 
-            errorOccurred = e;
-
             if (payerFsp != null) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
@@ -283,24 +266,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             }
 
-        } finally {
-
-            if (transactionId != null && errorOccurred != null) {
-
-                LOGGER.info(
-                    "PostTransfersCommandHandler : error : ({})", errorOccurred.getMessage());
-
-                this.closeTransactionPublisher.publish(
-                    new CloseTransactionCommand.Input(transactionId, errorOccurred.getMessage()));
-
-            }
         }
-
-        var endAt = System.nanoTime();
-        LOGGER.info(
-            "PostTransfersCommandHandler : done : took {} ms", (endAt - startAt) / 1_000_000);
-
-        MDC.remove("REQ_ID");
 
         return new Output();
     }

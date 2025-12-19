@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-participant-store</artifactId>
-    <name>Mojaloop - Platform - Core - Participant - Store</name>
+    <name>Mojave - Platform - Core - Participant - Store</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

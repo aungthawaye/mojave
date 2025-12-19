@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-lookup-service</artifactId>
-    <name>Mojaloop - Platform - Core - Lookup - Service</name>
+    <name>Mojave - Platform - Core - Lookup - Service</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

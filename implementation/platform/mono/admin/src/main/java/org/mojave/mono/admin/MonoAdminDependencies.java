@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,8 +15,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.mono.admin;
 
 import org.mojave.component.web.spring.security.AuthenticationErrorWriter;
@@ -70,10 +71,7 @@ public class MonoAdminDependencies implements MonoAdminConfiguration.RequiredDep
                                  ChartEntryRepository chartEntryRepository,
                                  FlowDefinitionRepository flowDefinitionRepository,
                                  PositionRepository positionRepository,
-                                 BalanceRepository balanceRepository,
-                                 MySqlLedger.LedgerDbSettings ledgerDbSettings,
-                                 MySqlBalanceUpdater.BalanceDbSettings balanceDbSettings,
-                                 MySqlPositionUpdater.PositionDbSettings positionDbSettings) {
+                                 BalanceRepository balanceRepository) {
 
         assert objectMapper != null;
         assert accountRepository != null;
@@ -81,7 +79,6 @@ public class MonoAdminDependencies implements MonoAdminConfiguration.RequiredDep
         assert flowDefinitionRepository != null;
         assert positionRepository != null;
         assert balanceRepository != null;
-        assert ledgerDbSettings != null;
 
         this.accountCache = new AccountLocalCache(accountRepository);
         this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);
@@ -89,11 +86,48 @@ public class MonoAdminDependencies implements MonoAdminConfiguration.RequiredDep
         this.positionCache = new PositionLocalCache(positionRepository);
         this.balanceCache = new BalanceLocalCache(balanceRepository);
 
-        this.ledger = new MySqlLedger(ledgerDbSettings, objectMapper);
+        this.ledger = new MySqlLedger(
+            new MySqlLedger.LedgerDbSettings(
+                new MySqlLedger.LedgerDbSettings.Connection(
+                    System.getenv("MYSQL_LEDGER_DB_URL"), System.getenv("MYSQL_LEDGER_DB_USER"),
+                    System.getenv("MYSQL_LEDGER_DB_PASSWORD"),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_CONNECTION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_VALIDATION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_MAX_LIFETIME_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_IDLE_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_KEEPALIVE_TIMEOUT")), false),
+                new MySqlLedger.LedgerDbSettings.Pool(
+                    "accounting-ledger",
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
+            objectMapper);
 
-        this.balanceUpdater = new MySqlBalanceUpdater(balanceDbSettings);
+        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
+            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
+                System.getenv("MYSQL_BALANCE_DB_URL"), System.getenv("MYSQL_BALANCE_DB_USER"),
+                System.getenv("MYSQL_BALANCE_DB_PASSWORD"),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_CONNECTION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_VALIDATION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_MAX_LIFETIME_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_IDLE_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_KEEPALIVE_TIMEOUT")), false),
+            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
+                "wallet-balance", Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
 
-        this.positionUpdater = new MySqlPositionUpdater(positionDbSettings);
+        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
+            new MySqlPositionUpdater.PositionDbSettings.Connection(
+                System.getenv("MYSQL_POSITION_DB_URL"), System.getenv("MYSQL_POSITION_DB_USER"),
+                System.getenv("MYSQL_POSITION_DB_PASSWORD"),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_CONNECTION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_VALIDATION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_MAX_LIFETIME_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_IDLE_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_POSITION_DB_KEEPALIVE_TIMEOUT")), false),
+            new MySqlPositionUpdater.PositionDbSettings.Pool(
+                "wallet-position",
+                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
     }
 
     @Bean

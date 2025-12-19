@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,10 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.platform.core.transfer.service.controller.event.listener;
 
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.transfer.contract.command.PutTransfersErrorCommand;
 import org.mojave.platform.core.transfer.service.controller.event.PutTransfersErrorEvent;
 import org.slf4j.Logger;
@@ -45,11 +47,13 @@ public class PutTransfersErrorEventListener {
     @EventListener
     public void onPutTransfersErrorEvent(PutTransfersErrorEvent event) {
 
-        LOGGER.info("Start handling PutTransfersErrorEvent : ({})", event);
+        LOGGER.info("PutTransfersErrorEvent : event : ({})", ObjectLogger.log(event));
 
         var output = this.putTransfersError.execute(event.getPayload());
 
-        LOGGER.info("Done handling PutTransfersErrorEvent : ({}), output : ({})", event, output);
+        LOGGER.info(
+            "PutTransfersErrorEvent : ({}), output : ({})", ObjectLogger.log(event),
+            ObjectLogger.log(output));
     }
 
 }

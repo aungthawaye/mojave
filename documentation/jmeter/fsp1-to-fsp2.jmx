@@ -11,10 +11,10 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave">
-        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.num_threads">20</intProp>
         <intProp name="ThreadGroup.ramp_time">5</intProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-        <stringProp name="ThreadGroup.on_sample_error">stopthread</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
           <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -90,7 +90,7 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;destination&quot;: &quot;fsp2&quot;,&#xd;
+    &quot;payeeFsp&quot;: &quot;${payeeFsp}&quot;,&#xd;
     &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
     &quot;partyId&quot;: &quot;${payeeMsisdn}&quot;&#xd;
 }</stringProp>
@@ -189,18 +189,18 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;destination&quot;: &quot;${payeeFsp}&quot;,&#xd;
+    &quot;payeeFsp&quot;: &quot;${payeeFsp}&quot;,&#xd;
     &quot;amountType&quot;: &quot;RECEIVE&quot;,&#xd;
     &quot;amount&quot;: {&#xd;
         &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
         &quot;amount&quot;: &quot;1.001&quot;&#xd;
     },&#xd;
-    &quot;source&quot;: {&#xd;
+    &quot;payer&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payerMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payerFsp}&quot;&#xd;
     },&#xd;
-    &quot;destination&quot;: {&#xd;
+    &quot;payee&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payeeMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payeeFsp}&quot;&#xd;
@@ -362,19 +362,19 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;destination&quot;: &quot;${payeeFsp}&quot;,&#xd;
+    &quot;payeeFsp&quot;: &quot;${payeeFsp}&quot;,&#xd;
     &quot;transferId&quot;: &quot;${quoteId}&quot;,&#xd;
     &quot;amountType&quot;: &quot;RECEIVE&quot;,&#xd;
     &quot;amount&quot;: {&#xd;
         &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
         &quot;amount&quot;: &quot;${transferAmount}&quot;&#xd;
     },&#xd;
-    &quot;source&quot;: {&#xd;
+    &quot;payer&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payerMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payerFsp}&quot;&#xd;
     },&#xd;
-    &quot;destination&quot;: {&#xd;
+    &quot;payee&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
         &quot;partyIdentifier&quot;: &quot;${payeeMsisdn}&quot;,&#xd;
         &quot;fspId&quot;: &quot;${payeeFsp}&quot;&#xd;
@@ -510,7 +510,7 @@
         </HeaderManager>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -543,11 +543,11 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename"></stringProp>
+          <stringProp name="filename">/Users/aungthawaye/Downloads/result.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -580,7 +580,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename"></stringProp>
+          <stringProp name="filename">/Users/aungthawaye/Downloads/result2.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">

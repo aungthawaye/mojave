@@ -16,6 +16,7 @@
         <module>platform</module>
         <module>operation</module>
         <module>connector</module>
+        <module>provider</module>
     </modules>
     <properties>
         <java.version>25</java.version>
@@ -29,6 +30,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>33.5.0-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>4.33.2</version>
             </dependency>
             <dependency>
                 <groupId>com.lmax</groupId>
@@ -393,6 +399,11 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-consumer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.wallet</groupId>
                 <artifactId>mod-wallet-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -409,6 +420,11 @@
             <dependency>
                 <groupId>org.mojave.platform.core.wallet</groupId>
                 <artifactId>mod-wallet-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -449,6 +465,16 @@
             <dependency>
                 <groupId>org.mojave.platform.mono</groupId>
                 <artifactId>mod-mono-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.provider.forex</groupId>
+                <artifactId>forex-provider-pom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.provider.settlement</groupId>
+                <artifactId>settlement-provider-pom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -593,9 +619,9 @@
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
                     <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-                    <processStartTag>================================================================================</processStartTag>
-                    <sectionDelimiter>--------------------------------------------------------------------------------</sectionDelimiter>
-                    <processEndTag>================================================================================</processEndTag>
+                    <processStartTag>===</processStartTag>
+                    <sectionDelimiter>---</sectionDelimiter>
+                    <processEndTag>===</processEndTag>
                     <includes>
                         <include>**/*.java</include>
                     </includes>

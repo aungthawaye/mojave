@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 
 package org.mojave.platform.core.transfer.service;
@@ -26,16 +26,32 @@ import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.core.transaction.intercom.client.service.TransactionIntercomService;
-import org.mojave.core.transaction.producer.TransactionProducerConfiguration;
 import org.mojave.core.transfer.TransferDomainConfiguration;
+import org.mojave.core.transfer.TransferKafkaConfiguration;
+import org.mojave.core.transfer.domain.kafka.listener.AbortTransferStepListener;
+import org.mojave.core.transfer.domain.kafka.listener.CommitTransferStepListener;
+import org.mojave.core.transfer.domain.kafka.listener.DisputeTransferStepListener;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
+import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 final class TransferServiceSettings implements TransferServiceConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public AbortTransferStepListener.Settings abortTransferStepListenerSettings() {
+
+        return new AbortTransferStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), AbortTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            ContainerProperties.AckMode.BATCH);
+    }
 
     @Bean
     @Override
@@ -43,6 +59,26 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new AccountingProducerConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
+    }
+
+    @Bean
+    @Override
+    public CommitTransferStepListener.Settings commitTransferStepListenerSettings() {
+
+        return new CommitTransferStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), CommitTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            ContainerProperties.AckMode.BATCH);
+    }
+
+    @Bean
+    @Override
+    public DisputeTransferStepListener.Settings disputeTransferStepListenerSettings() {
+
+        return new DisputeTransferStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), DisputeTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            ContainerProperties.AckMode.BATCH);
     }
 
     @Bean
@@ -86,12 +122,17 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
 
         var connection = new RoutingDataSourceConfigurer.ReadSettings.Connection(
-            System.getenv("TFR_READ_DB_URL"), System.getenv("TFR_READ_DB_USER"),
-            System.getenv("TFR_READ_DB_PASSWORD"), false);
+            System.getenv("READ_DB_URL"), System.getenv("READ_DB_USER"),
+            System.getenv("READ_DB_PASSWORD"),
+            Long.parseLong(System.getenv("READ_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("READ_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "transfer-service-read", Integer.parseInt(System.getenv("TFR_READ_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("TFR_READ_DB_MAX_POOL_SIZE")));
+            "transfer-service-read", Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
     }
@@ -101,12 +142,17 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
     public RoutingDataSourceConfigurer.WriteSettings routingDataSourceWriteSettings() {
 
         var connection = new RoutingDataSourceConfigurer.WriteSettings.Connection(
-            System.getenv("TFR_WRITE_DB_URL"), System.getenv("TFR_WRITE_DB_USER"),
-            System.getenv("TFR_WRITE_DB_PASSWORD"), false);
+            System.getenv("WRITE_DB_URL"), System.getenv("WRITE_DB_USER"),
+            System.getenv("WRITE_DB_PASSWORD"),
+            Long.parseLong(System.getenv("WRITE_DB_CONNECTION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_VALIDATION_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_MAX_LIFETIME_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_IDLE_TIMEOUT")),
+            Long.parseLong(System.getenv("WRITE_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "transfer-service-write", Integer.parseInt(System.getenv("TFR_WRITE_DB_MIN_POOL_SIZE")),
-            Integer.parseInt(System.getenv("TFR_WRITE_DB_MAX_POOL_SIZE")));
+            "transfer-service-write", Integer.parseInt(System.getenv("WRITE_DB_MIN_POOL_SIZE")),
+            Integer.parseInt(System.getenv("WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
     }
@@ -144,9 +190,9 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public TransactionProducerConfiguration.ProducerSettings transactionProducerSettings() {
+    public TransferKafkaConfiguration.ProducerSettings transferProducerSettings() {
 
-        return new TransactionProducerConfiguration.ProducerSettings(
+        return new TransferKafkaConfiguration.ProducerSettings(
             System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
@@ -173,6 +219,14 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new WalletIntercomService.Settings(System.getenv("WALLET_INTERCOM_BASE_URL"));
 
+    }
+
+    @Bean
+    @Override
+    public WalletProducerConfiguration.ProducerSettings walletProducerSettings() {
+
+        return new WalletProducerConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
 }

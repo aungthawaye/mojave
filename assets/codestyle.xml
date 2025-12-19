@@ -1,4 +1,5 @@
 <code_scheme name="Vivify" version="173">
+  <option name="AUTODETECT_INDENTS" value="false" />
   <option name="RIGHT_MARGIN" value="80" />
   <JavaCodeStyleSettings>
     <option name="ANNOTATION_PARAMETER_WRAP" value="2" />
@@ -9,10 +10,42 @@
     <option name="NEW_LINE_WHEN_BODY_IS_PRESENTED" value="true" />
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="20" />
     <option name="RECORD_COMPONENTS_WRAP" value="5" />
-    <option name="DECONSTRUCTION_LIST_WRAP" value="5" />
-    <option name="NEW_LINE_AFTER_LPAREN_IN_DECONSTRUCTION_PATTERN" value="false" />
+    <option name="DECONSTRUCTION_LIST_WRAP" value="2" />
+    <option name="ALIGN_MULTILINE_DECONSTRUCTION_LIST_COMPONENTS" value="false" />
     <option name="ENABLE_JAVADOC_FORMATTING" value="false" />
   </JavaCodeStyleSettings>
+  <MySQLCodeStyleSettings version="7">
+    <option name="USE_GENERAL_STYLE" value="false" />
+    <option name="KEYWORD_CASE" value="2" />
+    <option name="IDENTIFIER_CASE" value="1" />
+    <option name="INSERT_EL_WRAP" value="2" />
+    <option name="SET_EL_WRAP" value="3" />
+    <option name="SELECT_KEEP_N_ITEMS_IN_LINE" value="3" />
+    <option name="FROM_EL_WRAP" value="3" />
+    <option name="FROM_ALIGN_JOIN_TABLES" value="true" />
+    <option name="WHERE_EL_WRAP" value="2" />
+    <option name="ROUTINE_ARG_CONTENT" value="3" />
+    <option name="ROUTINE_ARG_CLOSING" value="1" />
+    <option name="ROUTINE_ARG_WRAP" value="2" />
+    <option name="ROUTINE_ARG_ALIGN_TYPES" value="true" />
+    <option name="SCRIPT_STMT_SEMICOLON_WRAP" value="2" />
+    <option name="EXPR_CASE_KEEP_NL_AFTER_THEN" value="true" />
+  </MySQLCodeStyleSettings>
+  <SqlCodeStyleSettings version="7">
+    <option name="USE_GENERAL_STYLE" value="true" />
+    <option name="KEYWORD_CASE" value="2" />
+    <option name="IDENTIFIER_CASE" value="1" />
+    <option name="INSERT_EL_WRAP" value="0" />
+    <option name="SELECT_EL_WRAP" value="2" />
+    <option name="SELECT_KEEP_N_ITEMS_IN_LINE" value="2" />
+    <option name="ROUTINE_ARG_CONTENT" value="4" />
+    <option name="ROUTINE_ARG_WRAP" value="2" />
+    <option name="ROUTINE_PG_L_QUOTE_WRAP_BEFORE" value="false" />
+    <option name="ROUTINE_PG_R_QUOTE_WRAP_BEFORE" value="false" />
+    <option name="IMP_DECLARE_EL_WRAP" value="3" />
+    <option name="IMP_DECLARE_ALIGN_DEFAULT" value="true" />
+    <option name="INDEX_NAME_TEMPLATE" value="{table}_{columns}_{unique?u:}_idx" />
+  </SqlCodeStyleSettings>
   <codeStyleSettings language="JAVA">
     <option name="RIGHT_MARGIN" value="100" />
     <option name="KEEP_LINE_BREAKS" value="false" />
@@ -328,5 +361,13 @@
         </section>
       </rules>
     </arrangement>
+  </codeStyleSettings>
+  <codeStyleSettings language="MySQL">
+    <option name="KEEP_LINE_BREAKS" value="false" />
+    <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+  </codeStyleSettings>
+  <codeStyleSettings language="SQL">
+    <option name="KEEP_LINE_BREAKS" value="false" />
+    <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
   </codeStyleSettings>
 </code_scheme>

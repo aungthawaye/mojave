@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.connector.adapter.fsp;
 
@@ -324,12 +324,13 @@ public class FspCoreAdapter {
                 }
             }
 
-            LOGGER.info("Posting transfers to FSP Core: {}", agreement);
+
             var result = this.fspClient.postTransfers(
                 payer, new Transfers.Post.Request(
                     request.getTransferId(), agreement,
                     request.getExtensionList()));
-            LOGGER.info("Got transfers from FSP Core: {}", result);
+
+            LOGGER.info("Got transfers from FSP Core: {}", ObjectLogger.log(result));
 
             var response = new TransfersIDPutResponse();
 

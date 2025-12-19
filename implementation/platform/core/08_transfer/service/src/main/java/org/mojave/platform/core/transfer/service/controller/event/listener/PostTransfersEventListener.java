@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,14 +15,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.platform.core.transfer.service.controller.event.listener;
 
+import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.transfer.contract.command.PostTransfersCommand;
 import org.mojave.platform.core.transfer.service.controller.event.PostTransfersEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -44,11 +48,21 @@ public class PostTransfersEventListener {
     @EventListener
     public void onPostTransfersEvent(PostTransfersEvent event) {
 
-        LOGGER.info("Start handling PostTransfersEvent : ({})", event);
+        final var udfTransferId = new UdfTransferId(
+            event.getPayload().transfersPostRequest().getTransferId());
 
-        var output = this.postTransfers.execute(event.getPayload());
+        MDC.put("REQ_ID", udfTransferId.getId());
 
-        LOGGER.info("Done handling PostTransfersEvent : ({}), output : ({})", event, output);
+        var startAt = System.nanoTime();
+
+        LOGGER.info("PostTransfersEvent : event : ({})", ObjectLogger.log(event));
+
+        this.postTransfers.execute(event.getPayload());
+
+        var endAt = System.nanoTime();
+        LOGGER.info("PostTransfersEvent : done : took {} ms", (endAt - startAt) / 1_000_000);
+
+        MDC.remove("REQ_ID");
     }
 
 }

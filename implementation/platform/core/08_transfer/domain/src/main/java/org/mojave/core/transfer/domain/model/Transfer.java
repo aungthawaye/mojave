@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.core.transfer.domain.model;
 
@@ -29,8 +29,10 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -388,7 +390,8 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
     @OneToMany(
         mappedBy = "transfer",
         cascade = CascadeType.ALL,
-        orphanRemoval = true)
+        orphanRemoval = true,
+        fetch = FetchType.LAZY)
     protected List<TransferExtension> extensions = new ArrayList<>();
 
     @Column(
@@ -400,7 +403,6 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         mappedBy = "transfer",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
-    @PrimaryKeyJoinColumn
     protected TransferIlpPacket ilpPacket;
 
     public Transfer(TransactionId transactionId,

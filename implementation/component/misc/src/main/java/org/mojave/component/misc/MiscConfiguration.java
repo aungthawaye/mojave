@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.component.misc;
 
@@ -68,15 +68,11 @@ public class MiscConfiguration {
 
         var executor = new SimpleAsyncTaskExecutor("event-vt-");
 
-        executor.setTaskDecorator(mdcTaskDecorator);
+        //executor.setTaskDecorator(mdcTaskDecorator);
         executor.setVirtualThreads(true); // 🔹 switch to virtual threads
 
         return executor;
     }
-
-    /**
-     * Copies MDC from the caller thread into the virtual thread.
-     */
     @Bean
     public TaskDecorator mdcTaskDecorator() {
 

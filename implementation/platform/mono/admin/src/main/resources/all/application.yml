@@ -6,6 +6,6 @@ springdoc:
   use-fqn: true
   swagger-ui:
     path: /swagger-ui.html
-    enabled: true
+    enabled: false
     operationsSorter: alpha
     tagsSorter: alpha

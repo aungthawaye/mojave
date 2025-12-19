@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-settlement-admin-client</artifactId>
-    <name>Mojaloop - Platform - Core - Settlement - Admin Client</name>
+    <name>Mojave - Platform - Core - Settlement - Admin Client</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

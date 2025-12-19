@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-mono-intercom</artifactId>
-    <name>Mojaloop - Platform - Mono - Intercom</name>
+    <name>Mojave - Platform - Mono - Intercom</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
@@ -36,16 +36,8 @@
             <artifactId>mod-component-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.core.accounting</groupId>
-            <artifactId>mod-accounting-intercom</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.platform.core.participant</groupId>
             <artifactId>mod-participant-intercom</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.platform.core.transaction</groupId>
-            <artifactId>mod-transaction-intercom</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.platform.core.wallet</groupId>

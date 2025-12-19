@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.core.lookup</groupId>
     <artifactId>lookup-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core - 06 Lookup</name>
+    <name>Mojave - Platform - Core - 06 Lookup</name>
     <modules>
         <module>domain</module>
         <module>service</module>

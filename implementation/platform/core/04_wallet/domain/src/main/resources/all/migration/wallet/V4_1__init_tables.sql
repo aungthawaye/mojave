@@ -13,7 +13,7 @@ CREATE TABLE `wlt_net_debit_cap_update`
     `rec_version`             int    DEFAULT NULL,
     PRIMARY KEY (`net_debit_cap_update_id`),
     UNIQUE KEY `wlt_net_debit_cap_update_transaction_id_UK` (`transaction_id`),
-    KEY                       `wlt_net_debit_cap_update_position_id_transaction_at_IDX` (`position_id`, `transaction_at`)
+    KEY `wlt_net_debit_cap_update_position_id_transaction_at_IDX` (`position_id`, `transaction_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -83,8 +83,8 @@ CREATE TABLE `wlt_balance_update`
     PRIMARY KEY (`balance_update_id`),
     UNIQUE KEY `wlt_balance_update_balance_id_action_transaction_id_UK` (`balance_id`, `action`, `transaction_id`),
     UNIQUE KEY `wlt_balance_update_withdraw_id_UK` (`withdraw_id`),
-    KEY                 `wlt_balance_update_balance_id_action_transaction_at_idx` (`balance_id`, `action`, `transaction_at`),
-    KEY                 `wlt_balance_update_transaction_at_idx` (`transaction_at`)
+    KEY `wlt_balance_update_balance_id_action_transaction_at_idx` (`balance_id`, `action`, `transaction_at`),
+    KEY `wlt_balance_update_transaction_at_idx` (`transaction_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -115,8 +115,8 @@ CREATE TABLE `wlt_position_update`
     PRIMARY KEY (`position_update_id`),
     UNIQUE KEY `wlt_position_update_position_id_action_transaction_id_UK` (`position_id`, `action`, `transaction_id`),
     UNIQUE KEY `wlt_balance_update_reversed_id_UK` (`reservation_id`),
-    KEY                  `wlt_position_update_position_id_action_transaction_at_idx` (`position_id`, `action`, `transaction_at`),
-    KEY                  `wlt_position_update_transaction_at_idx` (`transaction_at`)
+    KEY `wlt_position_update_position_id_action_transaction_at_idx` (`position_id`, `action`, `transaction_at`),
+    KEY `wlt_position_update_transaction_at_idx` (`transaction_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

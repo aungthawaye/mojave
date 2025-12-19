@@ -10,7 +10,7 @@
     <groupId>org.mojave.platform.core.accounting</groupId>
     <artifactId>accounting-pom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojaloop - Platform - Core - 02 Accounting</name>
+    <name>Mojave - Platform - Core - 03 Accounting</name>
     <modules>
         <module>contract</module>
         <module>domain</module>

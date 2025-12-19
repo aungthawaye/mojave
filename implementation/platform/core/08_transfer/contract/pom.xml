@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mod-transfer-contract</artifactId>
-    <name>Mojaloop - Platform - Core - Transfer - Contract</name>
+    <name>Mojave - Platform - Core - Transfer - Contract</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

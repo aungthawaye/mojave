@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,8 +15,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.core.accounting.intercom;
 
 import org.mojave.component.web.spring.security.AuthenticationErrorWriter;
@@ -61,13 +62,17 @@ final class AccountingIntercomDependencies
         this.ledger = new MySqlLedger(
             new MySqlLedger.LedgerDbSettings(
                 new MySqlLedger.LedgerDbSettings.Connection(
-                    System.getenv("ACC_MYSQL_LEDGER_DB_URL"),
-                    System.getenv("ACC_MYSQL_LEDGER_DB_USER"),
-                    System.getenv("ACC_MYSQL_LEDGER_DB_PASSWORD")),
+                    System.getenv("MYSQL_LEDGER_DB_URL"), System.getenv("MYSQL_LEDGER_DB_USER"),
+                    System.getenv("MYSQL_LEDGER_DB_PASSWORD"),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_CONNECTION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_VALIDATION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_MAX_LIFETIME_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_IDLE_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_KEEPALIVE_TIMEOUT")), false),
                 new MySqlLedger.LedgerDbSettings.Pool(
                     "accounting-ledger",
-                    Integer.parseInt(System.getenv("ACC_MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
-                    Integer.parseInt(System.getenv("ACC_MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
             objectMapper);
 
         this.accountCache = new AccountTimerCache(

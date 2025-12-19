@@ -1,26 +1,25 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.core.transfer.domain.command;
 
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
@@ -33,30 +32,32 @@ import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.core.transaction.contract.command.CloseTransactionCommand;
-import org.mojave.core.transaction.producer.publisher.CloseTransactionPublisher;
 import org.mojave.core.transfer.contract.command.PutTransfersCommand;
 import org.mojave.core.transfer.contract.command.step.financial.FulfilPositionsStep;
 import org.mojave.core.transfer.contract.command.step.financial.PostLedgerFlowStep;
 import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
+import org.mojave.core.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.core.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
+import org.mojave.core.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
 import org.mojave.core.transfer.contract.command.step.fspiop.UnwrapResponseStep;
 import org.mojave.core.transfer.contract.command.step.stateful.AbortTransferStep;
+import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferStep;
+import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.core.transfer.contract.command.step.stateful.FetchTransferStep;
 import org.mojave.core.transfer.domain.command.step.fspiop.CommitTransferToPayerStepHandler;
 import org.mojave.core.transfer.domain.command.step.fspiop.ForwardToDestinationStepHandler;
 import org.mojave.core.transfer.domain.command.step.fspiop.PatchTransferToPayeeStepHandler;
 import org.mojave.core.transfer.domain.command.step.stateful.CommitTransferStepHandler;
 import org.mojave.core.transfer.domain.command.step.stateful.DisputeTransferStepHandler;
-import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.fspiop.component.handy.FspiopUrls;
+import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.mojave.fspiop.spec.core.Currency;
 import org.mojave.fspiop.spec.core.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -75,9 +76,9 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final AbortTransferStep abortTransferStep;
 
-    private final CommitTransferStepHandler commitTransferStep;
+    private final CommitTransferStep commitTransferStep;
 
-    private final DisputeTransferStepHandler disputeTransferStep;
+    private final DisputeTransferStep disputeTransferStep;
 
     // Financial steps
     private final FulfilPositionsStep fulfilPositionsStep;
@@ -89,30 +90,30 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     // FSPIOP steps
     private final UnwrapResponseStep unwrapResponseStep;
 
-    private final CommitTransferToPayerStepHandler commitTransferToPayerStep;
+    private final CommitTransferToPayerStep commitTransferToPayerStep;
 
-    private final ForwardToDestinationStepHandler forwardToDestinationStep;
+    private final ForwardToDestinationStep forwardToDestinationStep;
 
-    private final PatchTransferToPayeeStepHandler patchTransferToPayeeStep;
+    private final PatchTransferToPayeeStep patchTransferToPayeeStep;
 
     private final RespondTransfers respondTransfers;
 
-    private final CloseTransactionPublisher closeTransactionPublisher;
-
     public PutTransfersCommandHandler(ParticipantStore participantStore,
                                       FetchTransferStep fetchTransferStep,
+                                      @Qualifier(AbortTransferStep.Qualifiers.PUBLISHER)
                                       AbortTransferStep abortTransferStep,
-                                      CommitTransferStepHandler commitTransferStep,
-                                      DisputeTransferStepHandler disputeTransferStep,
+                                      @Qualifier(CommitTransferStep.Qualifiers.PUBLISHER)
+                                      CommitTransferStep commitTransferStep,
+                                      @Qualifier(DisputeTransferStep.Qualifiers.PUBLISHER)
+                                      DisputeTransferStep disputeTransferStep,
                                       FulfilPositionsStep fulfilPositionsStep,
                                       RollbackReservationStep rollbackReservationStep,
                                       PostLedgerFlowStep postLedgerFlowStep,
                                       UnwrapResponseStep unwrapResponseStep,
-                                      CommitTransferToPayerStepHandler commitTransferToPayerStep,
-                                      ForwardToDestinationStepHandler forwardToDestinationStep,
-                                      PatchTransferToPayeeStepHandler patchTransferToPayeeStep,
-                                      RespondTransfers respondTransfers,
-                                      CloseTransactionPublisher closeTransactionPublisher) {
+                                      CommitTransferToPayerStep commitTransferToPayerStep,
+                                      ForwardToDestinationStep forwardToDestinationStep,
+                                      PatchTransferToPayeeStep patchTransferToPayeeStep,
+                                      RespondTransfers respondTransfers) {
 
         assert participantStore != null;
         assert fetchTransferStep != null;
@@ -127,7 +128,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         assert forwardToDestinationStep != null;
         assert patchTransferToPayeeStep != null;
         assert respondTransfers != null;
-        assert closeTransactionPublisher != null;
 
         this.participantStore = participantStore;
         this.fetchTransferStep = fetchTransferStep;
@@ -142,16 +142,10 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.forwardToDestinationStep = forwardToDestinationStep;
         this.patchTransferToPayeeStep = patchTransferToPayeeStep;
         this.respondTransfers = respondTransfers;
-        this.closeTransactionPublisher = closeTransactionPublisher;
     }
 
     @Override
-    @Write
     public Output execute(Input input) {
-
-        MDC.put("REQ_ID", String.valueOf(Snowflake.get().nextId()));
-
-        var startAt = System.nanoTime();
 
         LOGGER.info("PutTransfersCommandHandler : input: ({})", ObjectLogger.log(input));
 
@@ -168,7 +162,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         BigDecimal transferAmount = null;
         TransactionId transactionId = null;
         Instant transactionAt = null;
-        Exception errorOccurred = null;
 
         FspCode payerFspCode = null;
         FspData payerFsp = null;
@@ -270,22 +263,19 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             CONTEXT, transactionId, reservationId,
                             e.getMessage()));
 
-                } catch (Exception e1) {
-
-                    // Failed to roll back Payer's position. This is dispute. ‼️
-                    this.disputeTransferStep.execute(
-                        new DisputeTransferStepHandler.Input(
-                            CONTEXT, transactionId, transferId,
-                            DisputeReason.RESERVATION_ROLLBACK));
-                }
-
-                if (rollbackReservationOutput != null) {
-
                     this.abortTransferStep.execute(new AbortTransferStep.Input(
                         CONTEXT, transactionId, transferId, AbortReason.PAYEE_RESPONDED_WITH_ERROR,
                         rollbackReservationOutput.rollbackId(), Direction.FROM_PAYEE,
                         putTransfersResponse.getExtensionList()));
 
+                } catch (Exception e1) {
+
+                    // Failed to roll back Payer's position. This is dispute. ‼️
+                    if (rollbackReservationOutput == null) {
+                        this.disputeTransferStep.execute(new DisputeTransferStepHandler.Input(
+                            CONTEXT, transactionId, transferId,
+                            DisputeReason.RESERVATION_ROLLBACK));
+                    }
                 }
 
                 // Although Payee responded with an error, we still need to inform back
@@ -417,26 +407,23 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     try {
 
                         finalDispute = DisputeReason.POSITIONS_FULFILMENT;
-
                         fulfilPositionsOutput = this.fulfilPositionsStep.execute(
                             new FulfilPositionsStep.Input(
                                 CONTEXT_COMMITTED_FLOW, transactionId, transactionAt, payerFsp,
                                 payeeFsp, reservationId, currency, "-"));
 
-                        finalDispute = DisputeReason.COMMITING_TRANSFER;
+                        finalDispute = DisputeReason.POSTING_LEDGER_FLOW;
+                        this.postLedgerFlowStep.execute(new PostLedgerFlowStep.Input(
+                            CONTEXT_COMMITTED_FLOW, transactionId, transactionAt, currency,
+                            payerFsp, payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
 
+                        finalDispute = DisputeReason.COMMITING_TRANSFER;
                         this.commitTransferStep.execute(new CommitTransferStepHandler.Input(
                             CONTEXT_COMMITTED_FLOW, transactionId, transferId,
                             unwrapResponseOutput.ilpFulfilment(),
                             fulfilPositionsOutput.payerCommitId(),
                             fulfilPositionsOutput.payeeCommitId(),
                             unwrapResponseOutput.completedAt()));
-
-                        finalDispute = DisputeReason.POSTING_LEDGER_FLOW;
-
-                        this.postLedgerFlowStep.execute(new PostLedgerFlowStep.Input(
-                            CONTEXT_COMMITTED_FLOW, transactionId, transactionAt, currency,
-                            payerFsp, payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
 
                         finalDispute = null;
 
@@ -454,7 +441,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     try {
 
                         finalDispute = DisputeReason.RESERVATION_ROLLBACK;
-
                         this.rollbackReservationStep.execute(new RollbackReservationStep.Input(
                             CONTEXT_COMMITTED_FLOW, transactionId, reservationId,
                             "Failed to COMMIT transfer to Payer."));
@@ -498,8 +484,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
             LOGGER.error("Error:", e);
 
-            errorOccurred = e;
-
             if (payerFsp != null && !unreachablePayer) {
 
                 final var sendBackTo = new Payer(payerFspCode.value());
@@ -518,30 +502,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 } catch (Exception e1) {
 
                     LOGGER.error("Error:", e1);
-
-                    errorOccurred = e1;
                 }
 
             }
 
-        } finally {
-
-            if (transferId != null) {
-
-                LOGGER.info("Closing transaction : udfTransferId : ({})", udfTransferId.getId());
-
-                this.closeTransactionPublisher.publish(
-                    new CloseTransactionCommand.Input(
-                        transactionId,
-                        errorOccurred != null ? errorOccurred.getMessage() : null));
-            }
         }
-
-        var endAt = System.nanoTime();
-        LOGGER.info(
-            "PutTransfersCommandHandler : done : took {} ms", (endAt - startAt) / 1_000_000);
-
-        MDC.remove("REQ_ID");
 
         return new Output();
     }

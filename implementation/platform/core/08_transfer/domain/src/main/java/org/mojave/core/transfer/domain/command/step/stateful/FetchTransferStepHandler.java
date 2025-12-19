@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,11 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.core.transfer.domain.command.step.stateful;
 
-import org.mojave.component.jpa.routing.annotation.Read;
+import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.transfer.contract.command.step.stateful.FetchTransferStep;
 import org.mojave.core.transfer.domain.repository.TransferRepository;
@@ -47,8 +48,8 @@ public class FetchTransferStepHandler implements FetchTransferStep {
         this.transferRepository = transferRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @Read
+    @Transactional
+    @Write
     @Override
     public FetchTransferStep.Output execute(FetchTransferStep.Input input) throws FspiopException {
 

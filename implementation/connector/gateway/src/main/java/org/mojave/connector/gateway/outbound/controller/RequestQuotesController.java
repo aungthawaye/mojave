@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,8 +15,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.connector.gateway.outbound.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -90,7 +91,7 @@ public class RequestQuotesController {
                                                                .initiatorType(
                                                                    TransactionInitiatorType.CONSUMER));
 
-        final var payee = new Payee(request.destination);
+        final var payee = new Payee(request.payeeFsp);
 
         try {
 
@@ -118,7 +119,7 @@ public class RequestQuotesController {
 
     }
 
-    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String destination,
+    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
                           @JsonProperty(required = true) @NotNull AmountType amountType,
                           @JsonProperty(required = true) @NotNull Money amount,
                           @JsonProperty(required = true) @NotNull PartyIdInfo payer,

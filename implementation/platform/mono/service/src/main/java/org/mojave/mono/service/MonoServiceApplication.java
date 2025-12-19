@@ -1,26 +1,26 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
+
 package org.mojave.mono.service;
 
 import org.mojave.core.quoting.domain.QuotingFlyway;
-import org.mojave.core.transaction.producer.publisher.AddStepPublisher;
 import org.mojave.core.transfer.TransferFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,22 +51,18 @@ public class MonoServiceApplication {
 
     public static void main(String[] args) {
 
-        AddStepPublisher.ENABLED = false;
-
         QuotingFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         TransferFlyway.migrate(
-            System.getenv("MONO_FLYWAY_DB_URL"),
-            System.getenv("MONO_FLYWAY_DB_USER"), System.getenv("MONO_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(MonoServiceApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=mono-service", "spring.jmx.enabled=true",
-                "spring.jmx.unique-types=true", "spring.jmx.default-domain=mono-service",
-                "spring.application.admin.enabled=true",
+                "spring.application.name=MonoServiceApplication",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -76,8 +72,7 @@ public class MonoServiceApplication {
                 "management.endpoint.health.validate-group-membership=false",
                 "management.endpoint.health.probes.enabled=true",
                 "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always",
-                "spring.application.admin.jmx-name=org.springframework.boot:type=Admin,name=MonoServiceApplication,context=mono-service")
+                "management.endpoint.health.show-details=always")
             .run(args);
     }
 

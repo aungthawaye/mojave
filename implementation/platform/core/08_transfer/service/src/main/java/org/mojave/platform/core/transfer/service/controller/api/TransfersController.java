@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.platform.core.transfer.service.controller.api;
 
@@ -73,9 +73,7 @@ public class TransfersController {
         var event = new GetTransfersEvent(
             new GetTransfersCommand.Input(fspiopHttpRequest, transferId));
 
-        LOGGER.info("Publishing GetTransfersEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published GetTransfersEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -92,9 +90,7 @@ public class TransfersController {
         var event = new PostTransfersEvent(
             new PostTransfersCommand.Input(fspiopHttpRequest, requestBody));
 
-        LOGGER.info("Publishing PostTransfersEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PostTransfersEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -112,9 +108,7 @@ public class TransfersController {
         var event = new PutTransfersEvent(
             new PutTransfersCommand.Input(fspiopHttpRequest, transferId, response));
 
-        LOGGER.info("Publishing PutTransfersEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutTransfersEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }
@@ -126,15 +120,13 @@ public class TransfersController {
 
         LOGGER.info("Received PUT /transfers/{}/error", transferId);
 
-        var cachedBodyRequest = new CachedServletRequest(request);
-        var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
+        final var cachedBodyRequest = new CachedServletRequest(request);
+        final var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
 
-        var event = new PutTransfersErrorEvent(
+        final var event = new PutTransfersErrorEvent(
             new PutTransfersErrorCommand.Input(fspiopHttpRequest, transferId, error));
 
-        LOGGER.info("Publishing PutTransfersErrorEvent : ({})", event);
         this.eventPublisher.publish(event);
-        LOGGER.info("Published PutTransfersErrorEvent : ({})", event);
 
         return ResponseEntity.accepted().build();
     }

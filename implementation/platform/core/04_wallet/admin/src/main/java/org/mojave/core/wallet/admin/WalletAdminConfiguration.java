@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,14 +15,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.core.wallet.admin;
 
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.component.web.spring.mvc.WebMvcExtension;
+import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
@@ -46,7 +46,7 @@ import tools.jackson.databind.json.JsonMapper;
         WalletDomainConfiguration.class,
         RestErrorConfiguration.class,
         SpringSecurityConfiguration.class})
-public final class WalletAdminConfiguration extends WebMvcExtension {
+public final class WalletAdminConfiguration extends JsonWebMvcConfigurationSupport {
 
     public WalletAdminConfiguration(JsonMapper jsonMapper) {
 

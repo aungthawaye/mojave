@@ -1,9 +1,9 @@
 /*-
- * ================================================================================
+ * ===
  * Mojave
- * --------------------------------------------------------------------------------
+ * ---
  * Copyright (C) 2025 Open Source
- * --------------------------------------------------------------------------------
+ * ---
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,8 +15,36 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ================================================================================
+ * ===
  */
 package org.mojave.core.transfer.contract.command.step.stateful;
 
-public interface CommitTransferStep { }
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.fspiop.component.exception.FspiopException;
+
+import java.time.Instant;
+
+public interface CommitTransferStep {
+
+
+    class Qualifiers {
+
+        public static final String PUBLISHER = "publisher";
+
+        public static final String HANDLER = "handler";
+
+    }
+
+    void execute(Input input) throws FspiopException;
+
+    record Input(String context,
+                 TransactionId transactionId,
+                 TransferId transferId,
+                 String ilpFulfilment,
+                 PositionUpdateId payerCommitId,
+                 PositionUpdateId payeeCommitId,
+                 Instant completedAt) { }
+
+}

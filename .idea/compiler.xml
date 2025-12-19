@@ -14,7 +14,6 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="mod-operation-usecase" />
         <module name="mod-component-flyway" />
@@ -46,6 +45,7 @@
         <module name="mod-mono-admin" />
         <module name="mod-component-redis" />
         <module name="mod-lookup-contract" />
+        <module name="mod-wallet-consumer" />
         <module name="mod-transfer-service" />
         <module name="mod-lookup-domain" />
         <module name="mod-fspiop-service" />
@@ -61,6 +61,7 @@
         <module name="mod-accounting-admin" />
         <module name="mod-transaction-producer" />
         <module name="mod-quoting-service" />
+        <module name="mod-wallet-producer" />
         <module name="mod-settlement-contract" />
         <module name="mod-component-misc" />
         <module name="mod-accounting-domain" />
@@ -93,6 +94,7 @@
       <module name="component-pom" options="-parameters" />
       <module name="connector-pom" options="-parameters" />
       <module name="core-pom" options="-parameters" />
+      <module name="forex-provider-pom" options="-parameters" />
       <module name="fspiop-pom" options="-parameters" />
       <module name="iso20022-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
@@ -159,17 +161,21 @@
       <module name="mod-transfer-service" options="-parameters" />
       <module name="mod-wallet-admin" options="-parameters" />
       <module name="mod-wallet-admin-client" options="-parameters" />
+      <module name="mod-wallet-consumer" options="-parameters" />
       <module name="mod-wallet-contract" options="-parameters" />
       <module name="mod-wallet-domain" options="-parameters" />
       <module name="mod-wallet-intercom" options="-parameters" />
       <module name="mod-wallet-intercom-client" options="-parameters" />
+      <module name="mod-wallet-producer" options="-parameters" />
       <module name="mono-pom" options="-parameters" />
       <module name="operation-pom" options="-parameters" />
       <module name="parent-pom" options="-parameters" />
       <module name="participant-pom" options="-parameters" />
       <module name="platform-pom" options="-parameters" />
+      <module name="provider-pom" options="-parameters" />
       <module name="quoting-pom" options="-parameters" />
       <module name="settlement-pom" options="-parameters" />
+      <module name="settlement-provider-pom" options="-parameters" />
       <module name="transaction-pom" options="-parameters" />
       <module name="transfer-pom" options="-parameters" />
       <module name="wallet-pom" options="-parameters" />
