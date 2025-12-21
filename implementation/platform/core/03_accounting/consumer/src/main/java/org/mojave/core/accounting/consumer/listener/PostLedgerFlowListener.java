@@ -30,6 +30,8 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class PostLedgerFlowListener {
 
@@ -54,13 +56,17 @@ public class PostLedgerFlowListener {
         topics = TopicNames.POST_LEDGER_FLOW,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(PostLedgerFlowCommand.Input input, Acknowledgment ack) {
+    public void handle(List<PostLedgerFlowCommand.Input> inputs, Acknowledgment ack) {
 
         try {
 
-            this.postLedgerFlowCommand.execute(input);
+            LOGGER.info("PostLedgerFlow : Received ({}) messages.", inputs.size());
+            for (var input : inputs) {
+                this.postLedgerFlowCommand.execute(input);
+            }
 
             ack.acknowledge();
+            LOGGER.info("PostLedgerFlow : Done.");
 
         } catch (Exception e) {
 
@@ -74,13 +80,14 @@ public class PostLedgerFlowListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
+                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

@@ -41,6 +41,7 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         TransactionIntercomConfiguration.class,
+        TransactionIntercomDependencies.class,
         TransactionIntercomSettings.class})
 public class TransactionIntercomApplication {
 
@@ -50,8 +51,8 @@ public class TransactionIntercomApplication {
     public static void main(String[] args) {
 
         TransactionFlyway.migrate(
-            System.getenv("TXN_FLYWAY_DB_URL"),
-            System.getenv("TXN_FLYWAY_DB_USER"), System.getenv("TXN_FLYWAY_DB_PASSWORD"));
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(TransactionIntercomApplication.class)
             .web(WebApplicationType.SERVLET)

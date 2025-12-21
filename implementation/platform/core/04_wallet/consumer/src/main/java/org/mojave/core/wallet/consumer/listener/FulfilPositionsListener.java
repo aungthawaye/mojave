@@ -30,6 +30,8 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class FulfilPositionsListener {
 
@@ -54,13 +56,18 @@ public class FulfilPositionsListener {
         topics = TopicNames.FULFIL_POSITIONS,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(FulfilPositionsCommand.Input input, Acknowledgment ack) {
+    public void handle(List<FulfilPositionsCommand.Input> inputs, Acknowledgment ack) {
 
         try {
 
-            this.fulfilPositionsCommand.execute(input);
+            LOGGER.info("FulfilPositions : Received ({}) messages.", inputs.size());
+
+            for (var input : inputs) {
+                this.fulfilPositionsCommand.execute(input);
+            }
 
             ack.acknowledge();
+            LOGGER.info("FulfilPositions : Done.");
 
         } catch (Exception e) {
 
@@ -74,14 +81,15 @@ public class FulfilPositionsListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
+                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency, pollTimeoutMs,
-                autoCommit, ackMode);
+                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                pollTimeoutMs, autoCommit, ackMode);
         }
 
     }

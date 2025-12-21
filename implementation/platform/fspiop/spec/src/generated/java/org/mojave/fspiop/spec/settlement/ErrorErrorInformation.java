@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Error_errorInformation")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-19T19:52:46.622513+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2025-12-21T09:56:17.116483+06:30[Asia/Rangoon]", comments = "Generator version: 7.13.0")
 public class ErrorErrorInformation   {
   private Integer errorCode;
   private String errorDescription;
