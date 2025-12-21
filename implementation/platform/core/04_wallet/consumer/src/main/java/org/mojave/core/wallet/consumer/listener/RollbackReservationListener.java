@@ -30,6 +30,8 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class RollbackReservationListener {
 
@@ -54,13 +56,17 @@ public class RollbackReservationListener {
         topics = TopicNames.ROLLBACK_RESERVATION,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(RollbackReservationCommand.Input input, Acknowledgment ack) {
+    public void handle(List<RollbackReservationCommand.Input> inputs, Acknowledgment ack) {
 
         try {
 
-            this.rollbackReservationCommand.execute(input);
+            LOGGER.info("RollbackReservation : Received ({}) messages.", inputs.size());
+            for (var input : inputs) {
+                this.rollbackReservationCommand.execute(input);
+            }
 
             ack.acknowledge();
+            LOGGER.info("RollbackReservation : Done.");
 
         } catch (Exception e) {
 
@@ -74,14 +80,15 @@ public class RollbackReservationListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
+                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency, pollTimeoutMs,
-                autoCommit, ackMode);
+                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                pollTimeoutMs, autoCommit, ackMode);
         }
 
     }

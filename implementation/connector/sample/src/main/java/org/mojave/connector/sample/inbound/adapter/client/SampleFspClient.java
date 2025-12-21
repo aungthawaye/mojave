@@ -71,8 +71,8 @@ public class SampleFspClient implements FspClient {
 
         var currency = request.originalAmount().getCurrency();
         var originalAmount = new BigDecimal(request.originalAmount().getAmount());
-        var payeeFspFee = new BigDecimal("1");
-        var payeeFspCommission = new BigDecimal("1");
+        var payeeFspFee = new BigDecimal("0");
+        var payeeFspCommission = new BigDecimal("0");
         var payeeReceiveAmount = BigDecimal.ZERO;
         var transferAmount = new BigDecimal("0");
 

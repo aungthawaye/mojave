@@ -97,6 +97,7 @@
       <module name="forex-provider-pom" options="-parameters" />
       <module name="fspiop-pom" options="-parameters" />
       <module name="iso20022-pom" options="-parameters" />
+      <module name="ledger-provider-pom" options="-parameters" />
       <module name="lookup-pom" options="-parameters" />
       <module name="mod-accounting-admin" options="-parameters" />
       <module name="mod-accounting-admin-client" options="-parameters" />

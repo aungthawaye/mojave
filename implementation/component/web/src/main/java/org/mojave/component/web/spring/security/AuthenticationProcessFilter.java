@@ -96,13 +96,13 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
 
         if (match && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            LOGGER.info("Authentication is required for URI ({}) : ({})", method, uri);
+            LOGGER.debug("Authentication is required for URI ({}) : ({})", method, uri);
 
             try {
 
                 var authenticationToken = this.authenticator.authenticate(requestWrapper);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                LOGGER.info("Authentication is successful for URI ({}) : ({})", method, uri);
+                LOGGER.debug("Authentication is successful for URI ({}) : ({})", method, uri);
 
             } catch (AuthenticationFailureException e) {
 
