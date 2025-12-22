@@ -22,6 +22,7 @@ package org.mojave.core.transfer.domain.command.step.stateful;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferStep;
 import org.mojave.core.transfer.domain.repository.TransferRepository;
 import org.mojave.fspiop.component.error.FspiopErrors;
@@ -63,6 +64,16 @@ public class CommitTransferStepHandler implements CommitTransferStep {
             transfer.committed(
                 input.ilpFulfilment(), input.payerCommitId(), input.payeeCommitId(),
                 input.completedAt());
+
+            var extensionList = input.extensionList();
+
+            if (extensionList != null) {
+
+                for (var extension : extensionList.getExtension()) {
+                    transfer.addExtension(
+                        Direction.FROM_PAYEE, extension.getKey(), extension.getValue());
+                }
+            }
 
             this.transferRepository.save(transfer);
 

@@ -45,7 +45,6 @@ import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferSte
 import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.core.transfer.contract.command.step.stateful.FetchTransferStep;
 import org.mojave.core.transfer.domain.command.step.fspiop.CommitTransferToPayerStepHandler;
-import org.mojave.core.transfer.domain.command.step.fspiop.ForwardToDestinationStepHandler;
 import org.mojave.core.transfer.domain.command.step.fspiop.PatchTransferToPayeeStepHandler;
 import org.mojave.core.transfer.domain.command.step.stateful.CommitTransferStepHandler;
 import org.mojave.core.transfer.domain.command.step.stateful.DisputeTransferStepHandler;
@@ -423,7 +422,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             unwrapResponseOutput.ilpFulfilment(),
                             fulfilPositionsOutput.payerCommitId(),
                             fulfilPositionsOutput.payeeCommitId(),
-                            unwrapResponseOutput.completedAt()));
+                            unwrapResponseOutput.completedAt(),
+                            putTransfersResponse.getExtensionList()));
 
                         finalDispute = null;
 
