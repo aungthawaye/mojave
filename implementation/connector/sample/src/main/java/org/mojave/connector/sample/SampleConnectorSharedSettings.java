@@ -28,9 +28,11 @@ import org.mojave.fspiop.invoker.FspiopInvokerConfiguration;
 import org.mojave.fspiop.invoker.api.PartiesService;
 import org.mojave.fspiop.invoker.api.QuotesService;
 import org.mojave.fspiop.invoker.api.TransfersService;
+import org.mojave.fspiop.spec.core.Currency;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SampleConnectorSharedSettings
@@ -98,12 +100,22 @@ public class SampleConnectorSharedSettings
     @Override
     public FspiopComponentConfiguration.ParticipantSettings participantSettings() {
 
+        var hubCode = System.getenv("FSPIOP_HUB_CODE");
         var fspCode = System.getenv("FSPIOP_FSP_CODE");
         var fspName = System.getenv("FSPIOP_FSP_NAME");
+
+        var currencyNames = System.getenv("FSPIOP_CURRENCIES").split(",", -1);
+        var currencies = new ArrayList<Currency>();
+
+        for (var currencyName : currencyNames) {
+            currencies.add(Currency.valueOf(currencyName));
+        }
+
         var ilpSecret = System.getenv("FSPIOP_ILP_SECRET");
         var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
         var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
         var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
+
         var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
         var fspPublicKeyPem = new HashMap<String, String>();
 
@@ -118,7 +130,8 @@ public class SampleConnectorSharedSettings
         }
 
         return new FspiopComponentConfiguration.ParticipantSettings(
-            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+            hubCode, fspCode, fspName,
+            currencies, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
     }
 
     @Bean

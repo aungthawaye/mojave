@@ -6,9 +6,11 @@
 # =====================
 # FSPIOP participant
 # =====================
+export FSPIOP_HUB_CODE="hub"
 export FSPIOP_FSP_CODE="fsp1"
 export FSPIOP_FSP_NAME="FSP 1"
-export FSPIOP_ILP_SECRET="ilp_secret_!!"
+export FSPIOP_CURRENCIES="USD,BYN,BHD,MMK"
+export FSPIOP_ILP_SECRET="ilp_secret1_!!"
 export FSPIOP_SIGN_JWS="true"
 export FSPIOP_VERIFY_JWS="true"
 

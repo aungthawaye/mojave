@@ -43,10 +43,11 @@ CREATE TABLE `tfr_transfer`
     `aborted_at`                    bigint         DEFAULT NULL,
     `abort_reason`                  varchar(32)    DEFAULT NULL,
 
+    `dispute`                       tinyint(1)     DEFAULT NULL,
     `dispute_at`                    bigint         DEFAULT NULL,
     `dispute_reason`                varchar(32)    DEFAULT NULL,
 
-    `dispute_resolved`              tinyint(1)   DEFAULT NULL,
+    `dispute_resolved`              tinyint(1)     DEFAULT NULL,
     `dispute_resolved_at`           bigint         DEFAULT NULL,
 
     `reservation_timeout_at`        bigint         DEFAULT NULL,
@@ -67,19 +68,19 @@ CREATE TABLE `tfr_transfer`
     UNIQUE KEY `tfr_transfer_payee_commit_id_UK` (`payee_commit_id`),
     UNIQUE KEY `tfr_transfer_rollback_id_UK` (`rollback_id`),
 
-    KEY                             `tfr_transfer_payer_fsp_IDX` (`payer_fsp`),
-    KEY                             `tfr_transfer_payer_fsp_transaction_id_IDX` (`payer_fsp`, `transaction_id`),
-    KEY                             `tfr_transfer_payee_fsp_IDX` (`payee_fsp`),
-    KEY                             `tfr_transfer_payee_fsp_transaction_IDX` (`payee_fsp`, `transaction_id`),
-    KEY                             `tfr_transfer_payee_fsp_payer_fsp_IDX` (`payee_fsp`, `payer_fsp`),
-    KEY                             `tfr_transfer_transaction_at_IDX` (`transaction_at`),
-    KEY                             `tfr_transfer_payer_party_id_IDX` (`payer_party_id`),
-    KEY                             `tfr_transfer_payee_party_id_IDX` (`payee_party_id`),
-    KEY                             `tfr_transfer_reservation_timeout_at_IDX` (`reservation_timeout_at`),
-    KEY                             `tfr_transfer_reserved_at_IDX` (`reserved_at`),
-    KEY                             `tfr_transfer_committed_at_IDX` (`committed_at`),
-    KEY                             `tfr_transfer_aborted_at_IDX` (`aborted_at`),
-    KEY                             `tfr_transfer_status_IDX` (`status`)
+    KEY `tfr_transfer_payer_fsp_IDX` (`payer_fsp`),
+    KEY `tfr_transfer_payer_fsp_transaction_id_IDX` (`payer_fsp`, `transaction_id`),
+    KEY `tfr_transfer_payee_fsp_IDX` (`payee_fsp`),
+    KEY `tfr_transfer_payee_fsp_transaction_IDX` (`payee_fsp`, `transaction_id`),
+    KEY `tfr_transfer_payee_fsp_payer_fsp_IDX` (`payee_fsp`, `payer_fsp`),
+    KEY `tfr_transfer_transaction_at_IDX` (`transaction_at`),
+    KEY `tfr_transfer_payer_party_id_IDX` (`payer_party_id`),
+    KEY `tfr_transfer_payee_party_id_IDX` (`payee_party_id`),
+    KEY `tfr_transfer_reservation_timeout_at_IDX` (`reservation_timeout_at`),
+    KEY `tfr_transfer_reserved_at_IDX` (`reserved_at`),
+    KEY `tfr_transfer_committed_at_IDX` (`committed_at`),
+    KEY `tfr_transfer_aborted_at_IDX` (`aborted_at`),
+    KEY `tfr_transfer_status_IDX` (`status`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -100,7 +101,7 @@ CREATE TABLE `tfr_transfer_extension`
     `rec_version`           int          DEFAULT NULL,
 
     PRIMARY KEY (`transfer_extension_id`),
-    KEY                     `tfr_transfer_extension_transfer_id_IDX` (`transfer_id`),
+    KEY `tfr_transfer_extension_transfer_id_IDX` (`transfer_id`),
     CONSTRAINT `transfer_extension_transfer_FK` FOREIGN KEY (`transfer_id`) REFERENCES `tfr_transfer` (`transfer_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

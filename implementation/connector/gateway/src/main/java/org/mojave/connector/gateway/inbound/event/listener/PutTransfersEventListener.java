@@ -45,8 +45,6 @@ public class PutTransfersEventListener {
     @EventListener
     public void handle(PutTransfersEvent event) {
 
-        LOGGER.info("Handling PutTransfersEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -58,11 +56,9 @@ public class PutTransfersEventListener {
                     payload.payee(), payload.transferId(),
                     payload.response()));
 
-            LOGGER.info("Done handling PutTransfersEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PutTransfersEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

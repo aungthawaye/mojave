@@ -23,6 +23,8 @@ import org.mojave.fspiop.spec.core.AmountType;
 import org.mojave.fspiop.spec.core.Money;
 import org.mojave.fspiop.spec.core.Party;
 
+import java.time.Instant;
+
 public class Quotes {
 
     public static class Post {
@@ -32,14 +34,14 @@ public class Quotes {
                               Party payee,
                               AmountType amountType,
                               Money originalAmount,
-                              String expiration) { }
+                              Instant requestExpireAt) { }
 
         public record Response(Money originalAmount,
                                Money payeeFspFee,
                                Money payeeFspCommission,
                                Money payeeReceiveAmount,
                                Money transferAmount,
-                               String expiration) { }
+                               Instant quoteExpireAt) { }
 
     }
 

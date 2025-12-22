@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -26,6 +28,11 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.github.f4b6a3</groupId>
+                <artifactId>ulid-creator</artifactId>
+                <version>5.2.3</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
@@ -540,8 +547,10 @@
                 <artifactId>sortpom-maven-plugin</artifactId>
                 <version>4.0.0</version>
                 <configuration>
-                    <sortDependencies>groupId,artifactId,scope</sortDependencies>
-                    <sortDependencyManagement>groupId,artifactId,scope</sortDependencyManagement>
+                    <sortDependencies>groupId,artifactId,scope
+                    </sortDependencies>
+                    <sortDependencyManagement>groupId,artifactId,scope
+                    </sortDependencyManagement>
                     <sortPlugins>groupId,artifactId</sortPlugins>
                     <sortProperties>true</sortProperties>
                     <nrOfIndentSpace>4</nrOfIndentSpace>
@@ -578,7 +587,8 @@
                         </goals>
                         <phase>install</phase>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/lib
+                            </outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -618,7 +628,8 @@
                     <projectName>Mojave</projectName>
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
-                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+                    <addJavaLicenseAfterPackage>false
+                    </addJavaLicenseAfterPackage>
                     <processStartTag>===</processStartTag>
                     <sectionDelimiter>---</sectionDelimiter>
                     <processEndTag>===</processEndTag>

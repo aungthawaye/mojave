@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,10 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.sample.inbound.adapter.client;
 
+import com.github.f4b6a3.ulid.UlidCreator;
 import org.mojave.connector.adapter.fsp.client.FspClient;
 import org.mojave.connector.adapter.fsp.payload.Parties;
 import org.mojave.connector.adapter.fsp.payload.Quotes;
@@ -26,20 +28,21 @@ import org.mojave.connector.adapter.fsp.payload.Transfers;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.component.handy.FspiopDates;
 import org.mojave.fspiop.spec.core.AmountType;
-import org.mojave.fspiop.spec.core.Currency;
 import org.mojave.fspiop.spec.core.Money;
 import org.mojave.fspiop.spec.core.PartyComplexName;
 import org.mojave.fspiop.spec.core.PartyPersonalInfo;
+import org.mojave.fspiop.spec.core.TransferState;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
 
 public class SampleFspClient implements FspClient {
+
+    public SampleFspClient() {
+
+    }
 
     @Override
     public Parties.Get.Response getParties(Payer payer, Parties.Get.Request request)
@@ -54,14 +57,30 @@ public class SampleFspClient implements FspClient {
         }
 
         return new Parties.Get.Response(
-            List.of(Currency.USD, Currency.EUR, Currency.GBP, Currency.MMK), "Nezuko Kamado",
-            new PartyPersonalInfo().complexName(
-                new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
+            "Nezuko Kamado", new PartyPersonalInfo().complexName(
+            new PartyComplexName().firstName("Nezuko").lastName("Kamado")));
     }
 
     @Override
     public void patchTransfers(Payer payer, Transfers.Patch.Request request)
         throws FspiopException {
+
+        var extensionList = request.extensionList();
+        var simulateDispute = false;
+
+        for (var extensionItem : extensionList.getExtension()) {
+            if (extensionItem.getKey().equals("simulateDispute")) {
+                simulateDispute = true;
+                break;
+            }
+        }
+
+        if (simulateDispute) {
+
+            throw new FspiopException(
+                FspiopErrors.PAYEE_FSP_REJECTED_TRANSACTION,
+                "Payee's wallet has reached the daily limit.");
+        }
 
     }
 
@@ -90,22 +109,33 @@ public class SampleFspClient implements FspClient {
 
         }
 
-        var _15minsLater = new Date(Instant.now().plus(15, ChronoUnit.MINUTES).toEpochMilli());
-        var expiration = FspiopDates.forRequestBody(_15minsLater);
+        var _15minsLater = Instant.now().plus(15, ChronoUnit.MINUTES);
 
         return new Quotes.Post.Response(
             new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),
             new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()),
             new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()),
             new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()),
-            new Money(currency, transferAmount.stripTrailingZeros().toPlainString()), expiration);
+            new Money(currency, transferAmount.stripTrailingZeros().toPlainString()), _15minsLater);
     }
 
     @Override
     public Transfers.Post.Response postTransfers(Payer payer, Transfers.Post.Request request)
         throws FspiopException {
 
-        return null;
+        var partyId = request.agreement().payee().getPartyIdentifier();
+        var transferState = TransferState.RESERVED;
+
+        if (partyId.startsWith("5")) {
+            transferState = TransferState.RECEIVED;
+        } else if (partyId.startsWith("6")) {
+            transferState = TransferState.ABORTED;
+        } else if (partyId.startsWith("7")) {
+            transferState = TransferState.COMMITTED;
+        }
+
+        return new Transfers.Post.Response(
+            transferState, UlidCreator.getUlid().toString(), request.extensionList());
     }
 
 }

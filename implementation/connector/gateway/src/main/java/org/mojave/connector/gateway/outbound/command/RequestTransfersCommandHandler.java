@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.gateway.outbound.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
@@ -32,6 +33,7 @@ import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.invoker.api.transfers.PostTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -62,17 +64,20 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
+        assert input != null;
+        assert input.request() != null;
+
+        final var transferId = input.request().getTransferId();
+
+        MDC.put("REQ_ID", transferId);
+
         final var startAt = System.nanoTime();
         var endAt = 0L;
 
         LOGGER.info("RequestTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
 
-        assert input != null;
-        assert input.request() != null;
-
         try {
 
-            final var transferId = input.request().getTransferId();
             final var resultTopic = PubSubKeys.forTransfers(transferId);
             final var errorTopic = PubSubKeys.forTransfersError(transferId);
 
@@ -110,6 +115,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
             LOGGER.info(
                 "RequestTransfersCommandHandler : done : took {} ms",
                 (endAt - startAt) / 1_000_000);
+
+            MDC.remove("REQ_ID");
         }
 
     }

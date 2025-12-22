@@ -13,8 +13,10 @@ export FSPIOP_SERVICE_REQUEST_AGE_MS="300000"
 export FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION="true"
 
 # FSPIOP Participant Settings
+export FSPIOP_HUB_CODE="hub"
 export FSPIOP_FSP_CODE="hub"
 export FSPIOP_FSP_NAME="Mojave Hub"
+export FSPIOP_CURRENCIES="USD,BYN,BHD,MMK"
 export FSPIOP_ILP_SECRET="53cr3t"
 export FSPIOP_SIGN_JWS="true"
 export FSPIOP_VERIFY_JWS="true"

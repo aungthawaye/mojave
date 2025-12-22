@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,11 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.fspiop.component.participant;
 
 import org.mojave.component.misc.crypto.KeyPairs;
+import org.mojave.fspiop.spec.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +30,13 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public record ParticipantContext(String fspCode,
+public record ParticipantContext(String hubCode,
+                                 String fspCode,
                                  String fspName,
+                                 List<Currency> currencies,
                                  String ilpSecret,
                                  boolean signJws,
                                  boolean verifyJws,
@@ -65,8 +70,10 @@ public record ParticipantContext(String fspCode,
         }
     }
 
-    public static ParticipantContext with(String fspCode,
+    public static ParticipantContext with(String hubCode,
+                                          String fspCode,
                                           String fspName,
+                                          List<Currency> currencies,
                                           String ilpSecret,
                                           boolean signJws,
                                           boolean verifyJws,
@@ -74,12 +81,20 @@ public record ParticipantContext(String fspCode,
                                           Map<String, String> base64PublicKeys)
         throws NoSuchAlgorithmException, InvalidKeySpecException {
 
+        if (hubCode == null || hubCode.isEmpty()) {
+            throw new IllegalArgumentException("Hub Code is required");
+        }
+
         if (fspCode == null || fspCode.isEmpty()) {
             throw new IllegalArgumentException("FSP Code is required");
         }
 
         if (fspName == null || fspName.isEmpty()) {
             throw new IllegalArgumentException("FSP Name is required");
+        }
+
+        if (currencies == null || currencies.isEmpty()) {
+            throw new IllegalArgumentException("Currencies are required");
         }
 
         if (ilpSecret == null || ilpSecret.isEmpty()) {
@@ -111,7 +126,8 @@ public record ParticipantContext(String fspCode,
         }
 
         return new ParticipantContext(
-            fspCode, fspName, ilpSecret, signJws, verifyJws, signingKey, publicKeys);
+            hubCode, fspCode, fspName, currencies, ilpSecret, signJws,
+            verifyJws, signingKey, publicKeys);
     }
 
 }

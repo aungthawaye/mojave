@@ -45,8 +45,6 @@ public class PostQuotesEventListener {
     @EventListener
     public void handle(PostQuotesEvent event) {
 
-        LOGGER.info("Handling PostQuotesEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -57,11 +55,9 @@ public class PostQuotesEventListener {
                 new HandlePostQuotesRequestCommand.Input(
                     payload.payer(), payload.quoteId(), payload.request()));
 
-            LOGGER.info("Done handling PostQuotesEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PostQuotesEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

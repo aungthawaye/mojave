@@ -46,8 +46,6 @@ public class PutTransfersErrorEventListener {
     @EventListener
     public void handle(PutTransfersErrorEvent event) {
 
-        LOGGER.info("Handling PutTransfersErrorEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -58,11 +56,9 @@ public class PutTransfersErrorEventListener {
                 new HandlePutTransfersErrorCommand.Input(
                     payload.payee(), payload.transferId(), payload.errorInformationObject()));
 
-            LOGGER.info("Done handling PutTransfersErrorEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PutTransfersErrorEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

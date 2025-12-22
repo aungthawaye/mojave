@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +24,10 @@ import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.fspiop.spec.core.Currency;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 final class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettings {
@@ -50,12 +52,22 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
     @Override
     public FspiopComponentConfiguration.ParticipantSettings participantSettings() {
 
+        var hubCode = System.getenv("FSPIOP_HUB_CODE");
         var fspCode = System.getenv("FSPIOP_FSP_CODE");
         var fspName = System.getenv("FSPIOP_FSP_NAME");
+
+        var currencyNames = System.getenv("FSPIOP_CURRENCIES").split(",", -1);
+        var currencies = new ArrayList<Currency>();
+
+        for (var currencyName : currencyNames) {
+            currencies.add(Currency.valueOf(currencyName));
+        }
+
         var ilpSecret = System.getenv("FSPIOP_ILP_SECRET");
         var signJws = Boolean.parseBoolean(System.getenv("FSPIOP_SIGN_JWS"));
         var verifyJws = Boolean.parseBoolean(System.getenv("FSPIOP_VERIFY_JWS"));
         var privateKeyPem = System.getenv("FSPIOP_PRIVATE_KEY_PEM");
+
         var fsps = System.getenv("FSPIOP_FSPS").split(",", -1);
         var fspPublicKeyPem = new HashMap<String, String>();
 
@@ -70,7 +82,8 @@ final class LookUpServiceSettings implements LookUpServiceConfiguration.Required
         }
 
         return new FspiopComponentConfiguration.ParticipantSettings(
-            fspCode, fspName, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+            hubCode, fspCode, fspName,
+            currencies, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
 
     }
 
