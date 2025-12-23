@@ -39,6 +39,8 @@ import org.mojave.core.transfer.contract.command.step.fspiop.UnwrapRequestStep;
 import org.mojave.core.transfer.contract.command.step.stateful.AbortTransferStep;
 import org.mojave.core.transfer.contract.command.step.stateful.ReceiveTransferStep;
 import org.mojave.core.transfer.contract.command.step.stateful.ReserveTransferStep;
+import org.mojave.core.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
+import org.mojave.core.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.fspiop.component.error.FspiopErrors;
@@ -49,7 +51,6 @@ import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -67,12 +68,12 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
     private final ReserveTransferStep reserveTransferStep;
 
-    private final AbortTransferStep abortTransferStep;
+    private final AbortTransferStepPublisher abortTransferStepPublisher;
 
     // Financial steps
     private final ReservePayerPositionStep reservePayerPositionStep;
 
-    private final RollbackReservationStep rollbackReservationStep;
+    private final RollbackReservationStepPublisher rollbackReservationStepPublisher;
 
     // FSPIOP steps
     private final UnwrapRequestStep unwrapRequestStep;
@@ -84,10 +85,9 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
     public PostTransfersCommandHandler(ParticipantStore participantStore,
                                        ReceiveTransferStep receiveTransferStep,
                                        ReserveTransferStep reserveTransferStep,
-                                       @Qualifier(AbortTransferStep.Qualifiers.PUBLISHER)
-                                       AbortTransferStep abortTransferStep,
+                                       AbortTransferStepPublisher abortTransferStepPublisher,
                                        ReservePayerPositionStep reservePayerPositionStep,
-                                       RollbackReservationStep rollbackReservationStep,
+                                       RollbackReservationStepPublisher rollbackReservationStepPublisher,
                                        UnwrapRequestStep unwrapRequestStep,
                                        ForwardToDestinationStep forwardToDestinationStep,
                                        RespondTransfers respondTransfers) {
@@ -95,9 +95,9 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         assert participantStore != null;
         assert receiveTransferStep != null;
         assert reserveTransferStep != null;
-        assert abortTransferStep != null;
+        assert abortTransferStepPublisher != null;
         assert reservePayerPositionStep != null;
-        assert rollbackReservationStep != null;
+        assert rollbackReservationStepPublisher != null;
         assert unwrapRequestStep != null;
         assert forwardToDestinationStep != null;
         assert respondTransfers != null;
@@ -105,9 +105,9 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         this.participantStore = participantStore;
         this.receiveTransferStep = receiveTransferStep;
         this.reserveTransferStep = reserveTransferStep;
-        this.abortTransferStep = abortTransferStep;
+        this.abortTransferStepPublisher = abortTransferStepPublisher;
         this.reservePayerPositionStep = reservePayerPositionStep;
-        this.rollbackReservationStep = rollbackReservationStep;
+        this.rollbackReservationStepPublisher = rollbackReservationStepPublisher;
         this.unwrapRequestStep = unwrapRequestStep;
         this.forwardToDestinationStep = forwardToDestinationStep;
         this.respondTransfers = respondTransfers;
@@ -119,8 +119,6 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         final var udfTransferId = new UdfTransferId(input.transfersPostRequest().getTransferId());
 
         LOGGER.info("PostTransfersCommandHandler : input : ({})", ObjectLogger.log(input));
-
-        final var CONTEXT = "PostTransfers";
 
         TransactionId transactionId = null;
         Instant transactionAt = null;
@@ -144,7 +142,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
             // 1. Unwrap the request.
             var unwrapRequestOutput = this.unwrapRequestStep.execute(
-                new UnwrapRequestStep.Input(CONTEXT, udfTransferId, payerFsp, payeeFsp, request));
+                new UnwrapRequestStep.Input(payerFsp, payeeFsp, udfTransferId, request));
 
             var ilpCondition = unwrapRequestOutput.ilpCondition();
             var ilpPacket = unwrapRequestOutput.ilpPacket();
@@ -153,7 +151,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             // 2. Open a transaction. And receive the Transfer.
             var receiveTransferOutput = this.receiveTransferStep.execute(
                 new ReceiveTransferStep.Input(
-                    CONTEXT, udfTransferId, payerFsp, payeeFsp, ilpCondition, ilpPacket, agreement,
+                    payerFsp, payeeFsp, udfTransferId, ilpCondition, ilpPacket, agreement,
                     unwrapRequestOutput.requestExpiration(), request.getExtensionList()));
 
             transactionId = receiveTransferOutput.transactionId();
@@ -167,7 +165,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 reservePayerPositionOutput = this.reservePayerPositionStep.execute(
                     new ReservePayerPositionStep.Input(
-                        CONTEXT, transactionId, transactionAt, payerFsp, payeeFsp,
+                        udfTransferId, transactionId, transactionAt, payerFsp, payeeFsp,
                         agreement.transferAmount().getCurrency(),
                         new BigDecimal(agreement.transferAmount().getAmount())));
 
@@ -177,10 +175,10 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.abortTransferStep.execute(
+                this.abortTransferStepPublisher.publish(
                     new AbortTransferStep.Input(
-                        CONTEXT, transactionId, transferId,
-                        AbortReason.POSITION_RESERVATION_FAILURE, null, Direction.TO_PAYEE, null));
+                        udfTransferId, transactionId, transferId,
+                        AbortReason.POSITION_RESERVATION_FAILURE, Direction.TO_PAYEE, null));
 
                 throw new FspiopException(FspiopErrors.INTERNAL_SERVER_ERROR, e.getMessage());
 
@@ -188,10 +186,9 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 LOGGER.error("Error:", e);
 
-                this.abortTransferStep.execute(
-                    new AbortTransferStep.Input(
-                        CONTEXT, transactionId, transferId, AbortReason.POSITION_LIMIT_EXCEEDED,
-                        null, Direction.TO_PAYEE, null));
+                this.abortTransferStepPublisher.publish(new AbortTransferStep.Input(
+                    udfTransferId, transactionId, transferId, AbortReason.POSITION_LIMIT_EXCEEDED,
+                    Direction.TO_PAYEE, null));
 
                 throw new FspiopException(FspiopErrors.PAYER_LIMIT_ERROR);
 
@@ -206,11 +203,22 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        CONTEXT, transactionId, transferId, positionReservationId));
+                        udfTransferId, transactionId, transferId,
+                        positionReservationId));
 
             } catch (Exception e) {
 
                 LOGGER.error("Error:", e);
+
+                this.rollbackReservationStepPublisher.publish(new RollbackReservationStep.Input(
+                    udfTransferId, transactionId, transferId,
+                    reservePayerPositionOutput.positionReservationId(),
+                    "Failed to update the Transfer state to RESERVED."));
+
+                this.abortTransferStepPublisher.publish(
+                    new AbortTransferStep.Input(
+                        udfTransferId, transactionId, transferId,
+                        AbortReason.UNABLE_TO_RESERVE_TRANSFER, Direction.TO_PAYEE, null));
 
                 throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
             }
@@ -220,22 +228,20 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.TRANSFERS).baseUrl();
 
-                this.forwardToDestinationStep.execute(
-                    new ForwardToDestinationStep.Input(
-                        CONTEXT, transactionId, payeeFspCode.value(), payeeBaseUrl,
-                        input.request()));
+                this.forwardToDestinationStep.execute(new ForwardToDestinationStep.Input(
+                    udfTransferId, transactionId, payeeFspCode.value(), payeeBaseUrl,
+                    input.request()));
 
             } catch (Exception e) {
 
                 LOGGER.error("Error:", e);
 
-                this.rollbackReservationStep.execute(
-                    new RollbackReservationStep.Input(
-                        CONTEXT, transactionId, reservePayerPositionOutput.positionReservationId(),
-                        e.getMessage()));
+                this.rollbackReservationStepPublisher.publish(new RollbackReservationStep.Input(
+                    udfTransferId, transactionId, transferId,
+                    reservePayerPositionOutput.positionReservationId(), e.getMessage()));
 
-                this.abortTransferStep.execute(new AbortTransferStep.Input(
-                    CONTEXT, transactionId, transferId, AbortReason.UNABLE_TO_REACH_PAYEE, null,
+                this.abortTransferStepPublisher.publish(new AbortTransferStep.Input(
+                    udfTransferId, transactionId, transferId, AbortReason.UNABLE_TO_REACH_PAYEE,
                     Direction.TO_PAYEE, null));
 
                 throw e;

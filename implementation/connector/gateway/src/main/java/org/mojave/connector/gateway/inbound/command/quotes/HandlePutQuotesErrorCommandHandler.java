@@ -24,6 +24,7 @@ import org.mojave.connector.gateway.component.PubSubKeys;
 import org.mojave.connector.gateway.data.QuotesErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,10 +45,14 @@ class HandlePutQuotesErrorCommandHandler implements HandlePutQuotesErrorCommand 
     @Override
     public Output execute(Input input) {
 
+        MDC.put("REQ_ID", input.quoteId());
+
         var channel = PubSubKeys.forQuotesError(input.quoteId());
 
         this.pubSubClient.publish(
             channel, new QuotesErrorResult(input.quoteId(), input.errorInformationObject()));
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }

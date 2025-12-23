@@ -28,13 +28,13 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Qualifier(AbortTransferStep.Qualifiers.HANDLER)
 public class AbortTransferStepHandler implements AbortTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbortTransferStepHandler.class);
@@ -53,6 +53,8 @@ public class AbortTransferStepHandler implements AbortTransferStep {
     @Override
     public void execute(AbortTransferStep.Input input) throws FspiopException {
 
+        MDC.put("REQ_ID", input.udfTransferId().getId());
+
         var startAt = System.nanoTime();
 
         LOGGER.info("AbortTransferStep : input : ({})", ObjectLogger.log(input));
@@ -61,7 +63,7 @@ public class AbortTransferStepHandler implements AbortTransferStep {
 
             var transfer = this.transferRepository.getReferenceById(input.transferId());
 
-            transfer.aborted(input.abortReason(), input.rollbackId());
+            transfer.aborted(input.abortReason());
 
             var extensionList = input.extensionList();
 
@@ -83,6 +85,9 @@ public class AbortTransferStepHandler implements AbortTransferStep {
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
 

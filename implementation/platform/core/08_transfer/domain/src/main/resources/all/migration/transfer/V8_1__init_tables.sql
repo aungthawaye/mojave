@@ -31,9 +31,6 @@ CREATE TABLE `tfr_transfer`
     `request_expiration`            bigint         DEFAULT NULL,
 
     `reservation_id`                bigint         DEFAULT NULL,
-    `payer_commit_id`               bigint         DEFAULT NULL,
-    `payee_commit_id`               bigint         DEFAULT NULL,
-    `rollback_id`                   bigint         DEFAULT NULL,
 
     `status`                        varchar(32)    NOT NULL,
     `received_at`                   bigint         NOT NULL,
@@ -64,9 +61,6 @@ CREATE TABLE `tfr_transfer`
     UNIQUE KEY `tfr_transfer_transaction_id_UK` (`transaction_id`),
     UNIQUE KEY `tfr_transfer_udf_transfer_id_UK` (`udf_transfer_id`),
     UNIQUE KEY `tfr_transfer_reservation_id_UK` (`reservation_id`),
-    UNIQUE KEY `tfr_transfer_payer_commit_id_UK` (`payer_commit_id`),
-    UNIQUE KEY `tfr_transfer_payee_commit_id_UK` (`payee_commit_id`),
-    UNIQUE KEY `tfr_transfer_rollback_id_UK` (`rollback_id`),
 
     KEY `tfr_transfer_payer_fsp_IDX` (`payer_fsp`),
     KEY `tfr_transfer_payer_fsp_transaction_id_IDX` (`payer_fsp`, `transaction_id`),

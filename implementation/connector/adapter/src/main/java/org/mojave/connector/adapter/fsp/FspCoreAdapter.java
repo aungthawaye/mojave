@@ -20,7 +20,6 @@
 
 package org.mojave.connector.adapter.fsp;
 
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.connector.adapter.fsp.client.FspClient;
 import org.mojave.connector.adapter.fsp.payload.Parties;
 import org.mojave.connector.adapter.fsp.payload.Quotes;
@@ -114,12 +113,19 @@ public class FspCoreAdapter {
     public void patchTransfers(Payer payer, String transferId, TransfersIDPatchResponse response)
         throws FspiopException {
 
+        var ok = false;
         try {
 
-            this.fspClient.patchTransfers(
+            ok = this.fspClient.patchTransfers(
                 payer, new Transfers.Patch.Request(
                     transferId, response.getTransferState(), response.getCompletedTimestamp(),
                     response.getExtensionList()));
+
+            if (!ok) {
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_PAYEE_ERROR,
+                    "Something went wrong while notifying the Payee FSP for the final Transfer state.");
+            }
 
         } catch (FspiopException e) {
 
@@ -129,7 +135,9 @@ public class FspCoreAdapter {
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
-            throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, e.getMessage());
+            throw new FspiopException(
+                FspiopErrors.GENERIC_PAYEE_ERROR,
+                "Something went wrong while notifying the Payee FSP for the final Transfer state.");
         }
 
     }
@@ -311,11 +319,6 @@ public class FspCoreAdapter {
                 extensionList.addExtensionItem(
                     new Extension(extension.getKey(), extension.getValue()));
             });
-
-            extensionList.addExtensionItem(
-                new Extension("homeTransactionId", result.homeTransactionId()));
-            extensionList.addExtensionItem(
-                new Extension("transferId", result.transferState().toString()));
 
             response
                 .fulfilment(fulfilment)

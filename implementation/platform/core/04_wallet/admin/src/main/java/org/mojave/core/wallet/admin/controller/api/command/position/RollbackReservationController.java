@@ -20,8 +20,8 @@
 package org.mojave.core.wallet.admin.controller.api.command.position;
 
 import jakarta.validation.Valid;
-import org.mojave.core.wallet.contract.command.position.CommitReservationCommand;
-import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
+import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,25 +30,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CommitPositionController {
+public class RollbackReservationController {
 
-    private final CommitReservationCommand commitReservationCommand;
+    private final RollbackReservationCommand rollbackReservationCommand;
 
-    public CommitPositionController(final CommitReservationCommand commitReservationCommand) {
+    public RollbackReservationController(final RollbackReservationCommand rollbackReservationCommand) {
 
-        assert commitReservationCommand != null;
+        assert rollbackReservationCommand != null;
 
-        this.commitReservationCommand = commitReservationCommand;
+        this.rollbackReservationCommand = rollbackReservationCommand;
     }
 
-    @PostMapping("/positions/commit")
+    @PostMapping("/positions/rollback")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CommitReservationCommand.Output execute(
-        @Valid @RequestBody final CommitReservationCommand.Input input)
-        throws FailedToCommitReservationException {
+    public RollbackReservationCommand.Output execute(
+        @Valid @RequestBody final RollbackReservationCommand.Input input)
+        throws FailedToRollbackReservationException {
 
-        return this.commitReservationCommand.execute(input);
+        return this.rollbackReservationCommand.execute(input);
     }
 
 }

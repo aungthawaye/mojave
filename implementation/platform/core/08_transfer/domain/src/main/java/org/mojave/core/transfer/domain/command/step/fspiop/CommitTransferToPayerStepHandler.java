@@ -32,6 +32,7 @@ import org.mojave.fspiop.spec.core.TransferState;
 import org.mojave.fspiop.spec.core.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +52,8 @@ public class CommitTransferToPayerStepHandler implements CommitTransferToPayerSt
 
     @Override
     public void execute(Input input) throws FspiopException {
+
+        MDC.put("REQ_ID", input.udfTransferId().getId());
 
         var startAt = System.nanoTime();
 
@@ -88,6 +91,9 @@ public class CommitTransferToPayerStepHandler implements CommitTransferToPayerSt
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
 
     }

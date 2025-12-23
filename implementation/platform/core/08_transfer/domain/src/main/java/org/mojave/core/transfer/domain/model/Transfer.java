@@ -126,6 +126,9 @@ import static java.sql.Types.BIGINT;
             name = "tfr_transfer_payee_party_id_IDX",
             columnList = "payee_party_id"),
         @Index(
+            name = "tfr_transfer_transfer_currency_IDX",
+            columnList = "transfer_currency"),
+        @Index(
             name = "tfr_transfer_reservation_timeout_at_IDX",
             columnList = "reservation_timeout_at"),
         @Index(
@@ -305,30 +308,6 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         unique = true)
     protected PositionUpdateId reservationId;
 
-    @Basic
-    @JavaType(PositionUpdateIdJavaType.class)
-    @JdbcTypeCode(BIGINT)
-    @Column(
-        name = "payer_commit_id",
-        unique = true)
-    protected PositionUpdateId payerCommitId;
-
-    @Basic
-    @JavaType(PositionUpdateIdJavaType.class)
-    @JdbcTypeCode(BIGINT)
-    @Column(
-        name = "payee_commit_id",
-        unique = true)
-    protected PositionUpdateId payeeCommitId;
-
-    @Basic
-    @JavaType(PositionUpdateIdJavaType.class)
-    @JdbcTypeCode(BIGINT)
-    @Column(
-        name = "rollback_id",
-        unique = true)
-    protected PositionUpdateId rollbackId;
-
     @Column(
         name = "status",
         nullable = false,
@@ -467,9 +446,8 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         this.ilpPacket = new TransferIlpPacket(this, ilpPacket, ilpCondition);
     }
 
-    public void aborted(AbortReason abortReason, PositionUpdateId rollbackId) {
+    public void aborted(AbortReason abortReason) {
 
-        this.rollbackId = rollbackId;
         this.abortReason = abortReason;
 
         this.status = TransferStatus.ABORTED;
@@ -481,14 +459,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         this.extensions.add(new TransferExtension(this, direction, key, value));
     }
 
-    public void committed(String ilpFulfilment,
-                          PositionUpdateId payerCommitId,
-                          PositionUpdateId payeeCommitId,
-                          Instant completedAt) {
+    public void committed(String ilpFulfilment, Instant completedAt) {
 
         assert ilpFulfilment != null;
-        assert payerCommitId != null;
-        assert payeeCommitId != null;
 
         this.status = TransferStatus.COMMITTED;
 
@@ -496,9 +469,6 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         this.payeeCompletedAt = completedAt;
 
         this.ilpFulfilment = ilpFulfilment;
-
-        this.payerCommitId = payerCommitId;
-        this.payeeCommitId = payeeCommitId;
     }
 
     @Override
@@ -522,10 +492,10 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         return new TransferData(
             this.id, this.transactionId, this.transactionAt, this.udfTransferId, this.payerFsp,
             payerData, this.payeeFsp, payeeData, this.transferCurrency, this.transferAmount,
-            this.requestExpiration, this.reservationId, this.payerCommitId, this.payeeCommitId,
-            this.rollbackId, this.status, this.receivedAt, this.reservedAt, this.committedAt,
-            this.abortedAt, this.abortReason, this.disputeAt, this.disputeReason,
-            this.reservationTimeoutAt, this.payeeCompletedAt, extData, this.ilpFulfilment, ilpData);
+            this.requestExpiration, this.reservationId, this.status, this.receivedAt,
+            this.reservedAt, this.committedAt, this.abortedAt, this.abortReason, this.disputeAt,
+            this.disputeReason, this.reservationTimeoutAt, this.payeeCompletedAt, extData,
+            this.ilpFulfilment, ilpData);
     }
 
     public void disputed(DisputeReason disputeReason) {

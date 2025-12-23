@@ -33,6 +33,7 @@ import org.mojave.core.transfer.TransferKafkaConfiguration;
 import org.mojave.core.transfer.domain.kafka.listener.AbortTransferStepListener;
 import org.mojave.core.transfer.domain.kafka.listener.CommitTransferStepListener;
 import org.mojave.core.transfer.domain.kafka.listener.DisputeTransferStepListener;
+import org.mojave.core.transfer.domain.kafka.listener.RollbackReservationStepListener;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
@@ -88,6 +89,16 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
 
         return new DisputeTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), DisputeTransferStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public RollbackReservationStepListener.Settings rollbackReservationStepListenerSettings() {
+
+        return new RollbackReservationStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), RollbackReservationStepListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }

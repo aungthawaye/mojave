@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,8 +28,8 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -52,6 +52,8 @@ public class FetchTransferStepHandler implements FetchTransferStep {
     @Write
     @Override
     public FetchTransferStep.Output execute(FetchTransferStep.Input input) throws FspiopException {
+
+        MDC.put("REQ_ID", input.udfTransferId().getId());
 
         var startAt = System.nanoTime();
 
@@ -99,6 +101,9 @@ public class FetchTransferStepHandler implements FetchTransferStep {
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
 

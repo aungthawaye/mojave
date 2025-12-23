@@ -29,12 +29,11 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Qualifier(CommitTransferStep.Qualifiers.HANDLER)
 public class CommitTransferStepHandler implements CommitTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransferStepHandler.class);
@@ -53,6 +52,8 @@ public class CommitTransferStepHandler implements CommitTransferStep {
     @Override
     public void execute(CommitTransferStep.Input input) throws FspiopException {
 
+        MDC.put("REQ_ID", input.udfTransferId().getId());
+
         var startAt = System.nanoTime();
 
         LOGGER.info("CommitTransferStep : input : ({})", ObjectLogger.log(input));
@@ -61,9 +62,7 @@ public class CommitTransferStepHandler implements CommitTransferStep {
 
             var transfer = this.transferRepository.getReferenceById(input.transferId());
 
-            transfer.committed(
-                input.ilpFulfilment(), input.payerCommitId(), input.payeeCommitId(),
-                input.completedAt());
+            transfer.committed(input.ilpFulfilment(), input.completedAt());
 
             var extensionList = input.extensionList();
 
@@ -85,6 +84,9 @@ public class CommitTransferStepHandler implements CommitTransferStep {
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
 

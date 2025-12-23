@@ -17,13 +17,11 @@
  * limitations under the License.
  * ===
  */
-package org.mojave.core.wallet.admin.controller.api.command.position;
+package org.mojave.core.wallet.intercom.controller.api.command.position;
 
 import jakarta.validation.Valid;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReservationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,13 +30,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RollbackPositionController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RollbackPositionController.class);
+public class RollbackReservationController {
 
     private final RollbackReservationCommand rollbackReservationCommand;
 
-    public RollbackPositionController(final RollbackReservationCommand rollbackReservationCommand) {
+    public RollbackReservationController(final RollbackReservationCommand rollbackReservationCommand) {
 
         assert rollbackReservationCommand != null;
 
@@ -52,13 +48,7 @@ public class RollbackPositionController {
         @Valid @RequestBody final RollbackReservationCommand.Input input)
         throws FailedToRollbackReservationException {
 
-        LOGGER.info("Entering RollbackReservationCommand.execute: input : {}", input);
-
-        final var output = this.rollbackReservationCommand.execute(input);
-
-        LOGGER.info("Exiting RollbackReservationCommand.execute: {}", output);
-
-        return output;
+        return this.rollbackReservationCommand.execute(input);
     }
 
 }

@@ -7,8 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier(CommitTransferStep.Qualifiers.PUBLISHER)
-public class CommitTransferStepPublisher implements CommitTransferStep {
+public class CommitTransferStepPublisher {
 
     public static final String QUALIFIER = "commitTransferStep";
 
@@ -22,8 +21,7 @@ public class CommitTransferStepPublisher implements CommitTransferStep {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @Override
-    public void execute(final CommitTransferStep.Input input) {
+    public void publish(final CommitTransferStep.Input input) {
 
         this.kafkaTemplate.send(
             TopicNames.COMMIT_TRANSFER_STEP, input.transferId().getId().toString(), input);

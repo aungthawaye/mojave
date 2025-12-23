@@ -6,13 +6,16 @@ import org.mojave.component.kafka.KafkaConsumerConfigurer;
 import org.mojave.component.kafka.KafkaProducerConfigurer;
 import org.mojave.core.transfer.contract.command.step.stateful.AbortTransferStep;
 import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferStep;
+import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.core.transfer.domain.kafka.listener.AbortTransferStepListener;
 import org.mojave.core.transfer.domain.kafka.listener.CommitTransferStepListener;
 import org.mojave.core.transfer.domain.kafka.listener.DisputeTransferStepListener;
+import org.mojave.core.transfer.domain.kafka.listener.RollbackReservationStepListener;
 import org.mojave.core.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
 import org.mojave.core.transfer.domain.kafka.publisher.CommitTransferStepPublisher;
 import org.mojave.core.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
+import org.mojave.core.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -225,6 +228,72 @@ public class TransferKafkaConfiguration {
             });
     }
 
+    @Bean
+    @Qualifier(RollbackReservationStepPublisher.QUALIFIER)
+    public KafkaTemplate<String, RollbackReservationStep.Input> rollbackReservationStepKafkaTemplate(
+        @Qualifier(RollbackReservationStepPublisher.QUALIFIER)
+        ProducerFactory<String, RollbackReservationStep.Input> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean(name = RollbackReservationStepListener.LISTENER_CONTAINER_FACTORY)
+    @Qualifier(RollbackReservationStepListener.QUALIFIER)
+    public ConcurrentKafkaListenerContainerFactory<String, RollbackReservationStep.Input> rollbackReservationStepListenerContainerFactory(
+        RollbackReservationStepListener.Settings settings,
+        ObjectMapper objectMapper) {
+
+        return KafkaConsumerConfigurer.configure(
+            settings, new KafkaConsumerConfigurer.Deserializers<>() {
+
+                @Override
+                public Deserializer<String> forKey() {
+
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        String.class, (JsonMapper) objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+
+                @Override
+                public Deserializer<RollbackReservationStep.Input> forValue() {
+
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        RollbackReservationStep.Input.class, (JsonMapper) objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+            });
+    }
+
+    @Bean
+    @Qualifier(RollbackReservationStepPublisher.QUALIFIER)
+    public ProducerFactory<String, RollbackReservationStep.Input> rollbackReservationStepProducerFactory(
+        TransferKafkaConfiguration.ProducerSettings settings,
+        ObjectMapper objectMapper) {
+
+        return KafkaProducerConfigurer.configure(
+            settings.bootstrapServers(), settings.ack(),
+            new KafkaProducerConfigurer.Serializers<>() {
+
+                @Override
+                public Serializer<String> forKey() {
+
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
+                }
+
+                @Override
+                public Serializer<RollbackReservationStep.Input> forValue() {
+
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
+                }
+            });
+    }
+
     public interface RequiredBeans { }
 
     public interface RequiredSettings {
@@ -234,6 +303,8 @@ public class TransferKafkaConfiguration {
         CommitTransferStepListener.Settings commitTransferStepListenerSettings();
 
         DisputeTransferStepListener.Settings disputeTransferStepListenerSettings();
+
+        RollbackReservationStepListener.Settings rollbackReservationStepListenerSettings();
 
         TransferKafkaConfiguration.ProducerSettings transferProducerSettings();
 

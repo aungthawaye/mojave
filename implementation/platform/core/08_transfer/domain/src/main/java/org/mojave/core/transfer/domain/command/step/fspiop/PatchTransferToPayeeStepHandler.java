@@ -29,11 +29,11 @@ import org.mojave.fspiop.component.handy.FspiopDates;
 import org.mojave.fspiop.component.handy.FspiopUrls;
 import org.mojave.fspiop.component.type.Payee;
 import org.mojave.fspiop.service.api.transfers.RespondTransfers;
-import org.mojave.fspiop.spec.core.Extension;
 import org.mojave.fspiop.spec.core.ExtensionList;
 import org.mojave.fspiop.spec.core.TransfersIDPatchResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -57,6 +57,8 @@ public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep
     @Override
     public Output execute(Input input) throws FspiopException {
 
+        MDC.put("REQ_ID", input.udfTransferId().getId());
+
         var startAt = System.nanoTime();
 
         LOGGER.info("PatchTransferToPayeeStep : input : ({})", ObjectLogger.log(input));
@@ -66,10 +68,8 @@ public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep
             var patchResponse = new TransfersIDPatchResponse(
                 FspiopDates.forRequestBody(new Date()), input.state());
 
-            var extensions = new ArrayList<Extension>();
-            input.extensions().forEach((k, v) -> extensions.add(new Extension(k, v)));
-
-            var extensionList = new ExtensionList(extensions);
+            var extensionList = new ExtensionList(
+                new ArrayList<>(input.extensionList().getExtension()));
 
             if (!extensionList.getExtension().isEmpty()) {
                 patchResponse.setExtensionList(extensionList);
@@ -86,14 +86,17 @@ public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep
             LOGGER.info(
                 "PatchTransferToPayeeStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
+            return new Output();
+
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
-        }
 
-        return new Output();
+        } finally {
+            MDC.remove("REQ_ID");
+        }
     }
 
 }

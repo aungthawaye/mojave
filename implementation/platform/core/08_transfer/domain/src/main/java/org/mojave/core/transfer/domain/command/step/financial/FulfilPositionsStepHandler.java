@@ -30,6 +30,7 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,6 +51,7 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
     public FulfilPositionsStep.Output execute(FulfilPositionsStep.Input input)
         throws FailedToCommitReservationException, FspiopException {
 
+        MDC.put("REQ_ID", input.udfTransferId().getId());
         var startAt = System.nanoTime();
 
         LOGGER.info("FulfilPositionsStep : input : ({})", ObjectLogger.log(input));
@@ -76,6 +78,9 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
 

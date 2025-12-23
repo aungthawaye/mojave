@@ -24,7 +24,7 @@ import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.transfer.AbortReason;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.spec.core.ExtensionList;
 
@@ -32,19 +32,10 @@ public interface AbortTransferStep {
 
     void execute(Input input) throws FspiopException;
 
-    class Qualifiers {
-
-        public static final String PUBLISHER = "publisher";
-
-        public static final String HANDLER = "handler";
-
-    }
-
-    record Input(String context,
+    record Input(UdfTransferId udfTransferId,
                  TransactionId transactionId,
                  TransferId transferId,
                  AbortReason abortReason,
-                 PositionUpdateId rollbackId,
                  Direction direction,
                  ExtensionList extensionList) { }
 

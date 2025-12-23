@@ -26,6 +26,7 @@ import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.invoker.api.parties.PutParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,6 +51,11 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
 
     @Override
     public void execute(Input input) throws FspiopException {
+
+        final var reqId =
+            input.payer().fspCode() + "-" + input.partyIdType() + "-" + input.partyId();
+
+        MDC.put("REQ_ID", reqId);
 
         var startAt = System.nanoTime();
         var endAt = 0L;
@@ -92,6 +98,8 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
             LOGGER.info(
                 "HandleGetPartiesRequestCommandHandler : done : took {} ms",
                 (endAt - startAt) / 1000000);
+
+            MDC.remove("REQ_ID");
         }
 
     }

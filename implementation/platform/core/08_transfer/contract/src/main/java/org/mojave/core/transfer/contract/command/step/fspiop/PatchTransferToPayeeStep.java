@@ -24,20 +24,18 @@ import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.fspiop.component.exception.FspiopException;
+import org.mojave.fspiop.spec.core.ExtensionList;
 import org.mojave.fspiop.spec.core.TransferState;
-
-import java.util.Map;
 
 public interface PatchTransferToPayeeStep {
 
     Output execute(Input input) throws FspiopException;
 
-    record Input(String context,
+    record Input(UdfTransferId udfTransferId,
                  TransactionId transactionId,
-                 UdfTransferId udfTransferId,
                  FspData payeeFsp,
                  TransferState state,
-                 Map<String, String> extensions) { }
+                 ExtensionList extensionList) { }
 
     record Output() { }
 

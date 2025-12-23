@@ -27,6 +27,7 @@ import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.service.api.forwarder.ForwardRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,12 +48,11 @@ public class ForwardToDestinationStepHandler implements ForwardToDestinationStep
     @Override
     public void execute(ForwardToDestinationStep.Input input) throws FspiopException {
 
+        MDC.put("REQ_ID", input.udfTransferId().getId());
+
         var startAt = System.nanoTime();
 
         LOGGER.info("ForwardToDestinationStep : input : ({})", ObjectLogger.log(input));
-
-        final var CONTEXT = input.context();
-        final var STEP_NAME = "ForwardToDestinationStep";
 
         try {
 
@@ -73,6 +73,9 @@ public class ForwardToDestinationStepHandler implements ForwardToDestinationStep
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
 

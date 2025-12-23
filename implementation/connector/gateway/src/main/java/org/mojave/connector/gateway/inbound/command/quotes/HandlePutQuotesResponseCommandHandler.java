@@ -24,6 +24,7 @@ import org.mojave.connector.gateway.component.PubSubKeys;
 import org.mojave.connector.gateway.data.QuotesResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,11 +45,15 @@ class HandlePutQuotesResponseCommandHandler implements HandlePutQuotesResponseCo
     @Override
     public Output execute(Input input) {
 
+        MDC.put("REQ_ID", input.quoteId());
+
         var channel = PubSubKeys.forQuotes(input.quoteId());
         LOGGER.info("Publishing quotes result to channel : {}", channel);
 
         this.pubSubClient.publish(channel, new QuotesResult(input.quoteId(), input.response()));
         LOGGER.info("Published quotes result to channel : {}", channel);
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }

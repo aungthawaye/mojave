@@ -21,13 +21,16 @@
 package org.mojave.core.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
 import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
+import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferStep;
+import org.mojave.core.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
-import org.mojave.core.wallet.producer.publisher.RollbackReservationPublisher;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,19 +39,25 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
     private static final Logger LOGGER = LoggerFactory.getLogger(
         RollbackReservationStepHandler.class);
 
-    private final RollbackReservationPublisher rollbackReservationPublisher;
+    private final RollbackReservationCommand rollbackReservationCommand;
 
-    public RollbackReservationStepHandler(RollbackReservationPublisher rollbackReservationPublisher) {
+    private final DisputeTransferStepPublisher disputeTransferStepPublisher;
 
-        assert rollbackReservationPublisher != null;
+    public RollbackReservationStepHandler(RollbackReservationCommand rollbackReservationCommand,
+                                          DisputeTransferStepPublisher disputeTransferStepPublisher) {
 
-        this.rollbackReservationPublisher = rollbackReservationPublisher;
+        assert rollbackReservationCommand != null;
+        assert disputeTransferStepPublisher != null;
+
+        this.rollbackReservationCommand = rollbackReservationCommand;
+        this.disputeTransferStepPublisher = disputeTransferStepPublisher;
     }
 
     @Override
     public RollbackReservationStep.Output execute(RollbackReservationStep.Input input)
         throws FspiopException {
 
+        MDC.put("REQ_ID", input.udfTransferId().getId());
         var startAt = System.nanoTime();
 
         LOGGER.info("RollbackReservationStep : input : ({})", ObjectLogger.log(input));
@@ -58,13 +67,15 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
             var rollbackReservationInput = new RollbackReservationCommand.Input(
                 input.positionReservationId(), "Roll back due to : " + input.error());
 
-            this.rollbackReservationPublisher.publish(rollbackReservationInput);
+            var rollbackReservationOutput = this.rollbackReservationCommand.execute(
+                rollbackReservationInput);
 
-            var output = new RollbackReservationStep.Output(null);
+            var output = new RollbackReservationStep.Output(
+                rollbackReservationOutput.positionUpdateId());
 
             var endAt = System.nanoTime();
             LOGGER.info(
-                "RollbackReservationStep : output : ({}) , took : {} ms", output,
+                "RollbackReservationStep : output : ({}) , took : {} ms", ObjectLogger.log(output),
                 (endAt - startAt) / 1_000_000);
 
             return output;
@@ -73,7 +84,14 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
 
             LOGGER.error("Error:", e);
 
+            this.disputeTransferStepPublisher.publish(new DisputeTransferStep.Input(
+                input.udfTransferId(), input.transactionId(), input.transferId(),
+                DisputeReason.RESERVATION_ROLLBACK));
+
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
 

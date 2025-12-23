@@ -22,22 +22,17 @@ package org.mojave.core.transfer.domain.command.step.stateful;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.core.transfer.domain.repository.TransferRepository;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Qualifier(DisputeTransferStep.Qualifiers.HANDLER)
 public class DisputeTransferStepHandler implements DisputeTransferStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DisputeTransferStepHandler.class);
@@ -55,6 +50,8 @@ public class DisputeTransferStepHandler implements DisputeTransferStep {
     @Write
     @Override
     public void execute(DisputeTransferStep.Input input) throws FspiopException {
+
+        MDC.put("REQ_ID", input.udfTransferId().getId());
 
         var startAt = System.nanoTime();
 
@@ -76,8 +73,10 @@ public class DisputeTransferStepHandler implements DisputeTransferStep {
             LOGGER.error("Error:", e);
 
             throw new FspiopException(FspiopErrors.GENERIC_SERVER_ERROR, e.getMessage());
+
+        } finally {
+            MDC.remove("REQ_ID");
         }
     }
-
 
 }

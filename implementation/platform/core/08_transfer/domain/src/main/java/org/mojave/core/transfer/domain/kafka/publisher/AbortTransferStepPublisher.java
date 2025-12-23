@@ -7,8 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier(AbortTransferStep.Qualifiers.PUBLISHER)
-public class AbortTransferStepPublisher implements AbortTransferStep {
+public class AbortTransferStepPublisher {
 
     public static final String QUALIFIER = "abortTransferStep";
 
@@ -22,8 +21,7 @@ public class AbortTransferStepPublisher implements AbortTransferStep {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @Override
-    public void execute(AbortTransferStep.Input input) {
+    public void publish(AbortTransferStep.Input input) {
 
         this.kafkaTemplate.send(
             TopicNames.ABORT_TRANSFER_STEP, input.transferId().getId().toString(), input);

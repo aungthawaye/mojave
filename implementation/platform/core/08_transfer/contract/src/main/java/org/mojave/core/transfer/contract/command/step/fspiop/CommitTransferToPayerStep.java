@@ -30,9 +30,8 @@ public interface CommitTransferToPayerStep {
 
     void execute(Input input) throws FspiopException;
 
-    record Input(String context,
+    record Input(UdfTransferId udfTransferId,
                  TransactionId transactionId,
-                 UdfTransferId udfTransferId,
                  FspData payerFsp,
                  String ilpFulfilment,
                  String completedTimestamp,

@@ -2,7 +2,7 @@ package org.mojave.core.transfer.domain.kafka.listener;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
-import org.mojave.core.transfer.contract.command.step.stateful.CommitTransferStep;
+import org.mojave.core.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.core.transfer.domain.kafka.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,40 +15,38 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-public class CommitTransferStepListener {
+public class RollbackReservationStepListener {
 
-    public static final String QUALIFIER = "commitTransferStep";
+    public static final String QUALIFIER = "rollbackReservationStep";
 
-    public static final String LISTENER_CONTAINER_FACTORY = "commitTransferStepListenerContainerFactory";
+    public static final String LISTENER_CONTAINER_FACTORY = "rollbackReservationStepListenerContainerFactory";
 
     public static final String GROUP_ID = "primary-consumer";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommitTransferStepListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RollbackReservationStepListener.class);
 
-    private final CommitTransferStep commitTransferStep;
+    private final RollbackReservationStep rollbackReservationStep;
 
-    public CommitTransferStepListener(CommitTransferStep commitTransferStep) {
+    public RollbackReservationStepListener(RollbackReservationStep rollbackReservationStep) {
 
-        assert commitTransferStep != null;
+        assert rollbackReservationStep != null;
 
-        this.commitTransferStep = commitTransferStep;
+        this.rollbackReservationStep = rollbackReservationStep;
     }
 
     @KafkaListener(
-        topics = TopicNames.COMMIT_TRANSFER_STEP,
+        topics = TopicNames.ROLLBACK_RESERVATION_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<CommitTransferStep.Input> inputs, Acknowledgment ack) {
+    public void handle(List<RollbackReservationStep.Input> inputs, Acknowledgment ack) {
 
         try {
 
-            LOGGER.info("CommitTransferStep : Received ({}) messages.", inputs.size());
-            for (CommitTransferStep.Input input : inputs) {
-                this.commitTransferStep.execute(input);
+            for (RollbackReservationStep.Input input : inputs) {
+                this.rollbackReservationStep.execute(input);
             }
 
             ack.acknowledge();
-            LOGGER.info("CommitTransferStep : Done.");
 
         } catch (Exception e) {
 

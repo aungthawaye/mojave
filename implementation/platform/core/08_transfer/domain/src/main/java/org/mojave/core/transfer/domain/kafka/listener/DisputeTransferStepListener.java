@@ -6,7 +6,6 @@ import org.mojave.core.transfer.contract.command.step.stateful.DisputeTransferSt
 import org.mojave.core.transfer.domain.kafka.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
@@ -28,8 +27,7 @@ public class DisputeTransferStepListener {
 
     private final DisputeTransferStep disputeTransferStep;
 
-    public DisputeTransferStepListener(@Qualifier(DisputeTransferStep.Qualifiers.HANDLER)
-                                       DisputeTransferStep disputeTransferStep) {
+    public DisputeTransferStepListener(DisputeTransferStep disputeTransferStep) {
 
         assert disputeTransferStep != null;
 
@@ -40,8 +38,6 @@ public class DisputeTransferStepListener {
         topics = TopicNames.DISPUTE_TRANSFER_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    @Transactional
-    @Write
     public void handle(List<DisputeTransferStep.Input> inputs, Acknowledgment ack) {
 
         try {

@@ -29,6 +29,8 @@ import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.type.Payer;
 import org.mojave.fspiop.spec.core.AmountType;
+import org.mojave.fspiop.spec.core.Extension;
+import org.mojave.fspiop.spec.core.ExtensionList;
 import org.mojave.fspiop.spec.core.Money;
 import org.mojave.fspiop.spec.core.PartyComplexName;
 import org.mojave.fspiop.spec.core.PartyPersonalInfo;
@@ -62,16 +64,18 @@ public class SampleFspClient implements FspClient {
     }
 
     @Override
-    public void patchTransfers(Payer payer, Transfers.Patch.Request request)
+    public boolean patchTransfers(Payer payer, Transfers.Patch.Request request)
         throws FspiopException {
 
         var extensionList = request.extensionList();
         var simulateDispute = false;
 
-        for (var extensionItem : extensionList.getExtension()) {
-            if (extensionItem.getKey().equals("simulateDispute")) {
-                simulateDispute = true;
-                break;
+        if (extensionList != null) {
+            for (var extensionItem : extensionList.getExtension()) {
+                if (extensionItem.getKey().equals("simulateDispute")) {
+                    simulateDispute = true;
+                    break;
+                }
             }
         }
 
@@ -82,6 +86,7 @@ public class SampleFspClient implements FspClient {
                 "Payee's wallet has reached the daily limit.");
         }
 
+        return true;
     }
 
     @Override
@@ -134,8 +139,16 @@ public class SampleFspClient implements FspClient {
             transferState = TransferState.COMMITTED;
         }
 
+        var homeTransactionId = UlidCreator.getUlid().toString();
+        var extensionList = new ExtensionList().addExtensionItem(
+            new Extension("homeTransactionId", homeTransactionId));
+
+        if (partyId.startsWith("8")) {
+            extensionList.addExtensionItem(new Extension("simulateDispute", "true"));
+        }
+
         return new Transfers.Post.Response(
-            transferState, UlidCreator.getUlid().toString(), request.extensionList());
+            transferState, UlidCreator.getUlid().toString(), extensionList);
     }
 
 }

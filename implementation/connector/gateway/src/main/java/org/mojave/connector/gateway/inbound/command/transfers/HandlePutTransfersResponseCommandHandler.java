@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.gateway.inbound.command.transfers;
 
 import org.mojave.component.misc.pubsub.PubSubClient;
@@ -24,6 +25,7 @@ import org.mojave.connector.gateway.component.PubSubKeys;
 import org.mojave.connector.gateway.data.TransfersResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,10 +46,14 @@ class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResp
     @Override
     public Output execute(Input input) {
 
+        MDC.put("REQ_ID", input.transferId());
+
         var channel = PubSubKeys.forTransfers(input.transferId());
 
         this.pubSubClient.publish(
             channel, new TransfersResult(input.transferId(), input.response()));
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }

@@ -24,8 +24,6 @@ import org.mojave.core.wallet.contract.command.position.IncreasePositionCommand;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.core.wallet.contract.exception.position.PositionNotExistException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IncreasePositionController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(IncreasePositionController.class);
 
     private final IncreasePositionCommand increasePositionCommand;
 
