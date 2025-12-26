@@ -1,26 +1,3 @@
--- ml_wallet.wlt_net_debit_cap_update definition
-
-CREATE TABLE `wlt_net_debit_cap_update`
-(
-    `net_debit_cap_update_id` bigint         NOT NULL,
-    `position_id`             bigint         NOT NULL,
-    `transaction_id`          bigint         NOT NULL,
-    `old_net_debit_cap`       decimal(34, 4) NOT NULL,
-    `new_net_debit_cap`       decimal(34, 4) NOT NULL,
-    `transaction_at`          bigint         NOT NULL,
-    `rec_created_at`          bigint DEFAULT NULL,
-    `rec_updated_at`          bigint DEFAULT NULL,
-    `rec_version`             int    DEFAULT NULL,
-    PRIMARY KEY (`net_debit_cap_update_id`),
-    UNIQUE KEY `wlt_net_debit_cap_update_01_UK` (`transaction_id`),
-    KEY `wlt_net_debit_cap_update_01_IDX` (`position_id`, `transaction_at`),
-    KEY `wlt_position_wlt_net_debit_cap_update_FK_IDX` (`position_id`),
-    CONSTRAINT `wlt_position_wlt_net_debit_cap_update_FK` FOREIGN KEY (`position_id`) REFERENCES `wlt_position` (`position_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
-
 -- ml_wallet.wlt_balance definition
 
 CREATE TABLE `wlt_balance`
@@ -58,6 +35,28 @@ CREATE TABLE `wlt_position`
     `rec_version`     int    DEFAULT NULL,
     PRIMARY KEY (`position_id`),
     UNIQUE KEY `wlt_position_01_UK` (`wallet_owner_id`, `currency`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+-- ml_wallet.wlt_net_debit_cap_update definition
+
+CREATE TABLE `wlt_net_debit_cap_update`
+(
+    `net_debit_cap_update_id` bigint         NOT NULL,
+    `position_id`             bigint         NOT NULL,
+    `transaction_id`          bigint         NOT NULL,
+    `old_net_debit_cap`       decimal(34, 4) NOT NULL,
+    `new_net_debit_cap`       decimal(34, 4) NOT NULL,
+    `transaction_at`          bigint         NOT NULL,
+    `rec_created_at`          bigint DEFAULT NULL,
+    `rec_updated_at`          bigint DEFAULT NULL,
+    `rec_version`             int    DEFAULT NULL,
+    PRIMARY KEY (`net_debit_cap_update_id`),
+    UNIQUE KEY `wlt_net_debit_cap_update_01_UK` (`transaction_id`),
+    KEY `wlt_net_debit_cap_update_01_IDX` (`position_id`, `transaction_at`),
+    KEY `wlt_position_wlt_net_debit_cap_update_FK_IDX` (`position_id`),
+    CONSTRAINT `wlt_position_wlt_net_debit_cap_update_FK` FOREIGN KEY (`position_id`) REFERENCES `wlt_position` (`position_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
