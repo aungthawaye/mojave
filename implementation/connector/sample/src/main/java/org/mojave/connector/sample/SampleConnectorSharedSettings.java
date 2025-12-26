@@ -28,7 +28,7 @@ import org.mojave.fspiop.invoker.FspiopInvokerConfiguration;
 import org.mojave.fspiop.invoker.api.PartiesService;
 import org.mojave.fspiop.invoker.api.QuotesService;
 import org.mojave.fspiop.invoker.api.TransfersService;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 

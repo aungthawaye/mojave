@@ -32,7 +32,7 @@ import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;

@@ -42,7 +42,7 @@ import org.mojave.core.common.datatype.converter.identifier.wallet.WalletOwnerId
 import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

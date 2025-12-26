@@ -24,7 +24,7 @@ import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.util.HashMap;
 import java.util.Map;

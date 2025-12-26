@@ -48,7 +48,7 @@
             <artifactId>mod-connector-adapter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
+            <groupId>org.mojave.rail.fspiop</groupId>
             <artifactId>mod-fspiop-invoker</artifactId>
         </dependency>
         <dependency>

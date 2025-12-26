@@ -35,7 +35,7 @@ import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.data.PositionData;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

@@ -22,7 +22,7 @@ package org.mojave.core.participant.contract.command.oracle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import org.mojave.core.common.datatype.identifier.participant.OracleId;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 public interface ChangeOracleTypeCommand {
 

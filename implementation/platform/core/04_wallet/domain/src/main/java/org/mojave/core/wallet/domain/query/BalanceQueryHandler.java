@@ -27,7 +27,7 @@ import org.mojave.core.wallet.contract.exception.balance.BalanceIdNotFoundExcept
 import org.mojave.core.wallet.contract.query.BalanceQuery;
 import org.mojave.core.wallet.domain.model.Balance;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

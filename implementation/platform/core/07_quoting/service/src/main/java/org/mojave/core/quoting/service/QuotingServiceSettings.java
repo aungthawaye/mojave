@@ -27,7 +27,7 @@ import org.mojave.core.participant.intercom.client.service.ParticipantIntercomSe
 import org.mojave.core.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.fspiop.service.FspiopServiceConfiguration;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;

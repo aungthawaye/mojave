@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import org.mojave.core.common.datatype.identifier.participant.FspCurrencyId;
 import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 public interface DeactivateFspCurrencyCommand {
 

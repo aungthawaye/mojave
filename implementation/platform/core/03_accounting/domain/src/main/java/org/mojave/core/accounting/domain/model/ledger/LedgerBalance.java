@@ -47,7 +47,7 @@ import org.mojave.core.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.core.common.datatype.enums.accounting.Side;
 import org.mojave.core.common.datatype.identifier.accounting.AccountId;
 import org.mojave.fspiop.component.handy.FspiopCurrencies;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

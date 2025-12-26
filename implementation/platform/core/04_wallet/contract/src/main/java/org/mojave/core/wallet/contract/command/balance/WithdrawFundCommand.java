@@ -31,7 +31,7 @@ import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.exception.balance.InsufficientBalanceException;
 import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

@@ -27,7 +27,7 @@ import org.mojave.core.wallet.contract.exception.position.PositionIdNotFoundExce
 import org.mojave.core.wallet.contract.query.PositionQuery;
 import org.mojave.core.wallet.domain.model.Position;
 import org.mojave.core.wallet.domain.repository.PositionRepository;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

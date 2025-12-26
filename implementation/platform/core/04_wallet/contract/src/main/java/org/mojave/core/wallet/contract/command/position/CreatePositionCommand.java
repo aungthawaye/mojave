@@ -26,7 +26,7 @@ import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.core.common.datatype.identifier.wallet.PositionId;
 import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 

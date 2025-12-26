@@ -23,7 +23,7 @@ import org.mojave.core.common.datatype.enums.ActivationStatus;
 import org.mojave.core.common.datatype.enums.TerminationStatus;
 import org.mojave.core.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.domain.model.oracle.Oracle;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

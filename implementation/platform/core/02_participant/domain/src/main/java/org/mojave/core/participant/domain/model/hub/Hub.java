@@ -44,7 +44,7 @@ import org.mojave.core.participant.contract.exception.hub.HubNameRequiredExcepti
 import org.mojave.core.participant.contract.exception.hub.HubNameTooLongException;
 import org.mojave.core.participant.domain.model.fsp.Fsp;
 import org.mojave.core.participant.domain.model.ssp.Ssp;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.time.Instant;
 import java.util.Collections;

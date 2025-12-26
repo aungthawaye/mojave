@@ -30,7 +30,7 @@ import org.mojave.core.common.datatype.identifier.wallet.PositionId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

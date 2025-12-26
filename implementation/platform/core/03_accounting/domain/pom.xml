@@ -36,12 +36,12 @@
             <artifactId>mod-common-datatype-converter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
+            <groupId>org.mojave.rail.fspiop</groupId>
             <artifactId>mod-fspiop-component</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
+            <groupId>org.mojave.specification.fspiop</groupId>
+            <artifactId>mod-specification-fspiop</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -21,7 +21,7 @@ package org.mojave.core.quoting.contract.command;
 
 import org.mojave.core.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
+import org.mojave.specification.fspiop.core.ErrorInformationObject;
 
 public interface PutQuotesErrorCommand {
 

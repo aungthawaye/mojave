@@ -21,7 +21,7 @@ package org.mojave.core.transfer.contract.command;
 
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
-import org.mojave.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.specification.fspiop.core.TransfersIDPutResponse;
 
 public interface PutTransfersCommand {
 

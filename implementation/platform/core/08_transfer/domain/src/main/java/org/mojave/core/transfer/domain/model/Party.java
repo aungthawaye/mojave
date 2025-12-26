@@ -23,7 +23,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 @Embeddable
 public record Party(@Column(name = "party_id_type") @Enumerated(EnumType.STRING) PartyIdType partyIdType,

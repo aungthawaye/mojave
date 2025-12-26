@@ -22,7 +22,7 @@ package org.mojave.core.accounting.contract.command.definition;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 public interface ChangeFlowDefinitionCurrencyCommand {
 
     Output execute(Input input);

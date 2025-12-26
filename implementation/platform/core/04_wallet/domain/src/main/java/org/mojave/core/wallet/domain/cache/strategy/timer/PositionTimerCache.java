@@ -25,7 +25,7 @@ import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.PositionData;
 import org.mojave.core.wallet.domain.cache.PositionCache;
 import org.mojave.core.wallet.domain.repository.PositionRepository;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

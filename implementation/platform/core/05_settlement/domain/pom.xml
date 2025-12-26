@@ -16,6 +16,10 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mod-component-jpa</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.platform.core.common</groupId>
             <artifactId>mod-common-datatype</artifactId>
         </dependency>
@@ -24,12 +28,8 @@
             <artifactId>mod-common-datatype-converter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mod-component-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
+            <groupId>org.mojave.specification.fspiop</groupId>
+            <artifactId>mod-specification-fspiop</artifactId>
         </dependency>
     </dependencies>
 </project>

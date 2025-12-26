@@ -27,7 +27,7 @@ import org.mojave.core.common.datatype.identifier.accounting.AccountId;
 import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.core.common.datatype.type.accounting.AccountCode;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.util.Collections;
 import java.util.HashSet;

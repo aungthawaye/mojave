@@ -28,17 +28,16 @@ import org.mojave.connector.adapter.fsp.payload.Transfers;
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.spec.core.AmountType;
-import org.mojave.fspiop.spec.core.Extension;
-import org.mojave.fspiop.spec.core.ExtensionList;
-import org.mojave.fspiop.spec.core.Money;
-import org.mojave.fspiop.spec.core.PartyComplexName;
-import org.mojave.fspiop.spec.core.PartyPersonalInfo;
-import org.mojave.fspiop.spec.core.TransferState;
+import org.mojave.specification.fspiop.core.AmountType;
+import org.mojave.specification.fspiop.core.Extension;
+import org.mojave.specification.fspiop.core.ExtensionList;
+import org.mojave.specification.fspiop.core.Money;
+import org.mojave.specification.fspiop.core.PartyComplexName;
+import org.mojave.specification.fspiop.core.PartyPersonalInfo;
+import org.mojave.specification.fspiop.core.TransferState;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 public class SampleFspClient implements FspClient {
 

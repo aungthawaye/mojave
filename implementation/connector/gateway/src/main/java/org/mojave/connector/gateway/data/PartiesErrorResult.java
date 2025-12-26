@@ -19,8 +19,8 @@
  */
 package org.mojave.connector.gateway.data;
 
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.ErrorInformationObject;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 public record PartiesErrorResult(PartyIdType partyIdType,
                                  String partyId,

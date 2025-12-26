@@ -53,7 +53,7 @@ import org.mojave.core.common.datatype.enums.accounting.Side;
 import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.util.ArrayList;
 import java.util.Collections;

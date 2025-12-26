@@ -26,7 +26,7 @@ import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.admin.client.service.WalletAdminService;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.query.BalanceQuery;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 

@@ -46,7 +46,7 @@ import org.mojave.core.participant.contract.exception.oracle.OracleBaseUrlRequir
 import org.mojave.core.participant.contract.exception.oracle.OracleBaseUrlTooLongException;
 import org.mojave.core.participant.contract.exception.oracle.OracleNameRequiredException;
 import org.mojave.core.participant.contract.exception.oracle.OracleNameTooLongException;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 import java.time.Instant;
 

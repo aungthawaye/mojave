@@ -20,7 +20,7 @@
 package org.mojave.core.transfer.contract.command;
 
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
-import org.mojave.fspiop.spec.core.TransfersPostRequest;
+import org.mojave.specification.fspiop.core.TransfersPostRequest;
 
 public interface PostTransfersCommand {
 

@@ -14,6 +14,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="mod-operation-usecase" />
         <module name="mod-component-flyway" />
@@ -29,7 +30,6 @@
         <module name="mod-connector-adapter" />
         <module name="mod-participant-intercom" />
         <module name="mod-settlement-admin-client" />
-        <module name="mod-fspiop-spec" />
         <module name="mod-wallet-admin" />
         <module name="mod-wallet-intercom-client" />
         <module name="mod-fspiop-component" />
@@ -67,6 +67,7 @@
         <module name="mod-accounting-domain" />
         <module name="mod-accounting-consumer" />
         <module name="mod-accounting-intercom-client" />
+        <module name="mod-specification-fspiop" />
         <module name="mod-participant-admin-client" />
         <module name="mod-component-jpa" />
         <module name="mod-wallet-domain" />
@@ -86,6 +87,9 @@
         <module name="mod-mono-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mod-fspiop-spec" target="25" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -151,6 +155,7 @@
       <module name="mod-settlement-contract" options="-parameters" />
       <module name="mod-settlement-domain" options="-parameters" />
       <module name="mod-settlement-producer" options="-parameters" />
+      <module name="mod-specification-fspiop" options="-parameters" />
       <module name="mod-transaction-consumer" options="-parameters" />
       <module name="mod-transaction-contract" options="-parameters" />
       <module name="mod-transaction-domain" options="-parameters" />
@@ -175,8 +180,10 @@
       <module name="platform-pom" options="-parameters" />
       <module name="provider-pom" options="-parameters" />
       <module name="quoting-pom" options="-parameters" />
+      <module name="rail-pom" options="-parameters" />
       <module name="settlement-pom" options="-parameters" />
       <module name="settlement-provider-pom" options="-parameters" />
+      <module name="specification-pom" options="-parameters" />
       <module name="transaction-pom" options="-parameters" />
       <module name="transfer-pom" options="-parameters" />
       <module name="wallet-pom" options="-parameters" />

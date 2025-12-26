@@ -24,8 +24,8 @@ import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.spec.core.ExtensionList;
-import org.mojave.fspiop.spec.core.TransferState;
+import org.mojave.specification.fspiop.core.ExtensionList;
+import org.mojave.specification.fspiop.core.TransferState;
 
 public interface PatchTransferToPayeeStep {
 

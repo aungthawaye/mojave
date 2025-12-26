@@ -28,7 +28,7 @@
             <artifactId>mod-wallet-contract</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
+            <groupId>org.mojave.rail.fspiop</groupId>
             <artifactId>mod-fspiop-service</artifactId>
         </dependency>
     </dependencies>

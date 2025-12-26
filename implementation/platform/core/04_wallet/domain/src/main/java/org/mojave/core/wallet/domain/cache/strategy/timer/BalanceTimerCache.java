@@ -25,7 +25,7 @@ import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.domain.cache.BalanceCache;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

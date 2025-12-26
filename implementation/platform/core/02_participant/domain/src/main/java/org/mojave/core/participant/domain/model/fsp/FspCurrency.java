@@ -48,7 +48,7 @@ import org.mojave.core.participant.contract.data.FspCurrencyData;
 import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
 import org.mojave.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;
 import org.mojave.core.participant.contract.exception.fsp.FspCurrencyNotSupportedByHubException;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.time.Instant;
 

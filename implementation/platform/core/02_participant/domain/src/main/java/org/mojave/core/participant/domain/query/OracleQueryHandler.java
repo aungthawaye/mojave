@@ -29,7 +29,7 @@ import org.mojave.core.participant.contract.exception.oracle.OracleTypeNotFoundE
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.domain.model.oracle.Oracle;
 import org.mojave.core.participant.domain.repository.OracleRepository;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;

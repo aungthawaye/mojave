@@ -6,7 +6,7 @@ import org.mojave.core.common.datatype.identifier.settlement.SettlementBatchId;
 import org.mojave.core.common.datatype.identifier.settlement.SettlementId;
 import org.mojave.core.common.datatype.identifier.settlement.SettlementRecordId;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

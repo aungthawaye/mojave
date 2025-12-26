@@ -32,8 +32,8 @@
             <artifactId>mod-transaction-contract</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-spec</artifactId>
+            <groupId>org.mojave.specification.fspiop</groupId>
+            <artifactId>mod-specification-fspiop</artifactId>
         </dependency>
     </dependencies>
 </project>

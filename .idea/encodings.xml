@@ -114,14 +114,6 @@
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/core/src/main/resources/local" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/component/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/invoker/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/spec/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/proto" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/all" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/implementation/platform/fspiop/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/iso20022/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/iso20022/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/platform/iso20022/src/main/resources/all" charset="UTF-8" />
@@ -154,6 +146,23 @@
     <file url="file://$PROJECT_DIR$/implementation/provider/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/provider/src/main/resources/all" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/provider/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/component/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/invoker/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/spec/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/fspiop/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/rail/src/main/resources/local" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/specification/fspiop/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/specification/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/specification/src/main/proto" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/specification/src/main/resources/all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/implementation/specification/src/main/resources/local" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/src/generated/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/implementation/src/main/proto" charset="UTF-8" />

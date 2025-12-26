@@ -26,7 +26,7 @@ import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.wallet.domain.component.BalanceUpdater;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;

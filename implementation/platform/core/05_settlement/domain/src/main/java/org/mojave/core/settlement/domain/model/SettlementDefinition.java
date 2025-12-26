@@ -21,7 +21,7 @@ import org.mojave.core.common.datatype.enums.ActivationStatus;
 import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.identifier.participant.SspId;
 import org.mojave.core.common.datatype.identifier.settlement.SettlementDefinitionId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import static java.sql.Types.BIGINT;
 

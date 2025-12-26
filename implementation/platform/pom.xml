@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <name>Mojave - Platform</name>
     <modules>
-        <module>fspiop</module>
         <module>core</module>
         <module>mono</module>
         <module>iso20022</module>

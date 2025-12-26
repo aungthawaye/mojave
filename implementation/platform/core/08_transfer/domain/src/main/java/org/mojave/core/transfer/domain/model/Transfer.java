@@ -62,8 +62,8 @@ import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.transfer.contract.data.TransferData;
-import org.mojave.fspiop.spec.core.Currency;
-import org.mojave.fspiop.spec.core.Money;
+import org.mojave.specification.fspiop.core.Currency;
+import org.mojave.specification.fspiop.core.Money;
 
 import java.math.BigDecimal;
 import java.sql.Types;

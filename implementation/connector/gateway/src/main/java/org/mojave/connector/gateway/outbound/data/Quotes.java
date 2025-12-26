@@ -20,9 +20,9 @@
 package org.mojave.connector.gateway.outbound.data;
 
 import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.fspiop.spec.core.QuotesIDPutResponse;
-import org.mojave.fspiop.spec.core.QuotesPostRequest;
+import org.mojave.specification.fspiop.core.ErrorInformationObject;
+import org.mojave.specification.fspiop.core.QuotesIDPutResponse;
+import org.mojave.specification.fspiop.core.QuotesPostRequest;
 
 public record Quotes() {
 

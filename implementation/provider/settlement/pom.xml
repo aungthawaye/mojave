@@ -9,8 +9,8 @@
     </parent>
     <groupId>org.mojave.provider.settlement</groupId>
     <artifactId>settlement-provider-pom</artifactId>
-    <name>Mojave - Provider - Settlement</name>
     <packaging>pom</packaging>
+    <name>Mojave - Provider - Settlement</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

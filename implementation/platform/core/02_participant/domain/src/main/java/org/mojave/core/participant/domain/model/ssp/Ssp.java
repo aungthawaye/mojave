@@ -59,7 +59,7 @@ import org.mojave.core.participant.contract.exception.ssp.SspEndpointBaseUrlTooL
 import org.mojave.core.participant.contract.exception.ssp.SspNameRequiredException;
 import org.mojave.core.participant.contract.exception.ssp.SspNameTooLongException;
 import org.mojave.core.participant.domain.model.hub.Hub;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.time.Instant;
 import java.util.Collections;

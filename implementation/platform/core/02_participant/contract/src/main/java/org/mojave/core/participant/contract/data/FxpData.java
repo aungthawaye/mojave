@@ -21,7 +21,7 @@ package org.mojave.core.participant.contract.data;
 
 import org.mojave.core.common.datatype.identifier.participant.FxRatePairId;
 import org.mojave.core.common.datatype.identifier.participant.FxpId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 import java.math.BigDecimal;
 import java.util.Map;

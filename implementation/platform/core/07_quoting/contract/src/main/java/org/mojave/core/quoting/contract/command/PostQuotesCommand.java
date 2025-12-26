@@ -20,7 +20,7 @@
 package org.mojave.core.quoting.contract.command;
 
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
-import org.mojave.fspiop.spec.core.QuotesPostRequest;
+import org.mojave.specification.fspiop.core.QuotesPostRequest;
 
 public interface PostQuotesCommand {
 

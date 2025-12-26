@@ -27,7 +27,7 @@ import org.mojave.core.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.data.SspData;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 public interface ParticipantStore {
 

@@ -26,7 +26,7 @@ import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 import org.redisson.api.RMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -22,7 +22,7 @@ package org.mojave.core.participant.contract.query;
 
 import org.mojave.core.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 import java.util.List;
 import java.util.Optional;

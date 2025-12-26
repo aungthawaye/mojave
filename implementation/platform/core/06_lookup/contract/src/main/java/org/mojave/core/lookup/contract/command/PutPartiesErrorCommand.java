@@ -20,8 +20,8 @@
 package org.mojave.core.lookup.contract.command;
 
 import org.mojave.fspiop.service.component.FspiopHttpRequest;
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.ErrorInformationObject;
+import org.mojave.specification.fspiop.core.PartyIdType;
 
 public interface PutPartiesErrorCommand {
 

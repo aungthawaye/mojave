@@ -27,7 +27,7 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
 import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
-import org.mojave.fspiop.spec.core.Currency;
+import org.mojave.specification.fspiop.core.Currency;
 
 public interface CreateFspCommand {
 

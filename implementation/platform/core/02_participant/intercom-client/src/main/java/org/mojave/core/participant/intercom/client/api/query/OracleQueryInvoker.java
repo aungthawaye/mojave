@@ -29,7 +29,7 @@ import org.mojave.core.participant.contract.exception.oracle.OracleIdNotFoundExc
 import org.mojave.core.participant.contract.exception.oracle.OracleTypeNotFoundException;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.specification.fspiop.core.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

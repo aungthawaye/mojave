@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -15,10 +14,12 @@
     <name>Mojave - IIPS</name>
     <modules>
         <module>component</module>
+        <module>specification</module>
         <module>platform</module>
         <module>operation</module>
         <module>connector</module>
         <module>provider</module>
+        <module>rail</module>
     </modules>
     <properties>
         <java.version>25</java.version>
@@ -130,19 +131,25 @@
                 <version>1.3.1</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-flyway</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>3.50.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-jpa</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-kafka</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.springframework.vault</groupId>
+                <artifactId>spring-vault-core</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>software.amazon.cryptools</groupId>
+                <artifactId>AmazonCorrettoCryptoProvider</artifactId>
+                <version>2.5.0</version>
+                <classifier>osx-aarch_64</classifier>
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
@@ -151,7 +158,17 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-openapi</artifactId>
+                <artifactId>mod-component-tomcat</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mod-component-web</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mod-component-vault</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -166,82 +183,22 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-tomcat</artifactId>
+                <artifactId>mod-component-jpa</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-vault</artifactId>
+                <artifactId>mod-component-flyway</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mod-component-web</artifactId>
+                <artifactId>mod-component-kafka</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.connector</groupId>
-                <artifactId>mod-connector-adapter</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.connector</groupId>
-                <artifactId>mod-connector-gateway</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.connector</groupId>
-                <artifactId>mod-connector-sample</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.operation</groupId>
-                <artifactId>mod-operation-usecase</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-admin-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-consumer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-contract</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-domain</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-intercom</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-intercom-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-producer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.accounting</groupId>
-                <artifactId>mod-accounting-store</artifactId>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mod-component-openapi</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -252,106 +209,6 @@
             <dependency>
                 <groupId>org.mojave.platform.core.common</groupId>
                 <artifactId>mod-common-datatype-converter</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.lookup</groupId>
-                <artifactId>mod-lookup-contract</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.lookup</groupId>
-                <artifactId>mod-lookup-domain</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.lookup</groupId>
-                <artifactId>mod-lookup-service</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-admin-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-contract</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-domain</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-intercom</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-intercom-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.participant</groupId>
-                <artifactId>mod-participant-store</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.quoting</groupId>
-                <artifactId>mod-quoting-contract</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.quoting</groupId>
-                <artifactId>mod-quoting-domain</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.quoting</groupId>
-                <artifactId>mod-quoting-service</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.settlement</groupId>
-                <artifactId>mod-settlement-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.settlement</groupId>
-                <artifactId>mod-settlement-admin-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.settlement</groupId>
-                <artifactId>mod-settlement-consumer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.settlement</groupId>
-                <artifactId>mod-settlement-contract</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.settlement</groupId>
-                <artifactId>mod-settlement-domain</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.settlement</groupId>
-                <artifactId>mod-settlement-producer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.core.transaction</groupId>
-                <artifactId>mod-transaction-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -380,33 +237,88 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.core.transfer</groupId>
-                <artifactId>mod-transfer-contract</artifactId>
+                <groupId>org.mojave.platform.core.transaction</groupId>
+                <artifactId>mod-transaction-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.core.transfer</groupId>
-                <artifactId>mod-transfer-domain</artifactId>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.core.transfer</groupId>
-                <artifactId>mod-transfer-service</artifactId>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.core.wallet</groupId>
-                <artifactId>mod-wallet-admin</artifactId>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.core.wallet</groupId>
-                <artifactId>mod-wallet-admin-client</artifactId>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-admin-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.core.wallet</groupId>
-                <artifactId>mod-wallet-consumer</artifactId>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-intercom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.participant</groupId>
+                <artifactId>mod-participant-store</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-intercom</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-admin-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-intercom-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-store</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-producer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.accounting</groupId>
+                <artifactId>mod-accounting-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -417,6 +329,16 @@
             <dependency>
                 <groupId>org.mojave.platform.core.wallet</groupId>
                 <artifactId>mod-wallet-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-admin-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -435,33 +357,88 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.fspiop</groupId>
-                <artifactId>mod-fspiop-component</artifactId>
+                <groupId>org.mojave.platform.core.wallet</groupId>
+                <artifactId>mod-wallet-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.fspiop</groupId>
-                <artifactId>mod-fspiop-invoker</artifactId>
+                <groupId>org.mojave.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.fspiop</groupId>
-                <artifactId>mod-fspiop-service</artifactId>
+                <groupId>org.mojave.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.platform.fspiop</groupId>
-                <artifactId>mod-fspiop-spec</artifactId>
+                <groupId>org.mojave.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-producer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-admin</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-admin-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.settlement</groupId>
+                <artifactId>mod-settlement-consumer</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.lookup</groupId>
+                <artifactId>mod-lookup-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.lookup</groupId>
+                <artifactId>mod-lookup-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.lookup</groupId>
+                <artifactId>mod-lookup-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.quoting</groupId>
+                <artifactId>mod-quoting-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.quoting</groupId>
+                <artifactId>mod-quoting-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.quoting</groupId>
+                <artifactId>mod-quoting-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.transfer</groupId>
+                <artifactId>mod-transfer-contract</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.transfer</groupId>
+                <artifactId>mod-transfer-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.platform.core.transfer</groupId>
+                <artifactId>mod-transfer-service</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.platform.mono</groupId>
                 <artifactId>mod-mono-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.platform.mono</groupId>
-                <artifactId>mod-mono-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -475,35 +452,49 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.provider.forex</groupId>
-                <artifactId>forex-provider-pom</artifactId>
+                <groupId>org.mojave.platform.mono</groupId>
+                <artifactId>mod-mono-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.provider.settlement</groupId>
-                <artifactId>settlement-provider-pom</artifactId>
+                <groupId>org.mojave.operation</groupId>
+                <artifactId>mod-operation-usecase</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>3.50.0</version>
+                <groupId>org.mojave.connector</groupId>
+                <artifactId>mod-connector-adapter</artifactId>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>3.0.0</version>
+                <groupId>org.mojave.connector</groupId>
+                <artifactId>mod-connector-gateway</artifactId>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.vault</groupId>
-                <artifactId>spring-vault-core</artifactId>
-                <version>4.0.0</version>
+                <groupId>org.mojave.connector</groupId>
+                <artifactId>mod-connector-sample</artifactId>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>software.amazon.cryptools</groupId>
-                <artifactId>AmazonCorrettoCryptoProvider</artifactId>
-                <version>2.5.0</version>
-                <classifier>osx-aarch_64</classifier>
+                <groupId>org.mojave.rail.fspiop</groupId>
+                <artifactId>mod-fspiop-component</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.rail.fspiop</groupId>
+                <artifactId>mod-fspiop-invoker</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.rail.fspiop</groupId>
+                <artifactId>mod-fspiop-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.specification.fspiop</groupId>
+                <artifactId>mod-specification-fspiop</artifactId>
+                <version>1.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
