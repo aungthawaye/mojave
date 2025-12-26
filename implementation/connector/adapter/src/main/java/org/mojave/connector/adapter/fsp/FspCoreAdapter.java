@@ -186,7 +186,7 @@ public class FspCoreAdapter {
                 new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()),
                 new Money(currency, payeeReceiveAmount.stripTrailingZeros().toPlainString()),
                 new Money(currency, transferAmount.stripTrailingZeros().toPlainString()),
-                expiration);
+                result.quoteExpireAt().getEpochSecond());
 
             var payload = this.objectMapper.writeValueAsString(agreement);
             var preparePacket = Interledger.prepare(
@@ -293,9 +293,9 @@ public class FspCoreAdapter {
 
             var agreement = this.objectMapper.readValue(unwrappedIlpPacketData, Agreement.class);
 
-            if (agreement.expiration() != null) {
+            if (agreement.expireAt() != null) {
 
-                var quoteExpiredAt = FspiopDates.fromRequestBody(agreement.expiration());
+                var quoteExpiredAt = Instant.ofEpochSecond(agreement.expireAt());
 
                 if (quoteExpiredAt.isBefore(Instant.now())) {
 

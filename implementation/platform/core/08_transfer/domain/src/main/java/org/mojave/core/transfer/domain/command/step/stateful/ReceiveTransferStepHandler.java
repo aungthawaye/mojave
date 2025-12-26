@@ -82,6 +82,19 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
 
         try {
 
+            var where = TransferRepository.Filters.withUdfTransferId(input.udfTransferId());
+            where = where.and(TransferRepository.Filters.withPayerFspId(input.payerFsp().fspId()));
+            where = where.and(TransferRepository.Filters.withPayeeFspId(input.payeeFsp().fspId()));
+
+            var optExistingTransfer = this.transferRepository.findOne(where);
+
+            if (optExistingTransfer.isPresent()) {
+
+                throw new FspiopException(
+                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+                    "Transfer already exists with the same transfer ID, payer FSP and payee FSP.");
+            }
+
             var optExistingIlp = this.transferIlpPacketRepository.findOne(
                 TransferIlpPacketRepository.Filters.withIlpCondition(input.ilpCondition()));
 
@@ -109,9 +122,9 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
                                                this.transferSettings.reservationTimeoutMs());
 
             var transfer = new Transfer(
-                transactionId, transactionAt, input.udfTransferId(), payerFsp.code(), new Party(
+                transactionId, transactionAt, input.udfTransferId(), payerFsp.fspId(), new Party(
                 payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(),
-                payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.code(), new Party(
+                payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspId(), new Party(
                 payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(),
                 payeePartyIdInfo.getPartySubIdOrType()), input.agreement().transferAmount(),
                 input.agreement().payeeFspFee(), input.agreement().payeeFspCommission(),

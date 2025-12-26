@@ -24,11 +24,11 @@ import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.transfer.AbortReason;
 import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
 import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.fspiop.spec.core.Currency;
 import org.mojave.fspiop.spec.core.PartyIdType;
 
@@ -41,9 +41,9 @@ public record TransferData(TransferId transferId,
                            TransactionId transactionId,
                            Instant transactionAt,
                            UdfTransferId udfTransferId,
-                           FspCode payerFsp,
+                           FspId payerFspId,
                            PartyData payer,
-                           FspCode payeeFsp,
+                           FspId payeeFspId,
                            PartyData payee,
                            Currency currency,
                            BigDecimal transferAmount,

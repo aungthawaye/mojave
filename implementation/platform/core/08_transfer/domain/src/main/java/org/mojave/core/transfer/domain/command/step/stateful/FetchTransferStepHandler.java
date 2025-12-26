@@ -61,9 +61,11 @@ public class FetchTransferStepHandler implements FetchTransferStep {
 
         try {
 
-            var optTransfer = this.transferRepository.findOne(
-                TransferRepository.Filters.withUdfTransferId(input.udfTransferId()));
+            var where = TransferRepository.Filters.withUdfTransferId(input.udfTransferId());
+            where = where.and(TransferRepository.Filters.withPayerFspId(input.payerFspId()));
+            where = where.and(TransferRepository.Filters.withPayeeFspId(input.payeeFspId()));
 
+            var optTransfer = this.transferRepository.findOne(where);
             if (optTransfer.isEmpty()) {
 
                 LOGGER.info(

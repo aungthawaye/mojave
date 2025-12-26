@@ -107,6 +107,20 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
                 "QuoteId from Agreement does not match the transferId of Transfer request.");
         }
 
+        if (agreement.expireAt() != null) {
+
+            var quoteExpiredAt = Instant.ofEpochSecond(agreement.expireAt());
+
+            if (quoteExpiredAt.isBefore(Instant.now())) {
+
+                LOGGER.error("Quote has expired.");
+                throw new FspiopException(
+                    FspiopErrors.QUOTE_EXPIRED,
+                    "Quote has already expired. Transfer (" + input.udfTransferId() +
+                        ") cannot be performed.");
+            }
+        }
+
         if (ilpTransferAmount.subtract(transferAmount).signum() != 0) {
 
             LOGGER.info("The amount from ILP packet must be equal to the transfer amount.");

@@ -76,8 +76,6 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
 
             LOGGER.info("RequestPartiesCommand : input : ({})", ObjectLogger.log(input));
 
-            assert input != null;
-
             var withSubId = input.subId() != null && !input.subId().isBlank();
 
             var resultTopic = PubSubKeys.forParties(

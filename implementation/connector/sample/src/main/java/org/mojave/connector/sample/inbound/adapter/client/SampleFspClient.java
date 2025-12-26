@@ -114,7 +114,9 @@ public class SampleFspClient implements FspClient {
 
         }
 
-        var _15minsLater = Instant.now().plus(15, ChronoUnit.MINUTES);
+        var _15minsLater = Instant.now();
+
+
 
         return new Quotes.Post.Response(
             new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),
@@ -145,6 +147,13 @@ public class SampleFspClient implements FspClient {
 
         if (partyId.startsWith("8")) {
             extensionList.addExtensionItem(new Extension("simulateDispute", "true"));
+        }
+
+        if (partyId.startsWith("9")) {
+
+            throw new FspiopException(
+                FspiopErrors.PAYEE_REJECTED_TRANSACTION,
+                "Payee FSP rejected the transaction.");
         }
 
         return new Transfers.Post.Response(

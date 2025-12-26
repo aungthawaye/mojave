@@ -45,4 +45,6 @@ public class StringSizeConstraints {
 
     public static final int MAX_ILP_PACKET_FULFILMENT_LENGTH = 48;
 
+    public static final int MAX_REASON_ENUM_LENGTH = 64;
+
 }

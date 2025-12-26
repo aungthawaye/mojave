@@ -145,10 +145,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
         LOGGER.info("PutTransfersCommandHandler : input: ({})", ObjectLogger.log(input));
 
-        final var CONTEXT = "PutTransfers";
-        final var ABORTED_FLOW = "AbortedFlow";
-        final var COMMITED_FLOW = "CommitedFlow";
-
         var udfTransferId = input.udfTransferId();
 
         TransferId transferId = null;
@@ -181,7 +177,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
             // 1. Fetch the transfer.
             fetchTransferOutput = this.fetchTransferStep.execute(
-                new FetchTransferStep.Input(udfTransferId));
+                new FetchTransferStep.Input(udfTransferId, payerFsp.fspId(), payeeFsp.fspId()));
 
             transferId = fetchTransferOutput.transferId();
             state = fetchTransferOutput.state();
@@ -192,10 +188,12 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
             transactionAt = fetchTransferOutput.transactionAt();
 
             if (transferId == null) {
+
                 // Surely non-existence Transfer.
                 LOGGER.warn(
                     "Transfer not found for udfTransferId : ({}). Possible non-existence Transfer. Ignored it.",
                     udfTransferId.getId());
+
                 return new Output();
 
             } else if (state == TransferStatus.COMMITTED || state == TransferStatus.ABORTED ||
@@ -260,7 +258,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                 this.abortTransferStepPublisher.publish(new AbortTransferStep.Input(
                     udfTransferId, transactionId, transferId,
-                    AbortReason.PAYEE_RESPONDED_WITH_ERROR, Direction.FROM_PAYEE,
+                    AbortReason.VALIDATION_ERROR_IN_PAYEE_RESPONSE, Direction.FROM_PAYEE,
                     putTransfersResponse.getExtensionList()));
 
                 // Although Payee responded with an error, we still need to inform back
@@ -278,8 +276,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
             // 4. Handle ABORTED status and RESERVED status.
 
             if (unwrapResponseOutput.state() == TransferState.ABORTED) {
-
-                final var CONTEXT_ABORTED_FLOW = CONTEXT + "|" + ABORTED_FLOW;
 
                 // Oh, Payee aborted the transfer.
                 // Inform back to Payer that the transfer is ABORTED.

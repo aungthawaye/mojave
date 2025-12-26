@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,10 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.transfer.domain.repository;
 
+import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -33,6 +35,16 @@ public interface TransferRepository
     extends JpaRepository<Transfer, TransferId>, JpaSpecificationExecutor<Transfer> {
 
     class Filters {
+
+        public static Specification<Transfer> withPayeeFspId(FspId payeeFspId) {
+
+            return (root, query, cb) -> cb.equal(root.get("payeeFspId"), payeeFspId);
+        }
+
+        public static Specification<Transfer> withPayerFspId(FspId payerFspId) {
+
+            return (root, query, cb) -> cb.equal(root.get("payerFspId"), payerFspId);
+        }
 
         public static Specification<Transfer> withTransactionId(TransactionId transactionId) {
 

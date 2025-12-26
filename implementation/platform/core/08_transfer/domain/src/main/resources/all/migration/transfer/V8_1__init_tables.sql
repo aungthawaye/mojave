@@ -4,17 +4,17 @@ CREATE TABLE `tfr_transfer`
 
     `transaction_id`                bigint         NOT NULL,
     `transaction_at`                bigint         NOT NULL,
-    `udf_transfer_id`               varchar(48)    NOT NULL,
+    `udf_transfer_id`               varchar(64)    NOT NULL,
 
-    `payer_fsp`                     varchar(32)    NOT NULL,
+    `payer_fsp_id`                  bigint         NOT NULL,
     `payer_party_type`              varchar(32)    DEFAULT NULL,
-    `payer_party_id`                varchar(48)    DEFAULT NULL,
-    `payer_sub_id`                  varchar(48)    DEFAULT NULL,
+    `payer_party_id`                varchar(64)    DEFAULT NULL,
+    `payer_sub_id`                  varchar(64)    DEFAULT NULL,
 
-    `payee_fsp`                     varchar(32)    NOT NULL,
+    `payee_fsp_id`                  bigint         NOT NULL,
     `payee_party_type`              varchar(32)    DEFAULT NULL,
-    `payee_party_id`                varchar(48)    DEFAULT NULL,
-    `payee_sub_id`                  varchar(48)    DEFAULT NULL,
+    `payee_party_id`                varchar(64)    DEFAULT NULL,
+    `payee_sub_id`                  varchar(64)    DEFAULT NULL,
 
     `transfer_currency`             varchar(3)     NOT NULL,
     `transfer_amount`               decimal(34, 4) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `tfr_transfer`
     `reservation_timeout_at`        bigint         DEFAULT NULL,
     `payee_completed_at`            bigint         DEFAULT NULL,
 
-    `ilp_fulfilment`                varchar(48)    DEFAULT NULL,
+    `ilp_fulfilment`                varchar(48)   DEFAULT NULL,
 
     `rec_created_at`                bigint         DEFAULT NULL,
     `rec_updated_at`                bigint         DEFAULT NULL,
@@ -61,15 +61,18 @@ CREATE TABLE `tfr_transfer`
     UNIQUE KEY `tfr_transfer_transaction_id_UK` (`transaction_id`),
     UNIQUE KEY `tfr_transfer_udf_transfer_id_UK` (`udf_transfer_id`),
     UNIQUE KEY `tfr_transfer_reservation_id_UK` (`reservation_id`),
+    UNIQUE KEY `tfr_transfer_ilp_fulfilment_UK` (`ilp_fulfilment`),
 
-    KEY `tfr_transfer_payer_fsp_IDX` (`payer_fsp`),
-    KEY `tfr_transfer_payer_fsp_transaction_id_IDX` (`payer_fsp`, `transaction_id`),
-    KEY `tfr_transfer_payee_fsp_IDX` (`payee_fsp`),
-    KEY `tfr_transfer_payee_fsp_transaction_IDX` (`payee_fsp`, `transaction_id`),
-    KEY `tfr_transfer_payee_fsp_payer_fsp_IDX` (`payee_fsp`, `payer_fsp`),
+    KEY `tfr_transfer_payer_fsp_id_payee_fsp_id_udf_transfer_id_IDX` (`payer_fsp_id`, `payee_fsp_id`, `udf_transfer_id`),
+    KEY `tfr_transfer_payer_fsp_id_IDX` (`payer_fsp_id`),
+    KEY `tfr_transfer_payer_fsp_id_transaction_id_IDX` (`payer_fsp_id`, `transaction_id`),
+    KEY `tfr_transfer_payee_fsp_id_IDX` (`payee_fsp_id`),
+    KEY `tfr_transfer_payee_fsp_id_transaction_IDX` (`payee_fsp_id`, `transaction_id`),
+    KEY `tfr_transfer_payee_fsp_id_payer_fsp_id_IDX` (`payee_fsp_id`, `payer_fsp_id`),
     KEY `tfr_transfer_transaction_at_IDX` (`transaction_at`),
     KEY `tfr_transfer_payer_party_id_IDX` (`payer_party_id`),
     KEY `tfr_transfer_payee_party_id_IDX` (`payee_party_id`),
+    KEY `tfr_transfer_transfer_currency_IDX` (`transfer_currency`),
     KEY `tfr_transfer_reservation_timeout_at_IDX` (`reservation_timeout_at`),
     KEY `tfr_transfer_reserved_at_IDX` (`reserved_at`),
     KEY `tfr_transfer_committed_at_IDX` (`committed_at`),
@@ -96,7 +99,7 @@ CREATE TABLE `tfr_transfer_extension`
 
     PRIMARY KEY (`transfer_extension_id`),
     KEY `tfr_transfer_extension_transfer_id_IDX` (`transfer_id`),
-    CONSTRAINT `transfer_extension_transfer_FK` FOREIGN KEY (`transfer_id`) REFERENCES `tfr_transfer` (`transfer_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `tfr_transfer_extension_transfer_FK` FOREIGN KEY (`transfer_id`) REFERENCES `tfr_transfer` (`transfer_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -107,8 +110,8 @@ CREATE TABLE `tfr_transfer_extension`
 CREATE TABLE `tfr_transfer_ilp_packet`
 (
     `transfer_id`    bigint NOT NULL,
-    `ilp_packet`     MEDIUMTEXT  DEFAULT NULL,
-    `ilp_condition`  varchar(48) DEFAULT NULL,
+    `ilp_packet`     TEXT        DEFAULT NULL,
+    `ilp_condition`  varchar(256) DEFAULT NULL,
 
     `rec_created_at` bigint      DEFAULT NULL,
     `rec_updated_at` bigint      DEFAULT NULL,
@@ -116,7 +119,7 @@ CREATE TABLE `tfr_transfer_ilp_packet`
 
     PRIMARY KEY (`transfer_id`),
     UNIQUE KEY `tfr_transfer_ilp_packet_ilp_condition_UK` (`ilp_condition`),
-    CONSTRAINT `transfer_ilp_packet_transfer_FK` FOREIGN KEY (`transfer_id`) REFERENCES `tfr_transfer` (`transfer_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `tfr_transfer_ilp_packet_transfer_FK` FOREIGN KEY (`transfer_id`) REFERENCES `tfr_transfer` (`transfer_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

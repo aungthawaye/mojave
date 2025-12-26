@@ -21,6 +21,7 @@
 package org.mojave.core.transfer.contract.command.step.stateful;
 
 import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
@@ -35,7 +36,7 @@ public interface FetchTransferStep {
 
     Output execute(Input input) throws FspiopException;
 
-    record Input(UdfTransferId udfTransferId) { }
+    record Input(UdfTransferId udfTransferId, FspId payerFspId, FspId payeeFspId) { }
 
     record Output(TransferId transferId,
                   TransferStatus state,

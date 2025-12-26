@@ -33,4 +33,4 @@ public record Agreement(@JsonProperty(required = true) String quoteId,
                         @JsonProperty(required = true) Money payeeFspCommission,
                         @JsonProperty(required = true) Money payeeReceiveAmount,
                         @JsonProperty(required = true) Money transferAmount,
-                        @JsonProperty(required = true) String expiration) { }
+                        @JsonProperty(required = true) Long expireAt) { }

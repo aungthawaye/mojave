@@ -47,20 +47,20 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.common.datatype.converter.identifier.participant.FspIdJavaType;
 import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
 import org.mojave.core.common.datatype.converter.identifier.transfer.TransferIdJavaType;
 import org.mojave.core.common.datatype.converter.identifier.transfer.UdfTransferIdJavaType;
 import org.mojave.core.common.datatype.converter.identifier.wallet.PositionUpdateIdJavaType;
-import org.mojave.core.common.datatype.converter.type.fspiop.FspCodeConverter;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.enums.transfer.AbortReason;
 import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
 import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.core.common.datatype.identifier.participant.FspId;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.transfer.contract.data.TransferData;
 import org.mojave.fspiop.spec.core.Currency;
 import org.mojave.fspiop.spec.core.Money;
@@ -102,20 +102,23 @@ import static java.sql.Types.BIGINT;
             columnNames = {"ilp_fulfilment"})},
     indexes = {
         @Index(
-            name = "tfr_transfer_payer_fsp_IDX",
-            columnList = "payer_fsp"),
+            name = "tfr_transfer_payer_fsp_id_payee_fsp_id_udf_transfer_id_IDX",
+            columnList = "payer_fsp_id, payee_fsp_id, udf_transfer_id"),
         @Index(
-            name = "tfr_transfer_payer_fsp_transaction_id_IDX",
-            columnList = "payer_fsp, transaction_id"),
+            name = "tfr_transfer_payer_fsp_id_IDX",
+            columnList = "payer_fsp_id"),
         @Index(
-            name = "tfr_transfer_payee_fsp_IDX",
-            columnList = "payee_fsp"),
+            name = "tfr_transfer_payer_fsp_id_transaction_id_IDX",
+            columnList = "payer_fsp_id, transaction_id"),
         @Index(
-            name = "tfr_transfer_payee_fsp_transaction_IDX",
-            columnList = "payee_fsp, transaction_id"),
+            name = "tfr_transfer_payee_fsp_id_IDX",
+            columnList = "payee_fsp_id"),
         @Index(
-            name = "tfr_transfer_payee_fsp_payer_fsp_IDX",
-            columnList = "payee_fsp, payer_fsp"),
+            name = "tfr_transfer_payee_fsp_id_transaction_IDX",
+            columnList = "payee_fsp_id, transaction_id"),
+        @Index(
+            name = "tfr_transfer_payee_fsp_id_payer_fsp_id_IDX",
+            columnList = "payee_fsp_id, payer_fsp_id"),
         @Index(
             name = "tfr_transfer_transaction_at_IDX",
             columnList = "transaction_at"),
@@ -178,13 +181,14 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         length = StringSizeConstraints.MAX_UDF_TRANSFER_ID_LENGTH)
     protected UdfTransferId udfTransferId;
 
+    @Basic
+    @JavaType(FspIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
     @Column(
-        name = "payer_fsp",
+        name = "payer_fsp_id",
         nullable = false,
-        updatable = false,
-        length = StringSizeConstraints.MAX_CODE_LENGTH)
-    @Convert(converter = FspCodeConverter.class)
-    protected FspCode payerFsp;
+        updatable = false)
+    protected FspId payerFspId;
 
     @Embedded
     @AttributeOverrides(
@@ -206,13 +210,14 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
                     length = 48))})
     protected Party payer;
 
+    @Basic
+    @JavaType(FspIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
     @Column(
-        name = "payee_fsp",
+        name = "payee_fsp_id",
         nullable = false,
-        updatable = false,
-        length = StringSizeConstraints.MAX_CODE_LENGTH)
-    @Convert(converter = FspCodeConverter.class)
-    protected FspCode payeeFsp;
+        updatable = false)
+    protected FspId payeeFspId;
 
     @Embedded
     @AttributeOverrides(
@@ -335,7 +340,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
 
     @Column(
         name = "abort_reason",
-        length = StringSizeConstraints.MAX_ENUM_LENGTH)
+        length = StringSizeConstraints.MAX_REASON_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected AbortReason abortReason;
 
@@ -348,7 +353,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
 
     @Column(
         name = "dispute_reason",
-        length = StringSizeConstraints.MAX_ENUM_LENGTH)
+        length = StringSizeConstraints.MAX_REASON_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
     protected DisputeReason disputeReason;
 
@@ -389,9 +394,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
     public Transfer(TransactionId transactionId,
                     Instant transactionAt,
                     UdfTransferId udfTransferId,
-                    FspCode payerFsp,
+                    FspId payerFspId,
                     Party payer,
-                    FspCode payeeFsp,
+                    FspId payeeFspId,
                     Party payee,
                     Money transferAmount,
                     Money payeeFspFee,
@@ -405,9 +410,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         assert transactionId != null;
         assert transactionAt != null;
         assert udfTransferId != null;
-        assert payerFsp != null;
+        assert payerFspId != null;
         assert payer != null;
-        assert payeeFsp != null;
+        assert payeeFspId != null;
         assert payee != null;
         assert transferAmount != null;
         assert payeeFspFee != null;
@@ -421,9 +426,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         this.transactionId = transactionId;
         this.transactionAt = transactionAt;
         this.udfTransferId = udfTransferId;
-        this.payerFsp = payerFsp;
+        this.payerFspId = payerFspId;
         this.payer = payer;
-        this.payeeFsp = payeeFsp;
+        this.payeeFspId = payeeFspId;
         this.payee = payee;
 
         this.transferCurrency = transferAmount.getCurrency();
@@ -490,8 +495,8 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
             this.ilpPacket.getIlpPacket(), this.ilpPacket.getCondition());
 
         return new TransferData(
-            this.id, this.transactionId, this.transactionAt, this.udfTransferId, this.payerFsp,
-            payerData, this.payeeFsp, payeeData, this.transferCurrency, this.transferAmount,
+            this.id, this.transactionId, this.transactionAt, this.udfTransferId, this.payerFspId,
+            payerData, this.payeeFspId, payeeData, this.transferCurrency, this.transferAmount,
             this.requestExpiration, this.reservationId, this.status, this.receivedAt,
             this.reservedAt, this.committedAt, this.abortedAt, this.abortReason, this.disputeAt,
             this.disputeReason, this.reservationTimeoutAt, this.payeeCompletedAt, extData,
