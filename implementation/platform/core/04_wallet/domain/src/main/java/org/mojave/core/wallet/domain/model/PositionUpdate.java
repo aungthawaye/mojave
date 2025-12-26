@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.wallet.domain.model;
 
 import jakarta.persistence.Column;
@@ -59,20 +60,20 @@ import static java.sql.Types.BIGINT;
     name = "wlt_position_update",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "wlt_position_update_position_id_action_transaction_id_UK",
+            name = "wlt_position_update_01_UK",
             columnNames = {
                 "position_id",
                 "action",
                 "transaction_id"}),
         @UniqueConstraint(
-            name = "wlt_balance_update_reversed_id_UK",
+            name = "wlt_position_update_02_UK",
             columnNames = {"reservation_id"})},
     indexes = {
         @Index(
-            name = "wlt_position_update_position_id_action_transaction_at_idx",
+            name = "wlt_position_update_01_IDX",
             columnList = "position_id, action, transaction_at"),
         @Index(
-            name = "wlt_position_update_transaction_at_idx",
+            name = "wlt_position_update_02_IDX",
             columnList = "transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PositionUpdate extends JpaEntity<PositionUpdateId>

@@ -58,7 +58,7 @@ import static java.sql.Types.BIGINT;
     name = "pcp_oracle",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "pcp_oracle_type_UK",
+            name = "pcp_oracle_01_UK",
             columnNames = {"type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Oracle extends JpaEntity<OracleId> implements DataConversion<OracleData> {
@@ -86,7 +86,7 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
     protected String name;
 
     @Column(
-        name = "baseUrl",
+        name = "base_url",
         nullable = false,
         length = StringSizeConstraints.MAX_HTTP_URL_LENGTH)
     protected String baseUrl;
@@ -109,7 +109,7 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    public Oracle(PartyIdType type, String name, String host) {
+    public Oracle(final PartyIdType type, final String name, final String host) {
 
         assert type != null;
         assert name != null;
@@ -127,15 +127,17 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
-    public Oracle baseUrl(String baseUrl) {
+    public Oracle baseUrl(final String baseUrl) {
 
         if (baseUrl == null || baseUrl.isBlank()) {
+
             throw new OracleBaseUrlRequiredException();
         }
 
-        var value = baseUrl.trim();
+        final var value = baseUrl.trim();
 
         if (value.length() > StringSizeConstraints.MAX_HTTP_URL_LENGTH) {
+
             throw new OracleBaseUrlTooLongException();
         }
 
@@ -173,14 +175,17 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
         return this.terminationStatus == TerminationStatus.TERMINATED;
     }
 
-    public Oracle name(String name) {
+    public Oracle name(final String name) {
 
         if (name == null || name.isBlank()) {
+
             throw new OracleNameRequiredException();
         }
-        var value = name.trim();
+
+        final var value = name.trim();
 
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
+
             throw new OracleNameTooLongException();
         }
 
@@ -195,7 +200,7 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
         this.activationStatus = ActivationStatus.INACTIVE;
     }
 
-    public Oracle type(PartyIdType type) {
+    public Oracle type(final PartyIdType type) {
 
         assert type != null;
 

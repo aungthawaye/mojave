@@ -80,71 +80,71 @@ import static java.sql.Types.BIGINT;
     name = "tfr_transfer",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "tfr_transfer_transaction_id_UK",
+            name = "tfr_transfer_01_UK",
             columnNames = {"transaction_id"}),
         @UniqueConstraint(
-            name = "tfr_transfer_udf_transfer_id_UK",
+            name = "tfr_transfer_02_UK",
             columnNames = {"udf_transfer_id"}),
         @UniqueConstraint(
-            name = "tfr_transfer_reservation_id_UK",
+            name = "tfr_transfer_03_UK",
             columnNames = {"reservation_id"}),
         @UniqueConstraint(
-            name = "tfr_transfer_payer_commit_id_UK",
+            name = "tfr_transfer_04_UK",
             columnNames = {"payer_commit_id"}),
         @UniqueConstraint(
-            name = "tfr_transfer_payee_commit_id_UK",
+            name = "tfr_transfer_05_UK",
             columnNames = {"payee_commit_id"}),
         @UniqueConstraint(
-            name = "tfr_transfer_rollback_id_UK",
+            name = "tfr_transfer_06_UK",
             columnNames = {"rollback_id"}),
         @UniqueConstraint(
-            name = "tfr_transfer_ilp_fulfilment_UK",
+            name = "tfr_transfer_07_UK",
             columnNames = {"ilp_fulfilment"})},
     indexes = {
         @Index(
-            name = "tfr_transfer_payer_fsp_id_payee_fsp_id_udf_transfer_id_IDX",
+            name = "tfr_transfer_01_IDX",
             columnList = "payer_fsp_id, payee_fsp_id, udf_transfer_id"),
         @Index(
-            name = "tfr_transfer_payer_fsp_id_IDX",
+            name = "tfr_transfer_02_IDX",
             columnList = "payer_fsp_id"),
         @Index(
-            name = "tfr_transfer_payer_fsp_id_transaction_id_IDX",
+            name = "tfr_transfer_03_IDX",
             columnList = "payer_fsp_id, transaction_id"),
         @Index(
-            name = "tfr_transfer_payee_fsp_id_IDX",
+            name = "tfr_transfer_04_IDX",
             columnList = "payee_fsp_id"),
         @Index(
-            name = "tfr_transfer_payee_fsp_id_transaction_IDX",
+            name = "tfr_transfer_05_IDX",
             columnList = "payee_fsp_id, transaction_id"),
         @Index(
-            name = "tfr_transfer_payee_fsp_id_payer_fsp_id_IDX",
+            name = "tfr_transfer_06_IDX",
             columnList = "payee_fsp_id, payer_fsp_id"),
         @Index(
-            name = "tfr_transfer_transaction_at_IDX",
+            name = "tfr_transfer_07_IDX",
             columnList = "transaction_at"),
         @Index(
-            name = "tfr_transfer_payer_party_id_IDX",
+            name = "tfr_transfer_08_IDX",
             columnList = "payer_party_id"),
         @Index(
-            name = "tfr_transfer_payee_party_id_IDX",
+            name = "tfr_transfer_09_IDX",
             columnList = "payee_party_id"),
         @Index(
-            name = "tfr_transfer_transfer_currency_IDX",
+            name = "tfr_transfer_10_IDX",
             columnList = "transfer_currency"),
         @Index(
-            name = "tfr_transfer_reservation_timeout_at_IDX",
+            name = "tfr_transfer_11_IDX",
             columnList = "reservation_timeout_at"),
         @Index(
-            name = "tfr_transfer_reserved_at_IDX",
+            name = "tfr_transfer_12_IDX",
             columnList = "reserved_at"),
         @Index(
-            name = "tfr_transfer_committed_at_IDX",
+            name = "tfr_transfer_13_IDX",
             columnList = "committed_at"),
         @Index(
-            name = "tfr_transfer_aborted_at_IDX",
+            name = "tfr_transfer_14_IDX",
             columnList = "aborted_at"),
         @Index(
-            name = "tfr_transfer_status_IDX",
+            name = "tfr_transfer_15_IDX",
             columnList = "status")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Transfer extends JpaEntity<TransferId> implements DataConversion<TransferData> {
@@ -237,7 +237,6 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
                 column = @Column(
                     name = "payee_sub_id",
                     length = 48))})
-
     protected Party payee;
 
     @Column(

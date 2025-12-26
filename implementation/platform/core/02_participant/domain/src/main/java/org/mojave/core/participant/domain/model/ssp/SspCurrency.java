@@ -59,9 +59,9 @@ import static java.sql.Types.BIGINT;
     name = "pcp_ssp_currency",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "pcp_ssp_currency_ssp_currency_id_currency_UK",
+            name = "pcp_ssp_currency_01_UK",
             columnNames = {
-                "ssp_currency_id",
+                "ssp_id",
                 "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class SspCurrency extends JpaEntity<SspCurrencyId>
@@ -95,7 +95,7 @@ public final class SspCurrency extends JpaEntity<SspCurrencyId>
     @JoinColumn(
         name = "ssp_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "ssp_currency_ssp_FK"))
+        foreignKey = @ForeignKey(name = "pcp_ssp_pcp_ssp_currency_FK"))
     private Ssp ssp;
 
     public SspCurrency(final Ssp ssp, final Currency currency) {
@@ -114,6 +114,7 @@ public final class SspCurrency extends JpaEntity<SspCurrencyId>
         if (!this.ssp.isActive()) {
 
             this.activationStatus = ActivationStatus.INACTIVE;
+
             return;
         }
 

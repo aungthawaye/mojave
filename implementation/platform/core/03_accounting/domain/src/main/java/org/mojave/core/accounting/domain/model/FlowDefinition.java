@@ -68,12 +68,12 @@ import static java.sql.Types.BIGINT;
     name = "acc_flow_definition",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "acc_flow_definition_transaction_type_currency_UK",
+            name = "acc_flow_definition_01_UK",
             columnNames = {
                 "transaction_type",
                 "currency"}),
         @UniqueConstraint(
-            name = "acc_flow_definition_name_UK",
+            name = "acc_flow_definition_02_UK",
             columnNames = {"name"})})
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

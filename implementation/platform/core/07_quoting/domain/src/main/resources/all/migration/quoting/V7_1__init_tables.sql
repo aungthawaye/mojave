@@ -25,28 +25,28 @@ CREATE TABLE `qot_quote`
     `payee_sub_id`         varchar(48)    DEFAULT NULL,
 
     `response_expiration`  bigint         DEFAULT NULL,
-    `transfer_amount`      decimal(34, 4) DEFAULT NULL,
+    `transfer_amount`      decimal(34, 4) NOT NULL,
     `payee_fsp_fee`        decimal(34, 4) DEFAULT NULL,
     `payee_fsp_commission` decimal(34, 4) DEFAULT NULL,
-    `payee_receive_amount` decimal(34, 4) DEFAULT NULL,
+    `payee_receive_amount` decimal(34, 4) NOT NULL,
 
     `requested_at`         bigint         NOT NULL,
     `responded_at`         bigint         DEFAULT NULL,
     `stage`                varchar(32)    NOT NULL,
-    `error`                varchar(255)   DEFAULT NULL,
+    `error`                varchar(2048)  DEFAULT NULL,
 
     `rec_created_at`       bigint         DEFAULT NULL,
     `rec_updated_at`       bigint         DEFAULT NULL,
     `rec_version`          int            DEFAULT NULL,
 
     PRIMARY KEY (`quote_id`),
-    UNIQUE KEY `qot_quote_udf_quote_id_UK` (`udf_quote_id`),
+    UNIQUE KEY `qot_quote_01_UK` (`udf_quote_id`),
 
-    KEY                    `qot_quote_requested_at_IDX` (`requested_at`),
-    KEY                    `qot_quote_responded_at_IDX` (`responded_at`),
-    KEY                    `qot_quote_currency_IDX` (`currency`),
-    KEY                    `qot_quote_amount_type_IDX` (`amount_type`),
-    KEY                    `qot_quote_payer_fsp_id_payee_fsp_id_IDX` (`payer_fsp_id`, `payee_fsp_id`)
+    KEY `qot_quote_01_IDX` (`requested_at`),
+    KEY `qot_quote_02_IDX` (`responded_at`),
+    KEY `qot_quote_03_IDX` (`currency`),
+    KEY `qot_quote_04_IDX` (`amount_type`),
+    KEY `qot_quote_05_IDX` (`payer_fsp_id`, `payee_fsp_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -59,7 +59,7 @@ CREATE TABLE `qot_quote_extension`
     `quote_extension_id` bigint       NOT NULL,
     `direction`          varchar(32)  NOT NULL,
     `x_key`              varchar(64)  NOT NULL,
-    `x_value`            varchar(256) NOT NULL,
+    `x_value`            varchar(255) NOT NULL,
     `quote_id`           bigint       NOT NULL,
 
     `rec_created_at`     bigint DEFAULT NULL,
@@ -67,8 +67,8 @@ CREATE TABLE `qot_quote_extension`
     `rec_version`        int    DEFAULT NULL,
 
     PRIMARY KEY (`quote_extension_id`),
-    KEY                  `qot_quote_extension_quote_id_IDX` (`quote_id`),
-    CONSTRAINT `quote_extension_quote_FK` FOREIGN KEY (`quote_id`) REFERENCES `qot_quote` (`quote_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `qot_quote_qot_quote_extension_FK_IDX` (`quote_id`),
+    CONSTRAINT `qot_quote_qot_quote_extension_FK` FOREIGN KEY (`quote_id`) REFERENCES `qot_quote` (`quote_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -86,8 +86,8 @@ CREATE TABLE `qot_quote_ilp_packet`
     `rec_version`    int         DEFAULT NULL,
 
     PRIMARY KEY (`quote_id`),
-    KEY              `qot_quote_ilp_packet_quote_id_IDX` (`quote_id`),
-    CONSTRAINT `quote_ilp_packet_quote_FK` FOREIGN KEY (`quote_id`) REFERENCES `qot_quote` (`quote_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `qot_quote_qot_quote_ilp_packet_FK_IDX` (`quote_id`),
+    CONSTRAINT `qot_quote_qot_quote_ilp_packet_FK` FOREIGN KEY (`quote_id`) REFERENCES `qot_quote` (`quote_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

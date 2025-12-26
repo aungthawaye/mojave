@@ -51,11 +51,11 @@ import static java.sql.Types.BIGINT;
     name = "wlt_net_debit_cap_update",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "wlt_net_debit_cap_update_transaction_id_UK",
+            name = "wlt_net_debit_cap_update_01_UK",
             columnNames = {"transaction_id"})},
     indexes = {
         @Index(
-            name = "wlt_net_debit_cap_update_position_id_transaction_at_IDX",
+            name = "wlt_net_debit_cap_update_01_IDX",
             columnList = "position_id, transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {

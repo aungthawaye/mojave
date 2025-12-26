@@ -109,7 +109,7 @@ public class Hub extends JpaEntity<HubId>
         fetch = FetchType.EAGER)
     protected Set<Ssp> ssps = new HashSet<>();
 
-    public Hub(String name) {
+    public Hub(final String name) {
 
         assert name != null;
 
@@ -118,16 +118,17 @@ public class Hub extends JpaEntity<HubId>
         this.createdAt = Instant.now();
     }
 
-    public boolean activateCurrency(Currency currency) {
+    public boolean activateCurrency(final Currency currency) {
 
         assert currency != null;
 
-        var optSupportedCurrency = this.currencies
+        final var optSupportedCurrency = this.currencies
                                        .stream()
                                        .filter(sc -> sc.getCurrency() == currency)
                                        .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
+
             return false;
         }
 
@@ -136,7 +137,7 @@ public class Hub extends JpaEntity<HubId>
         return true;
     }
 
-    public HubCurrency addCurrency(Currency currency) {
+    public HubCurrency addCurrency(final Currency currency) {
 
         assert currency != null;
 
@@ -145,7 +146,7 @@ public class Hub extends JpaEntity<HubId>
             throw new HubCurrencyAlreadySupportedException(currency);
         }
 
-        var supportedCurrency = new HubCurrency(this, currency);
+        final var supportedCurrency = new HubCurrency(this, currency);
 
         this.currencies.add(supportedCurrency);
 
@@ -163,16 +164,17 @@ public class Hub extends JpaEntity<HubId>
                                               .toArray(HubData.HubCurrencyData[]::new));
     }
 
-    public Optional<HubCurrency> deactivate(Currency currency) {
+    public Optional<HubCurrency> deactivate(final Currency currency) {
 
         assert currency != null;
 
-        var optSupportedCurrency = this.currencies
+        final var optSupportedCurrency = this.currencies
                                        .stream()
                                        .filter(sc -> sc.getCurrency() == currency)
                                        .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
+
             return Optional.empty();
         }
 
@@ -188,7 +190,7 @@ public class Hub extends JpaEntity<HubId>
         return Collections.unmodifiableSet(this.currencies);
     }
 
-    public boolean isCurrencySupported(Currency currency) {
+    public boolean isCurrencySupported(final Currency currency) {
 
         assert currency != null;
 
@@ -197,17 +199,19 @@ public class Hub extends JpaEntity<HubId>
                    .anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
     }
 
-    public Hub name(String name) {
+    public Hub name(final String name) {
 
         assert name != null;
 
-        var value = name.trim();
+        final var value = name.trim();
 
         if (value.isEmpty()) {
+
             throw new HubNameRequiredException();
         }
 
         if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
+
             throw new HubNameTooLongException();
         }
 

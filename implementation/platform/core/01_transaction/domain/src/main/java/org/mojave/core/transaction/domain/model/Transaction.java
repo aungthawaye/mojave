@@ -59,16 +59,16 @@ import static java.sql.Types.BIGINT;
     name = "txn_transaction",
     indexes = {
         @Index(
-            name = "txn_transaction_type_phase_open_at_IDX",
+            name = "txn_transaction_01_IDX",
             columnList = "type, phase, open_at"),
         @Index(
-            name = "txn_transaction_type_phase_close_at_IDX",
+            name = "txn_transaction_02_IDX",
             columnList = "type, phase, close_at"),
         @Index(
-            name = "txn_transaction_open_at_IDX",
+            name = "txn_transaction_03_IDX",
             columnList = "open_at"),
         @Index(
-            name = "txn_transaction_close_at_IDX",
+            name = "txn_transaction_04_IDX",
             columnList = "close_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transaction extends JpaEntity<TransactionId>

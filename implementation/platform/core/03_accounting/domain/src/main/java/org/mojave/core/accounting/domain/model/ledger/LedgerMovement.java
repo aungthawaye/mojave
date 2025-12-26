@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.model.ledger;
 
 import jakarta.persistence.AttributeOverride;
@@ -66,23 +67,23 @@ import static java.sql.Types.BIGINT;
     name = "acc_ledger_movement",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "acc_account_account_id_side_transaction_id_UK",
+            name = "acc_ledger_movement_01_UK",
             columnNames = {
                 "account_id",
                 "side",
                 "transaction_id"}),},
     indexes = {
         @Index(
-            name = "acc_account_transaction_id_IDX",
+            name = "acc_ledger_movement_01_IDX",
             columnList = "transaction_id"),
         @Index(
-            name = "acc_account_transaction_at_IDX",
+            name = "acc_ledger_movement_02_IDX",
             columnList = "transaction_at"),
         @Index(
-            name = "acc_account_account_id_transaction_at_IDX",
+            name = "acc_ledger_movement_03_IDX",
             columnList = "account_id, transaction_at"),
         @Index(
-            name = "acc_account_account_id",
+            name = "acc_ledger_movement_04_IDX",
             columnList = "account_id")})
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

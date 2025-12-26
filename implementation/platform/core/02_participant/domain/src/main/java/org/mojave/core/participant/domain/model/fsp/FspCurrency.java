@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,9 +60,9 @@ import static java.sql.Types.BIGINT;
     name = "pcp_fsp_currency",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "pcp_fsp_currency_fsp_currency_id_currency_UK",
+            name = "pcp_fsp_currency_01_UK",
             columnNames = {
-                "fsp_currency_id",
+                "fsp_id",
                 "currency"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspCurrency extends JpaEntity<FspCurrencyId>
@@ -96,10 +96,10 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId>
     @JoinColumn(
         name = "fsp_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "fsp_currency_fsp_FK"))
+        foreignKey = @ForeignKey(name = "pcp_fsp_pcp_fsp_currency_FK"))
     private Fsp fsp;
 
-    public FspCurrency(Fsp fsp, Currency currency) {
+    public FspCurrency(final Fsp fsp, final Currency currency) {
 
         assert fsp != null;
         assert currency != null;

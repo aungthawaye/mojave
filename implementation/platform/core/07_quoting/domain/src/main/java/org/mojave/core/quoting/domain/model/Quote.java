@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.quoting.domain.model;
 
 import jakarta.persistence.AttributeOverride;
@@ -82,23 +83,23 @@ import static java.sql.Types.BIGINT;
     name = "qot_quote",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "qot_udf_quote_id_UK",
+            name = "qot_quote_01_UK",
             columnNames = {"udf_quote_id"})},
     indexes = {
         @Index(
-            name = "qot_quote_requested_at_IDX",
+            name = "qot_quote_01_IDX",
             columnList = "requested_at"),
         @Index(
-            name = "qot_quote_responded_at_IDX",
+            name = "qot_quote_02_IDX",
             columnList = "responded_at"),
         @Index(
-            name = "qot_quote_currency_IDX",
+            name = "qot_quote_03_IDX",
             columnList = "currency"),
         @Index(
-            name = "qot_quote_amount_type_IDX",
+            name = "qot_quote_04_IDX",
             columnList = "amount_type"),
         @Index(
-            name = "qot_quote_payer_fsp_id_payee_fsp_id_IDX",
+            name = "qot_quote_05_IDX",
             columnList = "payer_fsp_id, payee_fsp_id")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteData> {

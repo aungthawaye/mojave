@@ -61,9 +61,9 @@ import static java.sql.Types.BIGINT;
     name = "pcp_fsp_endpoint",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "pcp_fsp_endpoint_fsp_endpoint_id_type_UK",
+            name = "pcp_fsp_endpoint_01_UK",
             columnNames = {
-                "fsp_endpoint_id",
+                "fsp_id",
                 "type"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class FspEndpoint extends JpaEntity<FspEndpointId>
@@ -107,10 +107,10 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId>
     @JoinColumn(
         name = "fsp_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "fsp_endpoint_fsp_FK"))
+        foreignKey = @ForeignKey(name = "pcp_fsp_pcp_fsp_endpoint_FK"))
     private Fsp fsp;
 
-    public FspEndpoint(Fsp fsp, EndpointType type, String baseUrl) {
+    public FspEndpoint(final Fsp fsp, final EndpointType type, final String baseUrl) {
 
         assert fsp != null;
         assert type != null;
@@ -127,16 +127,17 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId>
         }
     }
 
-    public FspEndpoint baseUrl(String baseUrl) {
+    public FspEndpoint baseUrl(final String baseUrl) {
 
         if (baseUrl == null || baseUrl.isBlank()) {
 
             throw new FspEndpointBaseUrlRequiredException();
         }
 
-        var value = baseUrl.trim();
+        final var value = baseUrl.trim();
 
         if (value.length() > StringSizeConstraints.MAX_HTTP_URL_LENGTH) {
+
             throw new FspEndpointBaseUrlTooLongException();
         }
 

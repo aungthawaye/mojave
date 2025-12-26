@@ -75,7 +75,7 @@ import static java.sql.Types.BIGINT;
     name = "pcp_ssp",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "pcp_ssp_code_UK",
+            name = "pcp_ssp_01_UK",
             columnNames = {"code"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
@@ -143,7 +143,7 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
         name = "hub_id",
         nullable = false,
         updatable = false,
-        foreignKey = @ForeignKey(name = "ssp_hub_FK"))
+        foreignKey = @ForeignKey(name = "pcp_hub_pcp_ssp_FK"))
     protected Hub hub;
 
     public Ssp(final Hub hub, final SspCode code, final String name, final String baseUrl) {
@@ -219,10 +219,12 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
                             .findFirst();
 
         if (opt.isEmpty()) {
+
             return opt;
         }
 
         opt.get().deactivate();
+
         return opt;
     }
 
@@ -233,9 +235,10 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
             throw new SspEndpointBaseUrlRequiredException();
         }
 
-        var value = baseUrl.trim();
+        final var value = baseUrl.trim();
 
         if (value.length() > StringSizeConstraints.MAX_HTTP_URL_LENGTH) {
+
             throw new SspEndpointBaseUrlTooLongException();
         }
 

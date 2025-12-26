@@ -65,7 +65,7 @@ import static java.sql.Types.BIGINT;
 @Table(
     name = "acc_chart_entry",
     uniqueConstraints = @UniqueConstraint(
-        name = "acc_chart_entry_chart_entry_code_UK",
+        name = "acc_chart_entry_01_UK",
         columnNames = {"chart_entry_code"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversion<ChartEntryData> {

@@ -24,7 +24,8 @@ public final class SettlementDimension {
 
     public enum Participants {
         HUB,
-        RECEIVING_FSP
+        PAYER_FSP,
+        PAYEE_FSP
     }
 
     public enum Amounts {

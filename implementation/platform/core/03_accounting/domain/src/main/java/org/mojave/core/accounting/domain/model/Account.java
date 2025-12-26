@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.model;
 
 import jakarta.persistence.Basic;
@@ -76,17 +77,17 @@ import static java.sql.Types.BIGINT;
     name = "acc_account",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "acc_account_owner_id_currency_chart_entry_id_UK",
+            name = "acc_account_01_UK",
             columnNames = {
                 "owner_id",
                 "currency",
                 "chart_entry_id"})},
     indexes = {
         @Index(
-            name = "acc_account_owner_id_IDX",
+            name = "acc_account_01_IDX",
             columnList = "owner_id"),
         @Index(
-            name = "acc_account_currency_IDX",
+            name = "acc_account_02_IDX",
             columnList = "currency")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends JpaEntity<AccountId> implements DataConversion<AccountData> {

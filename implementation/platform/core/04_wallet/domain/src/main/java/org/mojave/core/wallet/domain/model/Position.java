@@ -55,7 +55,7 @@ import static java.sql.Types.BIGINT;
 @Table(
     name = "wlt_position",
     uniqueConstraints = @UniqueConstraint(
-        name = "wlt_balance_owner_id_currency_UK",
+        name = "wlt_position_01_UK",
         columnNames = {
             "wallet_owner_id",
             "currency"}))

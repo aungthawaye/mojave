@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.transaction.domain.model;
 
 import jakarta.persistence.Column;
@@ -54,8 +55,8 @@ import static java.sql.Types.BIGINT;
 @Table(
     name = "txn_transaction_step",
     indexes = @Index(
-        name = "idx_txn_transaction_phase_name_context",
-        columnList = "phase,name,context"))
+        name = "txn_transaction_step_01_IDX",
+        columnList = "phase, name, context"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TransactionStep extends JpaEntity<TransactionStepId>
     implements DataConversion<TransactionStepData> {

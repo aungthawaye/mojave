@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.common.datatype.enums.trasaction;
 
 import lombok.Getter;
@@ -42,7 +43,17 @@ public enum TransactionType {
             FundTransferDimension.Participants.PAYEE_FSP.name())), new Amounts(Set.of(
         FundTransferDimension.Amounts.TRANSFER_AMOUNT.name(),
         FundTransferDimension.Amounts.PAYEE_FSP_FEE.name(),
-        FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name())));
+        FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name()))),
+
+    SETTLE_FUND(
+        new Participants(Set.of(
+            SettlementDimension.Participants.PAYER_FSP.name(),
+            SettlementDimension.Participants.PAYEE_FSP.name())), new Amounts(Set.of(
+        SettlementDimension.Amounts.SETTLEMENT_AMOUNT.name(),
+        SettlementDimension.Amounts.PAYEE_FSP_FEE.name(),
+        SettlementDimension.Amounts.PAYEE_FSP_COMMISSION.name(),
+        SettlementDimension.Amounts.HUB_FEE.name()))),
+    ;
 
     @Getter
     private final Participants participants;
