@@ -1,16 +1,16 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="transfer-service (4803)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="08 transfer">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/08_transfer/service/src/main/java/org/mojave/platform/core/transfer/service/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/08_transfer/service/src/main/java/org/mojave/platform/core/transfer/service/.env" />
     </option>
     <module name="mojave-transfer-service" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.platform.core.transfer.service.TransferServiceApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.rail.fspiop.transfer.service.TransferServiceApplication" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="org.mojave.platform.core.transfer.service.*" />
+        <option name="PATTERN" value="org.mojave.rail.fspiop.transfer.service.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

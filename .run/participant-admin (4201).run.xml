@@ -2,7 +2,7 @@
   <configuration default="false" name="participant-admin (4201)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="02 participant">
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/02_participant/admin/src/main/java/org/mojave/core/participant/admin/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/02_participant/admin/src/main/java/org/mojave/core/participant/admin/.env" />
     </option>
     <module name="mojave-core-participant-admin" />
     <selectedOptions>

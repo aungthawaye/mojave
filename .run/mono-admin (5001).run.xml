@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="mono-admin (5001)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="00 mono">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/mono/admin/src/main/java/org/mojave/mono/admin/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/mono/admin/src/main/java/org/mojave/core/mono/admin/.env" />
     </option>
     <module name="mojave-core-mono-admin" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.mono.admin.MonoAdminApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.mono.admin.MonoAdminApplication" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.mono.admin.*" />

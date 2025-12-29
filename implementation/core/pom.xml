@@ -12,12 +12,12 @@
     <packaging>pom</packaging>
     <name>Mojave - Core</name>
     <modules>
-        <module>00_common</module>
-        <module>01_transaction</module>
-        <module>02_participant</module>
-        <module>03_accounting</module>
-        <module>04_wallet</module>
-        <module>05_settlement</module>
+        <module>common</module>
+        <module>transaction</module>
+        <module>participant</module>
+        <module>accounting</module>
+        <module>wallet</module>
+        <module>settlement</module>
         <module>mono</module>
     </modules>
     <properties>

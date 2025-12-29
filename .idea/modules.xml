@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/03_accounting/accounting-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/03_accounting/accounting-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/00_common/common-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/00_common/common-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/core-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/core-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/00_common/datatype-converter/mod-common-datatype-converter.iml" filepath="$PROJECT_DIR$/implementation/platform/core/00_common/datatype-converter/mod-common-datatype-converter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/mojave.iml" filepath="$PROJECT_DIR$/.idea/mojave.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/mono/mono-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/mono/mono-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/02_participant/participant-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/02_participant/participant-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/05_settlement/settlement-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/05_settlement/settlement-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/01_transaction/transaction-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/01_transaction/transaction-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/rail/fspiop/transfer/transfer-pom.iml" filepath="$PROJECT_DIR$/implementation/rail/fspiop/transfer/transfer-pom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/implementation/platform/core/04_wallet/wallet-pom.iml" filepath="$PROJECT_DIR$/implementation/platform/core/04_wallet/wallet-pom.iml" />
     </modules>
   </component>
 </project>

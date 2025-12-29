@@ -27,7 +27,7 @@ import org.mojave.component.web.spring.security.Authenticator;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.connector.gateway.outbound.component.FspiopOutboundGatekeeper;
-import org.mojave.fspiop.invoker.FspiopInvokerConfiguration;
+import org.mojave.rail.fspiop.invoker.FspiopInvokerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;

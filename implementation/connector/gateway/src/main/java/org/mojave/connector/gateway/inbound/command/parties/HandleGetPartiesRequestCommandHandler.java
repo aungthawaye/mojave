@@ -21,9 +21,9 @@ package org.mojave.connector.gateway.inbound.command.parties;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.connector.adapter.fsp.FspCoreAdapter;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.invoker.api.parties.PutParties;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.invoker.api.parties.PutParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

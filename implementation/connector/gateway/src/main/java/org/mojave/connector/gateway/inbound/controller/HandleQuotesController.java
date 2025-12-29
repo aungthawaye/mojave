@@ -26,9 +26,9 @@ import org.mojave.connector.gateway.inbound.command.quotes.HandlePutQuotesRespon
 import org.mojave.connector.gateway.inbound.event.PostQuotesEvent;
 import org.mojave.connector.gateway.inbound.event.PutQuotesErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutQuotesEvent;
-import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.component.handy.FspiopHeaders;
+import org.mojave.rail.fspiop.component.type.Payee;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.component.handy.FspiopHeaders;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
 import org.mojave.scheme.fspiop.core.QuotesPostRequest;

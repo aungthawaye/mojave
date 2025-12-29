@@ -19,8 +19,8 @@
  */
 package org.mojave.connector.gateway.inbound.command.parties;
 
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.scheme.fspiop.core.PartyIdType;
 
 public interface HandleGetPartiesRequestCommand {

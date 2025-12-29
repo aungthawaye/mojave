@@ -3,11 +3,6 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-      </profile>
       <profile name="Annotation profile for Mojave" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -15,235 +10,156 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
-        <module name="mod-operation-usecase" />
-        <module name="mod-component-flyway" />
-        <module name="mod-component-vault" />
-        <module name="mod-settlement-domain" />
-        <module name="mod-transaction-intercom-client" />
-        <module name="mod-participant-intercom-client" />
+        <module name="mojave-core-wallet-intercom-client" />
+        <module name="mojave-core-wallet-intercom" />
+        <module name="mojave-component-tomcat" />
+        <module name="mojave-core-accounting-producer" />
         <module name="mojave-core-mono-intercom" />
-        <module name="mod-component-web" />
-        <module name="mod-connector-gateway" />
-        <module name="mod-accounting-admin-client" />
-        <module name="mod-common-datatype" />
-        <module name="mod-connector-adapter" />
-        <module name="mod-participant-intercom" />
-        <module name="mod-settlement-admin-client" />
-        <module name="mod-wallet-admin" />
-        <module name="mod-wallet-intercom-client" />
-        <module name="mod-fspiop-component" />
-        <module name="mod-component-tomcat" />
-        <module name="mod-transaction-consumer" />
-        <module name="quoting-pom" />
-        <module name="mod-component-openapi" />
-        <module name="mod-transaction-intercom" />
-        <module name="mod-wallet-intercom" />
-        <module name="mod-scheme-fspiop" />
-        <module name="mod-participant-store" />
-        <module name="mod-component-redis" />
-        <module name="mod-wallet-consumer" />
-        <module name="transfer-pom" />
-        <module name="mod-wallet-admin-client" />
+        <module name="mojave-rail-fspiop-invoker" />
+        <module name="mojave-component-misc" />
+        <module name="mojave-rail-fspiop-bootstrap" />
+        <module name="mojave-core-wallet-admin" />
+        <module name="mojave-rail-fspiop-quoting" />
+        <module name="mojave-core-accounting-contract" />
+        <module name="mojave-scheme-fspiop" />
+        <module name="mojave-core-participant-store" />
+        <module name="mojave-core-transaction-intercom" />
+        <module name="mojave-core-transaction-domain" />
+        <module name="mojave-rail-fspiop-lookup" />
+        <module name="mojave-core-settlement-domain" />
+        <module name="mojave-core-transaction-producer" />
+        <module name="mojave-core-participant-intercom" />
+        <module name="mojave-core-participant-contract" />
+        <module name="mojave-core-participant-admin" />
+        <module name="mojave-operation-usecase" />
+        <module name="mojave-core-transaction-intercom-client" />
+        <module name="mojave-core-settlement-admin-client" />
+        <module name="mojave-component-flyway" />
+        <module name="mojave-component-kafka" />
+        <module name="mojave-core-participant-admin-client" />
+        <module name="mojave-core-accounting-intercom-client" />
+        <module name="mojave-core-transaction-contract" />
+        <module name="mojave-core-accounting-domain" />
+        <module name="mojave-component-jpa" />
+        <module name="mojave-component-retrofit" />
+        <module name="mojave-rail-fspiop-transfer" />
+        <module name="mojave-core-accounting-store" />
+        <module name="mojave-component-web" />
+        <module name="mojave-core-accounting-admin-client" />
+        <module name="mojave-core-settlement-producer" />
+        <module name="mojave-core-transaction-consumer" />
         <module name="mojave-rail-fspiop-mono-service" />
-        <module name="mod-fspiop-bootstrap" />
-        <module name="mod-accounting-intercom" />
-        <module name="mod-settlement-producer" />
-        <module name="mod-accounting-store" />
-        <module name="mod-participant-admin" />
-        <module name="mod-wallet-contract" />
-        <module name="mod-connector-sample" />
-        <module name="mod-accounting-admin" />
-        <module name="mod-transaction-producer" />
-        <module name="mod-wallet-producer" />
-        <module name="mod-settlement-contract" />
-        <module name="mod-component-misc" />
-        <module name="mod-accounting-domain" />
-        <module name="mod-accounting-consumer" />
-        <module name="mod-accounting-intercom-client" />
+        <module name="mojave-core-participant-intercom-client" />
+        <module name="mojave-core-accounting-admin" />
+        <module name="mojave-connector-sample" />
+        <module name="mojave-core-participant-domain" />
+        <module name="mojave-connector-adapter" />
+        <module name="mojave-component-vault" />
+        <module name="mojave-core-settlement-contract" />
+        <module name="mojave-rail-fspiop-component" />
+        <module name="mojave-connector-gateway" />
+        <module name="mojave-core-wallet-consumer" />
         <module name="mojave-core-mono-consumer" />
-        <module name="mod-participant-admin-client" />
-        <module name="mod-component-jpa" />
-        <module name="mod-wallet-domain" />
-        <module name="mod-accounting-contract" />
-        <module name="mod-component-retrofit" />
-        <module name="mod-settlement-consumer" />
-        <module name="mod-transaction-contract" />
-        <module name="mod-common-datatype-jpa" />
-        <module name="mod-component-kafka" />
-        <module name="fspiop-lookup-pom" />
-        <module name="mod-transaction-domain" />
-        <module name="mod-participant-domain" />
-        <module name="mod-accounting-producer" />
+        <module name="mojave-component-redis" />
+        <module name="mojave-core-accounting-consumer" />
+        <module name="mojave-core-common-datatype" />
+        <module name="mojave-component-openapi" />
+        <module name="mojave-core-wallet-contract" />
+        <module name="mojave-core-wallet-admin-client" />
+        <module name="mojave-core-common-datatype-jpa" />
         <module name="mojave-core-mono-admin" />
-        <module name="mod-settlement-admin" />
-        <module name="mod-fspiop-invoker" />
-        <module name="mod-participant-contract" />
+        <module name="mojave-core-accounting-intercom" />
+        <module name="mojave-core-settlement-admin" />
+        <module name="mojave-core-wallet-domain" />
+        <module name="mojave-core-settlement-consumer" />
+        <module name="mojave-core-wallet-producer" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="accounting-pom" target="25" />
-      <module name="common-pom" target="25" />
-      <module name="core-pom" target="25" />
-      <module name="fspiop-pom" target="25" />
-      <module name="iso20022-pom" target="25" />
-      <module name="mod-common-datatype-converter" target="25" />
-      <module name="mod-fspiop-service" target="25" />
-      <module name="mod-fspiop-spec" target="25" />
-      <module name="mod-lookup-contract" target="25" />
-      <module name="mod-lookup-domain" target="25" />
-      <module name="mod-lookup-service" target="25" />
-      <module name="mod-mono-admin" target="25" />
-      <module name="mod-mono-consumer" target="25" />
-      <module name="mod-mono-intercom" target="25" />
-      <module name="mod-mono-service" target="25" />
-      <module name="mod-quoting-contract" target="25" />
-      <module name="mod-quoting-domain" target="25" />
-      <module name="mod-quoting-service" target="25" />
-      <module name="mod-specification-fspiop" target="25" />
-      <module name="mod-transfer-contract" target="25" />
-      <module name="mod-transfer-domain" target="25" />
-      <module name="mod-transfer-service" target="25" />
-      <module name="mono-pom" target="25" />
-      <module name="participant-pom" target="25" />
-      <module name="platform-pom" target="25" />
-      <module name="pom-lookup" target="25" />
-      <module name="pom-mono" target="25" />
-      <module name="settlement-pom" target="25" />
-      <module name="specification-pom" target="25" />
-      <module name="transaction-pom" target="25" />
-      <module name="wallet-pom" target="25" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="accounting-pom" options="-parameters" />
-      <module name="common-pom" options="-parameters" />
-      <module name="component-pom" options="-parameters" />
-      <module name="connector-pom" options="-parameters" />
-      <module name="core-pom" options="-parameters" />
-      <module name="forex-provider-pom" options="-parameters" />
-      <module name="fspiop-lookup-pom" options="-parameters" />
-      <module name="iso20022-pom" options="-parameters" />
-      <module name="ledger-provider-pom" options="-parameters" />
-      <module name="mod-accounting-admin" options="-parameters" />
-      <module name="mod-accounting-admin-client" options="-parameters" />
-      <module name="mod-accounting-consumer" options="-parameters" />
-      <module name="mod-accounting-contract" options="-parameters" />
-      <module name="mod-accounting-domain" options="-parameters" />
-      <module name="mod-accounting-intercom" options="-parameters" />
-      <module name="mod-accounting-intercom-client" options="-parameters" />
-      <module name="mod-accounting-producer" options="-parameters" />
-      <module name="mod-accounting-store" options="-parameters" />
-      <module name="mod-common-datatype" options="-parameters" />
-      <module name="mod-common-datatype-converter" options="-parameters" />
-      <module name="mod-common-datatype-jpa" options="-parameters" />
-      <module name="mod-component-flyway" options="-parameters" />
-      <module name="mod-component-jpa" options="-parameters" />
-      <module name="mod-component-kafka" options="-parameters" />
-      <module name="mod-component-misc" options="-parameters" />
-      <module name="mod-component-openapi" options="-parameters" />
-      <module name="mod-component-redis" options="-parameters" />
-      <module name="mod-component-retrofit" options="-parameters" />
-      <module name="mod-component-tomcat" options="-parameters" />
-      <module name="mod-component-vault" options="-parameters" />
-      <module name="mod-component-web" options="-parameters" />
-      <module name="mod-connector-adapter" options="-parameters" />
-      <module name="mod-connector-gateway" options="-parameters" />
-      <module name="mod-connector-sample" options="-parameters" />
-      <module name="mod-fspiop-bootstrap" options="-parameters" />
-      <module name="mod-fspiop-component" options="-parameters" />
-      <module name="mod-fspiop-invoker" options="-parameters" />
-      <module name="mod-fspiop-service" options="-parameters" />
-      <module name="mod-fspiop-spec" options="-parameters" />
-      <module name="mod-lookup-contract" options="-parameters" />
-      <module name="mod-lookup-domain" options="-parameters" />
-      <module name="mod-lookup-service" options="-parameters" />
-      <module name="mod-mono-admin" options="-parameters" />
-      <module name="mod-mono-consumer" options="-parameters" />
-      <module name="mod-mono-intercom" options="-parameters" />
-      <module name="mod-mono-service" options="-parameters" />
-      <module name="mod-operation-usecase" options="-parameters" />
-      <module name="mod-participant-admin" options="-parameters" />
-      <module name="mod-participant-admin-client" options="-parameters" />
-      <module name="mod-participant-contract" options="-parameters" />
-      <module name="mod-participant-domain" options="-parameters" />
-      <module name="mod-participant-intercom" options="-parameters" />
-      <module name="mod-participant-intercom-client" options="-parameters" />
-      <module name="mod-participant-store" options="-parameters" />
-      <module name="mod-quoting-contract" options="-parameters" />
-      <module name="mod-quoting-domain" options="-parameters" />
-      <module name="mod-quoting-service" options="-parameters" />
-      <module name="mod-scheme-fspiop" options="-parameters" />
-      <module name="mod-settlement-admin" options="-parameters" />
-      <module name="mod-settlement-admin-client" options="-parameters" />
-      <module name="mod-settlement-consumer" options="-parameters" />
-      <module name="mod-settlement-contract" options="-parameters" />
-      <module name="mod-settlement-domain" options="-parameters" />
-      <module name="mod-settlement-producer" options="-parameters" />
-      <module name="mod-specification-fspiop" options="-parameters" />
-      <module name="mod-transaction-consumer" options="-parameters" />
-      <module name="mod-transaction-contract" options="-parameters" />
-      <module name="mod-transaction-domain" options="-parameters" />
-      <module name="mod-transaction-intercom" options="-parameters" />
-      <module name="mod-transaction-intercom-client" options="-parameters" />
-      <module name="mod-transaction-producer" options="-parameters" />
-      <module name="mod-transfer-contract" options="-parameters" />
-      <module name="mod-transfer-domain" options="-parameters" />
-      <module name="mod-transfer-service" options="-parameters" />
-      <module name="mod-wallet-admin" options="-parameters" />
-      <module name="mod-wallet-admin-client" options="-parameters" />
-      <module name="mod-wallet-consumer" options="-parameters" />
-      <module name="mod-wallet-contract" options="-parameters" />
-      <module name="mod-wallet-domain" options="-parameters" />
-      <module name="mod-wallet-intercom" options="-parameters" />
-      <module name="mod-wallet-intercom-client" options="-parameters" />
-      <module name="mod-wallet-producer" options="-parameters" />
+      <module name="mojave" options="-parameters" />
+      <module name="mojave-component" options="-parameters" />
+      <module name="mojave-component-flyway" options="-parameters" />
+      <module name="mojave-component-jpa" options="-parameters" />
+      <module name="mojave-component-kafka" options="-parameters" />
+      <module name="mojave-component-misc" options="-parameters" />
+      <module name="mojave-component-openapi" options="-parameters" />
+      <module name="mojave-component-redis" options="-parameters" />
+      <module name="mojave-component-retrofit" options="-parameters" />
+      <module name="mojave-component-tomcat" options="-parameters" />
+      <module name="mojave-component-vault" options="-parameters" />
+      <module name="mojave-component-web" options="-parameters" />
+      <module name="mojave-connector" options="-parameters" />
+      <module name="mojave-connector-adapter" options="-parameters" />
+      <module name="mojave-connector-gateway" options="-parameters" />
+      <module name="mojave-connector-sample" options="-parameters" />
+      <module name="mojave-core" options="-parameters" />
+      <module name="mojave-core-accounting" options="-parameters" />
+      <module name="mojave-core-accounting-admin" options="-parameters" />
+      <module name="mojave-core-accounting-admin-client" options="-parameters" />
+      <module name="mojave-core-accounting-consumer" options="-parameters" />
+      <module name="mojave-core-accounting-contract" options="-parameters" />
+      <module name="mojave-core-accounting-domain" options="-parameters" />
+      <module name="mojave-core-accounting-intercom" options="-parameters" />
+      <module name="mojave-core-accounting-intercom-client" options="-parameters" />
+      <module name="mojave-core-accounting-producer" options="-parameters" />
+      <module name="mojave-core-accounting-store" options="-parameters" />
+      <module name="mojave-core-common" options="-parameters" />
+      <module name="mojave-core-common-datatype" options="-parameters" />
+      <module name="mojave-core-common-datatype-jpa" options="-parameters" />
       <module name="mojave-core-mono" options="-parameters" />
       <module name="mojave-core-mono-admin" options="-parameters" />
       <module name="mojave-core-mono-consumer" options="-parameters" />
       <module name="mojave-core-mono-intercom" options="-parameters" />
-      <module name="mojave-pom" options="-parameters" />
+      <module name="mojave-core-participant" options="-parameters" />
+      <module name="mojave-core-participant-admin" options="-parameters" />
+      <module name="mojave-core-participant-admin-client" options="-parameters" />
+      <module name="mojave-core-participant-contract" options="-parameters" />
+      <module name="mojave-core-participant-domain" options="-parameters" />
+      <module name="mojave-core-participant-intercom" options="-parameters" />
+      <module name="mojave-core-participant-intercom-client" options="-parameters" />
+      <module name="mojave-core-participant-store" options="-parameters" />
+      <module name="mojave-core-settlement" options="-parameters" />
+      <module name="mojave-core-settlement-admin" options="-parameters" />
+      <module name="mojave-core-settlement-admin-client" options="-parameters" />
+      <module name="mojave-core-settlement-consumer" options="-parameters" />
+      <module name="mojave-core-settlement-contract" options="-parameters" />
+      <module name="mojave-core-settlement-domain" options="-parameters" />
+      <module name="mojave-core-settlement-producer" options="-parameters" />
+      <module name="mojave-core-transaction-" options="-parameters" />
+      <module name="mojave-core-transaction-consumer" options="-parameters" />
+      <module name="mojave-core-transaction-contract" options="-parameters" />
+      <module name="mojave-core-transaction-domain" options="-parameters" />
+      <module name="mojave-core-transaction-intercom" options="-parameters" />
+      <module name="mojave-core-transaction-intercom-client" options="-parameters" />
+      <module name="mojave-core-transaction-producer" options="-parameters" />
+      <module name="mojave-core-wallet" options="-parameters" />
+      <module name="mojave-core-wallet-admin" options="-parameters" />
+      <module name="mojave-core-wallet-admin-client" options="-parameters" />
+      <module name="mojave-core-wallet-consumer" options="-parameters" />
+      <module name="mojave-core-wallet-contract" options="-parameters" />
+      <module name="mojave-core-wallet-domain" options="-parameters" />
+      <module name="mojave-core-wallet-intercom" options="-parameters" />
+      <module name="mojave-core-wallet-intercom-client" options="-parameters" />
+      <module name="mojave-core-wallet-producer" options="-parameters" />
+      <module name="mojave-operation" options="-parameters" />
+      <module name="mojave-operation-usecase" options="-parameters" />
+      <module name="mojave-provider" options="-parameters" />
+      <module name="mojave-provider-forex" options="-parameters" />
+      <module name="mojave-provider-ledger" options="-parameters" />
+      <module name="mojave-provider-settlement" options="-parameters" />
+      <module name="mojave-rail" options="-parameters" />
+      <module name="mojave-rail-fspiop" options="-parameters" />
+      <module name="mojave-rail-fspiop-bootstrap" options="-parameters" />
+      <module name="mojave-rail-fspiop-component" options="-parameters" />
+      <module name="mojave-rail-fspiop-invoker" options="-parameters" />
+      <module name="mojave-rail-fspiop-lookup" options="-parameters" />
       <module name="mojave-rail-fspiop-mono-service" options="-parameters" />
-      <module name="mono-pom" options="-parameters" />
-      <module name="operation-pom" options="-parameters" />
-      <module name="participant-pom" options="-parameters" />
-      <module name="platform-pom" options="-parameters" />
-      <module name="pom-accounting" options="-parameters" />
-      <module name="pom-common" options="-parameters" />
-      <module name="pom-component" options="-parameters" />
-      <module name="pom-connector" options="-parameters" />
-      <module name="pom-core" options="-parameters" />
-      <module name="pom-forex-provider" options="-parameters" />
-      <module name="pom-fspiop" options="-parameters" />
-      <module name="pom-fspiop-lookup" options="-parameters" />
-      <module name="pom-iso20022" options="-parameters" />
-      <module name="pom-ledger-provider" options="-parameters" />
-      <module name="pom-lookup" options="-parameters" />
-      <module name="pom-mojave" options="-parameters" />
-      <module name="pom-mono" options="-parameters" />
-      <module name="pom-operation" options="-parameters" />
-      <module name="pom-participant" options="-parameters" />
-      <module name="pom-platform" options="-parameters" />
-      <module name="pom-provider" options="-parameters" />
-      <module name="pom-quoting" options="-parameters" />
-      <module name="pom-rail" options="-parameters" />
-      <module name="pom-scheme" options="-parameters" />
-      <module name="pom-settlement" options="-parameters" />
-      <module name="pom-settlement-provider" options="-parameters" />
-      <module name="pom-specification" options="-parameters" />
-      <module name="pom-transaction" options="-parameters" />
-      <module name="pom-transfer" options="-parameters" />
-      <module name="pom-wallet" options="-parameters" />
-      <module name="provider-pom" options="-parameters" />
-      <module name="quoting-pom" options="-parameters" />
-      <module name="rail-fspiop-pom" options="-parameters" />
-      <module name="rail-pom" options="-parameters" />
-      <module name="settlement-pom" options="-parameters" />
-      <module name="settlement-provider-pom" options="-parameters" />
-      <module name="specification-pom" options="-parameters" />
-      <module name="transaction-pom" options="-parameters" />
-      <module name="transfer-pom" options="-parameters" />
-      <module name="wallet-pom" options="-parameters" />
+      <module name="mojave-rail-fspiop-quoting" options="-parameters" />
+      <module name="mojave-rail-fspiop-transfer" options="-parameters" />
+      <module name="mojave-scheme" options="-parameters" />
+      <module name="mojave-scheme-fspiop" options="-parameters" />
     </option>
   </component>
 </project>

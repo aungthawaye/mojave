@@ -21,6 +21,7 @@ package org.mojave.fspiop.component.interledger;
 
 import com.google.common.primitives.UnsignedLong;
 import org.junit.jupiter.api.Test;
+import org.mojave.rail.fspiop.component.interledger.Interledger;
 
 public class InterledgerUT {
 

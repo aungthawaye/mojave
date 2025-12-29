@@ -19,7 +19,7 @@
  */
 package org.mojave.connector.gateway.outbound.data;
 
-import org.mojave.fspiop.component.type.Payee;
+import org.mojave.rail.fspiop.component.type.Payee;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
 import org.mojave.scheme.fspiop.core.TransfersPostRequest;

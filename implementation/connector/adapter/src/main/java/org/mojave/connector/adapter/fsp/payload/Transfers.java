@@ -20,7 +20,7 @@
 
 package org.mojave.connector.adapter.fsp.payload;
 
-import org.mojave.fspiop.component.data.Agreement;
+import org.mojave.rail.fspiop.component.data.Agreement;
 import org.mojave.scheme.fspiop.core.ExtensionList;
 import org.mojave.scheme.fspiop.core.TransferState;
 

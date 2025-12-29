@@ -2,7 +2,7 @@
   <configuration default="false" name="participant-intercom (4202)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="02 participant">
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/02_participant/intercom/src/main/java/org/mojave/core/participant/intercom/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/02_participant/intercom/src/main/java/org/mojave/core/participant/intercom/.env" />
     </option>
     <module name="mojave-core-participant-intercom" />
     <selectedOptions>

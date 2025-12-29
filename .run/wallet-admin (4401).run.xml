@@ -2,7 +2,7 @@
   <configuration default="false" name="wallet-admin (4401)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="04 wallet">
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/04_wallet/admin/src/main/java/org/mojave/core/wallet/admin/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/04_wallet/admin/src/main/java/org/mojave/core/wallet/admin/.env" />
     </option>
     <module name="mojave-core-wallet-admin" />
     <selectedOptions>

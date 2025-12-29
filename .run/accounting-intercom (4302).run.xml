@@ -2,7 +2,7 @@
   <configuration default="false" name="accounting-intercom (4302)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="03 accounting">
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/intercom/src/main/java/org/mojave/core/accounting/intercom/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/03_accounting/intercom/src/main/java/org/mojave/core/accounting/intercom/.env" />
     </option>
     <module name="mojave-core-accounting-intercom" />
     <selectedOptions>

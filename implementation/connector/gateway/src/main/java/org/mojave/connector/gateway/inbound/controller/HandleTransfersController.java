@@ -28,10 +28,10 @@ import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfers
 import org.mojave.connector.gateway.inbound.event.PostTransfersEvent;
 import org.mojave.connector.gateway.inbound.event.PutTransfersErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutTransfersEvent;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.handy.FspiopHeaders;
-import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.handy.FspiopHeaders;
+import org.mojave.rail.fspiop.component.type.Payee;
+import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.TransfersIDPatchResponse;
 import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;

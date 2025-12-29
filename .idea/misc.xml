@@ -7,22 +7,8 @@
         <option value="$PROJECT_DIR$/implementation/pom.xml" />
       </list>
     </option>
-    <option name="ignoredFiles">
-      <set>
-        <option value="$PROJECT_DIR$/implementation/platform/iso20022/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/platform/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/lookup/contract/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/lookup/domain/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/lookup/service/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/quoting/contract/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/quoting/domain/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/quoting/service/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/spec/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/transfer/contract/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/transfer/domain/pom.xml" />
-        <option value="$PROJECT_DIR$/implementation/rail/fspiop/transfer/service/pom.xml" />
-      </set>
-    </option>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="25" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="25" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>
