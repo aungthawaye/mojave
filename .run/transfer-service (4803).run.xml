@@ -3,7 +3,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/08_transfer/service/src/main/java/org/mojave/platform/core/transfer/service/.env" />
     </option>
-    <module name="mod-transfer-service" />
+    <module name="mojave-transfer-service" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

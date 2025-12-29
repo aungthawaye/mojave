@@ -24,7 +24,7 @@ import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.fspiop.component.participant.ParticipantContext;
 import org.mojave.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.fspiop.component.retrofit.FspiopSigningInterceptor;
-import org.mojave.specification.fspiop.core.Currency;
+import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import tools.jackson.databind.ObjectMapper;

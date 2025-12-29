@@ -21,8 +21,8 @@
 package org.mojave.connector.adapter.fsp.payload;
 
 import org.mojave.fspiop.component.data.Agreement;
-import org.mojave.specification.fspiop.core.ExtensionList;
-import org.mojave.specification.fspiop.core.TransferState;
+import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.scheme.fspiop.core.TransferState;
 
 public class Transfers {
 

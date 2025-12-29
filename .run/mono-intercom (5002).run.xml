@@ -3,7 +3,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/mono/intercom/src/main/java/org/mojave/mono/intercom/.env" />
     </option>
-    <module name="mod-mono-intercom" />
+    <module name="mojave-core-mono-intercom" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

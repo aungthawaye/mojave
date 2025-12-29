@@ -21,7 +21,7 @@
 package org.mojave.fspiop.component.participant;
 
 import org.mojave.component.misc.crypto.KeyPairs;
-import org.mojave.specification.fspiop.core.Currency;
+import org.mojave.scheme.fspiop.core.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

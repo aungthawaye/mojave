@@ -20,7 +20,7 @@
 package org.mojave.operation.usecase.domain.participant;
 
 import org.mojave.core.common.datatype.type.participant.FspCode;
-import org.mojave.specification.fspiop.core.Currency;
+import org.mojave.scheme.fspiop.core.Currency;
 
 public interface AddFsp {
 

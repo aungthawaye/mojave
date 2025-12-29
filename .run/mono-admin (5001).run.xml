@@ -3,7 +3,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/mono/admin/src/main/java/org/mojave/mono/admin/.env" />
     </option>
-    <module name="mod-mono-admin" />
+    <module name="mojave-core-mono-admin" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

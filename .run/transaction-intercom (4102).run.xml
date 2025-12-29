@@ -4,7 +4,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/01_transaction/intercom/src/main/java/org/mojave/core/transaction/intercom/.env" />
     </option>
-    <module name="mod-transaction-intercom" />
+    <module name="mojave-core-transaction-intercom" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

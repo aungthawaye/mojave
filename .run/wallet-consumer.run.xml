@@ -4,7 +4,7 @@
       <option value="$PROJECT_DIR$/implementation/platform/core/04_wallet/consumer/src/main/java/org/mojave/core/wallet/consumer/.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.core.wallet.consumer.WalletConsumerApplication" />
-    <module name="mod-wallet-consumer" />
+    <module name="mojave-core-wallet-consumer" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.core.wallet.consumer.*" />

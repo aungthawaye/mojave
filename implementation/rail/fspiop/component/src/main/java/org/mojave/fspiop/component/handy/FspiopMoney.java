@@ -21,7 +21,7 @@ package org.mojave.fspiop.component.handy;
 
 import org.mojave.fspiop.component.error.FspiopErrors;
 import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.specification.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.Money;
 
 import java.math.BigDecimal;
 

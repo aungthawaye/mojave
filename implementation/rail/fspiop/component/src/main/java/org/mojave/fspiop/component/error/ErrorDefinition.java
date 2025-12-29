@@ -19,8 +19,8 @@
  */
 package org.mojave.fspiop.component.error;
 
-import org.mojave.specification.fspiop.core.ErrorInformation;
-import org.mojave.specification.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.ErrorInformation;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 
 public record ErrorDefinition(FspiopErrorType errorType, String description) {
 

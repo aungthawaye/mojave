@@ -21,8 +21,8 @@ package org.mojave.fspiop.invoker.api.transfers;
 
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
 
 public interface PutTransfers {
 

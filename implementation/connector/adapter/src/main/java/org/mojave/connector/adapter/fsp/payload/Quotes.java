@@ -19,9 +19,9 @@
  */
 package org.mojave.connector.adapter.fsp.payload;
 
-import org.mojave.specification.fspiop.core.AmountType;
-import org.mojave.specification.fspiop.core.Money;
-import org.mojave.specification.fspiop.core.Party;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.Party;
 
 import java.time.Instant;
 

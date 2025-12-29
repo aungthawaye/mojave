@@ -20,8 +20,8 @@
 
 package org.mojave.connector.adapter.fsp.payload;
 
-import org.mojave.specification.fspiop.core.PartyIdType;
-import org.mojave.specification.fspiop.core.PartyPersonalInfo;
+import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.scheme.fspiop.core.PartyPersonalInfo;
 
 public class Parties {
 

@@ -20,7 +20,7 @@
 package org.mojave.fspiop.component.retrofit;
 
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.specification.fspiop.core.ErrorInformationResponse;
+import org.mojave.scheme.fspiop.core.ErrorInformationResponse;
 import tools.jackson.databind.ObjectMapper;
 
 public class FspiopErrorDecoder implements RetrofitService.ErrorDecoder<ErrorInformationResponse> {

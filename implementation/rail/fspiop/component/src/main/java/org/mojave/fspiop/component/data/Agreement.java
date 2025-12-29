@@ -20,9 +20,9 @@
 package org.mojave.fspiop.component.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.mojave.specification.fspiop.core.AmountType;
-import org.mojave.specification.fspiop.core.Money;
-import org.mojave.specification.fspiop.core.PartyIdInfo;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.PartyIdInfo;
 
 public record Agreement(@JsonProperty(required = true) String quoteId,
                         @JsonProperty(required = true) PartyIdInfo payer,

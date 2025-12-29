@@ -4,7 +4,7 @@
       <option value="$PROJECT_DIR$/implementation/platform/core/01_transaction/consumer/src/main/java/org/mojave/core/transaction/consumer/.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.core.transaction.consumer.TransactionConsumerApplication" />
-    <module name="mod-transaction-consumer" />
+    <module name="mojave-core-transaction-consumer" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

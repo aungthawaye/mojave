@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.inbound.command.transfers;
 
 import org.mojave.fspiop.component.type.Payee;
-import org.mojave.specification.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 
 public interface HandlePutTransfersErrorCommand {
 

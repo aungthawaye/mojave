@@ -19,9 +19,9 @@
  */
 package org.mojave.fspiop.invoker.api;
 
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
-import org.mojave.rail.fspiop.spec.core.QuotesPostRequest;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
+import org.mojave.scheme.fspiop.core.QuotesPostRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;

@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.inbound.command.quotes;
 
 import org.mojave.fspiop.component.type.Payee;
-import org.mojave.specification.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 
 public interface HandlePutQuotesErrorCommand {
 

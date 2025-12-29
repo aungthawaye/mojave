@@ -19,7 +19,7 @@
  */
 package org.mojave.fspiop.component.handy;
 
-import org.mojave.specification.fspiop.core.Currency;
+import org.mojave.scheme.fspiop.core.Currency;
 
 import java.util.HashMap;
 import java.util.Map;

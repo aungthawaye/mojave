@@ -21,9 +21,9 @@ package org.mojave.fspiop.invoker.api.parties;
 
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
-import org.mojave.rail.fspiop.spec.core.PartyIdType;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.PartiesTypeIDPutResponse;
+import org.mojave.scheme.fspiop.core.PartyIdType;
 
 public interface PutParties {
 

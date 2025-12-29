@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.component;
 
 import org.mojave.fspiop.component.type.Payee;
-import org.mojave.specification.fspiop.core.PartyIdType;
+import org.mojave.scheme.fspiop.core.PartyIdType;
 
 public class PubSubKeys {
 

@@ -4,7 +4,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/03_accounting/admin/src/main/java/org/mojave/core/accounting/admin/.env" />
     </option>
-    <module name="mod-accounting-admin" />
+    <module name="mojave-core-accounting-admin" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

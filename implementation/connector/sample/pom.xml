@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.connector</groupId>
-        <artifactId>connector-pom</artifactId>
+        <artifactId>mojave-connector</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mod-connector-sample</artifactId>
+    <artifactId>mojave-connector-sample</artifactId>
     <name>Mojave - Connector - Sample</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -17,11 +17,11 @@
     <dependencies>
         <dependency>
             <groupId>org.mojave.connector</groupId>
-            <artifactId>mod-connector-adapter</artifactId>
+            <artifactId>mojave-connector-adapter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.connector</groupId>
-            <artifactId>mod-connector-gateway</artifactId>
+            <artifactId>mojave-connector-gateway</artifactId>
         </dependency>
     </dependencies>
 </project>

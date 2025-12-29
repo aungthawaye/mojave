@@ -3,7 +3,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/platform/core/07_quoting/service/src/main/java/org/mojave/core/quoting/service/.env" />
     </option>
-    <module name="mod-quoting-service" />
+    <module name="mojave-quoting-service" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

@@ -4,7 +4,7 @@
       <option value="$PROJECT_DIR$/implementation/connector/sample/src/main/java/org/mojave/connector/sample/fsp1.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.connector.sample.SampleConnectorApplication" />
-    <module name="mod-connector-sample" />
+    <module name="mojave-connector-sample" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.connector.sample.*" />

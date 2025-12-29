@@ -3,18 +3,22 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.rail</groupId>
-        <artifactId>rail-pom</artifactId>
+        <artifactId>mojave-rail</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.rail.fspiop</groupId>
-    <artifactId>fspiop-pom</artifactId>
+    <artifactId>mojave-rail-fspiop</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Rail - FSPIOP</name>
     <modules>
         <module>component</module>
         <module>invoker</module>
-        <module>service</module>
+        <module>bootstrap</module>
+        <module>lookup</module>
+        <module>quoting</module>
+        <module>transfer</module>
+        <module>mono</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

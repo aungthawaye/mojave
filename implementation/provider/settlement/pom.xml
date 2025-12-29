@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.provider</groupId>
-        <artifactId>provider-pom</artifactId>
+        <artifactId>mojave-provider</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.provider.settlement</groupId>
-    <artifactId>settlement-provider-pom</artifactId>
+    <artifactId>mojave-provider-settlement</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Provider - Settlement</name>
     <properties>

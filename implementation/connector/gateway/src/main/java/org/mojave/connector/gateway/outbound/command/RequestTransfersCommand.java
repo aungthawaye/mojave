@@ -22,7 +22,7 @@ package org.mojave.connector.gateway.outbound.command;
 import org.mojave.connector.gateway.data.TransfersResult;
 import org.mojave.fspiop.component.exception.FspiopException;
 import org.mojave.fspiop.component.type.Payee;
-import org.mojave.specification.fspiop.core.TransfersPostRequest;
+import org.mojave.scheme.fspiop.core.TransfersPostRequest;
 
 public interface RequestTransfersCommand {
 

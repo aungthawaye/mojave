@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave</groupId>
-        <artifactId>parent-pom</artifactId>
+        <artifactId>mojave</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.component</groupId>
-    <artifactId>component-pom</artifactId>
+    <artifactId>mojave-component</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Component</name>
     <modules>

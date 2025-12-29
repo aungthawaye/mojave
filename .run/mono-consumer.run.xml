@@ -4,7 +4,7 @@
       <option value="$PROJECT_DIR$/implementation/platform/mono/consumer/src/main/java/org/mojave/mono/consumer/.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.mono.consumer.MonoConsumerApplication" />
-    <module name="mod-mono-consumer" />
+    <module name="mojave-core-mono-consumer" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.mono.consumer.*" />
