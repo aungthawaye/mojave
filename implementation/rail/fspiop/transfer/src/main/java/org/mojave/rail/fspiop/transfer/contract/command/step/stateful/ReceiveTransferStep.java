@@ -26,8 +26,13 @@ import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.rail.fspiop.component.data.Agreement;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Currency;
 import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.TransactionScenario;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 public interface ReceiveTransferStep {
@@ -37,6 +42,7 @@ public interface ReceiveTransferStep {
     record Input(FspData payerFsp,
                  FspData payeeFsp,
                  UdfTransferId udfTransferId,
+                 Money transferAmount,
                  String ilpCondition,
                  String ilpPacket,
                  Agreement agreement,

@@ -23,11 +23,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.mojave.scheme.fspiop.core.AmountType;
 import org.mojave.scheme.fspiop.core.Money;
 import org.mojave.scheme.fspiop.core.PartyIdInfo;
+import org.mojave.scheme.fspiop.core.TransactionScenario;
 
 public record Agreement(@JsonProperty(required = true) String quoteId,
                         @JsonProperty(required = true) PartyIdInfo payer,
                         @JsonProperty(required = true) PartyIdInfo payee,
                         @JsonProperty(required = true) AmountType amountType,
+                        @JsonProperty(required = true) TransactionScenario scenario,
+                        @JsonProperty(required = true) String subScenario,
                         @JsonProperty(required = true) Money originalAmount,
                         @JsonProperty(required = true) Money payeeFspFee,
                         @JsonProperty(required = true) Money payeeFspCommission,

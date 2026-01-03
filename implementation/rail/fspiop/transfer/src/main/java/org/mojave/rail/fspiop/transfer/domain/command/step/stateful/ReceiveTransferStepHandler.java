@@ -25,14 +25,14 @@ import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
+import org.mojave.rail.fspiop.component.error.FspiopErrors;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReceiveTransferStep;
+import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.model.Party;
 import org.mojave.rail.fspiop.transfer.domain.model.Transfer;
 import org.mojave.rail.fspiop.transfer.domain.repository.TransferIlpPacketRepository;
 import org.mojave.rail.fspiop.transfer.domain.repository.TransferRepository;
-import org.mojave.rail.fspiop.component.error.FspiopErrors;
-import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -121,15 +121,22 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
                                            .plusMillis(
                                                this.transferSettings.reservationTimeoutMs());
 
-            var transfer = new Transfer(
-                transactionId, transactionAt, input.udfTransferId(), payerFsp.fspId(), new Party(
+            var payer = new Party(
                 payerPartyIdInfo.getPartyIdType(), payerPartyIdInfo.getPartyIdentifier(),
-                payerPartyIdInfo.getPartySubIdOrType()), payeeFsp.fspId(), new Party(
+                payerPartyIdInfo.getPartySubIdOrType());
+
+            var payee = new Party(
                 payeePartyIdInfo.getPartyIdType(), payeePartyIdInfo.getPartyIdentifier(),
-                payeePartyIdInfo.getPartySubIdOrType()), input.agreement().transferAmount(),
-                input.agreement().payeeFspFee(), input.agreement().payeeFspCommission(),
-                input.agreement().payeeReceiveAmount(), input.ilpPacket(), input.ilpCondition(),
-                input.requestExpiration(), reservationTimeoutAt);
+                payeePartyIdInfo.getPartySubIdOrType());
+
+            var transfer = new Transfer(
+                transactionId, transactionAt, input.udfTransferId(), payerFsp.fspId(), payer,
+                payeeFsp.fspId(), payee, input.agreement().amountType(),
+                input.agreement().scenario(), input.agreement().subScenario(),
+                input.transferAmount(), input.agreement().payeeFspFee(),
+                input.agreement().payeeFspCommission(), input.agreement().payeeReceiveAmount(),
+                input.ilpPacket(), input.ilpCondition(), input.requestExpiration(),
+                reservationTimeoutAt);
 
             var extensionList = input.extensionList();
 

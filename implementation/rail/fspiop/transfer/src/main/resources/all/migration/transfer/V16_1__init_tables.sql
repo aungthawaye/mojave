@@ -15,6 +15,9 @@ CREATE TABLE `tfr_transfer`
     `payee_party_type`              varchar(32)    DEFAULT NULL,
     `payee_party_id`                varchar(48)    DEFAULT NULL,
     `payee_sub_id`                  varchar(48)    DEFAULT NULL,
+    `amount_type`                   varchar(32)    DEFAULT NULL,
+    `scenario`                      varchar(32)    DEFAULT NULL,
+    `sub_scenario`                  varchar(128)   DEFAULT NULL,
 
     `transfer_currency`             varchar(3)     NOT NULL,
     `transfer_amount`               decimal(34, 4) NOT NULL,
@@ -31,6 +34,9 @@ CREATE TABLE `tfr_transfer`
     `request_expiration`            bigint         DEFAULT NULL,
 
     `reservation_id`                bigint         DEFAULT NULL,
+    `payer_commit_id`               bigint         DEFAULT NULL,
+    `payee_commit_id`               bigint         DEFAULT NULL,
+    `rollback_id`                   bigint         DEFAULT NULL,
 
     `status`                        varchar(32)    NOT NULL,
     `received_at`                   bigint         NOT NULL,
@@ -61,6 +67,9 @@ CREATE TABLE `tfr_transfer`
     UNIQUE KEY `tfr_transfer_01_UK` (`transaction_id`),
     UNIQUE KEY `tfr_transfer_02_UK` (`udf_transfer_id`),
     UNIQUE KEY `tfr_transfer_03_UK` (`reservation_id`),
+    UNIQUE KEY `tfr_transfer_04_UK` (`payer_commit_id`),
+    UNIQUE KEY `tfr_transfer_05_UK` (`payee_commit_id`),
+    UNIQUE KEY `tfr_transfer_06_UK` (`rollback_id`),
     UNIQUE KEY `tfr_transfer_07_UK` (`ilp_fulfilment`),
 
     KEY `tfr_transfer_01_IDX` (`payer_fsp_id`, `payee_fsp_id`,
@@ -78,7 +87,10 @@ CREATE TABLE `tfr_transfer`
     KEY `tfr_transfer_12_IDX` (`reserved_at`),
     KEY `tfr_transfer_13_IDX` (`committed_at`),
     KEY `tfr_transfer_14_IDX` (`aborted_at`),
-    KEY `tfr_transfer_15_IDX` (`status`)
+    KEY `tfr_transfer_15_IDX` (`status`),
+    KEY `tfr_transfer_16_IDX` (`amount_type`),
+    KEY `tfr_transfer_17_IDX` (`scenario`),
+    KEY `tfr_transfer_18_IDX` (`scenario`, `sub_scenario`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

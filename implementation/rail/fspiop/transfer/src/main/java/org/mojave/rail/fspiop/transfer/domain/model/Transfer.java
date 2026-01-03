@@ -62,8 +62,10 @@ import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.rail.fspiop.transfer.contract.data.TransferData;
+import org.mojave.scheme.fspiop.core.AmountType;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.TransactionScenario;
 
 import java.math.BigDecimal;
 import java.sql.Types;
@@ -145,7 +147,16 @@ import static java.sql.Types.BIGINT;
             columnList = "aborted_at"),
         @Index(
             name = "tfr_transfer_15_IDX",
-            columnList = "status")})
+            columnList = "status"),
+        @Index(
+            name = "tfr_transfer_16_IDX",
+            columnList = "amount_type"),
+        @Index(
+            name = "tfr_transfer_17_IDX",
+            columnList = "scenario"),
+        @Index(
+            name = "tfr_transfer_18_IDX",
+            columnList = "scenario, sub_scenario")})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Transfer extends JpaEntity<TransferId> implements DataConversion<TransferData> {
 
@@ -240,6 +251,23 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
     protected Party payee;
 
     @Column(
+        name = "amount_type",
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected AmountType amountType = AmountType.SEND;
+
+    @Column(
+        name = "scenario",
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected TransactionScenario scenario = TransactionScenario.TRANSFER;
+
+    @Column(
+        name = "sub_scenario",
+        length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
+    protected String subScenario = null;
+
+    @Column(
         name = "transfer_currency",
         nullable = false,
         updatable = false,
@@ -311,6 +339,30 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         name = "reservation_id",
         unique = true)
     protected PositionUpdateId reservationId;
+    
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "payer_commit_id",
+        unique = true)
+    protected PositionUpdateId payerCommitId;
+
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "payee_commit_id",
+        unique = true)
+    protected PositionUpdateId payeeCommitId;
+
+    @Basic
+    @JavaType(PositionUpdateIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "rollback_id",
+        unique = true)
+    protected PositionUpdateId rollbackId;
 
     @Column(
         name = "status",
@@ -397,6 +449,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
                     Party payer,
                     FspId payeeFspId,
                     Party payee,
+                    AmountType amountType,
+                    TransactionScenario scenario,
+                    String subScenario,
                     Money transferAmount,
                     Money payeeFspFee,
                     Money payeeFspCommission,
@@ -413,6 +468,8 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         assert payer != null;
         assert payeeFspId != null;
         assert payee != null;
+        assert amountType != null;
+        assert scenario != null;
         assert transferAmount != null;
         assert payeeFspFee != null;
         assert payeeFspCommission != null;
@@ -430,6 +487,9 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
         this.payeeFspId = payeeFspId;
         this.payee = payee;
 
+        this.amountType = amountType;
+        this.scenario = scenario;
+        this.subScenario = subScenario;
         this.transferCurrency = transferAmount.getCurrency();
         this.transferAmount = new BigDecimal(transferAmount.getAmount());
 
