@@ -38,6 +38,7 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         LookUpServiceConfiguration.class,
+        LookUpServiceDependencies.class,
         LookUpServiceSettings.class})
 public class LookUpServiceApplication {
 

@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "org.mojave.core.quoting.service.controller")
+@ComponentScan(basePackages = "org.mojave.rail.fspiop.quoting.service")
 @Import(
     value = {
         QuotingDomainConfiguration.class,

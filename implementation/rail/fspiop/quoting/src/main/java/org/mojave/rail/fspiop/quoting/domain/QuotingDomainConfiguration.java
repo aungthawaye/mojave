@@ -27,7 +27,7 @@ import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
-@ComponentScan(basePackages = {"org.mojave.core.quoting.domain"})
+@ComponentScan(basePackages = {"org.mojave.rail.fspiop.quoting.domain"})
 @Import(
     value = {
         MiscConfiguration.class,

@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
 @EnableAsync
-@ComponentScan(basePackages = "org.mojave.rail.fspiop.transfer.service.controller")
+@ComponentScan(basePackages = "org.mojave.rail.fspiop.transfer.service")
 @Import(
     value = {
         TransferDomainConfiguration.class,

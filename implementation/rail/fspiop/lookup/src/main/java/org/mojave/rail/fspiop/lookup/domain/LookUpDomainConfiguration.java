@@ -25,7 +25,7 @@ import org.mojave.core.participant.store.ParticipantStoreConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
-@ComponentScan(basePackages = {"org.mojave.core.lookup.domain"})
+@ComponentScan(basePackages = {"org.mojave.rail.fspiop.lookup.domain"})
 @Import(
     value = {
         MiscConfiguration.class,

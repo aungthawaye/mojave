@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="fspiop-service (5003)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="00 mono">
+  <configuration default="false" name="fspiop-mono (5003)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="fspiop">
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/implementation/rail/fspiop/mono/src/main/java/org/mojave/rail/fspiop/mono/service/.env" />
     </option>
-    <module name="mojave-rail-fspiop-mono-service" />
+    <module name="mojave-rail-fspiop-mono" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

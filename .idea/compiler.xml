@@ -32,14 +32,14 @@
         <module name="mojave-core-participant-contract" />
         <module name="mojave-core-participant-admin" />
         <module name="mojave-operation-usecase" />
-        <module name="mojave-core-transaction-intercom-client" />
         <module name="mojave-core-settlement-admin-client" />
+        <module name="mojave-core-transaction-intercom-client" />
         <module name="mojave-component-flyway" />
         <module name="mojave-component-kafka" />
         <module name="mojave-core-participant-admin-client" />
         <module name="mojave-core-accounting-intercom-client" />
-        <module name="mojave-core-transaction-contract" />
         <module name="mojave-core-accounting-domain" />
+        <module name="mojave-core-transaction-contract" />
         <module name="mojave-component-jpa" />
         <module name="mojave-component-retrofit" />
         <module name="mojave-rail-fspiop-transfer" />
@@ -48,7 +48,6 @@
         <module name="mojave-core-accounting-admin-client" />
         <module name="mojave-core-settlement-producer" />
         <module name="mojave-core-transaction-consumer" />
-        <module name="mojave-rail-fspiop-mono-service" />
         <module name="mojave-core-participant-intercom-client" />
         <module name="mojave-core-accounting-admin" />
         <module name="mojave-connector-sample" />
@@ -72,6 +71,7 @@
         <module name="mojave-core-settlement-admin" />
         <module name="mojave-core-wallet-domain" />
         <module name="mojave-core-settlement-consumer" />
+        <module name="mojave-rail-fspiop-mono" />
         <module name="mojave-core-wallet-producer" />
       </profile>
     </annotationProcessing>
@@ -155,7 +155,7 @@
       <module name="mojave-rail-fspiop-component" options="-parameters" />
       <module name="mojave-rail-fspiop-invoker" options="-parameters" />
       <module name="mojave-rail-fspiop-lookup" options="-parameters" />
-      <module name="mojave-rail-fspiop-mono-service" options="-parameters" />
+      <module name="mojave-rail-fspiop-mono" options="-parameters" />
       <module name="mojave-rail-fspiop-quoting" options="-parameters" />
       <module name="mojave-rail-fspiop-transfer" options="-parameters" />
       <module name="mojave-scheme" options="-parameters" />

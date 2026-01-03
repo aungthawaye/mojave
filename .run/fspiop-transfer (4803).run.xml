@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="transfer-service (4803)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="08 transfer">
+  <configuration default="false" name="fspiop-transfer (4803)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="fspiop">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/core/08_transfer/service/src/main/java/org/mojave/platform/core/transfer/service/.env" />
+      <option value="$PROJECT_DIR$/implementation/rail/fspiop/transfer/src/main/java/org/mojave/rail/fspiop/transfer/service/.env" />
     </option>
-    <module name="mojave-transfer-service" />
+    <module name="mojave-rail-fspiop-transfer" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>

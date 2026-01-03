@@ -39,7 +39,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
-@ComponentScan(basePackages = {"org.mojave.fspiop.invoker"})
+@ComponentScan(basePackages = {"org.mojave.rail.fspiop.invoker"})
 @Import(value = {FspiopComponentConfiguration.class})
 public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.RequiredBeans {
 

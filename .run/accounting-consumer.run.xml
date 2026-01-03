@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="accounting-consumer" type="Application" factoryName="Application">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/core/03_accounting/consumer/src/main/java/org/mojave/core/accounting/consumer/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/accounting/consumer/src/main/java/org/mojave/core/accounting/consumer/.env" />
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.core.accounting.consumer.AccountingConsumerApplication" />
     <module name="mojave-core-accounting-consumer" />

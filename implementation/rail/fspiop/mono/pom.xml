@@ -7,9 +7,9 @@
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-rail-fspiop-mono-service</artifactId>
+    <artifactId>mojave-rail-fspiop-mono</artifactId>
     <packaging>jar</packaging>
-    <name>Mojave - Rail - FSPIOP - Mono - Service</name>
+    <name>Mojave - Rail - FSPIOP - Mono</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
