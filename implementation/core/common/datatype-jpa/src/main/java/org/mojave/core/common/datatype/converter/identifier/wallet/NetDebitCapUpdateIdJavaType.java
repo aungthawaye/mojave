@@ -25,21 +25,21 @@ import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
-import org.mojave.core.common.datatype.identifier.wallet.NetDebitCapUpdateId;
+import org.mojave.core.common.datatype.identifier.wallet.NdcUpdateId;
 
-public class NetDebitCapUpdateIdJavaType extends AbstractClassJavaType<NetDebitCapUpdateId> {
+public class NetDebitCapUpdateIdJavaType extends AbstractClassJavaType<NdcUpdateId> {
 
     public static final NetDebitCapUpdateIdJavaType INSTANCE = new NetDebitCapUpdateIdJavaType();
 
     public NetDebitCapUpdateIdJavaType() {
 
-        super(NetDebitCapUpdateId.class, ImmutableMutabilityPlan.instance());
+        super(NdcUpdateId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public NetDebitCapUpdateId fromString(CharSequence string) {
+    public NdcUpdateId fromString(CharSequence string) {
 
-        return (string == null) ? null : new NetDebitCapUpdateId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new NdcUpdateId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -49,14 +49,14 @@ public class NetDebitCapUpdateIdJavaType extends AbstractClassJavaType<NetDebitC
     }
 
     @Override
-    public String toString(NetDebitCapUpdateId value) {
+    public String toString(NdcUpdateId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(NetDebitCapUpdateId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(NdcUpdateId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -76,12 +76,12 @@ public class NetDebitCapUpdateIdJavaType extends AbstractClassJavaType<NetDebitC
     }
 
     @Override
-    public NetDebitCapUpdateId wrap(Object value, WrapperOptions options) {
+    public NdcUpdateId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case NetDebitCapUpdateId netDebitCapUpdateId -> netDebitCapUpdateId;
-            case Number n -> new NetDebitCapUpdateId(n.longValue());
+            case NdcUpdateId ndcUpdateId -> ndcUpdateId;
+            case Number n -> new NdcUpdateId(n.longValue());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };

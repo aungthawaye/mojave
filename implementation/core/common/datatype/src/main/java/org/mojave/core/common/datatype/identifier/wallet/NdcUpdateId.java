@@ -30,19 +30,19 @@ import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
-@JsonDeserialize(using = NetDebitCapUpdateId.Deserializer.class)
-public class NetDebitCapUpdateId extends EntityId<Long> {
+@JsonDeserialize(using = NdcUpdateId.Deserializer.class)
+public class NdcUpdateId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public NetDebitCapUpdateId(Long id) {
+    public NdcUpdateId(Long id) {
 
         super(id);
     }
 
-    public static class Deserializer extends ValueDeserializer<NetDebitCapUpdateId> {
+    public static class Deserializer extends ValueDeserializer<NdcUpdateId> {
 
         @Override
-        public NetDebitCapUpdateId deserialize(JsonParser p, DeserializationContext ctx)
+        public NdcUpdateId deserialize(JsonParser p, DeserializationContext ctx)
             throws JacksonException {
 
             var field = p.currentName();
@@ -53,7 +53,7 @@ public class NetDebitCapUpdateId extends EntityId<Long> {
             }
 
             try {
-                return new NetDebitCapUpdateId(Long.parseLong(text));
+                return new NdcUpdateId(Long.parseLong(text));
             } catch (NumberFormatException e) {
                 throw InvalidFormatException.from(
                     p, "'" + field + "' has invalid format. Must be number.", e);
@@ -63,12 +63,12 @@ public class NetDebitCapUpdateId extends EntityId<Long> {
     }
 
     @Component
-    public static class ParamConverter implements Converter<String, NetDebitCapUpdateId> {
+    public static class ParamConverter implements Converter<String, NdcUpdateId> {
 
         @Override
-        public NetDebitCapUpdateId convert(final String source) {
+        public NdcUpdateId convert(final String source) {
 
-            return new NetDebitCapUpdateId(Long.parseLong(source));
+            return new NdcUpdateId(Long.parseLong(source));
         }
 
     }

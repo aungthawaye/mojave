@@ -28,17 +28,17 @@ CREATE TABLE `txn_transaction`
 
 CREATE TABLE `txn_transaction_step`
 (
-    `step_id`        bigint        NOT NULL,
-    `phase`          varchar(32)   NOT NULL,
-    `name`           varchar(255)  NOT NULL,
-    `context`        varchar(255)   DEFAULT NULL,
-    `payload`        varchar(2048)  DEFAULT NULL,
-    `created_at`     bigint        NOT NULL,
-    `transaction_id` bigint        NOT NULL,
+    `step_id`        bigint       NOT NULL,
+    `phase`          varchar(32)  NOT NULL,
+    `name`           varchar(255) NOT NULL,
+    `context`        varchar(255)  DEFAULT NULL,
+    `payload`        varchar(2048) DEFAULT NULL,
+    `created_at`     bigint       NOT NULL,
+    `transaction_id` bigint       NOT NULL,
 
-    `rec_created_at` bigint         DEFAULT NULL,
-    `rec_updated_at` bigint         DEFAULT NULL,
-    `rec_version`    int            DEFAULT NULL,
+    `rec_created_at` bigint        DEFAULT NULL,
+    `rec_updated_at` bigint        DEFAULT NULL,
+    `rec_version`    int           DEFAULT NULL,
 
     PRIMARY KEY (`step_id`),
     KEY `txn_transaction_step_01_IDX` (`phase`, `name`, `context`),

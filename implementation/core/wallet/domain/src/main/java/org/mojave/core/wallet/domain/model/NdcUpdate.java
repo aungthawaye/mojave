@@ -37,7 +37,7 @@ import org.mojave.core.common.datatype.converter.identifier.transaction.Transact
 import org.mojave.core.common.datatype.converter.identifier.wallet.NetDebitCapUpdateIdJavaType;
 import org.mojave.core.common.datatype.converter.identifier.wallet.PositionIdConverter;
 import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.NetDebitCapUpdateId;
+import org.mojave.core.common.datatype.identifier.wallet.NdcUpdateId;
 import org.mojave.core.common.datatype.identifier.wallet.PositionId;
 
 import java.math.BigDecimal;
@@ -48,26 +48,26 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(
-    name = "wlt_net_debit_cap_update",
+    name = "wlt_ndc_update",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "wlt_net_debit_cap_update_01_UK",
+            name = "wlt_ndc_update_01_UK",
             columnNames = {"transaction_id"})},
     indexes = {
         @Index(
-            name = "wlt_net_debit_cap_update_01_IDX",
+            name = "wlt_ndc_update_01_IDX",
             columnList = "position_id, transaction_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {
+public class NdcUpdate extends JpaEntity<NdcUpdateId> {
 
     @Id
     @JavaType(NetDebitCapUpdateIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(
-        name = "net_debit_cap_update_id",
+        name = "ndc_update_id",
         nullable = false,
         updatable = false)
-    protected NetDebitCapUpdateId id;
+    protected NdcUpdateId id;
 
     @Column(name = "position_id")
     @Convert(converter = PositionIdConverter.class)
@@ -78,7 +78,7 @@ public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {
     protected TransactionId transactionId;
 
     @Column(
-        name = "old_net_debit_cap",
+        name = "old_ndc",
         precision = 34,
         scale = 4,
         nullable = false,
@@ -86,7 +86,7 @@ public class NetDebitCapUpdate extends JpaEntity<NetDebitCapUpdateId> {
     protected BigDecimal oldNetDebitCap;
 
     @Column(
-        name = "new_net_debit_cap",
+        name = "new_ndc",
         precision = 34,
         scale = 4,
         nullable = false)

@@ -142,7 +142,7 @@ public class PositionUpdate extends JpaEntity<PositionUpdateId>
     protected BigDecimal newReserved;
 
     @Column(
-        name = "net_debit_cap",
+        name = "ndc",
         precision = 34,
         scale = 4,
         nullable = false,

@@ -39,24 +39,24 @@ CREATE TABLE `wlt_position`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
--- ml_wallet.wlt_net_debit_cap_update definition
+-- ml_wallet.wlt_ndc_update definition
 
-CREATE TABLE `wlt_net_debit_cap_update`
+CREATE TABLE `wlt_ndc_update`
 (
-    `net_debit_cap_update_id` bigint         NOT NULL,
-    `position_id`             bigint         NOT NULL,
-    `transaction_id`          bigint         NOT NULL,
-    `old_net_debit_cap`       decimal(34, 4) NOT NULL,
-    `new_net_debit_cap`       decimal(34, 4) NOT NULL,
-    `transaction_at`          bigint         NOT NULL,
-    `rec_created_at`          bigint DEFAULT NULL,
-    `rec_updated_at`          bigint DEFAULT NULL,
-    `rec_version`             int    DEFAULT NULL,
-    PRIMARY KEY (`net_debit_cap_update_id`),
-    UNIQUE KEY `wlt_net_debit_cap_update_01_UK` (`transaction_id`),
-    KEY `wlt_net_debit_cap_update_01_IDX` (`position_id`, `transaction_at`),
-    KEY `wlt_position_wlt_net_debit_cap_update_FK_IDX` (`position_id`),
-    CONSTRAINT `wlt_position_wlt_net_debit_cap_update_FK` FOREIGN KEY (`position_id`) REFERENCES `wlt_position` (`position_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    `ndc_update_id`  bigint         NOT NULL,
+    `position_id`    bigint         NOT NULL,
+    `transaction_id` bigint         NOT NULL,
+    `old_ndc`        decimal(34, 4) NOT NULL,
+    `new_ndc`        decimal(34, 4) NOT NULL,
+    `transaction_at` bigint         NOT NULL,
+    `rec_created_at` bigint DEFAULT NULL,
+    `rec_updated_at` bigint DEFAULT NULL,
+    `rec_version`    int    DEFAULT NULL,
+    PRIMARY KEY (`ndc_update_id`),
+    UNIQUE KEY `wlt_ndc_update_01_UK` (`transaction_id`),
+    KEY `wlt_ndc_update_01_IDX` (`position_id`, `transaction_at`),
+    KEY `wlt_position_wlt_ndc_update_FK_IDX` (`position_id`),
+    CONSTRAINT `wlt_position_wlt_ndc_update_FK` FOREIGN KEY (`position_id`) REFERENCES `wlt_position` (`position_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -107,7 +107,7 @@ CREATE TABLE `wlt_position_update`
     `new_position`       decimal(34, 4) NOT NULL,
     `old_reserved`       decimal(34, 4) NOT NULL,
     `new_reserved`       decimal(34, 4) NOT NULL,
-    `net_debit_cap`      decimal(34, 4) NOT NULL,
+    `ndc`                decimal(34, 4) NOT NULL,
     `description`        varchar(255) DEFAULT NULL,
     `transaction_at`     bigint         NOT NULL,
     `created_at`         bigint         NOT NULL,

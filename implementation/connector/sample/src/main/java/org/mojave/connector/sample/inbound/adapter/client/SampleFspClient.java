@@ -38,6 +38,7 @@ import org.mojave.scheme.fspiop.core.TransferState;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 public class SampleFspClient implements FspClient {
 
@@ -113,9 +114,7 @@ public class SampleFspClient implements FspClient {
 
         }
 
-        var _15minsLater = Instant.now();
-
-
+        var _15minsLater = Instant.now().plus(15, ChronoUnit.MINUTES);
 
         return new Quotes.Post.Response(
             new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),

@@ -63,7 +63,8 @@ CREATE TABLE `tfr_transfer`
     UNIQUE KEY `tfr_transfer_03_UK` (`reservation_id`),
     UNIQUE KEY `tfr_transfer_07_UK` (`ilp_fulfilment`),
 
-    KEY `tfr_transfer_01_IDX` (`payer_fsp_id`, `payee_fsp_id`, `udf_transfer_id`),
+    KEY `tfr_transfer_01_IDX` (`payer_fsp_id`, `payee_fsp_id`,
+                               `udf_transfer_id`),
     KEY `tfr_transfer_02_IDX` (`payer_fsp_id`),
     KEY `tfr_transfer_03_IDX` (`payer_fsp_id`, `transaction_id`),
     KEY `tfr_transfer_04_IDX` (`payee_fsp_id`),

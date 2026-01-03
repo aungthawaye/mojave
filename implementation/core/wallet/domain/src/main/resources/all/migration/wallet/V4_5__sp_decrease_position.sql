@@ -5,30 +5,22 @@ $$
  */
 DROP PROCEDURE IF EXISTS sp_decrease_position $$
 CREATE PROCEDURE sp_decrease_position(
-    IN p_transaction_id BIGINT,
-    IN p_transaction_at BIGINT,
-    IN p_position_update_id BIGINT,
-    IN p_position_id BIGINT,
-    IN p_amount DECIMAL(34, 4),
-    IN p_description VARCHAR(256)
-)
+                                     IN p_transaction_id     BIGINT,
+                                     IN p_transaction_at     BIGINT,
+                                     IN p_position_update_id BIGINT,
+                                     IN p_position_id        BIGINT,
+                                     IN p_amount             DECIMAL(34, 4),
+                                     IN p_description        VARCHAR(256))
 BEGIN
     /* -------- Variables -------- */
-    DECLARE
-        v_old_position DECIMAL(34, 4);
-    DECLARE
-        v_new_position DECIMAL(34, 4);
-    DECLARE
-        v_old_reserved DECIMAL(34, 4);
-    DECLARE
-        v_ndc DECIMAL(34, 4);
-    DECLARE
-        v_currency VARCHAR(3);
-    DECLARE
-        v_now BIGINT;
+    DECLARE v_old_position DECIMAL(34, 4);
+    DECLARE v_new_position DECIMAL(34, 4);
+    DECLARE v_old_reserved DECIMAL(34, 4);
+    DECLARE v_ndc DECIMAL(34, 4);
+    DECLARE v_currency VARCHAR(3);
+    DECLARE v_now BIGINT;
 
-    SET
-        v_now = UNIX_TIMESTAMP();
+    SET v_now = UNIX_TIMESTAMP();
 
     START TRANSACTION;
 
@@ -41,8 +33,7 @@ BEGIN
     WHERE position_id = p_position_id FOR
     UPDATE;
 
-    SET
-        v_new_position = v_old_position - p_amount;
+    SET v_new_position = v_old_position - p_amount;
 
     UPDATE wlt_position
     SET position = v_new_position
@@ -66,13 +57,24 @@ BEGIN
                                      rec_created_at,
                                      rec_updated_at,
                                      rec_version)
-    VALUES (p_position_update_id, p_position_id,
-            'DECREASE', p_transaction_id, v_currency,
-            p_amount, v_old_position, v_new_position,
-            v_old_reserved, v_old_reserved, v_ndc, p_description,
-            p_transaction_at, v_now, NULL,
-            v_now, v_now, 0);
-    COMMIT;
+    VALUES (p_position_update_id,
+            p_position_id,
+            'DECREASE',
+            p_transaction_id,
+            v_currency,
+            p_amount,
+            v_old_position,
+            v_new_position,
+            v_old_reserved,
+            v_old_reserved,
+            v_ndc,
+            p_description,
+            p_transaction_at,
+            v_now,
+            NULL,
+            v_now,
+            v_now,
+            0); COMMIT;
 
     SELECT 'SUCCESS' AS status,
            pu.position_update_id,

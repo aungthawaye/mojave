@@ -3,59 +3,44 @@ $$
 
 DROP PROCEDURE IF EXISTS sp_reverse_fund $$
 CREATE PROCEDURE sp_reverse_fund(
-    IN p_reversing_balance_update_id BIGINT,
-    IN p_balance_update_id BIGINT
-)
+                                IN p_reversing_balance_update_id BIGINT,
+                                IN p_balance_update_id           BIGINT)
 proc_reverse:
 BEGIN
     /* -------- Variables -------- */
-    DECLARE
-        v_balance_id BIGINT;
-    DECLARE
-        v_action VARCHAR(32);
-    DECLARE
-        v_amount DECIMAL(34, 4);
-    DECLARE
-        v_currency VARCHAR(3);
-    DECLARE
-        v_transaction_id BIGINT;
-    DECLARE
-        v_description VARCHAR(256);
+    DECLARE v_balance_id BIGINT;
+    DECLARE v_action VARCHAR(32);
+    DECLARE v_amount DECIMAL(34, 4);
+    DECLARE v_currency VARCHAR(3);
+    DECLARE v_transaction_id BIGINT;
+    DECLARE v_description VARCHAR(256);
 
-    DECLARE
-        v_now BIGINT;
-    DECLARE
-        v_old_balance DECIMAL(34, 4);
-    DECLARE
-        v_new_balance DECIMAL(34, 4);
+    DECLARE v_now BIGINT;
+    DECLARE v_old_balance DECIMAL(34, 4);
+    DECLARE v_new_balance DECIMAL(34, 4);
 
-    DECLARE
-        v_not_found BOOLEAN DEFAULT FALSE;
+    DECLARE v_not_found BOOLEAN DEFAULT FALSE;
 
-    DECLARE
-        EXIT HANDLER FOR SQLEXCEPTION
-        BEGIN
-            ROLLBACK;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN
+        ROLLBACK;
 
-            SELECT 'ERROR'                       AS status,
-                   p_balance_update_id           AS balance_update_id,
-                   NULL                          AS balance_id,
-                   'REVERSE_WITHDRAW'            AS action,
-                   NULL                          AS transaction_id,
-                   NULL                          AS currency,
-                   0                             AS amount,
-                   0                             AS old_balance,
-                   0                             AS new_balance,
-                   NULL                          AS transaction_at,
-                   p_reversing_balance_update_id AS withdraw_id;
-        END;
+        SELECT 'ERROR'                       AS status,
+               p_balance_update_id           AS balance_update_id,
+               NULL                          AS balance_id,
+               'REVERSE_WITHDRAW'            AS action,
+               NULL                          AS transaction_id,
+               NULL                          AS currency,
+               0                             AS amount,
+               0                             AS old_balance,
+               0                             AS new_balance,
+               NULL                          AS transaction_at,
+               p_reversing_balance_update_id AS withdraw_id;
+    END;
 
-    DECLARE
-        CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
 
     /* Use epoch seconds for timestamps */
-    SET
-        v_now = UNIX_TIMESTAMP();
+    SET v_now = UNIX_TIMESTAMP();
 
     /* 1) Fetch the original balance update row */
     SELECT bu.balance_id,
@@ -64,18 +49,12 @@ BEGIN
            bu.currency,
            bu.transaction_id,
            bu.description
-    INTO
-        v_balance_id, v_action,
-        v_amount,
-        v_currency,
-        v_transaction_id,
-        v_description
+    INTO v_balance_id, v_action, v_amount, v_currency, v_transaction_id, v_description
     FROM wlt_balance_update bu
     WHERE bu.balance_update_id = p_reversing_balance_update_id
       AND bu.action = 'WITHDRAW';
 
-    IF
-        v_not_found THEN
+    IF v_not_found THEN
 
         SELECT 'REVERSAL_FAILED'             AS status,
                p_balance_update_id           AS balance_update_id,
@@ -89,18 +68,15 @@ BEGIN
                NULL                          AS transaction_at,
                p_reversing_balance_update_id AS withdraw_id;
 
-        LEAVE
-            proc_reverse;
+        LEAVE proc_reverse;
     END IF;
 
     /* 3) Branch by action */
-    IF
-        v_action = 'WITHDRAW' THEN
+    IF v_action = 'WITHDRAW' THEN
 
         START TRANSACTION;
 
-        SET
-            v_not_found = FALSE;
+        SET v_not_found = FALSE;
 
         /* Reverse the withdrawal by crediting back the amount */
         SELECT w.balance
@@ -109,11 +85,9 @@ BEGIN
         WHERE w.balance_id = v_balance_id FOR
         UPDATE;
 
-        SET
-            v_new_balance = v_old_balance + v_amount;
+        SET v_new_balance = v_old_balance + v_amount;
 
-        IF
-            v_not_found THEN
+        IF v_not_found THEN
 
             ROLLBACK;
 
@@ -129,8 +103,7 @@ BEGIN
                    NULL                          AS transaction_at,
                    p_reversing_balance_update_id AS withdraw_id;
 
-            LEAVE
-                proc_reverse;
+            LEAVE proc_reverse;
 
         END IF;
 
@@ -138,7 +111,7 @@ BEGIN
         SET balance = v_new_balance
         WHERE balance_id = v_balance_id;
 
-/* Insert a new balance update row flagged as REVERSED */
+        /* Insert a new balance update row flagged as REVERSED */
         INSERT INTO wlt_balance_update (balance_update_id,
                                         balance_id,
                                         action,
@@ -168,10 +141,9 @@ BEGIN
                 p_reversing_balance_update_id,
                 v_now,
                 v_now,
-                0);
-        COMMIT;
+                0); COMMIT;
 
-/* 3.c) Return the reversal row */
+        /* 3.c) Return the reversal row */
         SELECT 'SUCCESS' AS status,
                bu.balance_update_id,
                bu.balance_id,

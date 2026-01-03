@@ -21,21 +21,21 @@ package org.mojave.core.common.datatype.converter.identifier.wallet;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.mojave.core.common.datatype.identifier.wallet.NetDebitCapUpdateId;
+import org.mojave.core.common.datatype.identifier.wallet.NdcUpdateId;
 
 @Converter(autoApply = true)
-public class NetDebitCapUpdateIdConverter implements AttributeConverter<NetDebitCapUpdateId, Long> {
+public class NetDebitCapUpdateIdConverter implements AttributeConverter<NdcUpdateId, Long> {
 
     @Override
-    public Long convertToDatabaseColumn(NetDebitCapUpdateId attribute) {
+    public Long convertToDatabaseColumn(NdcUpdateId attribute) {
 
         return attribute == null ? null : attribute.getId();
     }
 
     @Override
-    public NetDebitCapUpdateId convertToEntityAttribute(Long dbData) {
+    public NdcUpdateId convertToEntityAttribute(Long dbData) {
 
-        return dbData == null ? null : new NetDebitCapUpdateId(dbData);
+        return dbData == null ? null : new NdcUpdateId(dbData);
     }
 
 }

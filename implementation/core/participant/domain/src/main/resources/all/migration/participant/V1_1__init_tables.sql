@@ -83,12 +83,12 @@ CREATE TABLE `pcp_fsp_currency`
 
 CREATE TABLE `pcp_fsp_endpoint`
 (
-    `fsp_endpoint_id`   bigint                                                       NOT NULL,
-    `type`              varchar(32)                                                  NOT NULL,
-    `base_url`          varchar(255)                                                 NOT NULL,
-    `activation_status` varchar(32) NOT NULL,
-    `fsp_id`            bigint                                                       NOT NULL,
-    `created_at`        bigint                                                       NOT NULL,
+    `fsp_endpoint_id`   bigint       NOT NULL,
+    `type`              varchar(32)  NOT NULL,
+    `base_url`          varchar(255) NOT NULL,
+    `activation_status` varchar(32)  NOT NULL,
+    `fsp_id`            bigint       NOT NULL,
+    `created_at`        bigint       NOT NULL,
     `rec_created_at`    bigint DEFAULT NULL,
     `rec_updated_at`    bigint DEFAULT NULL,
     `rec_version`       int    DEFAULT NULL,
