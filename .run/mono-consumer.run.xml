@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="mono-consumer" type="Application" factoryName="Application">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/platform/mono/consumer/src/main/java/org/mojave/mono/consumer/.env" />
+      <option value="$PROJECT_DIR$/implementation/core/mono/consumer/src/main/java/org/mojave/core/mono/consumer/.env" />
     </option>
-    <option name="MAIN_CLASS_NAME" value="org.mojave.mono.consumer.MonoConsumerApplication" />
-    <module name="mod-mono-consumer" />
+    <option name="MAIN_CLASS_NAME" value="org.mojave.core.mono.consumer.MonoConsumerApplication" />
+    <module name="mojave-core-mono-consumer" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.mono.consumer.*" />

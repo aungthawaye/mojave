@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,16 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.gateway.inbound.command.transfers;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.connector.adapter.fsp.FspCoreAdapter;
+import org.mojave.rail.fspiop.component.error.FspiopErrors;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,7 +45,10 @@ public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersC
     }
 
     @Override
-    public HandlePatchTransfersCommand.Output execute(HandlePatchTransfersCommand.Input input) {
+    public HandlePatchTransfersCommand.Output execute(HandlePatchTransfersCommand.Input input)
+        throws FspiopException {
+
+        MDC.put("REQ_ID", input.transferId());
 
         var startAt = System.nanoTime();
         var endAt = 0L;
@@ -54,15 +61,25 @@ public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersC
 
             this.fspCoreAdapter.patchTransfers(input.payer(), input.transferId(), input.response());
 
+        } catch (FspiopException e) {
+
+            LOGGER.error("Error:", e);
+            throw e;
+
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
+            throw new FspiopException(
+                FspiopErrors.GENERIC_PAYEE_ERROR,
+                "Something went wrong while notifying the Payee FSP for the final Transfer state.");
         }
 
         endAt = System.nanoTime();
         LOGGER.info(
             "HandlePatchTransfersCommandHandler : done : took {} ms",
             (endAt - startAt) / 1000000);
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }

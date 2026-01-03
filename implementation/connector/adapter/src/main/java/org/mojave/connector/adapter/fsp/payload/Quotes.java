@@ -19,9 +19,11 @@
  */
 package org.mojave.connector.adapter.fsp.payload;
 
-import org.mojave.fspiop.spec.core.AmountType;
-import org.mojave.fspiop.spec.core.Money;
-import org.mojave.fspiop.spec.core.Party;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.Party;
+
+import java.time.Instant;
 
 public class Quotes {
 
@@ -32,14 +34,14 @@ public class Quotes {
                               Party payee,
                               AmountType amountType,
                               Money originalAmount,
-                              String expiration) { }
+                              Instant requestExpireAt) { }
 
         public record Response(Money originalAmount,
                                Money payeeFspFee,
                                Money payeeFspCommission,
                                Money payeeReceiveAmount,
                                Money transferAmount,
-                               String expiration) { }
+                               Instant quoteExpireAt) { }
 
     }
 

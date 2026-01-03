@@ -21,10 +21,11 @@ package org.mojave.connector.gateway.inbound.command.transfers;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.connector.adapter.fsp.FspCoreAdapter;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.invoker.api.transfers.PutTransfers;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.invoker.api.transfers.PutTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,6 +50,8 @@ class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersReq
 
     @Override
     public void execute(Input input) throws FspiopException {
+
+        MDC.put("REQ_ID", input.transferId());
 
         var startAt = System.nanoTime();
         var endAt = 0L;
@@ -77,6 +80,8 @@ class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersReq
             LOGGER.info(
                 "HandlePostTransfersRequestCommandHandler : done : took {} ms",
                 (endAt - startAt) / 1000000);
+
+            MDC.remove("REQ_ID");
         }
     }
 

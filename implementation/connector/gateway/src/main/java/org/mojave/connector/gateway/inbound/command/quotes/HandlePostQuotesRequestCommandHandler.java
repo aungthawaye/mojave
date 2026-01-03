@@ -21,11 +21,12 @@ package org.mojave.connector.gateway.inbound.command.quotes;
 
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.connector.adapter.fsp.FspCoreAdapter;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.invoker.api.quotes.PutQuotes;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.invoker.api.quotes.PutQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,6 +51,8 @@ class HandlePostQuotesRequestCommandHandler implements HandlePostQuotesRequestCo
 
     @Override
     public void execute(Input input) throws FspiopException {
+
+        MDC.put("REQ_ID", input.quoteId());
 
         var startAt = System.nanoTime();
         var endAt = 0L;
@@ -78,6 +81,8 @@ class HandlePostQuotesRequestCommandHandler implements HandlePostQuotesRequestCo
             LOGGER.info(
                 "HandlePostQuotesRequestCommandHandler : done : took {} ms",
                 (endAt - startAt) / 1000000);
+
+            MDC.remove("REQ_ID");
         }
     }
 

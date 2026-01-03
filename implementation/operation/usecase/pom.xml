@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.operation</groupId>
-        <artifactId>operation-pom</artifactId>
+        <artifactId>mojave-operation</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mod-operation-usecase</artifactId>
+    <artifactId>mojave-operation-usecase</artifactId>
     <name>Mojave - Operation - Use Case</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -16,16 +16,16 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.platform.core.accounting</groupId>
-            <artifactId>mod-accounting-admin-client</artifactId>
+            <groupId>org.mojave.core.accounting</groupId>
+            <artifactId>mojave-core-accounting-admin-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.core.participant</groupId>
-            <artifactId>mod-participant-admin-client</artifactId>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-admin-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.core.wallet</groupId>
-            <artifactId>mod-wallet-admin-client</artifactId>
+            <groupId>org.mojave.core.wallet</groupId>
+            <artifactId>mojave-core-wallet-admin-client</artifactId>
         </dependency>
     </dependencies>
 </project>

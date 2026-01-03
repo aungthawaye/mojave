@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.component</groupId>
-        <artifactId>component-pom</artifactId>
+        <artifactId>mojave-component</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mod-component-kafka</artifactId>
+    <artifactId>mojave-component-kafka</artifactId>
     <name>Mojave - Component - Kafka</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -18,6 +18,16 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.lz4</groupId>
+                    <artifactId>lz4-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>at.yawk.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
         </dependency>
     </dependencies>
 </project>

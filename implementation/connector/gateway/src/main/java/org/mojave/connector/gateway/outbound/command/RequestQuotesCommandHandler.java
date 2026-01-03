@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.gateway.outbound.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
@@ -26,13 +27,14 @@ import org.mojave.connector.gateway.data.QuotesErrorResult;
 import org.mojave.connector.gateway.data.QuotesResult;
 import org.mojave.connector.gateway.outbound.ConnectorOutboundConfiguration;
 import org.mojave.connector.gateway.outbound.component.FspiopResultListener;
-import org.mojave.fspiop.component.error.ErrorDefinition;
-import org.mojave.fspiop.component.error.FspiopErrors;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.handy.FspiopDates;
-import org.mojave.fspiop.invoker.api.quotes.PostQuotes;
+import org.mojave.rail.fspiop.component.error.ErrorDefinition;
+import org.mojave.rail.fspiop.component.error.FspiopErrors;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.handy.FspiopDates;
+import org.mojave.rail.fspiop.invoker.api.quotes.PostQuotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -65,17 +67,19 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
+        assert input != null;
+        assert input.request() != null;
+
+        final var quoteId = input.request().getQuoteId();
+        MDC.put("REQ_ID", quoteId);
+
         final var startAt = System.nanoTime();
         var endAt = 0L;
 
         LOGGER.info("RequestQuotesCommandHandler : input : ({})", ObjectLogger.log(input));
 
-        assert input != null;
-        assert input.request() != null;
-
         try {
 
-            final var quoteId = input.request().getQuoteId();
             final var amount = input.request().getAmount();
             final var expiration = input.request().getExpiration();
             final var fees = input.request().getFees();
@@ -138,6 +142,8 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
             LOGGER.info(
                 "RequestQuotesCommandHandler : done : took {} ms",
                 (endAt - startAt) / 1_000_000);
+
+            MDC.remove("REQ_ID");
         }
 
     }

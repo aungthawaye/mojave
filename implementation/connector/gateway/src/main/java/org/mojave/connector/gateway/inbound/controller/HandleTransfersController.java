@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.gateway.inbound.controller;
 
 import org.mojave.component.misc.spring.event.EventPublisher;
@@ -24,17 +25,17 @@ import org.mojave.connector.gateway.inbound.command.transfers.HandlePatchTransfe
 import org.mojave.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
 import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfersErrorCommand;
 import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
-import org.mojave.connector.gateway.inbound.event.PatchTransfersEvent;
 import org.mojave.connector.gateway.inbound.event.PostTransfersEvent;
 import org.mojave.connector.gateway.inbound.event.PutTransfersErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutTransfersEvent;
-import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.component.handy.FspiopHeaders;
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.fspiop.spec.core.TransfersIDPatchResponse;
-import org.mojave.fspiop.spec.core.TransfersIDPutResponse;
-import org.mojave.fspiop.spec.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.handy.FspiopHeaders;
+import org.mojave.rail.fspiop.component.type.Payee;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.TransfersIDPatchResponse;
+import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
+import org.mojave.scheme.fspiop.core.TransfersPostRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -56,10 +57,16 @@ public class HandleTransfersController {
 
     private final EventPublisher eventPublisher;
 
-    public HandleTransfersController(EventPublisher eventPublisher) {
+    private final HandlePatchTransfersCommand handlePatchTransfersCommand;
+
+    public HandleTransfersController(EventPublisher eventPublisher,
+                                     HandlePatchTransfersCommand handlePatchTransfersCommand) {
 
         assert eventPublisher != null;
+        assert handlePatchTransfersCommand != null;
+
         this.eventPublisher = eventPublisher;
+        this.handlePatchTransfersCommand = handlePatchTransfersCommand;
     }
 
     @PostMapping("/transfers")
@@ -90,12 +97,13 @@ public class HandleTransfersController {
     @PatchMapping("/transfers/{transferId}")
     public ResponseEntity<?> putTransfers(@RequestHeader Map<String, String> headers,
                                           @PathVariable String transferId,
-                                          @RequestBody TransfersIDPatchResponse response) {
+                                          @RequestBody TransfersIDPatchResponse response)
+        throws FspiopException {
 
         var payer = new Payer(headers.get(FspiopHeaders.Names.FSPIOP_SOURCE));
 
-        this.eventPublisher.publish(new PatchTransfersEvent(
-            new HandlePatchTransfersCommand.Input(payer, transferId, response)));
+        this.handlePatchTransfersCommand.execute(
+            new HandlePatchTransfersCommand.Input(payer, transferId, response));
 
         return ResponseEntity.accepted().build();
     }

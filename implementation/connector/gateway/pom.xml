@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.connector</groupId>
-        <artifactId>connector-pom</artifactId>
+        <artifactId>mojave-connector</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mod-connector-gateway</artifactId>
+    <artifactId>mojave-connector-gateway</artifactId>
     <name>Mojave - Connector - Gateway</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -15,6 +15,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.github.f4b6a3</groupId>
+            <artifactId>ulid-creator</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
@@ -25,27 +29,27 @@
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
-            <artifactId>mod-component-openapi</artifactId>
+            <artifactId>mojave-component-openapi</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
-            <artifactId>mod-component-tomcat</artifactId>
+            <artifactId>mojave-component-tomcat</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
-            <artifactId>mod-component-vault</artifactId>
+            <artifactId>mojave-component-vault</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
-            <artifactId>mod-component-web</artifactId>
+            <artifactId>mojave-component-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.connector</groupId>
-            <artifactId>mod-connector-adapter</artifactId>
+            <artifactId>mojave-connector-adapter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.platform.fspiop</groupId>
-            <artifactId>mod-fspiop-invoker</artifactId>
+            <groupId>org.mojave.rail.fspiop</groupId>
+            <artifactId>mojave-rail-fspiop-invoker</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

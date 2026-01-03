@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package org.mojave.connector.gateway.outbound.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.f4b6a3.ulid.UlidCreator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,25 +31,23 @@ import org.mojave.connector.gateway.outbound.data.Quotes;
 import org.mojave.connector.gateway.outbound.event.QuotesErrorEvent;
 import org.mojave.connector.gateway.outbound.event.QuotesRequestEvent;
 import org.mojave.connector.gateway.outbound.event.QuotesResponseEvent;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.spec.core.AmountType;
-import org.mojave.fspiop.spec.core.Money;
-import org.mojave.fspiop.spec.core.Party;
-import org.mojave.fspiop.spec.core.PartyIdInfo;
-import org.mojave.fspiop.spec.core.QuotesPostRequest;
-import org.mojave.fspiop.spec.core.TransactionInitiator;
-import org.mojave.fspiop.spec.core.TransactionInitiatorType;
-import org.mojave.fspiop.spec.core.TransactionScenario;
-import org.mojave.fspiop.spec.core.TransactionType;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.type.Payee;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.Party;
+import org.mojave.scheme.fspiop.core.PartyIdInfo;
+import org.mojave.scheme.fspiop.core.QuotesPostRequest;
+import org.mojave.scheme.fspiop.core.TransactionInitiator;
+import org.mojave.scheme.fspiop.core.TransactionInitiatorType;
+import org.mojave.scheme.fspiop.core.TransactionScenario;
+import org.mojave.scheme.fspiop.core.TransactionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 @RestController
 public class RequestQuotesController {
@@ -72,7 +71,8 @@ public class RequestQuotesController {
     @PostMapping("/quote")
     public ResponseEntity<?> quote(@RequestBody @Valid Request request) throws FspiopException {
 
-        final var id = UUID.randomUUID().toString();
+        final var id =
+            request.quoteId() != null ? request.quoteId() : UlidCreator.getUlid().toString();
 
         final var quotesPostRequest = new QuotesPostRequest()
                                           .quoteId(id)
@@ -119,7 +119,8 @@ public class RequestQuotesController {
 
     }
 
-    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
+    public record Request(@JsonProperty(required = false) @NotNull @NotBlank String quoteId,
+                          @JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
                           @JsonProperty(required = true) @NotNull AmountType amountType,
                           @JsonProperty(required = true) @NotNull Money amount,
                           @JsonProperty(required = true) @NotNull PartyIdInfo payer,

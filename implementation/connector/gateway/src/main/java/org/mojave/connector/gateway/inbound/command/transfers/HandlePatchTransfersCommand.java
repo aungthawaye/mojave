@@ -19,12 +19,13 @@
  */
 package org.mojave.connector.gateway.inbound.command.transfers;
 
-import org.mojave.fspiop.component.type.Payer;
-import org.mojave.fspiop.spec.core.TransfersIDPatchResponse;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.scheme.fspiop.core.TransfersIDPatchResponse;
 
 public interface HandlePatchTransfersCommand {
 
-    Output execute(Input input);
+    Output execute(Input input) throws FspiopException;
 
     record Input(Payer payer, String transferId, TransfersIDPatchResponse response) { }
 

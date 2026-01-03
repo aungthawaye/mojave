@@ -46,8 +46,6 @@ public class PutPartiesErrorEventListener {
     @EventListener
     public void handle(PutPartiesErrorEvent event) {
 
-        LOGGER.info("Handling PutPartiesErrorEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -58,11 +56,9 @@ public class PutPartiesErrorEventListener {
                 payload.payee(), payload.partyIdType(), payload.partyId(), payload.subId(),
                 payload.errorInformationObject()));
 
-            LOGGER.info("Done handling PutPartiesErrorEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PutPartiesErrorEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

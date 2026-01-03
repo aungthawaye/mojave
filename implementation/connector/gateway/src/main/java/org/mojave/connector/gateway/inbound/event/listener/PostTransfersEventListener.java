@@ -45,8 +45,6 @@ public class PostTransfersEventListener {
     @EventListener
     public void handle(PostTransfersEvent event) {
 
-        LOGGER.info("Handling PostTransfersEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -57,11 +55,9 @@ public class PostTransfersEventListener {
                 new HandlePostTransfersRequestCommand.Input(
                     payload.payer(), payload.transferId(), payload.request()));
 
-            LOGGER.info("Done handling PostTransfersEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PostTransfersEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

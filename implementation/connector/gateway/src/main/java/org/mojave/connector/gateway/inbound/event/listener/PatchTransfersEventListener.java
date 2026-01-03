@@ -45,8 +45,6 @@ public class PatchTransfersEventListener {
     @EventListener
     public void handle(PatchTransfersEvent event) {
 
-        LOGGER.info("Handling PatchTransfersEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -57,11 +55,9 @@ public class PatchTransfersEventListener {
                 new HandlePatchTransfersCommand.Input(
                     payload.payer(), payload.transferId(), payload.response()));
 
-            LOGGER.info("Done handling PatchTransfersEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PutTransfersEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

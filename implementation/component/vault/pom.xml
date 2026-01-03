@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.component</groupId>
-        <artifactId>component-pom</artifactId>
+        <artifactId>mojave-component</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mod-component-vault</artifactId>
+    <artifactId>mojave-component-vault</artifactId>
     <name>Mojave - Component - Vault</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

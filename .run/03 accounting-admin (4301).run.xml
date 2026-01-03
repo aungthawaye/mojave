@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="03 accounting-admin (4301)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="core">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/core/accounting/admin/src/main/java/org/mojave/core/accounting/admin/.env" />
+    </option>
+    <module name="mojave-core-accounting-admin" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.accounting.admin.AccountingAdminApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

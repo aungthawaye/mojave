@@ -24,6 +24,7 @@ import org.mojave.connector.gateway.component.PubSubKeys;
 import org.mojave.connector.gateway.data.PartiesErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,6 +45,11 @@ class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorComman
     @Override
     public Output execute(Input input) {
 
+        final var reqId =
+            input.payee().fspCode() + "-" + input.partyIdType() + "-" + input.partyId();
+
+        MDC.put("REQ_ID", reqId);
+
         var channel = PubSubKeys.forPartiesError(
             input.payee(), input.partyIdType(), input.partyId(), input.subId());
 
@@ -52,6 +58,8 @@ class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorComman
             new PartiesErrorResult(
                 input.partyIdType(), input.partyId(), input.subId(),
                 input.errorInformationObject()));
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }

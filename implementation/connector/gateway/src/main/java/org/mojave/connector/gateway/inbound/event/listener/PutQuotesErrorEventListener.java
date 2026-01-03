@@ -45,8 +45,6 @@ public class PutQuotesErrorEventListener {
     @EventListener
     public void handle(PutQuotesErrorEvent event) {
 
-        LOGGER.info("Handling PutQuotesErrorEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -57,11 +55,9 @@ public class PutQuotesErrorEventListener {
                 new HandlePutQuotesErrorCommand.Input(
                     payload.payee(), payload.quoteId(), payload.errorInformationObject()));
 
-            LOGGER.info("Done handling PutQuotesErrorEvent : {}", event);
-
         } catch (Exception e) {
 
-            LOGGER.error("Error handling PutQuotesErrorEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

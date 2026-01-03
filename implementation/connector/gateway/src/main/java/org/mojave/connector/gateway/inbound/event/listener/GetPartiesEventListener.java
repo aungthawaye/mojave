@@ -45,8 +45,6 @@ public class GetPartiesEventListener {
     @EventListener
     public void handle(GetPartiesEvent event) {
 
-        LOGGER.info("Handling GetPartiesEvent : {}", event);
-
         var payload = event.getPayload();
 
         assert null != payload;
@@ -57,11 +55,10 @@ public class GetPartiesEventListener {
                 new HandleGetPartiesRequestCommand.Input(
                     payload.payer(), payload.partyIdType(), payload.partyId(), payload.subId()));
 
-            LOGGER.info("Done handling GetPartiesEvent : {}", event);
 
         } catch (Exception e) {
 
-            LOGGER.error("Error handling GetPartiesEvent", e);
+            LOGGER.error("Error:", e);
         }
     }
 

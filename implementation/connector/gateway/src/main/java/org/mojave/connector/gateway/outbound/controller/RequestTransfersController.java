@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,16 +31,16 @@ import org.mojave.connector.gateway.outbound.data.Transfers;
 import org.mojave.connector.gateway.outbound.event.TransfersErrorEvent;
 import org.mojave.connector.gateway.outbound.event.TransfersRequestEvent;
 import org.mojave.connector.gateway.outbound.event.TransfersResponseEvent;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.handy.FspiopDates;
-import org.mojave.fspiop.component.participant.ParticipantContext;
-import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.spec.core.AmountType;
-import org.mojave.fspiop.spec.core.Extension;
-import org.mojave.fspiop.spec.core.ExtensionList;
-import org.mojave.fspiop.spec.core.Money;
-import org.mojave.fspiop.spec.core.PartyIdInfo;
-import org.mojave.fspiop.spec.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.handy.FspiopDates;
+import org.mojave.rail.fspiop.component.participant.ParticipantContext;
+import org.mojave.rail.fspiop.component.type.Payee;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Extension;
+import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.scheme.fspiop.core.PartyIdInfo;
+import org.mojave.scheme.fspiop.core.TransfersPostRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +51,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 public class RequestTransfersController {
@@ -103,6 +104,12 @@ public class RequestTransfersController {
         extensionList.addExtensionItem(
             new Extension("payeePartyId", request.payee.getPartyIdentifier()));
 
+        if (request.extensions != null) {
+
+            request.extensions.forEach(
+                (key, value) -> extensionList.addExtensionItem(new Extension(key, value)));
+        }
+
         final var expireAfterSeconds = new Date(Instant
                                                     .now()
                                                     .plus(
@@ -147,13 +154,14 @@ public class RequestTransfersController {
 
     }
 
-    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
-                          @JsonProperty(required = true) @NotNull @NotBlank String transferId,
+    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String transferId,
+                          @JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
                           @JsonProperty(required = true) @NotNull AmountType amountType,
                           @JsonProperty(required = true) @NotNull Money amount,
                           @JsonProperty(required = true) @NotNull PartyIdInfo payer,
                           @JsonProperty(required = true) @NotNull PartyIdInfo payee,
                           @JsonProperty(required = true) @NotNull String ilpPacket,
-                          @JsonProperty(required = true) @NotNull String condition) { }
+                          @JsonProperty(required = true) @NotNull String condition,
+                          @JsonProperty() Map<String, String> extensions) { }
 
 }

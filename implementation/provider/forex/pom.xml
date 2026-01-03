@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mojave.provider</groupId>
-        <artifactId>provider-pom</artifactId>
+        <artifactId>mojave-provider</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.provider.forex</groupId>
-    <artifactId>forex-provider-pom</artifactId>
-    <name>Mojave - Provider - Forex</name>
+    <artifactId>mojave-provider-forex</artifactId>
     <packaging>pom</packaging>
+    <name>Mojave - Provider - Forex</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

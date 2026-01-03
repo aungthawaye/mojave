@@ -19,9 +19,9 @@
  */
 package org.mojave.connector.gateway.inbound.command.parties;
 
-import org.mojave.fspiop.component.type.Payee;
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.fspiop.spec.core.PartyIdType;
+import org.mojave.rail.fspiop.component.type.Payee;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.scheme.fspiop.core.PartyIdType;
 
 public interface HandlePutPartiesErrorCommand {
 

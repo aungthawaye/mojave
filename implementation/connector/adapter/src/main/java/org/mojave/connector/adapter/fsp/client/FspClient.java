@@ -22,15 +22,15 @@ package org.mojave.connector.adapter.fsp.client;
 import org.mojave.connector.adapter.fsp.payload.Parties;
 import org.mojave.connector.adapter.fsp.payload.Quotes;
 import org.mojave.connector.adapter.fsp.payload.Transfers;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.type.Payer;
 
 public interface FspClient {
 
     Parties.Get.Response getParties(Payer payer, Parties.Get.Request request)
         throws FspiopException;
 
-    void patchTransfers(Payer payer, Transfers.Patch.Request request) throws FspiopException;
+    boolean patchTransfers(Payer payer, Transfers.Patch.Request request) throws FspiopException;
 
     Quotes.Post.Response postQuotes(Payer payer, Quotes.Post.Request request)
         throws FspiopException;

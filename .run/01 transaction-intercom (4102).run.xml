@@ -1,0 +1,22 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="01 transaction-intercom (4102)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="core">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/implementation/core/transaction/intercom/src/main/java/org/mojave/core/transaction/intercom/.env" />
+    </option>
+    <module name="mojave-core-transaction-intercom" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.transaction.intercom.TransactionIntercomApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.mojave.core.transaction.intercom.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

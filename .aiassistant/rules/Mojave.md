@@ -48,10 +48,10 @@ This document captures conventions and practices to keep development consistent 
         - `import java.time.Instant;`
         - `Instant now = Instant.now();`
 - Upon generating the DDL for model/entities, follow these conventions:
-    - Use this pattern and format for generating unique key constraints: `<table>_<col1>_<col2>_UK`
-    - Use this pattern and format for generating foreign key constraints: `<table primary>_<table foreign>_FK`
-    - Use this pattern and format for generating indexes: `<table>_<col1>_<col2>_IDX`
-    - Use this pattern and format for generating unique indexes: `<table>_<col1>_<col2>_UK_IDX`
+    - Use the model class's index or unique constraint name as is.
+    - Use this pattern and format for generating foreign key constraints and its related Index:
+        - for foreign key constraint `<table primary>_<table foreign>_FK`
+        - for foreign key constraint index `<table primary>_<table foreign>_FK_IDX`
 - Use the `//` comment style for single-line comments.
     - Example: `// This is a single-line comment.`
 - Use the `/* */` comment style for multi-line comments.

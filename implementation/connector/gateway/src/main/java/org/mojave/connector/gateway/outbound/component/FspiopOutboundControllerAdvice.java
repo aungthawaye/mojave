@@ -20,10 +20,10 @@
 
 package org.mojave.connector.gateway.outbound.component;
 
-import org.mojave.fspiop.component.error.FspiopErrors;
-import org.mojave.fspiop.component.exception.FspiopException;
-import org.mojave.fspiop.spec.core.ErrorInformation;
-import org.mojave.fspiop.spec.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.component.error.FspiopErrors;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.scheme.fspiop.core.ErrorInformation;
+import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

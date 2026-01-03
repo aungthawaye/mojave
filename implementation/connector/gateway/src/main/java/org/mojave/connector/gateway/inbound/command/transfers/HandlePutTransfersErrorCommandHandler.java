@@ -24,6 +24,7 @@ import org.mojave.connector.gateway.component.PubSubKeys;
 import org.mojave.connector.gateway.data.TransfersErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,10 +45,14 @@ class HandlePutTransfersErrorCommandHandler implements HandlePutTransfersErrorCo
     @Override
     public Output execute(Input input) {
 
+        MDC.put("REQ_ID", input.transferId());
+
         var channel = PubSubKeys.forTransfersError(input.transferId());
 
         this.pubSubClient.publish(
             channel, new TransfersErrorResult(input.transferId(), input.errorInformationObject()));
+
+        MDC.remove("REQ_ID");
 
         return new Output();
     }
