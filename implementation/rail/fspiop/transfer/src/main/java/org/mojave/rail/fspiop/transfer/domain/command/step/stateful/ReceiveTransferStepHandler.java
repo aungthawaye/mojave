@@ -113,6 +113,7 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
             var payeePartyIdInfo = input.agreement().payee();
 
             transactionId = new TransactionId(Snowflake.get().nextId());
+            LOGGER.info("TransactionId : {}", transactionId);
 
             transactionAt = Instant.now();
 

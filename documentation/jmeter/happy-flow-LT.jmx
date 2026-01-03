@@ -11,24 +11,24 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp1 to fsp2)">
-        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.num_threads">10</intProp>
         <intProp name="ThreadGroup.ramp_time">5</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">1</stringProp>
+          <stringProp name="LoopController.loops">100</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="tg1payerFsp" elementType="Argument">
               <stringProp name="Argument.name">tg1payerFsp</stringProp>
@@ -58,7 +58,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8200000001</stringProp>
           <stringProp name="CounterConfig.end">8299999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -67,9 +67,9 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn">
-          <stringProp name="CounterConfig.start">9000000001</stringProp>
-          <stringProp name="CounterConfig.end">9999999999</stringProp>
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn" enabled="true">
+          <stringProp name="CounterConfig.start">8000000001</stringProp>
+          <stringProp name="CounterConfig.end">8999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
           <stringProp name="CounterConfig.name">tg1payeeMsisdn</stringProp>
           <stringProp name="CounterConfig.format"></stringProp>
@@ -670,12 +670,12 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
         <hashTree/>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp2 to fsp1)" enabled="true">
-        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.num_threads">10</intProp>
         <intProp name="ThreadGroup.ramp_time">5</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">1</stringProp>
+          <stringProp name="LoopController.loops">100</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
@@ -687,7 +687,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="tg2payerFsp" elementType="Argument">
               <stringProp name="Argument.name">tg2payerFsp</stringProp>
@@ -717,7 +717,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8100000001</stringProp>
           <stringProp name="CounterConfig.end">8199999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -726,7 +726,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8200000001</stringProp>
           <stringProp name="CounterConfig.end">8299999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -735,7 +735,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -1328,7 +1328,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -1366,7 +1366,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
-        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <boolProp name="ResultCollector.error_logging">true</boolProp>
         <objProp>
           <name>saveConfig</name>
           <value class="SampleSaveConfiguration">

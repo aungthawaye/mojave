@@ -31,6 +31,14 @@ import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
+import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
+import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.component.error.FspiopErrors;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
+import org.mojave.rail.fspiop.component.handy.FspiopUrls;
+import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.transfer.contract.command.PostTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.ReservePayerPositionStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
@@ -41,14 +49,6 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReceiveTra
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReserveTransferStep;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
-import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
-import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
-import org.mojave.rail.fspiop.component.error.FspiopErrors;
-import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
-import org.mojave.rail.fspiop.component.handy.FspiopUrls;
-import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -151,8 +151,9 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
             // 2. Open a transaction. And receive the Transfer.
             var receiveTransferOutput = this.receiveTransferStep.execute(
                 new ReceiveTransferStep.Input(
-                    payerFsp, payeeFsp, udfTransferId, ilpCondition, ilpPacket, agreement,
-                    unwrapRequestOutput.requestExpiration(), request.getExtensionList()));
+                    payerFsp, payeeFsp, udfTransferId, request.getAmount(), ilpCondition, ilpPacket,
+                    agreement, unwrapRequestOutput.requestExpiration(),
+                    request.getExtensionList()));
 
             transactionId = receiveTransferOutput.transactionId();
             transactionAt = receiveTransferOutput.transactionAt();
@@ -203,8 +204,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        udfTransferId, transactionId, transferId,
-                        positionReservationId));
+                        udfTransferId, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
 

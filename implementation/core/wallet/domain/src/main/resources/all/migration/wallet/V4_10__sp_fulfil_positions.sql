@@ -46,9 +46,9 @@ BEGIN
         LEAVE proc_fulfil;
     END IF;
 
+    -- Commit the reservation and Payer's position will be increased.
     START TRANSACTION;
 
-    -- Commit the reservation and Payer's position will be increased.
     SELECT position,
            reserved,
            ndc,
@@ -65,6 +65,34 @@ BEGIN
     UPDATE wlt_position
     SET position = v_new_position, reserved = v_new_reserved
     WHERE position_id = v_payer_position_id;
+
+    -- Now do the decrement of the Payee's position.
+    SELECT position,
+           reserved,
+           ndc,
+           currency
+    INTO v_old_position, v_old_reserved, v_ndc, v_payee_currency
+    FROM wlt_position
+    WHERE position_id = p_payee_position_id FOR
+    UPDATE;
+
+    IF v_payee_currency != v_payer_currency THEN
+        ROLLBACK;
+        SELECT 'ERROR'                 AS status,
+               'CURRENCIES_MISMATCHED' AS err_error_code,
+               NULL                    AS payer_commit_id,
+               NULL                    AS payee_commit_id;
+        LEAVE proc_fulfil;
+    END IF;
+
+    SET v_new_position = v_old_position - v_amount;
+    SET v_new_reserved = v_old_reserved;
+
+    UPDATE wlt_position
+    SET position = v_new_position
+    WHERE position_id = p_payee_position_id; COMMIT;
+
+    START TRANSACTION;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,
@@ -103,31 +131,6 @@ BEGIN
             v_now,
             0);
 
-    -- Now do the decrement of the Payee's position.
-    SELECT position,
-           reserved,
-           ndc,
-           currency
-    INTO v_old_position, v_old_reserved, v_ndc, v_payee_currency
-    FROM wlt_position
-    WHERE position_id = p_payee_position_id FOR
-    UPDATE;
-
-    IF v_payee_currency != v_payer_currency THEN
-        ROLLBACK;
-        SELECT 'ERROR'                 AS status,
-               'CURRENCIES_MISMATCHED' AS err_error_code,
-               NULL                    AS payer_commit_id,
-               NULL                    AS payee_commit_id;
-        LEAVE proc_fulfil;
-    END IF;
-
-    SET v_new_position = v_old_position - v_amount;
-    SET v_new_reserved = v_old_reserved;
-
-    UPDATE wlt_position
-    SET position = v_new_position
-    WHERE position_id = p_payee_position_id;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,

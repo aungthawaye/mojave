@@ -89,7 +89,11 @@ BEGIN
     SET balance = v_new_balance
     WHERE balance_id = p_balance_id;
 
+    COMMIT;
+
     /* 4) Insert balance update row */
+    START TRANSACTION;
+
     INSERT INTO wlt_balance_update (balance_update_id,
                                     balance_id,
                                     action,
@@ -117,7 +121,9 @@ BEGIN
             v_now,
             v_now,
             v_now,
-            0); COMMIT;
+            0);
+
+    COMMIT;
 
     /* 5) Return result */
     SELECT 'SUCCESS' AS status,

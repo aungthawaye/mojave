@@ -176,6 +176,7 @@ BEGIN
         LEAVE proc_posting;
     END IF;
 
+    START TRANSACTION;
     INSERT INTO acc_ledger_movement (ledger_movement_id,
                                      step,
                                      account_id,
@@ -332,7 +333,9 @@ BEGIN
             SET old_debits     = v_dr_curr, old_credits = v_cr_curr,
                 new_debits     = v_dr_new, new_credits = v_cr_new,
                 movement_stage = 'DEBIT_CREDIT', movement_result = 'SUCCESS'
-            WHERE ledger_movement_id = v_ledger_movement_id; COMMIT;
+            WHERE ledger_movement_id = v_ledger_movement_id;
+
+            COMMIT;
 
             -- Stage movement row
             INSERT INTO tmp_movements (ledger_movement_id,
@@ -380,9 +383,12 @@ BEGIN
     IF v_error <> 0 THEN
         -- There is an error. The last movement's ledger_movement_id must be marked as an error.
         START TRANSACTION;
+
         UPDATE acc_ledger_movement
         SET movement_stage = 'DEBIT_CREDIT', movement_result = v_error_code
-        WHERE ledger_movement_id = v_ledger_movement_id; COMMIT;
+        WHERE ledger_movement_id = v_ledger_movement_id;
+
+        COMMIT;
 
         -- Restore the balance of the successful rows which are prior to the error.
         BEGIN
@@ -448,6 +454,7 @@ BEGIN
                                UNIX_TIMESTAMP()     AS created_at;
                         ROLLBACK;
                     END;
+
                     START TRANSACTION;
 
                     -- Previously we increased the debits or credits based on the side.
@@ -469,7 +476,10 @@ BEGIN
                     UPDATE acc_ledger_movement
                     SET movement_stage  = 'DEBIT_CREDIT',
                         movement_result = 'REVERSED'
-                    WHERE ledger_movement_id = r_ledger_movement_id; COMMIT;
+                    WHERE ledger_movement_id = r_ledger_movement_id;
+
+                    COMMIT;
+
                 END;
             END LOOP rev_loop;
             CLOSE cur_rev;

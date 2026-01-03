@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.wallet.domain.command.position;
 
 import org.mojave.component.misc.handy.Snowflake;
@@ -67,12 +68,16 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
         }
 
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
+        LOGGER.info(
+            "ReservePositionCommand : positionUpdateId: ({}), transactionId : ({})",
+            positionUpdateId, input.transactionId());
 
         try {
 
             final var history = this.positionUpdater.reserve(
-                input.transactionId(), input.transactionAt(), positionUpdateId,
-                position.positionId(), input.amount(), input.description());
+                input.transactionId(),
+                input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
+                input.description());
 
             final var output = new Output(
                 history.positionUpdateId(), history.positionId(), history.action(),
@@ -89,8 +94,8 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
 
         } catch (final PositionUpdater.LimitExceededException e) {
             throw new PositionLimitExceededException(
-                e.getPositionId(), e.getAmount(), e.getOldPosition(), e.getOldReserved(),
-                e.getNetDebitCap(), e.getTransactionId());
+                e.getPositionId(), e.getAmount(),
+                e.getOldPosition(), e.getOldReserved(), e.getNetDebitCap(), e.getTransactionId());
         }
     }
 

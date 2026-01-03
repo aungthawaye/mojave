@@ -58,6 +58,10 @@ BEGIN
     SET reserved = v_new_reserved
     WHERE position_id = p_position_id;
 
+    COMMIT;
+
+    START TRANSACTION;
+
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,
                                      action,
@@ -93,7 +97,9 @@ BEGIN
             NULL,
             v_now,
             v_now,
-            0); COMMIT;
+            0);
+
+    COMMIT;
 
     SELECT 'SUCCESS' AS status,
            pu.position_update_id,
@@ -111,5 +117,5 @@ BEGIN
     FROM wlt_position_update pu
     WHERE pu.position_update_id = p_position_update_id;
 
-END$$
+END $$
 DELIMITER ;

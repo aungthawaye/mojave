@@ -111,7 +111,11 @@ BEGIN
         SET balance = v_new_balance
         WHERE balance_id = v_balance_id;
 
+        COMMIT;
+
         /* Insert a new balance update row flagged as REVERSED */
+        START TRANSACTION;
+
         INSERT INTO wlt_balance_update (balance_update_id,
                                         balance_id,
                                         action,
@@ -141,7 +145,9 @@ BEGIN
                 p_reversing_balance_update_id,
                 v_now,
                 v_now,
-                0); COMMIT;
+                0);
+
+        COMMIT;
 
         /* 3.c) Return the reversal row */
         SELECT 'SUCCESS' AS status,

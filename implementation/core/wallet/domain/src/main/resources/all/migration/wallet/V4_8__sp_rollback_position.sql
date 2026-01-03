@@ -65,7 +65,9 @@ BEGIN
 
     UPDATE wlt_position
     SET reserved = v_new_reserved
-    WHERE position_id = v_position_id;
+    WHERE position_id = v_position_id; COMMIT;
+
+    START TRANSACTION;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,

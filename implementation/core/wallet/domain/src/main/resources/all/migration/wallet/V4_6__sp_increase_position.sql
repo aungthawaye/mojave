@@ -59,7 +59,9 @@ BEGIN
 
     UPDATE wlt_position
     SET position = v_new_position
-    WHERE position_id = p_position_id;
+    WHERE position_id = p_position_id; COMMIT;
+
+    START TRANSACTION;
 
     INSERT INTO wlt_position_update (position_update_id,
                                      position_id,
@@ -96,7 +98,9 @@ BEGIN
             NULL,
             v_now,
             v_now,
-            0); COMMIT;
+            0);
+
+    COMMIT;
 
     SELECT 'SUCCESS' AS status,
            pu.position_update_id,

@@ -180,7 +180,8 @@ public class FspCoreAdapter {
 
             var agreement = new Agreement(
                 quoteId, request.getPayer().getPartyIdInfo(), request.getPayee().getPartyIdInfo(),
-                request.getAmountType(),
+                request.getAmountType(), request.getTransactionType().getScenario(),
+                request.getTransactionType().getSubScenario(),
                 new Money(currency, originalAmount.stripTrailingZeros().toPlainString()),
                 new Money(currency, payeeFspFee.stripTrailingZeros().toPlainString()),
                 new Money(currency, payeeFspCommission.stripTrailingZeros().toPlainString()),
