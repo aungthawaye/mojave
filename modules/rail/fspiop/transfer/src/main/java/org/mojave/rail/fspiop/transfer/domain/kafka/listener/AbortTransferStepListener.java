@@ -36,20 +36,16 @@ public class AbortTransferStepListener {
         topics = TopicNames.ABORT_TRANSFER_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<AbortTransferStep.Input> inputs, Acknowledgment ack) {
+    public void handle(AbortTransferStep.Input input, Acknowledgment ack) {
 
         try {
-
-            for (AbortTransferStep.Input input : inputs) {
-                this.abortTransferStep.execute(input);
-            }
-
+            this.abortTransferStep.execute(input);
             ack.acknowledge();
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
         }
+
     }
 
     public static class Settings extends KafkaConsumerConfigurer.ConsumerSettings {
@@ -58,14 +54,13 @@ public class AbortTransferStepListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

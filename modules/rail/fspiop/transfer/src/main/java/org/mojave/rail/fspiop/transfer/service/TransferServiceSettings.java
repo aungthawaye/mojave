@@ -30,6 +30,7 @@ import org.mojave.rail.fspiop.transfer.domain.TransferKafkaConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.AbortTransferStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.CommitTransferStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.DisputeTransferStepListener;
+import org.mojave.rail.fspiop.transfer.domain.kafka.listener.PatchTransferToPayeeStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.RollbackReservationStepListener;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
@@ -51,7 +52,7 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new AbortTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), AbortTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -69,7 +70,7 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new CommitTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), CommitTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -79,7 +80,7 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new DisputeTransferStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), DisputeTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -89,6 +90,16 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new ParticipantIntercomService.Settings(
             System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+    }
+
+    @Bean
+    @Override
+    public PatchTransferToPayeeStepListener.Settings patchTransferToPayeeStepListenerSettings() {
+
+        return new PatchTransferToPayeeStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), PatchTransferToPayeeStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -135,7 +146,7 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
         return new RollbackReservationStepListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), RollbackReservationStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 1000, false,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
             ContainerProperties.AckMode.MANUAL);
     }
 

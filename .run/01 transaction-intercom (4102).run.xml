@@ -2,7 +2,7 @@
   <configuration default="false" name="01 transaction-intercom (4102)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="core">
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-21" />
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/core/transaction/intercom/src/main/java/org/mojave/core/transaction/intercom/.env" />
+      <option value="$PROJECT_DIR$/modules/core/transaction/intercom/src/main/java/org/mojave/core/transaction/intercom/.env" />
     </option>
     <module name="mojave-core-transaction-intercom" />
     <selectedOptions>

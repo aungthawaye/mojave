@@ -56,18 +56,11 @@ public class RollbackReservationListener {
         topics = TopicNames.ROLLBACK_RESERVATION,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<RollbackReservationCommand.Input> inputs, Acknowledgment ack) {
+    public void handle(RollbackReservationCommand.Input input, Acknowledgment ack) {
 
         try {
-
-            LOGGER.info("RollbackReservation : Received ({}) messages.", inputs.size());
-            for (var input : inputs) {
-                this.rollbackReservationCommand.execute(input);
-            }
-
+            this.rollbackReservationCommand.execute(input);
             ack.acknowledge();
-            LOGGER.info("RollbackReservation : Done.");
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
@@ -80,14 +73,13 @@ public class RollbackReservationListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

@@ -36,16 +36,11 @@ public class DisputeTransferStepListener {
         topics = TopicNames.DISPUTE_TRANSFER_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<DisputeTransferStep.Input> inputs, Acknowledgment ack) {
+    public void handle(DisputeTransferStep.Input input, Acknowledgment ack) {
 
         try {
-
-            for (DisputeTransferStep.Input input : inputs) {
-                this.disputeTransferStep.execute(input);
-            }
-
+            this.disputeTransferStep.execute(input);
             ack.acknowledge();
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
@@ -58,14 +53,13 @@ public class DisputeTransferStepListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

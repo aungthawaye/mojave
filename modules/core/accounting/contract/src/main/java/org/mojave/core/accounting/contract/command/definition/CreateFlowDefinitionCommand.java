@@ -24,11 +24,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.enums.accounting.ReceiveIn;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.scheme.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.scheme.common.datatype.enums.accounting.Side;
+import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.util.List;

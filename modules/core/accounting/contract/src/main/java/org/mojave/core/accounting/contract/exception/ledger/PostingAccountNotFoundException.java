@@ -22,8 +22,8 @@ package org.mojave.core.accounting.contract.exception.ledger;
 import lombok.Getter;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
-import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.util.HashMap;

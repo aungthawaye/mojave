@@ -10,6 +10,10 @@
     <artifactId>mojave-provider-ledger</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Provider - Ledger</name>
+    <modules>
+        <module>mysql</module>
+        <module>contract</module>
+    </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

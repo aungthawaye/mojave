@@ -21,9 +21,9 @@ package org.mojave.core.accounting.contract.query;
 
 import org.mojave.core.accounting.contract.data.ChartEntryData;
 import org.mojave.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
-import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.scheme.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
 
 import java.util.List;
 

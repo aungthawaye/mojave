@@ -19,9 +19,9 @@
  */
 package org.mojave.core.wallet.intercom.client.service;
 
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.balance.DepositFundCommand;
 import org.mojave.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import org.mojave.core.wallet.contract.command.balance.WithdrawFundCommand;

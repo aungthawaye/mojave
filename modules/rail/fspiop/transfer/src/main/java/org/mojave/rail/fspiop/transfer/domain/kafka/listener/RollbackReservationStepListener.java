@@ -36,16 +36,11 @@ public class RollbackReservationStepListener {
         topics = TopicNames.ROLLBACK_RESERVATION_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<RollbackReservationStep.Input> inputs, Acknowledgment ack) {
+    public void handle(RollbackReservationStep.Input input, Acknowledgment ack) {
 
         try {
-
-            for (RollbackReservationStep.Input input : inputs) {
-                this.rollbackReservationStep.execute(input);
-            }
-
+            this.rollbackReservationStep.execute(input);
             ack.acknowledge();
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
@@ -58,14 +53,13 @@ public class RollbackReservationStepListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

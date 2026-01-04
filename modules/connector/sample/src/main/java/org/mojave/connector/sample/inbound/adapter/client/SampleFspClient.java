@@ -131,11 +131,11 @@ public class SampleFspClient implements FspClient {
         var partyId = request.agreement().payee().getPartyIdentifier();
         var transferState = TransferState.RESERVED;
 
-        if (partyId.startsWith("5")) {
+        if (partyId.startsWith("1")) {
             transferState = TransferState.RECEIVED;
-        } else if (partyId.startsWith("6")) {
+        } else if (partyId.startsWith("2")) {
             transferState = TransferState.ABORTED;
-        } else if (partyId.startsWith("7")) {
+        } else if (partyId.startsWith("3")) {
             transferState = TransferState.COMMITTED;
         }
 
@@ -143,11 +143,11 @@ public class SampleFspClient implements FspClient {
         var extensionList = new ExtensionList().addExtensionItem(
             new Extension("homeTransactionId", homeTransactionId));
 
-        if (partyId.startsWith("8")) {
+        if (partyId.startsWith("4")) {
             extensionList.addExtensionItem(new Extension("simulateDispute", "true"));
         }
 
-        if (partyId.startsWith("9")) {
+        if (partyId.startsWith("5")) {
 
             throw new FspiopException(
                 FspiopErrors.PAYEE_REJECTED_TRANSACTION,

@@ -19,7 +19,7 @@
  */
 package org.mojave.core.participant.admin.controller.api.query;
 
-import org.mojave.core.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.scheme.fspiop.core.PartyIdType;

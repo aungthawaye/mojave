@@ -24,9 +24,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.identifier.participant.FspEndpointId;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.scheme.common.datatype.identifier.participant.FspEndpointId;
+import org.mojave.scheme.common.datatype.identifier.participant.FspId;
 
 public interface AddEndpointCommand {
 

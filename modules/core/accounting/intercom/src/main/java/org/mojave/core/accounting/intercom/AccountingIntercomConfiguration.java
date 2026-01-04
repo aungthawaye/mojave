@@ -25,7 +25,7 @@ import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
-import org.mojave.core.common.datatype.DatatypeConfiguration;
+import org.mojave.scheme.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;

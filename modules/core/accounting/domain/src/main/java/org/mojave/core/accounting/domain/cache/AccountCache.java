@@ -20,10 +20,10 @@
 package org.mojave.core.accounting.domain.cache;
 
 import org.mojave.core.accounting.contract.data.AccountData;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.type.accounting.AccountCode;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.util.Set;

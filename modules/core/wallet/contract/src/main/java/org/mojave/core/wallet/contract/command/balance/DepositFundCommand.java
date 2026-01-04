@@ -24,11 +24,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.enums.wallet.BalanceAction;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.enums.wallet.BalanceAction;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
 import org.mojave.scheme.fspiop.core.Currency;
 

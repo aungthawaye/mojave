@@ -19,8 +19,8 @@
  */
 package org.mojave.core.wallet.contract.data;
 
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.math.BigDecimal;

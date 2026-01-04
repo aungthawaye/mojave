@@ -20,8 +20,8 @@
 package org.mojave.core.accounting.domain.component.ledger.strategy;
 
 import org.mojave.core.accounting.domain.component.ledger.Ledger;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
 
 import java.time.Instant;
 import java.util.List;

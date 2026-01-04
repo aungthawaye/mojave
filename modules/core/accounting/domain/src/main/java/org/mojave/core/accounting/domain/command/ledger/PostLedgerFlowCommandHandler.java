@@ -35,11 +35,11 @@ import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccou
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.component.ledger.Ledger;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.accounting.ReceiveIn;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.LedgerMovementId;
+import org.mojave.scheme.common.datatype.enums.ActivationStatus;
+import org.mojave.scheme.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.LedgerMovementId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -77,9 +77,6 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                                        OverdraftLimitReachedInAccountException,
                                        DuplicatePostingInLedgerException,
                                        RestoreFailedInAccountException {
-
-        final var CONTEXT = "Accounting";
-        final var STEP = "PostLedgerFlow";
 
         LOGGER.info("PostLedgerFlowCommand : input: ({})", ObjectLogger.log(input));
 

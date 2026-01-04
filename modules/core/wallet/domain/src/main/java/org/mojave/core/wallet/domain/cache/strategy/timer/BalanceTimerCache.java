@@ -20,8 +20,8 @@
 package org.mojave.core.wallet.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.domain.cache.BalanceCache;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;

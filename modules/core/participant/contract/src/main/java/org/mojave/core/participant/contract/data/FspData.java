@@ -19,11 +19,11 @@
  */
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.common.datatype.enums.ActivationStatus;
+import org.mojave.scheme.common.datatype.enums.TerminationStatus;
+import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.scheme.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.common.datatype.type.participant.FspCode;
 
 import java.util.Map;
 import java.util.Objects;

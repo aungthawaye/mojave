@@ -21,8 +21,8 @@ package org.mojave.core.wallet.intercom.client.api.query;
 
 import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.query.BalanceQuery;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;

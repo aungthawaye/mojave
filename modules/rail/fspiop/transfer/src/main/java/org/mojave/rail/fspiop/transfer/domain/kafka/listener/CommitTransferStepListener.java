@@ -36,18 +36,11 @@ public class CommitTransferStepListener {
         topics = TopicNames.COMMIT_TRANSFER_STEP,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<CommitTransferStep.Input> inputs, Acknowledgment ack) {
+    public void handle(CommitTransferStep.Input input, Acknowledgment ack) {
 
         try {
-
-            LOGGER.info("CommitTransferStep : Received ({}) messages.", inputs.size());
-            for (CommitTransferStep.Input input : inputs) {
-                this.commitTransferStep.execute(input);
-            }
-
+            this.commitTransferStep.execute(input);
             ack.acknowledge();
-            LOGGER.info("CommitTransferStep : Done.");
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
@@ -60,14 +53,13 @@ public class CommitTransferStepListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

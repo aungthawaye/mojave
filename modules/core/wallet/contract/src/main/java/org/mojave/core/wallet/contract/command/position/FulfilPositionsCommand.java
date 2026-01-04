@@ -19,8 +19,8 @@
  */
 package org.mojave.core.wallet.contract.command.position;
 
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
 import org.mojave.scheme.fspiop.core.Currency;
 

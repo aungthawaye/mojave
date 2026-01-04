@@ -22,7 +22,7 @@ package org.mojave.core.transaction.domain.command;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.transaction.contract.command.OpenTransactionCommand;
 import org.mojave.core.transaction.domain.model.Transaction;
 import org.mojave.core.transaction.domain.repository.TransactionRepository;

@@ -21,8 +21,8 @@ package org.mojave.core.participant.contract.command.ssp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.core.common.datatype.identifier.participant.SspCurrencyId;
-import org.mojave.core.common.datatype.identifier.participant.SspId;
+import org.mojave.scheme.common.datatype.identifier.participant.SspCurrencyId;
+import org.mojave.scheme.common.datatype.identifier.participant.SspId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 public interface AddSspCurrencyCommand {

@@ -20,7 +20,7 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.Chart;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

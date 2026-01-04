@@ -69,4 +69,4 @@ export FLYWAY_DB_URL="jdbc:mysql://localhost:3306/ml_mojave?createDatabaseIfNotE
 export FLYWAY_DB_USER="root"
 export FLYWAY_DB_PASSWORD="password"
 
-java -cp "./*:./lib/*" org.mojave.mono.admin.MonoAdminApplication
+java -cp "./*:./lib/*" -Dlog4j.configurationFile=classpath:mono-admin-log4j2.xml org.mojave.mono.admin.MonoAdminApplication

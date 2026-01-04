@@ -21,9 +21,9 @@ package org.mojave.core.accounting.intercom.controller.api.query;
 
 import org.mojave.core.accounting.contract.data.ChartEntryData;
 import org.mojave.core.accounting.contract.query.ChartEntryQuery;
-import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.scheme.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

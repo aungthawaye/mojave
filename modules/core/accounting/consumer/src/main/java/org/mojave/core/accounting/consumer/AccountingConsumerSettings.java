@@ -36,7 +36,7 @@ class AccountingConsumerSettings implements AccountingConsumerConfiguration.Requ
 
         return new PostLedgerFlowListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 

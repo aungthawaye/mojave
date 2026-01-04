@@ -19,9 +19,9 @@
  */
 package org.mojave.core.transaction.contract.data;
 
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionStepId;
+import org.mojave.scheme.common.datatype.enums.trasaction.StepPhase;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionStepId;
 
 import java.time.Instant;
 import java.util.Objects;

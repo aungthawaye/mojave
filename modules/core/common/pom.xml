@@ -10,9 +10,8 @@
     <groupId>org.mojave.core.common</groupId>
     <artifactId>mojave-core-common</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Core - 00 Common</name>
+    <name>Mojave - Core - Common</name>
     <modules>
-        <module>datatype</module>
         <module>datatype-jpa</module>
     </modules>
     <properties>

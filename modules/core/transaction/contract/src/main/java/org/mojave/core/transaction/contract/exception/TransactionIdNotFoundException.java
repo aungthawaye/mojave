@@ -22,7 +22,7 @@ package org.mojave.core.transaction.contract.exception;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
 
 import java.util.HashMap;
 import java.util.Map;

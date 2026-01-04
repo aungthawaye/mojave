@@ -20,11 +20,11 @@
 package org.mojave.core.participant.store.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.identifier.participant.OracleId;
-import org.mojave.core.common.datatype.identifier.participant.SspId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
-import org.mojave.core.common.datatype.type.participant.SspCode;
+import org.mojave.scheme.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.common.datatype.identifier.participant.SspId;
+import org.mojave.scheme.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.data.SspData;

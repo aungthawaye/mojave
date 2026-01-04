@@ -42,10 +42,10 @@ import org.mojave.component.misc.data.DataConversion;
 import org.mojave.core.accounting.contract.data.LedgerBalanceData;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.model.DrCr;
-import org.mojave.core.common.datatype.converter.identifier.accounting.AccountIdJavaType;
-import org.mojave.core.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.converter.identifier.accounting.AccountIdJavaType;
+import org.mojave.scheme.common.datatype.enums.accounting.OverdraftMode;
+import org.mojave.scheme.common.datatype.enums.accounting.Side;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
 import org.mojave.rail.fspiop.component.handy.FspiopCurrencies;
 import org.mojave.scheme.fspiop.core.Currency;
 

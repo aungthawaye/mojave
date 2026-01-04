@@ -19,8 +19,8 @@
  */
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.core.common.datatype.identifier.participant.FxRatePairId;
-import org.mojave.core.common.datatype.identifier.participant.FxpId;
+import org.mojave.scheme.common.datatype.identifier.participant.FxRatePairId;
+import org.mojave.scheme.common.datatype.identifier.participant.FxpId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.math.BigDecimal;

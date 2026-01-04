@@ -21,14 +21,14 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.UnwrapRequestStep;
-import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopCurrencies;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
 import org.mojave.rail.fspiop.component.handy.FspiopMoney;
 import org.mojave.rail.fspiop.component.interledger.Interledger;
+import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.UnwrapRequestStep;
+import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -83,7 +83,7 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
         var ilpCondition = request.getCondition();
 
         var ilpPacket = Interledger.unwrap(ilpPacketString);
-        var ilpTransferAmount = Interledger.Amount.deserialize(
+        var ilpTransferAmount = FspiopMoney.deserialize(
             ilpPacket.getAmount(), FspiopCurrencies.get(currency).scale());
 
         var agreement = this.agreementUnwrapper.unwrap(ilpPacket.getData());
@@ -100,11 +100,11 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
         if (!agreement.quoteId().equals(request.getTransferId())) {
 
             LOGGER.warn(
-                "QuoteId from Agreement does not match the transferId of Transfer request.");
+                "QuoteId from Agreement must be same as the transferId of Transfer request.");
 
             throw new FspiopException(
                 FspiopErrors.GENERIC_VALIDATION_ERROR,
-                "QuoteId from Agreement does not match the transferId of Transfer request.");
+                "QuoteId from Agreement must be same as the transferId of Transfer request.");
         }
 
         if (agreement.expireAt() != null) {

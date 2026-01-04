@@ -22,7 +22,7 @@ package org.mojave.core.participant.intercom.client.api.query;
 import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.core.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.exception.ParticipantExceptionResolver;
 import org.mojave.core.participant.contract.exception.oracle.OracleIdNotFoundException;

@@ -50,12 +50,12 @@ import org.mojave.core.accounting.contract.exception.definition.InvalidParticipa
 import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForReceiveInException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.ChartEntryCache;
-import org.mojave.core.common.datatype.converter.identifier.accounting.PostingDefinitionIdJavaType;
-import org.mojave.core.common.datatype.enums.accounting.ReceiveIn;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.scheme.common.datatype.converter.identifier.accounting.PostingDefinitionIdJavaType;
+import org.mojave.scheme.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.scheme.common.datatype.enums.accounting.Side;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.PostingDefinitionId;
 
 import java.util.stream.Collectors;
 

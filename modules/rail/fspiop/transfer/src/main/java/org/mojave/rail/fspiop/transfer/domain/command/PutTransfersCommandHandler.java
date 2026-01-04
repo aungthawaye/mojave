@@ -21,15 +21,15 @@
 package org.mojave.rail.fspiop.transfer.domain.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.enums.transfer.AbortReason;
-import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.common.datatype.enums.Direction;
+import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.scheme.common.datatype.enums.transfer.AbortReason;
+import org.mojave.scheme.common.datatype.enums.transfer.DisputeReason;
+import org.mojave.scheme.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.transfer.TransferId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
@@ -248,8 +248,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                 LOGGER.error("Error:", e);
                 // Payee responded with some validation error.
-                RollbackReservationStep.Output rollbackReservationOutput = null;
-
                 // Roll back the Payer position reservation.
                 this.rollbackReservationStepPublisher.publish(
                     new RollbackReservationStep.Input(
@@ -337,7 +335,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 // 👉Send the error response to Payer.
 
                 TransferState finalTransferState = null;
-                DisputeReason finalDispute = null;
 
                 try {
 
@@ -364,25 +361,20 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     // ‼️Any issue happens from this onward, it will be dispute.
                     try {
 
-                        finalDispute = DisputeReason.POSITIONS_FULFILMENT;
                         this.fulfilPositionsStep.execute(new FulfilPositionsStep.Input(
                             udfTransferId, transactionId, transactionAt, payerFsp, payeeFsp,
                             reservationId, currency, "-"));
 
-                        finalDispute = DisputeReason.POSTING_LEDGER_FLOW;
                         this.postLedgerFlowStep.execute(new PostLedgerFlowStep.Input(
                             udfTransferId, transactionId, transactionAt, currency, payerFsp,
                             payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
 
-                        finalDispute = DisputeReason.COMMITING_TRANSFER;
                         this.commitTransferStepPublisher.publish(
                             new CommitTransferStepHandler.Input(
                                 udfTransferId, transactionId, transferId,
                                 unwrapResponseOutput.ilpFulfilment(),
                                 unwrapResponseOutput.completedAt(),
                                 putTransfersResponse.getExtensionList()));
-
-                        finalDispute = null;
 
                     } catch (Exception e) {
 
@@ -394,16 +386,13 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                     // If we cannot commit Transfer to Payer, it is ABORTED.
                     // So, we need to roll back the Payer position reservation.
-
                     try {
 
-                        finalDispute = DisputeReason.RESERVATION_ROLLBACK;
+
                         this.rollbackReservationStepPublisher.publish(
                             new RollbackReservationStep.Input(
                                 udfTransferId, transactionId, transferId, reservationId,
                                 "Failed to COMMIT transfer to Payer."));
-
-                        finalDispute = null;
 
                     } catch (Exception e) {
 
@@ -424,19 +413,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 } catch (Exception e) {
 
                     LOGGER.error("Error:", e);
-
-                    if (finalTransferState == TransferState.COMMITTED) {
-                        // if we cannot notify the Payee that the Transfer is COMMITTED, it is dispute.
-                        finalDispute = DisputeReason.PATCHING_TO_PAYEE;
-                    }
-                }
-
-                if (finalDispute != null) {
-
-                    this.disputeTransferStepPublisher.publish(
-                        new DisputeTransferStep.Input(
-                            udfTransferId, transactionId, transferId,
-                            finalDispute));
                 }
 
             }

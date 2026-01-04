@@ -28,7 +28,7 @@ import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.ChartEntryCache;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.scheme.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -41,9 +41,9 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionStepIdJavaType;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionStepId;
+import org.mojave.scheme.common.datatype.converter.identifier.transaction.TransactionStepIdJavaType;
+import org.mojave.scheme.common.datatype.enums.trasaction.StepPhase;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionStepId;
 import org.mojave.core.transaction.contract.data.TransactionStepData;
 
 import java.time.Instant;

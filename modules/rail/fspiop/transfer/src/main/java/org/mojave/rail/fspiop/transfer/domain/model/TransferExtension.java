@@ -36,9 +36,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.transfer.TransferExtensionIdJavaType;
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.identifier.transfer.TransferExtensionId;
+import org.mojave.scheme.common.datatype.converter.identifier.transfer.TransferExtensionIdJavaType;
+import org.mojave.scheme.common.datatype.enums.Direction;
+import org.mojave.scheme.common.datatype.identifier.transfer.TransferExtensionId;
 
 import static java.sql.Types.BIGINT;
 

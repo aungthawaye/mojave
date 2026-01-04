@@ -22,7 +22,7 @@ package org.mojave.core.accounting.contract.exception.chart;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
 
 import java.util.HashMap;
 import java.util.Map;

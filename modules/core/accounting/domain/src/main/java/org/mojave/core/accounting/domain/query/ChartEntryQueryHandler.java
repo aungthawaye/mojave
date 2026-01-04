@@ -25,9 +25,9 @@ import org.mojave.core.accounting.contract.exception.chart.ChartEntryIdNotFoundE
 import org.mojave.core.accounting.contract.query.ChartEntryQuery;
 import org.mojave.core.accounting.domain.model.ChartEntry;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
-import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.scheme.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

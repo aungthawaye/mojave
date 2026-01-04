@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.component.interledger;
 
 import com.google.common.primitives.UnsignedLong;
@@ -26,6 +27,7 @@ import org.interledger.core.InterledgerAddress;
 import org.interledger.core.InterledgerFulfillment;
 import org.interledger.core.InterledgerPreparePacket;
 import org.interledger.encoding.asn.framework.CodecContext;
+import org.mojave.rail.fspiop.component.handy.FspiopMoney;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -173,44 +174,5 @@ public class Interledger {
                           String base64Condition) { }
 
     public record Fulfill(boolean valid, String base64Fulfillment) { }
-
-    public static class Amount {
-
-        private static final BigInteger UINT64_MAX = new BigInteger(
-            UnsignedLong.MAX_VALUE.toString());
-
-        public static BigDecimal deserialize(UnsignedLong amount, int scale) {
-
-            assert amount != null;
-            assert scale >= 0;
-
-            BigInteger minor = new BigInteger(amount.toString());
-
-            return new BigDecimal(minor).movePointLeft(scale);
-        }
-
-        public static UnsignedLong serialize(BigDecimal amount,
-                                             int scale,
-                                             RoundingMode roundingMode) {
-
-            assert amount != null;
-            assert scale >= 0;
-            assert roundingMode != null;
-
-            BigDecimal minor = amount.movePointRight(scale);
-            BigInteger asInt = minor.setScale(0, roundingMode).toBigIntegerExact();
-
-            if (asInt.signum() < 0) {
-                throw new IllegalArgumentException("Negative ILP amount not allowed");
-            }
-
-            if (asInt.compareTo(UINT64_MAX) > 0) {
-                throw new IllegalArgumentException("Exceeds UInt64");
-            }
-
-            return UnsignedLong.valueOf(asInt.toString());
-        }
-
-    }
 
 }

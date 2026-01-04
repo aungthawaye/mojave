@@ -22,8 +22,8 @@ package org.mojave.core.wallet.contract.exception.position;
 import lombok.Getter;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

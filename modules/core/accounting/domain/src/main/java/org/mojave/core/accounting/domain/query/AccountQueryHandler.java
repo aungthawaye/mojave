@@ -28,9 +28,9 @@ import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundEx
 import org.mojave.core.accounting.contract.query.AccountQuery;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.core.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.common.datatype.type.accounting.AccountCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;

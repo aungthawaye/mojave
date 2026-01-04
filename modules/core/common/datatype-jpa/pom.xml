@@ -20,8 +20,8 @@
             <artifactId>mojave-component-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.common</groupId>
-            <artifactId>mojave-core-common-datatype</artifactId>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-common</artifactId>
         </dependency>
     </dependencies>
 </project>

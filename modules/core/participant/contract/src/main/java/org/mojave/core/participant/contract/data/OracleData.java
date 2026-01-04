@@ -21,9 +21,9 @@
 
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.common.datatype.enums.ActivationStatus;
+import org.mojave.scheme.common.datatype.enums.TerminationStatus;
+import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
 import org.mojave.scheme.fspiop.core.PartyIdType;
 
 import java.util.Objects;

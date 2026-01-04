@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="01 fspiop-lookup (4603)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="fspiop">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/modules/rail/fspiop/lookup/src/main/java/org/mojave/rail/fspiop/lookup/service/.env" />
+    </option>
+    <module name="mojave-rail-fspiop-lookup" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.rail.fspiop.lookup.service.LookUpServiceApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.mojave.core.lookup.service.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

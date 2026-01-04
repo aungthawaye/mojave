@@ -19,8 +19,8 @@
  */
 package org.mojave.core.wallet.admin.controller.api.query;
 
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.PositionData;
 import org.mojave.core.wallet.contract.query.PositionQuery;
 import org.mojave.scheme.fspiop.core.Currency;

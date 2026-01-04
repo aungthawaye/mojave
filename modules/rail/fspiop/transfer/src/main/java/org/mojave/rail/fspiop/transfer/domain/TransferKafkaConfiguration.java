@@ -7,14 +7,17 @@ import org.mojave.component.kafka.KafkaProducerConfigurer;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.AbortTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.CommitTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
+import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.AbortTransferStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.CommitTransferStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.DisputeTransferStepListener;
+import org.mojave.rail.fspiop.transfer.domain.kafka.listener.PatchTransferToPayeeStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.RollbackReservationStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.CommitTransferStepPublisher;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
+import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.PatchTransferToPayeeStepPublisher;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -229,6 +232,72 @@ public class TransferKafkaConfiguration {
     }
 
     @Bean
+    @Qualifier(PatchTransferToPayeeStepPublisher.QUALIFIER)
+    public KafkaTemplate<String, PatchTransferToPayeeStep.Input> patchTransferToPayeeStepKafkaTemplate(
+        @Qualifier(PatchTransferToPayeeStepPublisher.QUALIFIER)
+        ProducerFactory<String, PatchTransferToPayeeStep.Input> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean(name = PatchTransferToPayeeStepListener.LISTENER_CONTAINER_FACTORY)
+    @Qualifier(PatchTransferToPayeeStepListener.QUALIFIER)
+    public ConcurrentKafkaListenerContainerFactory<String, PatchTransferToPayeeStep.Input> patchTransferToPayeeStepListenerContainerFactory(
+        PatchTransferToPayeeStepListener.Settings settings,
+        ObjectMapper objectMapper) {
+
+        return KafkaConsumerConfigurer.configure(
+            settings, new KafkaConsumerConfigurer.Deserializers<>() {
+
+                @Override
+                public Deserializer<String> forKey() {
+
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        String.class, (JsonMapper) objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+
+                @Override
+                public Deserializer<PatchTransferToPayeeStep.Input> forValue() {
+
+                    var deserializer = new JacksonJsonDeserializer<>(
+                        PatchTransferToPayeeStep.Input.class, (JsonMapper) objectMapper);
+
+                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
+
+                    return deserializer;
+                }
+            });
+    }
+
+    @Bean
+    @Qualifier(PatchTransferToPayeeStepPublisher.QUALIFIER)
+    public ProducerFactory<String, PatchTransferToPayeeStep.Input> patchTransferToPayeeStepProducerFactory(
+        TransferKafkaConfiguration.ProducerSettings settings,
+        ObjectMapper objectMapper) {
+
+        return KafkaProducerConfigurer.configure(
+            settings.bootstrapServers(), settings.ack(),
+            new KafkaProducerConfigurer.Serializers<>() {
+
+                @Override
+                public Serializer<String> forKey() {
+
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
+                }
+
+                @Override
+                public Serializer<PatchTransferToPayeeStep.Input> forValue() {
+
+                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
+                }
+            });
+    }
+
+    @Bean
     @Qualifier(RollbackReservationStepPublisher.QUALIFIER)
     public KafkaTemplate<String, RollbackReservationStep.Input> rollbackReservationStepKafkaTemplate(
         @Qualifier(RollbackReservationStepPublisher.QUALIFIER)
@@ -303,6 +372,8 @@ public class TransferKafkaConfiguration {
         CommitTransferStepListener.Settings commitTransferStepListenerSettings();
 
         DisputeTransferStepListener.Settings disputeTransferStepListenerSettings();
+
+        PatchTransferToPayeeStepListener.Settings patchTransferToPayeeStepListenerSettings();
 
         RollbackReservationStepListener.Settings rollbackReservationStepListenerSettings();
 

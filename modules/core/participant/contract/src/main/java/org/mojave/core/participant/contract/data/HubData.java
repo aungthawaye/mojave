@@ -19,9 +19,9 @@
  */
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.identifier.participant.HubCurrencyId;
-import org.mojave.core.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.common.datatype.enums.ActivationStatus;
+import org.mojave.scheme.common.datatype.identifier.participant.HubCurrencyId;
+import org.mojave.scheme.common.datatype.identifier.participant.HubId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.util.Objects;

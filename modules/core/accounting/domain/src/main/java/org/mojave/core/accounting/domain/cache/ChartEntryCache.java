@@ -20,9 +20,9 @@
 package org.mojave.core.accounting.domain.cache;
 
 import org.mojave.core.accounting.contract.data.ChartEntryData;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
-import org.mojave.core.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
+import org.mojave.scheme.common.datatype.type.accounting.ChartEntryCode;
 
 import java.util.Set;
 

@@ -76,4 +76,4 @@ export FLYWAY_DB_PASSWORD="password"
 export TRANSFER_RESERVATION_TIMEOUT_MS="15000"
 export TRANSFER_EXPIRY_TIMEOUT_MS="30000"
 
-java -cp "./*:./lib/*" -Dsnowflake.nodeId=3 -Dlog4j.configurationFile=classpath:mono-service-log4j2.xml org.mojave.mono.service.MonoServiceApplication
+java -cp "./*:./lib/*" -Dsnowflake.nodeId=10 -Dlog4j.configurationFile=classpath:mono-fspiop-log4j2.xml org.mojave.mono.service.MonoServiceApplication

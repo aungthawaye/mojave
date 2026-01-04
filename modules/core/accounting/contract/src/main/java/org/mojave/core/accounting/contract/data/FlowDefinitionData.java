@@ -19,13 +19,13 @@
  */
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.enums.accounting.ReceiveIn;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.scheme.common.datatype.enums.ActivationStatus;
+import org.mojave.scheme.common.datatype.enums.TerminationStatus;
+import org.mojave.scheme.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.scheme.common.datatype.enums.accounting.Side;
+import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.util.Comparator;

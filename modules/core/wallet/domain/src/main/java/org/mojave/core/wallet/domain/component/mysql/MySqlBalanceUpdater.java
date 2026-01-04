@@ -21,10 +21,10 @@ package org.mojave.core.wallet.domain.component.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.mojave.core.common.datatype.enums.wallet.BalanceAction;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.scheme.common.datatype.enums.wallet.BalanceAction;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.wallet.domain.component.BalanceUpdater;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.slf4j.Logger;

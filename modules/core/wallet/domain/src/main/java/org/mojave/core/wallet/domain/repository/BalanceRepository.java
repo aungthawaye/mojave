@@ -19,8 +19,8 @@
  */
 package org.mojave.core.wallet.domain.repository;
 
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.model.Balance;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.data.jpa.domain.Specification;

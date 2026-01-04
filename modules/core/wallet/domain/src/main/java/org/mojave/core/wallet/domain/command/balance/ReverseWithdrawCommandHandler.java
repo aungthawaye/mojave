@@ -21,7 +21,7 @@ package org.mojave.core.wallet.domain.command.balance;
 
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.scheme.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import org.mojave.core.wallet.contract.exception.balance.BalanceUpdateIdNotFoundException;
 import org.mojave.core.wallet.contract.exception.balance.ReversalFailedInWalletException;

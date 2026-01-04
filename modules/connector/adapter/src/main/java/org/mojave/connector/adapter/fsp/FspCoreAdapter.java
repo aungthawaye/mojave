@@ -29,6 +29,7 @@ import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopCurrencies;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
+import org.mojave.rail.fspiop.component.handy.FspiopMoney;
 import org.mojave.rail.fspiop.component.interledger.Interledger;
 import org.mojave.rail.fspiop.component.participant.ParticipantContext;
 import org.mojave.rail.fspiop.component.type.Payer;
@@ -192,7 +193,7 @@ public class FspCoreAdapter {
             var payload = this.objectMapper.writeValueAsString(agreement);
             var preparePacket = Interledger.prepare(
                 this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
-                Interledger.Amount.serialize(
+                FspiopMoney.serialize(
                     transferAmount, FspiopCurrencies.get(currency).scale(),
                     RoundingMode.UNNECESSARY), payload, 900);
 
@@ -277,7 +278,7 @@ public class FspCoreAdapter {
 
             var optFulfilment = Interledger.fulfil(
                 this.participantContext.ilpSecret(), Interledger.address(payer.fspCode()),
-                Interledger.Amount.serialize(
+                FspiopMoney.serialize(
                     transferAmount, FspiopCurrencies.get(currency).scale(),
                     RoundingMode.UNNECESSARY), unwrappedIlpPacketData, ilpConditionFromRequest,
                 900);

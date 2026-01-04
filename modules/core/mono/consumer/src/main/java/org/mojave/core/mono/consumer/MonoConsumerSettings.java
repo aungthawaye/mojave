@@ -38,7 +38,7 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
         return new FulfilPositionsListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), FulfilPositionsListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -48,7 +48,7 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
         return new PostLedgerFlowListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
@@ -58,7 +58,7 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
         return new RollbackReservationListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), RollbackReservationListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 100, 1, 100, false,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 

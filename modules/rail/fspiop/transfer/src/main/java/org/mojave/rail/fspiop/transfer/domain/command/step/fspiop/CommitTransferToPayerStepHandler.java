@@ -21,7 +21,7 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.wallet.intercom;
 
 import org.mojave.component.openapi.OpenApiConfiguration;
@@ -24,8 +25,8 @@ import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
-import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
+import org.mojave.scheme.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;

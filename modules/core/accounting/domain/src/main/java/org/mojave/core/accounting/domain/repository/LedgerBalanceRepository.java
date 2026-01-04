@@ -20,8 +20,8 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.ledger.LedgerBalance;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.LedgerBalanceId;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.identifier.accounting.LedgerBalanceId;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

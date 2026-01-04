@@ -19,9 +19,9 @@
  */
 package org.mojave.core.wallet.domain.component.empty;
 
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.wallet.domain.component.PositionUpdater;
 
 import java.math.BigDecimal;

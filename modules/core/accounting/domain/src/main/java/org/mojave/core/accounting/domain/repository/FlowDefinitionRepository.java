@@ -20,10 +20,10 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.FlowDefinition;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.common.datatype.enums.ActivationStatus;
+import org.mojave.scheme.common.datatype.enums.TerminationStatus;
+import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

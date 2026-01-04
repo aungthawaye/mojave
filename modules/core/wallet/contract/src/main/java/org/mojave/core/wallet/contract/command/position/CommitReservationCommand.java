@@ -24,10 +24,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.enums.wallet.PositionAction;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.common.datatype.enums.wallet.PositionAction;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import org.mojave.scheme.fspiop.core.Currency;
 

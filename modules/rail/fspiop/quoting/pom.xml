@@ -38,11 +38,11 @@
         </dependency>
         <dependency>
             <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-store</artifactId>
+            <artifactId>mojave-core-participant-intercom-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-intercom-client</artifactId>
+            <artifactId>mojave-core-participant-store</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.rail.fspiop</groupId>

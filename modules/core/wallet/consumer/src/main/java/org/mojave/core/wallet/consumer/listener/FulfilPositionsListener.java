@@ -56,19 +56,11 @@ public class FulfilPositionsListener {
         topics = TopicNames.FULFIL_POSITIONS,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<FulfilPositionsCommand.Input> inputs, Acknowledgment ack) {
+    public void handle(FulfilPositionsCommand.Input input, Acknowledgment ack) {
 
         try {
-
-            LOGGER.info("FulfilPositions : Received ({}) messages.", inputs.size());
-
-            for (var input : inputs) {
-                this.fulfilPositionsCommand.execute(input);
-            }
-
+            this.fulfilPositionsCommand.execute(input);
             ack.acknowledge();
-            LOGGER.info("FulfilPositions : Done.");
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
@@ -81,14 +73,13 @@ public class FulfilPositionsListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

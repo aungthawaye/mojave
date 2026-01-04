@@ -21,14 +21,14 @@
 package org.mojave.rail.fspiop.transfer.domain.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.core.common.datatype.enums.transfer.AbortReason;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.common.datatype.enums.Direction;
+import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
+import org.mojave.scheme.common.datatype.enums.transfer.AbortReason;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.identifier.transfer.TransferId;
+import org.mojave.scheme.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;

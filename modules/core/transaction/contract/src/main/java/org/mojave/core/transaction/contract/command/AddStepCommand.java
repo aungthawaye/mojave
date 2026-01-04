@@ -24,8 +24,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.enums.trasaction.StepPhase;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
 
 public interface AddStepCommand {
 

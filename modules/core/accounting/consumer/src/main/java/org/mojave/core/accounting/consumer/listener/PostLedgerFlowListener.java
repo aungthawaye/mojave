@@ -56,18 +56,11 @@ public class PostLedgerFlowListener {
         topics = TopicNames.POST_LEDGER_FLOW,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(List<PostLedgerFlowCommand.Input> inputs, Acknowledgment ack) {
+    public void handle(PostLedgerFlowCommand.Input input, Acknowledgment ack) {
 
         try {
-
-            LOGGER.info("PostLedgerFlow : Received ({}) messages.", inputs.size());
-            for (var input : inputs) {
-                this.postLedgerFlowCommand.execute(input);
-            }
-
+            this.postLedgerFlowCommand.execute(input);
             ack.acknowledge();
-            LOGGER.info("PostLedgerFlow : Done.");
-
         } catch (Exception e) {
 
             LOGGER.error("Error:", e);
@@ -80,14 +73,13 @@ public class PostLedgerFlowListener {
                         String groupId,
                         String clientId,
                         String autoOffsetReset,
-                        int maxPollRecords,
                         int concurrency,
                         int pollTimeoutMs,
                         boolean autoCommit,
                         ContainerProperties.AckMode ackMode) {
 
             super(
-                bootstrapServers, groupId, clientId, autoOffsetReset, maxPollRecords, concurrency,
+                bootstrapServers, groupId, clientId, autoOffsetReset, 1, concurrency,
                 pollTimeoutMs, autoCommit, ackMode);
         }
 

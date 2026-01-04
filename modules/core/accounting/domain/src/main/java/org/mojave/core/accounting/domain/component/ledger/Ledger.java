@@ -20,15 +20,15 @@
 package org.mojave.core.accounting.domain.component.ledger;
 
 import lombok.Getter;
-import org.mojave.core.common.datatype.enums.accounting.MovementResult;
-import org.mojave.core.common.datatype.enums.accounting.MovementStage;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.core.common.datatype.identifier.accounting.LedgerMovementId;
-import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.common.datatype.enums.accounting.MovementResult;
+import org.mojave.scheme.common.datatype.enums.accounting.MovementStage;
+import org.mojave.scheme.common.datatype.enums.accounting.Side;
+import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.common.datatype.identifier.accounting.LedgerMovementId;
+import org.mojave.scheme.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.math.BigDecimal;
