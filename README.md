@@ -23,8 +23,8 @@ Mojave is designed with two primary goals:
 Key directories include:
 
 * `assets/` – Code styles and other assets
-* `documentation/` – (Work-in-progress) Guides, architecture notes, and reference material
-* `implementation/` – Java source code
+* `docs/` – (Work-in-progress) Guides, architecture notes, and reference material
+* `modules/` – Java source code
 
 Builds follow the standard project configuration defined in the repository.
 No special steps are required beyond the usual Java build tooling for this project.
