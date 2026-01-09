@@ -3,6 +3,7 @@ package org.mojave.provider.ledger.contract;
 import lombok.Getter;
 import org.mojave.scheme.common.datatype.enums.accounting.MovementResult;
 import org.mojave.scheme.common.datatype.enums.accounting.MovementStage;
+import org.mojave.scheme.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.scheme.common.datatype.enums.accounting.Side;
 import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
@@ -18,6 +19,8 @@ import java.util.List;
 
 public interface Ledger {
 
+    void createLedgerBalance(LedgerBalance ledgerBalance) throws AccountIdAlreadyTakenException;
+
     List<Movement> post(List<Request> requests,
                         TransactionId transactionId,
                         Instant transactionAt,
@@ -27,6 +30,16 @@ public interface Ledger {
                                                          OverdraftExceededException,
                                                          RestoreFailedException,
                                                          DuplicatePostingException;
+
+    record LedgerBalance(AccountId accountId,
+                         Currency currency,
+                         Integer scale,
+                         Side nature,
+                         BigDecimal postedDebits,
+                         BigDecimal postedCredits,
+                         OverdraftMode overdraftMode,
+                         BigDecimal overdraftLimit,
+                         Instant createdAt) { }
 
     record Request(LedgerMovementId ledgerMovementId,
                    Integer step,
@@ -67,6 +80,22 @@ public interface Ledger {
     }
 
     record DrCr(BigDecimal debits, BigDecimal credits) {
+
+    }
+
+    @Getter
+    class AccountIdAlreadyTakenException extends Exception {
+
+        private final AccountId accountId;
+
+        public AccountIdAlreadyTakenException(AccountId accountId) {
+
+            assert accountId != null;
+
+            super("Account ID (" + accountId.getId() + ") is already taken.");
+
+            this.accountId = accountId;
+        }
 
     }
 

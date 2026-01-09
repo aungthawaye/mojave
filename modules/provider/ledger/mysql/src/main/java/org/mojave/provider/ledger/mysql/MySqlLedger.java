@@ -1,28 +1,10 @@
-/*-
- * ===
- * Mojave
- * ---
- * Copyright (C) 2025 Open Source
- * ---
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ===
- */
+package org.mojave.provider.ledger.mysql;
 
-package org.mojave.core.accounting.domain.component.ledger.strategy;
-
+import com.mysql.cj.jdbc.Driver;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.mojave.core.accounting.domain.component.ledger.Ledger;
+import org.mojave.component.flyway.FlywayMigration;
+import org.mojave.provider.ledger.contract.Ledger;
 import org.mojave.scheme.common.datatype.enums.accounting.MovementResult;
 import org.mojave.scheme.common.datatype.enums.accounting.MovementStage;
 import org.mojave.scheme.common.datatype.enums.accounting.Side;
@@ -50,6 +32,22 @@ public class MySqlLedger implements Ledger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySqlLedger.class);
 
+    private static final String SQL_CHECK_LEDGER_BALANCE_EXISTENCE = "SELECT COUNT(*) FROM lgr_ledger_balance WHERE account_id = ?";
+
+    private static final String SQL_INSERT_LEDGER_BALANCE = """
+        INSERT INTO lgr_ledger_balance (
+            account_id,
+            currency,
+            `scale`,
+            nature,
+            posted_debits,
+            posted_credits,
+            overdraft_mode,
+            overdraft_limit,
+            created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
     private final JdbcTemplate jdbcTemplate;
 
     private final ObjectMapper objectMapper;
@@ -59,6 +57,14 @@ public class MySqlLedger implements Ledger {
         assert settings != null;
         assert objectMapper != null;
 
+        LOGGER.info("MySqlLedger settings: ({})", settings);
+        var flyway = FlywayMigration.configure(new FlywayMigration.Settings(
+            settings.connection().url, settings.connection().username(),
+            settings.connection().password(), "flyway_mysql_ledger_history",
+            new String[]{"classpath:migration/ledger/mysql"}));
+        flyway.migrate();
+        LOGGER.info("MySqlLedger flyway migrated successfully.");
+
         var config = new HikariConfig();
 
         // Basic
@@ -66,7 +72,7 @@ public class MySqlLedger implements Ledger {
         config.setJdbcUrl(settings.connection().url());
         config.setUsername(settings.connection().username());
         config.setPassword(settings.connection().password());
-        config.setDriverClassName(com.mysql.cj.jdbc.Driver.class.getName());
+        config.setDriverClassName(Driver.class.getName());
 
         // ---- MySQL driver performance flags ----
         // Statement cache
@@ -128,6 +134,77 @@ public class MySqlLedger implements Ledger {
     }
 
     @Override
+    public void createLedgerBalance(LedgerBalance ledgerBalance)
+        throws AccountIdAlreadyTakenException {
+
+        try {
+
+            this.jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
+
+                var autoCommit = con.getAutoCommit();
+
+                try {
+
+                    con.setAutoCommit(false);
+
+                    try (var stm = con.prepareStatement(SQL_CHECK_LEDGER_BALANCE_EXISTENCE)) {
+
+                        stm.setLong(1, ledgerBalance.accountId().getId());
+
+                        try (var rs = stm.executeQuery()) {
+
+                            if (rs.next() && rs.getInt(1) > 0) {
+                                throw new RuntimeException(
+                                    new AccountIdAlreadyTakenException(ledgerBalance.accountId()));
+                            }
+                        }
+                    }
+
+                    try (var stm = con.prepareStatement(SQL_INSERT_LEDGER_BALANCE)) {
+
+                        stm.setLong(1, ledgerBalance.accountId().getId());
+                        stm.setString(2, ledgerBalance.currency().name());
+                        stm.setInt(3, ledgerBalance.scale());
+                        stm.setString(4, ledgerBalance.nature().name());
+                        stm.setBigDecimal(5, ledgerBalance.postedDebits());
+                        stm.setBigDecimal(6, ledgerBalance.postedCredits());
+                        stm.setString(7, ledgerBalance.overdraftMode().name());
+                        stm.setBigDecimal(8, ledgerBalance.overdraftLimit());
+                        stm.setLong(9, ledgerBalance.createdAt().getEpochSecond());
+
+                        stm.executeUpdate();
+                    }
+
+                    con.commit();
+
+                    return null;
+
+                } catch (Exception e) {
+
+                    con.rollback();
+                    throw e;
+
+                } finally {
+
+                    con.setAutoCommit(autoCommit);
+                }
+
+            });
+
+        } catch (Exception e) {
+
+            LOGGER.error("Error:", e);
+
+            if (e.getCause() instanceof AccountIdAlreadyTakenException exception) {
+                throw exception;
+            }
+
+            throw (RuntimeException) e;
+
+        }
+    }
+
+    @Override
     public List<Movement> post(List<Request> requests,
                                TransactionId transactionId,
                                Instant transactionAt,
@@ -136,9 +213,6 @@ public class MySqlLedger implements Ledger {
                                                                 OverdraftExceededException,
                                                                 RestoreFailedException,
                                                                 DuplicatePostingException {
-
-        final var CONTEXT = "MySqlLedger";
-        final var STEP = "PostLedgerFlow";
 
         try {
 
@@ -152,8 +226,7 @@ public class MySqlLedger implements Ledger {
                 if (!added) {
                     throw new RuntimeException(
                         new DuplicatePostingException(
-                            request.accountId(), request.side(),
-                            transactionId));
+                            request.accountId(), request.side(), transactionId));
                 }
             });
 
@@ -212,28 +285,31 @@ public class MySqlLedger implements Ledger {
 
             });
 
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
 
             LOGGER.error("Exception:", e);
 
-            if (e.getCause() instanceof InsufficientBalanceException e1) {
+            RuntimeException re = (RuntimeException) e;
+            if (re.getCause() != null) {
 
-                throw e1;
+                if (re.getCause() instanceof InsufficientBalanceException e1) {
+                    throw e1;
+                }
+
+                if (re.getCause() instanceof OverdraftExceededException e1) {
+                    throw e1;
+                }
+
+                if (re.getCause() instanceof RestoreFailedException e1) {
+                    throw e1;
+                }
+
+                if (re.getCause() instanceof DuplicatePostingException e1) {
+                    throw e1;
+                }
             }
 
-            if (e.getCause() instanceof OverdraftExceededException e1) {
-                throw e1;
-            }
-
-            if (e.getCause() instanceof RestoreFailedException e1) {
-                throw e1;
-            }
-
-            if (e.getCause() instanceof DuplicatePostingException e1) {
-                throw e1;
-            }
-
-            throw e;
+            throw new RuntimeException(re.getCause() != null ? re.getCause() : re);
 
         }
     }
@@ -253,8 +329,7 @@ public class MySqlLedger implements Ledger {
             case "DUPLICATE_POSTING": {
                 throw new RuntimeException(
                     new DuplicatePostingException(
-                        new AccountId(accountId), Side.valueOf(side),
-                        transactionId));
+                        new AccountId(accountId), Side.valueOf(side), transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {

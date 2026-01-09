@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,13 +28,13 @@ import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.cache.strategy.timer.AccountTimerCache;
 import org.mojave.core.accounting.domain.cache.strategy.timer.ChartEntryTimerCache;
 import org.mojave.core.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCache;
-import org.mojave.core.accounting.domain.component.ledger.Ledger;
-import org.mojave.core.accounting.domain.component.ledger.strategy.MySqlLedger;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.mojave.core.accounting.intercom.controller.component.EmptyErrorWriter;
 import org.mojave.core.accounting.intercom.controller.component.EmptyGatekeeper;
+import org.mojave.provider.ledger.contract.Ledger;
+import org.mojave.provider.ledger.mysql.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
 

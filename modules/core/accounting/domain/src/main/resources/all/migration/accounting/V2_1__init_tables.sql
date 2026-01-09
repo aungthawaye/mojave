@@ -68,8 +68,6 @@ CREATE TABLE `acc_account`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_accounting.acc_ledger_balance definition
-
 CREATE TABLE `acc_ledger_balance`
 (
     `ledger_balance_id` bigint      NOT NULL,
@@ -90,9 +88,6 @@ CREATE TABLE `acc_ledger_balance`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
-
-
--- ml_accounting.acc_ledger_movement definition
 
 CREATE TABLE `acc_ledger_movement`
 (

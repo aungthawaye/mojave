@@ -34,7 +34,7 @@ import org.mojave.core.accounting.contract.exception.ledger.RequiredParticipantN
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
-import org.mojave.core.accounting.domain.component.ledger.Ledger;
+import org.mojave.provider.ledger.contract.Ledger;
 import org.mojave.scheme.common.datatype.enums.ActivationStatus;
 import org.mojave.scheme.common.datatype.enums.accounting.ReceiveIn;
 import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;

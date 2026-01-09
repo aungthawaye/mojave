@@ -24,7 +24,7 @@ import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.ChartEntryCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
-import org.mojave.core.accounting.domain.component.ledger.Ledger;
+import org.mojave.provider.ledger.contract.Ledger;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 

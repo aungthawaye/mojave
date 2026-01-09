@@ -21,17 +21,14 @@
 package org.mojave.core.accounting.domain.model;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -50,7 +47,6 @@ import org.mojave.core.accounting.contract.exception.account.AccountDescriptionT
 import org.mojave.core.accounting.contract.exception.account.AccountNameRequiredException;
 import org.mojave.core.accounting.contract.exception.account.AccountNameTooLongException;
 import org.mojave.core.accounting.domain.cache.updater.AccountCacheUpdater;
-import org.mojave.core.accounting.domain.model.ledger.LedgerBalance;
 import org.mojave.scheme.common.datatype.converter.identifier.accounting.AccountIdJavaType;
 import org.mojave.scheme.common.datatype.converter.identifier.accounting.ChartEntryIdConverter;
 import org.mojave.scheme.common.datatype.converter.identifier.accounting.OwnerIdJavaType;
@@ -171,14 +167,6 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Convert(converter = ChartEntryIdConverter.class)
     protected ChartEntryId chartEntryId;
 
-    @OneToOne(
-        mappedBy = "account",
-        orphanRemoval = true,
-        cascade = CascadeType.ALL,
-        fetch = FetchType.EAGER,
-        optional = false)
-    protected LedgerBalance ledgerBalance;
-
     public Account(ChartEntry chartEntry,
                    AccountOwnerId ownerId,
                    Currency currency,
@@ -205,8 +193,6 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
         this.code(code).name(name).description(description);
         this.createdAt = Instant.now();
 
-        this.ledgerBalance = new LedgerBalance(
-            this, this.type.getSide(), overdraftMode, overdraftLimit);
     }
 
     public void activate() {
@@ -233,7 +219,7 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
         return new AccountData(
             this.getId(), this.ownerId, this.type, this.currency, this.code, this.name,
             this.description, this.createdAt, this.activationStatus, this.terminationStatus,
-            this.chartEntryId, this.ledgerBalance.convert());
+            this.chartEntryId);
     }
 
     public void deactivate() {

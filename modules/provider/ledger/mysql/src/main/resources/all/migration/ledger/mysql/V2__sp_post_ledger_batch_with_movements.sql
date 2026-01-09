@@ -123,7 +123,7 @@ BEGIN
     /* ---------------- INITIATE the movements (with handlers) ---------------- */
     /* ---------- Detect duplicates before inserting ---------- */
     IF EXISTS (SELECT 1
-               FROM acc_ledger_movement m
+               FROM lgr_ledger_movement m
                         JOIN tmp_lines t ON m.account_id = t.account_id AND
                                             m.side = t.side AND
                                             m.transaction_id =
@@ -137,7 +137,7 @@ BEGIN
                t.currency,
                m.ledger_movement_id AS existing_ledger_movement_id
         INTO v_step, v_err_account_id, v_err_side, v_txn_id, v_err_amount, v_err_currency, v_ledger_movement_id
-        FROM acc_ledger_movement m
+        FROM lgr_ledger_movement m
                  JOIN tmp_lines t
                       ON m.account_id = t.account_id AND m.side = t.side AND
                          m.transaction_id = t.transaction_id
@@ -177,7 +177,7 @@ BEGIN
     END IF;
 
     START TRANSACTION;
-    INSERT INTO acc_ledger_movement (ledger_movement_id,
+    INSERT INTO lgr_ledger_movement (ledger_movement_id,
                                      step,
                                      account_id,
                                      side,
@@ -219,8 +219,7 @@ BEGIN
            UNIX_TIMESTAMP(),
            UNIX_TIMESTAMP(),
            1
-    FROM tmp_lines;
-    COMMIT;
+    FROM tmp_lines; COMMIT;
 
 
     -- Iterate and post each line in its own transaction
@@ -276,8 +275,8 @@ BEGIN
                    overdraft_mode,
                    COALESCE(overdraft_limit, 0)
             INTO v_dr_curr, v_cr_curr, v_nature, v_mode, v_limit
-            FROM acc_ledger_balance
-            WHERE ledger_balance_id = v_account_id FOR
+            FROM lgr_ledger_balance
+            WHERE account_id = v_account_id FOR
             UPDATE;
 
             -- Compute new totals
@@ -323,19 +322,17 @@ BEGIN
             END IF;
 
             -- Apply update
-            UPDATE acc_ledger_balance
+            UPDATE lgr_ledger_balance
             SET posted_debits = v_dr_new, posted_credits = v_cr_new
-            WHERE ledger_balance_id = v_account_id;
+            WHERE account_id = v_account_id;
             -- Unlock the balance row and commit asap.
 
             -- Update the movement together. So that, something goes wrong, we can know which movement is missing.
-            UPDATE acc_ledger_movement
+            UPDATE lgr_ledger_movement
             SET old_debits     = v_dr_curr, old_credits = v_cr_curr,
                 new_debits     = v_dr_new, new_credits = v_cr_new,
                 movement_stage = 'DEBIT_CREDIT', movement_result = 'SUCCESS'
-            WHERE ledger_movement_id = v_ledger_movement_id;
-
-            COMMIT;
+            WHERE ledger_movement_id = v_ledger_movement_id; COMMIT;
 
             -- Stage movement row
             INSERT INTO tmp_movements (ledger_movement_id,
@@ -384,11 +381,9 @@ BEGIN
         -- There is an error. The last movement's ledger_movement_id must be marked as an error.
         START TRANSACTION;
 
-        UPDATE acc_ledger_movement
+        UPDATE lgr_ledger_movement
         SET movement_stage = 'DEBIT_CREDIT', movement_result = v_error_code
-        WHERE ledger_movement_id = v_ledger_movement_id;
-
-        COMMIT;
+        WHERE ledger_movement_id = v_ledger_movement_id; COMMIT;
 
         -- Restore the balance of the successful rows which are prior to the error.
         BEGIN
@@ -461,24 +456,22 @@ BEGIN
                     -- Now we decrease it to restore.
                     IF r_side = 'DEBIT' THEN
                         -- Restore for DEBIT
-                        UPDATE acc_ledger_balance
+                        UPDATE lgr_ledger_balance
                         SET posted_debits = posted_debits - r_amount
-                        WHERE ledger_balance_id = r_account_id;
+                        WHERE account_id = r_account_id;
                     ELSEIF r_side = 'CREDIT' THEN
                         -- Restore for CREDIT
-                        UPDATE acc_ledger_balance
+                        UPDATE lgr_ledger_balance
                         SET posted_credits = posted_credits - r_amount
-                        WHERE ledger_balance_id = r_account_id;
+                        WHERE account_id = r_account_id;
                     END IF;
 
                     -- After successfully reversed the dr/cr
                     -- Update the ledger movement with the result REVERSED
-                    UPDATE acc_ledger_movement
+                    UPDATE lgr_ledger_movement
                     SET movement_stage  = 'DEBIT_CREDIT',
                         movement_result = 'REVERSED'
-                    WHERE ledger_movement_id = r_ledger_movement_id;
-
-                    COMMIT;
+                    WHERE ledger_movement_id = r_ledger_movement_id; COMMIT;
 
                 END;
             END LOOP rev_loop;
@@ -515,7 +508,7 @@ BEGIN
     ELSE -- There is no error.
     -- Update all the movements' stage to COMMIT
         START TRANSACTION;
-        UPDATE acc_ledger_movement
+        UPDATE lgr_ledger_movement
         SET movement_stage = 'COMMIT', movement_result = 'SUCCESS'
         WHERE transaction_id = v_txn_id; COMMIT;
 
@@ -546,7 +539,7 @@ BEGIN
                movement_stage,
                movement_result,
                created_at
-        FROM acc_ledger_movement
+        FROM lgr_ledger_movement
         WHERE transaction_id = v_txn_id
         ORDER BY ledger_movement_id;
     END IF;
