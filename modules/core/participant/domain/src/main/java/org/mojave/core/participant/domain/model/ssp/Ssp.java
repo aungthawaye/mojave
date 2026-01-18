@@ -45,12 +45,12 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.scheme.common.datatype.converter.identifier.participant.SspIdJavaType;
-import org.mojave.scheme.common.datatype.converter.type.fspiop.SspCodeConverter;
-import org.mojave.scheme.common.datatype.enums.ActivationStatus;
-import org.mojave.scheme.common.datatype.enums.TerminationStatus;
-import org.mojave.scheme.common.datatype.identifier.participant.SspId;
-import org.mojave.scheme.common.datatype.type.participant.SspCode;
+import org.mojave.core.common.datatype.converter.identifier.participant.SspIdJavaType;
+import org.mojave.core.common.datatype.converter.type.fspiop.SspCodeConverter;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.identifier.participant.SspId;
+import org.mojave.core.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.SspCurrencyData;
 import org.mojave.core.participant.contract.data.SspData;
 import org.mojave.core.participant.contract.exception.ssp.SspCodeRequiredException;
@@ -59,7 +59,7 @@ import org.mojave.core.participant.contract.exception.ssp.SspEndpointBaseUrlTooL
 import org.mojave.core.participant.contract.exception.ssp.SspNameRequiredException;
 import org.mojave.core.participant.contract.exception.ssp.SspNameTooLongException;
 import org.mojave.core.participant.domain.model.hub.Hub;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Collections;

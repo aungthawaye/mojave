@@ -19,10 +19,10 @@
  */
 package org.mojave.core.participant.domain.repository;
 
-import org.mojave.scheme.common.datatype.enums.ActivationStatus;
-import org.mojave.scheme.common.datatype.enums.TerminationStatus;
-import org.mojave.scheme.common.datatype.identifier.participant.SspId;
-import org.mojave.scheme.common.datatype.type.participant.SspCode;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.identifier.participant.SspId;
+import org.mojave.core.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.domain.model.ssp.Ssp;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -37,13 +37,13 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.scheme.common.datatype.converter.identifier.wallet.PositionIdJavaType;
-import org.mojave.scheme.common.datatype.converter.identifier.wallet.WalletOwnerIdConverter;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.core.common.datatype.converter.identifier.wallet.PositionIdJavaType;
+import org.mojave.core.common.datatype.converter.identifier.wallet.WalletOwnerIdConverter;
+import org.mojave.core.common.datatype.identifier.wallet.PositionId;
+import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.PositionData;
 import org.mojave.core.wallet.contract.exception.position.FailedToUpdateNdcException;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

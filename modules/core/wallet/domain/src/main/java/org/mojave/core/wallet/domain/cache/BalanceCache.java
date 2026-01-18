@@ -21,10 +21,10 @@ package org.mojave.core.wallet.domain.cache;
 
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.PostRemove;
-import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.util.Set;
 

@@ -36,9 +36,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.scheme.common.datatype.converter.identifier.quoting.QuoteExtensionIdJavaType;
-import org.mojave.scheme.common.datatype.enums.Direction;
-import org.mojave.scheme.common.datatype.identifier.quoting.QuoteExtensionId;
+import org.mojave.core.common.datatype.converter.identifier.quoting.QuoteExtensionIdJavaType;
+import org.mojave.core.common.datatype.enums.Direction;
+import org.mojave.core.common.datatype.identifier.quoting.QuoteExtensionId;
 
 import static java.sql.Types.BIGINT;
 

@@ -36,15 +36,15 @@ import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
-import org.mojave.scheme.common.datatype.converter.identifier.participant.HubIdJavaType;
-import org.mojave.scheme.common.datatype.identifier.participant.HubId;
+import org.mojave.core.common.datatype.converter.identifier.participant.HubIdJavaType;
+import org.mojave.core.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import org.mojave.core.participant.contract.exception.hub.HubNameRequiredException;
 import org.mojave.core.participant.contract.exception.hub.HubNameTooLongException;
 import org.mojave.core.participant.domain.model.fsp.Fsp;
 import org.mojave.core.participant.domain.model.ssp.Ssp;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Collections;

@@ -21,9 +21,9 @@ package org.mojave.core.participant.contract.command.hub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.scheme.common.datatype.identifier.participant.HubCurrencyId;
-import org.mojave.scheme.common.datatype.identifier.participant.HubId;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.identifier.participant.HubCurrencyId;
+import org.mojave.core.common.datatype.identifier.participant.HubId;
+import org.mojave.core.common.datatype.enums.Currency;
 
 public interface AddHubCurrencyCommand {
 

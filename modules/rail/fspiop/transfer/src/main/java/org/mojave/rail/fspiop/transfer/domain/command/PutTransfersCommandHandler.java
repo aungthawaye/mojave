@@ -21,15 +21,14 @@
 package org.mojave.rail.fspiop.transfer.domain.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.scheme.common.datatype.enums.Direction;
-import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.scheme.common.datatype.enums.transfer.AbortReason;
-import org.mojave.scheme.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.scheme.common.datatype.enums.transfer.TransferStatus;
-import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.scheme.common.datatype.identifier.transfer.TransferId;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.common.datatype.type.participant.FspCode;
+import org.mojave.core.common.datatype.enums.Direction;
+import org.mojave.core.common.datatype.enums.participant.EndpointType;
+import org.mojave.core.common.datatype.enums.transfer.AbortReason;
+import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
@@ -41,7 +40,6 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDes
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.UnwrapResponseStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.AbortTransferStep;
-import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.FetchTransferStep;
 import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.CommitTransferToPayerStepHandler;
 import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.PatchTransferToPayeeStepHandler;

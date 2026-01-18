@@ -20,10 +20,10 @@
 package org.mojave.core.wallet.domain.repository;
 
 import jakarta.persistence.LockModeType;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionId;
+import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.model.Position;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

@@ -22,7 +22,7 @@ package org.mojave.core.accounting.contract.exception.definition;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
 
 import java.util.HashMap;
 import java.util.Map;

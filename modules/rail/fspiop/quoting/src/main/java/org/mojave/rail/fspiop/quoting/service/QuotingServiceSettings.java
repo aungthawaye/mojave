@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,9 +24,9 @@ import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
+import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
 

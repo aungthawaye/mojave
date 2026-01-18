@@ -19,11 +19,11 @@
  */
 package org.mojave.core.accounting.contract.command.account;
 
-import org.mojave.scheme.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.scheme.common.datatype.type.participant.FspCode;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.util.List;
 

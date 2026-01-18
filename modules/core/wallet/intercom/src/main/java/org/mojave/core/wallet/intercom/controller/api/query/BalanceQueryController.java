@@ -19,11 +19,11 @@
  */
 package org.mojave.core.wallet.intercom.controller.api.query;
 
-import org.mojave.scheme.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.query.BalanceQuery;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

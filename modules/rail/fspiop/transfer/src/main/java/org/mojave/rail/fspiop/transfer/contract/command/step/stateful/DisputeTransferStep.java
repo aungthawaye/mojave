@@ -20,10 +20,10 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.stateful;
 
-import org.mojave.scheme.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.scheme.common.datatype.identifier.transfer.TransferId;
-import org.mojave.scheme.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 
 public interface DisputeTransferStep {

@@ -28,7 +28,7 @@ import org.mojave.core.accounting.contract.exception.chart.ChartEntryIdNotFoundE
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
-import org.mojave.provider.ledger.contract.Ledger;
+import org.mojave.core.accounting.contract.ledger.Ledger;
 import org.mojave.rail.fspiop.component.handy.FspiopCurrencies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +90,7 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
 
         try {
             this.ledger.createLedgerBalance(new Ledger.LedgerBalance(
-                account.getId(), account.getCurrency(), FspiopCurrencies.get(input.currency()).scale(),
+                account.getId(), account.getCurrency(), input.currency().getScale(),
                 account.getType().getSide(), BigDecimal.ZERO, BigDecimal.ZERO, input.overdraftMode(),
                 input.overdraftLimit(), account.getCreatedAt()));
             LOGGER.info("Ledger balance created for account: ({})", account.getId());

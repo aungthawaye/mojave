@@ -21,13 +21,14 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.ReservePayerPositionStep;
+import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.transfer.contract.command.step.financial.ReservePayerPositionStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -80,8 +81,8 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
             var description = "-";
 
             var reservePayerPositionInput = new ReservePositionCommand.Input(
-                walletOwnerId,
-                currency, transferAmount, transactionId, transactionAt, description);
+                walletOwnerId, Currency.valueOf(currency.toString()), transferAmount, transactionId,
+                transactionAt, description);
 
             var reservePositionOutput = this.reservePositionCommand.execute(
                 reservePayerPositionInput);

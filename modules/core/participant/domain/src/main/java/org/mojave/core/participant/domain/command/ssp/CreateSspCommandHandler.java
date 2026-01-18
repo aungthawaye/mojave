@@ -23,7 +23,7 @@ package org.mojave.core.participant.domain.command.ssp;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.scheme.common.datatype.identifier.participant.HubId;
+import org.mojave.core.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.contract.command.ssp.CreateSspCommand;
 import org.mojave.core.participant.contract.exception.hub.HubNotFoundException;
 import org.mojave.core.participant.contract.exception.ssp.SspCodeAlreadyExistsException;

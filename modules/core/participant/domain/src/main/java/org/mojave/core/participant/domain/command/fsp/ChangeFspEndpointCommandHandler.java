@@ -21,7 +21,7 @@ package org.mojave.core.participant.domain.command.fsp;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.scheme.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
 import org.mojave.core.participant.contract.command.fsp.ChangeFspEndpointCommand;
 import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import org.mojave.core.participant.domain.model.fsp.FspEndpoint;

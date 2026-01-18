@@ -24,7 +24,7 @@ import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
-import org.mojave.scheme.common.datatype.DatatypeConfiguration;
+import org.mojave.core.common.datatype.DatatypeConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
 import org.mojave.core.participant.intercom.ParticipantIntercomConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;

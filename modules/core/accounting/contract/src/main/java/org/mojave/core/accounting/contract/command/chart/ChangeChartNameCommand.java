@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
+import org.mojave.core.common.datatype.identifier.accounting.ChartId;
 
 public interface ChangeChartNameCommand {
 

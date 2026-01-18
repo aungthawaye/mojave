@@ -20,12 +20,12 @@
 package org.mojave.core.wallet.domain.cache.strategy.local;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionId;
+import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.PositionData;
 import org.mojave.core.wallet.domain.cache.PositionCache;
 import org.mojave.core.wallet.domain.repository.PositionRepository;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.util.Collections;
 import java.util.HashSet;

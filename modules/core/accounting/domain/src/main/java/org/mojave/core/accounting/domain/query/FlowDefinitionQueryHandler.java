@@ -25,7 +25,7 @@ import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNo
 import org.mojave.core.accounting.contract.query.FlowDefinitionQuery;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -23,12 +23,13 @@ package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import org.mojave.core.accounting.producer.publisher.PostLedgerFlowPublisher;
-import org.mojave.scheme.common.datatype.enums.trasaction.FundTransferDimension;
-import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
+import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.core.common.datatype.enums.trasaction.FundTransferDimension;
+import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -79,10 +80,9 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
                 FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name(),
                 input.payeeFspCommission());
 
-            this.postLedgerFlowPublisher.publish(
-                new PostLedgerFlowCommand.Input(
-                    TransactionType.FUND_TRANSFER, input.currency(), input.transactionId(),
-                    input.transactionAt(), participants, amounts));
+            this.postLedgerFlowPublisher.publish(new PostLedgerFlowCommand.Input(
+                TransactionType.FUND_TRANSFER, Currency.valueOf(input.currency().toString()),
+                input.transactionId(), input.transactionAt(), participants, amounts));
 
             var endAt = System.nanoTime();
             LOGGER.info("PostLedgerFlowStep : done , took {} ms", (endAt - startAt) / 1_000_000);

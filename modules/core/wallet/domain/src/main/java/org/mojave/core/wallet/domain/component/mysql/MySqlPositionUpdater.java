@@ -21,12 +21,12 @@ package org.mojave.core.wallet.domain.component.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.mojave.scheme.common.datatype.enums.wallet.PositionAction;
-import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.core.common.datatype.enums.wallet.PositionAction;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.wallet.domain.component.PositionUpdater;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ConnectionCallback;

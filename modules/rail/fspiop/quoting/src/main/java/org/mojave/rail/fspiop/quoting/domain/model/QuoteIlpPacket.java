@@ -34,8 +34,8 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.scheme.common.datatype.converter.identifier.quoting.QuoteIdJavaType;
-import org.mojave.scheme.common.datatype.identifier.quoting.QuoteId;
+import org.mojave.core.common.datatype.converter.identifier.quoting.QuoteIdJavaType;
+import org.mojave.core.common.datatype.identifier.quoting.QuoteId;
 
 import static java.sql.Types.BIGINT;
 

@@ -19,8 +19,8 @@
  */
 package org.mojave.core.transaction.contract.data;
 
-import org.mojave.scheme.common.datatype.identifier.transaction.StepParamId;
-import org.mojave.scheme.common.datatype.identifier.transaction.TransactionStepId;
+import org.mojave.core.common.datatype.identifier.transaction.StepParamId;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionStepId;
 
 import java.util.Objects;
 

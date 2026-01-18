@@ -23,9 +23,9 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.scheme.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

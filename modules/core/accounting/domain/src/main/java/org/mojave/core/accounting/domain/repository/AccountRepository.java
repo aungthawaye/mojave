@@ -20,11 +20,11 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.Account;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.scheme.common.datatype.type.accounting.AccountCode;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.core.common.datatype.type.accounting.AccountCode;
+import org.mojave.core.common.datatype.enums.Currency;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

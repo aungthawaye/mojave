@@ -21,9 +21,9 @@ package org.mojave.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.scheme.common.datatype.identifier.participant.FspCurrencyId;
-import org.mojave.scheme.common.datatype.identifier.participant.FspId;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.identifier.participant.FspCurrencyId;
+import org.mojave.core.common.datatype.identifier.participant.FspId;
+import org.mojave.core.common.datatype.enums.Currency;
 
 public interface DeactivateFspCurrencyCommand {
 

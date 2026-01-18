@@ -23,7 +23,7 @@ package org.mojave.core.participant.contract.exception.ssp;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.scheme.common.datatype.identifier.participant.SspId;
+import org.mojave.core.common.datatype.identifier.participant.SspId;
 
 import java.util.HashMap;
 import java.util.Map;

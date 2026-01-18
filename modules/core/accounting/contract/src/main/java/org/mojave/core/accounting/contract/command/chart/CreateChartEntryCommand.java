@@ -24,11 +24,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.scheme.common.datatype.enums.accounting.AccountType;
-import org.mojave.scheme.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
-import org.mojave.scheme.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.core.common.datatype.enums.accounting.AccountType;
+import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.core.common.datatype.type.accounting.ChartEntryCode;
 
 public interface CreateChartEntryCommand {
 

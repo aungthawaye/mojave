@@ -37,16 +37,16 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.scheme.common.datatype.converter.identifier.participant.OracleIdJavaType;
-import org.mojave.scheme.common.datatype.enums.ActivationStatus;
-import org.mojave.scheme.common.datatype.enums.TerminationStatus;
-import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
+import org.mojave.core.common.datatype.converter.identifier.participant.OracleIdJavaType;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.exception.oracle.OracleBaseUrlRequiredException;
 import org.mojave.core.participant.contract.exception.oracle.OracleBaseUrlTooLongException;
 import org.mojave.core.participant.contract.exception.oracle.OracleNameRequiredException;
 import org.mojave.core.participant.contract.exception.oracle.OracleNameTooLongException;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.core.common.datatype.enums.participant.PartyIdType;
 
 import java.time.Instant;
 

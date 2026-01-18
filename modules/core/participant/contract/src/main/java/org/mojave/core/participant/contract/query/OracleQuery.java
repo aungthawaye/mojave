@@ -20,9 +20,9 @@
 
 package org.mojave.core.participant.contract.query;
 
-import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
+import org.mojave.core.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.core.common.datatype.enums.participant.PartyIdType;
 
 import java.util.List;
 import java.util.Optional;

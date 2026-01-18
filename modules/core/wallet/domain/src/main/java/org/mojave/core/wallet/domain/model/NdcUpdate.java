@@ -33,12 +33,12 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.scheme.common.datatype.converter.identifier.transaction.TransactionIdConverter;
-import org.mojave.scheme.common.datatype.converter.identifier.wallet.NetDebitCapUpdateIdJavaType;
-import org.mojave.scheme.common.datatype.converter.identifier.wallet.PositionIdConverter;
-import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.NdcUpdateId;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
+import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdConverter;
+import org.mojave.core.common.datatype.converter.identifier.wallet.NetDebitCapUpdateIdJavaType;
+import org.mojave.core.common.datatype.converter.identifier.wallet.PositionIdConverter;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.wallet.NdcUpdateId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionId;
 
 import java.math.BigDecimal;
 import java.time.Instant;

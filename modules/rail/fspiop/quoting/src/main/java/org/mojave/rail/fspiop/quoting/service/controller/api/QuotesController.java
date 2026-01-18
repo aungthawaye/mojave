@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.quoting.service.controller.api;
 import jakarta.servlet.http.HttpServletRequest;
 import org.mojave.component.misc.spring.event.EventPublisher;
 import org.mojave.component.web.request.CachedServletRequest;
-import org.mojave.scheme.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.core.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.quoting.contract.command.GetQuotesCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.PutQuotesCommand;

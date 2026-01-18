@@ -22,7 +22,7 @@ package org.mojave.core.participant.contract.exception.oracle;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.core.common.datatype.enums.participant.PartyIdType;
 
 import java.util.HashMap;
 import java.util.Map;

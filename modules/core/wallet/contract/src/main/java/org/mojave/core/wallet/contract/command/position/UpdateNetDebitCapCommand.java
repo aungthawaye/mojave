@@ -21,8 +21,8 @@ package org.mojave.core.wallet.contract.command.position;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.scheme.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.scheme.common.datatype.identifier.wallet.PositionId;
+import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.common.datatype.identifier.wallet.PositionId;
 import org.mojave.core.wallet.contract.exception.position.FailedToUpdateNdcException;
 
 import java.math.BigDecimal;

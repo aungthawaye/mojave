@@ -20,16 +20,16 @@
 package org.mojave.core.participant.domain.query;
 
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.scheme.common.datatype.enums.ActivationStatus;
-import org.mojave.scheme.common.datatype.enums.TerminationStatus;
-import org.mojave.scheme.common.datatype.identifier.participant.OracleId;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.exception.oracle.OracleIdNotFoundException;
 import org.mojave.core.participant.contract.exception.oracle.OracleTypeNotFoundException;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.domain.model.oracle.Oracle;
 import org.mojave.core.participant.domain.repository.OracleRepository;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.core.common.datatype.enums.participant.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;

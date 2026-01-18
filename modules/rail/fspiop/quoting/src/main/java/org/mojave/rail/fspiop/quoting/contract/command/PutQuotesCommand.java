@@ -19,7 +19,7 @@
  */
 package org.mojave.rail.fspiop.quoting.contract.command;
 
-import org.mojave.scheme.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.core.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
 import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
 

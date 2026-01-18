@@ -21,7 +21,7 @@ package org.mojave.core.accounting.admin.controller.api.query;
 
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.contract.query.FlowDefinitionQuery;
-import org.mojave.scheme.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

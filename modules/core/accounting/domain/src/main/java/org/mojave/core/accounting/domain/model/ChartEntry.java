@@ -48,12 +48,12 @@ import org.mojave.core.accounting.contract.exception.chart.ChartEntryNameAlready
 import org.mojave.core.accounting.contract.exception.chart.ChartEntryNameRequiredException;
 import org.mojave.core.accounting.contract.exception.chart.ChartEntryNameTooLongException;
 import org.mojave.core.accounting.domain.cache.updater.ChartEntryCacheUpdater;
-import org.mojave.scheme.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
-import org.mojave.scheme.common.datatype.converter.type.accounting.ChartEntryCodeConverter;
-import org.mojave.scheme.common.datatype.enums.accounting.AccountType;
-import org.mojave.scheme.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.scheme.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.core.common.datatype.converter.identifier.accounting.ChartEntryIdJavaType;
+import org.mojave.core.common.datatype.converter.type.accounting.ChartEntryCodeConverter;
+import org.mojave.core.common.datatype.enums.accounting.AccountType;
+import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.core.common.datatype.type.accounting.ChartEntryCode;
 
 import java.time.Instant;
 

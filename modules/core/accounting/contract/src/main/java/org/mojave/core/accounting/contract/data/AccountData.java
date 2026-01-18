@@ -20,14 +20,14 @@
 
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.scheme.common.datatype.enums.ActivationStatus;
-import org.mojave.scheme.common.datatype.enums.TerminationStatus;
-import org.mojave.scheme.common.datatype.enums.accounting.AccountType;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.scheme.common.datatype.type.accounting.AccountCode;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.core.common.datatype.enums.ActivationStatus;
+import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.core.common.datatype.enums.accounting.AccountType;
+import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.core.common.datatype.type.accounting.AccountCode;
+import org.mojave.core.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Objects;

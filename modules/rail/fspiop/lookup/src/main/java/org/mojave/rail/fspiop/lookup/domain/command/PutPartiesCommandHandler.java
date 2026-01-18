@@ -20,8 +20,8 @@
 package org.mojave.rail.fspiop.lookup.domain.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.scheme.common.datatype.enums.fspiop.EndpointType;
-import org.mojave.scheme.common.datatype.type.participant.FspCode;
+import org.mojave.core.common.datatype.enums.participant.EndpointType;
+import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.rail.fspiop.lookup.contract.command.PutPartiesCommand;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;

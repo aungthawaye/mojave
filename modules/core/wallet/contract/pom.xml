@@ -16,12 +16,8 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.scheme</groupId>
-            <artifactId>mojave-scheme-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.scheme.fspiop</groupId>
-            <artifactId>mojave-scheme-fspiop</artifactId>
+            <groupId>org.mojave.core.common</groupId>
+            <artifactId>mojave-core-common-datatype</artifactId>
         </dependency>
     </dependencies>
 </project>

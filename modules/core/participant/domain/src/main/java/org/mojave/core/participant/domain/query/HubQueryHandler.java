@@ -19,7 +19,7 @@
  */
 package org.mojave.core.participant.domain.query;
 
-import org.mojave.scheme.common.datatype.identifier.participant.HubId;
+import org.mojave.core.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.exception.hub.HubNotFoundException;
 import org.mojave.core.participant.contract.query.HubQuery;

@@ -21,7 +21,7 @@ package org.mojave.rail.fspiop.transfer.contract.exception;
 
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.scheme.common.datatype.identifier.transfer.TransferId;
+import org.mojave.core.common.datatype.identifier.transfer.TransferId;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -19,8 +19,8 @@
  */
 package org.mojave.core.participant.intercom.controller.api.query;
 
-import org.mojave.scheme.common.datatype.identifier.participant.FspId;
-import org.mojave.scheme.common.datatype.type.participant.FspCode;
+import org.mojave.core.common.datatype.identifier.participant.FspId;
+import org.mojave.core.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.slf4j.Logger;

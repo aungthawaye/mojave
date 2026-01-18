@@ -23,9 +23,9 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.core.accounting.contract.data.ChartEntryData;
 import org.mojave.core.accounting.domain.cache.ChartEntryCache;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.scheme.common.datatype.identifier.accounting.ChartId;
-import org.mojave.scheme.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.core.common.datatype.type.accounting.ChartEntryCode;
 
 import java.util.HashSet;
 import java.util.Map;

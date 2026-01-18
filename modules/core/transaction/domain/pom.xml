@@ -31,9 +31,5 @@
             <groupId>org.mojave.core.transaction</groupId>
             <artifactId>mojave-core-transaction-contract</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.mojave.scheme.fspiop</groupId>
-            <artifactId>mojave-scheme-fspiop</artifactId>
-        </dependency>
     </dependencies>
 </project>

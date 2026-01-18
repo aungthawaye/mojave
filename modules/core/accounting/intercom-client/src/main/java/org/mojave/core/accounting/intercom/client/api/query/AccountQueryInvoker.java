@@ -27,9 +27,9 @@ import org.mojave.core.accounting.contract.exception.account.AccountCodeNotFound
 import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import org.mojave.core.accounting.contract.query.AccountQuery;
 import org.mojave.core.accounting.intercom.client.service.AccountingIntercomService;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountId;
-import org.mojave.scheme.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.scheme.common.datatype.type.accounting.AccountCode;
+import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.core.common.datatype.type.accounting.AccountCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
