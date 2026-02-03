@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -45,8 +46,8 @@ public class DeactivateHubCurrencyCommandHandler implements DeactivateHubCurrenc
     public DeactivateHubCurrencyCommandHandler(HubRepository hubRepository,
                                                FspRepository fspRepository) {
 
-        assert hubRepository != null;
-        assert fspRepository != null;
+        Objects.requireNonNull(hubRepository);
+        Objects.requireNonNull(fspRepository);
 
         this.hubRepository = hubRepository;
         this.fspRepository = fspRepository;

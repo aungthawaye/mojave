@@ -52,6 +52,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.Objects;
 
 @EnableAutoConfiguration(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableAsync
@@ -75,8 +76,8 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
     public ConnectorInboundConfiguration(ParticipantContext participantContext,
                                          ObjectMapper objectMapper) {
 
-        assert participantContext != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(objectMapper);
 
         this.participantContext = participantContext;
         this.objectMapper = objectMapper;

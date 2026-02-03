@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
@@ -62,9 +63,9 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                                         FlowDefinitionCache flowDefinitionCache,
                                         Ledger ledger) {
 
-        assert accountCache != null;
-        assert flowDefinitionCache != null;
-        assert ledger != null;
+        Objects.requireNonNull(accountCache);
+        Objects.requireNonNull(flowDefinitionCache);
+        Objects.requireNonNull(ledger);
 
         this.accountCache = accountCache;
         this.flowDefinitionCache = flowDefinitionCache;

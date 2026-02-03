@@ -52,6 +52,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class RequestTransfersController {
@@ -72,10 +73,10 @@ public class RequestTransfersController {
                                       RequestTransfersCommand requestTransfersCommand,
                                       EventPublisher eventPublisher) {
 
-        assert participantContext != null;
-        assert transferSettings != null;
-        assert requestTransfersCommand != null;
-        assert eventPublisher != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(transferSettings);
+        Objects.requireNonNull(requestTransfersCommand);
+        Objects.requireNonNull(eventPublisher);
 
         this.participantContext = participantContext;
         this.transferSettings = transferSettings;

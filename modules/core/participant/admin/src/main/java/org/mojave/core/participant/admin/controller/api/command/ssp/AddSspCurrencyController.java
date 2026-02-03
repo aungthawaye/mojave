@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class AddSspCurrencyController {
@@ -40,7 +41,7 @@ public class AddSspCurrencyController {
 
     public AddSspCurrencyController(final AddSspCurrencyCommand addSspCurrencyCommand) {
 
-        assert addSspCurrencyCommand != null;
+        Objects.requireNonNull(addSspCurrencyCommand);
 
         this.addSspCurrencyCommand = addSspCurrencyCommand;
     }

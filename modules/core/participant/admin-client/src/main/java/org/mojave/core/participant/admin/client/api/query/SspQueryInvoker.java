@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class SspQueryInvoker implements SspQuery {
@@ -47,8 +48,8 @@ public class SspQueryInvoker implements SspQuery {
     public SspQueryInvoker(final ParticipantAdminService.SspQuery sspQuery,
                            final ObjectMapper objectMapper) {
 
-        assert sspQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(sspQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.sspQuery = sspQuery;
         this.objectMapper = objectMapper;

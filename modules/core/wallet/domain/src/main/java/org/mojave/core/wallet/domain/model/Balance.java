@@ -46,6 +46,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -99,9 +100,9 @@ public class Balance extends JpaEntity<BalanceId> implements DataConversion<Bala
 
     public Balance(WalletOwnerId walletOwnerId, Currency currency, String name) {
 
-        assert walletOwnerId != null;
-        assert currency != null;
-        assert name != null;
+        Objects.requireNonNull(walletOwnerId);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(name);
 
         this.id = new BalanceId(Snowflake.get().nextId());
         this.walletOwnerId = walletOwnerId;

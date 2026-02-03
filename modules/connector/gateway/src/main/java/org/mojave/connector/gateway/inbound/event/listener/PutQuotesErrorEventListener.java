@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class PutQuotesErrorEventListener {
@@ -36,7 +37,7 @@ public class PutQuotesErrorEventListener {
 
     public PutQuotesErrorEventListener(HandlePutQuotesErrorCommand handleQuotesError) {
 
-        assert null != handleQuotesError;
+        Objects.requireNonNull(handleQuotesError);
 
         this.handleQuotesError = handleQuotesError;
     }
@@ -47,7 +48,7 @@ public class PutQuotesErrorEventListener {
 
         var payload = event.getPayload();
 
-        assert null != payload;
+        Objects.requireNonNull(payload);
 
         try {
 

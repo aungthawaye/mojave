@@ -30,6 +30,7 @@ import org.mojave.rail.fspiop.invoker.api.TransfersService;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class PutTransfersHandler implements PutTransfers {
@@ -44,9 +45,9 @@ class PutTransfersHandler implements PutTransfers {
                                TransfersService transfersService,
                                FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert transfersService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(transfersService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.transfersService = transfersService;

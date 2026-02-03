@@ -34,6 +34,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 public class MySqlPositionUpdater implements PositionUpdater {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySqlPositionUpdater.class);
@@ -42,7 +43,7 @@ public class MySqlPositionUpdater implements PositionUpdater {
 
     public MySqlPositionUpdater(PositionDbSettings settings) {
 
-        assert settings != null;
+        Objects.requireNonNull(settings);
 
         var config = new HikariConfig();
 

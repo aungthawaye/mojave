@@ -55,6 +55,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 public class PostTransfersCommandHandler implements PostTransfersCommand {
@@ -92,15 +93,15 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
                                        ForwardToDestinationStep forwardToDestinationStep,
                                        RespondTransfers respondTransfers) {
 
-        assert participantStore != null;
-        assert receiveTransferStep != null;
-        assert reserveTransferStep != null;
-        assert abortTransferStepPublisher != null;
-        assert reservePayerPositionStep != null;
-        assert rollbackReservationStepPublisher != null;
-        assert unwrapRequestStep != null;
-        assert forwardToDestinationStep != null;
-        assert respondTransfers != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(receiveTransferStep);
+        Objects.requireNonNull(reserveTransferStep);
+        Objects.requireNonNull(abortTransferStepPublisher);
+        Objects.requireNonNull(reservePayerPositionStep);
+        Objects.requireNonNull(rollbackReservationStepPublisher);
+        Objects.requireNonNull(unwrapRequestStep);
+        Objects.requireNonNull(forwardToDestinationStep);
+        Objects.requireNonNull(respondTransfers);
 
         this.participantStore = participantStore;
         this.receiveTransferStep = receiveTransferStep;

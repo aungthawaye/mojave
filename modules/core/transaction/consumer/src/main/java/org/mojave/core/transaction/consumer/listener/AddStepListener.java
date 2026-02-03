@@ -29,6 +29,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class AddStepListener {
@@ -45,7 +46,7 @@ public class AddStepListener {
 
     public AddStepListener(AddStepCommand addStepCommand) {
 
-        assert addStepCommand != null;
+        Objects.requireNonNull(addStepCommand);
 
         this.addStepCommand = addStepCommand;
     }

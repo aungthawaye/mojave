@@ -44,6 +44,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FspiopServiceGatekeeper implements Authenticator {
 
@@ -63,10 +64,10 @@ public class FspiopServiceGatekeeper implements Authenticator {
                                    ObjectMapper objectMapper,
                                    FspiopServiceConfiguration.ServiceSettings serviceSettings) {
 
-        assert participantContext != null;
-        assert participantVerifier != null;
-        assert objectMapper != null;
-        assert serviceSettings != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(participantVerifier);
+        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(serviceSettings);
 
         this.participantContext = participantContext;
         this.participantVerifier = participantVerifier;

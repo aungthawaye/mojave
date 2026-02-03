@@ -50,6 +50,7 @@ import org.mojave.core.participant.contract.exception.ssp.SspCurrencyNotSupporte
 import org.mojave.core.common.datatype.enums.Currency;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -100,8 +101,8 @@ public final class SspCurrency extends JpaEntity<SspCurrencyId>
 
     public SspCurrency(final Ssp ssp, final Currency currency) {
 
-        assert ssp != null;
-        assert currency != null;
+        Objects.requireNonNull(ssp);
+        Objects.requireNonNull(currency);
 
         this.id = new SspCurrencyId(Snowflake.get().nextId());
         this.ssp = ssp;

@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class IncreasePositionController {
@@ -38,7 +39,7 @@ public class IncreasePositionController {
 
     public IncreasePositionController(final IncreasePositionCommand increasePositionCommand) {
 
-        assert increasePositionCommand != null;
+        Objects.requireNonNull(increasePositionCommand);
 
         this.increasePositionCommand = increasePositionCommand;
     }

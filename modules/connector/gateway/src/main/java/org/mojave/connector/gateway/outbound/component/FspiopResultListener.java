@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
 public class FspiopResultListener<R, E> {
 
@@ -59,10 +60,10 @@ public class FspiopResultListener<R, E> {
                                 Class<R> resultClazz,
                                 Class<E> errorClazz) {
 
-        assert pubSubClient != null;
-        assert outboundSettings != null;
-        assert resultClazz != null;
-        assert errorClazz != null;
+        Objects.requireNonNull(pubSubClient);
+        Objects.requireNonNull(outboundSettings);
+        Objects.requireNonNull(resultClazz);
+        Objects.requireNonNull(errorClazz);
 
         this.pubSubClient = pubSubClient;
         this.outboundSettings = outboundSettings;

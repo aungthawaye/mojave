@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class CreatePositionController {
@@ -35,7 +36,7 @@ public class CreatePositionController {
 
     public CreatePositionController(final CreatePositionCommand createPositionCommand) {
 
-        assert createPositionCommand != null;
+        Objects.requireNonNull(createPositionCommand);
 
         this.createPositionCommand = createPositionCommand;
     }

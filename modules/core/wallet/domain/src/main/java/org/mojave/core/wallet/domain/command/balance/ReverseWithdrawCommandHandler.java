@@ -30,6 +30,7 @@ import org.mojave.core.wallet.domain.repository.BalanceUpdateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class ReverseWithdrawCommandHandler implements ReverseWithdrawCommand {
@@ -44,8 +45,8 @@ public class ReverseWithdrawCommandHandler implements ReverseWithdrawCommand {
     public ReverseWithdrawCommandHandler(BalanceUpdateRepository balanceUpdateRepository,
                                          BalanceUpdater balanceUpdater) {
 
-        assert balanceUpdateRepository != null;
-        assert balanceUpdater != null;
+        Objects.requireNonNull(balanceUpdateRepository);
+        Objects.requireNonNull(balanceUpdater);
 
         this.balanceUpdateRepository = balanceUpdateRepository;
         this.balanceUpdater = balanceUpdater;

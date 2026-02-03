@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class FlowDefinitionQueryController {
@@ -43,7 +44,7 @@ public class FlowDefinitionQueryController {
 
     public FlowDefinitionQueryController(final FlowDefinitionQuery flowDefinitionQuery) {
 
-        assert flowDefinitionQuery != null;
+        Objects.requireNonNull(flowDefinitionQuery);
 
         this.flowDefinitionQuery = flowDefinitionQuery;
     }

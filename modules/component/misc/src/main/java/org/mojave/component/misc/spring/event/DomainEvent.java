@@ -23,6 +23,7 @@ import lombok.Getter;
 import org.mojave.component.misc.handy.Snowflake;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 public class DomainEvent<P> implements Serializable {
@@ -38,7 +39,7 @@ public class DomainEvent<P> implements Serializable {
         this.id = Snowflake.get().nextId();
         this.name = this.getClass().getName();
 
-        assert payload != null;
+        Objects.requireNonNull(payload);
 
         this.payload = payload;
     }

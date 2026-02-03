@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCommand {
@@ -46,8 +47,8 @@ public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCom
     public CreateAccountInBulkCommandHandler(CreateAccountCommand createAccountCommand,
                                              ChartEntryRepository chartEntryRepository) {
 
-        assert createAccountCommand != null;
-        assert chartEntryRepository != null;
+        Objects.requireNonNull(createAccountCommand);
+        Objects.requireNonNull(chartEntryRepository);
 
         this.createAccountCommand = createAccountCommand;
         this.chartEntryRepository = chartEntryRepository;

@@ -24,6 +24,7 @@ import org.mojave.core.transaction.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class CloseTransactionPublisher {
@@ -35,7 +36,7 @@ public class CloseTransactionPublisher {
     public CloseTransactionPublisher(
         @Qualifier(QUALIFIER) KafkaTemplate<String, CloseTransactionCommand.Input> kafkaTemplate) {
 
-        assert kafkaTemplate != null;
+        Objects.requireNonNull(kafkaTemplate);
 
         this.kafkaTemplate = kafkaTemplate;
     }

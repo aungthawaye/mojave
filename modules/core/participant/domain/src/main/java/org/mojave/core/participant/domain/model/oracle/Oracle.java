@@ -49,6 +49,7 @@ import org.mojave.core.participant.contract.exception.oracle.OracleNameTooLongEx
 import org.mojave.core.common.datatype.enums.participant.PartyIdType;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -111,9 +112,9 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
 
     public Oracle(final PartyIdType type, final String name, final String host) {
 
-        assert type != null;
-        assert name != null;
-        assert host != null;
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(host);
 
         this.id = new OracleId(Snowflake.get().nextId());
         this.type(type).name(name).baseUrl(host);
@@ -202,7 +203,7 @@ public class Oracle extends JpaEntity<OracleId> implements DataConversion<Oracle
 
     public Oracle type(final PartyIdType type) {
 
-        assert type != null;
+        Objects.requireNonNull(type);
 
         this.type = type;
 

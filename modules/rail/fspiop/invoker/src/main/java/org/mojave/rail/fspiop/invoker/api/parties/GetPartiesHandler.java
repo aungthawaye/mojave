@@ -31,6 +31,7 @@ import org.mojave.scheme.fspiop.core.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class GetPartiesHandler implements GetParties {
@@ -47,9 +48,9 @@ class GetPartiesHandler implements GetParties {
                              PartiesService partiesService,
                              FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert partiesService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(partiesService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.partiesService = partiesService;

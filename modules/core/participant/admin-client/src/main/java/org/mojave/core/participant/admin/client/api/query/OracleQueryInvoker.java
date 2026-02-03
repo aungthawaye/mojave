@@ -37,6 +37,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 @Component
 public class OracleQueryInvoker implements OracleQuery {
@@ -50,8 +51,8 @@ public class OracleQueryInvoker implements OracleQuery {
     public OracleQueryInvoker(final ParticipantAdminService.OracleQuery oracleQuery,
                               final ObjectMapper objectMapper) {
 
-        assert oracleQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(oracleQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.oracleQuery = oracleQuery;
         this.objectMapper = objectMapper;

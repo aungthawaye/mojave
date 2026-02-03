@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class CreateSspController {
@@ -41,7 +42,7 @@ public class CreateSspController {
 
     public CreateSspController(final CreateSspCommand createSspCommand) {
 
-        assert createSspCommand != null;
+        Objects.requireNonNull(createSspCommand);
 
         this.createSspCommand = createSspCommand;
     }

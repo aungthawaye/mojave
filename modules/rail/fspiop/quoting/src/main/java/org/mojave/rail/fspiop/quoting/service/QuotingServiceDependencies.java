@@ -28,6 +28,7 @@ import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.core.participant.store.strategy.timer.ParticipantTimerStore;
 import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
+import java.util.Objects;
 
 public class QuotingServiceDependencies
     implements QuotingServiceConfiguration.RequiredDependencies {
@@ -38,9 +39,9 @@ public class QuotingServiceDependencies
                                       SspQuery sspQuery,
                                       OracleQuery oracleQuery) {
 
-        assert fspQuery != null;
-        assert sspQuery != null;
-        assert oracleQuery != null;
+        Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(sspQuery);
+        Objects.requireNonNull(oracleQuery);
 
         this.participantStore = new ParticipantTimerStore(
             fspQuery, sspQuery, oracleQuery, new ParticipantTimerStore.Settings(

@@ -38,6 +38,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class ChartEntryTimerCache implements ChartEntryCache {
 
@@ -54,8 +55,10 @@ public class ChartEntryTimerCache implements ChartEntryCache {
     public ChartEntryTimerCache(final ChartEntryRepository chartEntryRepository,
                                 final int interval) {
 
-        assert chartEntryRepository != null;
-        assert interval > 0;
+        Objects.requireNonNull(chartEntryRepository);
+        if (interval <= 0) {
+            throw new IllegalArgumentException("interval must be greater than 0");
+        }
 
         this.chartEntryRepository = chartEntryRepository;
         this.interval = interval;

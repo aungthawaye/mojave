@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class SspQueryController {
@@ -44,7 +45,7 @@ public class SspQueryController {
 
     public SspQueryController(final SspQuery sspQuery) {
 
-        assert sspQuery != null;
+        Objects.requireNonNull(sspQuery);
 
         this.sspQuery = sspQuery;
     }

@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class FlowDefinitionQueryInvoker implements FlowDefinitionQuery {
@@ -45,8 +46,8 @@ public class FlowDefinitionQueryInvoker implements FlowDefinitionQuery {
     public FlowDefinitionQueryInvoker(final AccountingIntercomService.DefinitionQuery definitionQuery,
                                       final ObjectMapper objectMapper) {
 
-        assert definitionQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(definitionQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.definitionQuery = definitionQuery;
         this.objectMapper = objectMapper;

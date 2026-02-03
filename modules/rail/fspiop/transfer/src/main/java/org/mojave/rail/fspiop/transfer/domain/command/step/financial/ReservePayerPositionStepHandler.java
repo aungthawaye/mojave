@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class ReservePayerPositionStepHandler implements ReservePayerPositionStep {
@@ -44,7 +45,7 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
 
     public ReservePayerPositionStepHandler(ReservePositionCommand reservePositionCommand) {
 
-        assert reservePositionCommand != null;
+        Objects.requireNonNull(reservePositionCommand);
 
         this.reservePositionCommand = reservePositionCommand;
     }

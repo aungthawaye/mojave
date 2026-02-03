@@ -31,6 +31,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class RollbackReservationListener {
@@ -47,7 +48,7 @@ public class RollbackReservationListener {
 
     public RollbackReservationListener(RollbackReservationCommand rollbackReservationCommand) {
 
-        assert rollbackReservationCommand != null;
+        Objects.requireNonNull(rollbackReservationCommand);
 
         this.rollbackReservationCommand = rollbackReservationCommand;
     }

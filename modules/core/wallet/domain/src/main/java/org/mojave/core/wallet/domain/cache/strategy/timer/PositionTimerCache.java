@@ -37,6 +37,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class PositionTimerCache implements PositionCache {
 
@@ -52,8 +53,10 @@ public class PositionTimerCache implements PositionCache {
 
     public PositionTimerCache(final PositionRepository positionRepository, final int interval) {
 
-        assert positionRepository != null;
-        assert interval > 0;
+        Objects.requireNonNull(positionRepository);
+        if (interval <= 0) {
+            throw new IllegalArgumentException("interval must be greater than 0");
+        }
 
         this.positionRepository = positionRepository;
         this.interval = interval;

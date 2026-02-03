@@ -30,6 +30,7 @@ import org.mojave.core.wallet.contract.exception.position.PositionNotExistExcept
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class IncreasePositionInvoker implements IncreasePositionCommand {
@@ -41,8 +42,8 @@ public class IncreasePositionInvoker implements IncreasePositionCommand {
     public IncreasePositionInvoker(final WalletIntercomService.PositionCommand positionCommand,
                                    final ObjectMapper objectMapper) {
 
-        assert positionCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(positionCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.positionCommand = positionCommand;
         this.objectMapper = objectMapper;

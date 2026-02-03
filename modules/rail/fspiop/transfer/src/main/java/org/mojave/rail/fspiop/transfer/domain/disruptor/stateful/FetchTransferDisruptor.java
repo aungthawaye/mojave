@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.FetchTrans
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class FetchTransferDisruptor {
 
@@ -67,7 +68,7 @@ public class FetchTransferDisruptor {
 
         public Handler(FetchTransferStep fetchTransferStep) {
 
-            assert fetchTransferStep != null;
+            Objects.requireNonNull(fetchTransferStep);
 
             this.fetchTransferStep = fetchTransferStep;
         }

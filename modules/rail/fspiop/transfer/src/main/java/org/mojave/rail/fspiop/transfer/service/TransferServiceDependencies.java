@@ -30,6 +30,7 @@ import org.mojave.rail.fspiop.transfer.domain.component.interledger.unwrapper.Mo
 import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 public class TransferServiceDependencies
     implements TransferServiceConfiguration.RequiredDependencies {
@@ -43,10 +44,10 @@ public class TransferServiceDependencies
                                        OracleQuery oracleQuery,
                                        ObjectMapper objectMapper) {
 
-        assert fspQuery != null;
-        assert sspQuery != null;
-        assert oracleQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(sspQuery);
+        Objects.requireNonNull(oracleQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.participantStore = new ParticipantTimerStore(
             fspQuery, sspQuery, oracleQuery, new ParticipantTimerStore.Settings(

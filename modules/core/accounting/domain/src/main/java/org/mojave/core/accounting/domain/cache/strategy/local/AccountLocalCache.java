@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 public class AccountLocalCache implements AccountCache {
 
@@ -51,7 +52,7 @@ public class AccountLocalCache implements AccountCache {
 
     public AccountLocalCache(final AccountRepository accountRepository) {
 
-        assert accountRepository != null;
+        Objects.requireNonNull(accountRepository);
 
         this.accountRepository = accountRepository;
 

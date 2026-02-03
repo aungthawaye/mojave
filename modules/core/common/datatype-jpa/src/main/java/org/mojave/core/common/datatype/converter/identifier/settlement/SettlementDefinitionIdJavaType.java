@@ -26,21 +26,21 @@ import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.core.common.datatype.identifier.settlement.SettlementDefinitionId;
 
-public class SettlementDefinitionIdJavaType extends AbstractClassJavaType<BalanceId> {
+public class SettlementDefinitionIdJavaType extends AbstractClassJavaType<SettlementDefinitionId> {
 
     public static final SettlementDefinitionIdJavaType INSTANCE = new SettlementDefinitionIdJavaType();
 
     public SettlementDefinitionIdJavaType() {
 
-        super(BalanceId.class, ImmutableMutabilityPlan.instance());
+        super(SettlementDefinitionId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public BalanceId fromString(CharSequence string) {
+    public SettlementDefinitionId fromString(CharSequence string) {
 
-        return (string == null) ? null : new BalanceId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new SettlementDefinitionId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -50,19 +50,18 @@ public class SettlementDefinitionIdJavaType extends AbstractClassJavaType<Balanc
     }
 
     @Override
-    public String toString(BalanceId value) {
+    public String toString(SettlementDefinitionId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(BalanceId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(SettlementDefinitionId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
-
         Long primitive = value.getId();
 
         if (type.isAssignableFrom(Long.class)) {
@@ -77,12 +76,12 @@ public class SettlementDefinitionIdJavaType extends AbstractClassJavaType<Balanc
     }
 
     @Override
-    public BalanceId wrap(Object value, WrapperOptions options) {
+    public SettlementDefinitionId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case BalanceId balanceId -> balanceId;
-            case Number n -> new BalanceId(n.longValue());
+            case SettlementDefinitionId settlementDefinitionId -> settlementDefinitionId;
+            case Number n -> new SettlementDefinitionId(n.longValue());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };

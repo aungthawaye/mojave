@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class HandleQuotesController {
@@ -54,7 +55,7 @@ public class HandleQuotesController {
 
     public HandleQuotesController(EventPublisher eventPublisher) {
 
-        assert eventPublisher != null;
+        Objects.requireNonNull(eventPublisher);
         this.eventPublisher = eventPublisher;
     }
 

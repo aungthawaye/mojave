@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
+import java.util.Objects;
 
 @Service
 public class GetTransfersCommandHandler implements GetTransfersCommand {
@@ -55,12 +56,12 @@ public class GetTransfersCommandHandler implements GetTransfersCommand {
                                       PlatformTransactionManager transactionManager,
                                       TransferDomainConfiguration.TransferSettings transferSettings) {
 
-        assert participantStore != null;
-        assert respondTransfers != null;
-        assert forwardRequest != null;
-        assert transferRepository != null;
-        assert transactionManager != null;
-        assert transferSettings != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(respondTransfers);
+        Objects.requireNonNull(forwardRequest);
+        Objects.requireNonNull(transferRepository);
+        Objects.requireNonNull(transactionManager);
+        Objects.requireNonNull(transferSettings);
 
         this.participantStore = participantStore;
         this.respondTransfers = respondTransfers;

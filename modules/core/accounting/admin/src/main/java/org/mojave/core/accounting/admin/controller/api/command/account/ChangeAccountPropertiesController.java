@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class ChangeAccountPropertiesController {
@@ -40,7 +41,7 @@ public class ChangeAccountPropertiesController {
 
     public ChangeAccountPropertiesController(ChangeAccountPropertiesCommand changeAccountPropertiesCommand) {
 
-        assert changeAccountPropertiesCommand != null;
+        Objects.requireNonNull(changeAccountPropertiesCommand);
 
         this.changeAccountPropertiesCommand = changeAccountPropertiesCommand;
     }

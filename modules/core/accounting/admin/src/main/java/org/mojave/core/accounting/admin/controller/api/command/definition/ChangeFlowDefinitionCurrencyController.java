@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class ChangeFlowDefinitionCurrencyController {
@@ -40,7 +41,7 @@ public class ChangeFlowDefinitionCurrencyController {
 
     public ChangeFlowDefinitionCurrencyController(final ChangeFlowDefinitionCurrencyCommand changeFlowDefinitionCurrencyCommand) {
 
-        assert changeFlowDefinitionCurrencyCommand != null;
+        Objects.requireNonNull(changeFlowDefinitionCurrencyCommand);
 
         this.changeFlowDefinitionCurrencyCommand = changeFlowDefinitionCurrencyCommand;
     }

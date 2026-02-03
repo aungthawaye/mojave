@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class CommitTransferToPayerStepHandler implements CommitTransferToPayerStep {
@@ -45,7 +46,7 @@ public class CommitTransferToPayerStepHandler implements CommitTransferToPayerSt
 
     public CommitTransferToPayerStepHandler(RespondTransfers respondTransfers) {
 
-        assert respondTransfers != null;
+        Objects.requireNonNull(respondTransfers);
 
         this.respondTransfers = respondTransfers;
     }

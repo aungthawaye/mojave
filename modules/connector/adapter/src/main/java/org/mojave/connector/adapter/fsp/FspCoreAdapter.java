@@ -54,6 +54,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Objects;
 
 @Component
 public class FspCoreAdapter {
@@ -70,9 +71,9 @@ public class FspCoreAdapter {
                           FspClient fspClient,
                           ObjectMapper objectMapper) {
 
-        assert null != participantContext;
-        assert null != fspClient;
-        assert null != objectMapper;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(fspClient);
+        Objects.requireNonNull(objectMapper);
 
         this.participantContext = participantContext;
         this.fspClient = fspClient;

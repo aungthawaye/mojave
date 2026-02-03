@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class ChartQueryController {
@@ -43,7 +44,7 @@ public class ChartQueryController {
 
     public ChartQueryController(final ChartQuery chartQuery) {
 
-        assert chartQuery != null;
+        Objects.requireNonNull(chartQuery);
 
         this.chartQuery = chartQuery;
     }

@@ -30,6 +30,7 @@ import org.mojave.core.wallet.domain.component.BalanceUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class WithdrawFundCommandHandler implements WithdrawFundCommand {
@@ -42,8 +43,8 @@ public class WithdrawFundCommandHandler implements WithdrawFundCommand {
 
     public WithdrawFundCommandHandler(BalanceUpdater balanceUpdater, BalanceCache balanceCache) {
 
-        assert balanceUpdater != null;
-        assert balanceCache != null;
+        Objects.requireNonNull(balanceUpdater);
+        Objects.requireNonNull(balanceCache);
 
         this.balanceUpdater = balanceUpdater;
         this.balanceCache = balanceCache;

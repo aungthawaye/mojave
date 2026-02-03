@@ -51,6 +51,7 @@ import org.mojave.core.participant.contract.exception.fsp.FspCurrencyNotSupporte
 import org.mojave.core.common.datatype.enums.Currency;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -101,8 +102,8 @@ public final class FspCurrency extends JpaEntity<FspCurrencyId>
 
     public FspCurrency(final Fsp fsp, final Currency currency) {
 
-        assert fsp != null;
-        assert currency != null;
+        Objects.requireNonNull(fsp);
+        Objects.requireNonNull(currency);
 
         this.id = new FspCurrencyId(Snowflake.get().nextId());
         this.fsp = fsp;

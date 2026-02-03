@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class PostTransfersEventListener {
@@ -36,7 +37,7 @@ public class PostTransfersEventListener {
 
     public PostTransfersEventListener(HandlePostTransfersRequestCommand handleTransfersRequest) {
 
-        assert null != handleTransfersRequest;
+        Objects.requireNonNull(handleTransfersRequest);
 
         this.handleTransfersRequest = handleTransfersRequest;
     }
@@ -47,7 +48,7 @@ public class PostTransfersEventListener {
 
         var payload = event.getPayload();
 
-        assert null != payload;
+        Objects.requireNonNull(payload);
 
         try {
 

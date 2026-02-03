@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class FspiopSigningInterceptor implements okhttp3.Interceptor {
 
@@ -40,8 +41,8 @@ public class FspiopSigningInterceptor implements okhttp3.Interceptor {
     public FspiopSigningInterceptor(ParticipantContext participantContext,
                                     ObjectMapper objectMapper) {
 
-        assert participantContext != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(objectMapper);
 
         this.participantContext = participantContext;
         this.objectMapper = objectMapper;

@@ -24,6 +24,7 @@ import org.mojave.core.wallet.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class FulfilPositionsPublisher {
@@ -35,7 +36,7 @@ public class FulfilPositionsPublisher {
     public FulfilPositionsPublisher(
         @Qualifier(QUALIFIER) KafkaTemplate<String, FulfilPositionsCommand.Input> kafkaTemplate) {
 
-        assert kafkaTemplate != null;
+        Objects.requireNonNull(kafkaTemplate);
 
         this.kafkaTemplate = kafkaTemplate;
     }

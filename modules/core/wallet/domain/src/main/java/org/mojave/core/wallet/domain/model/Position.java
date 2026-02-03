@@ -47,6 +47,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -114,9 +115,9 @@ public class Position extends JpaEntity<PositionId> implements DataConversion<Po
 
     public Position(final WalletOwnerId walletOwnerId, final Currency currency, final String name) {
 
-        assert walletOwnerId != null;
-        assert currency != null;
-        assert name != null;
+        Objects.requireNonNull(walletOwnerId);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(name);
 
         this.id = new PositionId(Snowflake.get().nextId());
         this.walletOwnerId = walletOwnerId;
@@ -130,9 +131,9 @@ public class Position extends JpaEntity<PositionId> implements DataConversion<Po
                     final String name,
                     final BigDecimal ndc) {
 
-        assert walletOwnerId != null;
-        assert currency != null;
-        assert name != null;
+        Objects.requireNonNull(walletOwnerId);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(name);
 
         this.id = new PositionId(Snowflake.get().nextId());
         this.walletOwnerId = walletOwnerId;
@@ -158,7 +159,7 @@ public class Position extends JpaEntity<PositionId> implements DataConversion<Po
 
     public void updateNdc(BigDecimal ndc) throws FailedToUpdateNdcException {
 
-        assert ndc != null;
+        Objects.requireNonNull(ndc);
 
         if (ndc.compareTo(BigDecimal.ZERO) < 0) {
             ndc = BigDecimal.ZERO;

@@ -27,6 +27,7 @@ import org.mojave.core.accounting.contract.command.account.ActivateAccountComman
 import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class ActivateAccountInvoker implements ActivateAccountCommand {
@@ -38,8 +39,8 @@ public class ActivateAccountInvoker implements ActivateAccountCommand {
     public ActivateAccountInvoker(final AccountingAdminService.AccountCommand accountCommand,
                                   final ObjectMapper objectMapper) {
 
-        assert accountCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(accountCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.accountCommand = accountCommand;
         this.objectMapper = objectMapper;

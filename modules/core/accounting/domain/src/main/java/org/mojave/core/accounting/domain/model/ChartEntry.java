@@ -56,6 +56,7 @@ import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.core.common.datatype.type.accounting.ChartEntryCode;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -135,12 +136,12 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
                       String description,
                       AccountType accountType) {
 
-        assert chart != null;
-        assert category != null;
-        assert code != null;
-        assert name != null;
-        assert description != null;
-        assert accountType != null;
+        Objects.requireNonNull(chart);
+        Objects.requireNonNull(category);
+        Objects.requireNonNull(code);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(description);
+        Objects.requireNonNull(accountType);
 
         this.id = new ChartEntryId(Snowflake.get().nextId());
         this.chart = chart;
@@ -163,7 +164,7 @@ public class ChartEntry extends JpaEntity<ChartEntryId> implements DataConversio
 
     public ChartEntry code(ChartEntryCode code) {
 
-        assert code != null;
+        Objects.requireNonNull(code);
 
         this.chart.entries.stream().findFirst().ifPresent(existingEntry -> {
             if (existingEntry.getCode().equals(code)) {

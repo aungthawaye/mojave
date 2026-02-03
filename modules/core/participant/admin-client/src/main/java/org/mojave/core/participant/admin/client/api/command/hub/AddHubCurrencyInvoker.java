@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class AddHubCurrencyInvoker implements AddHubCurrencyCommand {
@@ -42,8 +43,8 @@ public class AddHubCurrencyInvoker implements AddHubCurrencyCommand {
     public AddHubCurrencyInvoker(final ParticipantAdminService.HubCommands hubCommands,
                                  final ObjectMapper objectMapper) {
 
-        assert hubCommands != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(hubCommands);
+        Objects.requireNonNull(objectMapper);
 
         this.hubCommands = hubCommands;
         this.objectMapper = objectMapper;

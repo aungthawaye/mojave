@@ -52,6 +52,7 @@ import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlRequ
 import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlTooLongException;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -112,8 +113,8 @@ public final class FspEndpoint extends JpaEntity<FspEndpointId>
 
     public FspEndpoint(final Fsp fsp, final EndpointType type, final String baseUrl) {
 
-        assert fsp != null;
-        assert type != null;
+        Objects.requireNonNull(fsp);
+        Objects.requireNonNull(type);
 
         this.id = new FspEndpointId(Snowflake.get().nextId());
         this.fsp = fsp;

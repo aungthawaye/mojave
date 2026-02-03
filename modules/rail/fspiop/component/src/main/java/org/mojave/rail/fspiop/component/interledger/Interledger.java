@@ -40,6 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.Objects;
 
 public class Interledger {
 
@@ -85,10 +86,10 @@ public class Interledger {
                                           String condition,
                                           int lifetimeSeconds) {
 
-        assert ilpSecret != null;
-        assert peer != null;
-        assert amount != null;
-        assert condition != null;
+        Objects.requireNonNull(ilpSecret);
+        Objects.requireNonNull(peer);
+        Objects.requireNonNull(amount);
+        Objects.requireNonNull(condition);
 
         var fulfilmentPacket = Interledger.prepare(ilpSecret, peer, amount, data, lifetimeSeconds);
         var fulfilmentCondition = fulfilmentPacket.base64Condition;
@@ -119,9 +120,9 @@ public class Interledger {
                                   String data,
                                   int lifetimeSeconds) {
 
-        assert ilpSecret != null;
-        assert peer != null;
-        assert amount != null;
+        Objects.requireNonNull(ilpSecret);
+        Objects.requireNonNull(peer);
+        Objects.requireNonNull(amount);
 
         var preimage = preimage(ilpSecret, amount, peer, data);
         var fulfillment = InterledgerFulfillment.of(preimage);
@@ -164,7 +165,7 @@ public class Interledger {
 
     public static InterledgerPreparePacket unwrap(String base64Packet) {
 
-        assert base64Packet != null;
+        Objects.requireNonNull(base64Packet);
 
         return deserialize(base64Packet, InterledgerPreparePacket.class);
     }

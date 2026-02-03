@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class DeactivateSspController {
@@ -40,7 +41,7 @@ public class DeactivateSspController {
 
     public DeactivateSspController(final DeactivateSspCommand deactivateSspCommand) {
 
-        assert deactivateSspCommand != null;
+        Objects.requireNonNull(deactivateSspCommand);
 
         this.deactivateSspCommand = deactivateSspCommand;
     }

@@ -39,6 +39,7 @@ import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.common.datatype.converter.identifier.quoting.QuoteExtensionIdJavaType;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.identifier.quoting.QuoteExtensionId;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -85,10 +86,10 @@ public class QuoteExtension extends JpaEntity<QuoteExtensionId> {
 
     public QuoteExtension(Quote quote, Direction direction, String key, String value) {
 
-        assert quote != null;
-        assert direction != null;
-        assert key != null;
-        assert value != null;
+        Objects.requireNonNull(quote);
+        Objects.requireNonNull(direction);
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(value);
 
         this.id = new QuoteExtensionId(Snowflake.get().nextId());
         this.direction = direction;

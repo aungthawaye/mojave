@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class BalanceQueryInvoker implements BalanceQuery {
@@ -42,8 +43,8 @@ public class BalanceQueryInvoker implements BalanceQuery {
     public BalanceQueryInvoker(final WalletAdminService.BalanceQuery balanceQuery,
                                final ObjectMapper objectMapper) {
 
-        assert balanceQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(balanceQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.balanceQuery = balanceQuery;
         this.objectMapper = objectMapper;

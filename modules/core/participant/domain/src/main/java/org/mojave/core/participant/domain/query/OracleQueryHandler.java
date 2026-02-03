@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -49,7 +50,7 @@ public class OracleQueryHandler implements OracleQuery {
 
     public OracleQueryHandler(OracleRepository oracleRepository) {
 
-        assert oracleRepository != null;
+        Objects.requireNonNull(oracleRepository);
 
         this.oracleRepository = oracleRepository;
     }

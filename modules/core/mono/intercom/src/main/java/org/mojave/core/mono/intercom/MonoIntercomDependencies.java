@@ -36,6 +36,7 @@ import org.mojave.core.mono.intercom.controller.component.EmptyErrorWriter;
 import org.mojave.core.mono.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 public class MonoIntercomDependencies implements MonoIntercomConfiguration.RequiredDependencies {
 
@@ -51,9 +52,9 @@ public class MonoIntercomDependencies implements MonoIntercomConfiguration.Requi
                                     PositionRepository positionRepository,
                                     BalanceRepository balanceRepository) {
 
-        assert objectMapper != null;
-        assert positionRepository != null;
-        assert balanceRepository != null;
+        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(positionRepository);
+        Objects.requireNonNull(balanceRepository);
 
         this.positionCache = new PositionLocalCache(positionRepository);
         this.balanceCache = new BalanceLocalCache(balanceRepository);

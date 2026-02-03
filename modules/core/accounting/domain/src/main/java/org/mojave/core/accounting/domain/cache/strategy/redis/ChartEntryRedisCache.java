@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 public class ChartEntryRedisCache implements ChartEntryCache {
 
@@ -47,8 +48,8 @@ public class ChartEntryRedisCache implements ChartEntryCache {
     public ChartEntryRedisCache(ChartEntryRepository chartEntryRepository,
                                 RedissonOpsClient redissonOpsClient) {
 
-        assert chartEntryRepository != null;
-        assert redissonOpsClient != null;
+        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(redissonOpsClient);
 
         this.chartEntryRepository = chartEntryRepository;
 

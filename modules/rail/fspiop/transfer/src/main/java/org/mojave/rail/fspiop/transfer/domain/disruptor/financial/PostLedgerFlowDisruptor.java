@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedge
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class PostLedgerFlowDisruptor {
 
@@ -67,7 +68,7 @@ public class PostLedgerFlowDisruptor {
 
         public Handler(PostLedgerFlowStep postLedgerFlowStep) {
 
-            assert postLedgerFlowStep != null;
+            Objects.requireNonNull(postLedgerFlowStep);
 
             this.postLedgerFlowStep = postLedgerFlowStep;
         }

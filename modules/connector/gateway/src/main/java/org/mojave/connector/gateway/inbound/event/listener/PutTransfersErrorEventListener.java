@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class PutTransfersErrorEventListener {
@@ -37,7 +38,7 @@ public class PutTransfersErrorEventListener {
 
     public PutTransfersErrorEventListener(HandlePutTransfersErrorCommand handleTransfersError) {
 
-        assert null != handleTransfersError;
+        Objects.requireNonNull(handleTransfersError);
 
         this.handleTransfersError = handleTransfersError;
     }
@@ -48,7 +49,7 @@ public class PutTransfersErrorEventListener {
 
         var payload = event.getPayload();
 
-        assert null != payload;
+        Objects.requireNonNull(payload);
 
         try {
 

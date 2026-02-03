@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class AddPostingDefinitionController {
@@ -40,7 +41,7 @@ public class AddPostingDefinitionController {
 
     public AddPostingDefinitionController(final AddPostingDefinitionCommand addPostingDefinitionCommand) {
 
-        assert addPostingDefinitionCommand != null;
+        Objects.requireNonNull(addPostingDefinitionCommand);
 
         this.addPostingDefinitionCommand = addPostingDefinitionCommand;
     }

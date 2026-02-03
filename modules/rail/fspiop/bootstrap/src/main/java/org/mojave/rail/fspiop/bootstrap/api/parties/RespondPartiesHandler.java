@@ -30,6 +30,7 @@ import org.mojave.rail.fspiop.bootstrap.api.PartiesResponseService;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.PartiesTypeIDPutResponse;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class RespondPartiesHandler implements RespondParties {
@@ -44,9 +45,9 @@ public class RespondPartiesHandler implements RespondParties {
                                  PartiesResponseService partiesResponseService,
                                  FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert partiesResponseService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(partiesResponseService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.partiesResponseService = partiesResponseService;

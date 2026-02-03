@@ -20,6 +20,7 @@
 package org.mojave.component.misc.crypto;
 
 import java.util.Base64;
+import java.util.Objects;
 
 public final class Pem {
 
@@ -52,7 +53,7 @@ public final class Pem {
 
     public static String to(byte[] content, String title) {
 
-        assert content != null;
+        Objects.requireNonNull(content);
 
         String base64 = MIME_ENCODER.encodeToString(content);
         String normalizedTitle = title == null ? null : title.trim();

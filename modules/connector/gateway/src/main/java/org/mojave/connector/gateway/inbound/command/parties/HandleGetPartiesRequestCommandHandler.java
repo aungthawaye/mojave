@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCommand {
@@ -42,8 +43,8 @@ class HandleGetPartiesRequestCommandHandler implements HandleGetPartiesRequestCo
     public HandleGetPartiesRequestCommandHandler(FspCoreAdapter fspCoreAdapter,
                                                  PutParties putParties) {
 
-        assert fspCoreAdapter != null;
-        assert putParties != null;
+        Objects.requireNonNull(fspCoreAdapter);
+        Objects.requireNonNull(putParties);
 
         this.fspCoreAdapter = fspCoreAdapter;
         this.putParties = putParties;

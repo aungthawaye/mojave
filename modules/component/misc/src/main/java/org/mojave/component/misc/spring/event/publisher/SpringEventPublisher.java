@@ -22,6 +22,7 @@ package org.mojave.component.misc.spring.event.publisher;
 import org.mojave.component.misc.spring.event.DomainEvent;
 import org.mojave.component.misc.spring.event.EventPublisher;
 import org.springframework.context.ApplicationEventPublisher;
+import java.util.Objects;
 
 public class SpringEventPublisher implements EventPublisher {
 
@@ -29,7 +30,7 @@ public class SpringEventPublisher implements EventPublisher {
 
     public SpringEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 
-        assert applicationEventPublisher != null;
+        Objects.requireNonNull(applicationEventPublisher);
 
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -37,7 +38,7 @@ public class SpringEventPublisher implements EventPublisher {
     @Override
     public <E extends DomainEvent<?>> void publish(E event) {
 
-        assert event != null;
+        Objects.requireNonNull(event);
 
         this.applicationEventPublisher.publishEvent(event);
     }

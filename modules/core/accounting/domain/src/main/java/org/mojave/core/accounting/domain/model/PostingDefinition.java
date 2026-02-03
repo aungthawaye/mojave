@@ -58,6 +58,7 @@ import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
 
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -149,8 +150,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
                              AccountCache accountCache,
                              ChartEntryCache chartEntryCache) {
 
-        assert definition != null;
-        assert side != null;
+        Objects.requireNonNull(definition);
+        Objects.requireNonNull(side);
 
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
@@ -185,13 +186,13 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
                                         AccountCache accountCache,
                                         ChartEntryCache chartEntryCache) {
 
-        assert step != null;
-        assert amountName != null;
-        assert side != null;
-        assert receiveIn != null;
-        assert receiveInId != null;
-        assert accountCache != null;
-        assert chartEntryCache != null;
+        Objects.requireNonNull(step);
+        Objects.requireNonNull(amountName);
+        Objects.requireNonNull(side);
+        Objects.requireNonNull(receiveIn);
+        Objects.requireNonNull(receiveInId);
+        Objects.requireNonNull(accountCache);
+        Objects.requireNonNull(chartEntryCache);
 
         if (this.definition.postings.stream().anyMatch(pd -> pd.step.equals(step))) {
             throw new DuplicatePostingDefinitionIndexException(step);

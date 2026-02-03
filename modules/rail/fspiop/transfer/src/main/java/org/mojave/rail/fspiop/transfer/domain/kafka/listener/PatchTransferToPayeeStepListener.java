@@ -9,6 +9,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class PatchTransferToPayeeStepListener {
@@ -27,7 +28,7 @@ public class PatchTransferToPayeeStepListener {
 
     public PatchTransferToPayeeStepListener(PatchTransferToPayeeStep patchTransferToPayeeStep) {
 
-        assert patchTransferToPayeeStep != null;
+        Objects.requireNonNull(patchTransferToPayeeStep);
 
         this.patchTransferToPayeeStep = patchTransferToPayeeStep;
     }

@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.CommitTransfer
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class CommitTransferToPayerDisruptor {
 
@@ -67,7 +68,7 @@ public class CommitTransferToPayerDisruptor {
 
         public Handler(CommitTransferToPayerStepHandler commitTransferToPayerStepHandler) {
 
-            assert commitTransferToPayerStepHandler != null;
+            Objects.requireNonNull(commitTransferToPayerStepHandler);
 
             this.commitTransferToPayerStepHandler = commitTransferToPayerStepHandler;
         }

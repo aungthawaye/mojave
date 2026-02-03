@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class DeactivateHubCurrencyController {
@@ -40,7 +41,7 @@ public class DeactivateHubCurrencyController {
 
     public DeactivateHubCurrencyController(DeactivateHubCurrencyCommand deactivateHubCurrencyCommand) {
 
-        assert deactivateHubCurrencyCommand != null;
+        Objects.requireNonNull(deactivateHubCurrencyCommand);
 
         this.deactivateHubCurrencyCommand = deactivateHubCurrencyCommand;
     }

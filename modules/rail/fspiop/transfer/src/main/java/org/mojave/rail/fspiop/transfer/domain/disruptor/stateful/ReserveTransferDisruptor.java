@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReserveTra
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class ReserveTransferDisruptor {
 
@@ -67,7 +68,7 @@ public class ReserveTransferDisruptor {
 
         public Handler(ReserveTransferStep reserveTransferStep) {
 
-            assert reserveTransferStep != null;
+            Objects.requireNonNull(reserveTransferStep);
 
             this.reserveTransferStep = reserveTransferStep;
         }

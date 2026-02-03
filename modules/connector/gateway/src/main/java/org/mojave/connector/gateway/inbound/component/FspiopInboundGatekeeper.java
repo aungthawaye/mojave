@@ -44,6 +44,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FspiopInboundGatekeeper implements Authenticator {
 
@@ -56,8 +57,8 @@ public class FspiopInboundGatekeeper implements Authenticator {
     public FspiopInboundGatekeeper(ParticipantContext participantContext,
                                    ObjectMapper objectMapper) {
 
-        assert participantContext != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(objectMapper);
 
         this.participantContext = participantContext;
         this.objectMapper = objectMapper;
@@ -240,7 +241,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
         public ErrorWriter(ObjectMapper objectMapper) {
 
-            assert objectMapper != null;
+            Objects.requireNonNull(objectMapper);
 
             this.objectMapper = objectMapper;
         }
@@ -277,7 +278,7 @@ public class FspiopInboundGatekeeper implements Authenticator {
 
             } catch (JsonProcessingException e) {
 
-                assert writer != null;
+                Objects.requireNonNull(writer);
 
                 String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.errorType().getCode();
                 String errorDescription = FspiopErrors.GENERIC_SERVER_ERROR.description();

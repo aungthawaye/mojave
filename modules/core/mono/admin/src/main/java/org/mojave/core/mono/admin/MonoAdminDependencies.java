@@ -47,6 +47,7 @@ import org.mojave.core.accounting.contract.ledger.Ledger;
 import org.mojave.provider.ledger.mysql.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 public class MonoAdminDependencies implements MonoAdminConfiguration.RequiredDependencies {
 
@@ -73,12 +74,12 @@ public class MonoAdminDependencies implements MonoAdminConfiguration.RequiredDep
                                  PositionRepository positionRepository,
                                  BalanceRepository balanceRepository) {
 
-        assert objectMapper != null;
-        assert accountRepository != null;
-        assert chartEntryRepository != null;
-        assert flowDefinitionRepository != null;
-        assert positionRepository != null;
-        assert balanceRepository != null;
+        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(accountRepository);
+        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(flowDefinitionRepository);
+        Objects.requireNonNull(positionRepository);
+        Objects.requireNonNull(balanceRepository);
 
         this.accountCache = new AccountLocalCache(accountRepository);
         this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);

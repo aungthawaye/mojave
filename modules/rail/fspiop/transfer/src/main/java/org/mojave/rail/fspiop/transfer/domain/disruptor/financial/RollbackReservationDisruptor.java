@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackR
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class RollbackReservationDisruptor {
 
@@ -67,7 +68,7 @@ public class RollbackReservationDisruptor {
 
         public Handler(RollbackReservationStep rollbackReservationStep) {
 
-            assert rollbackReservationStep != null;
+            Objects.requireNonNull(rollbackReservationStep);
 
             this.rollbackReservationStep = rollbackReservationStep;
         }

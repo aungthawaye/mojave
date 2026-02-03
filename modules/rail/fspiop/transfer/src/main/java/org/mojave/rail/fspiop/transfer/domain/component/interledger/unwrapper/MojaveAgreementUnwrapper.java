@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import tools.jackson.databind.ObjectMapper;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class MojaveAgreementUnwrapper implements AgreementUnwrapper {
 
@@ -35,7 +36,7 @@ public class MojaveAgreementUnwrapper implements AgreementUnwrapper {
 
     public MojaveAgreementUnwrapper(ObjectMapper objectMapper) {
 
-        assert objectMapper != null;
+        Objects.requireNonNull(objectMapper);
 
         this.objectMapper = objectMapper;
     }

@@ -14,4 +14,14 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.common</groupId>
+            <artifactId>mojave-core-common-datatype</artifactId>
+        </dependency>
+    </dependencies>
 </project>

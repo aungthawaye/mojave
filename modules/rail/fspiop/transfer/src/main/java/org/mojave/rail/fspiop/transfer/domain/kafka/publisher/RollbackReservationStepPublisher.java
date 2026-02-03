@@ -5,6 +5,7 @@ import org.mojave.rail.fspiop.transfer.domain.kafka.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class RollbackReservationStepPublisher {
@@ -16,7 +17,7 @@ public class RollbackReservationStepPublisher {
     public RollbackReservationStepPublisher(@Qualifier(QUALIFIER)
                                              final KafkaTemplate<String, RollbackReservationStep.Input> kafkaTemplate) {
 
-        assert kafkaTemplate != null;
+        Objects.requireNonNull(kafkaTemplate);
 
         this.kafkaTemplate = kafkaTemplate;
     }

@@ -29,6 +29,7 @@ import org.slf4j.MDC;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class PutTransfersEventListener {
@@ -39,7 +40,7 @@ public class PutTransfersEventListener {
 
     public PutTransfersEventListener(PutTransfersCommand putTransfers) {
 
-        assert putTransfers != null;
+        Objects.requireNonNull(putTransfers);
 
         this.putTransfers = putTransfers;
     }

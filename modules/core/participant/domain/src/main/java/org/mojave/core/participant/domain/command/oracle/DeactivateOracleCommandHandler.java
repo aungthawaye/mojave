@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
@@ -40,7 +41,7 @@ public class DeactivateOracleCommandHandler implements DeactivateOracleCommand {
 
     public DeactivateOracleCommandHandler(OracleRepository oracleRepository) {
 
-        assert oracleRepository != null;
+        Objects.requireNonNull(oracleRepository);
         this.oracleRepository = oracleRepository;
     }
 

@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class RequestPartiesCommandHandler implements RequestPartiesCommand {
@@ -53,9 +54,9 @@ class RequestPartiesCommandHandler implements RequestPartiesCommand {
                                         PubSubClient pubSubClient,
                                         ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
-        assert null != getParties;
-        assert null != pubSubClient;
-        assert null != outboundSettings;
+        Objects.requireNonNull(getParties);
+        Objects.requireNonNull(pubSubClient);
+        Objects.requireNonNull(outboundSettings);
 
         this.getParties = getParties;
         this.pubSubClient = pubSubClient;

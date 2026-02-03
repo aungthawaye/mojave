@@ -31,6 +31,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class PostLedgerFlowListener {
@@ -47,7 +48,7 @@ public class PostLedgerFlowListener {
 
     public PostLedgerFlowListener(PostLedgerFlowCommand postLedgerFlowCommand) {
 
-        assert postLedgerFlowCommand != null;
+        Objects.requireNonNull(postLedgerFlowCommand);
 
         this.postLedgerFlowCommand = postLedgerFlowCommand;
     }

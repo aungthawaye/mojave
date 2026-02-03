@@ -27,6 +27,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class MySqlLedger implements Ledger {
 
@@ -54,8 +55,8 @@ public class MySqlLedger implements Ledger {
 
     public MySqlLedger(LedgerDbSettings settings, ObjectMapper objectMapper) {
 
-        assert settings != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(settings);
+        Objects.requireNonNull(objectMapper);
 
         LOGGER.info("MySqlLedger settings: ({})", settings);
         var flyway = FlywayMigration.configure(new FlywayMigration.Settings(

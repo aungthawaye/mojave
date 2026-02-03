@@ -48,6 +48,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class RequestQuotesController {
@@ -62,8 +63,8 @@ public class RequestQuotesController {
     public RequestQuotesController(RequestQuotesCommand requestQuotesCommand,
                                    EventPublisher eventPublisher) {
 
-        assert requestQuotesCommand != null;
-        assert eventPublisher != null;
+        Objects.requireNonNull(requestQuotesCommand);
+        Objects.requireNonNull(eventPublisher);
         this.requestQuotesCommand = requestQuotesCommand;
         this.eventPublisher = eventPublisher;
     }

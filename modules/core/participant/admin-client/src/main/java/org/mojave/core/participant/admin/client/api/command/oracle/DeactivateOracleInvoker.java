@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class DeactivateOracleInvoker implements DeactivateOracleCommand {
@@ -42,8 +43,8 @@ public class DeactivateOracleInvoker implements DeactivateOracleCommand {
     public DeactivateOracleInvoker(final ParticipantAdminService.OracleCommands oracleCommands,
                                    final ObjectMapper objectMapper) {
 
-        assert oracleCommands != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(oracleCommands);
+        Objects.requireNonNull(objectMapper);
 
         this.oracleCommands = oracleCommands;
         this.objectMapper = objectMapper;

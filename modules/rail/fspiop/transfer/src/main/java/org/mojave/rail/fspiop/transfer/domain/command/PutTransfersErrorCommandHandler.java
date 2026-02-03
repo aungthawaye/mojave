@@ -42,6 +42,7 @@ import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand {
@@ -71,12 +72,12 @@ public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand
                                            ForwardToDestinationStep forwardToDestinationStep,
                                            RespondTransfers respondTransfers) {
 
-        assert participantStore != null;
-        assert rollbackReservationStepPublisher != null;
-        assert fetchTransferStep != null;
-        assert abortTransferStepPublisher != null;
-        assert forwardToDestinationStep != null;
-        assert respondTransfers != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(rollbackReservationStepPublisher);
+        Objects.requireNonNull(fetchTransferStep);
+        Objects.requireNonNull(abortTransferStepPublisher);
+        Objects.requireNonNull(forwardToDestinationStep);
+        Objects.requireNonNull(respondTransfers);
 
         this.participantStore = participantStore;
         this.rollbackReservationStepPublisher = rollbackReservationStepPublisher;

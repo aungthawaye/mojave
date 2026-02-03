@@ -39,6 +39,7 @@ import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.common.datatype.converter.identifier.transfer.TransferExtensionIdJavaType;
 import org.mojave.core.common.datatype.enums.Direction;
 import org.mojave.core.common.datatype.identifier.transfer.TransferExtensionId;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -82,10 +83,10 @@ public class TransferExtension extends JpaEntity<TransferExtensionId> {
 
     public TransferExtension(Transfer transfer, Direction direction, String key, String value) {
 
-        assert transfer != null;
-        assert direction != null;
-        assert key != null;
-        assert value != null;
+        Objects.requireNonNull(transfer);
+        Objects.requireNonNull(direction);
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(value);
 
         this.id = new TransferExtensionId(Snowflake.get().nextId());
         this.direction = direction;

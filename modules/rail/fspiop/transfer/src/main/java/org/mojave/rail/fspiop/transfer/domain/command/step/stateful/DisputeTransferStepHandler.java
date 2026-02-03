@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class DisputeTransferStepHandler implements DisputeTransferStep {
@@ -41,7 +42,7 @@ public class DisputeTransferStepHandler implements DisputeTransferStep {
 
     public DisputeTransferStepHandler(TransferRepository transferRepository) {
 
-        assert transferRepository != null;
+        Objects.requireNonNull(transferRepository);
 
         this.transferRepository = transferRepository;
     }

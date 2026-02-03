@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class ActivateEndpointInvoker implements ActivateEndpointCommand {
@@ -42,8 +43,8 @@ public class ActivateEndpointInvoker implements ActivateEndpointCommand {
     public ActivateEndpointInvoker(ParticipantAdminService.FspCommand fspCommand,
                                    ObjectMapper objectMapper) {
 
-        assert fspCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(fspCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.fspCommand = fspCommand;
         this.objectMapper = objectMapper;

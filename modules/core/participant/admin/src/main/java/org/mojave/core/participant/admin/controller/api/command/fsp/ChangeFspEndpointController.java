@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class ChangeFspEndpointController {
@@ -38,7 +39,7 @@ public class ChangeFspEndpointController {
 
     public ChangeFspEndpointController(ChangeFspEndpointCommand changeFspEndpointCommand) {
 
-        assert changeFspEndpointCommand != null;
+        Objects.requireNonNull(changeFspEndpointCommand);
 
         this.changeFspEndpointCommand = changeFspEndpointCommand;
     }

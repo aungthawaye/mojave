@@ -21,6 +21,7 @@ package org.mojave.component.redis;
 
 import lombok.Getter;
 import org.redisson.api.RedissonClient;
+import java.util.Objects;
 
 @Getter
 public class RedissonOpsClient {
@@ -29,7 +30,7 @@ public class RedissonOpsClient {
 
     RedissonOpsClient(RedissonClient redissonClient) {
 
-        assert redissonClient != null;
+        Objects.requireNonNull(redissonClient);
 
         this.redissonClient = redissonClient;
     }

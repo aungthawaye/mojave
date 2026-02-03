@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FlowDefinitionQueryHandler implements FlowDefinitionQuery {
@@ -38,7 +39,7 @@ public class FlowDefinitionQueryHandler implements FlowDefinitionQuery {
 
     public FlowDefinitionQueryHandler(final FlowDefinitionRepository flowDefinitionRepository) {
 
-        assert flowDefinitionRepository != null;
+        Objects.requireNonNull(flowDefinitionRepository);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
     }

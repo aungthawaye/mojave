@@ -24,6 +24,7 @@ import org.mojave.core.wallet.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class RollbackReservationPublisher {
@@ -35,7 +36,7 @@ public class RollbackReservationPublisher {
     public RollbackReservationPublisher(
         @Qualifier(QUALIFIER) KafkaTemplate<String, RollbackReservationCommand.Input> kafkaTemplate) {
 
-        assert kafkaTemplate != null;
+        Objects.requireNonNull(kafkaTemplate);
 
         this.kafkaTemplate = kafkaTemplate;
     }

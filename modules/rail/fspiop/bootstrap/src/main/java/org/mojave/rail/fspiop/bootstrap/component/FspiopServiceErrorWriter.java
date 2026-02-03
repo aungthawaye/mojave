@@ -33,6 +33,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 public class FspiopServiceErrorWriter implements AuthenticationErrorWriter {
 
@@ -42,7 +43,7 @@ public class FspiopServiceErrorWriter implements AuthenticationErrorWriter {
 
     public FspiopServiceErrorWriter(ObjectMapper objectMapper) {
 
-        assert objectMapper != null;
+        Objects.requireNonNull(objectMapper);
 
         this.objectMapper = objectMapper;
     }
@@ -77,7 +78,7 @@ public class FspiopServiceErrorWriter implements AuthenticationErrorWriter {
 
         } catch (JsonProcessingException e) {
 
-            assert writer != null;
+            Objects.requireNonNull(writer);
 
             String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.errorType().getCode();
             String errorDescription = FspiopErrors.GENERIC_SERVER_ERROR.description();

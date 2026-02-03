@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class FulfilPositionsController {
@@ -37,7 +38,7 @@ public class FulfilPositionsController {
 
     public FulfilPositionsController(final FulfilPositionsCommand fulfilPositionsCommand) {
 
-        assert fulfilPositionsCommand != null;
+        Objects.requireNonNull(fulfilPositionsCommand);
 
         this.fulfilPositionsCommand = fulfilPositionsCommand;
     }

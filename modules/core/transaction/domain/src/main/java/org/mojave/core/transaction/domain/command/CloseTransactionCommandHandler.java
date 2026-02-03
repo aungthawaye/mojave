@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class CloseTransactionCommandHandler implements CloseTransactionCommand {
@@ -39,7 +40,7 @@ public class CloseTransactionCommandHandler implements CloseTransactionCommand {
 
     public CloseTransactionCommandHandler(TransactionRepository transactionRepository) {
 
-        assert transactionRepository != null;
+        Objects.requireNonNull(transactionRepository);
         this.transactionRepository = transactionRepository;
     }
 

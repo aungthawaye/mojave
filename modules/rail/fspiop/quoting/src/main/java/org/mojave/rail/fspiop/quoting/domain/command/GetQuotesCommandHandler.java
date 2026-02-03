@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
+import java.util.Objects;
 
 @Service
 public class GetQuotesCommandHandler implements GetQuotesCommand {
@@ -65,12 +66,12 @@ public class GetQuotesCommandHandler implements GetQuotesCommand {
                                    PlatformTransactionManager transactionManager,
                                    QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
-        assert participantStore != null;
-        assert respondQuotes != null;
-        assert forwardRequest != null;
-        assert quoteRepository != null;
-        assert transactionManager != null;
-        assert quoteSettings != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(respondQuotes);
+        Objects.requireNonNull(forwardRequest);
+        Objects.requireNonNull(quoteRepository);
+        Objects.requireNonNull(transactionManager);
+        Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;

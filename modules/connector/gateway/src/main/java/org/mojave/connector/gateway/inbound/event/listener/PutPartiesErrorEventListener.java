@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class PutPartiesErrorEventListener {
@@ -37,7 +38,7 @@ public class PutPartiesErrorEventListener {
 
     public PutPartiesErrorEventListener(HandlePutPartiesErrorCommand handlePartiesError) {
 
-        assert null != handlePartiesError;
+        Objects.requireNonNull(handlePartiesError);
 
         this.handlePartiesError = handlePartiesError;
     }
@@ -48,7 +49,7 @@ public class PutPartiesErrorEventListener {
 
         var payload = event.getPayload();
 
-        assert null != payload;
+        Objects.requireNonNull(payload);
 
         try {
 

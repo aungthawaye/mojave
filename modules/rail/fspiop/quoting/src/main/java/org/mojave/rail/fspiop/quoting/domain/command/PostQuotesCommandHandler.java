@@ -50,6 +50,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 public class PostQuotesCommandHandler implements PostQuotesCommand {
@@ -75,12 +76,12 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
                                     PlatformTransactionManager transactionManager,
                                     QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
-        assert participantStore != null;
-        assert respondQuotes != null;
-        assert forwardRequest != null;
-        assert quoteRepository != null;
-        assert transactionManager != null;
-        assert quoteSettings != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(respondQuotes);
+        Objects.requireNonNull(forwardRequest);
+        Objects.requireNonNull(quoteRepository);
+        Objects.requireNonNull(transactionManager);
+        Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;

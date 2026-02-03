@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class FspQueryController {
@@ -44,7 +45,7 @@ public class FspQueryController {
 
     public FspQueryController(FspQuery fspQuery) {
 
-        assert fspQuery != null;
+        Objects.requireNonNull(fspQuery);
 
         this.fspQuery = fspQuery;
     }

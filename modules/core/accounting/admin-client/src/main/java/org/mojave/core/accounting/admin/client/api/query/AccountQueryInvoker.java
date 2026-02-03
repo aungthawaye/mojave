@@ -36,6 +36,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AccountQueryInvoker implements AccountQuery {
@@ -49,8 +50,8 @@ public class AccountQueryInvoker implements AccountQuery {
     public AccountQueryInvoker(final AccountingAdminService.AccountQuery accountQuery,
                                final ObjectMapper objectMapper) {
 
-        assert accountQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(accountQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.accountQuery = accountQuery;
         this.objectMapper = objectMapper;

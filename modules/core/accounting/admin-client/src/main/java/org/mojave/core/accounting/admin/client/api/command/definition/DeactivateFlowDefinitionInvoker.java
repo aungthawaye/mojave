@@ -27,6 +27,7 @@ import org.mojave.core.accounting.contract.command.definition.DeactivateFlowDefi
 import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinitionCommand {
@@ -38,8 +39,8 @@ public class DeactivateFlowDefinitionInvoker implements DeactivateFlowDefinition
     public DeactivateFlowDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
                                            final ObjectMapper objectMapper) {
 
-        assert definitionCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(definitionCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.definitionCommand = definitionCommand;
         this.objectMapper = objectMapper;

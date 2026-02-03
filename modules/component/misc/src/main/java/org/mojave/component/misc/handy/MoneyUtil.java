@@ -5,6 +5,7 @@ import com.google.common.primitives.UnsignedLong;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 public class MoneyUtil {
 
@@ -12,8 +13,10 @@ public class MoneyUtil {
 
     public static BigDecimal deserialize(UnsignedLong amount, int scale) {
 
-        assert amount != null;
-        assert scale >= 0;
+        Objects.requireNonNull(amount);
+        if (scale < 0) {
+            throw new IllegalArgumentException("scale must be greater than or equal to 0");
+        }
 
         BigInteger minor = new BigInteger(amount.toString());
 
@@ -22,9 +25,11 @@ public class MoneyUtil {
 
     public static UnsignedLong serialize(BigDecimal amount, int scale, RoundingMode roundingMode) {
 
-        assert amount != null;
-        assert scale >= 0;
-        assert roundingMode != null;
+        Objects.requireNonNull(amount);
+        if (scale < 0) {
+            throw new IllegalArgumentException("scale must be greater than or equal to 0");
+        }
+        Objects.requireNonNull(roundingMode);
 
         BigDecimal minor = amount.movePointRight(scale);
         BigInteger asInt = minor.setScale(0, roundingMode).toBigIntegerExact();

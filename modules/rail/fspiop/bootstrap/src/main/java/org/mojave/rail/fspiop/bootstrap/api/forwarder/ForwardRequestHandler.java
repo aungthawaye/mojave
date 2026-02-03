@@ -31,6 +31,7 @@ import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class ForwardRequestHandler implements ForwardRequest {
@@ -44,8 +45,8 @@ public class ForwardRequestHandler implements ForwardRequest {
     public ForwardRequestHandler(RetrofitService.ForwardingService forwardingService,
                                  FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert forwardingService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(forwardingService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.forwardingService = forwardingService;
         this.fspiopErrorDecoder = fspiopErrorDecoder;

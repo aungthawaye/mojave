@@ -30,6 +30,7 @@ import org.mojave.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class DecreasePositionCommandHandler implements DecreasePositionCommand {
@@ -44,8 +45,8 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
     public DecreasePositionCommandHandler(final PositionUpdater positionUpdater,
                                           final PositionCache positionCache) {
 
-        assert positionUpdater != null;
-        assert positionCache != null;
+        Objects.requireNonNull(positionUpdater);
+        Objects.requireNonNull(positionCache);
 
         this.positionUpdater = positionUpdater;
         this.positionCache = positionCache;

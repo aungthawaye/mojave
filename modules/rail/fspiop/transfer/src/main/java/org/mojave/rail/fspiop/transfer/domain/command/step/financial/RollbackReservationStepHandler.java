@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class RollbackReservationStepHandler implements RollbackReservationStep {
@@ -46,8 +47,8 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
     public RollbackReservationStepHandler(RollbackReservationCommand rollbackReservationCommand,
                                           DisputeTransferStepPublisher disputeTransferStepPublisher) {
 
-        assert rollbackReservationCommand != null;
-        assert disputeTransferStepPublisher != null;
+        Objects.requireNonNull(rollbackReservationCommand);
+        Objects.requireNonNull(disputeTransferStepPublisher);
 
         this.rollbackReservationCommand = rollbackReservationCommand;
         this.disputeTransferStepPublisher = disputeTransferStepPublisher;

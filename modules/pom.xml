@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.1</version>
+        <version>4.0.2</version>
     </parent>
     <groupId>org.mojave</groupId>
     <artifactId>mojave</artifactId>
@@ -15,11 +15,11 @@
     <modules>
         <module>component</module>
         <module>scheme</module>
+        <module>provider</module>
         <module>core</module>
+        <module>rail</module>
         <module>operation</module>
         <module>connector</module>
-        <module>provider</module>
-        <module>rail</module>
     </modules>
     <properties>
         <java.version>25</java.version>

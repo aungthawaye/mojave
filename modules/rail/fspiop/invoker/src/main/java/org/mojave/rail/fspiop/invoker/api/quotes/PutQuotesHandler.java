@@ -30,6 +30,7 @@ import org.mojave.rail.fspiop.invoker.api.QuotesService;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class PutQuotesHandler implements PutQuotes {
@@ -44,9 +45,9 @@ class PutQuotesHandler implements PutQuotes {
                             QuotesService quotesService,
                             FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert quotesService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(quotesService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.quotesService = quotesService;

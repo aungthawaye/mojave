@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -42,7 +43,7 @@ public class AddSspCurrencyCommandHandler implements AddSspCurrencyCommand {
 
     public AddSspCurrencyCommandHandler(final SspRepository sspRepository) {
 
-        assert sspRepository != null;
+        Objects.requireNonNull(sspRepository);
         this.sspRepository = sspRepository;
     }
 

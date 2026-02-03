@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BalanceQueryHandler implements BalanceQuery {
@@ -40,7 +41,7 @@ public class BalanceQueryHandler implements BalanceQuery {
 
     public BalanceQueryHandler(final BalanceRepository balanceRepository) {
 
-        assert balanceRepository != null;
+        Objects.requireNonNull(balanceRepository);
 
         this.balanceRepository = balanceRepository;
     }

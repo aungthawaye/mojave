@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class ChangeChartEntryPropertiesCommandHandler implements ChangeChartEntryPropertiesCommand {
@@ -39,7 +40,7 @@ public class ChangeChartEntryPropertiesCommandHandler implements ChangeChartEntr
 
     public ChangeChartEntryPropertiesCommandHandler(ChartEntryRepository chartEntryRepository) {
 
-        assert chartEntryRepository != null;
+        Objects.requireNonNull(chartEntryRepository);
         this.chartEntryRepository = chartEntryRepository;
     }
 

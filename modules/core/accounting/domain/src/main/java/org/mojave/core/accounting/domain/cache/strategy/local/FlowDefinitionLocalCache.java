@@ -29,6 +29,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
@@ -40,7 +41,7 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
     public FlowDefinitionLocalCache(final FlowDefinitionRepository flowDefinitionRepository) {
 
-        assert flowDefinitionRepository != null;
+        Objects.requireNonNull(flowDefinitionRepository);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
 

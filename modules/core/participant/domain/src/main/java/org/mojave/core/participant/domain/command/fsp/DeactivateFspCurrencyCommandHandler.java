@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -42,7 +43,7 @@ public class DeactivateFspCurrencyCommandHandler implements DeactivateFspCurrenc
 
     public DeactivateFspCurrencyCommandHandler(FspRepository fspRepository) {
 
-        assert fspRepository != null;
+        Objects.requireNonNull(fspRepository);
 
         this.fspRepository = fspRepository;
     }

@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class RequestTransfersCommandHandler implements RequestTransfersCommand {
@@ -52,9 +53,9 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
                                           PubSubClient pubSubClient,
                                           ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
-        assert null != postTransfers;
-        assert null != pubSubClient;
-        assert null != outboundSettings;
+        Objects.requireNonNull(postTransfers);
+        Objects.requireNonNull(pubSubClient);
+        Objects.requireNonNull(outboundSettings);
 
         this.postTransfers = postTransfers;
         this.pubSubClient = pubSubClient;
@@ -64,8 +65,8 @@ class RequestTransfersCommandHandler implements RequestTransfersCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
-        assert input != null;
-        assert input.request() != null;
+        Objects.requireNonNull(input);
+        Objects.requireNonNull(input.request());
 
         final var transferId = input.request().getTransferId();
 

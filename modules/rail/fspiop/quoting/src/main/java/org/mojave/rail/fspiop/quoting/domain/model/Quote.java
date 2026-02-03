@@ -74,6 +74,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -335,17 +336,17 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
                  Party payer,
                  Party payee) throws ExpirationNotInFutureException {
 
-        assert payerFspId != null;
-        assert payeeFspId != null;
-        assert udfQuoteId != null;
-        assert currency != null;
-        assert amount != null;
-        assert amountType != null;
-        assert scenario != null;
-        assert initiator != null;
-        assert initiatorType != null;
-        assert payer != null;
-        assert payee != null;
+        Objects.requireNonNull(payerFspId);
+        Objects.requireNonNull(payeeFspId);
+        Objects.requireNonNull(udfQuoteId);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(amount);
+        Objects.requireNonNull(amountType);
+        Objects.requireNonNull(scenario);
+        Objects.requireNonNull(initiator);
+        Objects.requireNonNull(initiatorType);
+        Objects.requireNonNull(payer);
+        Objects.requireNonNull(payee);
 
         this.id = new QuoteId(Snowflake.get().nextId());
         this.payerFspId = payerFspId;
@@ -433,8 +434,8 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
                           String condition)
         throws ExpirationNotInFutureException, QuoteRequestTimeoutException {
 
-        assert transferAmount != null;
-        assert payeeReceiveAmount != null;
+        Objects.requireNonNull(transferAmount);
+        Objects.requireNonNull(payeeReceiveAmount);
 
         this.responseExpiration = responseExpiration;
         this.transferAmount = transferAmount;

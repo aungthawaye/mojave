@@ -38,6 +38,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @ComponentScan(basePackages = {"org.mojave.rail.fspiop.bootstrap"})
 @Import(
@@ -62,11 +63,11 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                                       ObjectMapper objectMapper,
                                       FspiopServiceConfiguration.ServiceSettings serviceSettings) {
 
-        assert springSecuritySettings != null;
-        assert participantContext != null;
-        assert participantVerifier != null;
-        assert objectMapper != null;
-        assert serviceSettings != null;
+        Objects.requireNonNull(springSecuritySettings);
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(participantVerifier);
+        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(serviceSettings);
 
         this.springSecuritySettings = springSecuritySettings;
         this.participantContext = participantContext;

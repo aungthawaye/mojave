@@ -33,6 +33,7 @@ import org.mojave.core.accounting.contract.ledger.Ledger;
 import org.mojave.provider.ledger.mysql.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 class AccountingConsumerDependencies
     implements AccountingConsumerConfiguration.RequiredDependencies {
@@ -50,10 +51,10 @@ class AccountingConsumerDependencies
                                           FlowDefinitionRepository flowDefinitionRepository,
                                           ObjectMapper objectMapper) {
 
-        assert accountRepository != null;
-        assert chartEntryRepository != null;
-        assert flowDefinitionRepository != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(accountRepository);
+        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(flowDefinitionRepository);
+        Objects.requireNonNull(objectMapper);
 
         this.ledger = new MySqlLedger(
             new MySqlLedger.LedgerDbSettings(

@@ -27,6 +27,7 @@ import org.mojave.core.accounting.contract.command.chart.CreateChartEntryCommand
 import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class CreateChartEntryInvoker implements CreateChartEntryCommand {
@@ -38,8 +39,8 @@ public class CreateChartEntryInvoker implements CreateChartEntryCommand {
     public CreateChartEntryInvoker(final AccountingAdminService.ChartCommand chartCommand,
                                    final ObjectMapper objectMapper) {
 
-        assert chartCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(chartCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.chartCommand = chartCommand;
         this.objectMapper = objectMapper;

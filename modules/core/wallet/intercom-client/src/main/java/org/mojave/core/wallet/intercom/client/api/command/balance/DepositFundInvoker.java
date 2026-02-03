@@ -28,6 +28,7 @@ import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTrans
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class DepositFundInvoker implements DepositFundCommand {
@@ -39,8 +40,8 @@ public class DepositFundInvoker implements DepositFundCommand {
     public DepositFundInvoker(final WalletIntercomService.BalanceCommand balanceCommand,
                               final ObjectMapper objectMapper) {
 
-        assert balanceCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(balanceCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.balanceCommand = balanceCommand;
         this.objectMapper = objectMapper;

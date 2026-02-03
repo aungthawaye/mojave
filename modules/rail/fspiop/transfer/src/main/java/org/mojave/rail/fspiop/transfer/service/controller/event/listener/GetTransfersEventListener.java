@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class GetTransfersEventListener {
@@ -38,7 +39,7 @@ public class GetTransfersEventListener {
 
     public GetTransfersEventListener(GetTransfersCommand getTransfers) {
 
-        assert getTransfers != null;
+        Objects.requireNonNull(getTransfers);
 
         this.getTransfers = getTransfers;
     }

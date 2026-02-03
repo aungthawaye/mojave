@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class FspQueryInvoker implements FspQuery {
@@ -46,8 +47,8 @@ public class FspQueryInvoker implements FspQuery {
 
     public FspQueryInvoker(ParticipantAdminService.FspQuery fspQuery, ObjectMapper objectMapper) {
 
-        assert fspQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.fspQuery = fspQuery;
         this.objectMapper = objectMapper;

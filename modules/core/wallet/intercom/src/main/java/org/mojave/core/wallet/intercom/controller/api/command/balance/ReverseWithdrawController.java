@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class ReverseWithdrawController {
@@ -36,7 +37,7 @@ public class ReverseWithdrawController {
 
     public ReverseWithdrawController(final ReverseWithdrawCommand reverseWithdrawCommand) {
 
-        assert reverseWithdrawCommand != null;
+        Objects.requireNonNull(reverseWithdrawCommand);
 
         this.reverseWithdrawCommand = reverseWithdrawCommand;
     }

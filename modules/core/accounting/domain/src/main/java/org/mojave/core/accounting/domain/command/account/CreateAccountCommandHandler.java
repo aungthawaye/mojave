@@ -25,17 +25,17 @@ import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
 import org.mojave.core.accounting.contract.exception.account.AccountCodeAlreadyExistsException;
 import org.mojave.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
+import org.mojave.core.accounting.contract.ledger.Ledger;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
-import org.mojave.core.accounting.contract.ledger.Ledger;
-import org.mojave.rail.fspiop.component.handy.FspiopCurrencies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class CreateAccountCommandHandler implements CreateAccountCommand {
@@ -52,9 +52,9 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
                                        ChartEntryRepository chartEntryRepository,
                                        Ledger ledger) {
 
-        assert accountRepository != null;
-        assert chartEntryRepository != null;
-        assert ledger != null;
+        Objects.requireNonNull(accountRepository);
+        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(ledger);
 
         this.accountRepository = accountRepository;
         this.chartEntryRepository = chartEntryRepository;
@@ -91,8 +91,8 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
         try {
             this.ledger.createLedgerBalance(new Ledger.LedgerBalance(
                 account.getId(), account.getCurrency(), input.currency().getScale(),
-                account.getType().getSide(), BigDecimal.ZERO, BigDecimal.ZERO, input.overdraftMode(),
-                input.overdraftLimit(), account.getCreatedAt()));
+                account.getType().getSide(), BigDecimal.ZERO, BigDecimal.ZERO,
+                input.overdraftMode(), input.overdraftLimit(), account.getCreatedAt()));
             LOGGER.info("Ledger balance created for account: ({})", account.getId());
 
         } catch (Ledger.AccountIdAlreadyTakenException e) {

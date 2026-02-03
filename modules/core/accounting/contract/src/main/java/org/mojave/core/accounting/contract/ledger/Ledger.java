@@ -16,6 +16,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 public interface Ledger {
 
@@ -90,7 +91,7 @@ public interface Ledger {
 
         public AccountIdAlreadyTakenException(AccountId accountId) {
 
-            assert accountId != null;
+            Objects.requireNonNull(accountId);
 
             super("Account ID (" + accountId.getId() + ") is already taken.");
 

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ChartQueryHandler implements ChartQuery {
@@ -38,7 +39,7 @@ public class ChartQueryHandler implements ChartQuery {
 
     public ChartQueryHandler(final ChartRepository chartRepository) {
 
-        assert chartRepository != null;
+        Objects.requireNonNull(chartRepository);
 
         this.chartRepository = chartRepository;
     }

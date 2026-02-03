@@ -32,6 +32,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Objects;
 
 public final class Jwt {
 
@@ -66,9 +67,9 @@ public final class Jwt {
                              Map<String, String> headers,
                              String payload) {
 
-        assert privateKey != null;
-        assert headers != null;
-        assert payload != null;
+        Objects.requireNonNull(privateKey);
+        Objects.requireNonNull(headers);
+        Objects.requireNonNull(payload);
 
         String token = Jwts
                            .builder()
@@ -106,7 +107,7 @@ public final class Jwt {
 
         try {
 
-            assert token != null;
+            Objects.requireNonNull(token);
             LOGGER.debug("Verifying token : {}", token.full());
 
             Jwts.parser().verifyWith(publicKey).build().parseSignedContent(token.full());
@@ -124,10 +125,10 @@ public final class Jwt {
 
         public Token(String header, String body, String signature, String full) {
 
-            assert header != null;
-            assert body != null;
-            assert signature != null;
-            assert full != null;
+            Objects.requireNonNull(header);
+            Objects.requireNonNull(body);
+            Objects.requireNonNull(signature);
+            Objects.requireNonNull(full);
 
             this.header = header;
             this.body = body;

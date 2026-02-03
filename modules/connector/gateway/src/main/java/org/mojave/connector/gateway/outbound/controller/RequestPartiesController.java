@@ -39,6 +39,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class RequestPartiesController {
@@ -53,8 +54,8 @@ public class RequestPartiesController {
     public RequestPartiesController(RequestPartiesCommand requestPartiesCommand,
                                     EventPublisher eventPublisher) {
 
-        assert null != requestPartiesCommand;
-        assert null != eventPublisher;
+        Objects.requireNonNull(requestPartiesCommand);
+        Objects.requireNonNull(eventPublisher);
 
         this.requestPartiesCommand = requestPartiesCommand;
         this.eventPublisher = eventPublisher;

@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.financial.ReservePa
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class ReservePayerPositionDisruptor {
 
@@ -67,7 +68,7 @@ public class ReservePayerPositionDisruptor {
 
         public Handler(ReservePayerPositionStep reservePayerPositionStep) {
 
-            assert reservePayerPositionStep != null;
+            Objects.requireNonNull(reservePayerPositionStep);
 
             this.reservePayerPositionStep = reservePayerPositionStep;
         }

@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @RestController
 public class TransfersController {
@@ -56,7 +57,7 @@ public class TransfersController {
 
     public TransfersController(EventPublisher eventPublisher) {
 
-        assert eventPublisher != null;
+        Objects.requireNonNull(eventPublisher);
 
         this.eventPublisher = eventPublisher;
     }

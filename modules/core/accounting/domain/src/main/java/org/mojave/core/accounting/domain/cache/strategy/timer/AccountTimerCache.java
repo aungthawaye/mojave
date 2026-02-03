@@ -40,6 +40,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class AccountTimerCache implements AccountCache {
 
@@ -55,8 +56,10 @@ public class AccountTimerCache implements AccountCache {
 
     public AccountTimerCache(final AccountRepository accountRepository, int interval) {
 
-        assert accountRepository != null;
-        assert interval > 0;
+        Objects.requireNonNull(accountRepository);
+        if (interval <= 0) {
+            throw new IllegalArgumentException("interval must be greater than 0");
+        }
 
         this.accountRepository = accountRepository;
         this.interval = interval;

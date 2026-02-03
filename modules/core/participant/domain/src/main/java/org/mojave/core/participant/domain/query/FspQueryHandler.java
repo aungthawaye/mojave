@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -49,7 +50,7 @@ public class FspQueryHandler implements FspQuery {
 
     public FspQueryHandler(FspRepository fspRepository) {
 
-        assert fspRepository != null;
+        Objects.requireNonNull(fspRepository);
 
         this.fspRepository = fspRepository;
     }

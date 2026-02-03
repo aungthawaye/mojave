@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class CreateAccountInBulkController {
@@ -40,7 +41,7 @@ public class CreateAccountInBulkController {
 
     public CreateAccountInBulkController(final CreateAccountInBulkCommand createAccountInBulkCommand) {
 
-        assert createAccountInBulkCommand != null;
+        Objects.requireNonNull(createAccountInBulkCommand);
 
         this.createAccountInBulkCommand = createAccountInBulkCommand;
     }

@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class UpdateNetDebitCapCommandHandler implements UpdateNetDebitCapCommand {
@@ -40,7 +41,7 @@ public class UpdateNetDebitCapCommandHandler implements UpdateNetDebitCapCommand
 
     public UpdateNetDebitCapCommandHandler(PositionRepository positionRepository) {
 
-        assert positionRepository != null;
+        Objects.requireNonNull(positionRepository);
 
         this.positionRepository = positionRepository;
     }

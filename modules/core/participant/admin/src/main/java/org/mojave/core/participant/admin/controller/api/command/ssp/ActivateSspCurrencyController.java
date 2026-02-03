@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class ActivateSspCurrencyController {
@@ -42,7 +43,7 @@ public class ActivateSspCurrencyController {
     public ActivateSspCurrencyController(
         final ActivateSspCurrencyCommand activateSspCurrencyCommand) {
 
-        assert activateSspCurrencyCommand != null;
+        Objects.requireNonNull(activateSspCurrencyCommand);
 
         this.activateSspCurrencyCommand = activateSspCurrencyCommand;
     }

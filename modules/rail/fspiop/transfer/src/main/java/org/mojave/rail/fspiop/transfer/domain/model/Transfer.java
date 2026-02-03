@@ -73,6 +73,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -461,22 +462,22 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
                     Instant requestExpiration,
                     Instant reservationTimeoutAt) {
 
-        assert transactionId != null;
-        assert transactionAt != null;
-        assert udfTransferId != null;
-        assert payerFspId != null;
-        assert payer != null;
-        assert payeeFspId != null;
-        assert payee != null;
-        assert amountType != null;
-        assert scenario != null;
-        assert transferAmount != null;
-        assert payeeFspFee != null;
-        assert payeeFspCommission != null;
-        assert payeeReceiveAmount != null;
-        assert ilpPacket != null;
-        assert ilpCondition != null;
-        assert reservationTimeoutAt != null;
+        Objects.requireNonNull(transactionId);
+        Objects.requireNonNull(transactionAt);
+        Objects.requireNonNull(udfTransferId);
+        Objects.requireNonNull(payerFspId);
+        Objects.requireNonNull(payer);
+        Objects.requireNonNull(payeeFspId);
+        Objects.requireNonNull(payee);
+        Objects.requireNonNull(amountType);
+        Objects.requireNonNull(scenario);
+        Objects.requireNonNull(transferAmount);
+        Objects.requireNonNull(payeeFspFee);
+        Objects.requireNonNull(payeeFspCommission);
+        Objects.requireNonNull(payeeReceiveAmount);
+        Objects.requireNonNull(ilpPacket);
+        Objects.requireNonNull(ilpCondition);
+        Objects.requireNonNull(reservationTimeoutAt);
 
         this.id = new TransferId(Snowflake.get().nextId());
         this.transactionId = transactionId;
@@ -525,7 +526,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
 
     public void committed(String ilpFulfilment, Instant completedAt) {
 
-        assert ilpFulfilment != null;
+        Objects.requireNonNull(ilpFulfilment);
 
         this.status = TransferStatus.COMMITTED;
 
@@ -564,7 +565,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
 
     public void disputed(DisputeReason disputeReason) {
 
-        assert disputeReason != null;
+        Objects.requireNonNull(disputeReason);
 
         this.disputeReason = disputeReason;
         this.disputeAt = Instant.now();
@@ -585,7 +586,7 @@ public class Transfer extends JpaEntity<TransferId> implements DataConversion<Tr
 
     public void reserved(PositionUpdateId reservationId) {
 
-        assert reservationId != null;
+        Objects.requireNonNull(reservationId);
 
         this.status = TransferStatus.RESERVED;
         this.reservedAt = Instant.now();

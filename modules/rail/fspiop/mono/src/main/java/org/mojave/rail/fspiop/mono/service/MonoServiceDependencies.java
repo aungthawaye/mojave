@@ -30,6 +30,7 @@ import org.mojave.rail.fspiop.transfer.domain.component.interledger.unwrapper.Mo
 import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 public class MonoServiceDependencies implements MonoServiceConfiguration.RequiredDependencies {
 
@@ -42,10 +43,10 @@ public class MonoServiceDependencies implements MonoServiceConfiguration.Require
                                    SspQuery sspQuery,
                                    OracleQuery oracleQuery) {
 
-        assert objectMapper != null;
-        assert fspQuery != null;
-        assert sspQuery != null;
-        assert oracleQuery != null;
+        Objects.requireNonNull(objectMapper);
+        Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(sspQuery);
+        Objects.requireNonNull(oracleQuery);
 
         this.objectMapper = objectMapper;
 

@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -49,8 +50,8 @@ public class CreateFspCommandHandler implements CreateFspCommand {
 
     public CreateFspCommandHandler(FspRepository fspRepository, HubRepository hubRepository) {
 
-        assert fspRepository != null;
-        assert hubRepository != null;
+        Objects.requireNonNull(fspRepository);
+        Objects.requireNonNull(hubRepository);
 
         this.fspRepository = fspRepository;
         this.hubRepository = hubRepository;

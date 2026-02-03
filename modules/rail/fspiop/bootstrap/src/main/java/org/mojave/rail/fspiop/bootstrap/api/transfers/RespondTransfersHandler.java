@@ -32,6 +32,7 @@ import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.TransfersIDPatchResponse;
 import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class RespondTransfersHandler implements RespondTransfers {
@@ -46,9 +47,9 @@ public class RespondTransfersHandler implements RespondTransfers {
                                    TransfersResponseService transfersResponseService,
                                    FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert transfersResponseService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(transfersResponseService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.transfersResponseService = transfersResponseService;

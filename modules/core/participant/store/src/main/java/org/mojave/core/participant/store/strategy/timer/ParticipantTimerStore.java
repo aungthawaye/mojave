@@ -43,6 +43,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class ParticipantTimerStore implements ParticipantStore {
 
@@ -65,10 +66,10 @@ public class ParticipantTimerStore implements ParticipantStore {
                                  OracleQuery oracleQuery,
                                  ParticipantTimerStore.Settings settings) {
 
-        assert fspQuery != null;
-        assert sspQuery != null;
-        assert oracleQuery != null;
-        assert settings != null;
+        Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(sspQuery);
+        Objects.requireNonNull(oracleQuery);
+        Objects.requireNonNull(settings);
 
         this.fspQuery = fspQuery;
         this.sspQuery = sspQuery;

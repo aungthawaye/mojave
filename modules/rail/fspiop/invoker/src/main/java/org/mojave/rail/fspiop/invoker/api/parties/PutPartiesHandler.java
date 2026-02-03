@@ -31,6 +31,7 @@ import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.PartiesTypeIDPutResponse;
 import org.mojave.scheme.fspiop.core.PartyIdType;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class PutPartiesHandler implements PutParties {
@@ -45,9 +46,9 @@ class PutPartiesHandler implements PutParties {
                              PartiesService partiesService,
                              FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert partiesService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(partiesService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.partiesService = partiesService;

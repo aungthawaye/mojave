@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep {
@@ -49,7 +50,7 @@ public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep
 
     public PatchTransferToPayeeStepHandler(RespondTransfers respondTransfers) {
 
-        assert respondTransfers != null;
+        Objects.requireNonNull(respondTransfers);
 
         this.respondTransfers = respondTransfers;
     }

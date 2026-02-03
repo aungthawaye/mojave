@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.UnwrapReques
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class UnwrapRequestDisruptor {
 
@@ -67,7 +68,7 @@ public class UnwrapRequestDisruptor {
 
         public Handler(UnwrapRequestStep unwrapRequestStep) {
 
-            assert unwrapRequestStep != null;
+            Objects.requireNonNull(unwrapRequestStep);
 
             this.unwrapRequestStep = unwrapRequestStep;
         }

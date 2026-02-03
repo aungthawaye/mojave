@@ -28,6 +28,7 @@ import org.mojave.rail.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.rail.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import org.mojave.rail.fspiop.invoker.api.TransfersService;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class GetTransfersHandler implements GetTransfers {
@@ -42,9 +43,9 @@ class GetTransfersHandler implements GetTransfers {
                                TransfersService transfersService,
                                FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert transfersService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(transfersService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.transfersService = transfersService;

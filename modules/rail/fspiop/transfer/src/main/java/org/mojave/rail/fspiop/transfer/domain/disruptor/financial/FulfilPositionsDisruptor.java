@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPos
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class FulfilPositionsDisruptor {
 
@@ -66,7 +67,7 @@ public class FulfilPositionsDisruptor {
 
         public Handler(FulfilPositionsStep fulfilPositionsStep) {
 
-            assert fulfilPositionsStep != null;
+            Objects.requireNonNull(fulfilPositionsStep);
 
             this.fulfilPositionsStep = fulfilPositionsStep;
         }

@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 public class UnwrapRequestStepHandler implements UnwrapRequestStep {
@@ -46,7 +47,7 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
 
     public UnwrapRequestStepHandler(AgreementUnwrapper agreementUnwrapper) {
 
-        assert agreementUnwrapper != null;
+        Objects.requireNonNull(agreementUnwrapper);
 
         this.agreementUnwrapper = agreementUnwrapper;
     }

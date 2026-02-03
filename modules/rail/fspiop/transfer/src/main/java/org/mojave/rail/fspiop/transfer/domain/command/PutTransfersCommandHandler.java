@@ -60,6 +60,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 public class PutTransfersCommandHandler implements PutTransfersCommand {
@@ -109,19 +110,19 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       PatchTransferToPayeeStep patchTransferToPayeeStep,
                                       RespondTransfers respondTransfers) {
 
-        assert participantStore != null;
-        assert fetchTransferStep != null;
-        assert abortTransferStepPublisher != null;
-        assert commitTransferStepPublisher != null;
-        assert disputeTransferStepPublisher != null;
-        assert fulfilPositionsStep != null;
-        assert rollbackReservationStepPublisher != null;
-        assert postLedgerFlowStep != null;
-        assert unwrapResponseStep != null;
-        assert commitTransferToPayerStep != null;
-        assert forwardToDestinationStep != null;
-        assert patchTransferToPayeeStep != null;
-        assert respondTransfers != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(fetchTransferStep);
+        Objects.requireNonNull(abortTransferStepPublisher);
+        Objects.requireNonNull(commitTransferStepPublisher);
+        Objects.requireNonNull(disputeTransferStepPublisher);
+        Objects.requireNonNull(fulfilPositionsStep);
+        Objects.requireNonNull(rollbackReservationStepPublisher);
+        Objects.requireNonNull(postLedgerFlowStep);
+        Objects.requireNonNull(unwrapResponseStep);
+        Objects.requireNonNull(commitTransferToPayerStep);
+        Objects.requireNonNull(forwardToDestinationStep);
+        Objects.requireNonNull(patchTransferToPayeeStep);
+        Objects.requireNonNull(respondTransfers);
 
         this.participantStore = participantStore;
         this.fetchTransferStep = fetchTransferStep;

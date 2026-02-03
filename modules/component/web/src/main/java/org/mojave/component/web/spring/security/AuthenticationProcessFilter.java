@@ -34,6 +34,7 @@ import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.io.IOException;
+import java.util.Objects;
 
 class AuthenticationProcessFilter extends OncePerRequestFilter {
 
@@ -46,8 +47,8 @@ class AuthenticationProcessFilter extends OncePerRequestFilter {
     public AuthenticationProcessFilter(Authenticator authenticator,
                                        SpringSecurityConfigurer.Settings settings) {
 
-        assert authenticator != null;
-        assert settings != null;
+        Objects.requireNonNull(authenticator);
+        Objects.requireNonNull(settings);
 
         this.authenticator = authenticator;
 

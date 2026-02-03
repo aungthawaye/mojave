@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.AbortTrans
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class AbortTransferDisruptor {
 
@@ -67,7 +68,7 @@ public class AbortTransferDisruptor {
 
         public Handler(AbortTransferStep abortTransferStep) {
 
-            assert abortTransferStep != null;
+            Objects.requireNonNull(abortTransferStep);
 
             this.abortTransferStep = abortTransferStep;
         }

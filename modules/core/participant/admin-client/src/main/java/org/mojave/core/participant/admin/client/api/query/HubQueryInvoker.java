@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class HubQueryInvoker implements HubQuery {
@@ -45,8 +46,8 @@ public class HubQueryInvoker implements HubQuery {
     public HubQueryInvoker(final ParticipantAdminService.HubQuery hubQuery,
                            final ObjectMapper objectMapper) {
 
-        assert hubQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(hubQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.hubQuery = hubQuery;
         this.objectMapper = objectMapper;

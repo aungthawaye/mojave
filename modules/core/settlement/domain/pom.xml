@@ -31,5 +31,9 @@
             <groupId>org.mojave.scheme.fspiop</groupId>
             <artifactId>mojave-scheme-fspiop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mojave.core.settlement</groupId>
+            <artifactId>mojave-core-settlement-contract</artifactId>
+        </dependency>
     </dependencies>
 </project>

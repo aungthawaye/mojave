@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -111,7 +112,7 @@ public class Hub extends JpaEntity<HubId>
 
     public Hub(final String name) {
 
-        assert name != null;
+        Objects.requireNonNull(name);
 
         this.id = new HubId();
         this.name(name);
@@ -120,7 +121,7 @@ public class Hub extends JpaEntity<HubId>
 
     public boolean activateCurrency(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         final var optSupportedCurrency = this.currencies
                                        .stream()
@@ -139,7 +140,7 @@ public class Hub extends JpaEntity<HubId>
 
     public HubCurrency addCurrency(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         if (this.isCurrencySupported(currency)) {
 
@@ -166,7 +167,7 @@ public class Hub extends JpaEntity<HubId>
 
     public Optional<HubCurrency> deactivate(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         final var optSupportedCurrency = this.currencies
                                        .stream()
@@ -192,7 +193,7 @@ public class Hub extends JpaEntity<HubId>
 
     public boolean isCurrencySupported(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         return this.currencies
                    .stream()
@@ -201,7 +202,7 @@ public class Hub extends JpaEntity<HubId>
 
     public Hub name(final String name) {
 
-        assert name != null;
+        Objects.requireNonNull(name);
 
         final var value = name.trim();
 

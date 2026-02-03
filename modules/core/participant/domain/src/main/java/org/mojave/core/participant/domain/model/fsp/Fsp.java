@@ -68,6 +68,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -153,9 +154,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public Fsp(final Hub hub, final FspCode code, final String name) {
 
-        assert hub != null;
-        assert code != null;
-        assert name != null;
+        Objects.requireNonNull(hub);
+        Objects.requireNonNull(code);
+        Objects.requireNonNull(name);
 
         this.id = new FspId(Snowflake.get().nextId());
         this.hub = hub;
@@ -205,7 +206,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public FspCurrency addCurrency(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         final var supportedCurrency = new FspCurrency(this, currency);
 
@@ -216,8 +217,8 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public FspEndpoint addEndpoint(final EndpointType type, final String host) {
 
-        assert type != null;
-        assert host != null;
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(host);
 
         final var endpoint = new FspEndpoint(this, type, host);
 
@@ -228,8 +229,8 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public Optional<FspEndpoint> changeEndpoint(final EndpointType type, final String baseUrl) {
 
-        assert type != null;
-        assert baseUrl != null;
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(baseUrl);
 
         final var optEndpoint = this.endpoints
                               .stream()
@@ -270,7 +271,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public Optional<FspCurrency> deactivate(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         final var optSupportedCurrency = this.currencies
                                        .stream()
@@ -289,7 +290,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public Optional<FspEndpoint> deactivate(final EndpointType type) {
 
-        assert type != null;
+        Objects.requireNonNull(type);
 
         final var optEndpoint = this.endpoints
                               .stream()
@@ -346,7 +347,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public boolean hasEndpoint(final EndpointType type) {
 
-        assert type != null;
+        Objects.requireNonNull(type);
 
         return this.endpoints.stream().anyMatch(fspEndpoint -> fspEndpoint.getType() == type);
     }
@@ -358,7 +359,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public boolean isCurrencySupported(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         return this.currencies
                    .stream()

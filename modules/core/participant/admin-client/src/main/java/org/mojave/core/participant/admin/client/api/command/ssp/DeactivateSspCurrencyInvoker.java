@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class DeactivateSspCurrencyInvoker implements DeactivateSspCurrencyCommand {
@@ -42,8 +43,8 @@ public class DeactivateSspCurrencyInvoker implements DeactivateSspCurrencyComman
     public DeactivateSspCurrencyInvoker(final ParticipantAdminService.SspCommand sspCommand,
                                         final ObjectMapper objectMapper) {
 
-        assert sspCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(sspCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.sspCommand = sspCommand;
         this.objectMapper = objectMapper;

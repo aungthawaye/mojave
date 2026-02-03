@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class WithdrawFundController {
@@ -37,7 +38,7 @@ public class WithdrawFundController {
 
     public WithdrawFundController(final WithdrawFundCommand withdrawFundCommand) {
 
-        assert withdrawFundCommand != null;
+        Objects.requireNonNull(withdrawFundCommand);
 
         this.withdrawFundCommand = withdrawFundCommand;
     }

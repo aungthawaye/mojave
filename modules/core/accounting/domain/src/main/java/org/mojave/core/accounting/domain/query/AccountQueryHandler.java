@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class AccountQueryHandler implements AccountQuery {
@@ -47,7 +48,7 @@ public class AccountQueryHandler implements AccountQuery {
 
     public AccountQueryHandler(AccountRepository accountRepository) {
 
-        assert accountRepository != null;
+        Objects.requireNonNull(accountRepository);
 
         this.accountRepository = accountRepository;
     }

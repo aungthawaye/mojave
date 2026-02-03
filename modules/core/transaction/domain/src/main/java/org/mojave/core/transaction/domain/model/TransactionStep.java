@@ -47,6 +47,7 @@ import org.mojave.core.common.datatype.identifier.transaction.TransactionStepId;
 import org.mojave.core.transaction.contract.data.TransactionStepData;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -110,9 +111,9 @@ public class TransactionStep extends JpaEntity<TransactionStepId>
                            String context,
                            String payload) {
 
-        assert transaction != null;
-        assert phase != null;
-        assert name != null;
+        Objects.requireNonNull(transaction);
+        Objects.requireNonNull(phase);
+        Objects.requireNonNull(name);
 
         this.id = new TransactionStepId(Snowflake.get().nextId());
         this.phase = phase;

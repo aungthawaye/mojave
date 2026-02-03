@@ -32,6 +32,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 public final class Jackson3ConverterFactory extends Converter.Factory {
 
@@ -41,7 +42,7 @@ public final class Jackson3ConverterFactory extends Converter.Factory {
 
     private Jackson3ConverterFactory(ObjectMapper objectMapper) {
 
-        assert objectMapper != null;
+        Objects.requireNonNull(objectMapper);
 
         this.objectMapper = objectMapper;
     }

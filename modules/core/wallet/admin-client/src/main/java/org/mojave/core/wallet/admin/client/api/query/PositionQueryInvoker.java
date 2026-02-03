@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class PositionQueryInvoker implements PositionQuery {
@@ -42,8 +43,8 @@ public class PositionQueryInvoker implements PositionQuery {
     public PositionQueryInvoker(final WalletAdminService.PositionQuery positionQuery,
                                 final ObjectMapper objectMapper) {
 
-        assert positionQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(positionQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.positionQuery = positionQuery;
         this.objectMapper = objectMapper;

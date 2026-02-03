@@ -63,6 +63,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -176,14 +177,16 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
                    OverdraftMode overdraftMode,
                    BigDecimal overdraftLimit) {
 
-        assert chartEntry != null;
-        assert ownerId != null;
-        assert currency != null;
-        assert code != null;
-        assert name != null;
-        assert description != null;
-        assert overdraftMode != null;
-        assert overdraftMode != OverdraftMode.LIMITED || overdraftLimit != null;
+        Objects.requireNonNull(chartEntry);
+        Objects.requireNonNull(ownerId);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(code);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(description);
+        Objects.requireNonNull(overdraftMode);
+        if (overdraftMode == OverdraftMode.LIMITED && overdraftLimit == null) {
+            throw new IllegalArgumentException("overdraftLimit must not be null when overdraftMode is LIMITED");
+        }
 
         this.id = new AccountId(Snowflake.get().nextId());
         this.chartEntryId = chartEntry.getId();

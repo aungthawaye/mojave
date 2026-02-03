@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class HandleTransfersController {
@@ -62,8 +63,8 @@ public class HandleTransfersController {
     public HandleTransfersController(EventPublisher eventPublisher,
                                      HandlePatchTransfersCommand handlePatchTransfersCommand) {
 
-        assert eventPublisher != null;
-        assert handlePatchTransfersCommand != null;
+        Objects.requireNonNull(eventPublisher);
+        Objects.requireNonNull(handlePatchTransfersCommand);
 
         this.eventPublisher = eventPublisher;
         this.handlePatchTransfersCommand = handlePatchTransfersCommand;

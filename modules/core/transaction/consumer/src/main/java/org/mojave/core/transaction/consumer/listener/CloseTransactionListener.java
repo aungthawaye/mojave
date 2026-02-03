@@ -29,6 +29,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class CloseTransactionListener {
@@ -45,7 +46,7 @@ public class CloseTransactionListener {
 
     public CloseTransactionListener(CloseTransactionCommand closeTransactionCommand) {
 
-        assert closeTransactionCommand != null;
+        Objects.requireNonNull(closeTransactionCommand);
 
         this.closeTransactionCommand = closeTransactionCommand;
     }

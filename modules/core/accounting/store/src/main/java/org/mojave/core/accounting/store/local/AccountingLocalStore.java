@@ -42,6 +42,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Component
 public class AccountingLocalStore implements AccountingStore {
@@ -59,8 +60,8 @@ public class AccountingLocalStore implements AccountingStore {
     public AccountingLocalStore(AccountQuery accountQuery,
                                 AccountingStoreConfiguration.Settings accountingStoreSettings) {
 
-        assert accountQuery != null;
-        assert accountingStoreSettings != null;
+        Objects.requireNonNull(accountQuery);
+        Objects.requireNonNull(accountingStoreSettings);
 
         this.accountQuery = accountQuery;
         this.accountingStoreSettings = accountingStoreSettings;

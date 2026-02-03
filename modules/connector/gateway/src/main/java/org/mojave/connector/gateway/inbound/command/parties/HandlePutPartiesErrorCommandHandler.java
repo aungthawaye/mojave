@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorCommand {
@@ -37,7 +38,7 @@ class HandlePutPartiesErrorCommandHandler implements HandlePutPartiesErrorComman
 
     public HandlePutPartiesErrorCommandHandler(PubSubClient pubSubClient) {
 
-        assert null != pubSubClient;
+        Objects.requireNonNull(pubSubClient);
 
         this.pubSubClient = pubSubClient;
     }

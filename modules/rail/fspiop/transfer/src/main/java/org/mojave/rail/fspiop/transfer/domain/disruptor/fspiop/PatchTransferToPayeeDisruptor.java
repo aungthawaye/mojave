@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.PatchTransferT
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class PatchTransferToPayeeDisruptor {
 
@@ -67,7 +68,7 @@ public class PatchTransferToPayeeDisruptor {
 
         public Handler(PatchTransferToPayeeStepHandler patchTransferToPayeeStepHandler) {
 
-            assert patchTransferToPayeeStepHandler != null;
+            Objects.requireNonNull(patchTransferToPayeeStepHandler);
 
             this.patchTransferToPayeeStepHandler = patchTransferToPayeeStepHandler;
         }

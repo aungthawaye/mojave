@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class OracleQueryController {
@@ -43,7 +44,7 @@ public class OracleQueryController {
 
     public OracleQueryController(OracleQuery oracleQuery) {
 
-        assert oracleQuery != null;
+        Objects.requireNonNull(oracleQuery);
         this.oracleQuery = oracleQuery;
     }
 

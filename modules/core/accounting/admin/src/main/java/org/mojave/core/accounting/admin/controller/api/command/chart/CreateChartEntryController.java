@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class CreateChartEntryController {
@@ -42,7 +43,7 @@ public class CreateChartEntryController {
 
     public CreateChartEntryController(CreateChartEntryCommand createChartEntryCommand) {
 
-        assert createChartEntryCommand != null;
+        Objects.requireNonNull(createChartEntryCommand);
 
         this.createChartEntryCommand = createChartEntryCommand;
     }

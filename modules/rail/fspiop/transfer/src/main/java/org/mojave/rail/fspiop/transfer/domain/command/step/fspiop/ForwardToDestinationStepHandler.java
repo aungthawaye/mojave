@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class ForwardToDestinationStepHandler implements ForwardToDestinationStep {
@@ -40,7 +41,7 @@ public class ForwardToDestinationStepHandler implements ForwardToDestinationStep
 
     public ForwardToDestinationStepHandler(ForwardRequest forwardRequest) {
 
-        assert forwardRequest != null;
+        Objects.requireNonNull(forwardRequest);
 
         this.forwardRequest = forwardRequest;
     }

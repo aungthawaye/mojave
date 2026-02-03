@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class ChangeFlowDefinitionPropertiesCommandHandler
@@ -41,7 +42,7 @@ public class ChangeFlowDefinitionPropertiesCommandHandler
 
     public ChangeFlowDefinitionPropertiesCommandHandler(final FlowDefinitionRepository flowDefinitionRepository) {
 
-        assert flowDefinitionRepository != null;
+        Objects.requireNonNull(flowDefinitionRepository);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
     }

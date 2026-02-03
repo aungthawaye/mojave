@@ -11,6 +11,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class DisputeTransferStepListener {
@@ -27,7 +28,7 @@ public class DisputeTransferStepListener {
 
     public DisputeTransferStepListener(DisputeTransferStep disputeTransferStep) {
 
-        assert disputeTransferStep != null;
+        Objects.requireNonNull(disputeTransferStep);
 
         this.disputeTransferStep = disputeTransferStep;
     }

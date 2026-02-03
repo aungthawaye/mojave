@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class FetchTransferStepHandler implements FetchTransferStep {
@@ -43,7 +44,7 @@ public class FetchTransferStepHandler implements FetchTransferStep {
 
     public FetchTransferStepHandler(TransferRepository transferRepository) {
 
-        assert transferRepository != null;
+        Objects.requireNonNull(transferRepository);
 
         this.transferRepository = transferRepository;
     }

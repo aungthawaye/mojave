@@ -22,6 +22,7 @@ package org.mojave.rail.fspiop.component.retrofit;
 import org.mojave.component.retrofit.RetrofitService;
 import org.mojave.scheme.fspiop.core.ErrorInformationResponse;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 public class FspiopErrorDecoder implements RetrofitService.ErrorDecoder<ErrorInformationResponse> {
 
@@ -29,7 +30,7 @@ public class FspiopErrorDecoder implements RetrofitService.ErrorDecoder<ErrorInf
 
     public FspiopErrorDecoder(ObjectMapper objectMapper) {
 
-        assert objectMapper != null;
+        Objects.requireNonNull(objectMapper);
 
         this.objectMapper = objectMapper;
     }

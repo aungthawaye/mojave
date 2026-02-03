@@ -29,6 +29,7 @@ import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReserv
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class RollbackReservationInvoker implements RollbackReservationCommand {
@@ -40,8 +41,8 @@ public class RollbackReservationInvoker implements RollbackReservationCommand {
     public RollbackReservationInvoker(final WalletIntercomService.PositionCommand positionCommand,
                                       final ObjectMapper objectMapper) {
 
-        assert positionCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(positionCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.positionCommand = positionCommand;
         this.objectMapper = objectMapper;

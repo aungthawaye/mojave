@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class OpenTransactionInvoker implements OpenTransactionCommand {
@@ -42,8 +43,8 @@ public class OpenTransactionInvoker implements OpenTransactionCommand {
     public OpenTransactionInvoker(final TransactionIntercomService transactionIntercomService,
                                   final ObjectMapper objectMapper) {
 
-        assert transactionIntercomService != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(transactionIntercomService);
+        Objects.requireNonNull(objectMapper);
 
         this.transactionIntercomService = transactionIntercomService;
         this.objectMapper = objectMapper;

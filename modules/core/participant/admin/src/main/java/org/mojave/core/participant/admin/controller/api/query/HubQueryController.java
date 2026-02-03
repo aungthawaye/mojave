@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class HubQueryController {
@@ -41,7 +42,7 @@ public class HubQueryController {
 
     public HubQueryController(HubQuery hubQuery) {
 
-        assert hubQuery != null;
+        Objects.requireNonNull(hubQuery);
 
         this.hubQuery = hubQuery;
     }

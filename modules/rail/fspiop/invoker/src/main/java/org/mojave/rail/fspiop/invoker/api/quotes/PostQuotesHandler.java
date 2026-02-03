@@ -29,6 +29,7 @@ import org.mojave.rail.fspiop.component.retrofit.FspiopInvocationExceptionResolv
 import org.mojave.rail.fspiop.invoker.api.QuotesService;
 import org.mojave.scheme.fspiop.core.QuotesPostRequest;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class PostQuotesHandler implements PostQuotes {
@@ -43,9 +44,9 @@ class PostQuotesHandler implements PostQuotes {
                              QuotesService quotesService,
                              FspiopErrorDecoder fspiopErrorDecoder) {
 
-        assert participantContext != null;
-        assert quotesService != null;
-        assert fspiopErrorDecoder != null;
+        Objects.requireNonNull(participantContext);
+        Objects.requireNonNull(quotesService);
+        Objects.requireNonNull(fspiopErrorDecoder);
 
         this.participantContext = participantContext;
         this.quotesService = quotesService;

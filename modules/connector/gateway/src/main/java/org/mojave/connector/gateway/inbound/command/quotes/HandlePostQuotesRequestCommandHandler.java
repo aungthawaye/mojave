@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class HandlePostQuotesRequestCommandHandler implements HandlePostQuotesRequestCommand {
@@ -42,8 +43,8 @@ class HandlePostQuotesRequestCommandHandler implements HandlePostQuotesRequestCo
     public HandlePostQuotesRequestCommandHandler(FspCoreAdapter fspCoreAdapter,
                                                  PutQuotes putQuotes) {
 
-        assert fspCoreAdapter != null;
-        assert putQuotes != null;
+        Objects.requireNonNull(fspCoreAdapter);
+        Objects.requireNonNull(putQuotes);
 
         this.fspCoreAdapter = fspCoreAdapter;
         this.putQuotes = putQuotes;

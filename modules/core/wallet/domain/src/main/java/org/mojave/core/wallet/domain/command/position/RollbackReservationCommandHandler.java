@@ -28,6 +28,7 @@ import org.mojave.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class RollbackReservationCommandHandler implements RollbackReservationCommand {
@@ -39,7 +40,7 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
 
     public RollbackReservationCommandHandler(final PositionUpdater positionUpdater) {
 
-        assert positionUpdater != null;
+        Objects.requireNonNull(positionUpdater);
         this.positionUpdater = positionUpdater;
     }
 

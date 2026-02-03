@@ -11,6 +11,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AbortTransferStepListener {
@@ -27,7 +28,7 @@ public class AbortTransferStepListener {
 
     public AbortTransferStepListener(AbortTransferStep abortTransferStep) {
 
-        assert abortTransferStep != null;
+        Objects.requireNonNull(abortTransferStep);
 
         this.abortTransferStep = abortTransferStep;
     }

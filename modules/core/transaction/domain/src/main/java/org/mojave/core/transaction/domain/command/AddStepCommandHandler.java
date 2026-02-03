@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class AddStepCommandHandler implements AddStepCommand {
@@ -38,7 +39,7 @@ public class AddStepCommandHandler implements AddStepCommand {
 
     public AddStepCommandHandler(TransactionRepository transactionRepository) {
 
-        assert transactionRepository != null;
+        Objects.requireNonNull(transactionRepository);
         this.transactionRepository = transactionRepository;
     }
 

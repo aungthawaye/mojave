@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
@@ -42,7 +43,7 @@ public class ChangeOracleTypeCommandHandler implements ChangeOracleTypeCommand {
 
     public ChangeOracleTypeCommandHandler(OracleRepository oracleRepository) {
 
-        assert oracleRepository != null;
+        Objects.requireNonNull(oracleRepository);
         this.oracleRepository = oracleRepository;
     }
 

@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionCommand {
@@ -52,9 +53,9 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
                                               final AccountCache accountCache,
                                               final ChartEntryCache chartEntryCache) {
 
-        assert flowDefinitionRepository != null;
-        assert accountCache != null;
-        assert chartEntryCache != null;
+        Objects.requireNonNull(flowDefinitionRepository);
+        Objects.requireNonNull(accountCache);
+        Objects.requireNonNull(chartEntryCache);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
         this.accountCache = accountCache;

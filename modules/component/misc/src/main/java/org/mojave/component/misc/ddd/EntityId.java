@@ -32,7 +32,7 @@ public abstract class EntityId<T> {
 
     public EntityId(T id) {
 
-        assert id != null;
+        Objects.requireNonNull(id);
         this.id = id;
     }
 

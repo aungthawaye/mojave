@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResponseCommand {
@@ -38,7 +39,7 @@ class HandlePutTransfersResponseCommandHandler implements HandlePutTransfersResp
 
     public HandlePutTransfersResponseCommandHandler(PubSubClient pubSubClient) {
 
-        assert null != pubSubClient;
+        Objects.requireNonNull(pubSubClient);
 
         this.pubSubClient = pubSubClient;
     }

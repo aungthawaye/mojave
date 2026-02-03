@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.component.web.error;
 
 import org.mojave.component.misc.error.RestErrorResponse;
@@ -79,7 +80,7 @@ public class RestErrorControllerAdvice {
 
         return new ResponseEntity<>(
             new RestErrorResponse("ARGUMENT_NOT_VALID", errors.toString(), extra),
-            HttpStatus.UNPROCESSABLE_ENTITY);
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -89,7 +90,7 @@ public class RestErrorControllerAdvice {
 
         return new ResponseEntity<>(
             new RestErrorResponse("ARGUMENT_TYPE_MISMATCH", e.getMessage(), Map.of()),
-            HttpStatus.UNPROCESSABLE_ENTITY);
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -109,7 +110,7 @@ public class RestErrorControllerAdvice {
 
         return new ResponseEntity<>(
             new RestErrorResponse("MESSAGE_NOT_READABLE", e.getMessage(), Map.of()),
-            HttpStatus.UNPROCESSABLE_ENTITY);
+            HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -149,7 +150,7 @@ public class RestErrorControllerAdvice {
 
         return new ResponseEntity<>(
             new RestErrorResponse("BINDING_FAILED", e.getMessage(), Map.of()),
-            HttpStatus.UNPROCESSABLE_ENTITY);
+            HttpStatus.BAD_REQUEST);
     }
 
 }

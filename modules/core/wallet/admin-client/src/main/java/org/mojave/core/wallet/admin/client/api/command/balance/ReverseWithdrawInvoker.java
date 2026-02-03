@@ -28,6 +28,7 @@ import org.mojave.core.wallet.contract.exception.WalletExceptionResolver;
 import org.mojave.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class ReverseWithdrawInvoker implements ReverseWithdrawCommand {
@@ -39,8 +40,8 @@ public class ReverseWithdrawInvoker implements ReverseWithdrawCommand {
     public ReverseWithdrawInvoker(final WalletAdminService.BalanceCommand balanceCommand,
                                   final ObjectMapper objectMapper) {
 
-        assert balanceCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(balanceCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.balanceCommand = balanceCommand;
         this.objectMapper = objectMapper;

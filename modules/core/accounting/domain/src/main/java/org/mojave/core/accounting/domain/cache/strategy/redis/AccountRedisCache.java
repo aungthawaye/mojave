@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 public class AccountRedisCache implements AccountCache {
 
@@ -54,8 +55,8 @@ public class AccountRedisCache implements AccountCache {
     public AccountRedisCache(AccountRepository accountRepository,
                              RedissonOpsClient redissonOpsClient) {
 
-        assert accountRepository != null;
-        assert redissonOpsClient != null;
+        Objects.requireNonNull(accountRepository);
+        Objects.requireNonNull(redissonOpsClient);
 
         this.accountRepository = accountRepository;
 

@@ -24,6 +24,7 @@ import org.mojave.rail.fspiop.lookup.service.controller.event.GetPartiesEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class GetPartiesEventListener {
@@ -32,7 +33,7 @@ public class GetPartiesEventListener {
 
     public GetPartiesEventListener(GetPartiesCommand getParties) {
 
-        assert getParties != null;
+        Objects.requireNonNull(getParties);
 
         this.getParties = getParties;
     }

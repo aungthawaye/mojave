@@ -24,6 +24,7 @@ import org.mojave.core.accounting.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class PostLedgerFlowPublisher {
@@ -35,7 +36,7 @@ public class PostLedgerFlowPublisher {
     public PostLedgerFlowPublisher(
         @Qualifier(QUALIFIER) KafkaTemplate<String, PostLedgerFlowCommand.Input> kafkaTemplate) {
 
-        assert kafkaTemplate != null;
+        Objects.requireNonNull(kafkaTemplate);
 
         this.kafkaTemplate = kafkaTemplate;
     }

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class DeactivateAccountCommandHandler implements DeactivateAccountCommand {
@@ -39,7 +40,7 @@ public class DeactivateAccountCommandHandler implements DeactivateAccountCommand
 
     public DeactivateAccountCommandHandler(AccountRepository accountRepository) {
 
-        assert accountRepository != null;
+        Objects.requireNonNull(accountRepository);
         this.accountRepository = accountRepository;
     }
 

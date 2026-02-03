@@ -27,6 +27,7 @@ import org.mojave.core.wallet.contract.command.balance.CreateBalanceCommand;
 import org.mojave.core.wallet.contract.exception.WalletExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class CreateBalanceInvoker implements CreateBalanceCommand {
@@ -38,8 +39,8 @@ public class CreateBalanceInvoker implements CreateBalanceCommand {
     public CreateBalanceInvoker(final WalletAdminService.BalanceCommand balanceCommand,
                                 final ObjectMapper objectMapper) {
 
-        assert balanceCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(balanceCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.balanceCommand = balanceCommand;
         this.objectMapper = objectMapper;

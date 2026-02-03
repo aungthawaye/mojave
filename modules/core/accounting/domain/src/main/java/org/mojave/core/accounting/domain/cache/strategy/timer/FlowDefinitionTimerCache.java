@@ -36,6 +36,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class FlowDefinitionTimerCache implements FlowDefinitionCache {
 
@@ -52,8 +53,10 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
     public FlowDefinitionTimerCache(final FlowDefinitionRepository flowDefinitionRepository,
                                     final int interval) {
 
-        assert flowDefinitionRepository != null;
-        assert interval > 0;
+        Objects.requireNonNull(flowDefinitionRepository);
+        if (interval <= 0) {
+            throw new IllegalArgumentException("interval must be greater than 0");
+        }
 
         this.flowDefinitionRepository = flowDefinitionRepository;
         this.interval = interval;

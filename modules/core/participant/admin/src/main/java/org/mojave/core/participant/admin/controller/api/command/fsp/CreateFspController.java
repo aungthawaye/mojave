@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class CreateFspController {
@@ -45,7 +46,7 @@ public class CreateFspController {
 
     public CreateFspController(CreateFspCommand createFspCommand) {
 
-        assert createFspCommand != null;
+        Objects.requireNonNull(createFspCommand);
 
         this.createFspCommand = createFspCommand;
     }

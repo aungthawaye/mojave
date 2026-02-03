@@ -30,6 +30,7 @@ import org.mojave.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
 import org.mojave.core.wallet.domain.repository.PositionRepository;
 import org.springframework.context.annotation.Bean;
+import java.util.Objects;
 
 public class WalletConsumerDependencies
     implements WalletConsumerConfiguration.RequiredDependencies {
@@ -45,8 +46,8 @@ public class WalletConsumerDependencies
     public WalletConsumerDependencies(BalanceRepository balanceRepository,
                                       PositionRepository positionRepository) {
 
-        assert balanceRepository != null;
-        assert positionRepository != null;
+        Objects.requireNonNull(balanceRepository);
+        Objects.requireNonNull(positionRepository);
 
         this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
             new MySqlBalanceUpdater.BalanceDbSettings.Connection(

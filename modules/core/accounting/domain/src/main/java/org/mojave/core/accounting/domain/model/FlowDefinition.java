@@ -58,6 +58,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -140,9 +141,9 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                           String name,
                           String description) {
 
-        assert transactionType != null;
-        assert currency != null;
-        assert name != null;
+        Objects.requireNonNull(transactionType);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(name);
 
         this.id = new FlowDefinitionId(Snowflake.get().nextId());
         this.transactionType = transactionType;
@@ -192,7 +193,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
 
     public FlowDefinition currency(Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         this.currency = currency;
 
@@ -251,7 +252,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
 
     public void removePosting(PostingDefinitionId postingDefinitionId) {
 
-        assert postingDefinitionId != null;
+        Objects.requireNonNull(postingDefinitionId);
 
         if (this.postings.stream().noneMatch(p -> p.getId().equals(postingDefinitionId))) {
 

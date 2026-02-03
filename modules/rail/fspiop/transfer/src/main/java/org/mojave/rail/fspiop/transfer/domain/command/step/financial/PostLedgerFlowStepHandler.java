@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Service
 public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
@@ -47,7 +48,7 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
 
     public PostLedgerFlowStepHandler(PostLedgerFlowPublisher postLedgerFlowPublisher) {
 
-        assert postLedgerFlowPublisher != null;
+        Objects.requireNonNull(postLedgerFlowPublisher);
 
         this.postLedgerFlowPublisher = postLedgerFlowPublisher;
     }

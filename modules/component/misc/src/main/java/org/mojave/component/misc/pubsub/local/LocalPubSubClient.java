@@ -21,6 +21,7 @@ package org.mojave.component.misc.pubsub.local;
 
 import org.mojave.component.misc.pubsub.PubSubClient;
 import reactor.core.Disposable;
+import java.util.Objects;
 
 public class LocalPubSubClient implements PubSubClient {
 
@@ -28,7 +29,7 @@ public class LocalPubSubClient implements PubSubClient {
 
     public LocalPubSubClient(LocalPubSub pubSub) {
 
-        assert pubSub != null;
+        Objects.requireNonNull(pubSub);
 
         this.pubSub = pubSub;
     }

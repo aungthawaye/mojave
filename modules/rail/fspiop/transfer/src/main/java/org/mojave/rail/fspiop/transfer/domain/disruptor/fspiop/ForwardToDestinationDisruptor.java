@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDes
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class ForwardToDestinationDisruptor {
 
@@ -67,7 +68,7 @@ public class ForwardToDestinationDisruptor {
 
         public Handler(ForwardToDestinationStep forwardToDestinationStep) {
 
-            assert forwardToDestinationStep != null;
+            Objects.requireNonNull(forwardToDestinationStep);
 
             this.forwardToDestinationStep = forwardToDestinationStep;
         }

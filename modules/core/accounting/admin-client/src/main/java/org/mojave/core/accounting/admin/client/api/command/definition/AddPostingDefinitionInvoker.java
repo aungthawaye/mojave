@@ -27,6 +27,7 @@ import org.mojave.core.accounting.contract.command.definition.AddPostingDefiniti
 import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class AddPostingDefinitionInvoker implements AddPostingDefinitionCommand {
@@ -38,8 +39,8 @@ public class AddPostingDefinitionInvoker implements AddPostingDefinitionCommand 
     public AddPostingDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
                                        final ObjectMapper objectMapper) {
 
-        assert definitionCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(definitionCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.definitionCommand = definitionCommand;
         this.objectMapper = objectMapper;

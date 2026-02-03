@@ -38,6 +38,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @EnableAutoConfiguration(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableAsync
@@ -62,8 +63,8 @@ public class ConnectorOutboundConfiguration implements MiscConfiguration.Require
     public ConnectorOutboundConfiguration(OutboundSettings outboundSettings,
                                           ObjectMapper objectMapper) {
 
-        assert outboundSettings != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(outboundSettings);
+        Objects.requireNonNull(objectMapper);
 
         this.outboundSettings = outboundSettings;
         this.objectMapper = objectMapper;

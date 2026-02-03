@@ -34,6 +34,7 @@ import org.mojave.rail.fspiop.bootstrap.api.parties.RespondParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
@@ -51,9 +52,9 @@ public class PutPartiesErrorCommandHandler implements PutPartiesErrorCommand {
                                          RespondParties respondParties,
                                          ForwardRequest forwardRequest) {
 
-        assert participantStore != null;
-        assert respondParties != null;
-        assert forwardRequest != null;
+        Objects.requireNonNull(participantStore);
+        Objects.requireNonNull(respondParties);
+        Objects.requireNonNull(forwardRequest);
 
         this.participantStore = participantStore;
         this.respondParties = respondParties;

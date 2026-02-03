@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class PostQuotesEventListener {
@@ -36,7 +37,7 @@ public class PostQuotesEventListener {
 
     public PostQuotesEventListener(HandlePostQuotesRequestCommand handleQuotesRequest) {
 
-        assert null != handleQuotesRequest;
+        Objects.requireNonNull(handleQuotesRequest);
 
         this.handleQuotesRequest = handleQuotesRequest;
     }
@@ -47,7 +48,7 @@ public class PostQuotesEventListener {
 
         var payload = event.getPayload();
 
-        assert null != payload;
+        Objects.requireNonNull(payload);
 
         try {
 

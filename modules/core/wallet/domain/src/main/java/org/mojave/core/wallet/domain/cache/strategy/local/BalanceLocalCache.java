@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 public class BalanceLocalCache implements BalanceCache {
 
@@ -45,7 +46,7 @@ public class BalanceLocalCache implements BalanceCache {
 
     public BalanceLocalCache(final BalanceRepository balanceRepository) {
 
-        assert balanceRepository != null;
+        Objects.requireNonNull(balanceRepository);
 
         this.balanceRepository = balanceRepository;
 

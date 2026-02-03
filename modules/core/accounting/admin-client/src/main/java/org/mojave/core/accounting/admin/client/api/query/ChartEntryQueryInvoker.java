@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ChartEntryQueryInvoker implements ChartEntryQuery {
@@ -47,8 +48,8 @@ public class ChartEntryQueryInvoker implements ChartEntryQuery {
     public ChartEntryQueryInvoker(final AccountingAdminService.ChartQuery chartQuery,
                                   final ObjectMapper objectMapper) {
 
-        assert chartQuery != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(chartQuery);
+        Objects.requireNonNull(objectMapper);
 
         this.chartQuery = chartQuery;
         this.objectMapper = objectMapper;

@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersRequestCommand {
@@ -41,8 +42,8 @@ class HandlePostTransfersRequestCommandHandler implements HandlePostTransfersReq
     public HandlePostTransfersRequestCommandHandler(FspCoreAdapter fspCoreAdapter,
                                                     PutTransfers putTransfers) {
 
-        assert fspCoreAdapter != null;
-        assert putTransfers != null;
+        Objects.requireNonNull(fspCoreAdapter);
+        Objects.requireNonNull(putTransfers);
 
         this.fspCoreAdapter = fspCoreAdapter;
         this.putTransfers = putTransfers;

@@ -30,6 +30,7 @@ import org.mojave.core.common.datatype.enums.Currency;
 import org.redisson.api.RMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 public class FlowDefinitionRedisCache implements FlowDefinitionCache {
 
@@ -44,8 +45,8 @@ public class FlowDefinitionRedisCache implements FlowDefinitionCache {
     public FlowDefinitionRedisCache(final FlowDefinitionRepository flowDefinitionRepository,
                                     final RedissonOpsClient redissonOpsClient) {
 
-        assert flowDefinitionRepository != null;
-        assert redissonOpsClient != null;
+        Objects.requireNonNull(flowDefinitionRepository);
+        Objects.requireNonNull(redissonOpsClient);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
 

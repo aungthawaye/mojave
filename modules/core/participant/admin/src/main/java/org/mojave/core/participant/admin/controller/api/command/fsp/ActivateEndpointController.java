@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class ActivateEndpointController {
@@ -39,7 +40,7 @@ public class ActivateEndpointController {
 
     public ActivateEndpointController(ActivateEndpointCommand activateEndpointCommand) {
 
-        assert activateEndpointCommand != null;
+        Objects.requireNonNull(activateEndpointCommand);
 
         this.activateEndpointCommand = activateEndpointCommand;
     }

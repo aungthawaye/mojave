@@ -46,6 +46,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FspiopOutboundGatekeeper implements Authenticator {
 
@@ -57,7 +58,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
     public FspiopOutboundGatekeeper(ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
-        assert outboundSettings != null;
+        Objects.requireNonNull(outboundSettings);
 
         this.outboundSettings = outboundSettings;
 
@@ -135,7 +136,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
         public ErrorWriter(ObjectMapper objectMapper) {
 
-            assert objectMapper != null;
+            Objects.requireNonNull(objectMapper);
 
             this.objectMapper = objectMapper;
         }
@@ -172,7 +173,7 @@ public class FspiopOutboundGatekeeper implements Authenticator {
 
             } catch (JsonProcessingException e) {
 
-                assert writer != null;
+                Objects.requireNonNull(writer);
 
                 String errorCode = FspiopErrors.GENERIC_SERVER_ERROR.errorType().getCode();
                 String errorDescription = FspiopErrors.GENERIC_SERVER_ERROR.description();

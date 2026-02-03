@@ -38,6 +38,7 @@ import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 class RequestQuotesCommandHandler implements RequestQuotesCommand {
@@ -55,9 +56,9 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
                                        PubSubClient pubSubClient,
                                        ConnectorOutboundConfiguration.OutboundSettings outboundSettings) {
 
-        assert null != postQuotes;
-        assert null != pubSubClient;
-        assert null != outboundSettings;
+        Objects.requireNonNull(postQuotes);
+        Objects.requireNonNull(pubSubClient);
+        Objects.requireNonNull(outboundSettings);
 
         this.postQuotes = postQuotes;
         this.pubSubClient = pubSubClient;
@@ -67,8 +68,8 @@ class RequestQuotesCommandHandler implements RequestQuotesCommand {
     @Override
     public Output execute(Input input) throws FspiopException {
 
-        assert input != null;
-        assert input.request() != null;
+        Objects.requireNonNull(input);
+        Objects.requireNonNull(input.request());
 
         final var quoteId = input.request().getQuoteId();
         MDC.put("REQ_ID", quoteId);

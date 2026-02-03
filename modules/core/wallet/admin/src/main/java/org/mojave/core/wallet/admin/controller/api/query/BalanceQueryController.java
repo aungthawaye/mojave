@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class BalanceQueryController {
@@ -45,7 +46,7 @@ public class BalanceQueryController {
 
     public BalanceQueryController(final BalanceQuery balanceQuery) {
 
-        assert balanceQuery != null;
+        Objects.requireNonNull(balanceQuery);
 
         this.balanceQuery = balanceQuery;
     }

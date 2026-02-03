@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.domain.command.step.stateful.CommitTransf
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class CommitTransferDisruptor {
 
@@ -67,7 +68,7 @@ public class CommitTransferDisruptor {
 
         public Handler(CommitTransferStepHandler commitTransferStepHandler) {
 
-            assert commitTransferStepHandler != null;
+            Objects.requireNonNull(commitTransferStepHandler);
 
             this.commitTransferStepHandler = commitTransferStepHandler;
         }

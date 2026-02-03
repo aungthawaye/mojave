@@ -38,10 +38,6 @@
             <artifactId>mojave-core-common-datatype-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.rail.fspiop</groupId>
-            <artifactId>mojave-rail-fspiop-component</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.scheme.fspiop</groupId>
             <artifactId>mojave-scheme-fspiop</artifactId>
         </dependency>

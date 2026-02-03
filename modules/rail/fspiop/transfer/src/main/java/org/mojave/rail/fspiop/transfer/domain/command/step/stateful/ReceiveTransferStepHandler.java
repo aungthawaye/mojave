@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 public class ReceiveTransferStepHandler implements ReceiveTransferStep {
@@ -56,9 +57,9 @@ public class ReceiveTransferStepHandler implements ReceiveTransferStep {
                                       TransferRepository transferRepository,
                                       TransferIlpPacketRepository transferIlpPacketRepository) {
 
-        assert transferSettings != null;
-        assert transferRepository != null;
-        assert transferIlpPacketRepository != null;
+        Objects.requireNonNull(transferSettings);
+        Objects.requireNonNull(transferRepository);
+        Objects.requireNonNull(transferIlpPacketRepository);
 
         this.transferSettings = transferSettings;
         this.transferRepository = transferRepository;

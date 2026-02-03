@@ -50,6 +50,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -123,8 +124,8 @@ public class Transaction extends JpaEntity<TransactionId>
 
     public Transaction(TransactionId transactionId, TransactionType type) {
 
-        assert transactionId != null;
-        assert type != null;
+        Objects.requireNonNull(transactionId);
+        Objects.requireNonNull(type);
 
         this.id = transactionId;
         this.type = type;

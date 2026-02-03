@@ -34,6 +34,7 @@ import org.mojave.core.wallet.domain.repository.PositionRepository;
 import org.mojave.core.wallet.intercom.controller.component.EmptyErrorWriter;
 import org.mojave.core.wallet.intercom.controller.component.EmptyGatekeeper;
 import org.springframework.context.annotation.Bean;
+import java.util.Objects;
 
 final class WalletIntercomDependencies implements WalletIntercomConfiguration.RequiredDependencies {
 
@@ -48,8 +49,8 @@ final class WalletIntercomDependencies implements WalletIntercomConfiguration.Re
     public WalletIntercomDependencies(BalanceRepository balanceRepository,
                                       PositionRepository positionRepository) {
 
-        assert balanceRepository != null;
-        assert positionRepository != null;
+        Objects.requireNonNull(balanceRepository);
+        Objects.requireNonNull(positionRepository);
 
         this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
             new MySqlBalanceUpdater.BalanceDbSettings.Connection(

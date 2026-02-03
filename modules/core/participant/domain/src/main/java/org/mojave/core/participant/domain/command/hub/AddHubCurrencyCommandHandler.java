@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -41,7 +42,7 @@ public class AddHubCurrencyCommandHandler implements AddHubCurrencyCommand {
 
     public AddHubCurrencyCommandHandler(HubRepository hubRepository) {
 
-        assert hubRepository != null;
+        Objects.requireNonNull(hubRepository);
         this.hubRepository = hubRepository;
     }
 

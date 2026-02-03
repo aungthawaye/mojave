@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 @RestController
 public class DeactivateEndpointController implements DeactivateEndpointCommand {
@@ -40,7 +41,7 @@ public class DeactivateEndpointController implements DeactivateEndpointCommand {
 
     public DeactivateEndpointController(DeactivateEndpointCommand deactivateEndpointCommand) {
 
-        assert deactivateEndpointCommand != null;
+        Objects.requireNonNull(deactivateEndpointCommand);
 
         this.deactivateEndpointCommand = deactivateEndpointCommand;
     }

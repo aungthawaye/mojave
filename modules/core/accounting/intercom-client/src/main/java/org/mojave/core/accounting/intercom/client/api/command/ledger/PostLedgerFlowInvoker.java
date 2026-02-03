@@ -31,6 +31,7 @@ import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccou
 import org.mojave.core.accounting.intercom.client.service.AccountingIntercomService;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+import java.util.Objects;
 
 @Component
 public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
@@ -42,8 +43,8 @@ public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
     public PostLedgerFlowInvoker(final AccountingIntercomService.LedgerCommand ledgerCommand,
                                  final ObjectMapper objectMapper) {
 
-        assert ledgerCommand != null;
-        assert objectMapper != null;
+        Objects.requireNonNull(ledgerCommand);
+        Objects.requireNonNull(objectMapper);
 
         this.ledgerCommand = ledgerCommand;
         this.objectMapper = objectMapper;

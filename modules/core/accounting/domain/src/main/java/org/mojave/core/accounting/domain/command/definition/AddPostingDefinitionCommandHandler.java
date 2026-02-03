@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionCommand {
@@ -47,9 +48,9 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
                                               final AccountCache accountCache,
                                               final ChartEntryCache chartEntryCache) {
 
-        assert flowDefinitionRepository != null;
-        assert accountCache != null;
-        assert chartEntryCache != null;
+        Objects.requireNonNull(flowDefinitionRepository);
+        Objects.requireNonNull(accountCache);
+        Objects.requireNonNull(chartEntryCache);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
         this.accountCache = accountCache;

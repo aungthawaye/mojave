@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersCommand {
@@ -39,7 +40,7 @@ public class HandlePatchTransfersCommandHandler implements HandlePatchTransfersC
 
     public HandlePatchTransfersCommandHandler(FspCoreAdapter fspCoreAdapter) {
 
-        assert null != fspCoreAdapter;
+        Objects.requireNonNull(fspCoreAdapter);
 
         this.fspCoreAdapter = fspCoreAdapter;
     }

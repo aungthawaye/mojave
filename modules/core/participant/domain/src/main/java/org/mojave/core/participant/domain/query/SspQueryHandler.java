@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -48,7 +49,7 @@ public class SspQueryHandler implements SspQuery {
 
     public SspQueryHandler(final SspRepository sspRepository) {
 
-        assert sspRepository != null;
+        Objects.requireNonNull(sspRepository);
 
         this.sspRepository = sspRepository;
     }

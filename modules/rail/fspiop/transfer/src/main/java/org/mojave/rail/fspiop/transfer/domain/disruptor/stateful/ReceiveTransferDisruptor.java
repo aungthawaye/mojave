@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReceiveTra
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class ReceiveTransferDisruptor {
 
@@ -67,7 +68,7 @@ public class ReceiveTransferDisruptor {
 
         public Handler(ReceiveTransferStep receiveTransferStep) {
 
-            assert receiveTransferStep != null;
+            Objects.requireNonNull(receiveTransferStep);
 
             this.receiveTransferStep = receiveTransferStep;
         }

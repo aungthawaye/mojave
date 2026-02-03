@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class PositionQueryController {
@@ -45,7 +46,7 @@ public class PositionQueryController {
 
     public PositionQueryController(final PositionQuery positionQuery) {
 
-        assert positionQuery != null;
+        Objects.requireNonNull(positionQuery);
 
         this.positionQuery = positionQuery;
     }

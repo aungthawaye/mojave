@@ -38,6 +38,7 @@ import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.core.common.datatype.converter.identifier.transfer.TransferIdJavaType;
 import org.mojave.core.common.datatype.identifier.transfer.TransferId;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -82,9 +83,9 @@ public class TransferIlpPacket extends JpaEntity<TransferId> {
 
     public TransferIlpPacket(Transfer transfer, String ilpPacket, String ilpCondition) {
 
-        assert transfer != null;
-        assert ilpPacket != null;
-        assert ilpCondition != null;
+        Objects.requireNonNull(transfer);
+        Objects.requireNonNull(ilpPacket);
+        Objects.requireNonNull(ilpCondition);
 
         this.id = transfer.getId();
         this.ilpPacket = ilpPacket;

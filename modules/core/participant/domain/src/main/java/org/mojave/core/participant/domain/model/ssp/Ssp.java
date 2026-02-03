@@ -66,6 +66,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -148,10 +149,10 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
 
     public Ssp(final Hub hub, final SspCode code, final String name, final String baseUrl) {
 
-        assert hub != null;
-        assert code != null;
-        assert name != null;
-        assert baseUrl != null;
+        Objects.requireNonNull(hub);
+        Objects.requireNonNull(code);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(baseUrl);
 
         this.id = new SspId(Snowflake.get().nextId());
         this.hub = hub;
@@ -185,7 +186,7 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
 
     public SspCurrency addCurrency(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         final var supportedCurrency = new SspCurrency(this, currency);
 
@@ -211,7 +212,7 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
 
     public Optional<SspCurrency> deactivate(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         final var opt = this.currencies
                             .stream()
@@ -264,7 +265,7 @@ public class Ssp extends JpaEntity<SspId> implements DataConversion<SspData> {
 
     public boolean isCurrencySupported(final Currency currency) {
 
-        assert currency != null;
+        Objects.requireNonNull(currency);
 
         return this.currencies
                    .stream()

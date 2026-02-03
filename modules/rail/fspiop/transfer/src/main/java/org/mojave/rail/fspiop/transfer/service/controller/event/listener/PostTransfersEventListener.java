@@ -30,6 +30,7 @@ import org.slf4j.MDC;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class PostTransfersEventListener {
@@ -40,7 +41,7 @@ public class PostTransfersEventListener {
 
     public PostTransfersEventListener(PostTransfersCommand postTransfers) {
 
-        assert postTransfers != null;
+        Objects.requireNonNull(postTransfers);
         this.postTransfers = postTransfers;
     }
 

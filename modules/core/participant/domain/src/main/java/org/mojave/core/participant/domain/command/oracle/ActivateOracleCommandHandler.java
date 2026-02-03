@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @Service
 @Primary
@@ -42,7 +43,7 @@ public class ActivateOracleCommandHandler implements ActivateOracleCommand {
 
     public ActivateOracleCommandHandler(OracleRepository oracleRepository) {
 
-        assert oracleRepository != null;
+        Objects.requireNonNull(oracleRepository);
         this.oracleRepository = oracleRepository;
     }
 

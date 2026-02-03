@@ -24,6 +24,7 @@ import org.mojave.rail.fspiop.lookup.service.controller.event.PutPartiesEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 @Service
 public class PutPartiesEventListener {
@@ -32,7 +33,7 @@ public class PutPartiesEventListener {
 
     public PutPartiesEventListener(PutPartiesCommand putParties) {
 
-        assert putParties != null;
+        Objects.requireNonNull(putParties);
 
         this.putParties = putParties;
     }

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 @Component
 public class GetPartiesEventListener {
@@ -36,7 +37,7 @@ public class GetPartiesEventListener {
 
     public GetPartiesEventListener(HandleGetPartiesRequestCommand handlePartiesRequest) {
 
-        assert null != handlePartiesRequest;
+        Objects.requireNonNull(handlePartiesRequest);
 
         this.handlePartiesRequest = handlePartiesRequest;
     }
@@ -47,7 +48,7 @@ public class GetPartiesEventListener {
 
         var payload = event.getPayload();
 
-        assert null != payload;
+        Objects.requireNonNull(payload);
 
         try {
 

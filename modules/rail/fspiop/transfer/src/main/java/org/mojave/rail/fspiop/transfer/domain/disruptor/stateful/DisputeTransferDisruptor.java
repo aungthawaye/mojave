@@ -32,6 +32,7 @@ import org.mojave.rail.fspiop.transfer.domain.command.step.stateful.DisputeTrans
 import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.Objects;
 
 public class DisputeTransferDisruptor {
 
@@ -67,7 +68,7 @@ public class DisputeTransferDisruptor {
 
         public Handler(DisputeTransferStepHandler disputeTransferStepHandler) {
 
-            assert disputeTransferStepHandler != null;
+            Objects.requireNonNull(disputeTransferStepHandler);
 
             this.disputeTransferStepHandler = disputeTransferStepHandler;
         }

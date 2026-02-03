@@ -11,6 +11,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CommitTransferStepListener {
@@ -27,7 +28,7 @@ public class CommitTransferStepListener {
 
     public CommitTransferStepListener(CommitTransferStep commitTransferStep) {
 
-        assert commitTransferStep != null;
+        Objects.requireNonNull(commitTransferStep);
 
         this.commitTransferStep = commitTransferStep;
     }
