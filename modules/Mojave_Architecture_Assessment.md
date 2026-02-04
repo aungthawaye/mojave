@@ -1,6 +1,6 @@
 # Mojave Payment Switch - Architecture Assessment Report
 
-**Assessment Date:** January 30, 2026
+**Assessment Date:** February 4, 2026
 **Codebase Version:** 1.0.0
 **Technology Stack:** Java 25, Spring Boot 4.0.1, MySQL, Kafka, Redis
 **Protocol:** FSPIOP v2.0 (Financial Services Provider Interoperability Protocol)
@@ -10,6 +10,11 @@
 ## Executive Summary
 
 Mojave is a well-architected instant payment switch implementing the FSPIOP protocol for financial services interoperability. The codebase demonstrates strong adherence to Domain-Driven Design principles, CQRS patterns, and enterprise-grade infrastructure patterns. However, critical gaps exist in test coverage that must be addressed before production deployment.
+
+**Recent Updates (February 2026):**
+- ✅ Settlement module added with comprehensive domain modeling for settlement provider matching
+- ✅ Code quality improvement: Replaced assert statements with `Objects.requireNonNull()` for proper validation
+- ✅ Provider module refactored for better organization (forex, ledger, settlement providers)
 
 ### Overall Assessment: **B+ (Strong Architecture, Weak Testing)**
 
@@ -37,6 +42,7 @@ mojave/
 │   ├── kafka          # Message broker configuration
 │   ├── redis          # Caching layer (Redisson)
 │   ├── vault          # HashiCorp Vault integration
+│   ├── misc           # Utilities (crypto, JWT, DDD, event publishing)
 │   └── web            # HTTP/REST utilities
 ├── scheme/            # Protocol definitions
 │   └── fspiop         # FSPIOP v2.0 generated models
@@ -45,13 +51,15 @@ mojave/
 │   ├── accounting     # Double-entry ledger system
 │   ├── transaction    # Transaction lifecycle
 │   ├── wallet         # Position/balance management
-│   ├── settlement     # Settlement processing
+│   ├── settlement     # Settlement definitions, records, filter groups
 │   └── common         # Shared datatypes
 ├── connector/         # External integrations
 │   ├── adapter        # Protocol adapters
 │   └── gateway        # API gateway
 ├── provider/          # Storage implementations
-│   └── ledger/mysql   # MySQL ledger with stored procedures
+│   ├── ledger/mysql   # MySQL ledger with stored procedures
+│   ├── forex          # Foreign exchange provider
+│   └── settlement     # Settlement provider
 ├── operation/         # Administrative use cases
 └── rail/              # Protocol implementations
     └── fspiop         # FSPIOP rail services
@@ -67,7 +75,7 @@ The system properly separates concerns into distinct bounded contexts:
 | **Accounting** | Chart of accounts, flow definitions, posting | Chart, Account, FlowDefinition |
 | **Transaction** | Transaction lifecycle, audit trail | Transaction, TransactionStep |
 | **Wallet** | Position management, NDC limits | Balance, Position |
-| **Settlement** | Settlement windows, batch processing | Settlement |
+| **Settlement** | Settlement definitions, records, filter groups, settlement provider matching | SettlementDefinition, SettlementRecord, FilterGroup, FilterItem |
 
 ### 1.3 Layer Architecture
 
@@ -77,6 +85,7 @@ Each bounded context follows a clean hexagonal architecture:
 contract/     → API contracts, commands, queries, DTOs, exceptions
 domain/       → Entities, value objects, repositories, command handlers
 admin/        → Administrative REST APIs
+admin-client/ → Admin client modules for external consumption
 intercom/     → Internal service-to-service REST APIs
 producer/     → Kafka message publishers
 consumer/     → Kafka message listeners
@@ -84,6 +93,25 @@ store/        → Read-optimized caching layer
 ```
 
 **Assessment:** Excellent separation of concerns. The contract layer provides a stable API boundary, enabling independent evolution of implementations.
+
+**Common Data Types Module:**
+
+The `core/common/datatype` module provides shared domain primitives used across all bounded contexts:
+
+- **Identifiers:** Strongly-typed ID classes extending `EntityId<Long>` with JSON/REST support
+  - Accounting: `AccountId`, `ChartId`, `FlowDefinitionId`, `PostingDefinitionId`, `LedgerMovementId`
+  - Participant: `FspId`, `HubId`, `OracleId`, `SspId`, `EndpointId`
+  - Transaction: `TransactionId`, `TransactionStepId`
+  - Wallet: `BalanceId`, `PositionId`
+  - Settlement: `SettlementDefinitionId`, `FilterGroupId`, `FilterItemId`, `SettlementRecordId`, `SettlementBatchId`
+
+- **Enumerations:** Domain-specific type-safe enums
+  - `Currency`: Multi-currency support
+  - `TransactionType`: Payment operation types
+  - `SettlementType`: DFN (Deferred Net), CGS (Continuous Gross), RTGS (Real-Time Gross)
+  - `ActivationStatus`: ACTIVE, INACTIVE
+  - `Side`: DEBIT, CREDIT (for accounting)
+  - `MovementStage`, `MovementResult`: Ledger operation tracking
 
 ---
 
@@ -177,6 +205,66 @@ public void handle(CloseTransactionCommand.Input input, Acknowledgment ack) {
 ```
 
 **Note:** The pattern uses command re-invocation rather than pure event sourcing. Commands are published to Kafka and re-executed in consumers.
+
+### 2.5 Settlement Module Architecture
+
+The settlement module, recently added to the system, implements a sophisticated multi-tier filtering mechanism for settlement provider matching:
+
+**Domain Model:**
+```java
+@Entity
+public class SettlementDefinition {
+    // Configuration for settlement rules
+    private Currency currency;
+    private FilterGroup payerFilterGroup;
+    private FilterGroup payeeFilterGroup;
+    private SspId desiredSsp;
+    private ActivationStatus status;
+
+    public boolean matches(Currency currency, FspId payerFspId, FspId payeeFspId) {
+        // Matching logic implementation
+    }
+}
+
+@Entity
+public class FilterGroup {
+    @OneToMany(mappedBy = "filterGroup", cascade = CascadeType.ALL)
+    private List<FilterItem> items;
+
+    public boolean fspExists(FspId fspId) {
+        return items.stream().anyMatch(item -> item.matches(fspId));
+    }
+}
+
+@Entity
+public class FilterItem {
+    private FspId fspId;
+
+    public FilterItem(FilterGroup filterGroup, FspId fspId) {
+        Objects.requireNonNull(filterGroup);
+        Objects.requireNonNull(fspId);
+        // Validation by construction
+    }
+}
+```
+
+**Key Features:**
+- **Hierarchical Filtering:** SettlementDefinition → FilterGroups → FilterItems
+- **Multi-currency Support:** Settlement definitions per currency
+- **Activation Lifecycle:** ACTIVE/INACTIVE state management
+- **Settlement Types:** DFN (Deferred Net Settlement), CGS (Continuous Gross Settlement), RTGS (Real-Time Gross Settlement)
+- **Settlement Records:** Track individual settlement transactions with lifecycle timestamps (initiated, prepared, completed)
+
+**Command/Query Operations:**
+- Definition Management: Create, Update, Remove, Activate, Deactivate
+- Filter Management: CreateFilterGroup, AddFilterItem, RemoveFilterItem
+- Settlement Processing: InitiateSettlement, RequestSettlementInitiation, UpdatePreparationResult, CompleteSettlement
+- Provider Matching: FindSettlementProvider
+
+**Integration:**
+- Uses strongly-typed identifiers (SettlementDefinitionId, FilterGroupId, SettlementRecordId)
+- Follows the same hexagonal architecture pattern as other bounded contexts
+- Includes contract, domain, admin, producer, and consumer modules
 
 ---
 
@@ -314,13 +402,16 @@ HashiCorp Vault integration for secrets:
 
 ### 5.4 Code Smells Identified
 
-1. **Assert Statements for Validation:**
+1. **~~Assert Statements for Validation:~~** ✅ **FIXED**
    ```java
-   public PostLedgerFlowCommandHandler(...) {
-       assert accountCache != null;  // Should be Objects.requireNonNull()
-   }
+   // Old pattern (removed):
+   // assert accountCache != null;
+
+   // New pattern (current):
+   Objects.requireNonNull(settings);
+   Objects.requireNonNull(objectMapper);
    ```
-   Asserts can be disabled; use explicit null checks.
+   **Status:** Fixed in recent commits. The codebase now uses `Objects.requireNonNull()` for validation instead of assert statements, which ensures validation cannot be disabled at runtime.
 
 2. **Generic RuntimeException Wrapping:**
    ```java
@@ -406,14 +497,15 @@ POST /transfers → TransfersController
 
 1. **Implement Test Suite**
    - Target: 80% code coverage minimum
-   - Priority: Command handlers, repository queries, ledger operations
+   - Priority: Command handlers, repository queries, ledger operations, settlement module
 
 2. **Add Retry Semantics to Kafka Consumers**
    - Current silent error logging risks message loss
    - Implement dead-letter queues
 
-3. **Replace Assert with Explicit Validation**
-   - Use `Objects.requireNonNull()` or custom validation
+3. **~~Replace Assert with Explicit Validation~~** ✅ **COMPLETED**
+   - ~~Use `Objects.requireNonNull()` or custom validation~~
+   - **Status:** Fixed in recent commits. The codebase now properly uses `Objects.requireNonNull()` throughout.
 
 ### 8.2 Short-Term Improvements (P1)
 
