@@ -1,3 +1,13 @@
 package org.mojave.core.settlement.contract.command.definition;
 
-public interface ActivateSettlementDefinitionCommand { }
+import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
+
+public interface ActivateSettlementDefinitionCommand {
+
+    Output execute(Input input);
+
+    record Input(SettlementDefinitionId settlementDefinitionId) { }
+
+    record Output(SettlementDefinitionId settlementDefinitionId) { }
+
+}

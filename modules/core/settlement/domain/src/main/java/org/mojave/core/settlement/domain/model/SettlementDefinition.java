@@ -17,8 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.component.jpa.JpaInstantConverter;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.common.datatype.converter.identifier.participant.SspIdJavaType;
 import org.mojave.common.datatype.converter.identifier.settlement.SettlementDefinitionIdJavaType;
 import org.mojave.common.datatype.enums.ActivationStatus;
@@ -26,8 +24,13 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.participant.SspId;
 import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.jpa.JpaInstantConverter;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.handy.Snowflake;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -47,7 +50,7 @@ import static java.sql.Types.BIGINT;
             columnNames = {
                 "name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SettlementDefinition {
+public class SettlementDefinition extends JpaEntity<SettlementDefinitionId> {
 
     @Id
     @JavaType(SettlementDefinitionIdJavaType.class)
@@ -105,6 +108,30 @@ public class SettlementDefinition {
     @Enumerated(EnumType.STRING)
     protected ActivationStatus activationStatus;
 
+    public SettlementDefinition(final String name,
+                                final FilterGroup payerFilterGroup,
+                                final FilterGroup payeeFilterGroup,
+                                final Currency currency,
+                                final Instant startAt,
+                                final SspId desiredProviderId) {
+
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(payerFilterGroup);
+        Objects.requireNonNull(payeeFilterGroup);
+        Objects.requireNonNull(currency);
+        Objects.requireNonNull(startAt);
+        Objects.requireNonNull(desiredProviderId);
+
+        this.id = new SettlementDefinitionId(Snowflake.get().nextId());
+        this.name = name;
+        this.payerFilterGroup = payerFilterGroup;
+        this.payeeFilterGroup = payeeFilterGroup;
+        this.currency = currency;
+        this.startAt = startAt;
+        this.desiredProviderId = desiredProviderId;
+        this.activationStatus = ActivationStatus.ACTIVE;
+    }
+
     public void activate() {
 
         this.activationStatus = ActivationStatus.ACTIVE;
@@ -115,10 +142,48 @@ public class SettlementDefinition {
         this.activationStatus = ActivationStatus.INACTIVE;
     }
 
+    @Override
+    public SettlementDefinitionId getId() {
+
+        return id;
+    }
+
     public boolean matches(Currency currency, FspId payerFspId, FspId payeeFspId) {
 
         return this.currency.equals(currency) && this.payerFilterGroup.fspExists(payerFspId) &&
                    this.payeeFilterGroup.fspExists(payeeFspId);
+    }
+
+    public void update(final String name,
+                       final FilterGroup payerFilterGroup,
+                       final FilterGroup payeeFilterGroup,
+                       final Currency currency,
+                       final Instant startAt,
+                       final SspId desiredProviderId) {
+
+        if (name != null && !name.isBlank()) {
+            this.name = name;
+        }
+
+        if (payerFilterGroup != null) {
+            this.payerFilterGroup = payerFilterGroup;
+        }
+
+        if (payeeFilterGroup != null) {
+            this.payeeFilterGroup = payeeFilterGroup;
+        }
+
+        if (currency != null) {
+            this.currency = currency;
+        }
+
+        if (startAt != null) {
+            this.startAt = startAt;
+        }
+
+        if (desiredProviderId != null) {
+            this.desiredProviderId = desiredProviderId;
+        }
     }
 
 }

@@ -1,3 +1,13 @@
 package org.mojave.core.settlement.contract.command.definition;
 
-public interface CreateFilterGroupCommand { }
+import org.mojave.common.datatype.identifier.settlement.FilterGroupId;
+
+public interface CreateFilterGroupCommand {
+
+    Output execute(Input input);
+
+    record Input(String name) { }
+
+    record Output(FilterGroupId filterGroupId) { }
+
+}

@@ -1,3 +1,15 @@
 package org.mojave.core.settlement.contract.command.record;
 
-public interface CompleteSettlementCommand { }
+import org.mojave.common.datatype.identifier.settlement.SettlementRecordId;
+
+import java.time.Instant;
+
+public interface CompleteSettlementCommand {
+
+    Output execute(Input input);
+
+    record Input(SettlementRecordId settlementRecordId, Instant completedAt) { }
+
+    record Output(SettlementRecordId settlementRecordId) { }
+
+}
