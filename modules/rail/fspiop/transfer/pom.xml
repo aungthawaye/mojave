@@ -41,8 +41,8 @@
             <artifactId>mojave-core-accounting-producer</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.common</groupId>
-            <artifactId>mojave-core-common-datatype-jpa</artifactId>
+            <groupId>org.mojave.common</groupId>
+            <artifactId>mojave-common-datatype-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.core.participant</groupId>

@@ -41,11 +41,11 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.common.datatype.converter.identifier.participant.HubCurrencyIdJavaType;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.identifier.participant.HubCurrencyId;
+import org.mojave.common.datatype.converter.identifier.participant.HubCurrencyIdJavaType;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.identifier.participant.HubCurrencyId;
 import org.mojave.core.participant.contract.data.HubData;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Objects;

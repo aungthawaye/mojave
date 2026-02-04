@@ -19,7 +19,7 @@
  */
 package org.mojave.core.wallet.domain.repository;
 
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.wallet.domain.model.BalanceUpdate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

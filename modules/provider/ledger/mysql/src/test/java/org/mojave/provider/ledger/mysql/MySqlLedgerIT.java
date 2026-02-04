@@ -2,11 +2,11 @@ package org.mojave.provider.ledger.mysql;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mojave.core.accounting.contract.ledger.Ledger;
-import org.mojave.core.common.datatype.enums.Currency;
-import org.mojave.core.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
+import org.mojave.provider.ledger.contract.Ledger;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.accounting.OverdraftMode;
+import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import tools.jackson.databind.ObjectMapper;

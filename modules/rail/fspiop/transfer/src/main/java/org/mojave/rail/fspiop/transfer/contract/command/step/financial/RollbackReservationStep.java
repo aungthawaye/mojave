@@ -20,10 +20,10 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.financial;
 
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.transfer.TransferId;
+import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 
 public interface RollbackReservationStep {

@@ -19,11 +19,11 @@
  */
 package org.mojave.core.wallet.contract.data;
 
-import org.mojave.core.common.datatype.enums.wallet.BalanceAction;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.wallet.BalanceAction;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

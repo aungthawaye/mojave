@@ -22,8 +22,8 @@ package org.mojave.core.participant.contract.exception.fsp;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.core.common.datatype.type.participant.FspCode;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.util.HashMap;
 import java.util.Map;

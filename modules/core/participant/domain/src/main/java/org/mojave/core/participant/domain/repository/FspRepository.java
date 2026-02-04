@@ -20,10 +20,10 @@
 
 package org.mojave.core.participant.domain.repository;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.domain.model.fsp.Fsp;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

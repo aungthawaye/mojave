@@ -21,10 +21,10 @@
 
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.identifier.participant.OracleId;
-import org.mojave.core.common.datatype.enums.participant.PartyIdType;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.identifier.participant.OracleId;
+import org.mojave.common.datatype.enums.participant.PartyIdType;
 
 import java.util.Objects;
 

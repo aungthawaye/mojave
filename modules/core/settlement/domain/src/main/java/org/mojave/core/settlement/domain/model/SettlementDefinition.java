@@ -19,13 +19,13 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.converter.identifier.participant.SspIdJavaType;
-import org.mojave.core.common.datatype.converter.identifier.settlement.SettlementDefinitionIdJavaType;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.Currency;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.identifier.participant.SspId;
-import org.mojave.core.common.datatype.identifier.settlement.SettlementDefinitionId;
+import org.mojave.common.datatype.converter.identifier.participant.SspIdJavaType;
+import org.mojave.common.datatype.converter.identifier.settlement.SettlementDefinitionIdJavaType;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
 
 import java.time.Instant;
 

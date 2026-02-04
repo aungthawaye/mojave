@@ -21,7 +21,7 @@ package org.mojave.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 public interface ActivateFlowDefinitionCommand {
 
     Output execute(Input input);

@@ -22,9 +22,9 @@ package org.mojave.core.accounting.contract.exception.ledger;
 import lombok.Getter;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
-import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -25,7 +25,7 @@ import org.mojave.core.accounting.contract.exception.chart.ChartIdNotFoundExcept
 import org.mojave.core.accounting.contract.query.ChartQuery;
 import org.mojave.core.accounting.domain.model.Chart;
 import org.mojave.core.accounting.domain.repository.ChartRepository;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.common.datatype.identifier.accounting.ChartId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

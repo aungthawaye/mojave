@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <name>Mojave - Provider - Ledger</name>
     <modules>
+        <module>contract</module>
         <module>mysql</module>
     </modules>
     <properties>

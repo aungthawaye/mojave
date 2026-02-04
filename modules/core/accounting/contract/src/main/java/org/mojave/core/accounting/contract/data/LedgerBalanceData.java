@@ -19,10 +19,10 @@
  */
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.core.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.accounting.OverdraftMode;
+import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

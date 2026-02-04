@@ -19,7 +19,7 @@
  */
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.common.datatype.identifier.accounting.ChartId;
 
 import java.time.Instant;
 import java.util.Objects;

@@ -24,7 +24,7 @@ import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
-import org.mojave.core.common.datatype.DatatypeConfiguration;
+import org.mojave.common.datatype.DatatypeConfiguration;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.intercom.client.ParticipantIntercomClientConfiguration;

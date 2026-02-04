@@ -19,8 +19,8 @@
  */
 package org.mojave.core.participant.admin.controller.api.query;
 
-import org.mojave.core.common.datatype.identifier.participant.SspId;
-import org.mojave.core.common.datatype.type.participant.SspCode;
+import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.SspData;
 import org.mojave.core.participant.contract.query.SspQuery;
 import org.slf4j.Logger;

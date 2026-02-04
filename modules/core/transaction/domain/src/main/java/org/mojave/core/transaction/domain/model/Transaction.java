@@ -39,11 +39,11 @@ import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
-import org.mojave.core.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
-import org.mojave.core.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
+import org.mojave.common.datatype.enums.trasaction.StepPhase;
+import org.mojave.common.datatype.enums.trasaction.TransactionPhase;
+import org.mojave.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.transaction.contract.data.TransactionData;
 
 import java.time.Instant;

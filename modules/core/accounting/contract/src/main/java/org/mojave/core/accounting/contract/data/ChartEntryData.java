@@ -19,11 +19,11 @@
  */
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.core.common.datatype.enums.accounting.AccountType;
-import org.mojave.core.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
-import org.mojave.core.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.common.datatype.enums.accounting.AccountType;
+import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.ChartId;
+import org.mojave.common.datatype.type.accounting.ChartEntryCode;
 
 import java.time.Instant;
 import java.util.Objects;

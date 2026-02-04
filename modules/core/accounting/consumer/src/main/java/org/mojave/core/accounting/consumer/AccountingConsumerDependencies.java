@@ -29,7 +29,7 @@ import org.mojave.core.accounting.domain.cache.strategy.local.FlowDefinitionLoca
 import org.mojave.core.accounting.domain.repository.AccountRepository;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.core.accounting.contract.ledger.Ledger;
+import org.mojave.provider.ledger.contract.Ledger;
 import org.mojave.provider.ledger.mysql.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;

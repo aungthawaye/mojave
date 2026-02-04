@@ -19,9 +19,9 @@
  */
 package org.mojave.core.wallet.intercom.client.service;
 
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.balance.DepositFundCommand;
 import org.mojave.core.wallet.contract.command.balance.ReverseWithdrawCommand;
 import org.mojave.core.wallet.contract.command.balance.WithdrawFundCommand;
@@ -33,7 +33,7 @@ import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.data.PositionData;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.Currency;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

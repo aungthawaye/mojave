@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.common.datatype.converter.identifier.settlement.FilterGroupIdJavaType;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.identifier.settlement.FilterGroupId;
-import org.mojave.core.common.datatype.identifier.settlement.FilterItemId;
+import org.mojave.common.datatype.converter.identifier.settlement.FilterGroupIdJavaType;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.settlement.FilterGroupId;
+import org.mojave.common.datatype.identifier.settlement.FilterItemId;
 
 import java.util.ArrayList;
 import java.util.List;

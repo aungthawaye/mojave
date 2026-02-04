@@ -19,8 +19,8 @@
  */
 package org.mojave.core.participant.contract.query;
 
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 
 import java.util.List;

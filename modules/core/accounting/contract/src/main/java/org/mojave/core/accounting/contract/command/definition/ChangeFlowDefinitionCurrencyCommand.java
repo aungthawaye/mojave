@@ -21,8 +21,8 @@ package org.mojave.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.common.datatype.enums.Currency;
 public interface ChangeFlowDefinitionCurrencyCommand {
 
     Output execute(Input input);

@@ -21,8 +21,8 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.Currency;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import org.mojave.core.wallet.producer.publisher.FulfilPositionsPublisher;

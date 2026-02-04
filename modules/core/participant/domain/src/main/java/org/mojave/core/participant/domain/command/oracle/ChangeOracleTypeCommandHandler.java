@@ -21,7 +21,7 @@ package org.mojave.core.participant.domain.command.oracle;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.core.participant.contract.command.oracle.ChangeOracleTypeCommand;
 import org.mojave.core.participant.contract.exception.oracle.OracleAlreadyExistsException;
 import org.mojave.core.participant.contract.exception.oracle.OracleIdNotFoundException;

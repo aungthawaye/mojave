@@ -19,7 +19,7 @@
  */
 package org.mojave.rail.fspiop.transfer.service;
 
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.contract.query.SspQuery;

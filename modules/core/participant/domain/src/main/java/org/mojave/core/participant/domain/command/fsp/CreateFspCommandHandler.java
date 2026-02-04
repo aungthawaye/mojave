@@ -21,7 +21,7 @@ package org.mojave.core.participant.domain.command.fsp;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.identifier.participant.HubId;
+import org.mojave.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.contract.command.fsp.CreateFspCommand;
 import org.mojave.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
 import org.mojave.core.participant.contract.exception.fsp.FspCurrencyAlreadySupportedException;

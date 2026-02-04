@@ -20,12 +20,12 @@
 package org.mojave.core.wallet.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.domain.cache.BalanceCache;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

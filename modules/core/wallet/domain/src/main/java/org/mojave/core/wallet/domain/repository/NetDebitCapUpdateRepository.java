@@ -19,7 +19,7 @@
  */
 package org.mojave.core.wallet.domain.repository;
 
-import org.mojave.core.common.datatype.identifier.wallet.NdcUpdateId;
+import org.mojave.common.datatype.identifier.wallet.NdcUpdateId;
 import org.mojave.core.wallet.domain.model.NdcUpdate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

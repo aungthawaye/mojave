@@ -13,10 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.core.common.datatype.converter.identifier.participant.FspIdJavaType;
-import org.mojave.core.common.datatype.converter.identifier.settlement.FilterItemIdJavaType;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.identifier.settlement.FilterItemId;
+import org.mojave.common.datatype.converter.identifier.participant.FspIdJavaType;
+import org.mojave.common.datatype.converter.identifier.settlement.FilterItemIdJavaType;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.settlement.FilterItemId;
 import org.mojave.core.settlement.contract.exception.FspAlreadyExistsInGroupException;
 import java.util.Objects;
 

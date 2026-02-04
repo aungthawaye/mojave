@@ -21,9 +21,9 @@ package org.mojave.rail.fspiop.quoting.domain.command;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.jpa.transaction.TransactionContext;
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.participant.EndpointType;
-import org.mojave.core.common.datatype.type.participant.FspCode;
+import org.mojave.common.datatype.enums.Direction;
+import org.mojave.common.datatype.enums.participant.EndpointType;
+import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.rail.fspiop.quoting.contract.command.PutQuotesErrorCommand;

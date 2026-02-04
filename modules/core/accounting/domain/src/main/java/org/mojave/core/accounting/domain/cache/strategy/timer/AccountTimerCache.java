@@ -24,11 +24,11 @@ import org.mojave.core.accounting.contract.data.AccountData;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
-import org.mojave.core.common.datatype.identifier.accounting.AccountId;
-import org.mojave.core.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.core.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.core.common.datatype.type.accounting.AccountCode;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.common.datatype.enums.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

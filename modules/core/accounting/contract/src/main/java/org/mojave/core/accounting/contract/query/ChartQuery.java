@@ -21,7 +21,7 @@ package org.mojave.core.accounting.contract.query;
 
 import org.mojave.core.accounting.contract.data.ChartData;
 import org.mojave.core.accounting.contract.exception.chart.ChartIdNotFoundException;
-import org.mojave.core.common.datatype.identifier.accounting.ChartId;
+import org.mojave.common.datatype.identifier.accounting.ChartId;
 
 import java.util.List;
 

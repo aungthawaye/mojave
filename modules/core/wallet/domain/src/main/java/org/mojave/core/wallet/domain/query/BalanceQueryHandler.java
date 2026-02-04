@@ -20,14 +20,14 @@
 package org.mojave.core.wallet.domain.query;
 
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
 import org.mojave.core.wallet.contract.query.BalanceQuery;
 import org.mojave.core.wallet.domain.model.Balance;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.Currency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

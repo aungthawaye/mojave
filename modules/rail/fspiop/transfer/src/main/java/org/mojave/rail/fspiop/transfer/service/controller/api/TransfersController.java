@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.transfer.service.controller.api;
 import jakarta.servlet.http.HttpServletRequest;
 import org.mojave.component.misc.spring.event.EventPublisher;
 import org.mojave.component.web.request.CachedServletRequest;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.transfer.contract.command.GetTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PostTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;

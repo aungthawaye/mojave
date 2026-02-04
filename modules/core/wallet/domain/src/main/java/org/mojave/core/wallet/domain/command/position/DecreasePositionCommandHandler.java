@@ -21,7 +21,7 @@ package org.mojave.core.wallet.domain.command.position;
 
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.wallet.contract.command.position.DecreasePositionCommand;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionNotExistException;

@@ -19,11 +19,11 @@
  */
 package org.mojave.core.wallet.contract.data;
 
-import org.mojave.core.common.datatype.enums.wallet.PositionAction;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.wallet.PositionAction;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

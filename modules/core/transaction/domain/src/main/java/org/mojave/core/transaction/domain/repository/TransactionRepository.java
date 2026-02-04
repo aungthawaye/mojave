@@ -19,8 +19,8 @@
  */
 package org.mojave.core.transaction.domain.repository;
 
-import org.mojave.core.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.enums.trasaction.TransactionPhase;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.transaction.domain.model.Transaction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -19,8 +19,8 @@
  */
 package org.mojave.rail.fspiop.quoting.domain.repository;
 
-import org.mojave.core.common.datatype.identifier.quoting.QuoteId;
-import org.mojave.core.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.common.datatype.identifier.quoting.QuoteId;
+import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
 import org.mojave.scheme.fspiop.core.AmountType;
 import org.springframework.data.jpa.domain.Specification;

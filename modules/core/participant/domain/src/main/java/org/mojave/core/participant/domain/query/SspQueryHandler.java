@@ -20,10 +20,10 @@
 package org.mojave.core.participant.domain.query;
 
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.identifier.participant.SspId;
-import org.mojave.core.common.datatype.type.participant.SspCode;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.SspData;
 import org.mojave.core.participant.contract.exception.ssp.SspCodeNotFoundException;
 import org.mojave.core.participant.contract.exception.ssp.SspIdNotFoundException;

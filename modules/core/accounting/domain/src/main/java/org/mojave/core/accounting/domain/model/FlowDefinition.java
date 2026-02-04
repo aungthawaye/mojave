@@ -45,15 +45,15 @@ import org.mojave.core.accounting.contract.exception.definition.PostingDefinitio
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.ChartEntryCache;
 import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
-import org.mojave.core.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
-import org.mojave.core.common.datatype.enums.accounting.ReceiveIn;
-import org.mojave.core.common.datatype.enums.accounting.Side;
-import org.mojave.core.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.core.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.core.common.datatype.identifier.accounting.PostingDefinitionId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.util.ArrayList;
 import java.util.Collections;

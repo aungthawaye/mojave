@@ -20,8 +20,8 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.fspiop;
 
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
 

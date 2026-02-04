@@ -19,11 +19,11 @@
  */
 package org.mojave.rail.fspiop.quoting.contract.data;
 
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.quoting.QuotingStage;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.identifier.quoting.QuoteId;
-import org.mojave.core.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.common.datatype.enums.Direction;
+import org.mojave.common.datatype.enums.quoting.QuotingStage;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.quoting.QuoteId;
+import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.scheme.fspiop.core.AmountType;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.mojave.scheme.fspiop.core.PartyIdType;

@@ -22,7 +22,7 @@ package org.mojave.core.wallet.contract.exception.balance;
 import lombok.Getter;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 
 import java.util.HashMap;
 import java.util.Map;

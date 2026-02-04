@@ -19,10 +19,10 @@
  */
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.core.common.datatype.enums.ActivationStatus;
-import org.mojave.core.common.datatype.identifier.participant.FspCurrencyId;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.identifier.participant.FspCurrencyId;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Objects;

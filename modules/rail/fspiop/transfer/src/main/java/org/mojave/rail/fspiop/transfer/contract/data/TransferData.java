@@ -20,15 +20,15 @@
 
 package org.mojave.rail.fspiop.transfer.contract.data;
 
-import org.mojave.core.common.datatype.enums.Direction;
-import org.mojave.core.common.datatype.enums.transfer.AbortReason;
-import org.mojave.core.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.core.common.datatype.enums.transfer.TransferStatus;
-import org.mojave.core.common.datatype.identifier.participant.FspId;
-import org.mojave.core.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.core.common.datatype.identifier.transfer.TransferId;
-import org.mojave.core.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.core.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.enums.Direction;
+import org.mojave.common.datatype.enums.transfer.AbortReason;
+import org.mojave.common.datatype.enums.transfer.DisputeReason;
+import org.mojave.common.datatype.enums.transfer.TransferStatus;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.transfer.TransferId;
+import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.mojave.scheme.fspiop.core.PartyIdType;
 

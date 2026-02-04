@@ -23,7 +23,7 @@ package org.mojave.core.participant.domain.command.ssp;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.core.participant.contract.command.ssp.DeactivateSspCommand;
 import org.mojave.core.participant.contract.exception.ssp.SspIdNotFoundException;
 import org.mojave.core.participant.domain.repository.SspRepository;

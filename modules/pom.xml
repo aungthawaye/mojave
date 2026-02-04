@@ -14,6 +14,7 @@
     <name>Mojave</name>
     <modules>
         <module>component</module>
+        <module>common</module>
         <module>scheme</module>
         <module>provider</module>
         <module>core</module>
@@ -212,13 +213,13 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.common</groupId>
-                <artifactId>mojave-core-common-datatype</artifactId>
+                <groupId>org.mojave.common</groupId>
+                <artifactId>mojave-common-datatype</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.common</groupId>
-                <artifactId>mojave-core-common-datatype-jpa</artifactId>
+                <groupId>org.mojave.common</groupId>
+                <artifactId>mojave-common-datatype-jpa</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -434,6 +435,11 @@
             <dependency>
                 <groupId>org.mojave.connector</groupId>
                 <artifactId>mojave-connector-sample</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.provider.ledger</groupId>
+                <artifactId>mojave-provider-ledger-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

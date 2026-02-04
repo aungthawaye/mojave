@@ -21,7 +21,7 @@ package org.mojave.core.wallet.domain.command.balance;
 
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.wallet.contract.command.balance.DepositFundCommand;
 import org.mojave.core.wallet.contract.exception.balance.BalanceNotExistException;
 import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;

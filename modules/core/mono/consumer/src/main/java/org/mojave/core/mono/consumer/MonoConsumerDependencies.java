@@ -39,7 +39,7 @@ import org.mojave.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
 import org.mojave.core.wallet.domain.component.mysql.MySqlPositionUpdater;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
 import org.mojave.core.wallet.domain.repository.PositionRepository;
-import org.mojave.core.accounting.contract.ledger.Ledger;
+import org.mojave.provider.ledger.contract.Ledger;
 import org.mojave.provider.ledger.mysql.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;

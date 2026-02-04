@@ -21,12 +21,12 @@ package org.mojave.core.wallet.admin.client.api.query;
 
 import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.core.common.datatype.identifier.wallet.PositionId;
-import org.mojave.core.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.admin.client.service.WalletAdminService;
 import org.mojave.core.wallet.contract.data.PositionData;
 import org.mojave.core.wallet.contract.query.PositionQuery;
-import org.mojave.core.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.Currency;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
