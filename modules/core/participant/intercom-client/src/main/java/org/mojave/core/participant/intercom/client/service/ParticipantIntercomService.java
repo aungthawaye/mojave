@@ -31,41 +31,43 @@ import java.util.List;
 
 public interface ParticipantIntercomService {
 
+    String MODULE_PREFIX = "/participant-intercom";
+
     interface FspQuery {
 
-        @GET("fsps/get-all-fsps")
+        @GET(MODULE_PREFIX + "/fsps/get-all-fsps")
         Call<List<FspData>> getAllFsps();
 
-        @GET("fsps/get-by-fsp-id")
+        @GET(MODULE_PREFIX + "/fsps/get-by-fsp-id")
         Call<FspData> getByFspCode(@Query("code") String fspCode);
 
-        @GET("fsps/get-by-fsp-id")
+        @GET(MODULE_PREFIX + "/fsps/get-by-fsp-id")
         Call<FspData> getByFspId(@Query("fspId") String fspId);
 
     }
 
     interface OracleQuery {
 
-        @GET("oracles/get-all-oracles")
+        @GET(MODULE_PREFIX + "/oracles/get-all-oracles")
         Call<List<OracleData>> getAllOracles();
 
-        @GET("oracles/get-by-oracle-id")
+        @GET(MODULE_PREFIX + "/oracles/get-by-oracle-id")
         Call<OracleData> getByOracleId(@Query("oracleId") String oracleId);
 
-        @GET("oracles/get-by-party-id-type")
+        @GET(MODULE_PREFIX + "/oracles/get-by-party-id-type")
         Call<OracleData> getByPartyIdType(@Query("partyIdType") String partyIdType);
 
     }
 
     interface SspQuery {
 
-        @GET("ssps/get-all-ssps")
+        @GET(MODULE_PREFIX + "/ssps/get-all-ssps")
         Call<List<SspData>> getAllSsps();
 
-        @GET("ssps/get-by-ssp-code")
+        @GET(MODULE_PREFIX + "/ssps/get-by-ssp-code")
         Call<SspData> getBySspCode(@Query("code") String sspCode);
 
-        @GET("ssps/get-by-ssp-id")
+        @GET(MODULE_PREFIX + "/ssps/get-by-ssp-id")
         Call<SspData> getBySspId(@Query("sspId") String sspId);
 
     }
