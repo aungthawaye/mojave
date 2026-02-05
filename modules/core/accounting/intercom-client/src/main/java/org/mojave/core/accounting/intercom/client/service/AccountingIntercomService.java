@@ -40,68 +40,70 @@ import retrofit2.http.Query;
 
 public interface AccountingIntercomService {
 
+    String MODULE_PREFIX = "/accounting-intercom";
+
     interface AccountQuery {
 
-        @POST("/accounts/find-accounts")
+        @POST(MODULE_PREFIX + "/accounts/find-accounts")
         Call<PagedResult<AccountData>> find(
             @Body org.mojave.core.accounting.contract.query.AccountQuery.Criteria criteria);
 
-        @GET("/accounts/get-all-accounts")
+        @GET(MODULE_PREFIX + "/accounts/get-all-accounts")
         Call<java.util.List<AccountData>> getAll();
 
-        @GET("/accounts/get-by-account-code")
+        @GET(MODULE_PREFIX + "/accounts/get-by-account-code")
         Call<AccountData> getByAccountCode(@Query("accountCode") AccountCode accountCode);
 
-        @GET("/accounts/get-by-account-id")
+        @GET(MODULE_PREFIX + "/accounts/get-by-account-id")
         Call<AccountData> getByAccountId(@Query("accountId") AccountId accountId);
 
-        @GET("/accounts/get-by-owner-id")
+        @GET(MODULE_PREFIX + "/accounts/get-by-owner-id")
         Call<java.util.List<AccountData>> getByOwnerId(@Query("ownerId") AccountOwnerId ownerId);
 
     }
 
     interface ChartQuery {
 
-        @GET("/chart-entries/get-all-chart-entries")
+        @GET(MODULE_PREFIX + "/chart-entries/get-all-chart-entries")
         Call<java.util.List<ChartEntryData>> getAllChartEntries();
 
-        @GET("/charts/get-all-charts")
+        @GET(MODULE_PREFIX + "/charts/get-all-charts")
         Call<java.util.List<ChartData>> getAllCharts();
 
         // Chart entry queries
-        @GET("/chart-entries/get-by-chart-entry-id")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-entry-id")
         Call<ChartEntryData> getByChartEntryId(@Query("chartEntryId") ChartEntryId chartEntryId);
 
         // Chart queries
-        @GET("/charts/get-by-chart-id")
+        @GET(MODULE_PREFIX + "/charts/get-by-chart-id")
         Call<ChartData> getByChartId(@Query("chartId") ChartId chartId);
 
-        @GET("/chart-entries/get-by-name-contains")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-name-contains")
         Call<java.util.List<ChartEntryData>> getChartEntriesByNameContains(
             @Query("name") String name);
 
-        @GET("/charts/get-by-name-contains")
+        @GET(MODULE_PREFIX + "/charts/get-by-name-contains")
         Call<java.util.List<ChartData>> getChartsByNameContains(@Query("name") String name);
 
-        @GET("/chart-entries/get-by-category")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-category")
         Call<java.util.List<ChartEntryData>> getEntriesByCategory(
             @Query("category") ChartEntryCategory category);
 
-        @GET("/chart-entries/get-by-chart-id")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-id")
         Call<java.util.List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
 
     }
 
     interface DefinitionQuery {
 
-        @GET("/flow-definitions/get-all-flow-definitions")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-all-flow-definitions")
         Call<java.util.List<FlowDefinitionData>> getAllFlowDefinitions();
 
-        @GET("/flow-definitions/get-by-flow-definition-id")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-by-flow-definition-id")
         Call<FlowDefinitionData> getByFlowDefinitionId(
             @Query("flowDefinitionId") FlowDefinitionId flowDefinitionId);
 
-        @GET("/flow-definitions/get-by-name-contains")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-by-name-contains")
         Call<java.util.List<FlowDefinitionData>> getFlowDefinitionsByNameContains(
             @Query("name") String name);
 
@@ -109,7 +111,7 @@ public interface AccountingIntercomService {
 
     interface LedgerCommand {
 
-        @POST("/ledgers/post-ledger-flow")
+        @POST(MODULE_PREFIX + "/ledgers/post-ledger-flow")
         Call<PostLedgerFlowCommand.Output> postLedgerFlow(@Body PostLedgerFlowCommand.Input input);
 
     }

@@ -58,131 +58,133 @@ import retrofit2.http.Query;
 
 public interface AccountingAdminService {
 
+    String MODULE_PREFIX = "/accounting";
+
     interface AccountCommand {
 
-        @POST("/accounts/activate")
+        @POST(MODULE_PREFIX + "/accounts/activate")
         Call<ActivateAccountCommand.Output> activate(@Body ActivateAccountCommand.Input input);
 
-        @POST("/accounts/change-properties")
+        @POST(MODULE_PREFIX + "/accounts/change-properties")
         Call<ChangeAccountPropertiesCommand.Output> changeProperties(
             @Body ChangeAccountPropertiesCommand.Input input);
 
-        @POST("/accounts/create")
+        @POST(MODULE_PREFIX + "/accounts/create")
         Call<CreateAccountCommand.Output> create(@Body CreateAccountCommand.Input input);
 
-        @POST("/accounts/create-in-bulk")
+        @POST(MODULE_PREFIX + "/accounts/create-in-bulk")
         Call<CreateAccountInBulkCommand.Output> createInBulk(
             @Body CreateAccountInBulkCommand.Input input);
 
-        @POST("/accounts/deactivate")
+        @POST(MODULE_PREFIX + "/accounts/deactivate")
         Call<DeactivateAccountCommand.Output> deactivate(
             @Body DeactivateAccountCommand.Input input);
 
-        @POST("/accounts/terminate")
+        @POST(MODULE_PREFIX + "/accounts/terminate")
         Call<TerminateAccountCommand.Output> terminate(@Body TerminateAccountCommand.Input input);
 
     }
 
     interface AccountQuery {
 
-        @POST("/accounts/find-accounts")
+        @POST(MODULE_PREFIX + "/accounts/find-accounts")
         Call<PagedResult<AccountData>> find(
             @Body org.mojave.core.accounting.contract.query.AccountQuery.Criteria criteria);
 
-        @GET("/accounts/get-all-accounts")
+        @GET(MODULE_PREFIX + "/accounts/get-all-accounts")
         Call<java.util.List<AccountData>> getAll();
 
-        @GET("/accounts/get-by-account-code")
+        @GET(MODULE_PREFIX + "/accounts/get-by-account-code")
         Call<AccountData> getByAccountCode(@Query("accountCode") AccountCode accountCode);
 
-        @GET("/accounts/get-by-account-id")
+        @GET(MODULE_PREFIX + "/accounts/get-by-account-id")
         Call<AccountData> getByAccountId(@Query("accountId") AccountId accountId);
 
-        @GET("/accounts/get-by-owner-id")
+        @GET(MODULE_PREFIX + "/accounts/get-by-owner-id")
         Call<java.util.List<AccountData>> getByOwnerId(@Query("ownerId") AccountOwnerId ownerId);
 
     }
 
     interface ChartCommand {
 
-        @POST("/chart-entries/change-properties")
+        @POST(MODULE_PREFIX + "/chart-entries/change-properties")
         Call<ChangeChartEntryPropertiesCommand.Output> changeEntryProperties(
             @Body ChangeChartEntryPropertiesCommand.Input input);
 
-        @POST("/charts/change-name")
+        @POST(MODULE_PREFIX + "/charts/change-name")
         Call<ChangeChartNameCommand.Output> changeName(@Body ChangeChartNameCommand.Input input);
 
-        @POST("/charts/create")
+        @POST(MODULE_PREFIX + "/charts/create")
         Call<CreateChartCommand.Output> create(@Body CreateChartCommand.Input input);
 
-        @POST("/chart-entries/create")
+        @POST(MODULE_PREFIX + "/chart-entries/create")
         Call<CreateChartEntryCommand.Output> createEntry(@Body CreateChartEntryCommand.Input input);
 
     }
 
     interface ChartQuery {
 
-        @GET("/chart-entries/get-all-chart-entries")
+        @GET(MODULE_PREFIX + "/chart-entries/get-all-chart-entries")
         Call<java.util.List<ChartEntryData>> getAllChartEntries();
 
-        @GET("/charts/get-all-charts")
+        @GET(MODULE_PREFIX + "/charts/get-all-charts")
         Call<java.util.List<ChartData>> getAllCharts();
 
         // Chart entry queries
-        @GET("/chart-entries/get-by-chart-entry-id")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-entry-id")
         Call<ChartEntryData> getByChartEntryId(@Query("chartEntryId") ChartEntryId chartEntryId);
 
         // Chart queries
-        @GET("/charts/get-by-chart-id")
+        @GET(MODULE_PREFIX + "/charts/get-by-chart-id")
         Call<ChartData> getByChartId(@Query("chartId") ChartId chartId);
 
-        @GET("/chart-entries/get-by-name-contains")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-name-contains")
         Call<java.util.List<ChartEntryData>> getChartEntriesByNameContains(
             @Query("name") String name);
 
-        @GET("/charts/get-by-name-contains")
+        @GET(MODULE_PREFIX + "/charts/get-by-name-contains")
         Call<java.util.List<ChartData>> getChartsByNameContains(@Query("name") String name);
 
-        @GET("/chart-entries/get-by-category")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-category")
         Call<java.util.List<ChartEntryData>> getEntriesByCategory(
             @Query("category") ChartEntryCategory category);
 
-        @GET("/chart-entries/get-by-chart-id")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-id")
         Call<java.util.List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
 
     }
 
     interface DefinitionCommand {
 
-        @POST("/flow-definitions/activate")
+        @POST(MODULE_PREFIX + "/flow-definitions/activate")
         Call<ActivateFlowDefinitionCommand.Output> activate(
             @Body ActivateFlowDefinitionCommand.Input input);
 
-        @POST("/flow-definitions/add-posting")
+        @POST(MODULE_PREFIX + "/flow-definitions/add-posting")
         Call<AddPostingDefinitionCommand.Output> addPosting(
             @Body AddPostingDefinitionCommand.Input input);
 
-        @POST("/flow-definitions/change-currency")
+        @POST(MODULE_PREFIX + "/flow-definitions/change-currency")
         Call<ChangeFlowDefinitionCurrencyCommand.Output> changeCurrency(
             @Body ChangeFlowDefinitionCurrencyCommand.Input input);
 
-        @POST("/flow-definitions/change-properties")
+        @POST(MODULE_PREFIX + "/flow-definitions/change-properties")
         Call<ChangeFlowDefinitionPropertiesCommand.Output> changeProperties(
             @Body ChangeFlowDefinitionPropertiesCommand.Input input);
 
-        @POST("/flow-definitions/create")
+        @POST(MODULE_PREFIX + "/flow-definitions/create")
         Call<CreateFlowDefinitionCommand.Output> create(
             @Body CreateFlowDefinitionCommand.Input input);
 
-        @POST("/flow-definitions/deactivate")
+        @POST(MODULE_PREFIX + "/flow-definitions/deactivate")
         Call<DeactivateFlowDefinitionCommand.Output> deactivate(
             @Body DeactivateFlowDefinitionCommand.Input input);
 
-        @POST("/flow-definitions/remove-posting")
+        @POST(MODULE_PREFIX + "/flow-definitions/remove-posting")
         Call<RemovePostingDefinitionCommand.Output> removePosting(
             @Body RemovePostingDefinitionCommand.Input input);
 
-        @POST("/flow-definitions/terminate")
+        @POST(MODULE_PREFIX + "/flow-definitions/terminate")
         Call<TerminateFlowDefinitionCommand.Output> terminate(
             @Body TerminateFlowDefinitionCommand.Input input);
 
@@ -190,14 +192,14 @@ public interface AccountingAdminService {
 
     interface DefinitionQuery {
 
-        @GET("/flow-definitions/get-all-flow-definitions")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-all-flow-definitions")
         Call<java.util.List<FlowDefinitionData>> getAllFlowDefinitions();
 
-        @GET("/flow-definitions/get-by-flow-definition-id")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-by-flow-definition-id")
         Call<FlowDefinitionData> getByFlowDefinitionId(
             @Query("flowDefinitionId") FlowDefinitionId flowDefinitionId);
 
-        @GET("/flow-definitions/get-by-name-contains")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-by-name-contains")
         Call<java.util.List<FlowDefinitionData>> getFlowDefinitionsByNameContains(
             @Query("name") String name);
 
@@ -205,7 +207,7 @@ public interface AccountingAdminService {
 
     interface LedgerCommand {
 
-        @POST("/ledgers/post-ledger-flow")
+        @POST(MODULE_PREFIX + "/ledgers/post-ledger-flow")
         Call<PostLedgerFlowCommand.Output> postLedgerFlow(@Body PostLedgerFlowCommand.Input input);
 
     }
