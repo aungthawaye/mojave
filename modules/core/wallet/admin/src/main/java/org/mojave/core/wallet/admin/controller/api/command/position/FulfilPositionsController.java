@@ -29,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Objects;
 
 @RestController
+@RequestMapping("/wallet")
 public class FulfilPositionsController {
 
     private final FulfilPositionsCommand fulfilPositionsCommand;

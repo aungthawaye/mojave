@@ -46,58 +46,60 @@ import java.util.List;
 
 public interface WalletAdminService {
 
+    String MODULE_PREFIX = "/wallet";
+
     interface BalanceCommand {
 
-        @POST("/balances/create")
+        @POST(MODULE_PREFIX + "/balances/create")
         Call<CreateBalanceCommand.Output> create(@Body CreateBalanceCommand.Input input);
 
-        @POST("/balances/deposit-fund")
+        @POST(MODULE_PREFIX + "/balances/deposit-fund")
         Call<DepositFundCommand.Output> depositFund(@Body DepositFundCommand.Input input);
 
-        @POST("/balances/reverse-withdraw")
+        @POST(MODULE_PREFIX + "/balances/reverse-withdraw")
         Call<ReverseWithdrawCommand.Output> reverseWithdraw(
             @Body ReverseWithdrawCommand.Input input);
 
-        @POST("/balances/withdraw-fund")
+        @POST(MODULE_PREFIX + "/balances/withdraw-fund")
         Call<WithdrawFundCommand.Output> withdrawFund(@Body WithdrawFundCommand.Input input);
 
     }
 
     interface BalanceQuery {
 
-        @GET("/balances/get-all-balances")
+        @GET(MODULE_PREFIX + "/balances/get-all-balances")
         Call<List<BalanceData>> getAll();
 
-        @GET("/balances/get-by-owner-id-currency")
+        @GET(MODULE_PREFIX + "/balances/get-by-owner-id-currency")
         Call<List<BalanceData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
                                                         @Query("currency") Currency currency);
 
-        @GET("/balances/get-by-balance-id")
+        @GET(MODULE_PREFIX + "/balances/get-by-balance-id")
         Call<BalanceData> getByWalletId(@Query("balanceId") BalanceId balanceId);
 
     }
 
     interface PositionCommand {
 
-        @POST("/positions/commit")
+        @POST(MODULE_PREFIX + "/positions/commit")
         Call<CommitReservationCommand.Output> commit(@Body CommitReservationCommand.Input input);
 
-        @POST("/positions/create")
+        @POST(MODULE_PREFIX + "/positions/create")
         Call<CreatePositionCommand.Output> create(@Body CreatePositionCommand.Input input);
 
-        @POST("/positions/decrease")
+        @POST(MODULE_PREFIX + "/positions/decrease")
         Call<DecreasePositionCommand.Output> decrease(@Body DecreasePositionCommand.Input input);
 
-        @POST("/positions/fulfil")
+        @POST(MODULE_PREFIX + "/positions/fulfil")
         Call<FulfilPositionsCommand.Output> fulfil(@Body FulfilPositionsCommand.Input input);
 
-        @POST("/positions/increase")
+        @POST(MODULE_PREFIX + "/positions/increase")
         Call<IncreasePositionCommand.Output> increase(@Body IncreasePositionCommand.Input input);
 
-        @POST("/positions/reserve")
+        @POST(MODULE_PREFIX + "/positions/reserve")
         Call<ReservePositionCommand.Output> reserve(@Body ReservePositionCommand.Input input);
 
-        @POST("/positions/rollback")
+        @POST(MODULE_PREFIX + "/positions/rollback")
         Call<RollbackReservationCommand.Output> rollback(
             @Body RollbackReservationCommand.Input input);
 
@@ -105,14 +107,14 @@ public interface WalletAdminService {
 
     interface PositionQuery {
 
-        @GET("/positions/get-all-positions")
+        @GET(MODULE_PREFIX + "/positions/get-all-positions")
         Call<List<PositionData>> getAll();
 
-        @GET("/positions/get-by-owner-id-currency")
+        @GET(MODULE_PREFIX + "/positions/get-by-owner-id-currency")
         Call<List<PositionData>> getByOwnerIdAndCurrency(@Query("ownerId") WalletOwnerId ownerId,
                                                          @Query("currency") Currency currency);
 
-        @GET("/positions/get-by-position-id")
+        @GET(MODULE_PREFIX + "/positions/get-by-position-id")
         Call<PositionData> getByPositionId(@Query("positionId") PositionId positionId);
 
     }
