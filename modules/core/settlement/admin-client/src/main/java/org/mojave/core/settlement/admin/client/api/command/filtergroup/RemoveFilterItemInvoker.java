@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.admin.client.api.command.filtergroup;
 
 import org.mojave.component.misc.error.RestErrorResponse;
@@ -37,9 +38,8 @@ public class RemoveFilterItemInvoker implements RemoveFilterItemCommand {
 
     private final ObjectMapper objectMapper;
 
-    public RemoveFilterItemInvoker(
-        final SettlementAdminService.FilterGroupCommand filterGroupCommand,
-        final ObjectMapper objectMapper) {
+    public RemoveFilterItemInvoker(final SettlementAdminService.FilterGroupCommand filterGroupCommand,
+                                   final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(filterGroupCommand);
         Objects.requireNonNull(objectMapper);

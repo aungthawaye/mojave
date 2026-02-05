@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.admin.client;
 
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -33,9 +34,8 @@ import tools.jackson.databind.ObjectMapper;
 public class SettlementAdminClientConfiguration {
 
     @Bean
-    public SettlementAdminService.DefinitionCommand definitionCommands(
-        SettlementAdminService.Settings settings,
-        ObjectMapper objectMapper) {
+    public SettlementAdminService.DefinitionCommand definitionCommands(SettlementAdminService.Settings settings,
+                                                                       ObjectMapper objectMapper) {
 
         return RetrofitService
                    .newBuilder(SettlementAdminService.DefinitionCommand.class, settings.baseUrl())
@@ -45,9 +45,8 @@ public class SettlementAdminClientConfiguration {
     }
 
     @Bean
-    public SettlementAdminService.FilterGroupCommand filterGroupCommands(
-        SettlementAdminService.Settings settings,
-        ObjectMapper objectMapper) {
+    public SettlementAdminService.FilterGroupCommand filterGroupCommands(SettlementAdminService.Settings settings,
+                                                                         ObjectMapper objectMapper) {
 
         return RetrofitService
                    .newBuilder(SettlementAdminService.FilterGroupCommand.class, settings.baseUrl())
@@ -57,9 +56,8 @@ public class SettlementAdminClientConfiguration {
     }
 
     @Bean
-    public SettlementAdminService.RecordCommand recordCommands(
-        SettlementAdminService.Settings settings,
-        ObjectMapper objectMapper) {
+    public SettlementAdminService.RecordCommand recordCommands(SettlementAdminService.Settings settings,
+                                                               ObjectMapper objectMapper) {
 
         return RetrofitService
                    .newBuilder(SettlementAdminService.RecordCommand.class, settings.baseUrl())

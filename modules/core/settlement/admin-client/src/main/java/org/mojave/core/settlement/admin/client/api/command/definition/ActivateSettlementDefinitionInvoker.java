@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.admin.client.api.command.definition;
 
 import org.mojave.component.misc.error.RestErrorResponse;
@@ -37,9 +38,8 @@ public class ActivateSettlementDefinitionInvoker implements ActivateSettlementDe
 
     private final ObjectMapper objectMapper;
 
-    public ActivateSettlementDefinitionInvoker(
-        final SettlementAdminService.DefinitionCommand definitionCommand,
-        final ObjectMapper objectMapper) {
+    public ActivateSettlementDefinitionInvoker(final SettlementAdminService.DefinitionCommand definitionCommand,
+                                               final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(definitionCommand);
         Objects.requireNonNull(objectMapper);

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.admin.client.api.command.record;
 
 import org.mojave.component.misc.error.RestErrorResponse;
@@ -37,9 +38,8 @@ public class InitiateSettlementProcessInvoker implements InitiateSettlementProce
 
     private final ObjectMapper objectMapper;
 
-    public InitiateSettlementProcessInvoker(
-        final SettlementAdminService.RecordCommand recordCommand,
-        final ObjectMapper objectMapper) {
+    public InitiateSettlementProcessInvoker(final SettlementAdminService.RecordCommand recordCommand,
+                                            final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(recordCommand);
         Objects.requireNonNull(objectMapper);

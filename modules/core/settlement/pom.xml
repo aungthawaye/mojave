@@ -14,10 +14,12 @@
     <modules>
         <module>contract</module>
         <module>domain</module>
-        <module>producer</module>
         <module>admin</module>
         <module>admin-client</module>
+        <module>intercom</module>
+        <module>intercom-client</module>
         <module>consumer</module>
+        <module>producer</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

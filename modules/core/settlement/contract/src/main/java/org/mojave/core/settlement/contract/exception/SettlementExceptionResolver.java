@@ -16,8 +16,7 @@ public class SettlementExceptionResolver {
                 FilterGroupNameRequiredException.from(extras);
             case FilterGroupNameAlreadyExistsException.CODE ->
                 FilterGroupNameAlreadyExistsException.from(extras);
-            case FilterGroupIdNotFoundException.CODE ->
-                FilterGroupIdNotFoundException.from(extras);
+            case FilterGroupIdNotFoundException.CODE -> FilterGroupIdNotFoundException.from(extras);
             case SettlementDefinitionIdNotFoundException.CODE ->
                 SettlementDefinitionIdNotFoundException.from(extras);
             case SettlementDefinitionNameAlreadyExistsException.CODE ->

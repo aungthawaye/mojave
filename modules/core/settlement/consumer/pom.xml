@@ -14,4 +14,18 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.settlement</groupId>
+            <artifactId>mojave-core-settlement-domain</artifactId>
+        </dependency>
+    </dependencies>
 </project>

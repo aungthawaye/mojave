@@ -16,10 +16,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-jpa</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.common</groupId>
             <artifactId>mojave-common-datatype</artifactId>
         </dependency>
@@ -28,12 +24,16 @@
             <artifactId>mojave-common-datatype-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.scheme.fspiop</groupId>
-            <artifactId>mojave-scheme-fspiop</artifactId>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.core.settlement</groupId>
             <artifactId>mojave-core-settlement-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme.fspiop</groupId>
+            <artifactId>mojave-scheme-fspiop</artifactId>
         </dependency>
     </dependencies>
 </project>

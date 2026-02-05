@@ -16,6 +16,10 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.mojave.common</groupId>
+            <artifactId>mojave-common-datatype-jpa</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
         </dependency>
@@ -26,10 +30,6 @@
         <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.core.participant</groupId>

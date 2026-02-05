@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Comparator;
 import java.util.Objects;
 
 @Service
@@ -38,23 +37,7 @@ public class FindSettlementProviderCommandHandler implements FindSettlementProvi
 
         var now = Instant.now();
 
-        var providerId = this.settlementDefinitionRepository
-                             .findAll(spec)
-                             .stream()
-                             .filter(
-                                 def -> def.getStartAt() == null || !def.getStartAt().isAfter(now))
-                             .filter(def -> def.matches(
-                                 input.currency(), input.payerFspId(),
-                                 input.payeeFspId()))
-                             .sorted(Comparator
-                                         .comparing(d -> d.getStartAt() == null ? Instant.EPOCH :
-                                                             d.getStartAt())
-                                         .reversed())
-                             .map(def -> def.getDesiredProviderId())
-                             .findFirst()
-                             .orElse(null);
-
-        var output = new Output(providerId);
+        var output = new Output(null);
 
         LOGGER.info("FindSettlementProviderCommand : output : ({})", ObjectLogger.log(output));
 

@@ -7,7 +7,6 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Global Variables">
@@ -90,7 +89,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -101,15 +100,15 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1" enabled="true">
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1">
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create HUB" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create HUB">
           <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/hubs/create-hub</stringProp>
+          <stringProp name="HTTPSampler.path">/participant/hubs/create-hub</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -150,11 +149,11 @@ if (val != null) {
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP1" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP1">
           <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/fsps/create-fsp</stringProp>
+          <stringProp name="HTTPSampler.path">/participant/fsps/create-fsp</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -192,13 +191,13 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">fsp1Id</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.fspId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -210,11 +209,11 @@ if (val != null) {
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create FSP2" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create FSP2">
           <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/fsps/create-fsp</stringProp>
+          <stringProp name="HTTPSampler.path">/participant/fsps/create-fsp</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -391,7 +390,7 @@ if (val != null) {
         </HeaderManager>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -406,11 +405,11 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/charts/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/charts/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -435,11 +434,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -469,11 +468,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -503,11 +502,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -537,11 +536,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -571,11 +570,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -605,11 +604,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounts/create-in-bulk</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/accounts/create-in-bulk</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -630,11 +629,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounts/create-in-bulk</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/accounts/create-in-bulk</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -655,11 +654,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounts/create-in-bulk</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/accounts/create-in-bulk</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -680,11 +679,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN definition" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN definition">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/flow-definitions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/flow-definitions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -725,11 +724,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER definition" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER definition">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/flow-definitions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/flow-definitions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -806,11 +805,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="12. do fsp1 FUND_IN" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="12. do fsp1 FUND_IN">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/ledgers/post-ledger-flow</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -838,11 +837,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/ledgers/post-ledger-flow</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -870,11 +869,11 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER" enabled="false">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/ledgers/post-ledger-flow</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/ledgers/post-ledger-flow</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -891,8 +890,8 @@ if (val != null) {
     },&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
-        &quot;PAYER_FSP&quot;: &quot;${fsp1OwnerId}&quot;,&#xd;
-        &quot;PAYEE_FSP&quot;: &quot;${fsp2OwnerId}&quot;&#xd;
+        &quot;PAYER_FSP&quot;: &quot;${fsp1Id}&quot;,&#xd;
+        &quot;PAYEE_FSP&quot;: &quot;${fsp2Id}&quot;&#xd;
     },&#xd;
     &quot;transactionAt&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
     &quot;transactionId&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
@@ -1040,11 +1039,11 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 balance" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 balance">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/balances/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/balances/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1071,11 +1070,11 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 balance" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 balance">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/balances/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/balances/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1238,11 +1237,11 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 position" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 position">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/positions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/positions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1338,11 +1337,11 @@ if (val != null) {
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 position" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 position">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/positions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/positions/create</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>

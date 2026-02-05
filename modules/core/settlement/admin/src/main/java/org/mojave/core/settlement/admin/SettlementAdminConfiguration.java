@@ -17,14 +17,15 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.admin;
 
+import org.mojave.common.datatype.DatatypeConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
-import org.mojave.common.datatype.DatatypeConfiguration;
 import org.mojave.core.settlement.domain.SettlementDomainConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
