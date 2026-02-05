@@ -18,7 +18,7 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.filtergroup;
 
 import jakarta.validation.Valid;
 import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
+@RequestMapping("/settlement-intercom")
 public class CreateFilterGroupController {
 
     private final CreateFilterGroupCommand createFilterGroupCommand;

@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.definition;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.definition.DeactivateSettlementDefinitionCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class DeactivateSettlementDefinitionController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final DeactivateSettlementDefinitionCommand deactivateSettlementDefinitionCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public DeactivateSettlementDefinitionController(final DeactivateSettlementDefinitionCommand deactivateSettlementDefinitionCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(deactivateSettlementDefinitionCommand);
+        this.deactivateSettlementDefinitionCommand = deactivateSettlementDefinitionCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-definitions/deactivate")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public DeactivateSettlementDefinitionCommand.Output execute(
+        @Valid @RequestBody final DeactivateSettlementDefinitionCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.deactivateSettlementDefinitionCommand.execute(input);
     }
 
 }

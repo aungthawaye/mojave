@@ -18,7 +18,7 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api;
+package org.mojave.core.settlement.intercom.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ public class WelcomeController {
     @GetMapping("/**")
     public ResponseEntity<Response> welcome() {
 
-        return ResponseEntity.ok(new Response("1.0", "Welcome to the Settlement Admin API."));
+        return ResponseEntity.ok(new Response("1.0", "Welcome to the Settlement Intercom API."));
     }
 
     public record Response(String version, String message) { }

@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.filtergroup;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.definition.RemoveFilterItemCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class RemoveFilterItemController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final RemoveFilterItemCommand removeFilterItemCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public RemoveFilterItemController(final RemoveFilterItemCommand removeFilterItemCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(removeFilterItemCommand);
+        this.removeFilterItemCommand = removeFilterItemCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/filter-groups/remove-item")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public RemoveFilterItemCommand.Output execute(
+        @Valid @RequestBody final RemoveFilterItemCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.removeFilterItemCommand.execute(input);
     }
 
 }

@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class InitiateSettlementProcessController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final InitiateSettlementProcessCommand initiateSettlementProcessCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public InitiateSettlementProcessController(final InitiateSettlementProcessCommand initiateSettlementProcessCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(initiateSettlementProcessCommand);
+        this.initiateSettlementProcessCommand = initiateSettlementProcessCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-records/initiate-process")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public InitiateSettlementProcessCommand.Output execute(
+        @Valid @RequestBody final InitiateSettlementProcessCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.initiateSettlementProcessCommand.execute(input);
     }
 
 }

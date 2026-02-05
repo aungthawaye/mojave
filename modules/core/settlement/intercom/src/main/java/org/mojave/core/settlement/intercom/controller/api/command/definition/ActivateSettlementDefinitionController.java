@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.definition;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.definition.ActivateSettlementDefinitionCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class ActivateSettlementDefinitionController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final ActivateSettlementDefinitionCommand activateSettlementDefinitionCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public ActivateSettlementDefinitionController(final ActivateSettlementDefinitionCommand activateSettlementDefinitionCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(activateSettlementDefinitionCommand);
+        this.activateSettlementDefinitionCommand = activateSettlementDefinitionCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-definitions/activate")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public ActivateSettlementDefinitionCommand.Output execute(
+        @Valid @RequestBody final ActivateSettlementDefinitionCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.activateSettlementDefinitionCommand.execute(input);
     }
 
 }

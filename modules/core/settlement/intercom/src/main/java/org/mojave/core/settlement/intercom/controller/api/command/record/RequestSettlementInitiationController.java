@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.record.RequestSettlementInitiationCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class RequestSettlementInitiationController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final RequestSettlementInitiationCommand requestSettlementInitiationCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public RequestSettlementInitiationController(final RequestSettlementInitiationCommand requestSettlementInitiationCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(requestSettlementInitiationCommand);
+        this.requestSettlementInitiationCommand = requestSettlementInitiationCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-records/request-initiation")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public RequestSettlementInitiationCommand.Output execute(
+        @Valid @RequestBody final RequestSettlementInitiationCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.requestSettlementInitiationCommand.execute(input);
     }
 
 }

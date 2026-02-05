@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.definition;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.definition.RemoveSettlementDefinitionCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class RemoveSettlementDefinitionController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final RemoveSettlementDefinitionCommand removeSettlementDefinitionCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public RemoveSettlementDefinitionController(final RemoveSettlementDefinitionCommand removeSettlementDefinitionCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(removeSettlementDefinitionCommand);
+        this.removeSettlementDefinitionCommand = removeSettlementDefinitionCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-definitions/remove")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public RemoveSettlementDefinitionCommand.Output execute(
+        @Valid @RequestBody final RemoveSettlementDefinitionCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.removeSettlementDefinitionCommand.execute(input);
     }
 
 }

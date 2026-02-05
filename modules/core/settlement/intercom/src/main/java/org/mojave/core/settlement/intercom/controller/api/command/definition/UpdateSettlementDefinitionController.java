@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.definition;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.definition.UpdateSettlementDefinitionCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class UpdateSettlementDefinitionController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final UpdateSettlementDefinitionCommand updateSettlementDefinitionCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public UpdateSettlementDefinitionController(final UpdateSettlementDefinitionCommand updateSettlementDefinitionCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(updateSettlementDefinitionCommand);
+        this.updateSettlementDefinitionCommand = updateSettlementDefinitionCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-definitions/update")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public UpdateSettlementDefinitionCommand.Output execute(
+        @Valid @RequestBody final UpdateSettlementDefinitionCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.updateSettlementDefinitionCommand.execute(input);
     }
 
 }

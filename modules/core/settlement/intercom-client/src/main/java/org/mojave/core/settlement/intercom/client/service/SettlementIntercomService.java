@@ -18,7 +18,7 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.client.service;
+package org.mojave.core.settlement.intercom.client.service;
 
 import org.mojave.core.settlement.contract.command.definition.ActivateSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.definition.AddFilterItemCommand;
@@ -38,9 +38,9 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface SettlementAdminService {
+public interface SettlementIntercomService {
 
-    String MODULE_PREFIX = "/settlement";
+    String MODULE_PREFIX = "/settlement-intercom";
 
     interface DefinitionCommand {
 

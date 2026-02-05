@@ -18,10 +18,10 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.controller.api.command.filtergroup;
+package org.mojave.core.settlement.intercom.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
+import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
-public class CreateFilterGroupController {
+@RequestMapping("/settlement-intercom")
+public class UpdatePreparationResultController {
 
-    private final CreateFilterGroupCommand createFilterGroupCommand;
+    private final UpdatePreparationResultCommand updatePreparationResultCommand;
 
-    public CreateFilterGroupController(final CreateFilterGroupCommand createFilterGroupCommand) {
+    public UpdatePreparationResultController(final UpdatePreparationResultCommand updatePreparationResultCommand) {
 
-        Objects.requireNonNull(createFilterGroupCommand);
-        this.createFilterGroupCommand = createFilterGroupCommand;
+        Objects.requireNonNull(updatePreparationResultCommand);
+        this.updatePreparationResultCommand = updatePreparationResultCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement-records/update-preparation")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateFilterGroupCommand.Output execute(
-        @Valid @RequestBody final CreateFilterGroupCommand.Input input) {
+    public UpdatePreparationResultCommand.Output execute(
+        @Valid @RequestBody final UpdatePreparationResultCommand.Input input) {
 
-        return this.createFilterGroupCommand.execute(input);
+        return this.updatePreparationResultCommand.execute(input);
     }
 
 }

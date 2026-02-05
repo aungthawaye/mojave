@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.admin.controller.api.command.definition;
 
 import jakarta.validation.Valid;
@@ -26,17 +27,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
 @RestController
+@RequestMapping("/settlement")
 public class FindSettlementProviderController {
 
     private final FindSettlementProviderCommand findSettlementProviderCommand;
 
-    public FindSettlementProviderController(
-        final FindSettlementProviderCommand findSettlementProviderCommand) {
+    public FindSettlementProviderController(final FindSettlementProviderCommand findSettlementProviderCommand) {
 
         Objects.requireNonNull(findSettlementProviderCommand);
         this.findSettlementProviderCommand = findSettlementProviderCommand;
