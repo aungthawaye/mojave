@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(xargs:*)",
+      "Bash(for file in /Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/admin/src/main/java/org/mojave/core/accounting/admin/controller/api/command/definition/*.java)",
+      "Bash(do)",
+      "Bash(basename:*)",
+      "Bash(done)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd /accounting prefix to admin and intercom APIs\n\nUpdated all accounting admin controllers with @RequestMapping\\(\"/accounting\"\\)\nUpdated AccountingAdminService with MODULE_PREFIX = \"/accounting\"\nUpdated all accounting intercom controllers with @RequestMapping\\(\"/accounting-intercom\"\\)\nUpdated AccountingIntercomService with MODULE_PREFIX = \"/accounting-intercom\"\n\nThis ensures all accounting API paths are prefixed with their module name for better organization and namespace separation.\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
+    ]
+  }
+}

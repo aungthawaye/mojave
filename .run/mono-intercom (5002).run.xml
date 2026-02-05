@@ -1,13 +1,14 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="mono-intercom (5002)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="core">
     <option name="envFilePaths">
-      <option value="$PROJECT_DIR$/implementation/core/mono/intercom/src/main/java/org/mojave/core/mono/intercom/.env" />
+      <option value="$PROJECT_DIR$/modules/core/mono/intercom/src/main/java/org/mojave/core/mono/intercom/.env" />
     </option>
     <module name="mojave-core-mono-intercom" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.mono.intercom.MonoIntercomApplication" />
+    <option name="VM_PARAMETERS" value="-Dsnowflake.nodeId=10 -Dlog4j.configurationFile=classpath:mono-intercom-log4j2.xml" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.mono.intercom.*" />
