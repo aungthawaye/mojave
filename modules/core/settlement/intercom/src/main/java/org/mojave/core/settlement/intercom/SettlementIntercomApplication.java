@@ -20,6 +20,7 @@
 
 package org.mojave.core.settlement.intercom;
 
+import org.mojave.core.settlement.domain.SettlementFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -49,6 +50,10 @@ public class SettlementIntercomApplication {
         SettlementIntercomApplication.class.getName());
 
     public static void main(String[] args) {
+
+        SettlementFlyway.migrate(
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(SettlementIntercomApplication.class)
             .web(WebApplicationType.SERVLET)

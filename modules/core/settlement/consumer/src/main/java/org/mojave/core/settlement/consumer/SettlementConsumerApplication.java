@@ -20,6 +20,7 @@
 
 package org.mojave.core.settlement.consumer;
 
+import org.mojave.core.settlement.domain.SettlementFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -38,6 +39,10 @@ public class SettlementConsumerApplication {
         SettlementConsumerApplication.class);
 
     public static void main(String[] args) throws InterruptedException {
+
+        SettlementFlyway.migrate(
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         var context = new AnnotationConfigApplicationContext(SettlementConsumerApplication.class);
         var latch = new CountDownLatch(1);

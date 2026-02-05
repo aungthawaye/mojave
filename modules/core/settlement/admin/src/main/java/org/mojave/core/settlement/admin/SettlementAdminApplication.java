@@ -20,6 +20,7 @@
 
 package org.mojave.core.settlement.admin;
 
+import org.mojave.core.settlement.domain.SettlementFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
@@ -48,6 +49,10 @@ public class SettlementAdminApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(SettlementAdminApplication.class);
 
     public static void main(String[] args) {
+
+        SettlementFlyway.migrate(
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         new SpringApplicationBuilder(SettlementAdminApplication.class)
             .web(WebApplicationType.SERVLET)
