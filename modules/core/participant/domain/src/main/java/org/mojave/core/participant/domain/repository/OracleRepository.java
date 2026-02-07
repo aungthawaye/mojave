@@ -25,6 +25,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.participant.PartyIdType;
 import org.mojave.common.datatype.identifier.participant.OracleId;
 import org.mojave.core.participant.domain.model.oracle.Oracle;
+import org.mojave.core.participant.domain.model.oracle.Oracle_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -36,27 +37,27 @@ public interface OracleRepository
 
         public static Specification<Oracle> withActivationStatus(ActivationStatus status) {
 
-            return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
+            return (root, query, cb) -> cb.equal(root.get(Oracle_.activationStatus), status);
         }
 
         public static Specification<Oracle> withId(OracleId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Oracle_.id), id);
         }
 
         public static Specification<Oracle> withNameEquals(String name) {
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
+            return (root, query, cb) -> cb.equal(root.get(Oracle_.name), name);
         }
 
         public static Specification<Oracle> withTerminationStatus(TerminationStatus status) {
 
-            return (root, query, cb) -> cb.equal(root.get("terminationStatus"), status);
+            return (root, query, cb) -> cb.equal(root.get(Oracle_.terminationStatus), status);
         }
 
         public static Specification<Oracle> withType(PartyIdType type) {
 
-            return (root, query, cb) -> cb.equal(root.get("type"), type);
+            return (root, query, cb) -> cb.equal(root.get(Oracle_.type), type);
         }
 
     }

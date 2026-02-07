@@ -20,6 +20,7 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.FlowDefinition;
+import org.mojave.core.accounting.domain.model.FlowDefinition_;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
@@ -38,42 +39,42 @@ public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, 
 
         public static Specification<FlowDefinition> withActivationStatus(ActivationStatus status) {
 
-            return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.activationStatus), status);
         }
 
         public static Specification<FlowDefinition> withCurrency(Currency currency) {
 
-            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.currency), currency);
         }
 
         public static Specification<FlowDefinition> withId(FlowDefinitionId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.id), id);
         }
 
         public static Specification<FlowDefinition> withIdNotEquals(FlowDefinitionId id) {
 
-            return (root, query, cb) -> cb.notEqual(root.get("id"), id);
+            return (root, query, cb) -> cb.notEqual(root.get(FlowDefinition_.id), id);
         }
 
         public static Specification<FlowDefinition> withNameContains(String name) {
 
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+            return (root, query, cb) -> cb.like(root.get(FlowDefinition_.name), "%" + name + "%");
         }
 
         public static Specification<FlowDefinition> withNameEquals(String name) {
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.name), name);
         }
 
         public static Specification<FlowDefinition> withTerminationStatus(TerminationStatus status) {
 
-            return (root, query, cb) -> cb.equal(root.get("terminationStatus"), status);
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.terminationStatus), status);
         }
 
         public static Specification<FlowDefinition> withTransactionType(TransactionType type) {
 
-            return (root, query, cb) -> cb.equal(root.get("transactionType"), type);
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.transactionType), type);
         }
 
     }

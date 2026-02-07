@@ -20,6 +20,7 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.Chart;
+import org.mojave.core.accounting.domain.model.Chart_;
 import org.mojave.common.datatype.identifier.accounting.ChartId;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,17 +35,17 @@ public interface ChartRepository
 
         public static Specification<Chart> withId(ChartId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Chart_.id), id);
         }
 
         public static Specification<Chart> withNameContains(String name) {
 
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+            return (root, query, cb) -> cb.like(root.get(Chart_.name), "%" + name + "%");
         }
 
         public static Specification<Chart> withNameEquals(String name) {
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
+            return (root, query, cb) -> cb.equal(root.get(Chart_.name), name);
         }
 
     }

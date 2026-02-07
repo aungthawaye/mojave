@@ -21,8 +21,8 @@
 package org.mojave.core.participant.domain.repository;
 
 import org.mojave.common.datatype.identifier.participant.FspGroupId;
-import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.core.participant.domain.model.fsp.FspGroup;
+import org.mojave.core.participant.domain.model.fsp.FspGroup_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -34,19 +34,15 @@ public interface FspGroupRepository
 
     class Filters {
 
-        public static Specification<FspGroup> withFspId(final FspId fspId) {
-
-            return (root, query, cb) -> cb.equal(root.join("items").get("fspId"), fspId);
-        }
-
         public static Specification<FspGroup> withId(final FspGroupId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(FspGroup_.id), id);
         }
 
         public static Specification<FspGroup> withNameEquals(final String name) {
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
+            return (root, query, cb) -> cb.equal(
+                cb.lower(root.get(FspGroup_.name)), name.toLowerCase());
         }
 
     }

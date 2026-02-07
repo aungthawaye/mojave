@@ -25,6 +25,7 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.transfer.domain.model.Transfer;
+import org.mojave.rail.fspiop.transfer.domain.model.Transfer_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -38,22 +39,22 @@ public interface TransferRepository
 
         public static Specification<Transfer> withPayeeFspId(FspId payeeFspId) {
 
-            return (root, query, cb) -> cb.equal(root.get("payeeFspId"), payeeFspId);
+            return (root, query, cb) -> cb.equal(root.get(Transfer_.payeeFspId), payeeFspId);
         }
 
         public static Specification<Transfer> withPayerFspId(FspId payerFspId) {
 
-            return (root, query, cb) -> cb.equal(root.get("payerFspId"), payerFspId);
+            return (root, query, cb) -> cb.equal(root.get(Transfer_.payerFspId), payerFspId);
         }
 
         public static Specification<Transfer> withTransactionId(TransactionId transactionId) {
 
-            return (root, query, cb) -> cb.equal(root.get("transactionId"), transactionId);
+            return (root, query, cb) -> cb.equal(root.get(Transfer_.transactionId), transactionId);
         }
 
         public static Specification<Transfer> withUdfTransferId(UdfTransferId udfTransferId) {
 
-            return (root, query, cb) -> cb.equal(root.get("udfTransferId"), udfTransferId);
+            return (root, query, cb) -> cb.equal(root.get(Transfer_.udfTransferId), udfTransferId);
         }
 
     }

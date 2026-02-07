@@ -25,6 +25,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.identifier.participant.SspId;
 import org.mojave.common.datatype.type.participant.SspCode;
 import org.mojave.core.participant.domain.model.ssp.Ssp;
+import org.mojave.core.participant.domain.model.ssp.Ssp_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -37,32 +38,32 @@ public interface SspRepository extends JpaRepository<Ssp, SspId>, JpaSpecificati
 
         public static Specification<Ssp> withActivationStatus(final ActivationStatus status) {
 
-            return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
+            return (root, query, cb) -> cb.equal(root.get(Ssp_.activationStatus), status);
         }
 
         public static Specification<Ssp> withId(final SspId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Ssp_.id), id);
         }
 
         public static Specification<Ssp> withNameContains(final String name) {
 
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+            return (root, query, cb) -> cb.like(root.get(Ssp_.name), "%" + name + "%");
         }
 
         public static Specification<Ssp> withNameEquals(final String name) {
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
+            return (root, query, cb) -> cb.equal(root.get(Ssp_.name), name);
         }
 
         public static Specification<Ssp> withSspCode(final SspCode sspCode) {
 
-            return (root, query, cb) -> cb.equal(root.get("code"), sspCode);
+            return (root, query, cb) -> cb.equal(root.get(Ssp_.code), sspCode);
         }
 
         public static Specification<Ssp> withTerminationStatus(final TerminationStatus status) {
 
-            return (root, query, cb) -> cb.equal(root.get("terminationStatus"), status);
+            return (root, query, cb) -> cb.equal(root.get(Ssp_.terminationStatus), status);
         }
 
     }

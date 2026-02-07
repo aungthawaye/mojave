@@ -22,6 +22,7 @@ package org.mojave.core.wallet.domain.repository;
 import org.mojave.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.model.Balance;
+import org.mojave.core.wallet.domain.model.Balance_;
 import org.mojave.common.datatype.enums.Currency;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,17 +37,17 @@ public interface BalanceRepository
 
         public static Specification<Balance> withCurrency(Currency currency) {
 
-            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
+            return (root, query, cb) -> cb.equal(root.get(Balance_.currency), currency);
         }
 
         public static Specification<Balance> withId(BalanceId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Balance_.id), id);
         }
 
         public static Specification<Balance> withOwnerId(WalletOwnerId ownerId) {
 
-            return (root, query, cb) -> cb.equal(root.get("walletOwnerId"), ownerId);
+            return (root, query, cb) -> cb.equal(root.get(Balance_.walletOwnerId), ownerId);
         }
 
     }

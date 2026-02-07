@@ -21,6 +21,7 @@ package org.mojave.core.wallet.domain.repository;
 
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.core.wallet.domain.model.BalanceUpdate;
+import org.mojave.core.wallet.domain.model.BalanceUpdate_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -34,12 +35,12 @@ public interface BalanceUpdateRepository
 
         public static Specification<BalanceUpdate> withReversalId(final BalanceUpdateId walletId) {
 
-            return (root, query, cb) -> cb.equal(root.get("withdrawId"), walletId);
+            return (root, query, cb) -> cb.equal(root.get(BalanceUpdate_.withdrawId), walletId);
         }
 
         public static Specification<BalanceUpdate> withWalletId(final BalanceUpdateId walletId) {
 
-            return (root, query, cb) -> cb.equal(root.get("balanceId"), walletId);
+            return (root, query, cb) -> cb.equal(root.get(BalanceUpdate_.balanceId), walletId);
         }
 
     }

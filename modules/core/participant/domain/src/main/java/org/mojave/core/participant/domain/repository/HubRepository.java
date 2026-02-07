@@ -22,6 +22,7 @@ package org.mojave.core.participant.domain.repository;
 
 import org.mojave.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.domain.model.hub.Hub;
+import org.mojave.core.participant.domain.model.hub.Hub_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -34,12 +35,12 @@ public interface HubRepository extends JpaRepository<Hub, HubId>, JpaSpecificati
 
         public static Specification<Hub> withNameContains(String name) {
 
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+            return (root, query, cb) -> cb.like(root.get(Hub_.name), "%" + name + "%");
         }
 
         public static Specification<Hub> withNameEquals(String name) {
 
-            return (root, query, cb) -> cb.equal(root.get("name"), name);
+            return (root, query, cb) -> cb.equal(root.get(Hub_.name), name);
         }
 
     }

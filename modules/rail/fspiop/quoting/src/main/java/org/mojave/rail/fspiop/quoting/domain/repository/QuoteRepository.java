@@ -22,6 +22,7 @@ package org.mojave.rail.fspiop.quoting.domain.repository;
 import org.mojave.common.datatype.identifier.quoting.QuoteId;
 import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
+import org.mojave.rail.fspiop.quoting.domain.model.Quote_;
 import org.mojave.scheme.fspiop.core.AmountType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,17 +39,17 @@ public interface QuoteRepository
 
         public static Specification<Quote> withAmountType(AmountType amountType) {
 
-            return (root, query, cb) -> cb.equal(root.get("amountType"), amountType);
+            return (root, query, cb) -> cb.equal(root.get(Quote_.amountType), amountType);
         }
 
         public static Specification<Quote> withRequestedAtRange(Instant from, Instant to) {
 
-            return (root, query, cb) -> cb.between(root.get("requestedAt"), from, to);
+            return (root, query, cb) -> cb.between(root.get(Quote_.requestedAt), from, to);
         }
 
         public static Specification<Quote> withUdfQuoteId(UdfQuoteId udfQuoteId) {
 
-            return (root, query, cb) -> cb.equal(root.get("udfQuoteId"), udfQuoteId);
+            return (root, query, cb) -> cb.equal(root.get(Quote_.udfQuoteId), udfQuoteId);
         }
 
     }

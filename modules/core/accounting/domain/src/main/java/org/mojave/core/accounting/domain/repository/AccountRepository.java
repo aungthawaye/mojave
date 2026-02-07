@@ -20,6 +20,7 @@
 package org.mojave.core.accounting.domain.repository;
 
 import org.mojave.core.accounting.domain.model.Account;
+import org.mojave.core.accounting.domain.model.Account_;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
@@ -38,27 +39,27 @@ public interface AccountRepository
 
         public static Specification<Account> withChartEntryId(ChartEntryId chartEntryId) {
 
-            return (root, query, cb) -> cb.equal(root.get("chartEntryId"), chartEntryId);
+            return (root, query, cb) -> cb.equal(root.get(Account_.chartEntryId), chartEntryId);
         }
 
         public static Specification<Account> withCode(AccountCode code) {
 
-            return (root, query, cb) -> cb.equal(root.get("code"), code);
+            return (root, query, cb) -> cb.equal(root.get(Account_.code), code);
         }
 
         public static Specification<Account> withCurrency(Currency currency) {
 
-            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
+            return (root, query, cb) -> cb.equal(root.get(Account_.currency), currency);
         }
 
         public static Specification<Account> withId(AccountId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Account_.id), id);
         }
 
         public static Specification<Account> withOwnerId(AccountOwnerId ownerId) {
 
-            return (root, query, cb) -> cb.equal(root.get("ownerId"), ownerId);
+            return (root, query, cb) -> cb.equal(root.get(Account_.ownerId), ownerId);
         }
 
     }

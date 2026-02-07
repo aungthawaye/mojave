@@ -23,6 +23,7 @@ import jakarta.persistence.LockModeType;
 import org.mojave.common.datatype.identifier.wallet.PositionId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.model.Position;
+import org.mojave.core.wallet.domain.model.Position_;
 import org.mojave.common.datatype.enums.Currency;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -45,17 +46,17 @@ public interface PositionRepository
 
         public static Specification<Position> withCurrency(final Currency currency) {
 
-            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
+            return (root, query, cb) -> cb.equal(root.get(Position_.currency), currency);
         }
 
         public static Specification<Position> withId(final PositionId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Position_.id), id);
         }
 
         public static Specification<Position> withOwnerId(final WalletOwnerId ownerId) {
 
-            return (root, query, cb) -> cb.equal(root.get("walletOwnerId"), ownerId);
+            return (root, query, cb) -> cb.equal(root.get(Position_.walletOwnerId), ownerId);
         }
 
     }
