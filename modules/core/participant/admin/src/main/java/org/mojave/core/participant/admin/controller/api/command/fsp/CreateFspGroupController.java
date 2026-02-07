@@ -17,15 +17,16 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.admin.controller.api.command.fsp;
 
 import jakarta.validation.Valid;
 import org.mojave.core.participant.contract.command.fsp.CreateFspGroupCommand;
-import org.mojave.core.participant.contract.exception.fsp.FspAlreadyExistsInFspGroupException;
-import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameAlreadyExistsException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameRequiredException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameTooLongException;
+import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
+import org.mojave.core.participant.contract.exception.fsp.TerminatedFspIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -54,16 +55,16 @@ public class CreateFspGroupController {
         this.createFspGroupCommand = createFspGroupCommand;
     }
 
-    @PostMapping("/fsps/groups/create-fsp-group")
+    @PostMapping("/fsps/create-fsp-group")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CreateFspGroupCommand.Output execute(
         @Valid @RequestBody final CreateFspGroupCommand.Input input) throws
-                                                                   FspGroupNameRequiredException,
-                                                                   FspGroupNameTooLongException,
-                                                                   FspGroupNameAlreadyExistsException,
-                                                                   FspAlreadyExistsInFspGroupException,
-                                                                   FspIdNotFoundException {
+                                                                     FspGroupNameRequiredException,
+                                                                     FspGroupNameTooLongException,
+                                                                     FspGroupNameAlreadyExistsException,
+                                                                     FspIdNotFoundException,
+                                                                     TerminatedFspIdException {
 
         return this.createFspGroupCommand.execute(input);
     }

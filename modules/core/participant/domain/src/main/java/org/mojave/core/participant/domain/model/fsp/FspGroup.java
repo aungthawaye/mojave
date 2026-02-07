@@ -20,7 +20,6 @@
 
 package org.mojave.core.participant.domain.model.fsp;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,18 +34,15 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.common.datatype.converter.identifier.participant.FspGroupIdJavaType;
 import org.mojave.common.datatype.identifier.participant.FspGroupId;
-import org.mojave.common.datatype.identifier.participant.FspGroupItemId;
-import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.participant.contract.data.FspGroupData;
-import org.mojave.core.participant.contract.exception.fsp.FspGroupNameRequiredException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameTooLongException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static java.sql.Types.BIGINT;
 
@@ -74,10 +70,8 @@ public class FspGroup extends JpaEntity<FspGroupId> implements DataConversion<Fs
 
     @OneToMany(
         mappedBy = "fspGroup",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true,
         fetch = FetchType.EAGER)
-    protected List<FspGroupItem> items = new ArrayList<>();
+    protected Set<Fsp> fsps = Set.of();
 
     public FspGroup(final String name) {
 
@@ -85,26 +79,12 @@ public class FspGroup extends JpaEntity<FspGroupId> implements DataConversion<Fs
         this.name(name);
     }
 
-    public FspGroupItem addItem(final FspId fspId) {
-
-        final var item = new FspGroupItem(this, fspId);
-
-        this.items.add(item);
-
-        return item;
-    }
-
     @Override
     public FspGroupData convert() {
 
-        final var itemData = this.items.stream().map(FspGroupItem::convert).toList();
+        final var itemData = this.fsps.stream().map(Fsp::convert).toList();
 
         return new FspGroupData(this.id, this.name, itemData);
-    }
-
-    public boolean fspExists(final FspId fspId) {
-
-        return this.items.stream().anyMatch(item -> item.matches(fspId));
     }
 
     @Override
@@ -115,9 +95,7 @@ public class FspGroup extends JpaEntity<FspGroupId> implements DataConversion<Fs
 
     public FspGroup name(final String name) {
 
-        if (name == null || name.isBlank()) {
-            throw new FspGroupNameRequiredException();
-        }
+        Objects.requireNonNull(name);
 
         var value = name.trim();
 
@@ -128,11 +106,6 @@ public class FspGroup extends JpaEntity<FspGroupId> implements DataConversion<Fs
         this.name = value;
 
         return this;
-    }
-
-    public boolean removeItem(final FspGroupItemId fspGroupItemId) {
-
-        return this.items.removeIf(item -> fspGroupItemId.equals(item.getId()));
     }
 
 }

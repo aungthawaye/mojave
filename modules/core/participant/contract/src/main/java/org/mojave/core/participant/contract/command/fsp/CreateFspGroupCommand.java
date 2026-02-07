@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,16 +25,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.common.datatype.identifier.participant.FspGroupId;
-import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateFspGroupCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull @NotBlank
-                 @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
-                 @JsonProperty(required = true) @NotNull FspId[] fspIds) {
+    record Input(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name) {
 
     }
 

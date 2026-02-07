@@ -21,6 +21,7 @@
 package org.mojave.core.participant.domain.repository;
 
 import org.mojave.common.datatype.identifier.participant.FspGroupId;
+import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.core.participant.domain.model.fsp.FspGroup;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,10 +29,15 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FspGroupRepository extends JpaRepository<FspGroup, FspGroupId>,
-                                            JpaSpecificationExecutor<FspGroup> {
+public interface FspGroupRepository
+    extends JpaRepository<FspGroup, FspGroupId>, JpaSpecificationExecutor<FspGroup> {
 
     class Filters {
+
+        public static Specification<FspGroup> withFspId(final FspId fspId) {
+
+            return (root, query, cb) -> cb.equal(root.join("items").get("fspId"), fspId);
+        }
 
         public static Specification<FspGroup> withId(final FspGroupId id) {
 

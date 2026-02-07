@@ -62,7 +62,7 @@
                             <configOptions>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <useJakartaEe>true</useJakartaEe>
-                                <sourceFolder>src/generated/java</sourceFolder>
+                                <sourceFolder>src/main/java</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <returnResponse>false</returnResponse>

@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.contract.exception.fsp;
 
 import lombok.Getter;
@@ -38,9 +39,10 @@ public class FspGroupIdNotFoundException extends UncheckedDomainException {
 
     public FspGroupIdNotFoundException(final FspGroupId fspGroupId) {
 
-        super(new ErrorTemplate(
-            CODE, TEMPLATE,
-            new String[]{fspGroupId == null ? null : fspGroupId.getId().toString()}));
+        super(
+            new ErrorTemplate(
+                CODE, TEMPLATE,
+                new String[]{fspGroupId == null ? null : fspGroupId.getId().toString()}));
 
         this.fspGroupId = fspGroupId;
     }

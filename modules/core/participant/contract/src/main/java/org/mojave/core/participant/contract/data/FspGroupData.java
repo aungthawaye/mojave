@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.contract.data;
 
 import org.mojave.common.datatype.identifier.participant.FspGroupId;
@@ -24,9 +25,7 @@ import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import java.util.List;
 import java.util.Objects;
 
-public record FspGroupData(FspGroupId fspGroupId,
-                           String name,
-                           List<FspGroupItemData> items) {
+public record FspGroupData(FspGroupId fspGroupId, String name, List<FspData> fsps) {
 
     @Override
     public boolean equals(final Object o) {
@@ -41,7 +40,7 @@ public record FspGroupData(FspGroupId fspGroupId,
     @Override
     public int hashCode() {
 
-        return Objects.hashCode(this.fspGroupId);
+        return Objects.hash(this.fspGroupId, this.name, this.fsps);
     }
 
 }

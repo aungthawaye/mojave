@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,11 @@
  * ===
  */
 
-
 package org.mojave.core.participant.domain.command.ssp;
 
+import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.core.participant.contract.command.ssp.ChangeSspEndpointCommand;
 import org.mojave.core.participant.contract.exception.ssp.SspIdNotFoundException;
 import org.mojave.core.participant.domain.repository.SspRepository;
@@ -32,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Objects;
 
 @Service
@@ -60,8 +60,8 @@ public class ChangeSspEndpointCommandHandler implements ChangeSspEndpointCommand
         var alive = SspRepository.Filters.withTerminationStatus(TerminationStatus.ALIVE);
 
         var ssp = this.sspRepository
-                       .findOne(withId.and(alive))
-                       .orElseThrow(() -> new SspIdNotFoundException(input.sspId()));
+                      .findOne(withId.and(alive))
+                      .orElseThrow(() -> new SspIdNotFoundException(input.sspId()));
 
         // Change the single SSP endpoint base URL
         ssp.endpoint(input.baseUrl());
@@ -74,4 +74,5 @@ public class ChangeSspEndpointCommandHandler implements ChangeSspEndpointCommand
 
         return output;
     }
+
 }

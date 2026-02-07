@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,12 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.admin.client.service;
 
 import org.mojave.core.participant.contract.command.fsp.ActivateEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.ActivateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
-import org.mojave.core.participant.contract.command.fsp.AddFspGroupItemCommand;
 import org.mojave.core.participant.contract.command.fsp.AddEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.AddFspCurrencyCommand;
 import org.mojave.core.participant.contract.command.fsp.ChangeFspEndpointCommand;
@@ -32,17 +32,9 @@ import org.mojave.core.participant.contract.command.fsp.CreateFspGroupCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateFspCurrencyCommand;
+import org.mojave.core.participant.contract.command.fsp.JoinFspGroupCommand;
+import org.mojave.core.participant.contract.command.fsp.LeaveFspGroupCommand;
 import org.mojave.core.participant.contract.command.fsp.RemoveFspGroupCommand;
-import org.mojave.core.participant.contract.command.fsp.RemoveFspGroupItemCommand;
-import org.mojave.core.participant.contract.command.ssp.ActivateSspCommand;
-import org.mojave.core.participant.contract.command.ssp.ActivateSspCurrencyCommand;
-import org.mojave.core.participant.contract.command.ssp.AddSspCurrencyCommand;
-import org.mojave.core.participant.contract.command.ssp.ChangeSspEndpointCommand;
-import org.mojave.core.participant.contract.command.ssp.ChangeSspNameCommand;
-import org.mojave.core.participant.contract.command.ssp.CreateSspCommand;
-import org.mojave.core.participant.contract.command.ssp.DeactivateSspCommand;
-import org.mojave.core.participant.contract.command.ssp.DeactivateSspCurrencyCommand;
-import org.mojave.core.participant.contract.command.ssp.TerminateSspCommand;
 import org.mojave.core.participant.contract.command.hub.ActivateHubCurrencyCommand;
 import org.mojave.core.participant.contract.command.hub.AddHubCurrencyCommand;
 import org.mojave.core.participant.contract.command.hub.ChangeHubNameCommand;
@@ -53,10 +45,19 @@ import org.mojave.core.participant.contract.command.oracle.ChangeOracleNameComma
 import org.mojave.core.participant.contract.command.oracle.ChangeOracleTypeCommand;
 import org.mojave.core.participant.contract.command.oracle.CreateOracleCommand;
 import org.mojave.core.participant.contract.command.oracle.DeactivateOracleCommand;
+import org.mojave.core.participant.contract.command.ssp.ActivateSspCommand;
+import org.mojave.core.participant.contract.command.ssp.ActivateSspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.AddSspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.ChangeSspEndpointCommand;
+import org.mojave.core.participant.contract.command.ssp.ChangeSspNameCommand;
+import org.mojave.core.participant.contract.command.ssp.CreateSspCommand;
+import org.mojave.core.participant.contract.command.ssp.DeactivateSspCommand;
+import org.mojave.core.participant.contract.command.ssp.DeactivateSspCurrencyCommand;
+import org.mojave.core.participant.contract.command.ssp.TerminateSspCommand;
 import org.mojave.core.participant.contract.data.FspData;
-import org.mojave.core.participant.contract.data.SspData;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.data.OracleData;
+import org.mojave.core.participant.contract.data.SspData;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -89,7 +90,8 @@ public interface ParticipantAdminService {
         Call<AddFspCurrencyCommand.Output> addFspCurrency(@Body AddFspCurrencyCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/change-endpoint")
-        Call<ChangeFspEndpointCommand.Output> changeEndpoint(@Body ChangeFspEndpointCommand.Input input);
+        Call<ChangeFspEndpointCommand.Output> changeEndpoint(
+            @Body ChangeFspEndpointCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/change-name")
         Call<ChangeFspNameCommand.Output> changeFspName(@Body ChangeFspNameCommand.Input input);
@@ -97,18 +99,8 @@ public interface ParticipantAdminService {
         @POST(MODULE_PREFIX + "/fsps/create-fsp")
         Call<CreateFspCommand.Output> createFsp(@Body CreateFspCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/fsps/groups/create-fsp-group")
+        @POST(MODULE_PREFIX + "/fsp/create-fsp-group")
         Call<CreateFspGroupCommand.Output> createFspGroup(@Body CreateFspGroupCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/fsps/groups/add-fsp-group-item")
-        Call<AddFspGroupItemCommand.Output> addFspGroupItem(@Body AddFspGroupItemCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/fsps/groups/remove-fsp-group-item")
-        Call<RemoveFspGroupItemCommand.Output> removeFspGroupItem(
-            @Body RemoveFspGroupItemCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/fsps/groups/remove-fsp-group")
-        Call<RemoveFspGroupCommand.Output> removeFspGroup(@Body RemoveFspGroupCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/deactivate-endpoint")
         Call<DeactivateEndpointCommand.Output> deactivateEndpoint(
@@ -121,45 +113,48 @@ public interface ParticipantAdminService {
         Call<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(
             @Body DeactivateFspCurrencyCommand.Input input);
 
+        @POST(MODULE_PREFIX + "/fsps/join-fsp-group")
+        Call<JoinFspGroupCommand.Output> joinFspGroup(@Body JoinFspGroupCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/fsps/leave-fsp-group")
+        Call<LeaveFspGroupCommand.Output> leaveFspGroup(@Body LeaveFspGroupCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/fsps/remove-fsp-group")
+        Call<RemoveFspGroupCommand.Output> removeFspGroup(@Body RemoveFspGroupCommand.Input input);
+
     }
 
     interface SspCommand {
 
         @POST(MODULE_PREFIX + "/ssps/activate-ssp")
-        Call<ActivateSspCommand.Output> activateSsp(
-            @Body ActivateSspCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/ssps/deactivate-ssp")
-        Call<DeactivateSspCommand.Output> deactivateSsp(
-            @Body DeactivateSspCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/ssps/terminate-ssp")
-        Call<TerminateSspCommand.Output> terminateSsp(
-            @Body TerminateSspCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/ssps/create-ssp")
-        Call<CreateSspCommand.Output> createSsp(
-            @Body CreateSspCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/ssps/change-name")
-        Call<ChangeSspNameCommand.Output> changeSspName(
-            @Body ChangeSspNameCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/ssps/change-endpoint")
-        Call<ChangeSspEndpointCommand.Output> changeSspEndpoint(
-            @Body ChangeSspEndpointCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/ssps/add-currency")
-        Call<AddSspCurrencyCommand.Output> addSspCurrency(
-            @Body AddSspCurrencyCommand.Input input);
+        Call<ActivateSspCommand.Output> activateSsp(@Body ActivateSspCommand.Input input);
 
         @POST(MODULE_PREFIX + "/ssps/activate-currency")
         Call<ActivateSspCurrencyCommand.Output> activateSspCurrency(
             @Body ActivateSspCurrencyCommand.Input input);
 
+        @POST(MODULE_PREFIX + "/ssps/add-currency")
+        Call<AddSspCurrencyCommand.Output> addSspCurrency(@Body AddSspCurrencyCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/ssps/change-endpoint")
+        Call<ChangeSspEndpointCommand.Output> changeSspEndpoint(
+            @Body ChangeSspEndpointCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/ssps/change-name")
+        Call<ChangeSspNameCommand.Output> changeSspName(@Body ChangeSspNameCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/ssps/create-ssp")
+        Call<CreateSspCommand.Output> createSsp(@Body CreateSspCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/ssps/deactivate-ssp")
+        Call<DeactivateSspCommand.Output> deactivateSsp(@Body DeactivateSspCommand.Input input);
+
         @POST(MODULE_PREFIX + "/ssps/deactivate-currency")
         Call<DeactivateSspCurrencyCommand.Output> deactivateSspCurrency(
             @Body DeactivateSspCurrencyCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/ssps/terminate-ssp")
+        Call<TerminateSspCommand.Output> terminateSsp(@Body TerminateSspCommand.Input input);
 
     }
 

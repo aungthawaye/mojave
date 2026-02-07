@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

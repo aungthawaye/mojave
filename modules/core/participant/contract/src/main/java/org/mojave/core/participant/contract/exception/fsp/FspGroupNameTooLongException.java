@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.contract.exception.fsp;
 
 import lombok.Getter;
@@ -31,9 +32,9 @@ public class FspGroupNameTooLongException extends UncheckedDomainException {
 
     public static final String CODE = "FSP_GROUP_NAME_TOO_LONG";
 
-    private static final String TEMPLATE =
-        "FSP Group name is too long. Must not exceed "
-            + StringSizeConstraints.MAX_NAME_TITLE_LENGTH + " characters.";
+    private static final String TEMPLATE = "FSP Group name is too long. Must not exceed " +
+                                               StringSizeConstraints.MAX_NAME_TITLE_LENGTH +
+                                               " characters.";
 
     public FspGroupNameTooLongException() {
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,11 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.store.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
+import org.mojave.common.datatype.enums.participant.PartyIdType;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.participant.OracleId;
 import org.mojave.common.datatype.identifier.participant.SspId;
@@ -32,18 +34,17 @@ import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.contract.query.SspQuery;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
 public class ParticipantTimerStore implements ParticipantStore {
 
@@ -118,26 +119,6 @@ public class ParticipantTimerStore implements ParticipantStore {
     }
 
     @Override
-    public SspData getSspData(SspId sspId) {
-
-        if (sspId == null) {
-            return null;
-        }
-
-        return this.snapshotRef.get().withSspId.get(sspId);
-    }
-
-    @Override
-    public SspData getSspData(SspCode sspCode) {
-
-        if (sspCode == null) {
-            return null;
-        }
-
-        return this.snapshotRef.get().withSspCode.get(sspCode);
-    }
-
-    @Override
     public OracleData getOracleData(OracleId oracleId) {
 
         if (oracleId == null) {
@@ -157,6 +138,26 @@ public class ParticipantTimerStore implements ParticipantStore {
         return this.snapshotRef.get().withPartyIdType.get(partyIdType);
     }
 
+    @Override
+    public SspData getSspData(SspId sspId) {
+
+        if (sspId == null) {
+            return null;
+        }
+
+        return this.snapshotRef.get().withSspId.get(sspId);
+    }
+
+    @Override
+    public SspData getSspData(SspCode sspCode) {
+
+        if (sspCode == null) {
+            return null;
+        }
+
+        return this.snapshotRef.get().withSspCode.get(sspCode);
+    }
+
     private void refreshData() {
 
         LOGGER.info("Start refreshing participant data");
@@ -172,25 +173,29 @@ public class ParticipantTimerStore implements ParticipantStore {
                              .stream()
                              .collect(
                                  Collectors.toUnmodifiableMap(
-                                     FspData::fspId, Function.identity(), (a, b) -> a));
+                                     FspData::fspId, Function.identity(),
+                                     (a, b) -> a));
 
         var _withFspCode = fsps
                                .stream()
                                .collect(
                                    Collectors.toUnmodifiableMap(
-                                       FspData::code, Function.identity(), (a, b) -> a));
+                                       FspData::code, Function.identity(),
+                                       (a, b) -> a));
 
         var _withSspId = ssps
                              .stream()
                              .collect(
                                  Collectors.toUnmodifiableMap(
-                                     SspData::sspId, Function.identity(), (a, b) -> a));
+                                     SspData::sspId, Function.identity(),
+                                     (a, b) -> a));
 
         var _withSspCode = ssps
                                .stream()
                                .collect(
                                    Collectors.toUnmodifiableMap(
-                                       SspData::code, Function.identity(), (a, b) -> a));
+                                       SspData::code, Function.identity(),
+                                       (a, b) -> a));
 
         var _withOracleId = oracles
                                 .stream()
@@ -204,11 +209,14 @@ public class ParticipantTimerStore implements ParticipantStore {
                                        OracleData::type,
                                        Function.identity(), (a, b) -> a));
 
-        LOGGER.info("Refreshed FSP count: {} | SSP count: {} | Oracle count: {}",
-            fsps.size(), ssps.size(), oracles.size());
+        LOGGER.info(
+            "Refreshed FSP count: {} | SSP count: {} | Oracle count: {}", fsps.size(),
+            ssps.size(), oracles.size());
 
         this.snapshotRef.set(
-            new Snapshot(_withFspId, _withFspCode, _withSspId, _withSspCode, _withOracleId, _withPartyIdType));
+            new Snapshot(
+                _withFspId, _withFspCode, _withSspId, _withSspCode, _withOracleId,
+                _withPartyIdType));
     }
 
     private record Snapshot(Map<FspId, FspData> withFspId,

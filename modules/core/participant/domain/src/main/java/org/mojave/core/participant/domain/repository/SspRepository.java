@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.domain.repository;
 
 import org.mojave.common.datatype.enums.ActivationStatus;
@@ -39,11 +40,6 @@ public interface SspRepository extends JpaRepository<Ssp, SspId>, JpaSpecificati
             return (root, query, cb) -> cb.equal(root.get("activationStatus"), status);
         }
 
-        public static Specification<Ssp> withSspCode(final SspCode sspCode) {
-
-            return (root, query, cb) -> cb.equal(root.get("code"), sspCode);
-        }
-
         public static Specification<Ssp> withId(final SspId id) {
 
             return (root, query, cb) -> cb.equal(root.get("id"), id);
@@ -57,6 +53,11 @@ public interface SspRepository extends JpaRepository<Ssp, SspId>, JpaSpecificati
         public static Specification<Ssp> withNameEquals(final String name) {
 
             return (root, query, cb) -> cb.equal(root.get("name"), name);
+        }
+
+        public static Specification<Ssp> withSspCode(final SspCode sspCode) {
+
+            return (root, query, cb) -> cb.equal(root.get("code"), sspCode);
         }
 
         public static Specification<Ssp> withTerminationStatus(final TerminationStatus status) {

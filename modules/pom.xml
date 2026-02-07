@@ -548,11 +548,17 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <generatedSourcesDirectory>${project.basedir}/src/generated/java</generatedSourcesDirectory>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>1.18.42</version>
+                        </path>
+                        <path>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-processor</artifactId>
+                            <version>7.2.2.Final</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

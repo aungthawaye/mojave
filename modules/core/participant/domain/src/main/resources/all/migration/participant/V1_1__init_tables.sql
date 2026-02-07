@@ -34,6 +34,18 @@ CREATE TABLE `pcp_hub_currency`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+CREATE TABLE `pcp_fsp_group`
+(
+    `fsp_group_id`   bigint      NOT NULL,
+    `name`           varchar(64) NOT NULL,
+    `rec_created_at` bigint DEFAULT NULL,
+    `rec_updated_at` bigint DEFAULT NULL,
+    `rec_version`    int    DEFAULT NULL,
+    PRIMARY KEY (`fsp_group_id`),
+    UNIQUE KEY `pcp_fsp_group_01_UK` (`name`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
 -- ml_participant.pcp_fsp definition
 
@@ -46,13 +58,16 @@ CREATE TABLE `pcp_fsp`
     `termination_status` varchar(32) NOT NULL,
     `created_at`         bigint      NOT NULL,
     `hub_id`             bigint      NOT NULL,
+    `fsp_group_id`       bigint DEFAULT NULL,
     `rec_created_at`     bigint DEFAULT NULL,
     `rec_updated_at`     bigint DEFAULT NULL,
     `rec_version`        int    DEFAULT NULL,
     PRIMARY KEY (`fsp_id`),
     UNIQUE KEY `pcp_fsp_01_UK` (`code`),
     KEY `pcp_hub_pcp_fsp_FK_IDX` (`hub_id`),
-    CONSTRAINT `pcp_hub_pcp_fsp_FK` FOREIGN KEY (`hub_id`) REFERENCES `pcp_hub` (`hub_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    KEY `pcp_fsp_group_pcp_fsp_FK_IDX` (`fsp_group_id`),
+    CONSTRAINT `pcp_hub_pcp_fsp_FK` FOREIGN KEY (`hub_id`) REFERENCES `pcp_hub` (`hub_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `pcp_fsp_group_pcp_fsp_FK` FOREIGN KEY (`fsp_group_id`) REFERENCES `pcp_fsp_group` (`fsp_group_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

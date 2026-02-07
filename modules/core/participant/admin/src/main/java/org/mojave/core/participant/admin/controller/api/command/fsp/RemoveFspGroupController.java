@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.admin.controller.api.command.fsp;
 
 import jakarta.validation.Valid;
@@ -50,12 +51,12 @@ public class RemoveFspGroupController {
         this.removeFspGroupCommand = removeFspGroupCommand;
     }
 
-    @PostMapping("/fsps/groups/remove-fsp-group")
+    @PostMapping("/fsp/remove-fsp-group")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public RemoveFspGroupCommand.Output execute(
-        @Valid @RequestBody final RemoveFspGroupCommand.Input input) throws
-                                                                   FspGroupIdNotFoundException {
+        @Valid @RequestBody final RemoveFspGroupCommand.Input input)
+        throws FspGroupIdNotFoundException {
 
         return this.removeFspGroupCommand.execute(input);
     }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,15 +31,13 @@ import org.mojave.core.participant.contract.exception.fsp.FspCurrencyNotSupporte
 import org.mojave.core.participant.contract.exception.fsp.FspEndpointAlreadyConfiguredException;
 import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlRequiredException;
 import org.mojave.core.participant.contract.exception.fsp.FspEndpointBaseUrlTooLongException;
-import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
-import org.mojave.core.participant.contract.exception.fsp.FspNameRequiredException;
-import org.mojave.core.participant.contract.exception.fsp.FspNameTooLongException;
-import org.mojave.core.participant.contract.exception.fsp.FspAlreadyExistsInFspGroupException;
-import org.mojave.core.participant.contract.exception.fsp.FspGroupIdNotFoundException;
-import org.mojave.core.participant.contract.exception.fsp.FspGroupItemIdNotFoundException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameAlreadyExistsException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameRequiredException;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupNameTooLongException;
+import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
+import org.mojave.core.participant.contract.exception.fsp.FspNameRequiredException;
+import org.mojave.core.participant.contract.exception.fsp.FspNameTooLongException;
+import org.mojave.core.participant.contract.exception.fsp.TerminatedFspIdException;
 import org.mojave.core.participant.contract.exception.hub.HubCountLimitReachedException;
 import org.mojave.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import org.mojave.core.participant.contract.exception.hub.HubNameRequiredException;
@@ -90,20 +88,13 @@ public class ParticipantExceptionResolver {
             case FspIdNotFoundException.CODE -> FspIdNotFoundException.from(extra);
             case FspNameRequiredException.CODE -> FspNameRequiredException.from(extra);
             case FspNameTooLongException.CODE -> FspNameTooLongException.from(extra);
+            case TerminatedFspIdException.CODE -> TerminatedFspIdException.from(extra);
 
             // fsp group
-            case FspAlreadyExistsInFspGroupException.CODE ->
-                FspAlreadyExistsInFspGroupException.from(extra);
-            case FspGroupIdNotFoundException.CODE ->
-                FspGroupIdNotFoundException.from(extra);
-            case FspGroupItemIdNotFoundException.CODE ->
-                FspGroupItemIdNotFoundException.from(extra);
             case FspGroupNameAlreadyExistsException.CODE ->
                 FspGroupNameAlreadyExistsException.from(extra);
-            case FspGroupNameRequiredException.CODE ->
-                FspGroupNameRequiredException.from(extra);
-            case FspGroupNameTooLongException.CODE ->
-                FspGroupNameTooLongException.from(extra);
+            case FspGroupNameRequiredException.CODE -> FspGroupNameRequiredException.from(extra);
+            case FspGroupNameTooLongException.CODE -> FspGroupNameTooLongException.from(extra);
 
             // hub
             case HubCountLimitReachedException.CODE -> HubCountLimitReachedException.from(extra);
