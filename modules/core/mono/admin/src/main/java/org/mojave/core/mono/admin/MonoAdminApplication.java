@@ -21,6 +21,7 @@ package org.mojave.core.mono.admin;
 
 import org.mojave.core.accounting.domain.AccountingFlyway;
 import org.mojave.core.participant.domain.ParticipantFlyway;
+import org.mojave.core.settlement.domain.SettlementFlyway;
 import org.mojave.core.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,10 @@ public class MonoAdminApplication {
             System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 
         AccountingFlyway.migrate(
+            System.getenv("FLYWAY_DB_URL"),
+            System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
+
+        SettlementFlyway.migrate(
             System.getenv("FLYWAY_DB_URL"),
             System.getenv("FLYWAY_DB_USER"), System.getenv("FLYWAY_DB_PASSWORD"));
 

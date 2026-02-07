@@ -1,4 +1,4 @@
--- stm_filter_group definition
+-- ml_settlement.stm_filter_group definition
 
 CREATE TABLE `stm_filter_group`
 (
@@ -14,7 +14,7 @@ CREATE TABLE `stm_filter_group`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- stm_filter_item definition
+-- ml_settlement.stm_filter_item definition
 
 CREATE TABLE `stm_filter_item`
 (
@@ -33,7 +33,7 @@ CREATE TABLE `stm_filter_item`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- stm_settlement_definition definition
+-- ml_settlement.stm_settlement_definition definition
 
 CREATE TABLE `stm_settlement_definition`
 (
@@ -53,16 +53,16 @@ CREATE TABLE `stm_settlement_definition`
                                                   `payee_filter_group_id`,
                                                   `currency`),
     UNIQUE KEY `stm_settlement_definition_02_UK` (`name`),
-    KEY `stm_filter_group_stm_settlement_definition_01_FK_IDX` (`payer_filter_group_id`),
-    KEY `stm_filter_group_stm_settlement_definition_02_FK_IDX` (`payee_filter_group_id`),
-    CONSTRAINT `stm_filter_group_stm_settlement_definition_01_FK` FOREIGN KEY (`payer_filter_group_id`) REFERENCES `stm_filter_group` (`filter_group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `stm_filter_group_stm_settlement_definition_02_FK` FOREIGN KEY (`payee_filter_group_id`) REFERENCES `stm_filter_group` (`filter_group_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `stm_filter_group_stm_settlement_definition_payer_FK_IDX` (`payer_filter_group_id`),
+    KEY `stm_filter_group_stm_settlement_definition_payee_FK_IDX` (`payee_filter_group_id`),
+    CONSTRAINT `stm_filter_group_stm_settlement_definition_payer_FK` FOREIGN KEY (`payer_filter_group_id`) REFERENCES `stm_filter_group` (`filter_group_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `stm_filter_group_stm_settlement_definition_payee_FK` FOREIGN KEY (`payee_filter_group_id`) REFERENCES `stm_filter_group` (`filter_group_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- stm_settlement_record definition
+-- ml_settlement.stm_settlement_record definition
 
 CREATE TABLE `stm_settlement_record`
 (

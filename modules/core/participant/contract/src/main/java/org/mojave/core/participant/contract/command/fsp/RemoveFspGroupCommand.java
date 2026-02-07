@@ -17,19 +17,22 @@
  * limitations under the License.
  * ===
  */
-package org.mojave.core.settlement.domain;
+package org.mojave.core.participant.contract.command.fsp;
 
-import org.mojave.component.flyway.FlywayMigration;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 
-public class SettlementFlyway {
+public interface RemoveFspGroupCommand {
 
-    public static void migrate(String url, String username, String password) {
+    Output execute(Input input);
 
-        var flyway = FlywayMigration.configure(new FlywayMigration.Settings(
-            url, username, password, "flyway_settlement_history",
-            new String[]{"classpath:migration/settlement"}));
+    record Input(@JsonProperty(required = true) @NotNull FspGroupId fspGroupId) {
 
-        flyway.migrate();
+    }
+
+    record Output(FspGroupId fspGroupId) {
+
     }
 
 }

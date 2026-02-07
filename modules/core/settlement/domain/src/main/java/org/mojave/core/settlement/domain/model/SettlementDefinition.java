@@ -27,7 +27,9 @@ import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.settlement.contract.data.SettlementDefinitionData;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -50,7 +52,8 @@ import static java.sql.Types.BIGINT;
             columnNames = {
                 "name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SettlementDefinition extends JpaEntity<SettlementDefinitionId> {
+public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
+    implements DataConversion<SettlementDefinitionData> {
 
     @Id
     @JavaType(SettlementDefinitionIdJavaType.class)
@@ -65,7 +68,6 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId> {
     protected String name;
 
     @OneToOne(
-        mappedBy = "definition",
         fetch = FetchType.EAGER)
     @JoinColumn(
         name = "payer_filter_group_id",
@@ -73,7 +75,6 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId> {
     protected FilterGroup payerFilterGroup;
 
     @OneToOne(
-        mappedBy = "definition",
         fetch = FetchType.EAGER)
     @JoinColumn(
         name = "payee_filter_group_id",
@@ -140,6 +141,14 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId> {
     public void deactivate() {
 
         this.activationStatus = ActivationStatus.INACTIVE;
+    }
+
+    @Override
+    public SettlementDefinitionData convert() {
+
+        return new SettlementDefinitionData(
+            this.id, this.name, this.payerFilterGroup.getId(), this.payeeFilterGroup.getId(),
+            this.currency, this.startAt, this.desiredProviderId, this.activationStatus);
     }
 
     @Override

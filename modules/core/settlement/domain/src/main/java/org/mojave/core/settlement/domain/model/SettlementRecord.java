@@ -32,7 +32,9 @@ import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.settlement.contract.data.SettlementRecordData;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -55,7 +57,8 @@ import static java.sql.Types.BIGINT;
             name = "stm_settlement_record_03_IDX",
             columnList = "payer_fsp_id, payee_fsp_id, currency")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SettlementRecord extends JpaEntity<SettlementRecordId> {
+public class SettlementRecord extends JpaEntity<SettlementRecordId>
+    implements DataConversion<SettlementRecordData> {
 
     @Id
     @JavaType(SettlementRecordIdJavaType.class)
@@ -176,6 +179,16 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId> {
     public SettlementRecordId getId() {
 
         return id;
+    }
+
+    @Override
+    public SettlementRecordData convert() {
+
+        return new SettlementRecordData(
+            this.id, this.type, this.settlementId, this.settlementBatchId, this.payerFspId,
+            this.payeeFspId, this.currency, this.amount, this.transferId, this.transactionId,
+            this.transactionAt, this.settlementProviderId, this.initiatedAt, this.preparedAt,
+            this.completedAt);
     }
 
     public void markCompleted(final Instant completedAt) {

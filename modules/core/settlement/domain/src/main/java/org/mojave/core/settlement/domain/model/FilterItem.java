@@ -18,7 +18,9 @@ import org.mojave.common.datatype.converter.identifier.settlement.FilterItemIdJa
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.settlement.FilterItemId;
 import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.settlement.contract.data.FilterItemData;
 import org.mojave.core.settlement.contract.exception.FspAlreadyExistsInGroupException;
 
 import java.util.Objects;
@@ -34,7 +36,7 @@ import static java.sql.Types.BIGINT;
             "filter_group_id",
             "fsp_id"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FilterItem extends JpaEntity<FilterItemId> {
+public class FilterItem extends JpaEntity<FilterItemId> implements DataConversion<FilterItemData> {
 
     @Id
     @JavaType(FilterItemIdJavaType.class)
@@ -53,7 +55,8 @@ public class FilterItem extends JpaEntity<FilterItemId> {
     @ManyToOne
     @JoinColumn(
         name = "filter_group_id",
-        nullable = false)
+        nullable = false,
+        updatable = false)
     protected FilterGroup filterGroup;
 
     public FilterItem(FilterGroup filterGroup, FspId fspId) {
@@ -75,6 +78,12 @@ public class FilterItem extends JpaEntity<FilterItemId> {
     public FilterItemId getId() {
 
         return id;
+    }
+
+    @Override
+    public FilterItemData convert() {
+
+        return new FilterItemData(this.id, this.fspId, this.filterGroup.getId());
     }
 
     public boolean matches(FspId fspId) {

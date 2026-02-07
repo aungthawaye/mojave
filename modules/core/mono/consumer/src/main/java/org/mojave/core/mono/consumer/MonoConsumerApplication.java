@@ -21,6 +21,7 @@
 package org.mojave.core.mono.consumer;
 
 import org.mojave.core.accounting.domain.AccountingFlyway;
+import org.mojave.core.settlement.domain.SettlementFlyway;
 import org.mojave.core.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,10 @@ public class MonoConsumerApplication {
     public static void main(String[] args) throws InterruptedException {
 
         AccountingFlyway.migrate(
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
+
+        SettlementFlyway.migrate(
             System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
             System.getenv("FLYWAY_DB_PASSWORD"));
 

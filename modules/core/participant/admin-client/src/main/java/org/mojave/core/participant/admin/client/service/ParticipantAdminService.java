@@ -22,14 +22,18 @@ package org.mojave.core.participant.admin.client.service;
 import org.mojave.core.participant.contract.command.fsp.ActivateEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.ActivateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.ActivateFspCurrencyCommand;
+import org.mojave.core.participant.contract.command.fsp.AddFspGroupItemCommand;
 import org.mojave.core.participant.contract.command.fsp.AddEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.AddFspCurrencyCommand;
 import org.mojave.core.participant.contract.command.fsp.ChangeFspEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.ChangeFspNameCommand;
 import org.mojave.core.participant.contract.command.fsp.CreateFspCommand;
+import org.mojave.core.participant.contract.command.fsp.CreateFspGroupCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateEndpointCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateFspCommand;
 import org.mojave.core.participant.contract.command.fsp.DeactivateFspCurrencyCommand;
+import org.mojave.core.participant.contract.command.fsp.RemoveFspGroupCommand;
+import org.mojave.core.participant.contract.command.fsp.RemoveFspGroupItemCommand;
 import org.mojave.core.participant.contract.command.ssp.ActivateSspCommand;
 import org.mojave.core.participant.contract.command.ssp.ActivateSspCurrencyCommand;
 import org.mojave.core.participant.contract.command.ssp.AddSspCurrencyCommand;
@@ -92,6 +96,19 @@ public interface ParticipantAdminService {
 
         @POST(MODULE_PREFIX + "/fsps/create-fsp")
         Call<CreateFspCommand.Output> createFsp(@Body CreateFspCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/fsps/groups/create-fsp-group")
+        Call<CreateFspGroupCommand.Output> createFspGroup(@Body CreateFspGroupCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/fsps/groups/add-fsp-group-item")
+        Call<AddFspGroupItemCommand.Output> addFspGroupItem(@Body AddFspGroupItemCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/fsps/groups/remove-fsp-group-item")
+        Call<RemoveFspGroupItemCommand.Output> removeFspGroupItem(
+            @Body RemoveFspGroupItemCommand.Input input);
+
+        @POST(MODULE_PREFIX + "/fsps/groups/remove-fsp-group")
+        Call<RemoveFspGroupCommand.Output> removeFspGroup(@Body RemoveFspGroupCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/deactivate-endpoint")
         Call<DeactivateEndpointCommand.Output> deactivateEndpoint(

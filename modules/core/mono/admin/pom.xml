@@ -44,6 +44,10 @@
             <artifactId>mojave-core-participant-admin</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.settlement</groupId>
+            <artifactId>mojave-core-settlement-admin</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.wallet</groupId>
             <artifactId>mojave-core-wallet-admin</artifactId>
         </dependency>

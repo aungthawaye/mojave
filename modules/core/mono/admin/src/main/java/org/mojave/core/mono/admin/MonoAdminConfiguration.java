@@ -27,6 +27,8 @@ import org.mojave.core.accounting.admin.AccountingAdminConfiguration;
 import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
 import org.mojave.core.participant.admin.ParticipantAdminConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
+import org.mojave.core.settlement.admin.SettlementAdminConfiguration;
+import org.mojave.core.settlement.domain.SettlementDomainConfiguration;
 import org.mojave.core.wallet.admin.WalletAdminConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -45,6 +47,7 @@ import tools.jackson.databind.ObjectMapper;
         SpringSecurityConfiguration.class,
         ParticipantAdminConfiguration.class,
         AccountingAdminConfiguration.class,
+        SettlementAdminConfiguration.class,
         WalletAdminConfiguration.class})
 public class MonoAdminConfiguration extends JsonWebMvcConfigurationSupport {
 
@@ -57,12 +60,14 @@ public class MonoAdminConfiguration extends JsonWebMvcConfigurationSupport {
                                                   SpringSecurityConfiguration.RequiredBeans,
                                                   ParticipantAdminConfiguration.RequiredDependencies,
                                                   AccountingAdminConfiguration.RequiredDependencies,
+                                                  SettlementAdminConfiguration.RequiredDependencies,
                                                   WalletAdminConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
                                               SpringSecurityConfiguration.RequiredSettings,
                                               ParticipantDomainConfiguration.RequiredSettings,
                                               AccountingDomainConfiguration.RequiredSettings,
+                                              SettlementDomainConfiguration.RequiredSettings,
                                               WalletDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();

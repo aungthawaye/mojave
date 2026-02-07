@@ -40,6 +40,10 @@
             <artifactId>mojave-core-participant-intercom</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.settlement</groupId>
+            <artifactId>mojave-core-settlement-intercom</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.wallet</groupId>
             <artifactId>mojave-core-wallet-intercom</artifactId>
         </dependency>

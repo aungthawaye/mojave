@@ -23,6 +23,10 @@ package org.mojave.core.mono.consumer;
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.core.accounting.consumer.listener.PostLedgerFlowListener;
+import org.mojave.core.settlement.consumer.listener.CompleteSettlementListener;
+import org.mojave.core.settlement.consumer.listener.InitiateSettlementProcessListener;
+import org.mojave.core.settlement.consumer.listener.RequestSettlementInitiationListener;
+import org.mojave.core.settlement.consumer.listener.UpdatePreparationResultListener;
 import org.mojave.core.wallet.consumer.listener.FulfilPositionsListener;
 import org.mojave.core.wallet.consumer.listener.RollbackReservationListener;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +52,46 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
         return new PostLedgerFlowListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public CompleteSettlementListener.Settings completeSettlementListenerSettings() {
+
+        return new CompleteSettlementListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), CompleteSettlementListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public InitiateSettlementProcessListener.Settings initiateSettlementProcessListenerSettings() {
+
+        return new InitiateSettlementProcessListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), InitiateSettlementProcessListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public RequestSettlementInitiationListener.Settings requestSettlementInitiationListenerSettings() {
+
+        return new RequestSettlementInitiationListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), RequestSettlementInitiationListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public UpdatePreparationResultListener.Settings updatePreparationResultListenerSettings() {
+
+        return new UpdatePreparationResultListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), UpdatePreparationResultListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }

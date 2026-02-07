@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -20,7 +21,9 @@ import org.mojave.common.datatype.identifier.settlement.FilterGroupId;
 import org.mojave.common.datatype.identifier.settlement.FilterItemId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.core.settlement.contract.data.FilterGroupData;
 import org.mojave.core.settlement.contract.exception.FilterGroupNameRequiredException;
 
 import java.util.ArrayList;
@@ -34,7 +37,8 @@ import static java.sql.Types.BIGINT;
     name = "stm_filter_group",
     uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FilterGroup extends JpaEntity<FilterGroupId> {
+public class FilterGroup extends JpaEntity<FilterGroupId>
+    implements DataConversion<FilterGroupData> {
 
     @Id
     @JavaType(FilterGroupIdJavaType.class)
@@ -49,12 +53,10 @@ public class FilterGroup extends JpaEntity<FilterGroupId> {
     protected String name;
 
     @OneToMany(
+        mappedBy = "filterGroup",
         fetch = FetchType.EAGER,
         orphanRemoval = true,
         cascade = CascadeType.ALL)
-    @JoinColumn(
-        name = "filter_group_id",
-        nullable = false)
     protected List<FilterItem> items = new ArrayList<>();
 
     public FilterGroup(final String name) {
@@ -79,6 +81,14 @@ public class FilterGroup extends JpaEntity<FilterGroupId> {
     public boolean fspExists(FspId fspId) {
 
         return this.items.stream().anyMatch(item -> item.matches(fspId));
+    }
+
+    @Override
+    public FilterGroupData convert() {
+
+        var itemData = this.items.stream().map(FilterItem::convert).toList();
+
+        return new FilterGroupData(this.id, this.name, itemData);
     }
 
     @Override

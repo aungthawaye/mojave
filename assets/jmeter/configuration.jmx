@@ -251,7 +251,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
             <stringProp name="JSONPostProcessor.referenceNames">fsp2Id</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.fspId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
@@ -890,8 +890,8 @@ if (val != null) {
     },&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
-        &quot;PAYER_FSP&quot;: &quot;${fsp1Id}&quot;,&#xd;
-        &quot;PAYEE_FSP&quot;: &quot;${fsp2Id}&quot;&#xd;
+        &quot;PAYER_FSP&quot;: &quot;${__property(FSP1_ID,)}&quot;,&#xd;
+        &quot;PAYEE_FSP&quot;: &quot;${__property(FSP2_ID,)}&quot;&#xd;
     },&#xd;
     &quot;transactionAt&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
     &quot;transactionId&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
