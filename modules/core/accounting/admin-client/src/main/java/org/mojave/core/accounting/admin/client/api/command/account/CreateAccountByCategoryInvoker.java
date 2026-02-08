@@ -24,7 +24,7 @@ import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.retrofit.RetrofitService;
 import org.mojave.core.accounting.admin.client.service.AccountingAdminService;
-import org.mojave.core.accounting.contract.command.account.CreateAccountInBulkCommand;
+import org.mojave.core.accounting.contract.command.account.CreateAccountByCategoryCommand;
 import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
@@ -32,13 +32,13 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Objects;
 
 @Component
-public class CreateAccountInBulkInvoker implements CreateAccountInBulkCommand {
+public class CreateAccountByCategoryInvoker implements CreateAccountByCategoryCommand {
 
     private final AccountingAdminService.AccountCommand accountCommand;
 
     private final ObjectMapper objectMapper;
 
-    public CreateAccountInBulkInvoker(final AccountingAdminService.AccountCommand accountCommand,
+    public CreateAccountByCategoryInvoker(final AccountingAdminService.AccountCommand accountCommand,
                                       final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(accountCommand);
@@ -54,7 +54,7 @@ public class CreateAccountInBulkInvoker implements CreateAccountInBulkCommand {
         try {
 
             return RetrofitService.invoke(
-                this.accountCommand.createInBulk(input),
+                this.accountCommand.createByCategory(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(
                     errorResponseBody,
                     this.objectMapper)).body();

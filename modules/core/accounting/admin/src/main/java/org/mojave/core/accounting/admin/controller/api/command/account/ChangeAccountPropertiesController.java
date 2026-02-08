@@ -48,7 +48,7 @@ public class ChangeAccountPropertiesController {
         this.changeAccountPropertiesCommand = changeAccountPropertiesCommand;
     }
 
-    @PostMapping("/accounting/accounts/change-properties")
+    @PostMapping("/accounting/accounts/change-account-properties")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeAccountPropertiesCommand.Output execute(

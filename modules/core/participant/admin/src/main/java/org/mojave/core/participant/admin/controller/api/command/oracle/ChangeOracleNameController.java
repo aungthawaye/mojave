@@ -46,7 +46,7 @@ public class ChangeOracleNameController {
         this.changeOracleNameCommand = changeOracleNameCommand;
     }
 
-    @PostMapping("/participant/oracles/change-name")
+    @PostMapping("/participant/oracles/change-oracle-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeOracleNameCommand.Output execute(

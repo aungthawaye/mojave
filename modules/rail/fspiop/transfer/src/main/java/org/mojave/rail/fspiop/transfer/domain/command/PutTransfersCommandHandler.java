@@ -76,8 +76,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final CommitTransferStepPublisher commitTransferStepPublisher;
 
-    private final DisputeTransferStepPublisher disputeTransferStepPublisher;
-
     // Financial steps
     private final FulfilPositionsStep fulfilPositionsStep;
 
@@ -100,7 +98,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       FetchTransferStep fetchTransferStep,
                                       AbortTransferStepPublisher abortTransferStepPublisher,
                                       CommitTransferStepPublisher commitTransferStepPublisher,
-                                      DisputeTransferStepPublisher disputeTransferStepPublisher,
                                       FulfilPositionsStep fulfilPositionsStep,
                                       RollbackReservationStepPublisher rollbackReservationStepPublisher,
                                       PostLedgerFlowStep postLedgerFlowStep,
@@ -114,7 +111,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         Objects.requireNonNull(fetchTransferStep);
         Objects.requireNonNull(abortTransferStepPublisher);
         Objects.requireNonNull(commitTransferStepPublisher);
-        Objects.requireNonNull(disputeTransferStepPublisher);
         Objects.requireNonNull(fulfilPositionsStep);
         Objects.requireNonNull(rollbackReservationStepPublisher);
         Objects.requireNonNull(postLedgerFlowStep);
@@ -128,7 +124,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.fetchTransferStep = fetchTransferStep;
         this.abortTransferStepPublisher = abortTransferStepPublisher;
         this.commitTransferStepPublisher = commitTransferStepPublisher;
-        this.disputeTransferStepPublisher = disputeTransferStepPublisher;
         this.fulfilPositionsStep = fulfilPositionsStep;
         this.rollbackReservationStepPublisher = rollbackReservationStepPublisher;
         this.postLedgerFlowStep = postLedgerFlowStep;

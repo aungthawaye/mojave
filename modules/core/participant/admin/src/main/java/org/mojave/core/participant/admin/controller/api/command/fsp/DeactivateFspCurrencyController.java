@@ -48,7 +48,7 @@ public class DeactivateFspCurrencyController implements DeactivateFspCurrencyCom
         this.deactivateFspCurrencyCommand = deactivateFspCurrencyCommand;
     }
 
-    @PostMapping("/participant/fsps/deactivate-currency")
+    @PostMapping("/participant/fsps/deactivate-fsp-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public DeactivateFspCurrencyCommand.Output execute(

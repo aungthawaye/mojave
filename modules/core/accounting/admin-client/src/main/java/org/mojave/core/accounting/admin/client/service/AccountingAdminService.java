@@ -31,7 +31,7 @@ import org.mojave.component.misc.query.PagedResult;
 import org.mojave.core.accounting.contract.command.account.ActivateAccountCommand;
 import org.mojave.core.accounting.contract.command.account.ChangeAccountPropertiesCommand;
 import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
-import org.mojave.core.accounting.contract.command.account.CreateAccountInBulkCommand;
+import org.mojave.core.accounting.contract.command.account.CreateAccountByCategoryCommand;
 import org.mojave.core.accounting.contract.command.account.DeactivateAccountCommand;
 import org.mojave.core.accounting.contract.command.account.TerminateAccountCommand;
 import org.mojave.core.accounting.contract.command.chart.ChangeChartEntryPropertiesCommand;
@@ -68,16 +68,16 @@ public interface AccountingAdminService {
         @POST(MODULE_PREFIX + "/accounts/activate-account")
         Call<ActivateAccountCommand.Output> activate(@Body ActivateAccountCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/accounts/change-properties")
+        @POST(MODULE_PREFIX + "/accounts/change-account-properties")
         Call<ChangeAccountPropertiesCommand.Output> changeProperties(
             @Body ChangeAccountPropertiesCommand.Input input);
 
         @POST(MODULE_PREFIX + "/accounts/create-account")
         Call<CreateAccountCommand.Output> create(@Body CreateAccountCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/accounts/create-in-bulk")
-        Call<CreateAccountInBulkCommand.Output> createInBulk(
-            @Body CreateAccountInBulkCommand.Input input);
+        @POST(MODULE_PREFIX + "/accounts/create-account-by-category")
+        Call<CreateAccountByCategoryCommand.Output> createByCategory(
+            @Body CreateAccountByCategoryCommand.Input input);
 
         @POST(MODULE_PREFIX + "/accounts/deactivate-account")
         Call<DeactivateAccountCommand.Output> deactivate(
@@ -110,11 +110,11 @@ public interface AccountingAdminService {
 
     interface ChartCommand {
 
-        @POST(MODULE_PREFIX + "/chart-entries/change-properties")
+        @POST(MODULE_PREFIX + "/chart-entries/change-chart-entry-properties")
         Call<ChangeChartEntryPropertiesCommand.Output> changeEntryProperties(
             @Body ChangeChartEntryPropertiesCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/charts/change-name")
+        @POST(MODULE_PREFIX + "/charts/change-chart-name")
         Call<ChangeChartNameCommand.Output> changeName(@Body ChangeChartNameCommand.Input input);
 
         @POST(MODULE_PREFIX + "/charts/create-chart")
@@ -162,15 +162,15 @@ public interface AccountingAdminService {
         Call<ActivateFlowDefinitionCommand.Output> activate(
             @Body ActivateFlowDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/add-posting")
+        @POST(MODULE_PREFIX + "/flow-definitions/add-posting-definition")
         Call<AddPostingDefinitionCommand.Output> addPosting(
             @Body AddPostingDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/change-currency")
+        @POST(MODULE_PREFIX + "/flow-definitions/change-flow-definition-currency")
         Call<ChangeFlowDefinitionCurrencyCommand.Output> changeCurrency(
             @Body ChangeFlowDefinitionCurrencyCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/change-properties")
+        @POST(MODULE_PREFIX + "/flow-definitions/change-flow-definition-properties")
         Call<ChangeFlowDefinitionPropertiesCommand.Output> changeProperties(
             @Body ChangeFlowDefinitionPropertiesCommand.Input input);
 
@@ -182,7 +182,7 @@ public interface AccountingAdminService {
         Call<DeactivateFlowDefinitionCommand.Output> deactivate(
             @Body DeactivateFlowDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/remove-posting")
+        @POST(MODULE_PREFIX + "/flow-definitions/remove-posting-definition")
         Call<RemovePostingDefinitionCommand.Output> removePosting(
             @Body RemovePostingDefinitionCommand.Input input);
 

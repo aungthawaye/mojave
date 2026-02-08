@@ -47,7 +47,7 @@ public class AddFspCurrencyController {
         this.addFspCurrencyCommand = addFspCurrencyCommand;
     }
 
-    @PostMapping("/participant/fsps/add-currency")
+    @PostMapping("/participant/fsps/add-fsp-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddFspCurrencyCommand.Output execute(

@@ -48,7 +48,7 @@ public class ChangeFlowDefinitionPropertiesController {
         this.changeFlowDefinitionPropertiesCommand = changeFlowDefinitionPropertiesCommand;
     }
 
-    @PostMapping("/accounting/flow-definitions/change-properties")
+    @PostMapping("/accounting/flow-definitions/change-flow-definition-properties")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeFlowDefinitionPropertiesCommand.Output execute(

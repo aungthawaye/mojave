@@ -48,7 +48,7 @@ public class ChangeFlowDefinitionCurrencyController {
         this.changeFlowDefinitionCurrencyCommand = changeFlowDefinitionCurrencyCommand;
     }
 
-    @PostMapping("/accounting/flow-definitions/change-currency")
+    @PostMapping("/accounting/flow-definitions/change-flow-definition-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeFlowDefinitionCurrencyCommand.Output execute(

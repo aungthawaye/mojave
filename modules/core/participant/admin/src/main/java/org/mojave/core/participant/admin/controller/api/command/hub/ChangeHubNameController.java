@@ -47,7 +47,7 @@ public class ChangeHubNameController {
         this.changeHubNameCommand = changeHubNameCommand;
     }
 
-    @PostMapping("/participant/hubs/change-name")
+    @PostMapping("/participant/hubs/change-hub-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeHubNameCommand.Output execute(

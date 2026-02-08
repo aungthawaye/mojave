@@ -42,7 +42,7 @@ public class RequestSettlementInitiationController {
         this.requestSettlementInitiationCommand = requestSettlementInitiationCommand;
     }
 
-    @PostMapping("/settlement/settlement-records/request-initiation")
+    @PostMapping("/settlement/settlement-records/request-settlement-initiation")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public RequestSettlementInitiationCommand.Output execute(

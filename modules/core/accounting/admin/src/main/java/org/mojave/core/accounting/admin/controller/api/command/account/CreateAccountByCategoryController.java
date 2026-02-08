@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.admin.controller.api.command.account;
 
 import jakarta.validation.Valid;
-import org.mojave.core.accounting.contract.command.account.CreateAccountInBulkCommand;
+import org.mojave.core.accounting.contract.command.account.CreateAccountByCategoryCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,27 +34,27 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-public class CreateAccountInBulkController {
+public class CreateAccountByCategoryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        CreateAccountInBulkController.class);
+        CreateAccountByCategoryController.class);
 
-    private final CreateAccountInBulkCommand createAccountInBulkCommand;
+    private final CreateAccountByCategoryCommand createAccountByCategoryCommand;
 
-    public CreateAccountInBulkController(final CreateAccountInBulkCommand createAccountInBulkCommand) {
+    public CreateAccountByCategoryController(final CreateAccountByCategoryCommand createAccountByCategoryCommand) {
 
-        Objects.requireNonNull(createAccountInBulkCommand);
+        Objects.requireNonNull(createAccountByCategoryCommand);
 
-        this.createAccountInBulkCommand = createAccountInBulkCommand;
+        this.createAccountByCategoryCommand = createAccountByCategoryCommand;
     }
 
-    @PostMapping("/accounting/accounts/create-in-bulk")
+    @PostMapping("/accounting/accounts/create-account-by-category")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CreateAccountInBulkCommand.Output execute(
-        @Valid @RequestBody final CreateAccountInBulkCommand.Input input) {
+    public CreateAccountByCategoryCommand.Output execute(
+        @Valid @RequestBody final CreateAccountByCategoryCommand.Input input) {
 
-        return this.createAccountInBulkCommand.execute(input);
+        return this.createAccountByCategoryCommand.execute(input);
     }
 
 }

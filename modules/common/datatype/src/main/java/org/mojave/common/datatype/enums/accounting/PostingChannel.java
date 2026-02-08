@@ -20,7 +20,7 @@
 
 package org.mojave.common.datatype.enums.accounting;
 
-public enum ReceiveIn {
+public enum PostingChannel {
 
     ACCOUNT,
     CHART_ENTRY

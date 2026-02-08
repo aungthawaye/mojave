@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.common.datatype.converter.identifier.accounting.PostingDefinitionIdJavaType;
-import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
@@ -111,16 +111,16 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     protected Side side;
 
     @Column(
-        name = "receive_in",
+        name = "posting_channel",
         nullable = false,
         length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected ReceiveIn receiveIn;
+    protected PostingChannel postingChannel;
 
     @Column(
-        name = "receive_in_id",
+        name = "posting_channel_id",
         nullable = false)
-    protected Long receiveInId;
+    protected Long postingChannelId;
 
     @Column(
         name = "description",
@@ -141,8 +141,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
     public PostingDefinition(FlowDefinition definition,
                              Integer step,
-                             ReceiveIn receiveIn,
-                             Long receiveInId,
+                             PostingChannel postingChannel,
+                             Long postingChannelId,
                              String participant,
                              String amountName,
                              Side side,
@@ -156,7 +156,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         this.id = new PostingDefinitionId(Snowflake.get().nextId());
         this.definition = definition;
         this.forPosting(
-            step, receiveIn, receiveInId, participant, amountName, side, accountCache,
+            step, postingChannel, postingChannelId, participant, amountName, side, accountCache,
             chartEntryCache).description(description);
     }
 
@@ -178,7 +178,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     }
 
     public PostingDefinition forPosting(Integer step,
-                                        ReceiveIn receiveIn,
+                                        PostingChannel postingChannel,
                                         Long receiveInId,
                                         String participant,
                                         String amountName,
@@ -189,7 +189,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         Objects.requireNonNull(step);
         Objects.requireNonNull(amountName);
         Objects.requireNonNull(side);
-        Objects.requireNonNull(receiveIn);
+        Objects.requireNonNull(postingChannel);
         Objects.requireNonNull(receiveInId);
         Objects.requireNonNull(accountCache);
         Objects.requireNonNull(chartEntryCache);
@@ -202,7 +202,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         var _amountName = amountName.trim().toUpperCase();
 
-        if (receiveIn == ReceiveIn.ACCOUNT) {
+        if (postingChannel == PostingChannel.ACCOUNT) {
 
             if (participant != null && participant.isBlank()) {
 
@@ -210,7 +210,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
             }
         }
 
-        if (receiveIn == ReceiveIn.CHART_ENTRY) {
+        if (postingChannel == PostingChannel.CHART_ENTRY) {
 
             if (participant == null || participant.isBlank()) {
 
@@ -236,25 +236,26 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         // 1. When CHART_ENTRY, any account of the adding ChartEntryId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
         // 2. When ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
 
-        // Find all the accounts, created under the same receiveInId in the accounting system, and previously added for the same Side and AmountName.
+        // Find all the accounts, created under the same postingChannelId in the accounting system, and previously added for the same Side and AmountName.
         var existingAccountIds = this.definition.postings
                                      .stream()
-                                     .filter(pd -> pd.receiveIn == ReceiveIn.ACCOUNT &&
+                                     .filter(pd -> pd.postingChannel == PostingChannel.ACCOUNT &&
                                                        pd.side == side &&
                                                        pd.amountName.equals(_amountName))
-                                     .map(pd -> pd.receiveInId)
+                                     .map(pd -> pd.postingChannelId)
                                      .collect(Collectors.toSet());
 
         var existingChartEntryIds = this.definition.postings
                                         .stream()
-                                        .filter(pd -> pd.receiveIn == ReceiveIn.CHART_ENTRY &&
-                                                          pd.participant.equals(participant) &&
-                                                          pd.side == side &&
-                                                          pd.amountName.equals(_amountName))
-                                        .map(pd -> pd.receiveInId)
+                                        .filter(
+                                            pd -> pd.postingChannel == PostingChannel.CHART_ENTRY &&
+                                                      pd.participant.equals(participant) &&
+                                                      pd.side == side &&
+                                                      pd.amountName.equals(_amountName))
+                                        .map(pd -> pd.postingChannelId)
                                         .collect(Collectors.toSet());
 
-        if (receiveIn == ReceiveIn.CHART_ENTRY) {
+        if (postingChannel == PostingChannel.CHART_ENTRY) {
 
             var _chartEntryId = new ChartEntryId(receiveInId);
 
@@ -313,8 +314,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         this.participant = participant;
         this.amountName = _amountName;
         this.side = side;
-        this.receiveIn = receiveIn;
-        this.receiveInId = receiveInId;
+        this.postingChannel = postingChannel;
+        this.postingChannelId = receiveInId;
 
         return this;
     }

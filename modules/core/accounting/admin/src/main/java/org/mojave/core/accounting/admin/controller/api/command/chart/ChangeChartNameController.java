@@ -47,7 +47,7 @@ public class ChangeChartNameController {
         this.changeChartNameCommand = changeChartNameCommand;
     }
 
-    @PostMapping("/accounting/charts/change-name")
+    @PostMapping("/accounting/charts/change-chart-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeChartNameCommand.Output execute(

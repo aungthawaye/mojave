@@ -48,7 +48,7 @@ public class ActivateSspCurrencyController {
         this.activateSspCurrencyCommand = activateSspCurrencyCommand;
     }
 
-    @PostMapping("/participant/ssps/activate-currency")
+    @PostMapping("/participant/ssps/activate-ssp-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ActivateSspCurrencyCommand.Output execute(

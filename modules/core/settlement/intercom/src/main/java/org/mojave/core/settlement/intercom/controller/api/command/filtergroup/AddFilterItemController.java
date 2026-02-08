@@ -42,7 +42,7 @@ public class AddFilterItemController {
         this.addFilterItemCommand = addFilterItemCommand;
     }
 
-    @PostMapping("/settlement/filter-groups/add-item")
+    @PostMapping("/settlement/filter-groups/add-filter-item")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddFilterItemCommand.Output execute(

@@ -42,7 +42,7 @@ public class InitiateSettlementProcessController {
         this.initiateSettlementProcessCommand = initiateSettlementProcessCommand;
     }
 
-    @PostMapping("/settlement/settlement-records/initiate-process")
+    @PostMapping("/settlement/settlement-records/initiate-settlement-process")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public InitiateSettlementProcessCommand.Output execute(

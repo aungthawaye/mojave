@@ -42,7 +42,7 @@ public class RemoveFilterItemController {
         this.removeFilterItemCommand = removeFilterItemCommand;
     }
 
-    @PostMapping("/settlement/filter-groups/remove-item")
+    @PostMapping("/settlement/filter-groups/remove-filter-item")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public RemoveFilterItemCommand.Output execute(

@@ -31,15 +31,25 @@
             <DefaultRolloverStrategy fileIndex="min" max="30"/>
         </RollingFile>
 
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss}{GMT+06:30}|%level|REQ_ID=%X{REQ_ID}|%t|%logger{36} - %msg%xEx%n"/>
+        </Console>
+
         <!-- Optional: async wrapper around the rolling file -->
         <Async name="ASYNC_FILE" bufferSize="262144" blocking="true">
             <AppenderRef ref="ROLLING_FILE"/>
+        </Async>
+        <!-- Asynchronous wrapper -->
+        <Async name="ASYNC_CONSOLE" bufferSize="262144" blocking="true">
+            <AppenderRef ref="CONSOLE"/>
         </Async>
     </Appenders>
 
     <Loggers>
         <Root level="info">
             <AppenderRef ref="ASYNC_FILE"/>
+            <AppenderRef ref="ASYNC_CONSOLE"/>
         </Root>
     </Loggers>
 </Configuration>

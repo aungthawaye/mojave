@@ -46,7 +46,7 @@ public class ChangeOracleTypeController {
         this.changeOracleTypeCommand = changeOracleTypeCommand;
     }
 
-    @PostMapping("/participant/oracles/change-type")
+    @PostMapping("/participant/oracles/change-oracle-type")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeOracleTypeCommand.Output execute(

@@ -47,7 +47,7 @@ public class ChangeSspNameController {
         this.changeSspNameCommand = changeSspNameCommand;
     }
 
-    @PostMapping("/participant/ssps/change-name")
+    @PostMapping("/participant/ssps/change-ssp-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeSspNameCommand.Output execute(

@@ -42,7 +42,7 @@ public class UpdatePreparationResultController {
         this.updatePreparationResultCommand = updatePreparationResultCommand;
     }
 
-    @PostMapping("/settlement/settlement-records/update-preparation")
+    @PostMapping("/settlement/settlement-records/update-preparation-result")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public UpdatePreparationResultCommand.Output execute(

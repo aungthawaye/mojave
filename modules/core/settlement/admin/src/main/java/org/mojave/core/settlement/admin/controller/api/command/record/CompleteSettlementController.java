@@ -42,7 +42,7 @@ public class CompleteSettlementController {
         this.completeSettlementCommand = completeSettlementCommand;
     }
 
-    @PostMapping("/settlement/settlement-records/complete")
+    @PostMapping("/settlement/settlement-records/complete-settlement")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CompleteSettlementCommand.Output execute(

@@ -73,7 +73,7 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
         final var posting = input.posting();
 
         var pd = definition.addPosting(
-            input.posting().step(), posting.receiveIn(), posting.receiveInId(),
+            input.posting().step(), posting.postingChannel(), posting.postingChannelId(),
             posting.participant(), posting.amountName(), posting.side(), posting.description(),
             this.accountCache, this.chartEntryCache);
 

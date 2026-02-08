@@ -48,7 +48,7 @@ public class ActivateFspCurrencyController {
         this.activateFspCurrencyCommand = activateFspCurrencyCommand;
     }
 
-    @PostMapping("/participant/fsps/activate-currency")
+    @PostMapping("/participant/fsps/activate-fsp-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ActivateFspCurrencyCommand.Output execute(

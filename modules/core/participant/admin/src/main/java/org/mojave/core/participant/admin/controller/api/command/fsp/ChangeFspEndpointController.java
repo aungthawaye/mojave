@@ -46,7 +46,7 @@ public class ChangeFspEndpointController {
         this.changeFspEndpointCommand = changeFspEndpointCommand;
     }
 
-    @PostMapping("/participant/fsps/change-endpoint")
+    @PostMapping("/participant/fsps/change-fsp-endpoint")
     @ResponseStatus(HttpStatus.OK)
     public ChangeFspEndpointCommand.Output execute(
         @Valid @RequestBody ChangeFspEndpointCommand.Input input) {

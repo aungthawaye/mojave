@@ -48,7 +48,7 @@ public class DeactivateSspCurrencyController {
         this.deactivateSspCurrencyCommand = deactivateSspCurrencyCommand;
     }
 
-    @PostMapping("/participant/ssps/deactivate-currency")
+    @PostMapping("/participant/ssps/deactivate-ssp-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public DeactivateSspCurrencyCommand.Output execute(

@@ -4,7 +4,7 @@ import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.mojave.component.jpa.JpaEntity_;
@@ -38,14 +38,14 @@ public abstract class PostingDefinition_ extends JpaEntity_ {
 	public static final String SIDE = "side";
 	
 	/**
-	 * @see #receiveIn
+	 * @see #postingChannel
 	 **/
-	public static final String RECEIVE_IN = "receiveIn";
+	public static final String POSTING_CHANNEL = "postingChannel";
 	
 	/**
-	 * @see #receiveInId
+	 * @see #postingChannelId
 	 **/
-	public static final String RECEIVE_IN_ID = "receiveInId";
+	public static final String POSTING_CHANNEL_ID = "postingChannelId";
 	
 	/**
 	 * @see #description
@@ -89,14 +89,14 @@ public abstract class PostingDefinition_ extends JpaEntity_ {
 	public static volatile SingularAttribute<PostingDefinition, Side> side;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.PostingDefinition#receiveIn}
+	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.PostingDefinition#postingChannel}
 	 **/
-	public static volatile SingularAttribute<PostingDefinition, ReceiveIn> receiveIn;
+	public static volatile SingularAttribute<PostingDefinition, PostingChannel> postingChannel;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.PostingDefinition#receiveInId}
+	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.PostingDefinition#postingChannelId}
 	 **/
-	public static volatile SingularAttribute<PostingDefinition, Long> receiveInId;
+	public static volatile SingularAttribute<PostingDefinition, Long> postingChannelId;
 	
 	/**
 	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.PostingDefinition#description}

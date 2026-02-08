@@ -47,7 +47,7 @@ public class ChangeFspNameController {
         this.changeFspNameCommand = changeFspNameCommand;
     }
 
-    @PostMapping("/participant/fsps/change-name")
+    @PostMapping("/participant/fsps/change-fsp-name")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeFspNameCommand.Output execute(

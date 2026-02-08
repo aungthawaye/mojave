@@ -23,7 +23,7 @@ package org.mojave.core.accounting.contract.data;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
@@ -81,7 +81,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
 
     public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
                                         Integer step,
-                                        ReceiveIn receiveIn,
+                                        PostingChannel postingChannel,
                                         Long receiveInId,
                                         String participant,
                                         String amountName,

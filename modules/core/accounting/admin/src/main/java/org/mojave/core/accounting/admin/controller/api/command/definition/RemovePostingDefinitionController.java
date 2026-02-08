@@ -48,7 +48,7 @@ public class RemovePostingDefinitionController {
         this.removePostingDefinitionCommand = removePostingDefinitionCommand;
     }
 
-    @PostMapping("/accounting/flow-definitions/remove-posting")
+    @PostMapping("/accounting/flow-definitions/remove-posting-definition")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public RemovePostingDefinitionCommand.Output execute(

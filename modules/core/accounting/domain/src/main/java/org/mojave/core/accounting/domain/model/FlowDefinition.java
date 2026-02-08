@@ -39,7 +39,7 @@ import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinition
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
@@ -157,7 +157,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     }
 
     public PostingDefinition addPosting(Integer index,
-                                        ReceiveIn receiveIn,
+                                        PostingChannel postingChannel,
                                         Long receiveInId,
                                         String participant,
                                         String amountName,
@@ -167,7 +167,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                                         ChartEntryCache chartEntryCache) {
 
         var posting = new PostingDefinition(
-            this, index, receiveIn, receiveInId, participant, amountName, side, description,
+            this, index, postingChannel, receiveInId, participant, amountName, side, description,
             accountCache, chartEntryCache);
 
         this.postings.add(posting);
@@ -182,7 +182,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         var postingData = this.postings
                               .stream()
                               .map(p -> new FlowDefinitionData.PostingDefinitionData(
-                                  p.id, p.step, p.receiveIn, p.receiveInId, p.participant,
+                                  p.id, p.step, p.postingChannel, p.postingChannelId, p.participant,
                                   p.amountName, p.side, p.description))
                               .toList();
 

@@ -48,7 +48,7 @@ public class DeactivateHubCurrencyController {
         this.deactivateHubCurrencyCommand = deactivateHubCurrencyCommand;
     }
 
-    @PostMapping("/participant/hubs/deactivate-currency")
+    @PostMapping("/participant/hubs/deactivate-hub-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public DeactivateHubCurrencyCommand.Output execute(

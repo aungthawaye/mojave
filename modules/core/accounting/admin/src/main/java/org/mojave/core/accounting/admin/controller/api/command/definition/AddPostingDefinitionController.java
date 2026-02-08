@@ -48,7 +48,7 @@ public class AddPostingDefinitionController {
         this.addPostingDefinitionCommand = addPostingDefinitionCommand;
     }
 
-    @PostMapping("/accounting/flow-definitions/add-posting")
+    @PostMapping("/accounting/flow-definitions/add-posting-definition")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddPostingDefinitionCommand.Output execute(

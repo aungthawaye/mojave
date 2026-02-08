@@ -25,7 +25,7 @@ import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
-import org.mojave.core.accounting.contract.command.account.CreateAccountInBulkCommand;
+import org.mojave.core.accounting.contract.command.account.CreateAccountByCategoryCommand;
 import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,16 +36,16 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Service
-public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCommand {
+public class CreateAccountByCategoryCommandHandler implements CreateAccountByCategoryCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        CreateAccountInBulkCommandHandler.class);
+        CreateAccountByCategoryCommandHandler.class);
 
     private final CreateAccountCommand createAccountCommand;
 
     private final ChartEntryRepository chartEntryRepository;
 
-    public CreateAccountInBulkCommandHandler(CreateAccountCommand createAccountCommand,
+    public CreateAccountByCategoryCommandHandler(CreateAccountCommand createAccountCommand,
                                              ChartEntryRepository chartEntryRepository) {
 
         Objects.requireNonNull(createAccountCommand);
@@ -60,7 +60,7 @@ public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCom
     @Override
     public Output execute(Input input) {
 
-        LOGGER.info("CreateAccountInBulkCommand : input: ({})", ObjectLogger.log(input));
+        LOGGER.info("CreateAccountByCategoryCommand : input: ({})", ObjectLogger.log(input));
 
         final var entries = this.chartEntryRepository.findAll(
             ChartEntryRepository.Filters.withCategory(input.category()));
@@ -84,7 +84,7 @@ public class CreateAccountInBulkCommandHandler implements CreateAccountInBulkCom
 
         final var output = new Output(accountIds);
 
-        LOGGER.info("CreateAccountInBulkCommand : output: ({})", ObjectLogger.log(output));
+        LOGGER.info("CreateAccountByCategoryCommand : output: ({})", ObjectLogger.log(output));
 
         return output;
     }

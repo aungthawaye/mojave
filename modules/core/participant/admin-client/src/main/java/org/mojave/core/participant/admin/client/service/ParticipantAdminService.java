@@ -87,21 +87,21 @@ public interface ParticipantAdminService {
         @POST(MODULE_PREFIX + "/fsps/activate-fsp")
         Call<ActivateFspCommand.Output> activateFsp(@Body ActivateFspCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/fsps/activate-currency")
+        @POST(MODULE_PREFIX + "/fsps/activate-fsp-currency")
         Call<ActivateFspCurrencyCommand.Output> activateFspCurrency(
             @Body ActivateFspCurrencyCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/add-endpoint")
         Call<AddEndpointCommand.Output> addEndpoint(@Body AddEndpointCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/fsps/add-currency")
+        @POST(MODULE_PREFIX + "/fsps/add-fsp-currency")
         Call<AddFspCurrencyCommand.Output> addFspCurrency(@Body AddFspCurrencyCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/fsps/change-endpoint")
+        @POST(MODULE_PREFIX + "/fsps/change-fsp-endpoint")
         Call<ChangeFspEndpointCommand.Output> changeEndpoint(
             @Body ChangeFspEndpointCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/fsps/change-name")
+        @POST(MODULE_PREFIX + "/fsps/change-fsp-name")
         Call<ChangeFspNameCommand.Output> changeFspName(@Body ChangeFspNameCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/create-fsp")
@@ -114,7 +114,7 @@ public interface ParticipantAdminService {
         @POST(MODULE_PREFIX + "/fsps/deactivate-fsp")
         Call<DeactivateFspCommand.Output> deactivateFsp(@Body DeactivateFspCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/fsps/deactivate-currency")
+        @POST(MODULE_PREFIX + "/fsps/deactivate-fsp-currency")
         Call<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(
             @Body DeactivateFspCurrencyCommand.Input input);
 
@@ -134,18 +134,18 @@ public interface ParticipantAdminService {
         @POST(MODULE_PREFIX + "/ssps/activate-ssp")
         Call<ActivateSspCommand.Output> activateSsp(@Body ActivateSspCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/ssps/activate-currency")
+        @POST(MODULE_PREFIX + "/ssps/activate-ssp-currency")
         Call<ActivateSspCurrencyCommand.Output> activateSspCurrency(
             @Body ActivateSspCurrencyCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/ssps/add-currency")
+        @POST(MODULE_PREFIX + "/ssps/add-ssp-currency")
         Call<AddSspCurrencyCommand.Output> addSspCurrency(@Body AddSspCurrencyCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/ssps/change-endpoint")
+        @POST(MODULE_PREFIX + "/ssps/change-ssp-endpoint")
         Call<ChangeSspEndpointCommand.Output> changeSspEndpoint(
             @Body ChangeSspEndpointCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/ssps/change-name")
+        @POST(MODULE_PREFIX + "/ssps/change-ssp-name")
         Call<ChangeSspNameCommand.Output> changeSspName(@Body ChangeSspNameCommand.Input input);
 
         @POST(MODULE_PREFIX + "/ssps/create-ssp")
@@ -154,7 +154,7 @@ public interface ParticipantAdminService {
         @POST(MODULE_PREFIX + "/ssps/deactivate-ssp")
         Call<DeactivateSspCommand.Output> deactivateSsp(@Body DeactivateSspCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/ssps/deactivate-currency")
+        @POST(MODULE_PREFIX + "/ssps/deactivate-ssp-currency")
         Call<DeactivateSspCurrencyCommand.Output> deactivateSspCurrency(
             @Body DeactivateSspCurrencyCommand.Input input);
 
@@ -217,11 +217,11 @@ public interface ParticipantAdminService {
         @POST(MODULE_PREFIX + "/oracles/activate-oracle")
         Call<ActivateOracleCommand.Output> activateOracle(@Body ActivateOracleCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/oracles/change-name")
+        @POST(MODULE_PREFIX + "/oracles/change-oracle-name")
         Call<ChangeOracleNameCommand.Output> changeOracleName(
             @Body ChangeOracleNameCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/oracles/change-type")
+        @POST(MODULE_PREFIX + "/oracles/change-oracle-type")
         Call<ChangeOracleTypeCommand.Output> changeOracleType(
             @Body ChangeOracleTypeCommand.Input input);
 
@@ -236,20 +236,20 @@ public interface ParticipantAdminService {
 
     interface HubCommands {
 
-        @POST(MODULE_PREFIX + "/hubs/activate-currency")
+        @POST(MODULE_PREFIX + "/hubs/activate-hub-currency")
         Call<ActivateHubCurrencyCommand.Output> activateHubCurrency(
             @Body ActivateHubCurrencyCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/hubs/add-currency")
+        @POST(MODULE_PREFIX + "/hubs/add-hub-currency")
         Call<AddHubCurrencyCommand.Output> addHubCurrency(@Body AddHubCurrencyCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/hubs/change-name")
+        @POST(MODULE_PREFIX + "/hubs/change-hub-name")
         Call<ChangeHubNameCommand.Output> changeHubName(@Body ChangeHubNameCommand.Input input);
 
         @POST(MODULE_PREFIX + "/hubs/create-hub")
         Call<CreateHubCommand.Output> createHub(@Body CreateHubCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/hubs/deactivate-currency")
+        @POST(MODULE_PREFIX + "/hubs/deactivate-hub-currency")
         Call<DeactivateHubCurrencyCommand.Output> deactivateHubCurrency(
             @Body DeactivateHubCurrencyCommand.Input input);
 

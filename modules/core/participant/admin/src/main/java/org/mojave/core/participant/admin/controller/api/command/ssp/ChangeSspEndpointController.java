@@ -47,7 +47,7 @@ public class ChangeSspEndpointController {
         this.changeSspEndpointCommand = changeSspEndpointCommand;
     }
 
-    @PostMapping("/participant/ssps/change-endpoint")
+    @PostMapping("/participant/ssps/change-ssp-endpoint")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeSspEndpointCommand.Output execute(

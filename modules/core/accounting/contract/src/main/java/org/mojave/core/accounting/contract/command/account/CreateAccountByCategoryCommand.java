@@ -28,7 +28,7 @@ import org.mojave.common.datatype.type.participant.FspCode;
 
 import java.util.List;
 
-public interface CreateAccountInBulkCommand {
+public interface CreateAccountByCategoryCommand {
 
     Output execute(Input input);
 

@@ -48,7 +48,7 @@ public class ChangeChartEntryPropertiesController {
         this.changeChartEntryPropertiesCommand = changeChartEntryPropertiesCommand;
     }
 
-    @PostMapping("/accounting/chart-entries/change-properties")
+    @PostMapping("/accounting/chart-entries/change-chart-entry-properties")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChangeChartEntryPropertiesCommand.Output execute(

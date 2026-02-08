@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.domain.command.ledger;
 
 import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
@@ -107,7 +107,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
             AccountId accountId = null;
             AccountData accountData = null;
 
-            if (posting.receiveIn() == ReceiveIn.CHART_ENTRY) {
+            if (posting.postingChannel() == PostingChannel.CHART_ENTRY) {
 
                 var accountOfParticipant = input.participants().get(posting.participant());
 

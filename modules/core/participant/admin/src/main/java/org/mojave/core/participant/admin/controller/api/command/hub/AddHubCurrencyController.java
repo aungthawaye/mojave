@@ -47,7 +47,7 @@ public class AddHubCurrencyController {
         this.addHubCurrencyCommand = addHubCurrencyCommand;
     }
 
-    @PostMapping("/participant/hubs/add-currency")
+    @PostMapping("/participant/hubs/add-hub-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddHubCurrencyCommand.Output execute(

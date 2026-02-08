@@ -42,7 +42,7 @@ public class FindSettlementProviderController {
         this.findSettlementProviderCommand = findSettlementProviderCommand;
     }
 
-    @PostMapping("/settlement/settlement-definitions/find-provider")
+    @PostMapping("/settlement/settlement-definitions/find-settlement-provider")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public FindSettlementProviderCommand.Output execute(
