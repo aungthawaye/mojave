@@ -50,9 +50,9 @@ import java.util.Objects;
         OpenApiConfiguration.class,
         SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"org.mojave.connector.gateway.outbound"})
-public class ConnectorOutboundConfiguration implements MiscConfiguration.RequiredBeans,
-                                                       FspiopInvokerConfiguration.RequiredBeans,
-                                                       SpringSecurityConfiguration.RequiredBeans,
+public class ConnectorOutboundConfiguration implements MiscConfiguration.RequiredDependencies,
+                                                       FspiopInvokerConfiguration.RequiredDependencies,
+                                                       SpringSecurityConfiguration.RequiredDependencies,
                                                        OpenApiConfiguration.RequiredSettings,
                                                        SpringSecurityConfiguration.RequiredSettings {
 
@@ -118,7 +118,7 @@ public class ConnectorOutboundConfiguration implements MiscConfiguration.Require
         };
     }
 
-    public interface RequiredBeans {
+    public interface RequiredDependencies {
 
         PubSubClient pubSubClient();
 

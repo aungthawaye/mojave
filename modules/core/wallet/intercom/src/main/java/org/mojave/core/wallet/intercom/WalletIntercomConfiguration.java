@@ -20,13 +20,13 @@
 
 package org.mojave.core.wallet.intercom;
 
+import org.mojave.common.datatype.DatatypeConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
-import org.mojave.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -34,8 +34,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "org.mojave.core.wallet.intercom.controller")
 @Import(
@@ -53,8 +51,8 @@ public final class WalletIntercomConfiguration extends JsonWebMvcConfigurationSu
         super(jsonMapper);
     }
 
-    public interface RequiredDependencies extends WalletDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends WalletDomainConfiguration.RequiredDependencies,
+                                                  SpringSecurityConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings,
                                               OpenApiConfiguration.RequiredSettings,

@@ -21,13 +21,13 @@
 package org.mojave.core.accounting.contract.data;
 
 import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
-import org.mojave.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Objects;

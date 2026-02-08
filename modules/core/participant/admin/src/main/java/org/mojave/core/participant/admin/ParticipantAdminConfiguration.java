@@ -35,8 +35,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.ObjectMapper;
 
 @EnableAutoConfiguration
-
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "org.mojave.core.participant.admin.controller")
 @Import(
@@ -54,8 +52,9 @@ public final class ParticipantAdminConfiguration extends JsonWebMvcConfiguration
         super(objectMapper);
     }
 
-    public interface RequiredDependencies extends ParticipantDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans { }
+    public interface RequiredDependencies
+        extends ParticipantDomainConfiguration.RequiredDependencies,
+                SpringSecurityConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
                                               OpenApiConfiguration.RequiredSettings,

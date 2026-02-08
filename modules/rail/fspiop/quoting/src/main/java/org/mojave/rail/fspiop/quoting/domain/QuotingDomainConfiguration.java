@@ -36,10 +36,10 @@ import org.springframework.context.annotation.Import;
         RoutingJpaConfiguration.class})
 public class QuotingDomainConfiguration {
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
-                                           FspiopComponentConfiguration.RequiredBeans,
-                                           ParticipantStoreConfiguration.RequiredBeans,
-                                           RoutingJpaConfiguration.RequiredBeans {
+    public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies,
+                                           FspiopComponentConfiguration.RequiredDependencies,
+                                           ParticipantStoreConfiguration.RequiredDependencies,
+                                           RoutingJpaConfiguration.RequiredDependencies {
 
     }
 

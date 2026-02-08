@@ -34,8 +34,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "org.mojave.core.participant.intercom.controller")
 @Import(
@@ -53,8 +51,9 @@ public final class ParticipantIntercomConfiguration extends JsonWebMvcConfigurat
         super(jsonMapper);
     }
 
-    public interface RequiredDependencies extends ParticipantDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans { }
+    public interface RequiredDependencies
+        extends ParticipantDomainConfiguration.RequiredDependencies,
+                SpringSecurityConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends ParticipantDomainConfiguration.RequiredSettings,
                                               OpenApiConfiguration.RequiredSettings,

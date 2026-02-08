@@ -63,9 +63,10 @@ public class SspQueryHandler implements SspQuery {
         var activationStatus = SspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
         var terminationStatus = SspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
+        var withId = SspRepository.Filters.withId(sspId);
 
         return this.sspRepository
-                   .findOne(activationStatus.and(terminationStatus))
+                   .findOne(activationStatus.and(terminationStatus).and(withId))
                    .orElseThrow(() -> new SspIdNotFoundException(sspId))
                    .convert();
     }
@@ -78,11 +79,12 @@ public class SspQueryHandler implements SspQuery {
         var activationStatus = SspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
         var terminationStatus = SspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
+        var withSspCode = SspRepository.Filters.withSspCode(sspCode);
 
         return this.sspRepository
                    .findOne(activationStatus
                                 .and(terminationStatus)
-                                .and(SspRepository.Filters.withSspCode(sspCode)))
+                                .and(withSspCode))
                    .orElseThrow(() -> new SspCodeNotFoundException(sspCode))
                    .convert();
     }

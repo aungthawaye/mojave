@@ -25,7 +25,6 @@ import org.mojave.core.settlement.contract.command.record.RequestSettlementIniti
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
 public class RequestSettlementInitiationController {
 
     private final RequestSettlementInitiationCommand requestSettlementInitiationCommand;
@@ -44,7 +42,7 @@ public class RequestSettlementInitiationController {
         this.requestSettlementInitiationCommand = requestSettlementInitiationCommand;
     }
 
-    @PostMapping("/settlement-records/request-initiation")
+    @PostMapping("/settlement/settlement-records/request-initiation")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public RequestSettlementInitiationCommand.Output execute(

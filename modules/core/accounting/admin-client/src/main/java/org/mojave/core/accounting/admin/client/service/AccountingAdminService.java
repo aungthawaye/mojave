@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,16 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.admin.client.service;
 
+import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
+import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.ChartId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.misc.query.PagedResult;
 import org.mojave.core.accounting.contract.command.account.ActivateAccountCommand;
 import org.mojave.core.accounting.contract.command.account.ChangeAccountPropertiesCommand;
@@ -43,18 +51,13 @@ import org.mojave.core.accounting.contract.data.AccountData;
 import org.mojave.core.accounting.contract.data.ChartData;
 import org.mojave.core.accounting.contract.data.ChartEntryData;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.common.datatype.identifier.accounting.ChartId;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+
+import java.util.List;
 
 public interface AccountingAdminService {
 
@@ -62,25 +65,25 @@ public interface AccountingAdminService {
 
     interface AccountCommand {
 
-        @POST(MODULE_PREFIX + "/accounts/activate")
+        @POST(MODULE_PREFIX + "/accounts/activate-account")
         Call<ActivateAccountCommand.Output> activate(@Body ActivateAccountCommand.Input input);
 
         @POST(MODULE_PREFIX + "/accounts/change-properties")
         Call<ChangeAccountPropertiesCommand.Output> changeProperties(
             @Body ChangeAccountPropertiesCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/accounts/create")
+        @POST(MODULE_PREFIX + "/accounts/create-account")
         Call<CreateAccountCommand.Output> create(@Body CreateAccountCommand.Input input);
 
         @POST(MODULE_PREFIX + "/accounts/create-in-bulk")
         Call<CreateAccountInBulkCommand.Output> createInBulk(
             @Body CreateAccountInBulkCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/accounts/deactivate")
+        @POST(MODULE_PREFIX + "/accounts/deactivate-account")
         Call<DeactivateAccountCommand.Output> deactivate(
             @Body DeactivateAccountCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/accounts/terminate")
+        @POST(MODULE_PREFIX + "/accounts/terminate-account")
         Call<TerminateAccountCommand.Output> terminate(@Body TerminateAccountCommand.Input input);
 
     }
@@ -91,17 +94,17 @@ public interface AccountingAdminService {
         Call<PagedResult<AccountData>> find(
             @Body org.mojave.core.accounting.contract.query.AccountQuery.Criteria criteria);
 
-        @GET(MODULE_PREFIX + "/accounts/get-all-accounts")
-        Call<java.util.List<AccountData>> getAll();
+        @GET(MODULE_PREFIX + "/accounts/get-all")
+        Call<List<AccountData>> getAll();
 
-        @GET(MODULE_PREFIX + "/accounts/get-by-account-code")
+        @GET(MODULE_PREFIX + "/accounts/get-by-code")
         Call<AccountData> getByAccountCode(@Query("accountCode") AccountCode accountCode);
 
-        @GET(MODULE_PREFIX + "/accounts/get-by-account-id")
+        @GET(MODULE_PREFIX + "/accounts/get-by-id")
         Call<AccountData> getByAccountId(@Query("accountId") AccountId accountId);
 
         @GET(MODULE_PREFIX + "/accounts/get-by-owner-id")
-        Call<java.util.List<AccountData>> getByOwnerId(@Query("ownerId") AccountOwnerId ownerId);
+        Call<List<AccountData>> getByOwnerId(@Query("ownerId") AccountOwnerId ownerId);
 
     }
 
@@ -114,49 +117,48 @@ public interface AccountingAdminService {
         @POST(MODULE_PREFIX + "/charts/change-name")
         Call<ChangeChartNameCommand.Output> changeName(@Body ChangeChartNameCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/charts/create")
+        @POST(MODULE_PREFIX + "/charts/create-chart")
         Call<CreateChartCommand.Output> create(@Body CreateChartCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/chart-entries/create")
+        @POST(MODULE_PREFIX + "/chart-entries/create-chart-entry")
         Call<CreateChartEntryCommand.Output> createEntry(@Body CreateChartEntryCommand.Input input);
 
     }
 
     interface ChartQuery {
 
-        @GET(MODULE_PREFIX + "/chart-entries/get-all-chart-entries")
-        Call<java.util.List<ChartEntryData>> getAllChartEntries();
+        @GET(MODULE_PREFIX + "/chart-entries/get-all")
+        Call<List<ChartEntryData>> getAllChartEntries();
 
-        @GET(MODULE_PREFIX + "/charts/get-all-charts")
-        Call<java.util.List<ChartData>> getAllCharts();
+        @GET(MODULE_PREFIX + "/charts/get-all")
+        Call<List<ChartData>> getAllCharts();
 
         // Chart entry queries
-        @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-entry-id")
+        @GET(MODULE_PREFIX + "/chart-entries/get-by-id")
         Call<ChartEntryData> getByChartEntryId(@Query("chartEntryId") ChartEntryId chartEntryId);
 
         // Chart queries
-        @GET(MODULE_PREFIX + "/charts/get-by-chart-id")
+        @GET(MODULE_PREFIX + "/charts/get-by-id")
         Call<ChartData> getByChartId(@Query("chartId") ChartId chartId);
 
         @GET(MODULE_PREFIX + "/chart-entries/get-by-name-contains")
-        Call<java.util.List<ChartEntryData>> getChartEntriesByNameContains(
-            @Query("name") String name);
+        Call<List<ChartEntryData>> getChartEntriesByNameContains(@Query("name") String name);
 
         @GET(MODULE_PREFIX + "/charts/get-by-name-contains")
-        Call<java.util.List<ChartData>> getChartsByNameContains(@Query("name") String name);
+        Call<List<ChartData>> getChartsByNameContains(@Query("name") String name);
 
         @GET(MODULE_PREFIX + "/chart-entries/get-by-category")
-        Call<java.util.List<ChartEntryData>> getEntriesByCategory(
+        Call<List<ChartEntryData>> getEntriesByCategory(
             @Query("category") ChartEntryCategory category);
 
         @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-id")
-        Call<java.util.List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
+        Call<List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
 
     }
 
     interface DefinitionCommand {
 
-        @POST(MODULE_PREFIX + "/flow-definitions/activate")
+        @POST(MODULE_PREFIX + "/flow-definitions/activate-flow-definition")
         Call<ActivateFlowDefinitionCommand.Output> activate(
             @Body ActivateFlowDefinitionCommand.Input input);
 
@@ -172,11 +174,11 @@ public interface AccountingAdminService {
         Call<ChangeFlowDefinitionPropertiesCommand.Output> changeProperties(
             @Body ChangeFlowDefinitionPropertiesCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/create")
+        @POST(MODULE_PREFIX + "/flow-definitions/create-flow-definition")
         Call<CreateFlowDefinitionCommand.Output> create(
             @Body CreateFlowDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/deactivate")
+        @POST(MODULE_PREFIX + "/flow-definitions/deactivate-flow-definition")
         Call<DeactivateFlowDefinitionCommand.Output> deactivate(
             @Body DeactivateFlowDefinitionCommand.Input input);
 
@@ -184,7 +186,7 @@ public interface AccountingAdminService {
         Call<RemovePostingDefinitionCommand.Output> removePosting(
             @Body RemovePostingDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/terminate")
+        @POST(MODULE_PREFIX + "/flow-definitions/terminate-flow-definition")
         Call<TerminateFlowDefinitionCommand.Output> terminate(
             @Body TerminateFlowDefinitionCommand.Input input);
 
@@ -192,16 +194,15 @@ public interface AccountingAdminService {
 
     interface DefinitionQuery {
 
-        @GET(MODULE_PREFIX + "/flow-definitions/get-all-flow-definitions")
-        Call<java.util.List<FlowDefinitionData>> getAllFlowDefinitions();
+        @GET(MODULE_PREFIX + "/flow-definitions/get-all")
+        Call<List<FlowDefinitionData>> getAllFlowDefinitions();
 
-        @GET(MODULE_PREFIX + "/flow-definitions/get-by-flow-definition-id")
+        @GET(MODULE_PREFIX + "/flow-definitions/get-by-id")
         Call<FlowDefinitionData> getByFlowDefinitionId(
             @Query("flowDefinitionId") FlowDefinitionId flowDefinitionId);
 
         @GET(MODULE_PREFIX + "/flow-definitions/get-by-name-contains")
-        Call<java.util.List<FlowDefinitionData>> getFlowDefinitionsByNameContains(
-            @Query("name") String name);
+        Call<List<FlowDefinitionData>> getFlowDefinitionsByNameContains(@Query("name") String name);
 
     }
 

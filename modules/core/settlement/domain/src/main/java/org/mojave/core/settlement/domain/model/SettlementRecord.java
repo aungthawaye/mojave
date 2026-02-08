@@ -176,12 +176,6 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
     }
 
     @Override
-    public SettlementRecordId getId() {
-
-        return id;
-    }
-
-    @Override
     public SettlementRecordData convert() {
 
         return new SettlementRecordData(
@@ -189,6 +183,12 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
             this.payeeFspId, this.currency, this.amount, this.transferId, this.transactionId,
             this.transactionAt, this.settlementProviderId, this.initiatedAt, this.preparedAt,
             this.completedAt);
+    }
+
+    @Override
+    public SettlementRecordId getId() {
+
+        return id;
     }
 
     public void markCompleted(final Instant completedAt) {

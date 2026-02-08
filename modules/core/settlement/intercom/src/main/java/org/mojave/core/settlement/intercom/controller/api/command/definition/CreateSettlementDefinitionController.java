@@ -25,7 +25,6 @@ import org.mojave.core.settlement.contract.command.definition.CreateSettlementDe
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement-intercom")
 public class CreateSettlementDefinitionController {
 
     private final CreateSettlementDefinitionCommand createSettlementDefinitionCommand;
@@ -44,7 +42,7 @@ public class CreateSettlementDefinitionController {
         this.createSettlementDefinitionCommand = createSettlementDefinitionCommand;
     }
 
-    @PostMapping("/settlement-definitions/create")
+    @PostMapping("/settlement/settlement-definitions/create-settlement-definition")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CreateSettlementDefinitionCommand.Output execute(

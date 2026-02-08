@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/participant")
 public class HubQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -50,7 +48,7 @@ public class HubQueryController {
         this.hubQuery = hubQuery;
     }
 
-    @GetMapping("/hubs/count")
+    @GetMapping("/participant/hubs/count")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public long count() {
@@ -58,7 +56,7 @@ public class HubQueryController {
         return 1;
     }
 
-    @GetMapping("/hubs/get-hub")
+    @GetMapping("/participant/hubs/get")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public HubData get() {
@@ -66,7 +64,7 @@ public class HubQueryController {
         return this.hubQuery.get();
     }
 
-    @GetMapping("/hubs/get-all-hubs")
+    @GetMapping("/participant/hubs/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<HubData> getAll() {

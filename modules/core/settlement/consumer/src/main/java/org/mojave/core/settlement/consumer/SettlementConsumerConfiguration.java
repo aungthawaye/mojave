@@ -178,7 +178,8 @@ public class SettlementConsumerConfiguration {
             });
     }
 
-    public interface RequiredDependencies extends SettlementDomainConfiguration.RequiredBeans { }
+    public interface RequiredDependencies
+        extends SettlementDomainConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends SettlementDomainConfiguration.RequiredSettings {
 

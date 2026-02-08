@@ -22,7 +22,7 @@ package org.mojave.core.participant.store;
 
 public class ParticipantStoreConfiguration {
 
-    public interface RequiredBeans {
+    public interface RequiredDependencies {
 
         ParticipantStore participantStore();
 

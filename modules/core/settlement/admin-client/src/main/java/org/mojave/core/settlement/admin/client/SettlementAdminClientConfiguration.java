@@ -66,7 +66,7 @@ public class SettlementAdminClientConfiguration {
                    .build();
     }
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {
 

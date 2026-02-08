@@ -6,9 +6,7 @@ import org.mojave.common.datatype.identifier.settlement.FilterItemId;
 
 import java.util.Objects;
 
-public record FilterItemData(FilterItemId filterItemId,
-                             FspId fspId,
-                             FilterGroupId filterGroupId) {
+public record FilterItemData(FilterItemId filterItemId, FspId fspId, FilterGroupId filterGroupId) {
 
     @Override
     public boolean equals(Object o) {

@@ -25,7 +25,6 @@ import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupC
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
 public class CreateFilterGroupController {
 
     private final CreateFilterGroupCommand createFilterGroupCommand;
@@ -44,7 +42,7 @@ public class CreateFilterGroupController {
         this.createFilterGroupCommand = createFilterGroupCommand;
     }
 
-    @PostMapping("/filter-groups/create")
+    @PostMapping("/settlement/filter-groups/create-filter-group")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CreateFilterGroupCommand.Output execute(

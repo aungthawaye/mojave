@@ -44,15 +44,15 @@ public interface SettlementAdminService {
 
     interface DefinitionCommand {
 
-        @POST(MODULE_PREFIX + "/settlement-definitions/activate")
+        @POST(MODULE_PREFIX + "/settlement-definitions/activate-settlement-definition")
         Call<ActivateSettlementDefinitionCommand.Output> activate(
             @Body ActivateSettlementDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/settlement-definitions/create")
+        @POST(MODULE_PREFIX + "/settlement-definitions/create-settlement-definition")
         Call<CreateSettlementDefinitionCommand.Output> create(
             @Body CreateSettlementDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/settlement-definitions/deactivate")
+        @POST(MODULE_PREFIX + "/settlement-definitions/deactivate-settlement-definition")
         Call<DeactivateSettlementDefinitionCommand.Output> deactivate(
             @Body DeactivateSettlementDefinitionCommand.Input input);
 
@@ -60,11 +60,11 @@ public interface SettlementAdminService {
         Call<FindSettlementProviderCommand.Output> findProvider(
             @Body FindSettlementProviderCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/settlement-definitions/remove")
+        @POST(MODULE_PREFIX + "/settlement-definitions/remove-settlement-definition")
         Call<RemoveSettlementDefinitionCommand.Output> remove(
             @Body RemoveSettlementDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/settlement-definitions/update")
+        @POST(MODULE_PREFIX + "/settlement-definitions/update-settlement-definition")
         Call<UpdateSettlementDefinitionCommand.Output> update(
             @Body UpdateSettlementDefinitionCommand.Input input);
 
@@ -75,13 +75,13 @@ public interface SettlementAdminService {
         @POST(MODULE_PREFIX + "/filter-groups/add-item")
         Call<AddFilterItemCommand.Output> addItem(@Body AddFilterItemCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/filter-groups/create")
+        @POST(MODULE_PREFIX + "/filter-groups/create-filter-group")
         Call<CreateFilterGroupCommand.Output> create(@Body CreateFilterGroupCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/filter-groups/remove")
+        @POST(MODULE_PREFIX + "/filter-groups/remove-filter-group")
         Call<RemoveFilterGroupCommand.Output> remove(@Body RemoveFilterGroupCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/filter-groups/remove-item")
+        @POST(MODULE_PREFIX + "/filter-groups/remove-filter-group-item")
         Call<RemoveFilterItemCommand.Output> removeItem(@Body RemoveFilterItemCommand.Input input);
 
     }

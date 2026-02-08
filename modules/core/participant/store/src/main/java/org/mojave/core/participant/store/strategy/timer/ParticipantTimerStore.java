@@ -173,29 +173,25 @@ public class ParticipantTimerStore implements ParticipantStore {
                              .stream()
                              .collect(
                                  Collectors.toUnmodifiableMap(
-                                     FspData::fspId, Function.identity(),
-                                     (a, b) -> a));
+                                     FspData::fspId, Function.identity(), (a, b) -> a));
 
         var _withFspCode = fsps
                                .stream()
                                .collect(
                                    Collectors.toUnmodifiableMap(
-                                       FspData::code, Function.identity(),
-                                       (a, b) -> a));
+                                       FspData::code, Function.identity(), (a, b) -> a));
 
         var _withSspId = ssps
                              .stream()
                              .collect(
                                  Collectors.toUnmodifiableMap(
-                                     SspData::sspId, Function.identity(),
-                                     (a, b) -> a));
+                                     SspData::sspId, Function.identity(), (a, b) -> a));
 
         var _withSspCode = ssps
                                .stream()
                                .collect(
                                    Collectors.toUnmodifiableMap(
-                                       SspData::code, Function.identity(),
-                                       (a, b) -> a));
+                                       SspData::code, Function.identity(), (a, b) -> a));
 
         var _withOracleId = oracles
                                 .stream()

@@ -20,9 +20,9 @@
 
 package org.mojave.core.wallet.domain.command.position;
 
+import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
@@ -32,6 +32,7 @@ import org.mojave.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -76,9 +77,8 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
         try {
 
             final var history = this.positionUpdater.reserve(
-                input.transactionId(),
-                input.transactionAt(), positionUpdateId, position.positionId(), input.amount(),
-                input.description());
+                input.transactionId(), input.transactionAt(), positionUpdateId,
+                position.positionId(), input.amount(), input.description());
 
             final var output = new Output(
                 history.positionUpdateId(), history.positionId(), history.action(),

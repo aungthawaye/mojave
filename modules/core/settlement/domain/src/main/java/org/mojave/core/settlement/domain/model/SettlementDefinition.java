@@ -138,17 +138,17 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
-    public void deactivate() {
-
-        this.activationStatus = ActivationStatus.INACTIVE;
-    }
-
     @Override
     public SettlementDefinitionData convert() {
 
         return new SettlementDefinitionData(
             this.id, this.name, this.payerFilterGroup.getId(), this.payeeFilterGroup.getId(),
             this.currency, this.startAt, this.desiredProviderId, this.activationStatus);
+    }
+
+    public void deactivate() {
+
+        this.activationStatus = ActivationStatus.INACTIVE;
     }
 
     @Override

@@ -42,7 +42,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.ObjectMapper;
 
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(
     basePackages = {
@@ -67,7 +66,7 @@ public final class MonoServiceConfiguration extends JsonWebMvcConfigurationSuppo
 
     }
 
-    public interface RequiredDependencies extends FspiopServiceConfiguration.RequiredBeans,
+    public interface RequiredDependencies extends FspiopServiceConfiguration.RequiredDependencies,
                                                   LookUpServiceConfiguration.RequiredDependencies,
                                                   QuotingServiceConfiguration.RequiredDependencies,
                                                   TransferServiceConfiguration.RequiredDependencies { }

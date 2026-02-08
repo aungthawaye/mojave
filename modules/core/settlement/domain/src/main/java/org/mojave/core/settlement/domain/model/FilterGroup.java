@@ -5,9 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -78,17 +76,17 @@ public class FilterGroup extends JpaEntity<FilterGroupId>
         return item;
     }
 
-    public boolean fspExists(FspId fspId) {
-
-        return this.items.stream().anyMatch(item -> item.matches(fspId));
-    }
-
     @Override
     public FilterGroupData convert() {
 
         var itemData = this.items.stream().map(FilterItem::convert).toList();
 
         return new FilterGroupData(this.id, this.name, itemData);
+    }
+
+    public boolean fspExists(FspId fspId) {
+
+        return this.items.stream().anyMatch(item -> item.matches(fspId));
     }
 
     @Override

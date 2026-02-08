@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,19 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.store.local;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.core.accounting.contract.data.AccountData;
-import org.mojave.core.accounting.contract.query.AccountQuery;
-import org.mojave.core.accounting.store.AccountingStore;
-import org.mojave.core.accounting.store.AccountingStoreConfiguration;
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
-import org.mojave.common.datatype.enums.Currency;
+import org.mojave.core.accounting.contract.data.AccountData;
+import org.mojave.core.accounting.contract.query.AccountQuery;
+import org.mojave.core.accounting.store.AccountingStore;
+import org.mojave.core.accounting.store.AccountingStoreConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -36,13 +37,13 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
 @Component
 public class AccountingLocalStore implements AccountingStore {
@@ -148,28 +149,24 @@ public class AccountingLocalStore implements AccountingStore {
         var _withAccountId = accounts
                                  .stream()
                                  .collect(Collectors.toUnmodifiableMap(
-                                     AccountData::accountId, Function.identity(), (a, b) -> a));
+                                     AccountData::accountId,
+                                     Function.identity(), (a, b) -> a));
 
         var _withAccountCode = accounts
                                    .stream()
                                    .collect(Collectors.toUnmodifiableMap(
-                                       AccountData::code, Function.identity(), (a, b) -> a));
+                                       AccountData::code,
+                                       Function.identity(), (a, b) -> a));
 
-        var _withOwnerId = Collections.unmodifiableMap(accounts
-                                                           .stream()
-                                                           .collect(Collectors.groupingBy(
-                                                               AccountData::ownerId,
-                                                               Collectors.collectingAndThen(
-                                                                   Collectors.toSet(),
-                                                                   Collections::unmodifiableSet))));
+        var _withOwnerId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(
+                AccountData::ownerId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-        var _withChartEntryId = Collections.unmodifiableMap(accounts
-                                                                .stream()
-                                                                .collect(Collectors.groupingBy(
-                                                                    AccountData::chartEntryId,
-                                                                    Collectors.collectingAndThen(
-                                                                        Collectors.toSet(),
-                                                                        Collections::unmodifiableSet))));
+        var _withChartEntryId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(
+                AccountData::chartEntryId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
         var _withChartEntryOwnerCurrency = accounts.stream().collect(Collectors.toUnmodifiableMap(
             acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() +

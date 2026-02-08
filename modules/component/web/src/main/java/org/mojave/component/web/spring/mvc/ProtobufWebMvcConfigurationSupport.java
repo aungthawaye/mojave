@@ -20,13 +20,30 @@
 
 package org.mojave.component.web.spring.mvc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import java.util.List;
+
 public class ProtobufWebMvcConfigurationSupport extends WebMvcConfigurationSupport {
 
+    @Autowired(required = false)
+    private List<Converter<?, ?>> converters;
+
     public ProtobufWebMvcConfigurationSupport() {
+
+    }
+
+    @Override
+    protected void addFormatters(FormatterRegistry registry) {
+
+        if (this.converters != null) {
+            this.converters.forEach(registry::addConverter);
+        }
 
     }
 

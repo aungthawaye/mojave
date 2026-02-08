@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,17 +17,18 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.wallet.domain.query;
 
-import org.mojave.component.jpa.routing.annotation.Read;
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
 import org.mojave.core.wallet.contract.query.BalanceQuery;
 import org.mojave.core.wallet.domain.model.Balance;
 import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.common.datatype.enums.Currency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

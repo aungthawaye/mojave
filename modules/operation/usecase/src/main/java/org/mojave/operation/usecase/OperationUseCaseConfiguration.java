@@ -32,9 +32,9 @@ import org.springframework.context.annotation.Import;
         AccountingAdminClientConfiguration.class,
         WalletAdminClientConfiguration.class})
 public class OperationUseCaseConfiguration
-    implements ParticipantAdminClientConfiguration.RequiredBeans,
-               AccountingAdminClientConfiguration.RequiredBeans,
-               WalletAdminClientConfiguration.RequiredBeans {
+    implements ParticipantAdminClientConfiguration.RequiredDependencies,
+               AccountingAdminClientConfiguration.RequiredDependencies,
+               WalletAdminClientConfiguration.RequiredDependencies {
 
     public interface RequiredSettings extends ParticipantAdminClientConfiguration.RequiredSettings,
                                               AccountingAdminClientConfiguration.RequiredSettings,

@@ -31,7 +31,8 @@ import tools.jackson.databind.ObjectMapper;
 
 @Import(value = {MiscConfiguration.class})
 @ComponentScan(basePackages = {"org.mojave.core.settlement.intercom.client"})
-public class SettlementIntercomClientConfiguration implements MiscConfiguration.RequiredBeans {
+public class SettlementIntercomClientConfiguration
+    implements MiscConfiguration.RequiredDependencies {
 
     @Bean
     public SettlementIntercomService settlementIntercomService(SettlementIntercomService.Settings settings,
@@ -44,7 +45,7 @@ public class SettlementIntercomClientConfiguration implements MiscConfiguration.
                    .build();
     }
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans {
+    public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies {
 
     }
 

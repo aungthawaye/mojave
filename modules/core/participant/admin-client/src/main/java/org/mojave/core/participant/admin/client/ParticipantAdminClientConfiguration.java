@@ -56,6 +56,17 @@ public class ParticipantAdminClientConfiguration {
     }
 
     @Bean
+    public ParticipantAdminService.FspGroupQuery fspGroupQuery(
+        ParticipantAdminService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(ParticipantAdminService.FspGroupQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
     public ParticipantAdminService.HubCommands hubCommands(ParticipantAdminService.Settings settings,
                                                            ObjectMapper objectMapper) {
 
@@ -99,7 +110,7 @@ public class ParticipantAdminClientConfiguration {
                    .build();
     }
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {
 

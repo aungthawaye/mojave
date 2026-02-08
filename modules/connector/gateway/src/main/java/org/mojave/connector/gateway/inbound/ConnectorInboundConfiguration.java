@@ -64,9 +64,9 @@ import java.util.Objects;
         FspiopInvokerConfiguration.class,
         SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"org.mojave.connector.gateway.inbound"})
-public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredBeans,
-                                                      FspiopInvokerConfiguration.RequiredBeans,
-                                                      SpringSecurityConfiguration.RequiredBeans,
+public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredDependencies,
+                                                      FspiopInvokerConfiguration.RequiredDependencies,
+                                                      SpringSecurityConfiguration.RequiredDependencies,
                                                       SpringSecurityConfiguration.RequiredSettings {
 
     private final ParticipantContext participantContext;
@@ -156,7 +156,7 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
         }
     }
 
-    public interface RequiredBeans extends ConnectorAdapterConfiguration.RequiredBeans {
+    public interface RequiredDependencies extends ConnectorAdapterConfiguration.RequiredDependencies {
 
         PubSubClient pubSubClient();
 

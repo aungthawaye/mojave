@@ -17,12 +17,14 @@ public interface SettlementRecordRepository
 
         public static Specification<SettlementRecord> withTransactionId(final TransactionId transactionId) {
 
-            return (root, query, cb) -> cb.equal(root.get(SettlementRecord_.transactionId), transactionId);
+            return (root, query, cb) -> cb.equal(
+                root.get(SettlementRecord_.transactionId), transactionId);
         }
 
         public static Specification<SettlementRecord> withTransferId(final TransferId transferId) {
 
-            return (root, query, cb) -> cb.equal(root.get(SettlementRecord_.transferId), transferId);
+            return (root, query, cb) -> cb.equal(
+                root.get(SettlementRecord_.transferId), transferId);
         }
 
     }

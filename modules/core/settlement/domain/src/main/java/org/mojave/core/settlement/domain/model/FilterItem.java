@@ -75,15 +75,15 @@ public class FilterItem extends JpaEntity<FilterItemId> implements DataConversio
     }
 
     @Override
-    public FilterItemId getId() {
-
-        return id;
-    }
-
-    @Override
     public FilterItemData convert() {
 
         return new FilterItemData(this.id, this.fspId, this.filterGroup.getId());
+    }
+
+    @Override
+    public FilterItemId getId() {
+
+        return id;
     }
 
     public boolean matches(FspId fspId) {

@@ -31,7 +31,8 @@ import tools.jackson.databind.ObjectMapper;
 
 @Import(value = {MiscConfiguration.class})
 @ComponentScan(basePackages = {"org.mojave.core.participant.intercom.client"})
-public class ParticipantIntercomClientConfiguration implements MiscConfiguration.RequiredBeans {
+public class ParticipantIntercomClientConfiguration
+    implements MiscConfiguration.RequiredDependencies {
 
     @Bean
     public ParticipantIntercomService.FspQuery fspQuery(ParticipantIntercomService.Settings settings,
@@ -39,6 +40,17 @@ public class ParticipantIntercomClientConfiguration implements MiscConfiguration
 
         return RetrofitService
                    .newBuilder(ParticipantIntercomService.FspQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
+    public ParticipantIntercomService.FspGroupQuery fspGroupQuery(
+        ParticipantIntercomService.Settings settings, ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(ParticipantIntercomService.FspGroupQuery.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();
@@ -66,7 +78,7 @@ public class ParticipantIntercomClientConfiguration implements MiscConfiguration
                    .build();
     }
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans {
+    public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies {
 
     }
 

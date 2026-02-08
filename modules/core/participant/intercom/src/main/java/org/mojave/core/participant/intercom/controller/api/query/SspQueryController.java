@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/participant-intercom")
 public class SspQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -53,7 +51,7 @@ public class SspQueryController {
         this.sspQuery = sspQuery;
     }
 
-    @GetMapping("/ssps/get-by-ssp-code")
+    @GetMapping("/participant/ssps/get-by-code")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public SspData get(@RequestParam final SspCode sspCode) {
@@ -61,7 +59,7 @@ public class SspQueryController {
         return this.sspQuery.get(sspCode);
     }
 
-    @GetMapping("/ssps/get-by-ssp-id")
+    @GetMapping("/participant/ssps/get-by-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public SspData get(@RequestParam final SspId sspId) {
@@ -69,7 +67,7 @@ public class SspQueryController {
         return this.sspQuery.get(sspId);
     }
 
-    @GetMapping("/ssps/get-all-ssps")
+    @GetMapping("/participant/ssps/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<SspData> getAll() {

@@ -25,7 +25,6 @@ import org.mojave.core.settlement.contract.command.definition.RemoveFilterItemCo
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
 public class RemoveFilterItemController {
 
     private final RemoveFilterItemCommand removeFilterItemCommand;
@@ -44,7 +42,7 @@ public class RemoveFilterItemController {
         this.removeFilterItemCommand = removeFilterItemCommand;
     }
 
-    @PostMapping("/filter-groups/remove-item")
+    @PostMapping("/settlement/filter-groups/remove-item")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public RemoveFilterItemCommand.Output execute(

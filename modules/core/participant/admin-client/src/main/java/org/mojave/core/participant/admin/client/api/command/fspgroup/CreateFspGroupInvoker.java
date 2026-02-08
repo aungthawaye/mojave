@@ -18,7 +18,7 @@
  * ===
  */
 
-package org.mojave.core.participant.admin.client.api.command.fsp;
+package org.mojave.core.participant.admin.client.api.command.fspgroup;
 
 import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
@@ -34,17 +34,17 @@ import java.util.Objects;
 @Component
 public class CreateFspGroupInvoker implements CreateFspGroupCommand {
 
-    private final ParticipantAdminService.FspCommand fspCommand;
+    private final ParticipantAdminService.FspGroupCommand fspGroupCommand;
 
     private final ObjectMapper objectMapper;
 
-    public CreateFspGroupInvoker(final ParticipantAdminService.FspCommand fspCommand,
+    public CreateFspGroupInvoker(final ParticipantAdminService.FspGroupCommand fspGroupCommand,
                                  final ObjectMapper objectMapper) {
 
-        Objects.requireNonNull(fspCommand);
+        Objects.requireNonNull(fspGroupCommand);
         Objects.requireNonNull(objectMapper);
 
-        this.fspCommand = fspCommand;
+        this.fspGroupCommand = fspGroupCommand;
         this.objectMapper = objectMapper;
     }
 
@@ -54,7 +54,7 @@ public class CreateFspGroupInvoker implements CreateFspGroupCommand {
         try {
 
             return RetrofitService.invoke(
-                this.fspCommand.createFspGroup(input),
+                this.fspGroupCommand.createFspGroup(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(
                     errorResponseBody,
                     this.objectMapper)).body();

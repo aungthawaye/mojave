@@ -30,10 +30,10 @@ import org.springframework.context.annotation.Import;
     value = {
         MiscConfiguration.class,
         RoutingJpaConfiguration.class})
-public class ParticipantDomainConfiguration
-    implements MiscConfiguration.RequiredBeans, RoutingJpaConfiguration.RequiredBeans {
+public class ParticipantDomainConfiguration implements MiscConfiguration.RequiredDependencies,
+                                                       RoutingJpaConfiguration.RequiredDependencies {
 
-    public interface RequiredBeans extends RoutingJpaConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends RoutingJpaConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings
         extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings { }

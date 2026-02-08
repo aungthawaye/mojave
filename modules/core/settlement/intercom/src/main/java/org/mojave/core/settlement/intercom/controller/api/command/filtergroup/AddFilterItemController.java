@@ -25,7 +25,6 @@ import org.mojave.core.settlement.contract.command.definition.AddFilterItemComma
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement-intercom")
 public class AddFilterItemController {
 
     private final AddFilterItemCommand addFilterItemCommand;
@@ -44,7 +42,7 @@ public class AddFilterItemController {
         this.addFilterItemCommand = addFilterItemCommand;
     }
 
-    @PostMapping("/filter-groups/add-item")
+    @PostMapping("/settlement/filter-groups/add-item")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AddFilterItemCommand.Output execute(

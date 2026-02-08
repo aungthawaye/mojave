@@ -55,6 +55,7 @@ import org.mojave.core.participant.contract.command.ssp.DeactivateSspCommand;
 import org.mojave.core.participant.contract.command.ssp.DeactivateSspCurrencyCommand;
 import org.mojave.core.participant.contract.command.ssp.TerminateSspCommand;
 import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.core.participant.contract.data.FspGroupData;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.data.OracleData;
 import org.mojave.core.participant.contract.data.SspData;
@@ -69,6 +70,13 @@ import java.util.List;
 public interface ParticipantAdminService {
 
     String MODULE_PREFIX = "/participant";
+
+    interface FspGroupCommand {
+
+        @POST(MODULE_PREFIX + "/fsp-groups/create-fsp-group")
+        Call<CreateFspGroupCommand.Output> createFspGroup(@Body CreateFspGroupCommand.Input input);
+
+    }
 
     interface FspCommand {
 
@@ -98,9 +106,6 @@ public interface ParticipantAdminService {
 
         @POST(MODULE_PREFIX + "/fsps/create-fsp")
         Call<CreateFspCommand.Output> createFsp(@Body CreateFspCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/fsp/create-fsp-group")
-        Call<CreateFspGroupCommand.Output> createFspGroup(@Body CreateFspGroupCommand.Input input);
 
         @POST(MODULE_PREFIX + "/fsps/deactivate-endpoint")
         Call<DeactivateEndpointCommand.Output> deactivateEndpoint(
@@ -160,10 +165,10 @@ public interface ParticipantAdminService {
 
     interface OracleQuery {
 
-        @GET(MODULE_PREFIX + "/oracles/get-all-oracles")
+        @GET(MODULE_PREFIX + "/oracles/get-all")
         Call<List<OracleData>> getAllOracles();
 
-        @GET(MODULE_PREFIX + "/oracles/get-by-oracle-id")
+        @GET(MODULE_PREFIX + "/oracles/get-by-id")
         Call<OracleData> getByOracleId(@Query("oracleId") String oracleId);
 
         @GET(MODULE_PREFIX + "/oracles/get-by-party-id-type")
@@ -173,26 +178,36 @@ public interface ParticipantAdminService {
 
     interface FspQuery {
 
-        @GET(MODULE_PREFIX + "/fsps/get-all-fsps")
+        @GET(MODULE_PREFIX + "/fsps/get-all")
         Call<List<FspData>> getAllFsps();
 
-        @GET(MODULE_PREFIX + "/fsps/get-by-fsp-code")
+        @GET(MODULE_PREFIX + "/fsps/get-by-code")
         Call<FspData> getByFspCode(@Query("code") String fspCode);
 
-        @GET(MODULE_PREFIX + "/fsps/get-by-fsp-id")
+        @GET(MODULE_PREFIX + "/fsps/get-by-id")
         Call<FspData> getByFspId(@Query("fspId") String fspId);
+
+    }
+
+    interface FspGroupQuery {
+
+        @GET(MODULE_PREFIX + "/fsp-groups/get-all")
+        Call<List<FspGroupData>> getAllFspGroups();
+
+        @GET(MODULE_PREFIX + "/fsp-groups/get-by-id")
+        Call<FspGroupData> getByFspGroupId(@Query("fspGroupId") String fspGroupId);
 
     }
 
     interface SspQuery {
 
-        @GET(MODULE_PREFIX + "/ssps/get-all-ssps")
+        @GET(MODULE_PREFIX + "/ssps/get-all")
         Call<List<SspData>> getAllSsps();
 
-        @GET(MODULE_PREFIX + "/ssps/get-by-ssp-code")
+        @GET(MODULE_PREFIX + "/ssps/get-by-code")
         Call<SspData> getBySspCode(@Query("code") String sspCode);
 
-        @GET(MODULE_PREFIX + "/ssps/get-by-ssp-id")
+        @GET(MODULE_PREFIX + "/ssps/get-by-id")
         Call<SspData> getBySspId(@Query("sspId") String sspId);
 
     }
@@ -245,10 +260,10 @@ public interface ParticipantAdminService {
         @GET(MODULE_PREFIX + "/hubs/count")
         Call<Long> count();
 
-        @GET(MODULE_PREFIX + "/hubs/get-hub")
+        @GET(MODULE_PREFIX + "/hubs/get")
         Call<HubData> get();
 
-        @GET(MODULE_PREFIX + "/hubs/get-all-hubs")
+        @GET(MODULE_PREFIX + "/hubs/get-all")
         Call<List<HubData>> getAll();
 
     }

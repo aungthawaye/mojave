@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.settlement.domain;
 
 import org.mojave.component.flyway.FlywayMigration;

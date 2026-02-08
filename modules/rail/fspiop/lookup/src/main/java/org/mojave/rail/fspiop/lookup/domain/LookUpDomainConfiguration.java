@@ -32,8 +32,8 @@ import org.springframework.context.annotation.Import;
         ParticipantStoreConfiguration.class})
 public class LookUpDomainConfiguration {
 
-    public interface RequiredBeans
-        extends MiscConfiguration.RequiredBeans, ParticipantStoreConfiguration.RequiredBeans { }
+    public interface RequiredDependencies
+        extends MiscConfiguration.RequiredDependencies, ParticipantStoreConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends ParticipantStoreConfiguration.RequiredSettings,
                                               MiscConfiguration.RequiredSettings { }

@@ -38,30 +38,20 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
     @Bean
     @Override
-    public FulfilPositionsListener.Settings fulfilPositionsListenerSettings() {
-
-        return new FulfilPositionsListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), FulfilPositionsListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
-    public PostLedgerFlowListener.Settings postLedgerFlowListenerSettings() {
-
-        return new PostLedgerFlowListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
     public CompleteSettlementListener.Settings completeSettlementListenerSettings() {
 
         return new CompleteSettlementListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), CompleteSettlementListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public FulfilPositionsListener.Settings fulfilPositionsListenerSettings() {
+
+        return new FulfilPositionsListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), FulfilPositionsListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
@@ -78,20 +68,20 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
     @Bean
     @Override
-    public RequestSettlementInitiationListener.Settings requestSettlementInitiationListenerSettings() {
+    public PostLedgerFlowListener.Settings postLedgerFlowListenerSettings() {
 
-        return new RequestSettlementInitiationListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), RequestSettlementInitiationListener.GROUP_ID,
+        return new PostLedgerFlowListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
     @Override
-    public UpdatePreparationResultListener.Settings updatePreparationResultListenerSettings() {
+    public RequestSettlementInitiationListener.Settings requestSettlementInitiationListenerSettings() {
 
-        return new UpdatePreparationResultListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), UpdatePreparationResultListener.GROUP_ID,
+        return new RequestSettlementInitiationListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), RequestSettlementInitiationListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }
@@ -151,6 +141,16 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("transaction-consumer", false, false);
+    }
+
+    @Bean
+    @Override
+    public UpdatePreparationResultListener.Settings updatePreparationResultListenerSettings() {
+
+        return new UpdatePreparationResultListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), UpdatePreparationResultListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 100, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
 }

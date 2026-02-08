@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/participant")
 public class ActivateEndpointController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivateEndpointController.class);
@@ -49,7 +47,7 @@ public class ActivateEndpointController {
         this.activateEndpointCommand = activateEndpointCommand;
     }
 
-    @PostMapping("/fsps/activate-endpoint")
+    @PostMapping("/participant/fsps/activate-endpoint")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ActivateEndpointCommand.Output execute(

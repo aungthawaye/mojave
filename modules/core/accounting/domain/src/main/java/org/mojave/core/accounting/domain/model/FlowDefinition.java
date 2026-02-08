@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.model;
 
 import jakarta.persistence.Column;
@@ -34,6 +35,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.enums.accounting.ReceiveIn;
+import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
@@ -45,15 +55,6 @@ import org.mojave.core.accounting.contract.exception.definition.PostingDefinitio
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.ChartEntryCache;
 import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
-import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.ReceiveIn;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
-import org.mojave.common.datatype.enums.Currency;
 
 import java.util.ArrayList;
 import java.util.Collections;

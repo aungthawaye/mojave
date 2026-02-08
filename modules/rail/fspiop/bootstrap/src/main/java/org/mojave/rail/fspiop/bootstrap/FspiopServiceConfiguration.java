@@ -45,7 +45,7 @@ import java.util.Objects;
     value = {
         FspiopComponentConfiguration.class,
         SpringSecurityConfiguration.class})
-public class FspiopServiceConfiguration implements SpringSecurityConfiguration.RequiredBeans {
+public class FspiopServiceConfiguration implements SpringSecurityConfiguration.RequiredDependencies {
 
     private final SpringSecurityConfigurer.Settings springSecuritySettings;
 
@@ -136,7 +136,7 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .build();
     }
 
-    public interface RequiredBeans {
+    public interface RequiredDependencies {
 
         ParticipantVerifier participantVerifier();
 

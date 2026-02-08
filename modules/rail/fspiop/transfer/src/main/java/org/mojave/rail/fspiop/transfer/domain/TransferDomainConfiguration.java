@@ -42,13 +42,13 @@ import org.springframework.context.annotation.Import;
         RoutingJpaConfiguration.class})
 public class TransferDomainConfiguration {
 
-    public interface RequiredBeans extends MiscConfiguration.RequiredBeans,
-                                           FspiopComponentConfiguration.RequiredBeans,
-                                           TransferKafkaConfiguration.RequiredBeans,
-                                           AccountingProducerConfiguration.RequiredBeans,
-                                           WalletProducerConfiguration.RequiredBeans,
-                                           RoutingJpaConfiguration.RequiredBeans,
-                                           ParticipantStoreConfiguration.RequiredBeans {
+    public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies,
+                                           FspiopComponentConfiguration.RequiredDependencies,
+                                           TransferKafkaConfiguration.RequiredDependencies,
+                                           AccountingProducerConfiguration.RequiredDependencies,
+                                           WalletProducerConfiguration.RequiredDependencies,
+                                           RoutingJpaConfiguration.RequiredDependencies,
+                                           ParticipantStoreConfiguration.RequiredDependencies {
 
         AgreementUnwrapper partyUnwrapper();
 

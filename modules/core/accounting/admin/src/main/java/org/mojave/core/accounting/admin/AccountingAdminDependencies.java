@@ -37,6 +37,7 @@ import org.mojave.provider.ledger.contract.Ledger;
 import org.mojave.provider.ledger.mysql.MySqlLedger;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+
 import java.util.Objects;
 
 final class AccountingAdminDependencies

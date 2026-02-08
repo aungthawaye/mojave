@@ -64,11 +64,10 @@ public class MiscConfiguration {
     }
 
     @Bean(name = "eventVirtualThreadExecutor")
-    public Executor eventVirtualThreadExecutor(TaskDecorator mdcTaskDecorator) {
+    public Executor eventVirtualThreadExecutor() {
 
         var executor = new SimpleAsyncTaskExecutor("event-vt-");
 
-        //executor.setTaskDecorator(mdcTaskDecorator);
         executor.setVirtualThreads(true); // 🔹 switch to virtual threads
 
         return executor;
@@ -131,7 +130,7 @@ public class MiscConfiguration {
         return new SpringContext();
     }
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings { }
 

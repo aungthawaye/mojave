@@ -363,7 +363,7 @@ public class TransferKafkaConfiguration {
             });
     }
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings {
 

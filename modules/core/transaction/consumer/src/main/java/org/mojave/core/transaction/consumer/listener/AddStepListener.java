@@ -29,6 +29,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
 @Component

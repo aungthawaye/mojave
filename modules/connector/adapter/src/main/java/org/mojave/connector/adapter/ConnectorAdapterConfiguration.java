@@ -26,9 +26,9 @@ import org.springframework.context.annotation.Import;
 
 @Import(value = {MiscConfiguration.class})
 @ComponentScan(basePackages = {"org.mojave.connector.adapter"})
-public class ConnectorAdapterConfiguration implements MiscConfiguration.RequiredBeans {
+public class ConnectorAdapterConfiguration implements MiscConfiguration.RequiredDependencies {
 
-    public interface RequiredBeans {
+    public interface RequiredDependencies {
 
         FspClient fspClient();
 

@@ -63,9 +63,10 @@ public class FspQueryHandler implements FspQuery {
         var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
         var terminationStatus = FspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
+        var withId = FspRepository.Filters.withId(fspId);
 
         return this.fspRepository
-                   .findOne(activationStatus.and(terminationStatus))
+                   .findOne(activationStatus.and(terminationStatus).and(withId))
                    .orElseThrow(() -> new FspIdNotFoundException(fspId))
                    .convert();
     }
@@ -78,11 +79,12 @@ public class FspQueryHandler implements FspQuery {
         var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
         var terminationStatus = FspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
+        var withFspCode = FspRepository.Filters.withFspCode(fspCode);
 
         return this.fspRepository
                    .findOne(activationStatus
                                 .and(terminationStatus)
-                                .and(FspRepository.Filters.withFspCode(fspCode)))
+                                .and(withFspCode))
                    .orElseThrow(() -> new FspCodeNotFoundException(fspCode))
                    .convert();
     }
