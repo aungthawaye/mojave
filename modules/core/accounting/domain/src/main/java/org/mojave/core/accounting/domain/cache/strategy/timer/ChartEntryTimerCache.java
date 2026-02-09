@@ -113,15 +113,12 @@ public class ChartEntryTimerCache implements ChartEntryCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
-
-                @Override
-                public void run() {
-
-                    ChartEntryTimerCache.this.refreshData();
-                }
-            }, this.interval, this.interval);
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                ChartEntryTimerCache.this.refreshData();
+            }
+        }, this.interval, this.interval);
     }
 
     @Override

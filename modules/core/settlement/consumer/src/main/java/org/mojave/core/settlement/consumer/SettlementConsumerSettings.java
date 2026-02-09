@@ -24,7 +24,6 @@ import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.core.settlement.consumer.listener.CompleteSettlementListener;
 import org.mojave.core.settlement.consumer.listener.InitiateSettlementProcessListener;
-import org.mojave.core.settlement.consumer.listener.RequestSettlementInitiationListener;
 import org.mojave.core.settlement.consumer.listener.UpdatePreparationResultListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
@@ -49,16 +48,6 @@ class SettlementConsumerSettings implements SettlementConsumerConfiguration.Requ
 
         return new InitiateSettlementProcessListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), InitiateSettlementProcessListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
-    public RequestSettlementInitiationListener.Settings requestSettlementInitiationListenerSettings() {
-
-        return new RequestSettlementInitiationListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), RequestSettlementInitiationListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }

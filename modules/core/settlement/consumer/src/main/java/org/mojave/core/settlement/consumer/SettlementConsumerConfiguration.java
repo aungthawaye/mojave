@@ -24,12 +24,10 @@ import org.apache.kafka.common.serialization.Deserializer;
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
 import org.mojave.core.settlement.consumer.listener.CompleteSettlementListener;
 import org.mojave.core.settlement.consumer.listener.InitiateSettlementProcessListener;
-import org.mojave.core.settlement.consumer.listener.RequestSettlementInitiationListener;
 import org.mojave.core.settlement.consumer.listener.UpdatePreparationResultListener;
-import org.mojave.core.settlement.contract.command.record.CompleteSettlementCommand;
-import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
-import org.mojave.core.settlement.contract.command.record.RequestSettlementInitiationCommand;
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
+import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
 import org.mojave.core.settlement.domain.SettlementDomainConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +46,7 @@ public class SettlementConsumerConfiguration {
 
     @Bean(name = CompleteSettlementListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(CompleteSettlementListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, CompleteSettlementCommand.Input> completeSettlementListenerContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, HandleSettlementCompletionCommand.Input> completeSettlementListenerContainerFactory(
         CompleteSettlementListener.Settings settings,
         ObjectMapper objectMapper) {
 
@@ -67,10 +65,10 @@ public class SettlementConsumerConfiguration {
                 }
 
                 @Override
-                public Deserializer<CompleteSettlementCommand.Input> forValue() {
+                public Deserializer<HandleSettlementCompletionCommand.Input> forValue() {
 
                     var deserializer = new JacksonJsonDeserializer<>(
-                        CompleteSettlementCommand.Input.class, (JsonMapper) objectMapper);
+                        HandleSettlementCompletionCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -81,7 +79,7 @@ public class SettlementConsumerConfiguration {
 
     @Bean(name = InitiateSettlementProcessListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(InitiateSettlementProcessListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, InitiateSettlementProcessCommand.Input> initiateSettlementProcessListenerContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, SendSettlementRequestCommand.Input> initiateSettlementProcessListenerContainerFactory(
         InitiateSettlementProcessListener.Settings settings,
         ObjectMapper objectMapper) {
 
@@ -100,43 +98,10 @@ public class SettlementConsumerConfiguration {
                 }
 
                 @Override
-                public Deserializer<InitiateSettlementProcessCommand.Input> forValue() {
+                public Deserializer<SendSettlementRequestCommand.Input> forValue() {
 
                     var deserializer = new JacksonJsonDeserializer<>(
-                        InitiateSettlementProcessCommand.Input.class, (JsonMapper) objectMapper);
-
-                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
-
-                    return deserializer;
-                }
-            });
-    }
-
-    @Bean(name = RequestSettlementInitiationListener.LISTENER_CONTAINER_FACTORY)
-    @Qualifier(RequestSettlementInitiationListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, RequestSettlementInitiationCommand.Input> requestSettlementInitiationListenerContainerFactory(
-        RequestSettlementInitiationListener.Settings settings,
-        ObjectMapper objectMapper) {
-
-        return KafkaConsumerConfigurer.configure(
-            settings, new KafkaConsumerConfigurer.Deserializers<>() {
-
-                @Override
-                public Deserializer<String> forKey() {
-
-                    var deserializer = new JacksonJsonDeserializer<>(
-                        String.class, (JsonMapper) objectMapper);
-
-                    deserializer.ignoreTypeHeaders().addTrustedPackages("*");
-
-                    return deserializer;
-                }
-
-                @Override
-                public Deserializer<RequestSettlementInitiationCommand.Input> forValue() {
-
-                    var deserializer = new JacksonJsonDeserializer<>(
-                        RequestSettlementInitiationCommand.Input.class, (JsonMapper) objectMapper);
+                        SendSettlementRequestCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -147,7 +112,7 @@ public class SettlementConsumerConfiguration {
 
     @Bean(name = UpdatePreparationResultListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(UpdatePreparationResultListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, UpdatePreparationResultCommand.Input> updatePreparationResultListenerContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, HandleSettlementPreparationCommand.Input> updatePreparationResultListenerContainerFactory(
         UpdatePreparationResultListener.Settings settings,
         ObjectMapper objectMapper) {
 
@@ -166,10 +131,10 @@ public class SettlementConsumerConfiguration {
                 }
 
                 @Override
-                public Deserializer<UpdatePreparationResultCommand.Input> forValue() {
+                public Deserializer<HandleSettlementPreparationCommand.Input> forValue() {
 
                     var deserializer = new JacksonJsonDeserializer<>(
-                        UpdatePreparationResultCommand.Input.class, (JsonMapper) objectMapper);
+                        HandleSettlementPreparationCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -186,8 +151,6 @@ public class SettlementConsumerConfiguration {
         CompleteSettlementListener.Settings completeSettlementListenerSettings();
 
         InitiateSettlementProcessListener.Settings initiateSettlementProcessListenerSettings();
-
-        RequestSettlementInitiationListener.Settings requestSettlementInitiationListenerSettings();
 
         UpdatePreparationResultListener.Settings updatePreparationResultListenerSettings();
 

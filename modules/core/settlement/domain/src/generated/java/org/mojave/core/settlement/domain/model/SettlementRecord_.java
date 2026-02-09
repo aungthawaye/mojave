@@ -81,9 +81,9 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	public static final String TRANSACTION_AT = "transactionAt";
 	
 	/**
-	 * @see #settlementProviderId
+	 * @see #sspId
 	 **/
-	public static final String SETTLEMENT_PROVIDER_ID = "settlementProviderId";
+	public static final String SSP_ID = "sspId";
 	
 	/**
 	 * @see #initiatedAt
@@ -162,9 +162,9 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	public static volatile SingularAttribute<SettlementRecord, Instant> transactionAt;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#settlementProviderId}
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#sspId}
 	 **/
-	public static volatile SingularAttribute<SettlementRecord, SspId> settlementProviderId;
+	public static volatile SingularAttribute<SettlementRecord, SspId> sspId;
 	
 	/**
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#initiatedAt}

@@ -102,15 +102,12 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
-
-                @Override
-                public void run() {
-
-                    FlowDefinitionTimerCache.this.refreshData();
-                }
-            }, this.interval, this.interval);
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                FlowDefinitionTimerCache.this.refreshData();
+            }
+        }, this.interval, this.interval);
     }
 
     @Override

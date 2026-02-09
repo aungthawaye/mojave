@@ -21,19 +21,14 @@
 package org.mojave.core.settlement.admin.client.service;
 
 import org.mojave.core.settlement.contract.command.definition.ActivateSettlementDefinitionCommand;
-import org.mojave.core.settlement.contract.command.definition.AddFilterItemCommand;
-import org.mojave.core.settlement.contract.command.definition.CreateFilterGroupCommand;
 import org.mojave.core.settlement.contract.command.definition.CreateSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.definition.DeactivateSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.definition.FindSettlementProviderCommand;
-import org.mojave.core.settlement.contract.command.definition.RemoveFilterGroupCommand;
-import org.mojave.core.settlement.contract.command.definition.RemoveFilterItemCommand;
 import org.mojave.core.settlement.contract.command.definition.RemoveSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.definition.UpdateSettlementDefinitionCommand;
-import org.mojave.core.settlement.contract.command.record.CompleteSettlementCommand;
-import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
-import org.mojave.core.settlement.contract.command.record.RequestSettlementInitiationCommand;
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
+import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -70,39 +65,19 @@ public interface SettlementAdminService {
 
     }
 
-    interface FilterGroupCommand {
-
-        @POST(MODULE_PREFIX + "/filter-groups/add-filter-item")
-        Call<AddFilterItemCommand.Output> addItem(@Body AddFilterItemCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/filter-groups/create-filter-group")
-        Call<CreateFilterGroupCommand.Output> create(@Body CreateFilterGroupCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/filter-groups/remove-filter-group")
-        Call<RemoveFilterGroupCommand.Output> remove(@Body RemoveFilterGroupCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/filter-groups/remove-filter-item")
-        Call<RemoveFilterItemCommand.Output> removeItem(@Body RemoveFilterItemCommand.Input input);
-
-    }
-
     interface RecordCommand {
 
         @POST(MODULE_PREFIX + "/settlement-records/complete-settlement")
-        Call<CompleteSettlementCommand.Output> complete(
-            @Body CompleteSettlementCommand.Input input);
+        Call<HandleSettlementCompletionCommand.Output> complete(
+            @Body HandleSettlementCompletionCommand.Input input);
 
         @POST(MODULE_PREFIX + "/settlement-records/initiate-settlement-process")
-        Call<InitiateSettlementProcessCommand.Output> initiateProcess(
-            @Body InitiateSettlementProcessCommand.Input input);
-
-        @POST(MODULE_PREFIX + "/settlement-records/request-settlement-initiation")
-        Call<RequestSettlementInitiationCommand.Output> requestInitiation(
-            @Body RequestSettlementInitiationCommand.Input input);
+        Call<SendSettlementRequestCommand.Output> initiateProcess(
+            @Body SendSettlementRequestCommand.Input input);
 
         @POST(MODULE_PREFIX + "/settlement-records/update-preparation-result")
-        Call<UpdatePreparationResultCommand.Output> updatePreparation(
-            @Body UpdatePreparationResultCommand.Input input);
+        Call<HandleSettlementPreparationCommand.Output> updatePreparation(
+            @Body HandleSettlementPreparationCommand.Input input);
 
     }
 

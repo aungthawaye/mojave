@@ -7,6 +7,7 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 import java.time.Instant;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import org.mojave.common.datatype.identifier.participant.SspId;
 import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
 import org.mojave.component.jpa.JpaEntity_;
@@ -30,14 +31,14 @@ public abstract class SettlementDefinition_ extends JpaEntity_ {
 	public static final String NAME = "name";
 	
 	/**
-	 * @see #payerFilterGroup
+	 * @see #payerFspGroupId
 	 **/
-	public static final String PAYER_FILTER_GROUP = "payerFilterGroup";
+	public static final String PAYER_FSP_GROUP_ID = "payerFspGroupId";
 	
 	/**
-	 * @see #payeeFilterGroup
+	 * @see #payeeFspGroupId
 	 **/
-	public static final String PAYEE_FILTER_GROUP = "payeeFilterGroup";
+	public static final String PAYEE_FSP_GROUP_ID = "payeeFspGroupId";
 	
 	/**
 	 * @see #currency
@@ -76,14 +77,14 @@ public abstract class SettlementDefinition_ extends JpaEntity_ {
 	public static volatile SingularAttribute<SettlementDefinition, String> name;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#payerFilterGroup}
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#payerFspGroupId}
 	 **/
-	public static volatile SingularAttribute<SettlementDefinition, FilterGroup> payerFilterGroup;
+	public static volatile SingularAttribute<SettlementDefinition, FspGroupId> payerFspGroupId;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#payeeFilterGroup}
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#payeeFspGroupId}
 	 **/
-	public static volatile SingularAttribute<SettlementDefinition, FilterGroup> payeeFilterGroup;
+	public static volatile SingularAttribute<SettlementDefinition, FspGroupId> payeeFspGroupId;
 	
 	/**
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#currency}

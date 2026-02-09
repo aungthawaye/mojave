@@ -6,10 +6,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -17,11 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.common.datatype.converter.identifier.participant.FspGroupIdJavaType;
 import org.mojave.common.datatype.converter.identifier.participant.SspIdJavaType;
 import org.mojave.common.datatype.converter.identifier.settlement.SettlementDefinitionIdJavaType;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import org.mojave.common.datatype.identifier.participant.SspId;
 import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
 import org.mojave.component.jpa.JpaEntity;
@@ -44,8 +42,8 @@ import static java.sql.Types.BIGINT;
         @UniqueConstraint(
             name = "stm_settlement_definition_01_UK",
             columnNames = {
-                "payer_filter_group_id",
-                "payee_filter_group_id",
+                "payer_fsp_group_id",
+                "payee_fsp_group_id",
                 "currency"}),
         @UniqueConstraint(
             name = "stm_settlement_definition_02_UK",
@@ -67,19 +65,21 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
         length = StringSizeConstraints.MAX_NAME_TITLE_LENGTH)
     protected String name;
 
-    @OneToOne(
-        fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "payer_filter_group_id",
+    @Basic
+    @JavaType(FspGroupIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "payer_fsp_group_id",
         nullable = false)
-    protected FilterGroup payerFilterGroup;
+    protected FspGroupId payerFspGroupId;
 
-    @OneToOne(
-        fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "payee_filter_group_id",
+    @Basic
+    @JavaType(FspGroupIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "payee_fsp_group_id",
         nullable = false)
-    protected FilterGroup payeeFilterGroup;
+    protected FspGroupId payeeFspGroupId;
 
     @Column(
         name = "currency",
@@ -110,23 +110,23 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
     protected ActivationStatus activationStatus;
 
     public SettlementDefinition(final String name,
-                                final FilterGroup payerFilterGroup,
-                                final FilterGroup payeeFilterGroup,
+                                final FspGroupId payerFspGroupId,
+                                final FspGroupId payeeFspGroupId,
                                 final Currency currency,
                                 final Instant startAt,
                                 final SspId desiredProviderId) {
 
         Objects.requireNonNull(name);
-        Objects.requireNonNull(payerFilterGroup);
-        Objects.requireNonNull(payeeFilterGroup);
+        Objects.requireNonNull(payerFspGroupId);
+        Objects.requireNonNull(payeeFspGroupId);
         Objects.requireNonNull(currency);
         Objects.requireNonNull(startAt);
         Objects.requireNonNull(desiredProviderId);
 
         this.id = new SettlementDefinitionId(Snowflake.get().nextId());
         this.name = name;
-        this.payerFilterGroup = payerFilterGroup;
-        this.payeeFilterGroup = payeeFilterGroup;
+        this.payerFspGroupId = payerFspGroupId;
+        this.payeeFspGroupId = payeeFspGroupId;
         this.currency = currency;
         this.startAt = startAt;
         this.desiredProviderId = desiredProviderId;
@@ -142,8 +142,8 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
     public SettlementDefinitionData convert() {
 
         return new SettlementDefinitionData(
-            this.id, this.name, this.payerFilterGroup.getId(), this.payeeFilterGroup.getId(),
-            this.currency, this.startAt, this.desiredProviderId, this.activationStatus);
+            this.id, this.name, this.payerFspGroupId, this.payeeFspGroupId, this.currency,
+            this.startAt, this.desiredProviderId, this.activationStatus);
     }
 
     public void deactivate() {
@@ -157,15 +157,17 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
         return id;
     }
 
-    public boolean matches(Currency currency, FspId payerFspId, FspId payeeFspId) {
+    public boolean matches(final Currency currency,
+                           final FspGroupId payerFspGroupId,
+                           final FspGroupId payeeFspGroupId) {
 
-        return this.currency.equals(currency) && this.payerFilterGroup.fspExists(payerFspId) &&
-                   this.payeeFilterGroup.fspExists(payeeFspId);
+        return this.currency.equals(currency) && this.payerFspGroupId.equals(payerFspGroupId) &&
+                   this.payeeFspGroupId.equals(payeeFspGroupId);
     }
 
     public void update(final String name,
-                       final FilterGroup payerFilterGroup,
-                       final FilterGroup payeeFilterGroup,
+                       final FspGroupId payerFspGroupId,
+                       final FspGroupId payeeFspGroupId,
                        final Currency currency,
                        final Instant startAt,
                        final SspId desiredProviderId) {
@@ -174,12 +176,12 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
             this.name = name;
         }
 
-        if (payerFilterGroup != null) {
-            this.payerFilterGroup = payerFilterGroup;
+        if (payerFspGroupId != null) {
+            this.payerFspGroupId = payerFspGroupId;
         }
 
-        if (payeeFilterGroup != null) {
-            this.payeeFilterGroup = payeeFilterGroup;
+        if (payeeFspGroupId != null) {
+            this.payeeFspGroupId = payeeFspGroupId;
         }
 
         if (currency != null) {

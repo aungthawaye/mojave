@@ -82,9 +82,9 @@ public class FspGroup extends JpaEntity<FspGroupId> implements DataConversion<Fs
     @Override
     public FspGroupData convert() {
 
-        final var itemData = this.fsps.stream().map(Fsp::convert).toList();
+        final var fspIds = this.fsps.stream().map(Fsp::getId).toList();
 
-        return new FspGroupData(this.id, this.name, itemData);
+        return new FspGroupData(this.id, this.name, fspIds);
     }
 
     @Override

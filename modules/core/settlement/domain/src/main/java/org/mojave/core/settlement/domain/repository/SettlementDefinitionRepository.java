@@ -2,9 +2,8 @@ package org.mojave.core.settlement.domain.repository;
 
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.settlement.FilterGroupId;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
-import org.mojave.core.settlement.domain.model.FilterGroup_;
 import org.mojave.core.settlement.domain.model.SettlementDefinition;
 import org.mojave.core.settlement.domain.model.SettlementDefinition_;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,18 +33,16 @@ public interface SettlementDefinitionRepository
             return (root, query, cb) -> cb.equal(root.get(SettlementDefinition_.name), name);
         }
 
-        public static Specification<SettlementDefinition> withPayeeFilterGroupId(final FilterGroupId filterGroupId) {
+        public static Specification<SettlementDefinition> withPayerFspGroupId(final FspGroupId fspGroupId) {
 
             return (root, query, cb) -> cb.equal(
-                root.get(SettlementDefinition_.payeeFilterGroup).get(FilterGroup_.id),
-                filterGroupId);
+                root.get(SettlementDefinition_.payerFspGroupId), fspGroupId);
         }
 
-        public static Specification<SettlementDefinition> withPayerFilterGroupId(final FilterGroupId filterGroupId) {
+        public static Specification<SettlementDefinition> withPayeeFspGroupId(final FspGroupId fspGroupId) {
 
             return (root, query, cb) -> cb.equal(
-                root.get(SettlementDefinition_.payerFilterGroup).get(FilterGroup_.id),
-                filterGroupId);
+                root.get(SettlementDefinition_.payeeFspGroupId), fspGroupId);
         }
 
     }

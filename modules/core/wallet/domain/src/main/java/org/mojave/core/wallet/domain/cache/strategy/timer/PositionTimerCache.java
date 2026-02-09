@@ -106,15 +106,12 @@ public class PositionTimerCache implements PositionCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
-
-                @Override
-                public void run() {
-
-                    PositionTimerCache.this.refreshData();
-                }
-            }, this.interval, this.interval);
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                PositionTimerCache.this.refreshData();
+            }
+        }, this.interval, this.interval);
     }
 
     private void refreshData() {

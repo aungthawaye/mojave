@@ -45,17 +45,6 @@ public class SettlementAdminClientConfiguration {
     }
 
     @Bean
-    public SettlementAdminService.FilterGroupCommand filterGroupCommands(SettlementAdminService.Settings settings,
-                                                                         ObjectMapper objectMapper) {
-
-        return RetrofitService
-                   .newBuilder(SettlementAdminService.FilterGroupCommand.class, settings.baseUrl())
-                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
-                   .withDefaultFactories(objectMapper)
-                   .build();
-    }
-
-    @Bean
     public SettlementAdminService.RecordCommand recordCommands(SettlementAdminService.Settings settings,
                                                                ObjectMapper objectMapper) {
 

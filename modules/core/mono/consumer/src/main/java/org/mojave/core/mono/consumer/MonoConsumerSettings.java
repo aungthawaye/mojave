@@ -25,7 +25,6 @@ import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.core.accounting.consumer.listener.PostLedgerFlowListener;
 import org.mojave.core.settlement.consumer.listener.CompleteSettlementListener;
 import org.mojave.core.settlement.consumer.listener.InitiateSettlementProcessListener;
-import org.mojave.core.settlement.consumer.listener.RequestSettlementInitiationListener;
 import org.mojave.core.settlement.consumer.listener.UpdatePreparationResultListener;
 import org.mojave.core.wallet.consumer.listener.FulfilPositionsListener;
 import org.mojave.core.wallet.consumer.listener.RollbackReservationListener;
@@ -72,16 +71,6 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
 
         return new PostLedgerFlowListener.Settings(
             System.getenv("KAFKA_BROKER_URL"), PostLedgerFlowListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 100, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
-    public RequestSettlementInitiationListener.Settings requestSettlementInitiationListenerSettings() {
-
-        return new RequestSettlementInitiationListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), RequestSettlementInitiationListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
     }

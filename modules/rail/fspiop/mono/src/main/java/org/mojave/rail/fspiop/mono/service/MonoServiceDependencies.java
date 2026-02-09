@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,22 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.mono.service;
 
 import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.core.participant.contract.query.FspGroupQuery;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.contract.query.SspQuery;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.core.participant.store.strategy.timer.ParticipantTimerStore;
+import org.mojave.core.participant.store.strategy.timer.TimerBasedInMemoryParticipantStore;
+import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
 import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.mojave.rail.fspiop.transfer.domain.component.interledger.unwrapper.MojaveAgreementUnwrapper;
-import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
+
 import java.util.Objects;
 
 public class MonoServiceDependencies implements MonoServiceConfiguration.RequiredDependencies {
@@ -40,19 +43,22 @@ public class MonoServiceDependencies implements MonoServiceConfiguration.Require
 
     public MonoServiceDependencies(ObjectMapper objectMapper,
                                    FspQuery fspQuery,
+                                   FspGroupQuery fspGroupQuery,
                                    SspQuery sspQuery,
                                    OracleQuery oracleQuery) {
 
         Objects.requireNonNull(objectMapper);
         Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(fspGroupQuery);
         Objects.requireNonNull(sspQuery);
         Objects.requireNonNull(oracleQuery);
 
         this.objectMapper = objectMapper;
 
-        this.participantStore = new ParticipantTimerStore(
-            fspQuery, sspQuery, oracleQuery, new ParticipantTimerStore.Settings(
-            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
+        this.participantStore = new TimerBasedInMemoryParticipantStore(
+            fspQuery, fspGroupQuery, sspQuery, oracleQuery,
+            new TimerBasedInMemoryParticipantStore.Settings(
+                Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
 
     }
 

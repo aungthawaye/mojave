@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,21 +42,43 @@ import java.time.Instant;
 import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
+import static java.sql.Types.VARCHAR;
 
 @Getter
 @Entity
 @Table(
     name = "stm_settlement_record",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "stm_settlement_record_01_UK",
+            columnNames = {
+                "settlement_id",
+                "settlement_batch_id",
+                "ssp_id"}),
+        @UniqueConstraint(
+            name = "stm_settlement_record_02_UK",
+            columnNames = {
+                "transaction_id"}),
+        @UniqueConstraint(
+            name = "stm_settlement_record_03_UK",
+            columnNames = {
+                "transfer_id"})},
     indexes = {
         @Index(
             name = "stm_settlement_record_01_IDX",
-            columnList = "transaction_id, transfer_id"),
+            columnList = "payer_fsp_id, payee_fsp_id, currency"),
         @Index(
             name = "stm_settlement_record_02_IDX",
-            columnList = "settlement_id, settlement_batch_id"),
+            columnList = "transaction_at"),
         @Index(
             name = "stm_settlement_record_03_IDX",
-            columnList = "payer_fsp_id, payee_fsp_id, currency")})
+            columnList = "initiated_at"),
+        @Index(
+            name = "stm_settlement_record_04_IDX",
+            columnList = "prepared_at"),
+        @Index(
+            name = "stm_settlement_record_05_IDX",
+            columnList = "completed_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SettlementRecord extends JpaEntity<SettlementRecordId>
     implements DataConversion<SettlementRecordData> {
@@ -77,12 +100,12 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
     protected SettlementType type;
 
     @JavaType(SettlementIdJavaType.class)
-    @JdbcTypeCode(BIGINT)
+    @JdbcTypeCode(VARCHAR)
     @Column(name = "settlement_id")
     protected SettlementId settlementId;
 
     @JavaType(SettlementBatchIdJavaType.class)
-    @JdbcTypeCode(BIGINT)
+    @JdbcTypeCode(VARCHAR)
     @Column(name = "settlement_batch_id")
     protected SettlementBatchId settlementBatchId;
 
@@ -129,9 +152,9 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
     @JavaType(SspIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(
-        name = "settlement_provider_id",
+        name = "ssp_id",
         nullable = false)
-    protected SspId settlementProviderId;
+    protected SspId sspId;
 
     @Column(name = "initiated_at")
     @Convert(converter = JpaInstantConverter.class)
@@ -153,14 +176,14 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
                             final TransferId transferId,
                             final TransactionId transactionId,
                             final Instant transactionAt,
-                            final SspId settlementProviderId) {
+                            final SspId sspId) {
 
         Objects.requireNonNull(type);
         Objects.requireNonNull(payerFspId);
         Objects.requireNonNull(payeeFspId);
         Objects.requireNonNull(currency);
         Objects.requireNonNull(amount);
-        Objects.requireNonNull(settlementProviderId);
+        Objects.requireNonNull(sspId);
 
         this.id = new SettlementRecordId(Snowflake.get().nextId());
         this.type = type;
@@ -171,7 +194,7 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
         this.transferId = transferId;
         this.transactionId = transactionId;
         this.transactionAt = transactionAt;
-        this.settlementProviderId = settlementProviderId;
+        this.sspId = sspId;
         this.initiatedAt = Instant.now();
     }
 
@@ -181,8 +204,7 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
         return new SettlementRecordData(
             this.id, this.type, this.settlementId, this.settlementBatchId, this.payerFspId,
             this.payeeFspId, this.currency, this.amount, this.transferId, this.transactionId,
-            this.transactionAt, this.settlementProviderId, this.initiatedAt, this.preparedAt,
-            this.completedAt);
+            this.transactionAt, this.sspId, this.initiatedAt, this.preparedAt, this.completedAt);
     }
 
     @Override

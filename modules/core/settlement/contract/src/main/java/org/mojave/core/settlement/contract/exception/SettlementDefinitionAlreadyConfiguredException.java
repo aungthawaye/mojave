@@ -2,7 +2,7 @@ package org.mojave.core.settlement.contract.exception;
 
 import lombok.Getter;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.settlement.FilterGroupId;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 
@@ -18,35 +18,35 @@ public class SettlementDefinitionAlreadyConfiguredException extends UncheckedDom
 
     private final Currency currency;
 
-    private final FilterGroupId payerFilterGroupId;
+    private final FspGroupId payerFspGroupId;
 
-    private final FilterGroupId payeeFilterGroupId;
+    private final FspGroupId payeeFspGroupId;
 
     public SettlementDefinitionAlreadyConfiguredException(final Currency currency,
-                                                          final FilterGroupId payerFilterGroupId,
-                                                          final FilterGroupId payeeFilterGroupId) {
+                                                          final FspGroupId payerFspGroupId,
+                                                          final FspGroupId payeeFspGroupId) {
 
         super(new ErrorTemplate(
             CODE, TEMPLATE, new String[]{
             currency == null ? null : currency.name(),
-            payerFilterGroupId == null ? null : payerFilterGroupId.getId().toString(),
-            payeeFilterGroupId == null ? null : payeeFilterGroupId.getId().toString()}));
+            payerFspGroupId == null ? null : payerFspGroupId.getId().toString(),
+            payeeFspGroupId == null ? null : payeeFspGroupId.getId().toString()}));
 
         this.currency = currency;
-        this.payerFilterGroupId = payerFilterGroupId;
-        this.payeeFilterGroupId = payeeFilterGroupId;
+        this.payerFspGroupId = payerFspGroupId;
+        this.payeeFspGroupId = payeeFspGroupId;
     }
 
     public static SettlementDefinitionAlreadyConfiguredException from(final Map<String, String> extras) {
 
         final var currency = extras.get(Keys.CURRENCY);
-        final var payer = extras.get(Keys.PAYER_FILTER_GROUP_ID);
-        final var payee = extras.get(Keys.PAYEE_FILTER_GROUP_ID);
+        final var payer = extras.get(Keys.PAYER_FSP_GROUP_ID);
+        final var payee = extras.get(Keys.PAYEE_FSP_GROUP_ID);
 
         return new SettlementDefinitionAlreadyConfiguredException(
             currency == null ? null : Currency.valueOf(currency),
-            payer == null ? null : new FilterGroupId(Long.parseLong(payer)),
-            payee == null ? null : new FilterGroupId(Long.parseLong(payee)));
+            payer == null ? null : new FspGroupId(Long.parseLong(payer)),
+            payee == null ? null : new FspGroupId(Long.parseLong(payee)));
     }
 
     @Override
@@ -55,11 +55,11 @@ public class SettlementDefinitionAlreadyConfiguredException extends UncheckedDom
         final var extras = new HashMap<String, String>();
         extras.put(Keys.CURRENCY, this.currency == null ? null : this.currency.name());
         extras.put(
-            Keys.PAYER_FILTER_GROUP_ID,
-            this.payerFilterGroupId == null ? null : this.payerFilterGroupId.getId().toString());
+            Keys.PAYER_FSP_GROUP_ID,
+            this.payerFspGroupId == null ? null : this.payerFspGroupId.getId().toString());
         extras.put(
-            Keys.PAYEE_FILTER_GROUP_ID,
-            this.payeeFilterGroupId == null ? null : this.payeeFilterGroupId.getId().toString());
+            Keys.PAYEE_FSP_GROUP_ID,
+            this.payeeFspGroupId == null ? null : this.payeeFspGroupId.getId().toString());
         return extras;
     }
 
@@ -67,9 +67,9 @@ public class SettlementDefinitionAlreadyConfiguredException extends UncheckedDom
 
         public static final String CURRENCY = "currency";
 
-        public static final String PAYER_FILTER_GROUP_ID = "payerFilterGroupId";
+        public static final String PAYER_FSP_GROUP_ID = "payerFspGroupId";
 
-        public static final String PAYEE_FILTER_GROUP_ID = "payeeFilterGroupId";
+        public static final String PAYEE_FSP_GROUP_ID = "payeeFspGroupId";
 
     }
 

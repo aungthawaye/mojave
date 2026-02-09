@@ -23,13 +23,11 @@ package org.mojave.core.settlement.producer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.mojave.component.kafka.KafkaProducerConfigurer;
 import org.mojave.component.misc.MiscConfiguration;
-import org.mojave.core.settlement.contract.command.record.CompleteSettlementCommand;
-import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
-import org.mojave.core.settlement.contract.command.record.RequestSettlementInitiationCommand;
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
+import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
 import org.mojave.core.settlement.producer.publisher.CompleteSettlementPublisher;
 import org.mojave.core.settlement.producer.publisher.InitiateSettlementProcessPublisher;
-import org.mojave.core.settlement.producer.publisher.RequestSettlementInitiationPublisher;
 import org.mojave.core.settlement.producer.publisher.UpdatePreparationResultPublisher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -47,17 +45,17 @@ public class SettlementProducerConfiguration {
 
     @Bean
     @Qualifier(CompleteSettlementPublisher.QUALIFIER)
-    public KafkaTemplate<String, CompleteSettlementCommand.Input> completeSettlementKafkaTemplate(
+    public KafkaTemplate<String, HandleSettlementCompletionCommand.Input> completeSettlementKafkaTemplate(
         @Qualifier(
             CompleteSettlementPublisher.QUALIFIER)
-        ProducerFactory<String, CompleteSettlementCommand.Input> producerFactory) {
+        ProducerFactory<String, HandleSettlementCompletionCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     @Qualifier(CompleteSettlementPublisher.QUALIFIER)
-    public ProducerFactory<String, CompleteSettlementCommand.Input> completeSettlementProducerFactory(
+    public ProducerFactory<String, HandleSettlementCompletionCommand.Input> completeSettlementProducerFactory(
         SettlementProducerConfiguration.ProducerSettings settings,
         ObjectMapper objectMapper) {
 
@@ -72,7 +70,7 @@ public class SettlementProducerConfiguration {
                 }
 
                 @Override
-                public Serializer<CompleteSettlementCommand.Input> forValue() {
+                public Serializer<HandleSettlementCompletionCommand.Input> forValue() {
 
                     return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }
@@ -81,17 +79,17 @@ public class SettlementProducerConfiguration {
 
     @Bean
     @Qualifier(InitiateSettlementProcessPublisher.QUALIFIER)
-    public KafkaTemplate<String, InitiateSettlementProcessCommand.Input> initiateSettlementProcessKafkaTemplate(
+    public KafkaTemplate<String, SendSettlementRequestCommand.Input> initiateSettlementProcessKafkaTemplate(
         @Qualifier(
             InitiateSettlementProcessPublisher.QUALIFIER)
-        ProducerFactory<String, InitiateSettlementProcessCommand.Input> producerFactory) {
+        ProducerFactory<String, SendSettlementRequestCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     @Qualifier(InitiateSettlementProcessPublisher.QUALIFIER)
-    public ProducerFactory<String, InitiateSettlementProcessCommand.Input> initiateSettlementProcessProducerFactory(
+    public ProducerFactory<String, SendSettlementRequestCommand.Input> initiateSettlementProcessProducerFactory(
         SettlementProducerConfiguration.ProducerSettings settings,
         ObjectMapper objectMapper) {
 
@@ -106,41 +104,7 @@ public class SettlementProducerConfiguration {
                 }
 
                 @Override
-                public Serializer<InitiateSettlementProcessCommand.Input> forValue() {
-
-                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
-                }
-            });
-    }
-
-    @Bean
-    @Qualifier(RequestSettlementInitiationPublisher.QUALIFIER)
-    public KafkaTemplate<String, RequestSettlementInitiationCommand.Input> requestSettlementInitiationKafkaTemplate(
-        @Qualifier(
-            RequestSettlementInitiationPublisher.QUALIFIER)
-        ProducerFactory<String, RequestSettlementInitiationCommand.Input> producerFactory) {
-
-        return new KafkaTemplate<>(producerFactory);
-    }
-
-    @Bean
-    @Qualifier(RequestSettlementInitiationPublisher.QUALIFIER)
-    public ProducerFactory<String, RequestSettlementInitiationCommand.Input> requestSettlementInitiationProducerFactory(
-        SettlementProducerConfiguration.ProducerSettings settings,
-        ObjectMapper objectMapper) {
-
-        return KafkaProducerConfigurer.configure(
-            settings.bootstrapServers(), settings.ack(),
-            new KafkaProducerConfigurer.Serializers<>() {
-
-                @Override
-                public Serializer<String> forKey() {
-
-                    return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
-                }
-
-                @Override
-                public Serializer<RequestSettlementInitiationCommand.Input> forValue() {
+                public Serializer<SendSettlementRequestCommand.Input> forValue() {
 
                     return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }
@@ -149,17 +113,17 @@ public class SettlementProducerConfiguration {
 
     @Bean
     @Qualifier(UpdatePreparationResultPublisher.QUALIFIER)
-    public KafkaTemplate<String, UpdatePreparationResultCommand.Input> updatePreparationResultKafkaTemplate(
+    public KafkaTemplate<String, HandleSettlementPreparationCommand.Input> updatePreparationResultKafkaTemplate(
         @Qualifier(
             UpdatePreparationResultPublisher.QUALIFIER)
-        ProducerFactory<String, UpdatePreparationResultCommand.Input> producerFactory) {
+        ProducerFactory<String, HandleSettlementPreparationCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     @Qualifier(UpdatePreparationResultPublisher.QUALIFIER)
-    public ProducerFactory<String, UpdatePreparationResultCommand.Input> updatePreparationResultProducerFactory(
+    public ProducerFactory<String, HandleSettlementPreparationCommand.Input> updatePreparationResultProducerFactory(
         SettlementProducerConfiguration.ProducerSettings settings,
         ObjectMapper objectMapper) {
 
@@ -174,7 +138,7 @@ public class SettlementProducerConfiguration {
                 }
 
                 @Override
-                public Serializer<UpdatePreparationResultCommand.Input> forValue() {
+                public Serializer<HandleSettlementPreparationCommand.Input> forValue() {
 
                     return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }

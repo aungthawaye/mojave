@@ -23,6 +23,7 @@ package org.mojave.core.participant.contract.data;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.participant.EndpointType;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.type.participant.FspCode;
 
@@ -32,6 +33,7 @@ import java.util.Objects;
 public record FspData(FspId fspId,
                       FspCode code,
                       String name,
+                      FspGroupId fspGroupId,
                       FspCurrencyData[] currencies,
                       Map<EndpointType, FspEndpointData> endpoints,
                       ActivationStatus activationStatus,

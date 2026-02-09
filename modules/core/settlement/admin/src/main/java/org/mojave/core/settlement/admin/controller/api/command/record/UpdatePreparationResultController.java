@@ -21,7 +21,7 @@
 package org.mojave.core.settlement.admin.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,21 +34,21 @@ import java.util.Objects;
 @RestController
 public class UpdatePreparationResultController {
 
-    private final UpdatePreparationResultCommand updatePreparationResultCommand;
+    private final HandleSettlementPreparationCommand handleSettlementPreparationCommand;
 
-    public UpdatePreparationResultController(final UpdatePreparationResultCommand updatePreparationResultCommand) {
+    public UpdatePreparationResultController(final HandleSettlementPreparationCommand handleSettlementPreparationCommand) {
 
-        Objects.requireNonNull(updatePreparationResultCommand);
-        this.updatePreparationResultCommand = updatePreparationResultCommand;
+        Objects.requireNonNull(handleSettlementPreparationCommand);
+        this.handleSettlementPreparationCommand = handleSettlementPreparationCommand;
     }
 
     @PostMapping("/settlement/settlement-records/update-preparation-result")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UpdatePreparationResultCommand.Output execute(
-        @Valid @RequestBody final UpdatePreparationResultCommand.Input input) {
+    public HandleSettlementPreparationCommand.Output execute(
+        @Valid @RequestBody final HandleSettlementPreparationCommand.Input input) {
 
-        return this.updatePreparationResultCommand.execute(input);
+        return this.handleSettlementPreparationCommand.execute(input);
     }
 
 }

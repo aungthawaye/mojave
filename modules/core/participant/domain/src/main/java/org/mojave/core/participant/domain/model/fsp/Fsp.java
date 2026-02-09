@@ -263,6 +263,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
         return new FspData(
             this.getId(), this.getCode(), this.getName(),
+            this.fspGroup == null ? null : this.fspGroup.getId(),
             this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
             this.getEndpoints().stream().map(FspEndpoint::convert).collect(Collectors.toMap(
                 FspEndpointData::type, Function.identity(),

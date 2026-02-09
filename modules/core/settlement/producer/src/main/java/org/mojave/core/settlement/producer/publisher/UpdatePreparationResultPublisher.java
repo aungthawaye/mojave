@@ -20,7 +20,7 @@
 
 package org.mojave.core.settlement.producer.publisher;
 
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
 import org.mojave.core.settlement.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,16 +33,16 @@ public class UpdatePreparationResultPublisher {
 
     public static final String QUALIFIER = "updatePreparationResult";
 
-    private final KafkaTemplate<String, UpdatePreparationResultCommand.Input> kafkaTemplate;
+    private final KafkaTemplate<String, HandleSettlementPreparationCommand.Input> kafkaTemplate;
 
     public UpdatePreparationResultPublisher(@Qualifier(QUALIFIER)
-                                            KafkaTemplate<String, UpdatePreparationResultCommand.Input> kafkaTemplate) {
+                                            KafkaTemplate<String, HandleSettlementPreparationCommand.Input> kafkaTemplate) {
 
         Objects.requireNonNull(kafkaTemplate);
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(UpdatePreparationResultCommand.Input input) {
+    public void publish(HandleSettlementPreparationCommand.Input input) {
 
         this.kafkaTemplate.send(
             TopicNames.UPDATE_PREPARATION_RESULT, input.settlementRecordId().getId().toString(),

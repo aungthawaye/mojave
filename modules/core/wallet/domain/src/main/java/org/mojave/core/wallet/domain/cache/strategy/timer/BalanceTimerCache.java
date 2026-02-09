@@ -106,15 +106,12 @@ public class BalanceTimerCache implements BalanceCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(
-            new TimerTask() {
-
-                @Override
-                public void run() {
-
-                    BalanceTimerCache.this.refreshData();
-                }
-            }, this.interval, this.interval);
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                BalanceTimerCache.this.refreshData();
+            }
+        }, this.interval, this.interval);
     }
 
     private void refreshData() {

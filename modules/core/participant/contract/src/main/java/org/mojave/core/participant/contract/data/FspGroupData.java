@@ -21,11 +21,12 @@
 package org.mojave.core.participant.contract.data;
 
 import org.mojave.common.datatype.identifier.participant.FspGroupId;
+import org.mojave.common.datatype.identifier.participant.FspId;
 
 import java.util.List;
 import java.util.Objects;
 
-public record FspGroupData(FspGroupId fspGroupId, String name, List<FspData> fsps) {
+public record FspGroupData(FspGroupId fspGroupId, String name, List<FspId> fspIds) {
 
     @Override
     public boolean equals(final Object o) {
@@ -40,7 +41,7 @@ public record FspGroupData(FspGroupId fspGroupId, String name, List<FspData> fsp
     @Override
     public int hashCode() {
 
-        return Objects.hash(this.fspGroupId, this.name, this.fsps);
+        return Objects.hash(this.fspGroupId);
     }
 
 }

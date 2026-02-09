@@ -20,6 +20,8 @@
         <module>intercom-client</module>
         <module>consumer</module>
         <module>producer</module>
+        <module>invoker</module>
+        <module>service</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

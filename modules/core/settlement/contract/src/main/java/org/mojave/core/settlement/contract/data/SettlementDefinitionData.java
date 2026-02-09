@@ -2,8 +2,8 @@ package org.mojave.core.settlement.contract.data;
 
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.participant.FspGroupId;
 import org.mojave.common.datatype.identifier.participant.SspId;
-import org.mojave.common.datatype.identifier.settlement.FilterGroupId;
 import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
 
 import java.time.Instant;
@@ -11,8 +11,8 @@ import java.util.Objects;
 
 public record SettlementDefinitionData(SettlementDefinitionId settlementDefinitionId,
                                        String name,
-                                       FilterGroupId payerFilterGroupId,
-                                       FilterGroupId payeeFilterGroupId,
+                                       FspGroupId payerFspGroupId,
+                                       FspGroupId payeeFspGroupId,
                                        Currency currency,
                                        Instant startAt,
                                        SspId desiredProviderId,

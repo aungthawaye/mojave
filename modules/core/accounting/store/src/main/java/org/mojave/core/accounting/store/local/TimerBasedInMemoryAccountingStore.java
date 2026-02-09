@@ -1,0 +1,194 @@
+/*-
+ * ===
+ * Mojave
+ * ---
+ * Copyright (C) 2025 Open Source
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===
+ */
+
+package org.mojave.core.accounting.store.local;
+
+import jakarta.annotation.PostConstruct;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.core.accounting.contract.data.AccountData;
+import org.mojave.core.accounting.contract.query.AccountQuery;
+import org.mojave.core.accounting.store.AccountingStore;
+import org.mojave.core.accounting.store.AccountingStoreConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+@Component
+public class TimerBasedInMemoryAccountingStore implements AccountingStore {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        TimerBasedInMemoryAccountingStore.class);
+
+    private final AccountQuery accountQuery;
+
+    private final AccountingStoreConfiguration.Settings accountingStoreSettings;
+
+    private final AtomicReference<Snapshot> snapshotRef = new AtomicReference<>(Snapshot.empty());
+
+    private final Timer timer = new Timer("AccountingLocalStoreRefreshTimer", true);
+
+    public TimerBasedInMemoryAccountingStore(AccountQuery accountQuery,
+                                             AccountingStoreConfiguration.Settings accountingStoreSettings) {
+
+        Objects.requireNonNull(accountQuery);
+        Objects.requireNonNull(accountingStoreSettings);
+
+        this.accountQuery = accountQuery;
+        this.accountingStoreSettings = accountingStoreSettings;
+    }
+
+    @PostConstruct
+    public void bootstrap() {
+
+        var interval = this.accountingStoreSettings.refreshIntervalMs();
+
+        LOGGER.info("Bootstrapping TimerBasedInMemoryAccountingStore");
+        this.refreshData();
+
+        this.timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                TimerBasedInMemoryAccountingStore.this.refreshData();
+            }
+        }, interval, interval);
+    }
+
+    @Override
+    public AccountData get(AccountCode accountCode) {
+
+        if (accountCode == null) {
+            return null;
+        }
+
+        return this.snapshotRef.get().accountByCode.get(accountCode);
+    }
+
+    @Override
+    public Set<AccountData> get(AccountOwnerId ownerId) {
+
+        if (ownerId == null) {
+            return Set.of();
+        }
+
+        return this.snapshotRef.get().accountByOwnerId.getOrDefault(ownerId, Set.of());
+    }
+
+    @Override
+    public AccountData get(AccountId accountId) {
+
+        if (accountId == null) {
+            return null;
+        }
+
+        return this.snapshotRef.get().accountById.get(accountId);
+    }
+
+    @Override
+    public AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
+
+        if (chartEntryId == null || ownerId == null || currency == null) {
+            return null;
+        }
+
+        var key = chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
+                      currency.name();
+
+        return this.snapshotRef.get().accountByChartEntryOwnerCurrency.get(key);
+    }
+
+    @Override
+    public Set<AccountData> get(ChartEntryId chartEntryId) {
+
+        if (chartEntryId == null) {
+            return Set.of();
+        }
+
+        return this.snapshotRef.get().accountByChartEntryId.getOrDefault(chartEntryId, Set.of());
+    }
+
+    private void refreshData() {
+
+        LOGGER.info("Start refreshing accounting data");
+
+        List<AccountData> accounts = this.accountQuery.getAll();
+
+        var _accountById = accounts
+                                 .stream()
+                                 .collect(Collectors.toUnmodifiableMap(
+                                     AccountData::accountId,
+                                     Function.identity(), (a, b) -> a));
+
+        var _accountByCode = accounts
+                                   .stream()
+                                   .collect(Collectors.toUnmodifiableMap(
+                                       AccountData::code,
+                                       Function.identity(), (a, b) -> a));
+
+        var _accountByOwnerId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(
+                AccountData::ownerId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+
+        var _accountByChartEntryId = Collections.unmodifiableMap(
+            accounts.stream().collect(Collectors.groupingBy(
+                AccountData::chartEntryId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+
+        var _accountByChartEntryOwnerCurrency = accounts.stream().collect(Collectors.toUnmodifiableMap(
+            acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() +
+                       ":" + acc.currency().name(), Function.identity(), (a, b) -> a));
+
+        LOGGER.info("Refreshed Account data, count: {}", accounts.size());
+
+        this.snapshotRef.set(new Snapshot(
+            _accountById, _accountByCode, _accountByOwnerId, _accountByChartEntryOwnerCurrency,
+            _accountByChartEntryId));
+
+    }
+
+    private record Snapshot(Map<AccountId, AccountData> accountById,
+                            Map<AccountCode, AccountData> accountByCode,
+                            Map<AccountOwnerId, Set<AccountData>> accountByOwnerId,
+                            Map<String, AccountData> accountByChartEntryOwnerCurrency,
+                            Map<ChartEntryId, Set<AccountData>> accountByChartEntryId) {
+
+        static Snapshot empty() {
+
+            return new Snapshot(Map.of(), Map.of(), Map.of(), Map.of(), Map.of());
+        }
+
+    }
+
+}
