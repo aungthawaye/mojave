@@ -40,8 +40,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         FspiopServiceConfiguration.class})
 public final class QuotingServiceConfiguration {
 
-    public interface RequiredDependencies extends QuotingDomainConfiguration.RequiredBeans,
-                                                  FspiopServiceConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends QuotingDomainConfiguration.RequiredDependencies,
+                                                  FspiopServiceConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends QuotingDomainConfiguration.RequiredSettings,
                                               ParticipantIntercomClientConfiguration.RequiredSettings,

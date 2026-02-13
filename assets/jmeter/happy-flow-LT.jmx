@@ -87,7 +87,7 @@
         <hashTree/>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Mojave Flow" enabled="true"/>
         <hashTree>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator" enabled="true">
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
@@ -131,7 +131,7 @@ String ulid = timePart + randPart
 vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </JSR223Sampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2">
             <stringProp name="HTTPSampler.domain">${tg1sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg1sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>

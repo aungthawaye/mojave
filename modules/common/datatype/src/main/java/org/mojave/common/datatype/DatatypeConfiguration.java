@@ -22,5 +22,5 @@ package org.mojave.common.datatype;
 
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = {"org.mojave.scheme.common.datatype"})
+@ComponentScan(basePackages = {"org.mojave.common.datatype"})
 public class DatatypeConfiguration { }

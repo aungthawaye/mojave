@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.domain.model.hub;
 
 import jakarta.persistence.CascadeType;
@@ -32,26 +33,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.common.datatype.converter.identifier.participant.HubIdJavaType;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.participant.HubId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
-import org.mojave.common.datatype.converter.identifier.participant.HubIdJavaType;
-import org.mojave.common.datatype.identifier.participant.HubId;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.exception.hub.HubCurrencyAlreadySupportedException;
 import org.mojave.core.participant.contract.exception.hub.HubNameRequiredException;
 import org.mojave.core.participant.contract.exception.hub.HubNameTooLongException;
 import org.mojave.core.participant.domain.model.fsp.Fsp;
 import org.mojave.core.participant.domain.model.ssp.Ssp;
-import org.mojave.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -124,9 +125,9 @@ public class Hub extends JpaEntity<HubId>
         Objects.requireNonNull(currency);
 
         final var optSupportedCurrency = this.currencies
-                                       .stream()
-                                       .filter(sc -> sc.getCurrency() == currency)
-                                       .findFirst();
+                                             .stream()
+                                             .filter(sc -> sc.getCurrency() == currency)
+                                             .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
 
@@ -170,9 +171,9 @@ public class Hub extends JpaEntity<HubId>
         Objects.requireNonNull(currency);
 
         final var optSupportedCurrency = this.currencies
-                                       .stream()
-                                       .filter(sc -> sc.getCurrency() == currency)
-                                       .findFirst();
+                                             .stream()
+                                             .filter(sc -> sc.getCurrency() == currency)
+                                             .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
 

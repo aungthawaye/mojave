@@ -30,7 +30,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = {"org.mojave.connector.sample"})
 public class SampleConnectorSharedConfiguration
-    implements ConnectorGatewayConfiguration.RequiredBeans {
+    implements ConnectorGatewayConfiguration.RequiredDependencies {
 
     public SampleConnectorSharedConfiguration() {
 

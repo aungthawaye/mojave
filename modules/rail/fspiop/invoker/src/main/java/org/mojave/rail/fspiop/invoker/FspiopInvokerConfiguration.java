@@ -41,7 +41,7 @@ import java.util.Base64;
 
 @ComponentScan(basePackages = {"org.mojave.rail.fspiop.invoker"})
 @Import(value = {FspiopComponentConfiguration.class})
-public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.RequiredBeans {
+public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.RequiredDependencies {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FspiopInvokerConfiguration.class);
 
@@ -166,7 +166,7 @@ public class FspiopInvokerConfiguration implements FspiopComponentConfiguration.
         return builder.build();
     }
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings extends FspiopComponentConfiguration.RequiredSettings {
 

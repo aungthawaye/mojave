@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,13 +17,14 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.wallet.intercom.controller.api.query;
 
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.PositionId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.PositionData;
 import org.mojave.core.wallet.contract.query.PositionQuery;
-import org.mojave.common.datatype.enums.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,13 +33,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/wallet-intercom")
 public class PositionQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -53,7 +52,7 @@ public class PositionQueryController {
         this.positionQuery = positionQuery;
     }
 
-    @GetMapping("/positions/get-by-position-id")
+    @GetMapping("/wallet/positions/get-by-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PositionData get(@RequestParam final PositionId positionId) {
@@ -61,7 +60,7 @@ public class PositionQueryController {
         return this.positionQuery.get(positionId);
     }
 
-    @GetMapping("/positions/get-by-owner-id-currency")
+    @GetMapping("/wallet/positions/get-by-owner-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<PositionData> get(@RequestParam final WalletOwnerId ownerId,
@@ -70,7 +69,7 @@ public class PositionQueryController {
         return this.positionQuery.get(ownerId, currency);
     }
 
-    @GetMapping("/positions/get-all-positions")
+    @GetMapping("/wallet/positions/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<PositionData> getAll() {

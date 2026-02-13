@@ -40,10 +40,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         FspiopServiceConfiguration.class})
 public final class LookUpServiceConfiguration {
 
-    public interface RequiredDependencies extends LookUpDomainConfiguration.RequiredBeans,
-                                                  RequestIdMdcConfiguration.RequiredBeans,
-                                                  ParticipantIntercomClientConfiguration.RequiredBeans,
-                                                  FspiopServiceConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends LookUpDomainConfiguration.RequiredDependencies,
+                                                  RequestIdMdcConfiguration.RequiredDependencies,
+                                                  ParticipantIntercomClientConfiguration.RequiredDependencies,
+                                                  FspiopServiceConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings,
                                               RequestIdMdcConfiguration.RequiredSettings,

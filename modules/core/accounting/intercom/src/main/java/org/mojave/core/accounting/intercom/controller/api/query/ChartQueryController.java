@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,16 +17,16 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.intercom.controller.api.query;
 
+import org.mojave.common.datatype.identifier.accounting.ChartId;
 import org.mojave.core.accounting.contract.data.ChartData;
 import org.mojave.core.accounting.contract.query.ChartQuery;
-import org.mojave.common.datatype.identifier.accounting.ChartId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/accounting-intercom")
 public class ChartQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -51,7 +50,7 @@ public class ChartQueryController {
         this.chartQuery = chartQuery;
     }
 
-    @GetMapping("/charts/get-by-chart-id")
+    @GetMapping("/accounting/charts/get-by-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ChartData get(@RequestParam final ChartId chartId) {
@@ -59,7 +58,7 @@ public class ChartQueryController {
         return this.chartQuery.get(chartId);
     }
 
-    @GetMapping("/charts/get-all-charts")
+    @GetMapping("/accounting/charts/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<ChartData> getAll() {
@@ -67,7 +66,7 @@ public class ChartQueryController {
         return this.chartQuery.getAll();
     }
 
-    @GetMapping("/charts/get-by-name-contains")
+    @GetMapping("/accounting/charts/get-by-name-contains")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<ChartData> getByNameContains(@RequestParam final String name) {

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,13 +17,14 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.wallet.intercom.controller.api.query;
 
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.BalanceData;
 import org.mojave.core.wallet.contract.query.BalanceQuery;
-import org.mojave.common.datatype.enums.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,13 +33,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/wallet-intercom")
 public class BalanceQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -53,7 +52,7 @@ public class BalanceQueryController {
         this.balanceQuery = balanceQuery;
     }
 
-    @GetMapping("/balances/get-by-balance-id")
+    @GetMapping("/wallet/balances/get-by-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public BalanceData get(@RequestParam final BalanceId balanceId) {
@@ -61,7 +60,7 @@ public class BalanceQueryController {
         return this.balanceQuery.get(balanceId);
     }
 
-    @GetMapping("/balances/get-by-owner-id-currency")
+    @GetMapping("/wallet/balances/get-by-owner-currency")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<BalanceData> get(@RequestParam final WalletOwnerId ownerId,
@@ -70,7 +69,7 @@ public class BalanceQueryController {
         return this.balanceQuery.get(ownerId, currency);
     }
 
-    @GetMapping("/balances/get-all-balances")
+    @GetMapping("/wallet/balances/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<BalanceData> getAll() {

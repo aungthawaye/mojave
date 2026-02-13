@@ -40,7 +40,7 @@ public class RequestIdMdcConfiguration {
         return registration;
     }
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings { }
 

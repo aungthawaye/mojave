@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +20,11 @@
 
 package org.mojave.core.participant.domain.query;
 
-import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.exception.fsp.FspCodeNotFoundException;
 import org.mojave.core.participant.contract.exception.fsp.FspIdNotFoundException;
@@ -63,9 +63,12 @@ public class FspQueryHandler implements FspQuery {
         var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
         var terminationStatus = FspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
+        var withId = FspRepository.Filters.withId(fspId);
 
-        return this.fspRepository.findOne(activationStatus.and(terminationStatus)).orElseThrow(
-            () -> new FspIdNotFoundException(fspId)).convert();
+        return this.fspRepository
+                   .findOne(activationStatus.and(terminationStatus).and(withId))
+                   .orElseThrow(() -> new FspIdNotFoundException(fspId))
+                   .convert();
     }
 
     @Transactional(readOnly = true)
@@ -76,11 +79,12 @@ public class FspQueryHandler implements FspQuery {
         var activationStatus = FspRepository.Filters.withActivationStatus(ActivationStatus.ACTIVE);
         var terminationStatus = FspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
+        var withFspCode = FspRepository.Filters.withFspCode(fspCode);
 
         return this.fspRepository
                    .findOne(activationStatus
                                 .and(terminationStatus)
-                                .and(FspRepository.Filters.withFspCode(fspCode)))
+                                .and(withFspCode))
                    .orElseThrow(() -> new FspCodeNotFoundException(fspCode))
                    .convert();
     }
@@ -94,8 +98,11 @@ public class FspQueryHandler implements FspQuery {
         var terminationStatus = FspRepository.Filters.withTerminationStatus(
             TerminationStatus.ALIVE);
 
-        return this.fspRepository.findAll(activationStatus.and(terminationStatus)).stream().map(
-            Fsp::convert).toList();
+        return this.fspRepository
+                   .findAll(activationStatus.and(terminationStatus))
+                   .stream()
+                   .map(Fsp::convert)
+                   .toList();
     }
 
 }

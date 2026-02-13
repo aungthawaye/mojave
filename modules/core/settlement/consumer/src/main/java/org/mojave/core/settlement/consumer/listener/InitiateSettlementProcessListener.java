@@ -21,7 +21,7 @@
 package org.mojave.core.settlement.consumer.listener;
 
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
-import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
+import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
 import org.mojave.core.settlement.contract.constant.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,23 +44,23 @@ public class InitiateSettlementProcessListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(
         InitiateSettlementProcessListener.class);
 
-    private final InitiateSettlementProcessCommand initiateSettlementProcessCommand;
+    private final SendSettlementRequestCommand sendSettlementRequestCommand;
 
-    public InitiateSettlementProcessListener(InitiateSettlementProcessCommand initiateSettlementProcessCommand) {
+    public InitiateSettlementProcessListener(SendSettlementRequestCommand sendSettlementRequestCommand) {
 
-        Objects.requireNonNull(initiateSettlementProcessCommand);
-        this.initiateSettlementProcessCommand = initiateSettlementProcessCommand;
+        Objects.requireNonNull(sendSettlementRequestCommand);
+        this.sendSettlementRequestCommand = sendSettlementRequestCommand;
     }
 
     @KafkaListener(
         topics = TopicNames.INITIATE_SETTLEMENT_PROCESS,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(InitiateSettlementProcessCommand.Input input, Acknowledgment ack) {
+    public void handle(SendSettlementRequestCommand.Input input, Acknowledgment ack) {
 
         try {
 
-            this.initiateSettlementProcessCommand.execute(input);
+            this.sendSettlementRequestCommand.execute(input);
             ack.acknowledge();
 
         } catch (Exception e) {

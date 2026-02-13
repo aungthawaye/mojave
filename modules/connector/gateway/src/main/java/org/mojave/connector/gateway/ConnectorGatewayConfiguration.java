@@ -32,8 +32,8 @@ import org.springframework.context.annotation.Import;
         FspiopComponentConfiguration.class})
 public class ConnectorGatewayConfiguration {
 
-    public interface RequiredBeans extends ConnectorInboundConfiguration.RequiredBeans,
-                                           ConnectorOutboundConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends ConnectorInboundConfiguration.RequiredDependencies,
+                                           ConnectorOutboundConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends ConnectorInboundConfiguration.RequiredSettings,
                                               ConnectorOutboundConfiguration.RequiredSettings { }

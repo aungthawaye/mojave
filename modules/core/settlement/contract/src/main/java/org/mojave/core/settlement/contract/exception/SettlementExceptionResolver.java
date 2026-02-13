@@ -12,11 +12,6 @@ public class SettlementExceptionResolver {
         return switch (code) {
             case FspAlreadyExistsInGroupException.CODE ->
                 FspAlreadyExistsInGroupException.from(extras);
-            case FilterGroupNameRequiredException.CODE ->
-                FilterGroupNameRequiredException.from(extras);
-            case FilterGroupNameAlreadyExistsException.CODE ->
-                FilterGroupNameAlreadyExistsException.from(extras);
-            case FilterGroupIdNotFoundException.CODE -> FilterGroupIdNotFoundException.from(extras);
             case SettlementDefinitionIdNotFoundException.CODE ->
                 SettlementDefinitionIdNotFoundException.from(extras);
             case SettlementDefinitionNameAlreadyExistsException.CODE ->

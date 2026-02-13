@@ -19,19 +19,36 @@
  */
 package org.mojave.component.web.spring.mvc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.util.List;
+
 public class JsonWebMvcConfigurationSupport extends WebMvcConfigurationSupport {
 
     private final ObjectMapper objectMapper;
 
+    @Autowired(required = false)
+    private List<Converter<?, ?>> converters;
+
     public JsonWebMvcConfigurationSupport(ObjectMapper objectMapper) {
 
         this.objectMapper = objectMapper;
+    }
+
+    @Override
+    protected void addFormatters(FormatterRegistry registry) {
+
+        if (this.converters != null) {
+            this.converters.forEach(registry::addConverter);
+        }
+
     }
 
     @Override

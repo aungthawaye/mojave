@@ -41,8 +41,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         FspiopServiceConfiguration.class})
 public final class TransferServiceConfiguration {
 
-    public interface RequiredDependencies extends TransferDomainConfiguration.RequiredBeans,
-                                                  FspiopServiceConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends TransferDomainConfiguration.RequiredDependencies,
+                                                  FspiopServiceConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends TransferDomainConfiguration.RequiredSettings,
                                               ParticipantIntercomClientConfiguration.RequiredSettings,

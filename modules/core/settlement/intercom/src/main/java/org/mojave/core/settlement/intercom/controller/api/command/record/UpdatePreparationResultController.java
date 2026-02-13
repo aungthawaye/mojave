@@ -21,11 +21,10 @@
 package org.mojave.core.settlement.intercom.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,24 +32,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement-intercom")
 public class UpdatePreparationResultController {
 
-    private final UpdatePreparationResultCommand updatePreparationResultCommand;
+    private final HandleSettlementPreparationCommand handleSettlementPreparationCommand;
 
-    public UpdatePreparationResultController(final UpdatePreparationResultCommand updatePreparationResultCommand) {
+    public UpdatePreparationResultController(final HandleSettlementPreparationCommand handleSettlementPreparationCommand) {
 
-        Objects.requireNonNull(updatePreparationResultCommand);
-        this.updatePreparationResultCommand = updatePreparationResultCommand;
+        Objects.requireNonNull(handleSettlementPreparationCommand);
+        this.handleSettlementPreparationCommand = handleSettlementPreparationCommand;
     }
 
-    @PostMapping("/settlement-records/update-preparation")
+    @PostMapping("/settlement/settlement-records/update-preparation-result")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UpdatePreparationResultCommand.Output execute(
-        @Valid @RequestBody final UpdatePreparationResultCommand.Input input) {
+    public HandleSettlementPreparationCommand.Output execute(
+        @Valid @RequestBody final HandleSettlementPreparationCommand.Input input) {
 
-        return this.updatePreparationResultCommand.execute(input);
+        return this.handleSettlementPreparationCommand.execute(input);
     }
 
 }

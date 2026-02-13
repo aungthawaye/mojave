@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,12 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.query;
 
+import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.component.misc.query.PagedResult;
 import org.mojave.component.misc.query.SortingMode;
@@ -28,9 +32,6 @@ import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundEx
 import org.mojave.core.accounting.contract.query.AccountQuery;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -38,8 +39,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountQueryHandler implements AccountQuery {

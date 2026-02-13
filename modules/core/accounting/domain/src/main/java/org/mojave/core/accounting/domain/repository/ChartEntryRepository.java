@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,17 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.repository;
 
-import org.mojave.core.accounting.domain.model.ChartEntry;
 import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.common.datatype.identifier.accounting.ChartId;
 import org.mojave.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.core.accounting.domain.model.ChartEntry;
+import org.mojave.core.accounting.domain.model.ChartEntry_;
+import org.mojave.core.accounting.domain.model.Chart_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -38,32 +41,33 @@ public interface ChartEntryRepository
 
         public static Specification<ChartEntry> withAccountType(AccountType type) {
 
-            return (root, query, cb) -> cb.equal(root.get("accountType"), type);
+            return (root, query, cb) -> cb.equal(root.get(ChartEntry_.accountType), type);
         }
 
         public static Specification<ChartEntry> withCategory(ChartEntryCategory category) {
 
-            return (root, query, cb) -> cb.equal(root.get("category"), category);
+            return (root, query, cb) -> cb.equal(root.get(ChartEntry_.category), category);
         }
 
         public static Specification<ChartEntry> withChartId(ChartId chartId) {
 
-            return (root, query, cb) -> cb.equal(root.get("chart").get("id"), chartId);
+            return (root, query, cb) -> cb.equal(
+                root.get(ChartEntry_.chart).get(Chart_.id), chartId);
         }
 
         public static Specification<ChartEntry> withCode(ChartEntryCode code) {
 
-            return (root, query, cb) -> cb.equal(root.get("code"), code);
+            return (root, query, cb) -> cb.equal(root.get(ChartEntry_.code), code);
         }
 
         public static Specification<ChartEntry> withId(ChartEntryId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(ChartEntry_.id), id);
         }
 
         public static Specification<ChartEntry> withNameContains(String name) {
 
-            return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+            return (root, query, cb) -> cb.like(root.get(ChartEntry_.name), "%" + name + "%");
         }
 
     }

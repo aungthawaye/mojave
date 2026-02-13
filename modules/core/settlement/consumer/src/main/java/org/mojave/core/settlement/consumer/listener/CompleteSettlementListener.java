@@ -21,7 +21,7 @@
 package org.mojave.core.settlement.consumer.listener;
 
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
-import org.mojave.core.settlement.contract.command.record.CompleteSettlementCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
 import org.mojave.core.settlement.contract.constant.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,23 +43,23 @@ public class CompleteSettlementListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompleteSettlementListener.class);
 
-    private final CompleteSettlementCommand completeSettlementCommand;
+    private final HandleSettlementCompletionCommand handleSettlementCompletionCommand;
 
-    public CompleteSettlementListener(CompleteSettlementCommand completeSettlementCommand) {
+    public CompleteSettlementListener(HandleSettlementCompletionCommand handleSettlementCompletionCommand) {
 
-        Objects.requireNonNull(completeSettlementCommand);
-        this.completeSettlementCommand = completeSettlementCommand;
+        Objects.requireNonNull(handleSettlementCompletionCommand);
+        this.handleSettlementCompletionCommand = handleSettlementCompletionCommand;
     }
 
     @KafkaListener(
         topics = TopicNames.COMPLETE_SETTLEMENT,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(CompleteSettlementCommand.Input input, Acknowledgment ack) {
+    public void handle(HandleSettlementCompletionCommand.Input input, Acknowledgment ack) {
 
         try {
 
-            this.completeSettlementCommand.execute(input);
+            this.handleSettlementCompletionCommand.execute(input);
             ack.acknowledge();
 
         } catch (Exception e) {

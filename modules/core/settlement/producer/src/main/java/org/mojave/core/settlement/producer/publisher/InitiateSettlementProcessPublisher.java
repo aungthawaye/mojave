@@ -20,7 +20,7 @@
 
 package org.mojave.core.settlement.producer.publisher;
 
-import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
+import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
 import org.mojave.core.settlement.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,16 +33,16 @@ public class InitiateSettlementProcessPublisher {
 
     public static final String QUALIFIER = "initiateSettlementProcess";
 
-    private final KafkaTemplate<String, InitiateSettlementProcessCommand.Input> kafkaTemplate;
+    private final KafkaTemplate<String, SendSettlementRequestCommand.Input> kafkaTemplate;
 
     public InitiateSettlementProcessPublisher(@Qualifier(QUALIFIER)
-                                              KafkaTemplate<String, InitiateSettlementProcessCommand.Input> kafkaTemplate) {
+                                              KafkaTemplate<String, SendSettlementRequestCommand.Input> kafkaTemplate) {
 
         Objects.requireNonNull(kafkaTemplate);
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(InitiateSettlementProcessCommand.Input input) {
+    public void publish(SendSettlementRequestCommand.Input input) {
 
         this.kafkaTemplate.send(
             TopicNames.INITIATE_SETTLEMENT_PROCESS, input.transactionId().getId().toString(),

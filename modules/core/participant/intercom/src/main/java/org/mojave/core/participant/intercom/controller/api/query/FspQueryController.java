@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.participant.intercom.controller.api.query;
 
 import org.mojave.common.datatype.identifier.participant.FspId;
@@ -30,14 +31,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/participant-intercom")
 public class FspQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -52,7 +51,7 @@ public class FspQueryController {
         this.fspQuery = fspQuery;
     }
 
-    @GetMapping("/fsps/get-by-fsp-code")
+    @GetMapping("/participant/fsps/get-by-code")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public FspData get(@RequestParam FspCode fspCode) {
@@ -60,7 +59,7 @@ public class FspQueryController {
         return this.fspQuery.get(fspCode);
     }
 
-    @GetMapping("/fsps/get-by-fsp-id")
+    @GetMapping("/participant/fsps/get-by-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public FspData get(@RequestParam FspId fspId) {
@@ -68,7 +67,7 @@ public class FspQueryController {
         return this.fspQuery.get(fspId);
     }
 
-    @GetMapping("/fsps/get-all-fsps")
+    @GetMapping("/participant/fsps/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<FspData> getAll() {

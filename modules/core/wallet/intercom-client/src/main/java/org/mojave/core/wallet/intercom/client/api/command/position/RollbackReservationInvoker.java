@@ -29,6 +29,7 @@ import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReserv
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
+
 import java.util.Objects;
 
 @Component

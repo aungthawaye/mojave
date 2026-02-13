@@ -100,11 +100,11 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1">
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer 1" enabled="true">
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create HUB">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create HUB" enabled="true">
           <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -149,7 +149,7 @@ if (val != null) {
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP1">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP1" enabled="true">
           <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -191,13 +191,13 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fsp1Id</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.fspId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -209,7 +209,7 @@ if (val != null) {
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create FSP2">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create FSP2" enabled="true">
           <stringProp name="HTTPSampler.domain">${participantAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${participantAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -390,7 +390,7 @@ if (val != null) {
         </HeaderManager>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -409,7 +409,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/charts/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/charts/create-chart</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -438,7 +438,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create-chart-entry</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -472,7 +472,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create-chart-entry</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -506,7 +506,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create-chart-entry</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -540,7 +540,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create-chart-entry</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -574,7 +574,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/chart-entries/create-chart-entry</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -608,7 +608,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/accounts/create-in-bulk</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/accounts/create-account-by-category</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -633,7 +633,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/accounts/create-in-bulk</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/accounts/create-account-by-category</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -658,7 +658,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/accounts/create-in-bulk</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/accounts/create-account-by-category</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -683,7 +683,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/flow-definitions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/flow-definitions/create-flow-definition</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -702,8 +702,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;LIQUIDITY_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - HUB Liquidity&quot;,&#xd;
             &quot;participant&quot;: &quot;HUB&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${hubLiquidityChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${hubLiquidityChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
@@ -711,8 +711,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;LIQUIDITY_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payer Liquidity&quot;,&#xd;
             &quot;participant&quot;: &quot;RECEIVING_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspLiquidityChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspLiquidityChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;CREDIT&quot;&#xd;
         }&#xd;
     ],&#xd;
@@ -728,7 +728,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/accounting/flow-definitions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/accounting/flow-definitions/create-flow-definition</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -747,8 +747,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - Payer Liquidity&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspLiquidityChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspLiquidityChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
@@ -756,8 +756,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payer Position&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspPositionChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspPositionChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;CREDIT&quot;&#xd;
         },&#xd;
         {&#xd;
@@ -765,8 +765,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - Payer Position&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspPositionChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspPositionChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
@@ -774,8 +774,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payer Payable&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspPayableChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspPayableChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;CREDIT&quot;&#xd;
         },&#xd;
         {&#xd;
@@ -783,8 +783,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Dr - Payer Payable&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYER_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspPayableChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspPayableChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;DEBIT&quot;&#xd;
         },&#xd;
         {&#xd;
@@ -792,8 +792,8 @@ if (val != null) {
             &quot;amountName&quot;: &quot;TRANSFER_AMOUNT&quot;,&#xd;
             &quot;description&quot;: &quot;Cr - Payee Receivable&quot;,&#xd;
             &quot;participant&quot;: &quot;PAYEE_FSP&quot;,&#xd;
-            &quot;receiveIn&quot;: &quot;CHART_ENTRY&quot;,&#xd;
-            &quot;receiveInId&quot;: &quot;${fspReceivableChartEntryId}&quot;,&#xd;
+            &quot;postingChannel&quot;: &quot;CHART_ENTRY&quot;,&#xd;
+            &quot;postingChannelId&quot;: &quot;${fspReceivableChartEntryId}&quot;,&#xd;
             &quot;side&quot;: &quot;CREDIT&quot;&#xd;
         }&#xd;
     ],&#xd;
@@ -837,7 +837,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -869,7 +869,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -890,8 +890,8 @@ if (val != null) {
     },&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
-        &quot;PAYER_FSP&quot;: &quot;${fsp1Id}&quot;,&#xd;
-        &quot;PAYEE_FSP&quot;: &quot;${fsp2Id}&quot;&#xd;
+        &quot;PAYER_FSP&quot;: &quot;${__property(FSP1_ID,)}&quot;,&#xd;
+        &quot;PAYEE_FSP&quot;: &quot;${__property(FSP2_ID,)}&quot;&#xd;
     },&#xd;
     &quot;transactionAt&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
     &quot;transactionId&quot;: &quot;${__time(/1000,)}&quot;,&#xd;
@@ -1043,7 +1043,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/wallet/balances/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/balances/create-balance</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1074,7 +1074,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/wallet/balances/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/balances/create-balance</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1222,7 +1222,7 @@ if (val != null) {
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Position Setup" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Position Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -1241,7 +1241,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/wallet/positions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/positions/create-position</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1341,7 +1341,7 @@ if (val != null) {
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">/wallet/positions/create</stringProp>
+          <stringProp name="HTTPSampler.path">/wallet/positions/create-position</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>

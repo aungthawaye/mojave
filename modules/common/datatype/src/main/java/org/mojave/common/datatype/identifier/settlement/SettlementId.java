@@ -29,13 +29,12 @@ import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
-import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = SettlementId.Deserializer.class)
-public class SettlementId extends EntityId<Long> {
+public class SettlementId extends EntityId<String> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public SettlementId(Long id) {
+    public SettlementId(String id) {
 
         super(id);
     }
@@ -53,12 +52,7 @@ public class SettlementId extends EntityId<Long> {
                 return null;
             }
 
-            try {
-                return new SettlementId(Long.parseLong(text));
-            } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(
-                    p, "'" + field + "' has invalid format. Must be number.", e);
-            }
+            return new SettlementId(text);
         }
 
     }
@@ -69,7 +63,7 @@ public class SettlementId extends EntityId<Long> {
         @Override
         public SettlementId convert(String source) {
 
-            return new SettlementId(Long.parseLong(source));
+            return new SettlementId(source);
         }
 
     }

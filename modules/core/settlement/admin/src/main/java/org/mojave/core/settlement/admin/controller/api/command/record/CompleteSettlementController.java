@@ -21,11 +21,10 @@
 package org.mojave.core.settlement.admin.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.record.CompleteSettlementCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,24 +32,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/settlement")
 public class CompleteSettlementController {
 
-    private final CompleteSettlementCommand completeSettlementCommand;
+    private final HandleSettlementCompletionCommand handleSettlementCompletionCommand;
 
-    public CompleteSettlementController(final CompleteSettlementCommand completeSettlementCommand) {
+    public CompleteSettlementController(final HandleSettlementCompletionCommand handleSettlementCompletionCommand) {
 
-        Objects.requireNonNull(completeSettlementCommand);
-        this.completeSettlementCommand = completeSettlementCommand;
+        Objects.requireNonNull(handleSettlementCompletionCommand);
+        this.handleSettlementCompletionCommand = handleSettlementCompletionCommand;
     }
 
-    @PostMapping("/settlement-records/complete")
+    @PostMapping("/settlement/settlement-records/complete-settlement")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CompleteSettlementCommand.Output execute(
-        @Valid @RequestBody final CompleteSettlementCommand.Input input) {
+    public HandleSettlementCompletionCommand.Output execute(
+        @Valid @RequestBody final HandleSettlementCompletionCommand.Input input) {
 
-        return this.completeSettlementCommand.execute(input);
+        return this.handleSettlementCompletionCommand.execute(input);
     }
 
 }

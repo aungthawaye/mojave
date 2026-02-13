@@ -20,13 +20,13 @@
 
 package org.mojave.core.wallet.admin;
 
+import org.mojave.common.datatype.DatatypeConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
-import org.mojave.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -35,8 +35,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.json.JsonMapper;
 
 @EnableAutoConfiguration
-
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "org.mojave.core.wallet.admin.controller")
 @Import(
@@ -54,8 +52,8 @@ public final class WalletAdminConfiguration extends JsonWebMvcConfigurationSuppo
         super(jsonMapper);
     }
 
-    public interface RequiredDependencies extends WalletDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans { }
+    public interface RequiredDependencies extends WalletDomainConfiguration.RequiredDependencies,
+                                                  SpringSecurityConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends WalletDomainConfiguration.RequiredSettings,
                                               OpenApiConfiguration.RequiredSettings,

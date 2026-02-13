@@ -20,7 +20,7 @@
 
 package org.mojave.core.settlement.producer.publisher;
 
-import org.mojave.core.settlement.contract.command.record.CompleteSettlementCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
 import org.mojave.core.settlement.contract.constant.TopicNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,16 +33,16 @@ public class CompleteSettlementPublisher {
 
     public static final String QUALIFIER = "completeSettlement";
 
-    private final KafkaTemplate<String, CompleteSettlementCommand.Input> kafkaTemplate;
+    private final KafkaTemplate<String, HandleSettlementCompletionCommand.Input> kafkaTemplate;
 
     public CompleteSettlementPublisher(@Qualifier(QUALIFIER)
-                                       KafkaTemplate<String, CompleteSettlementCommand.Input> kafkaTemplate) {
+                                       KafkaTemplate<String, HandleSettlementCompletionCommand.Input> kafkaTemplate) {
 
         Objects.requireNonNull(kafkaTemplate);
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(CompleteSettlementCommand.Input input) {
+    public void publish(HandleSettlementCompletionCommand.Input input) {
 
         this.kafkaTemplate.send(
             TopicNames.COMPLETE_SETTLEMENT, input.settlementRecordId().getId().toString(), input);

@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="05 settlement-admin (4501)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="core">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/modules/core/settlement/admin/src/main/java/org/mojave/core/settlement/admin/.env" />
+    </option>
+    <module name="mojave-core-settlement-admin" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.core.settlement.admin.SettlementAdminApplication" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.mojave.core.settlement.admin.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

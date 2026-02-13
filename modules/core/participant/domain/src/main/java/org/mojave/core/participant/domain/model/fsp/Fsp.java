@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,18 +40,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.common.datatype.converter.identifier.participant.FspIdJavaType;
+import org.mojave.common.datatype.converter.type.fspiop.FspCodeConverter;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.enums.participant.EndpointType;
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.common.datatype.converter.identifier.participant.FspIdJavaType;
-import org.mojave.common.datatype.converter.type.fspiop.FspCodeConverter;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.identifier.participant.FspId;
-import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspCurrencyData;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.FspEndpointData;
@@ -59,16 +60,15 @@ import org.mojave.core.participant.contract.exception.fsp.FspCodeRequiredExcepti
 import org.mojave.core.participant.contract.exception.fsp.FspNameRequiredException;
 import org.mojave.core.participant.contract.exception.fsp.FspNameTooLongException;
 import org.mojave.core.participant.domain.model.hub.Hub;
-import org.mojave.common.datatype.enums.Currency;
 
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
 
@@ -152,6 +152,12 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         foreignKey = @ForeignKey(name = "pcp_hub_pcp_fsp_FK"))
     protected Hub hub;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "fsp_group_id",
+        foreignKey = @ForeignKey(name = "pcp_fsp_group_pcp_fsp_FK"))
+    protected FspGroup fspGroup;
+
     public Fsp(final Hub hub, final FspCode code, final String name) {
 
         Objects.requireNonNull(hub);
@@ -168,9 +174,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
     public Optional<FspCurrency> activate(final Currency currency) {
 
         final var fspCurrency = this.currencies
-                              .stream()
-                              .filter(f -> f.getCurrency().equals(currency))
-                              .findFirst();
+                                    .stream()
+                                    .filter(f -> f.getCurrency().equals(currency))
+                                    .findFirst();
 
         if (fspCurrency.isPresent()) {
 
@@ -184,7 +190,10 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
     public Optional<FspEndpoint> activate(final EndpointType type) {
 
-        final var fspEndpoint = this.endpoints.stream().filter(f -> f.getType().equals(type)).findFirst();
+        final var fspEndpoint = this.endpoints
+                                    .stream()
+                                    .filter(f -> f.getType().equals(type))
+                                    .findFirst();
 
         if (fspEndpoint.isPresent()) {
 
@@ -233,9 +242,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         Objects.requireNonNull(baseUrl);
 
         final var optEndpoint = this.endpoints
-                              .stream()
-                              .filter(fspEndpoint -> fspEndpoint.getType() == type)
-                              .findFirst();
+                                    .stream()
+                                    .filter(fspEndpoint -> fspEndpoint.getType() == type)
+                                    .findFirst();
 
         if (optEndpoint.isEmpty()) {
 
@@ -254,6 +263,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
         return new FspData(
             this.getId(), this.getCode(), this.getName(),
+            this.fspGroup == null ? null : this.fspGroup.getId(),
             this.getCurrencies().stream().map(FspCurrency::convert).toArray(FspCurrencyData[]::new),
             this.getEndpoints().stream().map(FspEndpoint::convert).collect(Collectors.toMap(
                 FspEndpointData::type, Function.identity(),
@@ -274,9 +284,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         Objects.requireNonNull(currency);
 
         final var optSupportedCurrency = this.currencies
-                                       .stream()
-                                       .filter(sc -> sc.getCurrency() == currency)
-                                       .findFirst();
+                                             .stream()
+                                             .filter(sc -> sc.getCurrency() == currency)
+                                             .findFirst();
 
         if (optSupportedCurrency.isEmpty()) {
 
@@ -293,9 +303,9 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
         Objects.requireNonNull(type);
 
         final var optEndpoint = this.endpoints
-                              .stream()
-                              .filter(fspEndpoint -> fspEndpoint.getType() == type)
-                              .findFirst();
+                                    .stream()
+                                    .filter(fspEndpoint -> fspEndpoint.getType() == type)
+                                    .findFirst();
 
         if (optEndpoint.isEmpty()) {
 
@@ -366,6 +376,22 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
                    .anyMatch(sc -> sc.getCurrency() == currency && sc.isActive());
     }
 
+    public void join(FspGroup fspGroup) {
+
+        Objects.requireNonNull(fspGroup);
+
+        if (this.fspGroup != null && this.fspGroup.getId().equals(fspGroup.getId())) {
+            return;
+        }
+
+        this.fspGroup = fspGroup;
+    }
+
+    public void leave() {
+
+        this.fspGroup = null;
+    }
+
     public Fsp name(final String name) {
 
         if (name == null || name.isBlank()) {
@@ -375,7 +401,7 @@ public class Fsp extends JpaEntity<FspId> implements DataConversion<FspData> {
 
         final var value = name.trim();
 
-        if (name.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
+        if (value.length() > StringSizeConstraints.MAX_NAME_TITLE_LENGTH) {
 
             throw new FspNameTooLongException();
         }

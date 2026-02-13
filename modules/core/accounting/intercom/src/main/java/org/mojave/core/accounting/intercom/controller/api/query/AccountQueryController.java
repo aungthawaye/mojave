@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,21 +17,21 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.intercom.controller.api.query;
 
-import org.mojave.component.misc.query.PagedResult;
-import org.mojave.core.accounting.contract.data.AccountData;
-import org.mojave.core.accounting.contract.query.AccountQuery;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.component.misc.query.PagedResult;
+import org.mojave.core.accounting.contract.data.AccountData;
+import org.mojave.core.accounting.contract.query.AccountQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/accounting-intercom")
 public class AccountQueryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -56,7 +55,7 @@ public class AccountQueryController {
         this.accountQuery = accountQuery;
     }
 
-    @PostMapping("/accounts/find-accounts")
+    @PostMapping("/accounting/accounts/find-accounts")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PagedResult<AccountData> find(@RequestBody final AccountQuery.Criteria criteria) {
@@ -64,7 +63,7 @@ public class AccountQueryController {
         return this.accountQuery.find(criteria);
     }
 
-    @GetMapping("/accounts/get-by-account-code")
+    @GetMapping("/accounting/accounts/get-by-code")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AccountData get(@RequestParam final AccountCode accountCode) {
@@ -72,7 +71,7 @@ public class AccountQueryController {
         return this.accountQuery.get(accountCode);
     }
 
-    @GetMapping("/accounts/get-by-owner-id")
+    @GetMapping("/accounting/accounts/get-by-owner-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<AccountData> get(@RequestParam final AccountOwnerId ownerId) {
@@ -80,7 +79,7 @@ public class AccountQueryController {
         return this.accountQuery.get(ownerId);
     }
 
-    @GetMapping("/accounts/get-by-account-id")
+    @GetMapping("/accounting/accounts/get-by-id")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AccountData get(@RequestParam final AccountId accountId) {
@@ -88,7 +87,7 @@ public class AccountQueryController {
         return this.accountQuery.get(accountId);
     }
 
-    @GetMapping("/accounts/get-all-accounts")
+    @GetMapping("/accounting/accounts/get-all")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<AccountData> getAll() {

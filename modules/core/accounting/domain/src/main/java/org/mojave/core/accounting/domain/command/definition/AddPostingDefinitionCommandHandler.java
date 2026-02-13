@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.command.definition;
 
 import org.mojave.component.jpa.routing.annotation.Write;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Objects;
 
 @Service
@@ -71,7 +73,7 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
         final var posting = input.posting();
 
         var pd = definition.addPosting(
-            input.posting().step(), posting.receiveIn(), posting.receiveInId(),
+            input.posting().step(), posting.postingChannel(), posting.postingChannelId(),
             posting.participant(), posting.amountName(), posting.side(), posting.description(),
             this.accountCache, this.chartEntryCache);
 

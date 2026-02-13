@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,8 @@ import org.mojave.core.accounting.admin.AccountingAdminConfiguration;
 import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
 import org.mojave.core.participant.admin.ParticipantAdminConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
+import org.mojave.core.settlement.admin.SettlementAdminConfiguration;
+import org.mojave.core.settlement.domain.SettlementDomainConfiguration;
 import org.mojave.core.wallet.admin.WalletAdminConfiguration;
 import org.mojave.core.wallet.domain.WalletDomainConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,7 +37,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.ObjectMapper;
 
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(
     basePackages = {"org.mojave.mono.admin.controller"})
@@ -45,6 +46,7 @@ import tools.jackson.databind.ObjectMapper;
         SpringSecurityConfiguration.class,
         ParticipantAdminConfiguration.class,
         AccountingAdminConfiguration.class,
+        SettlementAdminConfiguration.class,
         WalletAdminConfiguration.class})
 public class MonoAdminConfiguration extends JsonWebMvcConfigurationSupport {
 
@@ -53,16 +55,18 @@ public class MonoAdminConfiguration extends JsonWebMvcConfigurationSupport {
         super(objectMapper);
     }
 
-    public interface RequiredDependencies extends OpenApiConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans,
+    public interface RequiredDependencies extends OpenApiConfiguration.RequiredDependencies,
+                                                  SpringSecurityConfiguration.RequiredDependencies,
                                                   ParticipantAdminConfiguration.RequiredDependencies,
                                                   AccountingAdminConfiguration.RequiredDependencies,
+                                                  SettlementAdminConfiguration.RequiredDependencies,
                                                   WalletAdminConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
                                               SpringSecurityConfiguration.RequiredSettings,
                                               ParticipantDomainConfiguration.RequiredSettings,
                                               AccountingDomainConfiguration.RequiredSettings,
+                                              SettlementDomainConfiguration.RequiredSettings,
                                               WalletDomainConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();

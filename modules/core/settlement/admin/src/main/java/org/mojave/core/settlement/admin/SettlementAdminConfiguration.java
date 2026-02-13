@@ -34,7 +34,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableAutoConfiguration
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "org.mojave.core.settlement.admin.controller")
 @Import(
@@ -52,8 +51,9 @@ public final class SettlementAdminConfiguration extends JsonWebMvcConfigurationS
         super(jsonMapper);
     }
 
-    public interface RequiredDependencies extends SettlementDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans { }
+    public interface RequiredDependencies
+        extends SettlementDomainConfiguration.RequiredDependencies,
+                SpringSecurityConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends SettlementDomainConfiguration.RequiredSettings,
                                               OpenApiConfiguration.RequiredSettings,

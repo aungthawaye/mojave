@@ -64,7 +64,7 @@ public class FspiopComponentConfiguration {
             participantSettings.fspPublicKeyPem());
     }
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {
 

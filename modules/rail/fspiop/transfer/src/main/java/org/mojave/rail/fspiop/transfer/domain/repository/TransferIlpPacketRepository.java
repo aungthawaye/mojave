@@ -21,6 +21,7 @@ package org.mojave.rail.fspiop.transfer.domain.repository;
 
 import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.rail.fspiop.transfer.domain.model.TransferIlpPacket;
+import org.mojave.rail.fspiop.transfer.domain.model.TransferIlpPacket_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -34,7 +35,7 @@ public interface TransferIlpPacketRepository extends JpaRepository<TransferIlpPa
 
         public static Specification<TransferIlpPacket> withIlpCondition(String ilpCondition) {
 
-            return (root, query, cb) -> cb.equal(root.get("condition"), ilpCondition);
+            return (root, query, cb) -> cb.equal(root.get(TransferIlpPacket_.condition), ilpCondition);
         }
 
     }

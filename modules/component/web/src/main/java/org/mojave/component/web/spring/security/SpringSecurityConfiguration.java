@@ -38,7 +38,7 @@ public class SpringSecurityConfiguration {
             httpSecurity, settings, authenticator, authenticationErrorWriter);
     }
 
-    public interface RequiredBeans {
+    public interface RequiredDependencies {
 
         AuthenticationErrorWriter authenticationErrorWriter();
 

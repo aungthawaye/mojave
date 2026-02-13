@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,14 +17,16 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.domain.repository;
 
-import org.mojave.core.accounting.domain.model.Account;
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
-import org.mojave.common.datatype.enums.Currency;
+import org.mojave.core.accounting.domain.model.Account;
+import org.mojave.core.accounting.domain.model.Account_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -38,27 +40,27 @@ public interface AccountRepository
 
         public static Specification<Account> withChartEntryId(ChartEntryId chartEntryId) {
 
-            return (root, query, cb) -> cb.equal(root.get("chartEntryId"), chartEntryId);
+            return (root, query, cb) -> cb.equal(root.get(Account_.chartEntryId), chartEntryId);
         }
 
         public static Specification<Account> withCode(AccountCode code) {
 
-            return (root, query, cb) -> cb.equal(root.get("code"), code);
+            return (root, query, cb) -> cb.equal(root.get(Account_.code), code);
         }
 
         public static Specification<Account> withCurrency(Currency currency) {
 
-            return (root, query, cb) -> cb.equal(root.get("currency"), currency);
+            return (root, query, cb) -> cb.equal(root.get(Account_.currency), currency);
         }
 
         public static Specification<Account> withId(AccountId id) {
 
-            return (root, query, cb) -> cb.equal(root.get("id"), id);
+            return (root, query, cb) -> cb.equal(root.get(Account_.id), id);
         }
 
         public static Specification<Account> withOwnerId(AccountOwnerId ownerId) {
 
-            return (root, query, cb) -> cb.equal(root.get("ownerId"), ownerId);
+            return (root, query, cb) -> cb.equal(root.get(Account_.ownerId), ownerId);
         }
 
     }

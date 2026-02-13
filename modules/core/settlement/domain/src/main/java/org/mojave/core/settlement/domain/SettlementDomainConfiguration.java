@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
         RoutingJpaConfiguration.class})
 public class SettlementDomainConfiguration {
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings
         extends MiscConfiguration.RequiredSettings, RoutingJpaConfiguration.RequiredSettings {

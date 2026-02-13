@@ -21,7 +21,7 @@
 package org.mojave.core.settlement.consumer.listener;
 
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
-import org.mojave.core.settlement.contract.command.record.UpdatePreparationResultCommand;
+import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
 import org.mojave.core.settlement.contract.constant.TopicNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,23 +44,23 @@ public class UpdatePreparationResultListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(
         UpdatePreparationResultListener.class);
 
-    private final UpdatePreparationResultCommand updatePreparationResultCommand;
+    private final HandleSettlementPreparationCommand handleSettlementPreparationCommand;
 
-    public UpdatePreparationResultListener(UpdatePreparationResultCommand updatePreparationResultCommand) {
+    public UpdatePreparationResultListener(HandleSettlementPreparationCommand handleSettlementPreparationCommand) {
 
-        Objects.requireNonNull(updatePreparationResultCommand);
-        this.updatePreparationResultCommand = updatePreparationResultCommand;
+        Objects.requireNonNull(handleSettlementPreparationCommand);
+        this.handleSettlementPreparationCommand = handleSettlementPreparationCommand;
     }
 
     @KafkaListener(
         topics = TopicNames.UPDATE_PREPARATION_RESULT,
         containerFactory = LISTENER_CONTAINER_FACTORY,
         groupId = GROUP_ID)
-    public void handle(UpdatePreparationResultCommand.Input input, Acknowledgment ack) {
+    public void handle(HandleSettlementPreparationCommand.Input input, Acknowledgment ack) {
 
         try {
 
-            this.updatePreparationResultCommand.execute(input);
+            this.handleSettlementPreparationCommand.execute(input);
             ack.acknowledge();
 
         } catch (Exception e) {

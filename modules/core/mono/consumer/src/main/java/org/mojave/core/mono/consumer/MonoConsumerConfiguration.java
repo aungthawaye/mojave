@@ -21,20 +21,24 @@
 package org.mojave.core.mono.consumer;
 
 import org.mojave.core.accounting.consumer.AccountingConsumerConfiguration;
+import org.mojave.core.settlement.consumer.SettlementConsumerConfiguration;
 import org.mojave.core.wallet.consumer.WalletConsumerConfiguration;
 import org.springframework.context.annotation.Import;
 
 @Import(
     value = {
         AccountingConsumerConfiguration.class,
+        SettlementConsumerConfiguration.class,
         WalletConsumerConfiguration.class})
 public class MonoConsumerConfiguration {
 
     public interface RequiredDependencies
         extends AccountingConsumerConfiguration.RequiredDependencies,
+                SettlementConsumerConfiguration.RequiredDependencies,
                 WalletConsumerConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends AccountingConsumerConfiguration.RequiredSettings,
+                                              SettlementConsumerConfiguration.RequiredSettings,
                                               WalletConsumerConfiguration.RequiredSettings { }
 
 }

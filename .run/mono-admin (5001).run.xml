@@ -1,5 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="mono-admin (5001)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="core">
+    <additionalParameters>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="management.endpoint.env.show-values" />
+        <option name="value" value="when_authorized" />
+      </param>
+    </additionalParameters>
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/modules/core/mono/admin/src/main/java/org/mojave/core/mono/admin/.env" />
     </option>

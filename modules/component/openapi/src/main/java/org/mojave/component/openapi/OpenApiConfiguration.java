@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.component.openapi;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -25,16 +26,19 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 public class OpenApiConfiguration {
 
     static {
         SpringDocUtils
             .getConfig()
-            .replaceWithSchema(Instant.class,
+            .replaceWithSchema(
+                Instant.class,
                 new StringSchema().example("epoch seconds or ISO-8601"))
             .replaceWithSchema(BigDecimal.class, new StringSchema().example("decimal"))
             .replaceWithSchema(Long.class, new StringSchema().example("integer"))
@@ -53,23 +57,42 @@ public class OpenApiConfiguration {
     public OperationCustomizer operationNameCustomizer() {
 
         return (operation, handlerMethod) -> {
+
             Class<?> controllerClass = handlerMethod.getBeanType();
-            String className = controllerClass.getSimpleName(); // e.g. CreateFsp, CreateOracle
+            String className = controllerClass.getSimpleName();
+
+            RequestMapping annotation = handlerMethod.getMethodAnnotation(RequestMapping.class);
+
+            operation.getTags().clear();
+
+            String operationId = null;
+
+            if (annotation != null) {
+
+                String[] paths = annotation.value();
+
+                operationId = paths[0].substring(1);
+
+                operation.getTags().add(operationId);
+            }
 
             if (operation.getSummary() == null || operation.getSummary().isBlank()) {
-                operation.setSummary(className);
+                operation.setSummary(className.replace("Controller", ""));
             }
 
             if (operation.getOperationId() == null ||
                     operation.getOperationId().startsWith("execute")) {
-                operation.setOperationId(className + "_" + handlerMethod.getMethod().getName());
+
+                operation.setOperationId(Objects.requireNonNullElseGet(
+                    operationId,
+                    () -> className + "_" + handlerMethod.getMethod().getName()));
             }
 
             return operation;
         };
     }
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings {
 

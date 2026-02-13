@@ -21,7 +21,7 @@ package org.mojave.component.web.cors;
 
 public class CorsConfiguration {
 
-    public interface RequiredBeans { }
+    public interface RequiredDependencies { }
 
     public interface RequiredSettings {
 

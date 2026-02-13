@@ -3,11 +3,9 @@ package org.mojave.core.settlement.domain.command.definition;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.settlement.contract.command.definition.CreateSettlementDefinitionCommand;
-import org.mojave.core.settlement.contract.exception.FilterGroupIdNotFoundException;
 import org.mojave.core.settlement.contract.exception.SettlementDefinitionAlreadyConfiguredException;
 import org.mojave.core.settlement.contract.exception.SettlementDefinitionNameAlreadyExistsException;
 import org.mojave.core.settlement.domain.model.SettlementDefinition;
-import org.mojave.core.settlement.domain.repository.FilterGroupRepository;
 import org.mojave.core.settlement.domain.repository.SettlementDefinitionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,16 +22,11 @@ public class CreateSettlementDefinitionCommandHandler implements CreateSettlemen
 
     private final SettlementDefinitionRepository settlementDefinitionRepository;
 
-    private final FilterGroupRepository filterGroupRepository;
-
-    public CreateSettlementDefinitionCommandHandler(final SettlementDefinitionRepository settlementDefinitionRepository,
-                                                    final FilterGroupRepository filterGroupRepository) {
+    public CreateSettlementDefinitionCommandHandler(final SettlementDefinitionRepository settlementDefinitionRepository) {
 
         Objects.requireNonNull(settlementDefinitionRepository);
-        Objects.requireNonNull(filterGroupRepository);
 
         this.settlementDefinitionRepository = settlementDefinitionRepository;
-        this.filterGroupRepository = filterGroupRepository;
     }
 
     @Override
@@ -51,28 +44,19 @@ public class CreateSettlementDefinitionCommandHandler implements CreateSettlemen
 
         var duplicateSpec = SettlementDefinitionRepository.Filters
                                 .withCurrency(input.currency())
-                                .and(SettlementDefinitionRepository.Filters.withPayerFilterGroupId(
-                                    input.payerFilterGroupId()))
-                                .and(SettlementDefinitionRepository.Filters.withPayeeFilterGroupId(
-                                    input.payeeFilterGroupId()));
+                                .and(SettlementDefinitionRepository.Filters.withPayerFspGroupId(
+                                    input.payerFspGroupId()))
+                                .and(SettlementDefinitionRepository.Filters.withPayeeFspGroupId(
+                                    input.payeeFspGroupId()));
 
         if (this.settlementDefinitionRepository.findOne(duplicateSpec).isPresent()) {
             throw new SettlementDefinitionAlreadyConfiguredException(
                 input.currency(),
-                input.payerFilterGroupId(), input.payeeFilterGroupId());
+                input.payerFspGroupId(), input.payeeFspGroupId());
         }
 
-        var payerGroup = this.filterGroupRepository
-                             .findById(input.payerFilterGroupId())
-                             .orElseThrow(() -> new FilterGroupIdNotFoundException(
-                                 input.payerFilterGroupId()));
-        var payeeGroup = this.filterGroupRepository
-                             .findById(input.payeeFilterGroupId())
-                             .orElseThrow(() -> new FilterGroupIdNotFoundException(
-                                 input.payeeFilterGroupId()));
-
         var definition = new SettlementDefinition(
-            input.name(), payerGroup, payeeGroup,
+            input.name(), input.payerFspGroupId(), input.payeeFspGroupId(),
             input.currency(), input.startAt(), input.desiredProviderId());
 
         definition = this.settlementDefinitionRepository.save(definition);

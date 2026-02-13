@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,24 +17,22 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.core.accounting.admin;
 
+import org.mojave.common.datatype.DatatypeConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.accounting.domain.AccountingDomainConfiguration;
-import org.mojave.common.datatype.DatatypeConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@EnableAutoConfiguration
-
-@EnableWebMvc
 @EnableAsync
 @ComponentScan(basePackages = "org.mojave.core.accounting.admin.controller")
 @Import(
@@ -52,8 +50,9 @@ public final class AccountingAdminConfiguration extends JsonWebMvcConfigurationS
         super(jsonMapper);
     }
 
-    public interface RequiredDependencies extends AccountingDomainConfiguration.RequiredBeans,
-                                                  SpringSecurityConfiguration.RequiredBeans { }
+    public interface RequiredDependencies
+        extends AccountingDomainConfiguration.RequiredDependencies,
+                SpringSecurityConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends AccountingDomainConfiguration.RequiredSettings,
                                               OpenApiConfiguration.RequiredSettings,

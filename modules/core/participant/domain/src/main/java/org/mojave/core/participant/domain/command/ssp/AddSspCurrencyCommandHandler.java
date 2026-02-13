@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ===
  */
-
 
 package org.mojave.core.participant.domain.command.ssp;
 
@@ -31,13 +30,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Objects;
 
 @Service
 @Primary
 public class AddSspCurrencyCommandHandler implements AddSspCurrencyCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddSspCurrencyCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+        AddSspCurrencyCommandHandler.class);
 
     private final SspRepository sspRepository;
 
@@ -55,8 +56,8 @@ public class AddSspCurrencyCommandHandler implements AddSspCurrencyCommand {
         LOGGER.info("AddSspCurrencyCommand : input: ({})", ObjectLogger.log(input));
 
         var ssp = this.sspRepository
-                       .findById(input.sspId())
-                       .orElseThrow(() -> new SspIdNotFoundException(input.sspId()));
+                      .findById(input.sspId())
+                      .orElseThrow(() -> new SspIdNotFoundException(input.sspId()));
 
         var supportedCurrency = ssp.addCurrency(input.currency());
 
@@ -68,4 +69,5 @@ public class AddSspCurrencyCommandHandler implements AddSspCurrencyCommand {
 
         return output;
     }
+
 }

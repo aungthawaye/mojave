@@ -45,9 +45,9 @@ This document captures conventions and practices to keep development consistent 
         - `Instant now = Instant.now();`
 - Upon generating the DDL for model/entities, follow these conventions:
     - Use the model class's index or unique constraint name as is.
-    - Use this pattern and format for generating foreign key constraints and its related Index: 
-      - for foreign key constraint `<table primary>_<table foreign>_FK`    
-      - for foreign key constraint index `<table primary>_<table foreign>_FK_IDX`    
+    - Use this pattern and format for generating foreign key constraints and its related Index:
+        - for foreign key constraint `<table primary>_<table foreign>_FK`
+        - for foreign key constraint index `<table primary>_<table foreign>_FK_IDX`
 - Use the `//` comment style for single-line comments.
     - Example: `// This is a single-line comment.`
 - Use the `/* */` comment style for multi-line comments.
@@ -70,11 +70,21 @@ This document captures conventions and practices to keep development consistent 
                 - Arrange
                 - Act
                 - Assert
-
 - General style tips:
     - Keep methods focused; extract helper methods when a method grows too large.
     - Favor constructor or explicit setter injection for dependencies in Spring components.
     - Log at appropriate levels; avoid excessive debug logs in hot paths.
+- To generate or update a DDL migration script (e.g., `V1_1__init_tables.sql`) based on JPA entities while maintaining project-specific standards, follow these steps:
+    - Analyze Entities: Review the JPA entities in the target module (e.g., `org.mojave.core.settlement.domain.model`). Note the field types, constraints (`@Column`, `@UniqueConstraint`, `@Index`), and relationships (`@ManyToOne`, `@OneToOne`).
+    - Refer to Reference Modules: Check existing SQL files in modules like `accounting`, `wallet`, or `participant` to identify the established style, formatting, and data types (e.g., using `bigint` for `Instant`, `decimal(34, 4)` for financial amounts).
+    - Apply Naming Conventions:
+        - **Foreign Keys**: Use `<table primary>_<table foreign>_FK`.
+        - **Foreign Key Indexes**: Use `<table primary>_<table foreign>_FK_IDX`.
+        - **Unique Keys**: Use `_01_UK`, `_02_UK` etc.
+        - **Indexes**: Use `_01_IDX`, `_02_IDX` etc.
+    - **Order Columns**: Align the SQL column order with the field declaration order in the Java entity.
+    - **Audit Columns**: Always place the auditing columns (`rec_created_at`, `rec_updated_at`, `rec_version`) at the very end of the `CREATE TABLE` statement.
+    - **Apply Technical Metadata**: Use backticks for all identifiers and include the standard engine/charset suffix: `ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci`.
 
 
 ## Notes
