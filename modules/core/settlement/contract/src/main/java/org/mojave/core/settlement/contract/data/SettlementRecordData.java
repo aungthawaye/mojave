@@ -1,6 +1,8 @@
 package org.mojave.core.settlement.contract.data;
 
 import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.settlement.AmountType;
+import org.mojave.common.datatype.enums.settlement.LiquidityDirection;
 import org.mojave.common.datatype.enums.settlement.SettlementType;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.participant.SspId;
@@ -20,6 +22,10 @@ public record SettlementRecordData(SettlementRecordId settlementRecordId,
                                    SettlementBatchId settlementBatchId,
                                    FspId payerFspId,
                                    FspId payeeFspId,
+                                   FspId partyFspId,
+                                   LiquidityDirection liquidityDirection,
+                                   AmountType amountType,
+                                   Integer lineNo,
                                    Currency currency,
                                    BigDecimal amount,
                                    TransferId transferId,
@@ -28,7 +34,8 @@ public record SettlementRecordData(SettlementRecordId settlementRecordId,
                                    SspId settlementProviderId,
                                    Instant initiatedAt,
                                    Instant preparedAt,
-                                   Instant completedAt) {
+                                   Instant completedAt,
+                                   String error) {
 
     @Override
     public boolean equals(Object o) {

@@ -10,13 +10,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.time.Instant;
+
 public interface SettlementDefinitionRepository
     extends JpaRepository<SettlementDefinition, SettlementDefinitionId>,
             JpaSpecificationExecutor<SettlementDefinition> {
 
     class Filters {
 
-        public static Specification<SettlementDefinition> withActivationStatus(final ActivationStatus status) {
+        public static Specification<SettlementDefinition> withActivationStatus(
+            final ActivationStatus status) {
 
             return (root, query, cb) -> cb.equal(
                 root.get(SettlementDefinition_.activationStatus), status);
@@ -28,21 +31,51 @@ public interface SettlementDefinitionRepository
                 root.get(SettlementDefinition_.currency), currency);
         }
 
+        public static Specification<SettlementDefinition> withIdNotEquals(
+            final SettlementDefinitionId settlementDefinitionId) {
+
+            return (root, query, cb) -> cb.notEqual(
+                root.get(SettlementDefinition_.id), settlementDefinitionId);
+        }
+
         public static Specification<SettlementDefinition> withNameEquals(final String name) {
 
             return (root, query, cb) -> cb.equal(root.get(SettlementDefinition_.name), name);
         }
 
-        public static Specification<SettlementDefinition> withPayerFspGroupId(final FspGroupId fspGroupId) {
+        public static Specification<SettlementDefinition> withPayerFspGroupId(
+            final FspGroupId fspGroupId) {
 
             return (root, query, cb) -> cb.equal(
                 root.get(SettlementDefinition_.payerFspGroupId), fspGroupId);
         }
 
-        public static Specification<SettlementDefinition> withPayeeFspGroupId(final FspGroupId fspGroupId) {
+        public static Specification<SettlementDefinition> withPayeeFspGroupId(
+            final FspGroupId fspGroupId) {
 
             return (root, query, cb) -> cb.equal(
                 root.get(SettlementDefinition_.payeeFspGroupId), fspGroupId);
+        }
+
+        public static Specification<SettlementDefinition> withTimeRangeOverlapping(
+            final Instant startAt,
+            final Instant endAt) {
+
+            return (root, query, cb) -> {
+
+                final var existingStartAt = root.get(SettlementDefinition_.startAt);
+                final var existingEndAt = root.<Instant>get("endAt");
+
+                final var existingStartBeforeEndOfCandidate = endAt == null
+                    ? cb.conjunction()
+                    : cb.lessThan(existingStartAt, endAt);
+
+                final var existingEndAfterStartOfCandidate = cb.or(
+                    cb.isNull(existingEndAt),
+                    cb.greaterThan(existingEndAt, startAt));
+
+                return cb.and(existingStartBeforeEndOfCandidate, existingEndAfterStartOfCandidate);
+            };
         }
 
     }

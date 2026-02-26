@@ -35,11 +35,48 @@ public class SettlementIntercomClientConfiguration
     implements MiscConfiguration.RequiredDependencies {
 
     @Bean
-    public SettlementIntercomService settlementIntercomService(SettlementIntercomService.Settings settings,
-                                                               ObjectMapper objectMapper) {
+    public SettlementIntercomService.DefinitionCommand definitionCommands(
+        final SettlementIntercomService.Settings settings,
+        final ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(SettlementIntercomService.class, settings.baseUrl())
+                   .newBuilder(SettlementIntercomService.DefinitionCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
+    public SettlementIntercomService.DefinitionQuery definitionQueries(
+        final SettlementIntercomService.Settings settings,
+        final ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(SettlementIntercomService.DefinitionQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
+    public SettlementIntercomService.RecordCommand recordCommands(
+        final SettlementIntercomService.Settings settings,
+        final ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(SettlementIntercomService.RecordCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
+    public SettlementIntercomService.RecordQuery recordQueries(
+        final SettlementIntercomService.Settings settings,
+        final ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(SettlementIntercomService.RecordQuery.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();

@@ -36,16 +36,16 @@ public class CompleteSettlementPublisher {
     private final KafkaTemplate<String, HandleSettlementCompletionCommand.Input> kafkaTemplate;
 
     public CompleteSettlementPublisher(@Qualifier(QUALIFIER)
-                                       KafkaTemplate<String, HandleSettlementCompletionCommand.Input> kafkaTemplate) {
+                                       final KafkaTemplate<String, HandleSettlementCompletionCommand.Input> kafkaTemplate) {
 
         Objects.requireNonNull(kafkaTemplate);
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(HandleSettlementCompletionCommand.Input input) {
+    public void publish(final HandleSettlementCompletionCommand.Input input) {
 
         this.kafkaTemplate.send(
-            TopicNames.COMPLETE_SETTLEMENT, input.settlementRecordId().getId().toString(), input);
+            TopicNames.COMPLETE_SETTLEMENT, input.transactionId().getId().toString(), input);
     }
 
 }

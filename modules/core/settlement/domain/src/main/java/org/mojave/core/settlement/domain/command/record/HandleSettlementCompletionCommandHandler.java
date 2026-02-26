@@ -3,7 +3,6 @@ package org.mojave.core.settlement.domain.command.record;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
-import org.mojave.core.settlement.contract.exception.SettlementRecordNotFoundException;
 import org.mojave.core.settlement.domain.repository.SettlementRecordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,8 @@ public class HandleSettlementCompletionCommandHandler implements HandleSettlemen
 
     private final SettlementRecordRepository settlementRecordRepository;
 
-    public HandleSettlementCompletionCommandHandler(final SettlementRecordRepository settlementRecordRepository) {
+    public HandleSettlementCompletionCommandHandler(
+        final SettlementRecordRepository settlementRecordRepository) {
 
         Objects.requireNonNull(settlementRecordRepository);
         this.settlementRecordRepository = settlementRecordRepository;
@@ -33,16 +33,16 @@ public class HandleSettlementCompletionCommandHandler implements HandleSettlemen
 
         LOGGER.info("HandleSettlementCompletionCommand : input: ({})", ObjectLogger.log(input));
 
-        var record = this.settlementRecordRepository
-                         .findById(input.settlementRecordId())
-                         .orElseThrow(() -> new SettlementRecordNotFoundException(
-                             input.settlementRecordId()));
+        final var records = this.settlementRecordRepository.findAll(
+            SettlementRecordRepository.Filters.withTransactionId(input.transactionId()));
 
-        record.markCompleted(input.completedAt());
+        for (final var record : records) {
+            record.markCompleted(input.completedAt());
+        }
 
-        record = this.settlementRecordRepository.save(record);
+        this.settlementRecordRepository.saveAll(records);
 
-        var output = new Output(record.getId());
+        final var output = new Output(input.transactionId());
 
         LOGGER.info("HandleSettlementCompletionCommand : output : ({})", ObjectLogger.log(output));
 

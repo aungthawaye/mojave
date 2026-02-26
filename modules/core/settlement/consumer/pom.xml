@@ -24,6 +24,14 @@
             <artifactId>mojave-component-misc</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-intercom-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-store</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.settlement</groupId>
             <artifactId>mojave-core-settlement-domain</artifactId>
         </dependency>

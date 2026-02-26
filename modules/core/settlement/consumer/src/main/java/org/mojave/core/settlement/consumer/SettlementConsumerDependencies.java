@@ -20,7 +20,44 @@
 
 package org.mojave.core.settlement.consumer;
 
+import org.mojave.core.participant.contract.query.FspGroupQuery;
+import org.mojave.core.participant.contract.query.FspQuery;
+import org.mojave.core.participant.contract.query.OracleQuery;
+import org.mojave.core.participant.contract.query.SspQuery;
+import org.mojave.core.participant.store.ParticipantStore;
+import org.mojave.core.participant.store.strategy.timer.TimerBasedInMemoryParticipantStore;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Objects;
+
 final class SettlementConsumerDependencies
     implements SettlementConsumerConfiguration.RequiredDependencies {
+
+    private final ParticipantStore participantStore;
+
+    SettlementConsumerDependencies(final FspQuery fspQuery,
+                                   final FspGroupQuery fspGroupQuery,
+                                   final SspQuery sspQuery,
+                                   final OracleQuery oracleQuery) {
+
+        Objects.requireNonNull(fspQuery);
+        Objects.requireNonNull(fspGroupQuery);
+        Objects.requireNonNull(sspQuery);
+        Objects.requireNonNull(oracleQuery);
+
+        this.participantStore = new TimerBasedInMemoryParticipantStore(
+            fspQuery,
+            fspGroupQuery,
+            sspQuery,
+            oracleQuery,
+            new TimerBasedInMemoryParticipantStore.Settings(
+                Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
+    }
+
+    @Bean
+    public ParticipantStore participantStore() {
+
+        return this.participantStore;
+    }
 
 }

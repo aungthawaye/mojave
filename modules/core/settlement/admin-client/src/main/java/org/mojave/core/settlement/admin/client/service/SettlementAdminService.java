@@ -20,6 +20,9 @@
 
 package org.mojave.core.settlement.admin.client.service;
 
+import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
+import org.mojave.common.datatype.identifier.settlement.SettlementRecordId;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.settlement.contract.command.definition.ActivateSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.definition.CreateSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.definition.DeactivateSettlementDefinitionCommand;
@@ -28,10 +31,16 @@ import org.mojave.core.settlement.contract.command.definition.RemoveSettlementDe
 import org.mojave.core.settlement.contract.command.definition.UpdateSettlementDefinitionCommand;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
-import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
+import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
+import org.mojave.core.settlement.contract.data.SettlementDefinitionData;
+import org.mojave.core.settlement.contract.data.SettlementRecordData;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
+
+import java.util.List;
 
 public interface SettlementAdminService {
 
@@ -65,6 +74,17 @@ public interface SettlementAdminService {
 
     }
 
+    interface DefinitionQuery {
+
+        @GET(MODULE_PREFIX + "/settlement-definitions/get-all")
+        Call<List<SettlementDefinitionData>> getAllSettlementDefinitions();
+
+        @GET(MODULE_PREFIX + "/settlement-definitions/get-by-id")
+        Call<SettlementDefinitionData> getBySettlementDefinitionId(
+            @Query("settlementDefinitionId") SettlementDefinitionId settlementDefinitionId);
+
+    }
+
     interface RecordCommand {
 
         @POST(MODULE_PREFIX + "/settlement-records/complete-settlement")
@@ -72,12 +92,27 @@ public interface SettlementAdminService {
             @Body HandleSettlementCompletionCommand.Input input);
 
         @POST(MODULE_PREFIX + "/settlement-records/initiate-settlement-process")
-        Call<SendSettlementRequestCommand.Output> initiateProcess(
-            @Body SendSettlementRequestCommand.Input input);
+        Call<InitiateSettlementProcessCommand.Output> initiateProcess(
+            @Body InitiateSettlementProcessCommand.Input input);
 
         @POST(MODULE_PREFIX + "/settlement-records/update-preparation-result")
         Call<HandleSettlementPreparationCommand.Output> updatePreparation(
             @Body HandleSettlementPreparationCommand.Input input);
+
+    }
+
+    interface RecordQuery {
+
+        @GET(MODULE_PREFIX + "/settlement-records/get-all")
+        Call<List<SettlementRecordData>> getAllSettlementRecords();
+
+        @GET(MODULE_PREFIX + "/settlement-records/get-by-id")
+        Call<SettlementRecordData> getBySettlementRecordId(
+            @Query("settlementRecordId") SettlementRecordId settlementRecordId);
+
+        @GET(MODULE_PREFIX + "/settlement-records/get-by-transaction-id")
+        Call<List<SettlementRecordData>> getByTransactionId(
+            @Query("transactionId") TransactionId transactionId);
 
     }
 

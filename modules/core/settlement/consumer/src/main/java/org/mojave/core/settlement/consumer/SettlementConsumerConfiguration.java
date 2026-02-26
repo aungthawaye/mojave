@@ -22,12 +22,13 @@ package org.mojave.core.settlement.consumer;
 
 import org.apache.kafka.common.serialization.Deserializer;
 import org.mojave.component.kafka.KafkaConsumerConfigurer;
+import org.mojave.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import org.mojave.core.settlement.consumer.listener.CompleteSettlementListener;
 import org.mojave.core.settlement.consumer.listener.InitiateSettlementProcessListener;
 import org.mojave.core.settlement.consumer.listener.UpdatePreparationResultListener;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
-import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
+import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
 import org.mojave.core.settlement.domain.SettlementDomainConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +42,10 @@ import tools.jackson.databind.json.JsonMapper;
 
 @EnableKafka
 @ComponentScan(basePackages = {"org.mojave.core.settlement.consumer"})
-@Import(value = {SettlementDomainConfiguration.class})
+@Import(
+    value = {
+        SettlementDomainConfiguration.class,
+        ParticipantIntercomClientConfiguration.class})
 public class SettlementConsumerConfiguration {
 
     @Bean(name = CompleteSettlementListener.LISTENER_CONTAINER_FACTORY)
@@ -79,7 +83,7 @@ public class SettlementConsumerConfiguration {
 
     @Bean(name = InitiateSettlementProcessListener.LISTENER_CONTAINER_FACTORY)
     @Qualifier(InitiateSettlementProcessListener.QUALIFIER)
-    public ConcurrentKafkaListenerContainerFactory<String, SendSettlementRequestCommand.Input> initiateSettlementProcessListenerContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, InitiateSettlementProcessCommand.Input> initiateSettlementProcessListenerContainerFactory(
         InitiateSettlementProcessListener.Settings settings,
         ObjectMapper objectMapper) {
 
@@ -98,10 +102,10 @@ public class SettlementConsumerConfiguration {
                 }
 
                 @Override
-                public Deserializer<SendSettlementRequestCommand.Input> forValue() {
+                public Deserializer<InitiateSettlementProcessCommand.Input> forValue() {
 
                     var deserializer = new JacksonJsonDeserializer<>(
-                        SendSettlementRequestCommand.Input.class, (JsonMapper) objectMapper);
+                        InitiateSettlementProcessCommand.Input.class, (JsonMapper) objectMapper);
 
                     deserializer.ignoreTypeHeaders().addTrustedPackages("*");
 
@@ -144,9 +148,11 @@ public class SettlementConsumerConfiguration {
     }
 
     public interface RequiredDependencies
-        extends SettlementDomainConfiguration.RequiredDependencies { }
+        extends SettlementDomainConfiguration.RequiredDependencies,
+                ParticipantIntercomClientConfiguration.RequiredDependencies { }
 
-    public interface RequiredSettings extends SettlementDomainConfiguration.RequiredSettings {
+    public interface RequiredSettings extends SettlementDomainConfiguration.RequiredSettings,
+                                              ParticipantIntercomClientConfiguration.RequiredSettings {
 
         CompleteSettlementListener.Settings completeSettlementListenerSettings();
 

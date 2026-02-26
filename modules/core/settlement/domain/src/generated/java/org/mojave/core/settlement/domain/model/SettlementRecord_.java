@@ -7,6 +7,8 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 import java.math.BigDecimal;
 import java.time.Instant;
 import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.settlement.AmountType;
+import org.mojave.common.datatype.enums.settlement.LiquidityDirection;
 import org.mojave.common.datatype.enums.settlement.SettlementType;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.participant.SspId;
@@ -29,6 +31,11 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	 * @see #id
 	 **/
 	public static final String ID = "id";
+	
+	/**
+	 * @see #sspId
+	 **/
+	public static final String SSP_ID = "sspId";
 	
 	/**
 	 * @see #type
@@ -56,6 +63,26 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	public static final String PAYEE_FSP_ID = "payeeFspId";
 	
 	/**
+	 * @see #partyFspId
+	 **/
+	public static final String PARTY_FSP_ID = "partyFspId";
+	
+	/**
+	 * @see #liquidityDirection
+	 **/
+	public static final String LIQUIDITY_DIRECTION = "liquidityDirection";
+	
+	/**
+	 * @see #amountType
+	 **/
+	public static final String AMOUNT_TYPE = "amountType";
+	
+	/**
+	 * @see #lineNo
+	 **/
+	public static final String LINE_NO = "lineNo";
+	
+	/**
 	 * @see #currency
 	 **/
 	public static final String CURRENCY = "currency";
@@ -81,11 +108,6 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	public static final String TRANSACTION_AT = "transactionAt";
 	
 	/**
-	 * @see #sspId
-	 **/
-	public static final String SSP_ID = "sspId";
-	
-	/**
 	 * @see #initiatedAt
 	 **/
 	public static final String INITIATED_AT = "initiatedAt";
@@ -99,6 +121,11 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	 * @see #completedAt
 	 **/
 	public static final String COMPLETED_AT = "completedAt";
+	
+	/**
+	 * @see #error
+	 **/
+	public static final String ERROR = "error";
 
 	
 	/**
@@ -110,6 +137,11 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#id}
 	 **/
 	public static volatile SingularAttribute<SettlementRecord, SettlementRecordId> id;
+	
+	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#sspId}
+	 **/
+	public static volatile SingularAttribute<SettlementRecord, SspId> sspId;
 	
 	/**
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#type}
@@ -137,6 +169,26 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	public static volatile SingularAttribute<SettlementRecord, FspId> payeeFspId;
 	
 	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#partyFspId}
+	 **/
+	public static volatile SingularAttribute<SettlementRecord, FspId> partyFspId;
+	
+	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#liquidityDirection}
+	 **/
+	public static volatile SingularAttribute<SettlementRecord, LiquidityDirection> liquidityDirection;
+	
+	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#amountType}
+	 **/
+	public static volatile SingularAttribute<SettlementRecord, AmountType> amountType;
+	
+	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#lineNo}
+	 **/
+	public static volatile SingularAttribute<SettlementRecord, Integer> lineNo;
+	
+	/**
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#currency}
 	 **/
 	public static volatile SingularAttribute<SettlementRecord, Currency> currency;
@@ -162,11 +214,6 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	public static volatile SingularAttribute<SettlementRecord, Instant> transactionAt;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#sspId}
-	 **/
-	public static volatile SingularAttribute<SettlementRecord, SspId> sspId;
-	
-	/**
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#initiatedAt}
 	 **/
 	public static volatile SingularAttribute<SettlementRecord, Instant> initiatedAt;
@@ -180,6 +227,11 @@ public abstract class SettlementRecord_ extends JpaEntity_ {
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#completedAt}
 	 **/
 	public static volatile SingularAttribute<SettlementRecord, Instant> completedAt;
+	
+	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementRecord#error}
+	 **/
+	public static volatile SingularAttribute<SettlementRecord, String> error;
 
 }
 

@@ -22,6 +22,8 @@ import org.mojave.common.datatype.converter.identifier.settlement.SettlementReco
 import org.mojave.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
 import org.mojave.common.datatype.converter.identifier.transfer.TransferIdJavaType;
 import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.settlement.AmountType;
+import org.mojave.common.datatype.enums.settlement.LiquidityDirection;
 import org.mojave.common.datatype.enums.settlement.SettlementType;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.participant.SspId;
@@ -52,32 +54,29 @@ import static java.sql.Types.VARCHAR;
         @UniqueConstraint(
             name = "stm_settlement_record_01_UK",
             columnNames = {
-                "settlement_id",
-                "settlement_batch_id",
-                "ssp_id"}),
-        @UniqueConstraint(
-            name = "stm_settlement_record_02_UK",
-            columnNames = {
-                "transaction_id"}),
-        @UniqueConstraint(
-            name = "stm_settlement_record_03_UK",
-            columnNames = {
-                "transfer_id"})},
+                "transaction_id",
+                "line_no"})},
     indexes = {
         @Index(
             name = "stm_settlement_record_01_IDX",
-            columnList = "payer_fsp_id, payee_fsp_id, currency"),
+            columnList = "transaction_id"),
         @Index(
             name = "stm_settlement_record_02_IDX",
-            columnList = "transaction_at"),
+            columnList = "transfer_id"),
         @Index(
             name = "stm_settlement_record_03_IDX",
-            columnList = "initiated_at"),
+            columnList = "payer_fsp_id, payee_fsp_id, currency"),
         @Index(
             name = "stm_settlement_record_04_IDX",
-            columnList = "prepared_at"),
+            columnList = "transaction_at"),
         @Index(
             name = "stm_settlement_record_05_IDX",
+            columnList = "initiated_at"),
+        @Index(
+            name = "stm_settlement_record_06_IDX",
+            columnList = "prepared_at"),
+        @Index(
+            name = "stm_settlement_record_07_IDX",
             columnList = "completed_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SettlementRecord extends JpaEntity<SettlementRecordId>
@@ -91,6 +90,13 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
         nullable = false,
         updatable = false)
     protected SettlementRecordId id;
+
+    @JavaType(SspIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "ssp_id",
+        nullable = false)
+    protected SspId sspId;
 
     @Column(
         name = "settlement_type",
@@ -123,6 +129,32 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
         nullable = false)
     protected FspId payeeFspId;
 
+    @JavaType(FspIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
+    @Column(
+        name = "party_fsp_id",
+        nullable = false)
+    protected FspId partyFspId;
+
+    @Column(
+        name = "liquidity_direction",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected LiquidityDirection liquidityDirection;
+
+    @Column(
+        name = "amount_type",
+        nullable = false,
+        length = StringSizeConstraints.MAX_ENUM_LENGTH)
+    @Enumerated(EnumType.STRING)
+    protected AmountType amountType;
+
+    @Column(
+        name = "line_no",
+        nullable = false)
+    protected Integer lineNo;
+
     @Column(
         name = "currency",
         nullable = false,
@@ -142,19 +174,14 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
 
     @JavaType(TransactionIdJavaType.class)
     @JdbcTypeCode(BIGINT)
-    @Column(name = "transaction_id")
+    @Column(
+        name = "transaction_id",
+        nullable = false)
     protected TransactionId transactionId;
 
     @Column(name = "transaction_at")
     @Convert(converter = JpaInstantConverter.class)
     protected Instant transactionAt;
-
-    @JavaType(SspIdJavaType.class)
-    @JdbcTypeCode(BIGINT)
-    @Column(
-        name = "ssp_id",
-        nullable = false)
-    protected SspId sspId;
 
     @Column(name = "initiated_at")
     @Convert(converter = JpaInstantConverter.class)
@@ -168,9 +195,18 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
     @Convert(converter = JpaInstantConverter.class)
     protected Instant completedAt;
 
+    @Column(
+        name = "error",
+        length = StringSizeConstraints.MAX_PARAGRAPH_LENGTH)
+    protected String error;
+
     public SettlementRecord(final SettlementType type,
                             final FspId payerFspId,
                             final FspId payeeFspId,
+                            final FspId partyFspId,
+                            final LiquidityDirection liquidityDirection,
+                            final AmountType amountType,
+                            final Integer lineNo,
                             final Currency currency,
                             final BigDecimal amount,
                             final TransferId transferId,
@@ -181,56 +217,67 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
         Objects.requireNonNull(type);
         Objects.requireNonNull(payerFspId);
         Objects.requireNonNull(payeeFspId);
+        Objects.requireNonNull(partyFspId);
+        Objects.requireNonNull(liquidityDirection);
+        Objects.requireNonNull(amountType);
+        Objects.requireNonNull(lineNo);
         Objects.requireNonNull(currency);
         Objects.requireNonNull(amount);
+        Objects.requireNonNull(transactionId);
         Objects.requireNonNull(sspId);
 
         this.id = new SettlementRecordId(Snowflake.get().nextId());
         this.type = type;
         this.payerFspId = payerFspId;
         this.payeeFspId = payeeFspId;
+        this.partyFspId = partyFspId;
+        this.liquidityDirection = liquidityDirection;
+        this.amountType = amountType;
+        this.lineNo = lineNo;
         this.currency = currency;
         this.amount = amount;
         this.transferId = transferId;
         this.transactionId = transactionId;
         this.transactionAt = transactionAt;
         this.sspId = sspId;
-        this.initiatedAt = Instant.now();
     }
 
     @Override
     public SettlementRecordData convert() {
 
         return new SettlementRecordData(
-            this.id, this.type, this.settlementId, this.settlementBatchId, this.payerFspId,
-            this.payeeFspId, this.currency, this.amount, this.transferId, this.transactionId,
-            this.transactionAt, this.sspId, this.initiatedAt, this.preparedAt, this.completedAt);
+            this.id,
+            this.type,
+            this.settlementId,
+            this.settlementBatchId,
+            this.payerFspId,
+            this.payeeFspId,
+            this.partyFspId,
+            this.liquidityDirection,
+            this.amountType,
+            this.lineNo,
+            this.currency,
+            this.amount,
+            this.transferId,
+            this.transactionId,
+            this.transactionAt,
+            this.sspId,
+            this.initiatedAt,
+            this.preparedAt,
+            this.completedAt,
+            this.error);
     }
 
     @Override
     public SettlementRecordId getId() {
 
-        return id;
+        return this.id;
     }
 
     public void markCompleted(final Instant completedAt) {
 
         this.completedAt = completedAt == null ? Instant.now() : completedAt;
-    }
-
-    public void markInitiated(final SettlementId settlementId,
-                              final SettlementBatchId settlementBatchId,
-                              final Instant initiatedAt) {
-
-        if (settlementId != null) {
-            this.settlementId = settlementId;
-        }
-
-        if (settlementBatchId != null) {
-            this.settlementBatchId = settlementBatchId;
-        }
-
-        this.initiatedAt = initiatedAt == null ? Instant.now() : initiatedAt;
+        this.error = null;
     }
 
     public void markPrepared(final SettlementId settlementId,
@@ -246,6 +293,18 @@ public class SettlementRecord extends JpaEntity<SettlementRecordId>
         }
 
         this.preparedAt = preparedAt == null ? Instant.now() : preparedAt;
+        this.error = null;
+    }
+
+    public void markInitiated(final Instant initiatedAt) {
+
+        this.initiatedAt = initiatedAt == null ? Instant.now() : initiatedAt;
+        this.error = null;
+    }
+
+    public void markError(final String error) {
+
+        this.error = error;
     }
 
 }

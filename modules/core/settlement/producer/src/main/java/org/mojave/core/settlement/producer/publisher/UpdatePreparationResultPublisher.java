@@ -36,16 +36,16 @@ public class UpdatePreparationResultPublisher {
     private final KafkaTemplate<String, HandleSettlementPreparationCommand.Input> kafkaTemplate;
 
     public UpdatePreparationResultPublisher(@Qualifier(QUALIFIER)
-                                            KafkaTemplate<String, HandleSettlementPreparationCommand.Input> kafkaTemplate) {
+                                            final KafkaTemplate<String, HandleSettlementPreparationCommand.Input> kafkaTemplate) {
 
         Objects.requireNonNull(kafkaTemplate);
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(HandleSettlementPreparationCommand.Input input) {
+    public void publish(final HandleSettlementPreparationCommand.Input input) {
 
         this.kafkaTemplate.send(
-            TopicNames.UPDATE_PREPARATION_RESULT, input.settlementRecordId().getId().toString(),
+            TopicNames.UPDATE_PREPARATION_RESULT, input.transactionId().getId().toString(),
             input);
     }
 

@@ -21,8 +21,10 @@
 package org.mojave.rail.fspiop.transfer.contract.command.step.financial;
 
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.scheme.fspiop.core.Currency;
 
 import java.math.BigDecimal;
@@ -30,12 +32,17 @@ import java.time.Instant;
 
 public interface PrepareSettlementStep {
 
+    void execute(Input input) throws FspiopException;
+
     record Input(UdfTransferId udfTransferId,
                  TransactionId transactionId,
+                 TransferId transferId,
                  Instant transactionAt,
                  Currency currency,
                  FspData payerFsp,
                  FspData payeeFsp,
-                 BigDecimal settlementAmount) { }
+                 BigDecimal transferAmount,
+                 BigDecimal payeeFspFee,
+                 BigDecimal payeeFspCommission) { }
 
 }

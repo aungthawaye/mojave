@@ -42,12 +42,6 @@ import static java.sql.Types.BIGINT;
         @UniqueConstraint(
             name = "stm_settlement_definition_01_UK",
             columnNames = {
-                "payer_fsp_group_id",
-                "payee_fsp_group_id",
-                "currency"}),
-        @UniqueConstraint(
-            name = "stm_settlement_definition_02_UK",
-            columnNames = {
                 "name"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
@@ -94,6 +88,10 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
     @Convert(converter = JpaInstantConverter.class)
     protected Instant startAt;
 
+    @Column(name = "end_at")
+    @Convert(converter = JpaInstantConverter.class)
+    protected Instant endAt;
+
     @Basic
     @JavaType(SspIdJavaType.class)
     @JdbcTypeCode(BIGINT)
@@ -114,6 +112,7 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
                                 final FspGroupId payeeFspGroupId,
                                 final Currency currency,
                                 final Instant startAt,
+                                final Instant endAt,
                                 final SspId desiredProviderId) {
 
         Objects.requireNonNull(name);
@@ -123,12 +122,15 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
         Objects.requireNonNull(startAt);
         Objects.requireNonNull(desiredProviderId);
 
+        this.validateTimeRange(startAt, endAt);
+
         this.id = new SettlementDefinitionId(Snowflake.get().nextId());
         this.name = name;
         this.payerFspGroupId = payerFspGroupId;
         this.payeeFspGroupId = payeeFspGroupId;
         this.currency = currency;
         this.startAt = startAt;
+        this.endAt = endAt;
         this.desiredProviderId = desiredProviderId;
         this.activationStatus = ActivationStatus.ACTIVE;
     }
@@ -143,7 +145,7 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
 
         return new SettlementDefinitionData(
             this.id, this.name, this.payerFspGroupId, this.payeeFspGroupId, this.currency,
-            this.startAt, this.desiredProviderId, this.activationStatus);
+            this.startAt, this.endAt, this.desiredProviderId, this.activationStatus);
     }
 
     public void deactivate() {
@@ -154,15 +156,57 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
     @Override
     public SettlementDefinitionId getId() {
 
-        return id;
+        return this.id;
     }
 
     public boolean matches(final Currency currency,
                            final FspGroupId payerFspGroupId,
-                           final FspGroupId payeeFspGroupId) {
+                           final FspGroupId payeeFspGroupId,
+                           final Instant transactionAt) {
 
-        return this.currency.equals(currency) && this.payerFspGroupId.equals(payerFspGroupId) &&
-                   this.payeeFspGroupId.equals(payeeFspGroupId);
+        if (!this.currency.equals(currency)) {
+            return false;
+        }
+
+        if (!this.payerFspGroupId.equals(payerFspGroupId)) {
+            return false;
+        }
+
+        if (!this.payeeFspGroupId.equals(payeeFspGroupId)) {
+            return false;
+        }
+
+        if (transactionAt == null) {
+            return false;
+        }
+
+        if (transactionAt.isBefore(this.startAt)) {
+            return false;
+        }
+
+        return this.endAt == null || transactionAt.isBefore(this.endAt);
+    }
+
+    public boolean overlapsWith(final Instant startAt,
+                                final Instant endAt) {
+
+        this.validateTimeRange(startAt, endAt);
+
+        final var overlapStart = this.startAt.isAfter(startAt) ? this.startAt : startAt;
+
+        final Instant overlapEnd;
+
+        if (this.endAt == null && endAt == null) {
+            overlapEnd = null;
+        } else if (this.endAt == null) {
+            overlapEnd = endAt;
+        } else if (endAt == null) {
+            overlapEnd = this.endAt;
+        } else {
+            overlapEnd = this.endAt.isBefore(endAt) ? this.endAt : endAt;
+        }
+
+        return overlapEnd == null || overlapStart.isBefore(overlapEnd);
     }
 
     public void update(final String name,
@@ -170,7 +214,13 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
                        final FspGroupId payeeFspGroupId,
                        final Currency currency,
                        final Instant startAt,
+                       final Instant endAt,
                        final SspId desiredProviderId) {
+
+        final var newStartAt = startAt == null ? this.startAt : startAt;
+        final var newEndAt = endAt == null ? this.endAt : endAt;
+
+        this.validateTimeRange(newStartAt, newEndAt);
 
         if (name != null && !name.isBlank()) {
             this.name = name;
@@ -192,8 +242,24 @@ public class SettlementDefinition extends JpaEntity<SettlementDefinitionId>
             this.startAt = startAt;
         }
 
+        if (endAt != null) {
+            this.endAt = endAt;
+        }
+
         if (desiredProviderId != null) {
             this.desiredProviderId = desiredProviderId;
+        }
+    }
+
+    private void validateTimeRange(final Instant startAt,
+                                   final Instant endAt) {
+
+        if (startAt == null) {
+            throw new IllegalArgumentException("startAt must not be null.");
+        }
+
+        if (endAt != null && !startAt.isBefore(endAt)) {
+            throw new IllegalArgumentException("startAt must be before endAt.");
         }
     }
 

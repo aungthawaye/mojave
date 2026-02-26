@@ -23,6 +23,7 @@ package org.mojave.core.mono.consumer;
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.core.accounting.consumer.listener.PostLedgerFlowListener;
+import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.core.settlement.consumer.listener.CompleteSettlementListener;
 import org.mojave.core.settlement.consumer.listener.InitiateSettlementProcessListener;
 import org.mojave.core.settlement.consumer.listener.UpdatePreparationResultListener;
@@ -63,6 +64,13 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
             System.getenv("KAFKA_BROKER_URL"), InitiateSettlementProcessListener.GROUP_ID,
             UUID.randomUUID().toString(), "earliest", 1, 100, false,
             ContainerProperties.AckMode.MANUAL);
+    }
+
+    @Bean
+    @Override
+    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
+
+        return null;
     }
 
     @Bean

@@ -25,6 +25,7 @@ import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
+import org.mojave.core.settlement.producer.SettlementProducerConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferKafkaConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.AbortTransferStepListener;
@@ -204,6 +205,14 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
         return new FspiopServiceConfiguration.ServiceSettings(
             Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
             Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
+    }
+
+    @Bean
+    @Override
+    public SettlementProducerConfiguration.ProducerSettings settlementProducerSettings() {
+
+        return new SettlementProducerConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean

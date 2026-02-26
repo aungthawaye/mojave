@@ -21,7 +21,7 @@
 package org.mojave.core.settlement.intercom.controller.api.command.record;
 
 import jakarta.validation.Valid;
-import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
+import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,21 +34,21 @@ import java.util.Objects;
 @RestController
 public class InitiateSettlementProcessController {
 
-    private final SendSettlementRequestCommand sendSettlementRequestCommand;
+    private final InitiateSettlementProcessCommand initiateSettlementProcessCommand;
 
-    public InitiateSettlementProcessController(final SendSettlementRequestCommand sendSettlementRequestCommand) {
+    public InitiateSettlementProcessController(final InitiateSettlementProcessCommand initiateSettlementProcessCommand) {
 
-        Objects.requireNonNull(sendSettlementRequestCommand);
-        this.sendSettlementRequestCommand = sendSettlementRequestCommand;
+        Objects.requireNonNull(initiateSettlementProcessCommand);
+        this.initiateSettlementProcessCommand = initiateSettlementProcessCommand;
     }
 
     @PostMapping("/settlement/settlement-records/initiate-settlement-process")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public SendSettlementRequestCommand.Output execute(
-        @Valid @RequestBody final SendSettlementRequestCommand.Input input) {
+    public InitiateSettlementProcessCommand.Output execute(
+        @Valid @RequestBody final InitiateSettlementProcessCommand.Input input) {
 
-        return this.sendSettlementRequestCommand.execute(input);
+        return this.initiateSettlementProcessCommand.execute(input);
     }
 
 }

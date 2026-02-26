@@ -18,59 +18,67 @@
  * ===
  */
 
-package org.mojave.core.settlement.admin.client.api.command.record;
+package org.mojave.core.settlement.admin.client.api.query;
 
+import org.mojave.common.datatype.identifier.settlement.SettlementDefinitionId;
 import org.mojave.component.misc.error.RestErrorResponse;
-import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.retrofit.RetrofitService;
 import org.mojave.core.settlement.admin.client.service.SettlementAdminService;
-import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
-import org.mojave.core.settlement.contract.exception.SettlementExceptionResolver;
+import org.mojave.core.settlement.contract.data.SettlementDefinitionData;
+import org.mojave.core.settlement.contract.query.SettlementDefinitionQuery;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
-public class SendSettlementRequestInvoker implements SendSettlementRequestCommand {
+public class SettlementDefinitionQueryInvoker implements SettlementDefinitionQuery {
 
-    private final SettlementAdminService.RecordCommand recordCommand;
+    private final SettlementAdminService.DefinitionQuery definitionQuery;
 
     private final ObjectMapper objectMapper;
 
-    public SendSettlementRequestInvoker(final SettlementAdminService.RecordCommand recordCommand,
-                                        final ObjectMapper objectMapper) {
+    public SettlementDefinitionQueryInvoker(
+        final SettlementAdminService.DefinitionQuery definitionQuery,
+        final ObjectMapper objectMapper) {
 
-        Objects.requireNonNull(recordCommand);
+        Objects.requireNonNull(definitionQuery);
         Objects.requireNonNull(objectMapper);
 
-        this.recordCommand = recordCommand;
+        this.definitionQuery = definitionQuery;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public Output execute(final Input input) {
+    public SettlementDefinitionData get(final SettlementDefinitionId settlementDefinitionId) {
 
         try {
 
             return RetrofitService.invoke(
-                this.recordCommand.initiateProcess(input),
+                this.definitionQuery.getBySettlementDefinitionId(settlementDefinitionId),
                 (status, errorResponseBody) -> RestErrorResponse.decode(
                     errorResponseBody,
                     this.objectMapper)).body();
 
         } catch (RetrofitService.InvocationException e) {
 
-            var decodedErrorResponse = e.getDecodedErrorResponse();
+            throw new RuntimeException(e);
+        }
+    }
 
-            if (decodedErrorResponse instanceof RestErrorResponse errorResponse) {
+    @Override
+    public List<SettlementDefinitionData> getAll() {
 
-                var throwable = SettlementExceptionResolver.resolve(errorResponse);
+        try {
 
-                if (throwable instanceof UncheckedDomainException ude) {
-                    throw ude;
-                }
-            }
+            return RetrofitService.invoke(
+                this.definitionQuery.getAllSettlementDefinitions(),
+                (status, errorResponseBody) -> RestErrorResponse.decode(
+                    errorResponseBody,
+                    this.objectMapper)).body();
+
+        } catch (RetrofitService.InvocationException e) {
 
             throw new RuntimeException(e);
         }

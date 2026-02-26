@@ -3,7 +3,6 @@ package org.mojave.core.settlement.domain.command.record;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
-import org.mojave.core.settlement.contract.exception.SettlementRecordNotFoundException;
 import org.mojave.core.settlement.domain.repository.SettlementRecordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,8 @@ public class HandleSettlementPreparationCommandHandler
 
     private final SettlementRecordRepository settlementRecordRepository;
 
-    public HandleSettlementPreparationCommandHandler(final SettlementRecordRepository settlementRecordRepository) {
+    public HandleSettlementPreparationCommandHandler(
+        final SettlementRecordRepository settlementRecordRepository) {
 
         Objects.requireNonNull(settlementRecordRepository);
         this.settlementRecordRepository = settlementRecordRepository;
@@ -34,16 +34,16 @@ public class HandleSettlementPreparationCommandHandler
 
         LOGGER.info("HandleSettlementPreparationCommand : input: ({})", ObjectLogger.log(input));
 
-        var record = this.settlementRecordRepository
-                         .findById(input.settlementRecordId())
-                         .orElseThrow(() -> new SettlementRecordNotFoundException(
-                             input.settlementRecordId()));
+        final var records = this.settlementRecordRepository.findAll(
+            SettlementRecordRepository.Filters.withTransactionId(input.transactionId()));
 
-        record.markPrepared(input.settlementId(), input.settlementBatchId(), input.preparedAt());
+        for (final var record : records) {
+            record.markPrepared(input.settlementId(), input.settlementBatchId(), input.preparedAt());
+        }
 
-        record = this.settlementRecordRepository.save(record);
+        this.settlementRecordRepository.saveAll(records);
 
-        var output = new Output(record.getId());
+        final var output = new Output(input.transactionId());
 
         LOGGER.info("HandleSettlementPreparationCommand : output : ({})", ObjectLogger.log(output));
 

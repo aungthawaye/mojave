@@ -18,8 +18,20 @@ public class SettlementExceptionResolver {
                 SettlementDefinitionNameAlreadyExistsException.from(extras);
             case SettlementDefinitionAlreadyConfiguredException.CODE ->
                 SettlementDefinitionAlreadyConfiguredException.from(extras);
+            case SettlementDefinitionInvalidTimeRangeException.CODE ->
+                SettlementDefinitionInvalidTimeRangeException.from(extras);
+            case SettlementDefinitionTimeRangeOverlappingException.CODE ->
+                SettlementDefinitionTimeRangeOverlappingException.from(extras);
+            case SettlementDefinitionAmbiguousMatchException.CODE ->
+                SettlementDefinitionAmbiguousMatchException.from(extras);
+            case InitiateSettlementProcessInvalidInputException.CODE ->
+                InitiateSettlementProcessInvalidInputException.from(extras);
             case SettlementProviderIdNotFoundException.CODE ->
                 SettlementProviderIdNotFoundException.from(extras);
+            case SettlementProviderEndpointNotFoundException.CODE ->
+                SettlementProviderEndpointNotFoundException.from(extras);
+            case SettlementProviderDispatchFailedException.CODE ->
+                SettlementProviderDispatchFailedException.from(extras);
             case SettlementRecordNotFoundException.CODE ->
                 SettlementRecordNotFoundException.from(extras);
             default -> throw new RuntimeException("Unknown exception code: " + code);

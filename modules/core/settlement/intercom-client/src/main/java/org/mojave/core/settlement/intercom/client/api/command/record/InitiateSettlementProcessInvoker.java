@@ -23,7 +23,7 @@ package org.mojave.core.settlement.intercom.client.api.command.record;
 import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
+import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
 import org.mojave.core.settlement.contract.exception.SettlementExceptionResolver;
 import org.mojave.core.settlement.intercom.client.service.SettlementIntercomService;
 import org.springframework.stereotype.Component;
@@ -32,13 +32,13 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Objects;
 
 @Component
-public class SendSettlementRequestInvoker implements SendSettlementRequestCommand {
+public class InitiateSettlementProcessInvoker implements InitiateSettlementProcessCommand {
 
     private final SettlementIntercomService.RecordCommand recordCommand;
 
     private final ObjectMapper objectMapper;
 
-    public SendSettlementRequestInvoker(final SettlementIntercomService.RecordCommand recordCommand,
+    public InitiateSettlementProcessInvoker(final SettlementIntercomService.RecordCommand recordCommand,
                                         final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(recordCommand);

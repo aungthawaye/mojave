@@ -15,6 +15,7 @@ public record SettlementDefinitionData(SettlementDefinitionId settlementDefiniti
                                        FspGroupId payeeFspGroupId,
                                        Currency currency,
                                        Instant startAt,
+                                       Instant endAt,
                                        SspId desiredProviderId,
                                        ActivationStatus activationStatus) {
 

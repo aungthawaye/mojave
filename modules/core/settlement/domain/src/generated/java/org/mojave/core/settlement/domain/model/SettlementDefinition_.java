@@ -51,6 +51,11 @@ public abstract class SettlementDefinition_ extends JpaEntity_ {
 	public static final String START_AT = "startAt";
 	
 	/**
+	 * @see #endAt
+	 **/
+	public static final String END_AT = "endAt";
+	
+	/**
 	 * @see #desiredProviderId
 	 **/
 	public static final String DESIRED_PROVIDER_ID = "desiredProviderId";
@@ -95,6 +100,11 @@ public abstract class SettlementDefinition_ extends JpaEntity_ {
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#startAt}
 	 **/
 	public static volatile SingularAttribute<SettlementDefinition, Instant> startAt;
+	
+	/**
+	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#endAt}
+	 **/
+	public static volatile SingularAttribute<SettlementDefinition, Instant> endAt;
 	
 	/**
 	 * Static metamodel for attribute {@link org.mojave.core.settlement.domain.model.SettlementDefinition#desiredProviderId}

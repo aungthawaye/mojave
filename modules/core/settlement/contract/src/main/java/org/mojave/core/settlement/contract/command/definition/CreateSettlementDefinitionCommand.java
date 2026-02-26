@@ -16,6 +16,7 @@ public interface CreateSettlementDefinitionCommand {
                  FspGroupId payeeFspGroupId,
                  Currency currency,
                  Instant startAt,
+                 Instant endAt,
                  SspId desiredProviderId) { }
 
     record Output(SettlementDefinitionId settlementDefinitionId) { }

@@ -25,7 +25,7 @@ import org.mojave.component.kafka.KafkaProducerConfigurer;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementCompletionCommand;
 import org.mojave.core.settlement.contract.command.record.HandleSettlementPreparationCommand;
-import org.mojave.core.settlement.contract.command.record.SendSettlementRequestCommand;
+import org.mojave.core.settlement.contract.command.record.InitiateSettlementProcessCommand;
 import org.mojave.core.settlement.producer.publisher.CompleteSettlementPublisher;
 import org.mojave.core.settlement.producer.publisher.InitiateSettlementProcessPublisher;
 import org.mojave.core.settlement.producer.publisher.UpdatePreparationResultPublisher;
@@ -79,17 +79,17 @@ public class SettlementProducerConfiguration {
 
     @Bean
     @Qualifier(InitiateSettlementProcessPublisher.QUALIFIER)
-    public KafkaTemplate<String, SendSettlementRequestCommand.Input> initiateSettlementProcessKafkaTemplate(
+    public KafkaTemplate<String, InitiateSettlementProcessCommand.Input> initiateSettlementProcessKafkaTemplate(
         @Qualifier(
             InitiateSettlementProcessPublisher.QUALIFIER)
-        ProducerFactory<String, SendSettlementRequestCommand.Input> producerFactory) {
+        ProducerFactory<String, InitiateSettlementProcessCommand.Input> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
     @Bean
     @Qualifier(InitiateSettlementProcessPublisher.QUALIFIER)
-    public ProducerFactory<String, SendSettlementRequestCommand.Input> initiateSettlementProcessProducerFactory(
+    public ProducerFactory<String, InitiateSettlementProcessCommand.Input> initiateSettlementProcessProducerFactory(
         SettlementProducerConfiguration.ProducerSettings settings,
         ObjectMapper objectMapper) {
 
@@ -104,7 +104,7 @@ public class SettlementProducerConfiguration {
                 }
 
                 @Override
-                public Serializer<SendSettlementRequestCommand.Input> forValue() {
+                public Serializer<InitiateSettlementProcessCommand.Input> forValue() {
 
                     return new JacksonJsonSerializer<>((JsonMapper) objectMapper);
                 }

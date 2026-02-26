@@ -34,8 +34,9 @@ import tools.jackson.databind.ObjectMapper;
 public class SettlementAdminClientConfiguration {
 
     @Bean
-    public SettlementAdminService.DefinitionCommand definitionCommands(SettlementAdminService.Settings settings,
-                                                                       ObjectMapper objectMapper) {
+    public SettlementAdminService.DefinitionCommand definitionCommands(
+        final SettlementAdminService.Settings settings,
+        final ObjectMapper objectMapper) {
 
         return RetrofitService
                    .newBuilder(SettlementAdminService.DefinitionCommand.class, settings.baseUrl())
@@ -45,11 +46,36 @@ public class SettlementAdminClientConfiguration {
     }
 
     @Bean
-    public SettlementAdminService.RecordCommand recordCommands(SettlementAdminService.Settings settings,
-                                                               ObjectMapper objectMapper) {
+    public SettlementAdminService.DefinitionQuery definitionQueries(
+        final SettlementAdminService.Settings settings,
+        final ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(SettlementAdminService.DefinitionQuery.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
+    public SettlementAdminService.RecordCommand recordCommands(
+        final SettlementAdminService.Settings settings,
+        final ObjectMapper objectMapper) {
 
         return RetrofitService
                    .newBuilder(SettlementAdminService.RecordCommand.class, settings.baseUrl())
+                   .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
+                   .withDefaultFactories(objectMapper)
+                   .build();
+    }
+
+    @Bean
+    public SettlementAdminService.RecordQuery recordQueries(
+        final SettlementAdminService.Settings settings,
+        final ObjectMapper objectMapper) {
+
+        return RetrofitService
+                   .newBuilder(SettlementAdminService.RecordQuery.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();

@@ -17,6 +17,7 @@ public interface UpdateSettlementDefinitionCommand {
                  FspGroupId payeeFspGroupId,
                  Currency currency,
                  Instant startAt,
+                 Instant endAt,
                  SspId desiredProviderId) { }
 
     record Output(SettlementDefinitionId settlementDefinitionId) { }
