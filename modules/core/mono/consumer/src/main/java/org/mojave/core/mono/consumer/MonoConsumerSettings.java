@@ -70,7 +70,8 @@ public class MonoConsumerSettings implements MonoConsumerConfiguration.RequiredS
     @Override
     public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
 
-        return null;
+        return new ParticipantIntercomService.Settings(
+            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
     }
 
     @Bean
