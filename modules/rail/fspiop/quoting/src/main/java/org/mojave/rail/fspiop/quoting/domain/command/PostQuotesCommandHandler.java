@@ -142,12 +142,12 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             Instant requestExpiration = null;
 
-            if (fees != null && fees.getCurrency() != currency) {
-
-                throw new FspiopException(
-                    FspiopErrors.GENERIC_VALIDATION_ERROR,
-                    "The currency of amount and fees must be the same.");
-            }
+//            if (fees != null && fees.getCurrency() != currency) {
+//
+//                throw new FspiopException(
+//                    FspiopErrors.GENERIC_VALIDATION_ERROR,
+//                    "The currency of amount and fees must be the same.");
+//            }
 
             if (expiration != null) {
 

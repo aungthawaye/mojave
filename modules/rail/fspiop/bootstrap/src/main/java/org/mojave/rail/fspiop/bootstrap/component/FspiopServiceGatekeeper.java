@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.bootstrap.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,14 +28,14 @@ import org.mojave.component.web.request.CachedServletRequest;
 import org.mojave.component.web.spring.security.AuthenticationFailureException;
 import org.mojave.component.web.spring.security.Authenticator;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
+import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.component.participant.ParticipantContext;
-import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
 import org.mojave.rail.fspiop.component.handy.FspiopHeaders;
 import org.mojave.rail.fspiop.component.handy.FspiopSignature;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.component.participant.ParticipantContext;
+import org.mojave.rail.fspiop.component.type.Payer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

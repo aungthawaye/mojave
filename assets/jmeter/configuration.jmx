@@ -59,38 +59,38 @@
           </elementProp>
           <elementProp name="fsp1InboundUrl" elementType="Argument">
             <stringProp name="Argument.name">fsp1InboundUrl</stringProp>
-            <stringProp name="Argument.value">http://localhost:8080</stringProp>
+            <stringProp name="Argument.value">http://localhost:3201</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp1Code" elementType="Argument">
             <stringProp name="Argument.name">fsp1Code</stringProp>
-            <stringProp name="Argument.value">fsp1</stringProp>
+            <stringProp name="Argument.value">wallet1</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp1Name" elementType="Argument">
             <stringProp name="Argument.name">fsp1Name</stringProp>
-            <stringProp name="Argument.value">fsp1</stringProp>
+            <stringProp name="Argument.value">Wallet1</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2InboundUrl" elementType="Argument">
             <stringProp name="Argument.name">fsp2InboundUrl</stringProp>
-            <stringProp name="Argument.value">http://localhost:9090</stringProp>
+            <stringProp name="Argument.value">http://localhost:3201</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2Code" elementType="Argument">
             <stringProp name="Argument.name">fsp2Code</stringProp>
-            <stringProp name="Argument.value">fsp2</stringProp>
+            <stringProp name="Argument.value">wallet2</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2Name" elementType="Argument">
             <stringProp name="Argument.name">fsp2Name</stringProp>
-            <stringProp name="Argument.value">fsp2</stringProp>
+            <stringProp name="Argument.value">wallet2</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
