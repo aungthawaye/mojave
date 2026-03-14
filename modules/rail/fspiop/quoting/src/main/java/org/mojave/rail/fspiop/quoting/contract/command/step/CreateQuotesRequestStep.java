@@ -1,0 +1,62 @@
+/*-
+ * ===
+ * Mojave
+ * ---
+ * Copyright (C) 2025 Open Source
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===
+ */
+
+package org.mojave.rail.fspiop.quoting.contract.command.step;
+
+import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.scheme.fspiop.core.TransactionInitiator;
+import org.mojave.scheme.fspiop.core.TransactionInitiatorType;
+import org.mojave.scheme.fspiop.core.TransactionScenario;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+
+public interface CreateQuotesRequestStep {
+
+    void execute(Input input) throws FspiopException;
+
+    record Input(
+        FspId payerFspId,
+        FspId payeeFspId,
+        UdfQuoteId udfQuoteId,
+        Currency currency,
+        BigDecimal amount,
+        BigDecimal fees,
+        AmountType amountType,
+        TransactionScenario scenario,
+        String subScenario,
+        TransactionInitiator initiator,
+        TransactionInitiatorType initiatorType,
+        Instant requestExpiration,
+        PartyIdType payerPartyIdType,
+        String payerPartyId,
+        String payerSubId,
+        PartyIdType payeePartyIdType,
+        String payeePartyId,
+        String payeeSubId,
+        ExtensionList extensionList) { }
+
+}

@@ -27,8 +27,13 @@ import org.mojave.core.participant.intercom.client.service.ParticipantIntercomSe
 import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
+import org.mojave.rail.fspiop.quoting.domain.QuotingKafkaConfiguration;
+import org.mojave.rail.fspiop.quoting.domain.kafka.listener.CreateQuotesRequestStepListener;
+import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesErrorStepListener;
+import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesResponseStepListener;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,6 +164,60 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
         return new SpringSecurityConfigurer.Settings(new String[]{"/quotes/**"});
+    }
+
+    @Bean
+    @Override
+    public QuotingKafkaConfiguration.ProducerSettings quotingProducerSettings() {
+
+        return new QuotingKafkaConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"),
+            System.getenv("KAFKA_PRODUCER_ACK"));
+    }
+
+    @Bean
+    @Override
+    public CreateQuotesRequestStepListener.Settings createQuotesRequestStepListenerSettings() {
+
+        return new CreateQuotesRequestStepListener.Settings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"),
+            CreateQuotesRequestStepListener.GROUP_ID,
+            System.getenv("KAFKA_CONSUMER_CLIENT_ID"),
+            System.getenv("KAFKA_CONSUMER_AUTO_OFFSET_RESET"),
+            Integer.parseInt(System.getenv("KAFKA_CONSUMER_CONCURRENCY")),
+            Integer.parseInt(System.getenv("KAFKA_CONSUMER_POLL_TIMEOUT_MS")),
+            false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    }
+
+    @Bean
+    @Override
+    public UpdateQuotesResponseStepListener.Settings updateQuotesResponseStepListenerSettings() {
+
+        return new UpdateQuotesResponseStepListener.Settings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"),
+            UpdateQuotesResponseStepListener.GROUP_ID,
+            System.getenv("KAFKA_CONSUMER_CLIENT_ID"),
+            System.getenv("KAFKA_CONSUMER_AUTO_OFFSET_RESET"),
+            Integer.parseInt(System.getenv("KAFKA_CONSUMER_CONCURRENCY")),
+            Integer.parseInt(System.getenv("KAFKA_CONSUMER_POLL_TIMEOUT_MS")),
+            false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    }
+
+    @Bean
+    @Override
+    public UpdateQuotesErrorStepListener.Settings updateQuotesErrorStepListenerSettings() {
+
+        return new UpdateQuotesErrorStepListener.Settings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"),
+            UpdateQuotesErrorStepListener.GROUP_ID,
+            System.getenv("KAFKA_CONSUMER_CLIENT_ID"),
+            System.getenv("KAFKA_CONSUMER_AUTO_OFFSET_RESET"),
+            Integer.parseInt(System.getenv("KAFKA_CONSUMER_CONCURRENCY")),
+            Integer.parseInt(System.getenv("KAFKA_CONSUMER_POLL_TIMEOUT_MS")),
+            false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
     }
 
 }

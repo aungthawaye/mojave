@@ -37,6 +37,10 @@
             <artifactId>mojave-component-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-kafka</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.participant</groupId>
             <artifactId>mojave-core-participant-intercom-client</artifactId>
         </dependency>
