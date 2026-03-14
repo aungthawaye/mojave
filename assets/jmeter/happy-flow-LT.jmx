@@ -42,7 +42,7 @@
             </elementProp>
             <elementProp name="tg1currency" elementType="Argument">
               <stringProp name="Argument.name">tg1currency</stringProp>
-              <stringProp name="Argument.value">BYN</stringProp>
+              <stringProp name="Argument.value">USD</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg1sourceHost" elementType="Argument">
@@ -52,13 +52,13 @@
             </elementProp>
             <elementProp name="tg1sourcePort" elementType="Argument">
               <stringProp name="Argument.name">tg1sourcePort</stringProp>
-              <stringProp name="Argument.value">8081</stringProp>
+              <stringProp name="Argument.value">3200</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8200000001</stringProp>
           <stringProp name="CounterConfig.end">8299999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -67,7 +67,7 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn" enabled="true">
           <stringProp name="CounterConfig.start">8000000001</stringProp>
           <stringProp name="CounterConfig.end">8999999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -76,7 +76,7 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -87,7 +87,7 @@
         <hashTree/>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Mojave Flow" enabled="true"/>
         <hashTree>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator">
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator" enabled="true">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
@@ -131,7 +131,7 @@ String ulid = timePart + randPart
 vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </JSR223Sampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2" enabled="true">
             <stringProp name="HTTPSampler.domain">${tg1sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg1sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -557,7 +557,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>

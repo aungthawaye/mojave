@@ -44,12 +44,12 @@
           </elementProp>
           <elementProp name="currency" elementType="Argument">
             <stringProp name="Argument.name">currency</stringProp>
-            <stringProp name="Argument.value">BYN</stringProp>
+            <stringProp name="Argument.value">USD</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="amount" elementType="Argument">
             <stringProp name="Argument.name">amount</stringProp>
-            <stringProp name="Argument.value">1.01</stringProp>
+            <stringProp name="Argument.value">100</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="hubCode" elementType="Argument">
@@ -84,13 +84,13 @@
           </elementProp>
           <elementProp name="fsp2Name" elementType="Argument">
             <stringProp name="Argument.name">fsp2Name</stringProp>
-            <stringProp name="Argument.value">wallet2</stringProp>
+            <stringProp name="Argument.value">Wallet2</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>

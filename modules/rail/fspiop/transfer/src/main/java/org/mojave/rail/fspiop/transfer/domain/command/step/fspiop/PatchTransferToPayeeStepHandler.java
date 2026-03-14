@@ -20,15 +20,15 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.fspiop;
 
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
+import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.PatchTransferToPayeeStep;
 import org.mojave.scheme.fspiop.core.ExtensionList;
 import org.mojave.scheme.fspiop.core.TransfersIDPatchResponse;
 import org.slf4j.Logger;
@@ -70,7 +70,8 @@ public class PatchTransferToPayeeStepHandler implements PatchTransferToPayeeStep
                 FspiopDates.forRequestBody(new Date()), input.state());
 
             var extensionList = new ExtensionList(
-                new ArrayList<>(input.extensionList().getExtension()));
+                input.extensionList() != null ? input.extensionList().getExtension() :
+                    new ArrayList<>());
 
             if (!extensionList.getExtension().isEmpty()) {
                 patchResponse.setExtensionList(extensionList);

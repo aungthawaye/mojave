@@ -158,7 +158,7 @@ public class UnwrapRequestStepHandler implements UnwrapRequestStep {
                 throw new FspiopException(
                     FspiopErrors.GENERIC_VALIDATION_ERROR,
                     "The transfer request from Payer FSP has expired. The expiration is : " +
-                        expiration);
+                        expiration + ". Current time is " + FspiopDates.forRequestBody());
             }
 
         }
