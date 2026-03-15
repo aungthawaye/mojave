@@ -22,7 +22,6 @@ package org.mojave.rail.fspiop.quoting.domain.command;
 
 import org.mojave.common.datatype.enums.participant.EndpointType;
 import org.mojave.common.datatype.type.participant.FspCode;
-import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
@@ -36,18 +35,17 @@ import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.quoting.contract.command.PutQuotesCommand;
+import org.mojave.rail.fspiop.quoting.contract.command.step.FindQuotesStep;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesErrorStep;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesResponseStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesErrorStepPublisher;
 import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesResponseStepPublisher;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
-import org.mojave.rail.fspiop.quoting.domain.repository.QuoteRepository;
 import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -64,7 +62,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    private final QuoteRepository quoteRepository;
+    private final FindQuotesStep findQuotesStep;
 
     private final UpdateQuotesResponseStepPublisher updateQuotesResponseStepPublisher;
 
@@ -75,7 +73,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
     public PutQuotesCommandHandler(ParticipantStore participantStore,
                                    RespondQuotes respondQuotes,
                                    ForwardRequest forwardRequest,
-                                   QuoteRepository quoteRepository,
+                                   FindQuotesStep findQuotesStep,
                                    UpdateQuotesResponseStepPublisher updateQuotesResponseStepPublisher,
                                    UpdateQuotesErrorStepPublisher updateQuotesErrorStepPublisher,
                                    QuotingDomainConfiguration.QuoteSettings quoteSettings) {
@@ -83,7 +81,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
-        Objects.requireNonNull(quoteRepository);
+        Objects.requireNonNull(findQuotesStep);
         Objects.requireNonNull(updateQuotesResponseStepPublisher);
         Objects.requireNonNull(updateQuotesErrorStepPublisher);
         Objects.requireNonNull(quoteSettings);
@@ -91,14 +89,28 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
-        this.quoteRepository = quoteRepository;
+        this.findQuotesStep = findQuotesStep;
         this.updateQuotesResponseStepPublisher = updateQuotesResponseStepPublisher;
         this.updateQuotesErrorStepPublisher = updateQuotesErrorStepPublisher;
         this.quoteSettings = quoteSettings;
     }
 
-    @Transactional(readOnly = true)
-    @Read
+    private static boolean isCurrenciesMatch(Quote quote, QuotesIDPutResponse quoteIdPutResponse) {
+
+        var quotedCurrency = quote.getCurrency();
+        var transferCurrency = quoteIdPutResponse.getTransferAmount().getCurrency();
+        var currenciesMatch = quotedCurrency.equals(transferCurrency);
+
+        currenciesMatch = currenciesMatch && quotedCurrency.equals(
+            quoteIdPutResponse.getPayeeFspFee().getCurrency());
+        currenciesMatch = currenciesMatch && quotedCurrency.equals(
+            quoteIdPutResponse.getPayeeFspCommission().getCurrency());
+        currenciesMatch = currenciesMatch && quotedCurrency.equals(
+            quoteIdPutResponse.getPayeeReceiveAmount().getCurrency());
+
+        return currenciesMatch;
+    }
+
     @Override
     public Output execute(Input input) {
 
@@ -118,8 +130,9 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
             if (this.quoteSettings.stateful()) {
 
-                var optQuote = this.quoteRepository.findOne(
-                    QuoteRepository.Filters.withUdfQuoteId(udfQuoteId));
+                var optQuote = this.findQuotesStep
+                                   .execute(new FindQuotesStep.Input(udfQuoteId))
+                                   .quote();
 
                 if (optQuote.isEmpty()) {
 
@@ -222,22 +235,6 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
         LOGGER.info("PutQuotesCommandHandler : done");
 
         return new Output();
-    }
-
-    private static boolean isCurrenciesMatch(Quote quote, QuotesIDPutResponse quoteIdPutResponse) {
-
-        var quotedCurrency = quote.getCurrency();
-        var transferCurrency = quoteIdPutResponse.getTransferAmount().getCurrency();
-        var currenciesMatch = quotedCurrency.equals(transferCurrency);
-
-        currenciesMatch = currenciesMatch && quotedCurrency.equals(
-            quoteIdPutResponse.getPayeeFspFee().getCurrency());
-        currenciesMatch = currenciesMatch && quotedCurrency.equals(
-            quoteIdPutResponse.getPayeeFspCommission().getCurrency());
-        currenciesMatch = currenciesMatch && quotedCurrency.equals(
-            quoteIdPutResponse.getPayeeReceiveAmount().getCurrency());
-
-        return currenciesMatch;
     }
 
 }

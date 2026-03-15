@@ -17,27 +17,27 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.quoting.domain.command;
 
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.participant.EndpointType;
 import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
-import org.mojave.rail.fspiop.quoting.contract.command.step.CreateQuotesRequestStep;
-import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.CreateQuotesRequestStepPublisher;
+import org.mojave.rail.fspiop.bootstrap.api.forwarder.ForwardRequest;
+import org.mojave.rail.fspiop.bootstrap.api.quotes.RespondQuotes;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopMoney;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
-import org.mojave.rail.fspiop.bootstrap.api.forwarder.ForwardRequest;
-import org.mojave.rail.fspiop.bootstrap.api.quotes.RespondQuotes;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
+import org.mojave.rail.fspiop.quoting.contract.command.step.CreateQuotesRequestStep;
+import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,26 +57,26 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    private final CreateQuotesRequestStepPublisher createQuotesRequestStepPublisher;
+    private final CreateQuotesRequestStep createQuotesRequestStep;
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
     public PostQuotesCommandHandler(ParticipantStore participantStore,
                                     RespondQuotes respondQuotes,
                                     ForwardRequest forwardRequest,
-                                    CreateQuotesRequestStepPublisher createQuotesRequestStepPublisher,
+                                    CreateQuotesRequestStep createQuotesRequestStep,
                                     QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
-        Objects.requireNonNull(createQuotesRequestStepPublisher);
+        Objects.requireNonNull(createQuotesRequestStep);
         Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
-        this.createQuotesRequestStepPublisher = createQuotesRequestStepPublisher;
+        this.createQuotesRequestStep = createQuotesRequestStep;
         this.quoteSettings = quoteSettings;
     }
 
@@ -146,19 +146,16 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (this.quoteSettings.stateful()) {
 
-                this.createQuotesRequestStepPublisher.publish(
-                    new CreateQuotesRequestStep.Input(
-                        payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
-                        new BigDecimal(amount.getAmount()),
-                        fees != null ? new BigDecimal(fees.getAmount()) : null,
-                        postQuotesRequest.getAmountType(), transactionType.getScenario(),
-                        transactionType.getSubScenario(), transactionType.getInitiator(),
-                        transactionType.getInitiatorType(), requestExpiration,
-                        payer.getPartyIdType(), payer.getPartyIdentifier(),
-                        payer.getPartySubIdOrType(),
-                        payee.getPartyIdType(), payee.getPartyIdentifier(),
-                        payee.getPartySubIdOrType(),
-                        postQuotesRequest.getExtensionList()));
+                this.createQuotesRequestStep.execute(new CreateQuotesRequestStep.Input(
+                    payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
+                    new BigDecimal(amount.getAmount()),
+                    fees != null ? new BigDecimal(fees.getAmount()) : null,
+                    postQuotesRequest.getAmountType(), transactionType.getScenario(),
+                    transactionType.getSubScenario(), transactionType.getInitiator(),
+                    transactionType.getInitiatorType(), requestExpiration, payer.getPartyIdType(),
+                    payer.getPartyIdentifier(), payer.getPartySubIdOrType(), payee.getPartyIdType(),
+                    payee.getPartyIdentifier(), payee.getPartySubIdOrType(),
+                    postQuotesRequest.getExtensionList()));
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();

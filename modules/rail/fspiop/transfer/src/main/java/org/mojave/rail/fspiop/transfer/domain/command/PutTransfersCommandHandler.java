@@ -382,20 +382,20 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                         finalTransferState = TransferState.ABORTED;
                     }
 
-                    if (finalTransferState == TransferState.COMMITTED) {
-
-                        try {
-
-                            this.prepareSettlementStep.execute(new PrepareSettlementStep.Input(
-                                udfTransferId, transactionId, transferId, transactionAt, currency,
-                                payerFsp, payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
-
-                        } catch (Exception e) {
-
-                            LOGGER.error("(Ignored) Error:", e);
-                        }
-
-                    }
+//                    if (finalTransferState == TransferState.COMMITTED) {
+//
+//                        try {
+//
+//                            this.prepareSettlementStep.execute(new PrepareSettlementStep.Input(
+//                                udfTransferId, transactionId, transferId, transactionAt, currency,
+//                                payerFsp, payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
+//
+//                        } catch (Exception e) {
+//
+//                            LOGGER.error("(Ignored) Error:", e);
+//                        }
+//
+//                    }
 
                 } else {
 

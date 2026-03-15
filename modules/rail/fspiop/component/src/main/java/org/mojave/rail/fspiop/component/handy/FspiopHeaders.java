@@ -74,6 +74,7 @@ public class FspiopHeaders {
 
                 var headers = new HashMap<String, String>();
 
+                headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
                 headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
@@ -113,6 +114,7 @@ public class FspiopHeaders {
 
                 var headers = new HashMap<String, String>();
 
+                headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
                 headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
@@ -152,6 +154,7 @@ public class FspiopHeaders {
 
                 var headers = new HashMap<String, String>();
 
+                headers.put(Names.ACCEPT, ACCEPT);
                 headers.put(Names.CONTENT_TYPE, CONTENT_TYPE);
                 headers.put(Names.DATE, FspiopDates.forRequestHeader());
                 headers.put(Names.FSPIOP_SOURCE, source);
