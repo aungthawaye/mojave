@@ -358,7 +358,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 // We have informed the Payer that the Payee has reserved or committed the transfer.
                 if (finalTransferState == TransferState.COMMITTED) {
 
-                    // ‼️Any issue happens from this onward, it will be dispute.
+
                     try {
 
                         this.fulfilPositionsStep.execute(new FulfilPositionsStep.Input(
@@ -381,6 +381,8 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                         LOGGER.error("Error:", e);
                         finalTransferState = TransferState.ABORTED;
                     }
+
+                    // ‼️Any issue happens from this onward, it will be dispute.
 
 //                    if (finalTransferState == TransferState.COMMITTED) {
 //

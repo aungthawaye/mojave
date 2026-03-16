@@ -24,6 +24,7 @@ import org.mojave.component.misc.spring.event.EventPublisher;
 import org.mojave.component.web.request.CachedServletRequest;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.transfer.contract.command.GetTransfersCommand;
+import org.mojave.rail.fspiop.transfer.contract.command.PatchTransfersErrorCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PostTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersErrorCommand;
@@ -31,14 +32,16 @@ import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
 import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
 import org.mojave.scheme.fspiop.core.TransfersPostRequest;
-import org.mojave.rail.fspiop.transfer.service.controller.event.GetTransfersEvent;
-import org.mojave.rail.fspiop.transfer.service.controller.event.PostTransfersEvent;
-import org.mojave.rail.fspiop.transfer.service.controller.event.PutTransfersErrorEvent;
-import org.mojave.rail.fspiop.transfer.service.controller.event.PutTransfersEvent;
+import org.mojave.rail.fspiop.transfer.service.event.GetTransfersEvent;
+import org.mojave.rail.fspiop.transfer.service.event.PatchTransfersErrorEvent;
+import org.mojave.rail.fspiop.transfer.service.event.PostTransfersEvent;
+import org.mojave.rail.fspiop.transfer.service.event.PutTransfersErrorEvent;
+import org.mojave.rail.fspiop.transfer.service.event.PutTransfersEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -126,6 +129,24 @@ public class TransfersController {
 
         final var event = new PutTransfersErrorEvent(
             new PutTransfersErrorCommand.Input(fspiopHttpRequest, transferId, error));
+
+        this.eventPublisher.publish(event);
+
+        return ResponseEntity.accepted().build();
+    }
+
+    @PatchMapping("/transfers/{transferId}/error")
+    public ResponseEntity<?> patchTransfersError(@PathVariable UdfTransferId transferId,
+                                               @RequestBody ErrorInformationObject error,
+                                               HttpServletRequest request) throws IOException {
+
+        LOGGER.info("Received PATCH /transfers/{}/error", transferId);
+
+        final var cachedBodyRequest = new CachedServletRequest(request);
+        final var fspiopHttpRequest = FspiopHttpRequest.with(cachedBodyRequest);
+
+        final var event = new PatchTransfersErrorEvent(
+            new PatchTransfersErrorCommand.Input(fspiopHttpRequest, transferId, error));
 
         this.eventPublisher.publish(event);
 

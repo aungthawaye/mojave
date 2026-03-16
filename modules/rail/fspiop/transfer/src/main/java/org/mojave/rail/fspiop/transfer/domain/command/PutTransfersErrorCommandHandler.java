@@ -91,7 +91,7 @@ public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand
     @Write
     public Output execute(Input input) {
 
-        LOGGER.info("PutTransfersCommandHandler : input: ({})", ObjectLogger.log(input));
+        LOGGER.info("PutTransfersErrorCommandHandler : input: ({})", ObjectLogger.log(input));
 
         var udfTransferId = input.udfTransferId();
 

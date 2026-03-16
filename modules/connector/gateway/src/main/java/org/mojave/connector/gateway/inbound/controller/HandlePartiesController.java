@@ -20,9 +20,9 @@
 package org.mojave.connector.gateway.inbound.controller;
 
 import org.mojave.component.misc.spring.event.EventPublisher;
-import org.mojave.connector.gateway.inbound.command.parties.HandleGetPartiesRequestCommand;
-import org.mojave.connector.gateway.inbound.command.parties.HandlePutPartiesErrorCommand;
-import org.mojave.connector.gateway.inbound.command.parties.HandlePutPartiesResponseCommand;
+import org.mojave.connector.gateway.inbound.command.parties.payee.HandleGetPartiesRequestCommand;
+import org.mojave.connector.gateway.inbound.command.parties.payer.HandlePutPartiesErrorCommand;
+import org.mojave.connector.gateway.inbound.command.parties.payer.HandlePutPartiesResponseCommand;
 import org.mojave.connector.gateway.inbound.event.GetPartiesEvent;
 import org.mojave.connector.gateway.inbound.event.PutPartiesErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutPartiesEvent;

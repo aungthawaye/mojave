@@ -19,7 +19,7 @@
  */
 package org.mojave.connector.gateway.inbound.event.listener;
 
-import org.mojave.connector.gateway.inbound.command.quotes.HandlePostQuotesRequestCommand;
+import org.mojave.connector.gateway.inbound.command.quotes.payee.HandlePostQuotesRequestCommand;
 import org.mojave.connector.gateway.inbound.event.PostQuotesEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

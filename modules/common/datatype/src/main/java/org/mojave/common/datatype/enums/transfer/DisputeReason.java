@@ -20,12 +20,19 @@
 
 package org.mojave.common.datatype.enums.transfer;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum DisputeReason {
 
-    COMMITING_TRANSFER,
-    POSTING_LEDGER_FLOW,
-    PATCHING_TO_PAYEE,
-    RESERVATION_ROLLBACK,
-    POSITIONS_FULFILMENT,
-    SETTLEMENT_PREPARATION
+    COMMITING_TRANSFER("Commiting transfer"),
+    POSTING_LEDGER_FLOW("Posting ledger flow"),
+    PATCHING_TO_PAYEE("Patching to payee"),
+    RESERVATION_ROLLBACK("Reservation rollback"),
+    POSITIONS_FULFILMENT("Positions fulfilment"),
+    SETTLEMENT_PREPARATION("Settlement preparation");
+
+    private final String description;
 }

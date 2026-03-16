@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.bootstrap.api;
 
 import org.mojave.scheme.fspiop.core.ErrorInformationObject;
@@ -37,6 +38,11 @@ public interface TransfersResponseService {
     Call<String> patchTransfers(@Url String url,
                                 @HeaderMap Map<String, String> fspiopHeaders,
                                 @Body TransfersIDPatchResponse transfersIDPatchResponse);
+
+    @PATCH
+    Call<String> patchTransfersError(@Url String url,
+                                     @HeaderMap Map<String, String> fspiopHeaders,
+                                     @Body ErrorInformationObject errorInformationObject);
 
     @PUT
     Call<String> putTransfers(@Url String url,

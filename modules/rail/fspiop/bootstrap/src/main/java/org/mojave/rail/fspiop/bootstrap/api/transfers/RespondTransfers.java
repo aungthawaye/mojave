@@ -37,4 +37,7 @@ public interface RespondTransfers {
     void putTransfersError(Payer payer, String url, ErrorInformationObject error)
         throws FspiopException;
 
+    void patchTransfersError(Payer payer, String url, ErrorInformationObject error)
+        throws FspiopException;
+
 }

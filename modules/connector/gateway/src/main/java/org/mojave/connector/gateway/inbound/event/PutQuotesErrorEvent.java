@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.inbound.event;
 
 import org.mojave.component.misc.spring.event.DomainEvent;
-import org.mojave.connector.gateway.inbound.command.quotes.HandlePutQuotesErrorCommand;
+import org.mojave.connector.gateway.inbound.command.quotes.payer.HandlePutQuotesErrorCommand;
 
 public class PutQuotesErrorEvent extends DomainEvent<HandlePutQuotesErrorCommand.Input> {
 
