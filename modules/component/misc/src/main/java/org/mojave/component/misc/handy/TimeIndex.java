@@ -32,11 +32,11 @@ public final class TimeIndex {
         return zdt.withZoneSameInstant(ZoneOffset.UTC).toLocalTime().toSecondOfDay();
     }
 
-    public static int of(int hour, int minute, ZoneId zoneId) {
+    public static int of(int hour, int minute, int second, ZoneId zoneId) {
 
         var current = ZonedDateTime.now(zoneId);
 
-        return of(current.withHour(hour).withMinute(minute).withSecond(0).withNano(0));
+        return of(current.withHour(hour).withMinute(minute).withSecond(second).withNano(0));
     }
 
     public static Instant toInstant(int timeIndex) {

@@ -21,7 +21,6 @@
 package org.mojave.core.mono.intercom;
 
 import org.mojave.core.participant.domain.ParticipantFlyway;
-import org.mojave.core.settlement.domain.SettlementFlyway;
 import org.mojave.core.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,10 +52,6 @@ public class MonoIntercomApplication {
     public static void main(String[] args) {
 
         ParticipantFlyway.migrate(
-            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
-            System.getenv("FLYWAY_DB_PASSWORD"));
-
-        SettlementFlyway.migrate(
             System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
             System.getenv("FLYWAY_DB_PASSWORD"));
 

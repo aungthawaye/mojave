@@ -24,7 +24,6 @@ import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
-import org.mojave.core.settlement.producer.SettlementProducerConfiguration;
 import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
@@ -38,7 +37,6 @@ import org.springframework.context.annotation.Import;
         FspiopComponentConfiguration.class,
         TransferKafkaConfiguration.class,
         AccountingProducerConfiguration.class,
-        SettlementProducerConfiguration.class,
         WalletProducerConfiguration.class,
         ParticipantStoreConfiguration.class,
         RoutingJpaConfiguration.class})
@@ -48,7 +46,6 @@ public class TransferDomainConfiguration {
                                            FspiopComponentConfiguration.RequiredDependencies,
                                            TransferKafkaConfiguration.RequiredDependencies,
                                            AccountingProducerConfiguration.RequiredDependencies,
-                                           SettlementProducerConfiguration.RequiredDependencies,
                                            WalletProducerConfiguration.RequiredDependencies,
                                            RoutingJpaConfiguration.RequiredDependencies,
                                            ParticipantStoreConfiguration.RequiredDependencies {
@@ -60,7 +57,6 @@ public class TransferDomainConfiguration {
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
                                               FspiopComponentConfiguration.RequiredSettings,
                                               AccountingProducerConfiguration.RequiredSettings,
-                                              SettlementProducerConfiguration.RequiredSettings,
                                               WalletProducerConfiguration.RequiredSettings,
                                               TransferKafkaConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,

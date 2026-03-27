@@ -20,7 +20,6 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.Direction;
 import org.mojave.common.datatype.enums.participant.EndpointType;
 import org.mojave.common.datatype.enums.transfer.AbortReason;
@@ -29,12 +28,16 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
+import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
+import org.mojave.rail.fspiop.component.handy.FspiopUrls;
+import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PrepareSettlementStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
@@ -47,12 +50,7 @@ import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.PatchTransferT
 import org.mojave.rail.fspiop.transfer.domain.command.step.stateful.CommitTransferStepHandler;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.CommitTransferStepPublisher;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
-import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
-import org.mojave.rail.fspiop.component.handy.FspiopUrls;
-import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.mojave.scheme.fspiop.core.TransferState;
 import org.slf4j.Logger;
@@ -84,8 +82,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final PostLedgerFlowStep postLedgerFlowStep;
 
-    private final PrepareSettlementStep prepareSettlementStep;
-
     // FSPIOP steps
     private final UnwrapResponseStep unwrapResponseStep;
 
@@ -104,7 +100,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       FulfilPositionsStep fulfilPositionsStep,
                                       RollbackReservationStepPublisher rollbackReservationStepPublisher,
                                       PostLedgerFlowStep postLedgerFlowStep,
-                                      PrepareSettlementStep prepareSettlementStep,
                                       UnwrapResponseStep unwrapResponseStep,
                                       CommitTransferToPayerStep commitTransferToPayerStep,
                                       ForwardToDestinationStep forwardToDestinationStep,
@@ -118,7 +113,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         Objects.requireNonNull(fulfilPositionsStep);
         Objects.requireNonNull(rollbackReservationStepPublisher);
         Objects.requireNonNull(postLedgerFlowStep);
-        Objects.requireNonNull(prepareSettlementStep);
         Objects.requireNonNull(unwrapResponseStep);
         Objects.requireNonNull(commitTransferToPayerStep);
         Objects.requireNonNull(forwardToDestinationStep);
@@ -132,7 +126,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.fulfilPositionsStep = fulfilPositionsStep;
         this.rollbackReservationStepPublisher = rollbackReservationStepPublisher;
         this.postLedgerFlowStep = postLedgerFlowStep;
-        this.prepareSettlementStep = prepareSettlementStep;
         this.unwrapResponseStep = unwrapResponseStep;
         this.commitTransferToPayerStep = commitTransferToPayerStep;
         this.forwardToDestinationStep = forwardToDestinationStep;
@@ -268,8 +261,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 throw e;
             }
 
-            // 3. Verify ILP. Do we need ?
-            // ? ? ?
+            // 3. Verify ILP. Do we need?
 
             // 4. Handle ABORTED status and RESERVED status.
 
@@ -358,7 +350,6 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 // We have informed the Payer that the Payee has reserved or committed the transfer.
                 if (finalTransferState == TransferState.COMMITTED) {
 
-
                     try {
 
                         this.fulfilPositionsStep.execute(new FulfilPositionsStep.Input(
@@ -384,27 +375,24 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
                     // ‼️Any issue happens from this onward, it will be dispute.
 
-//                    if (finalTransferState == TransferState.COMMITTED) {
-//
-//                        try {
-//
-//                            this.prepareSettlementStep.execute(new PrepareSettlementStep.Input(
-//                                udfTransferId, transactionId, transferId, transactionAt, currency,
-//                                payerFsp, payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
-//
-//                        } catch (Exception e) {
-//
-//                            LOGGER.error("(Ignored) Error:", e);
-//                        }
-//
-//                    }
+                    if (finalTransferState == TransferState.COMMITTED) {
+
+                        try {
+
+                            // We will initiate or create settlement record.
+
+                        } catch (Exception e) {
+
+                            LOGGER.error("(Ignored) Error:", e);
+                        }
+
+                    }
 
                 } else {
 
                     // If we cannot commit Transfer to Payer, it is ABORTED.
                     // So, we need to roll back the Payer position reservation.
                     try {
-
 
                         this.rollbackReservationStepPublisher.publish(
                             new RollbackReservationStep.Input(

@@ -53,10 +53,6 @@
             <artifactId>mojave-core-participant-store</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.settlement</groupId>
-            <artifactId>mojave-core-settlement-producer</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.core.wallet</groupId>
             <artifactId>mojave-core-wallet-intercom-client</artifactId>
         </dependency>

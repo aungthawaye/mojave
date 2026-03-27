@@ -25,7 +25,10 @@ import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.core.settlement.producer.SettlementProducerConfiguration;
+import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
+import org.mojave.core.wallet.producer.WalletProducerConfiguration;
+import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferKafkaConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.AbortTransferStepListener;
@@ -33,10 +36,6 @@ import org.mojave.rail.fspiop.transfer.domain.kafka.listener.CommitTransferStepL
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.DisputeTransferStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.PatchTransferToPayeeStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.RollbackReservationStepListener;
-import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
-import org.mojave.core.wallet.producer.WalletProducerConfiguration;
-import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
@@ -95,16 +94,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public PatchTransferToPayeeStepListener.Settings patchTransferToPayeeStepListenerSettings() {
-
-        return new PatchTransferToPayeeStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), PatchTransferToPayeeStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
     public FspiopComponentConfiguration.ParticipantSettings participantSettings() {
 
         var hubCode = System.getenv("FSPIOP_HUB_CODE");
@@ -139,6 +128,16 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
         return new FspiopComponentConfiguration.ParticipantSettings(
             hubCode, fspCode, fspName,
             currencies, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
+    }
+
+    @Bean
+    @Override
+    public PatchTransferToPayeeStepListener.Settings patchTransferToPayeeStepListenerSettings() {
+
+        return new PatchTransferToPayeeStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), PatchTransferToPayeeStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -205,14 +204,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
         return new FspiopServiceConfiguration.ServiceSettings(
             Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
             Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
-    }
-
-    @Bean
-    @Override
-    public SettlementProducerConfiguration.ProducerSettings settlementProducerSettings() {
-
-        return new SettlementProducerConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean

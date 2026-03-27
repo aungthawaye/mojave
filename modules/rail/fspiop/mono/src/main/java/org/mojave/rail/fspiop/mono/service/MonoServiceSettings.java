@@ -26,7 +26,6 @@ import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.core.settlement.producer.SettlementProducerConfiguration;
 import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.core.wallet.producer.WalletProducerConfiguration;
 import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
@@ -245,14 +244,6 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
         return new FspiopServiceConfiguration.ServiceSettings(
             Integer.parseInt(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_MS")),
             Boolean.parseBoolean(System.getenv("FSPIOP_SERVICE_REQUEST_AGE_VERIFICATION")));
-    }
-
-    @Bean
-    @Override
-    public SettlementProducerConfiguration.ProducerSettings settlementProducerSettings() {
-
-        return new SettlementProducerConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean

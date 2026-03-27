@@ -1,23 +1,3 @@
-/*-
- * ===
- * Mojave
- * ---
- * Copyright (C) 2025 Open Source
- * ---
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ===
- */
-
 package org.mojave.common.datatype.converter.identifier.settlement;
 
 import org.hibernate.type.descriptor.WrapperOptions;
@@ -26,21 +6,21 @@ import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.settlement.SettlementBatchId;
 
-public class SettlementBatchIdJavaType extends AbstractClassJavaType<BalanceId> {
+public class SettlementBatchIdJavaType extends AbstractClassJavaType<SettlementBatchId> {
 
     public static final SettlementBatchIdJavaType INSTANCE = new SettlementBatchIdJavaType();
 
     public SettlementBatchIdJavaType() {
 
-        super(BalanceId.class, ImmutableMutabilityPlan.instance());
+        super(SettlementBatchId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public BalanceId fromString(CharSequence string) {
+    public SettlementBatchId fromString(CharSequence string) {
 
-        return (string == null) ? null : new BalanceId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new SettlementBatchId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -50,19 +30,18 @@ public class SettlementBatchIdJavaType extends AbstractClassJavaType<BalanceId> 
     }
 
     @Override
-    public String toString(BalanceId value) {
+    public String toString(SettlementBatchId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(BalanceId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(SettlementBatchId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
-
         Long primitive = value.getId();
 
         if (type.isAssignableFrom(Long.class)) {
@@ -77,12 +56,12 @@ public class SettlementBatchIdJavaType extends AbstractClassJavaType<BalanceId> 
     }
 
     @Override
-    public BalanceId wrap(Object value, WrapperOptions options) {
+    public SettlementBatchId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case BalanceId balanceId -> balanceId;
-            case Number n -> new BalanceId(n.longValue());
+            case SettlementBatchId settlementBatchId -> settlementBatchId;
+            case Number n -> new SettlementBatchId(n.longValue());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };
