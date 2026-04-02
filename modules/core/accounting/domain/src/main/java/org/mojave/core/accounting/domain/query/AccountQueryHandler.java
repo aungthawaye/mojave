@@ -77,9 +77,9 @@ public class AccountQueryHandler implements AccountQuery {
             spec = spec.and(AccountRepository.Filters.withOwnerId(ownerId));
         }
 
-        var chartEntryId = criteria.filter().chartEntryId();
-        if (chartEntryId != null) {
-            spec = spec.and(AccountRepository.Filters.withChartEntryId(chartEntryId));
+        var coaEntryId = criteria.filter().coaEntryId();
+        if (coaEntryId != null) {
+            spec = spec.and(AccountRepository.Filters.withCoaEntryId(coaEntryId));
         }
 
         var currency = criteria.filter().currency();
@@ -91,7 +91,7 @@ public class AccountQueryHandler implements AccountQuery {
             case ACCOUNT_CODE -> "code";
             case NAME -> "name";
             case OWNER_ID -> "ownerId";
-            case CHART_ENTRY_ID -> "chartEntryId";
+            case COA_ENTRY_ID -> "coaEntryId";
             case CURRENCY -> "currency";
             default -> "id";
         };

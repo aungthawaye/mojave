@@ -28,7 +28,7 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
@@ -38,7 +38,7 @@ public interface CreateAccountCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull ChartEntryId chartEntryId,
+    record Input(@JsonProperty(required = true) @NotNull CoaEntryId coaEntryId,
                  @JsonProperty(required = true) @NotNull AccountOwnerId ownerId,
                  @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull AccountCode code,

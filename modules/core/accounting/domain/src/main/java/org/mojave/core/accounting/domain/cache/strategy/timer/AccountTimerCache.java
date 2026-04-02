@@ -24,7 +24,7 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
 import org.mojave.core.accounting.domain.cache.AccountCache;
@@ -108,26 +108,26 @@ public class AccountTimerCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(final ChartEntryId chartEntryId,
+    public AccountData get(final CoaEntryId coaEntryId,
                            final AccountOwnerId ownerId,
                            final Currency currency) {
 
-        if (chartEntryId == null || ownerId == null || currency == null) {
+        if (coaEntryId == null || ownerId == null || currency == null) {
             return null;
         }
 
-        final var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
-        return this.snapshotRef.get().withChartEntryIdOwnerIdCurrency.get(key);
+        final var key = AccountCache.Keys.forCoaEntry(coaEntryId, ownerId, currency);
+        return this.snapshotRef.get().withCoaEntryIdOwnerIdCurrency.get(key);
     }
 
     @Override
-    public Set<AccountData> get(final ChartEntryId chartEntryId) {
+    public Set<AccountData> get(final CoaEntryId coaEntryId) {
 
-        if (chartEntryId == null) {
+        if (coaEntryId == null) {
             return Set.of();
         }
 
-        return this.snapshotRef.get().withChartEntryId.getOrDefault(chartEntryId, Set.of());
+        return this.snapshotRef.get().withCoaEntryId.getOrDefault(coaEntryId, Set.of());
     }
 
     @PostConstruct
@@ -175,16 +175,16 @@ public class AccountTimerCache implements AccountCache {
                 AccountData::ownerId,
                 Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-        var _withChartEntryId = Collections.unmodifiableMap(
+        var _withCoaEntryId = Collections.unmodifiableMap(
             accounts.stream().collect(Collectors.groupingBy(
-                AccountData::chartEntryId,
+                AccountData::coaEntryId,
                 Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-        var _withChartEntryIdOwnerIdCurrency = accounts
+        var _withCoaEntryIdOwnerIdCurrency = accounts
                                                    .stream()
                                                    .collect(Collectors.toUnmodifiableMap(
-                                                       acc -> AccountCache.Keys.forChart(
-                                                           acc.chartEntryId(), acc.ownerId(),
+                                                       acc -> AccountCache.Keys.forCoaEntry(
+                                                           acc.coaEntryId(), acc.ownerId(),
                                                            acc.currency()), Function.identity(),
                                                        (a, b) -> a));
 
@@ -192,15 +192,15 @@ public class AccountTimerCache implements AccountCache {
 
         this.snapshotRef.set(
             new Snapshot(
-                _withId, _withCode, _withOwnerId, _withChartEntryIdOwnerIdCurrency,
-                _withChartEntryId));
+                _withId, _withCode, _withOwnerId, _withCoaEntryIdOwnerIdCurrency,
+                _withCoaEntryId));
     }
 
     private record Snapshot(Map<AccountId, AccountData> withId,
                             Map<AccountCode, AccountData> withCode,
                             Map<AccountOwnerId, Set<AccountData>> withOwnerId,
-                            Map<String, AccountData> withChartEntryIdOwnerIdCurrency,
-                            Map<ChartEntryId, Set<AccountData>> withChartEntryId) {
+                            Map<String, AccountData> withCoaEntryIdOwnerIdCurrency,
+                            Map<CoaEntryId, Set<AccountData>> withCoaEntryId) {
 
         static Snapshot empty() {
 

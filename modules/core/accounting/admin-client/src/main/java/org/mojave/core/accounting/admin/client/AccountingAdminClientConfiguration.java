@@ -56,22 +56,22 @@ public class AccountingAdminClientConfiguration {
     }
 
     @Bean
-    public AccountingAdminService.ChartCommand chartCommands(AccountingAdminService.Settings settings,
-                                                             ObjectMapper objectMapper) {
+    public AccountingAdminService.CoaCommand coaCommands(AccountingAdminService.Settings settings,
+                                                         ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(AccountingAdminService.ChartCommand.class, settings.baseUrl())
+                   .newBuilder(AccountingAdminService.CoaCommand.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();
     }
 
     @Bean
-    public AccountingAdminService.ChartQuery chartQuery(AccountingAdminService.Settings settings,
-                                                        ObjectMapper objectMapper) {
+    public AccountingAdminService.CoaQuery coaQuery(AccountingAdminService.Settings settings,
+                                                    ObjectMapper objectMapper) {
 
         return RetrofitService
-                   .newBuilder(AccountingAdminService.ChartQuery.class, settings.baseUrl())
+                   .newBuilder(AccountingAdminService.CoaQuery.class, settings.baseUrl())
                    .withHttpLogging(HttpLoggingInterceptor.Level.BODY, true)
                    .withDefaultFactories(objectMapper)
                    .build();

@@ -1,39 +1,39 @@
--- ml_accounting.acc_chart definition
+-- ml_accounting.acc_coa definition
 
-CREATE TABLE `acc_chart`
+CREATE TABLE `acc_coa`
 (
-    `chart_id`       bigint      NOT NULL,
+    `coa_id`         bigint      NOT NULL,
     `name`           varchar(64) NOT NULL,
     `created_at`     bigint      NOT NULL,
     `rec_created_at` bigint DEFAULT NULL,
     `rec_updated_at` bigint DEFAULT NULL,
     `rec_version`    int    DEFAULT NULL,
-    PRIMARY KEY (`chart_id`),
-    UNIQUE KEY `acc_chart_01_UK` (`name`)
+    PRIMARY KEY (`coa_id`),
+    UNIQUE KEY `acc_coa_01_UK` (`name`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_accounting.acc_chart_entry definition
+-- ml_accounting.acc_coa_entry definition
 
-CREATE TABLE `acc_chart_entry`
+CREATE TABLE `acc_coa_entry`
 (
-    `chart_entry_id`   bigint       NOT NULL,
+    `coa_entry_id`     bigint       NOT NULL,
     `category`         varchar(32)  NOT NULL,
-    `chart_entry_code` varchar(32)  NOT NULL,
+    `coa_entry_code`   varchar(32)  NOT NULL,
     `name`             varchar(64)  NOT NULL,
     `description`      varchar(255) NOT NULL,
     `account_type`     varchar(32)  NOT NULL,
     `created_at`       bigint       NOT NULL,
-    `chart_id`         bigint       NOT NULL,
+    `coa_id`           bigint       NOT NULL,
     `rec_created_at`   bigint DEFAULT NULL,
     `rec_updated_at`   bigint DEFAULT NULL,
     `rec_version`      int    DEFAULT NULL,
-    PRIMARY KEY (`chart_entry_id`),
-    UNIQUE KEY `acc_chart_entry_01_UK` (`chart_entry_code`),
-    KEY `acc_chart_acc_chart_entry_FK_IDX` (`chart_id`),
-    CONSTRAINT `acc_chart_acc_chart_entry_FK` FOREIGN KEY (`chart_id`) REFERENCES `acc_chart` (`chart_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (`coa_entry_id`),
+    UNIQUE KEY `acc_coa_entry_01_UK` (`coa_entry_code`),
+    KEY `acc_coa_acc_coa_entry_FK_IDX` (`coa_id`),
+    CONSTRAINT `acc_coa_acc_coa_entry_FK` FOREIGN KEY (`coa_id`) REFERENCES `acc_coa` (`coa_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -53,16 +53,16 @@ CREATE TABLE `acc_account`
     `created_at`         bigint      NOT NULL,
     `activation_status`  varchar(32) NOT NULL,
     `termination_status` varchar(32) NOT NULL,
-    `chart_entry_id`     bigint      NOT NULL,
+    `coa_entry_id`       bigint      NOT NULL,
     `rec_created_at`     bigint       DEFAULT NULL,
     `rec_updated_at`     bigint       DEFAULT NULL,
     `rec_version`        int          DEFAULT NULL,
     PRIMARY KEY (`account_id`),
-    UNIQUE KEY `acc_account_01_UK` (`owner_id`, `currency`, `chart_entry_id`),
+    UNIQUE KEY `acc_account_01_UK` (`owner_id`, `currency`, `coa_entry_id`),
     KEY `acc_account_01_IDX` (`owner_id`),
     KEY `acc_account_02_IDX` (`currency`),
-    KEY `acc_chart_entry_acc_account_FK_IDX` (`chart_entry_id`),
-    CONSTRAINT `acc_chart_entry_acc_account_FK` FOREIGN KEY (`chart_entry_id`) REFERENCES `acc_chart_entry` (`chart_entry_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `acc_coa_entry_acc_account_FK_IDX` (`coa_entry_id`),
+    CONSTRAINT `acc_coa_entry_acc_account_FK` FOREIGN KEY (`coa_entry_id`) REFERENCES `acc_coa_entry` (`coa_entry_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

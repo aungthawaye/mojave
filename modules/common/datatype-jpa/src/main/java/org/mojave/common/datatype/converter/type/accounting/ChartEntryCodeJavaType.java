@@ -26,21 +26,21 @@ import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
-import org.mojave.common.datatype.type.accounting.ChartEntryCode;
+import org.mojave.common.datatype.type.accounting.CoaEntryCode;
 
-public class ChartEntryCodeJavaType extends AbstractClassJavaType<ChartEntryCode> {
+public class ChartEntryCodeJavaType extends AbstractClassJavaType<CoaEntryCode> {
 
     public static final ChartEntryCodeJavaType INSTANCE = new ChartEntryCodeJavaType();
 
     public ChartEntryCodeJavaType() {
 
-        super(ChartEntryCode.class, ImmutableMutabilityPlan.instance());
+        super(CoaEntryCode.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public ChartEntryCode fromString(CharSequence string) {
+    public CoaEntryCode fromString(CharSequence string) {
 
-        return (string == null) ? null : new ChartEntryCode(string.toString());
+        return (string == null) ? null : new CoaEntryCode(string.toString());
     }
 
     @Override
@@ -50,14 +50,14 @@ public class ChartEntryCodeJavaType extends AbstractClassJavaType<ChartEntryCode
     }
 
     @Override
-    public String toString(ChartEntryCode value) {
+    public String toString(CoaEntryCode value) {
 
         return value == null ? null : value.value();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(ChartEntryCode value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(CoaEntryCode value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -73,12 +73,12 @@ public class ChartEntryCodeJavaType extends AbstractClassJavaType<ChartEntryCode
     }
 
     @Override
-    public ChartEntryCode wrap(Object value, WrapperOptions options) {
+    public CoaEntryCode wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case ChartEntryCode code -> code;
-            case String s -> new ChartEntryCode(s);
+            case CoaEntryCode code -> code;
+            case String s -> new CoaEntryCode(s);
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };

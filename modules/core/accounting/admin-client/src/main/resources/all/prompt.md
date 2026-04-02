@@ -7,11 +7,11 @@ Write retrofit methods inside `AccountingAdminService` class.
   `org.mojave.core.accounting.admin.controller.api.command.account`
 - Inside `AccountingAdminService.AccountQuery`, create the methods according to
   the methods inside `AccountQueryController`.
-- Inside `AccountingAdminService.ChartCommand`, create the methods according to
+- Inside `AccountingAdminService.CoaCommand`, create the methods according to
   the controllers inside
   `org.mojave.core.accounting.admin.controller.api.command.chart`
-- Inside `AccountingAdminService.ChartQuery`, create the methods according to
-  the methods inside `ChartQueryController` & `ChartEntryQueryController`.
+- Inside `AccountingAdminService.CoaQuery`, create the methods according to
+  the methods inside `CoaQueryController` & `CoaEntryQueryController`.
 - Inside `AccountingAdminService.DefinitionCommand`, create the methods
   according to the controllers inside
   `org.mojave.core.accounting.admin.controller.api.command.definition`

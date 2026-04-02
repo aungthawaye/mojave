@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.common.datatype.converter.identifier.accounting.AccountIdJavaType;
-import org.mojave.common.datatype.converter.identifier.accounting.ChartEntryIdConverter;
+import org.mojave.common.datatype.converter.identifier.accounting.CoaEntryIdConverter;
 import org.mojave.common.datatype.converter.identifier.accounting.OwnerIdJavaType;
 import org.mojave.common.datatype.converter.type.accounting.AccountCodeConverter;
 import org.mojave.common.datatype.enums.ActivationStatus;
@@ -47,7 +47,7 @@ import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
@@ -78,7 +78,7 @@ import static java.sql.Types.BIGINT;
             columnNames = {
                 "owner_id",
                 "currency",
-                "chart_entry_id"})},
+                "coa_entry_id"})},
     indexes = {
         @Index(
             name = "acc_account_01_IDX",
@@ -163,12 +163,12 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     protected TerminationStatus terminationStatus = TerminationStatus.ALIVE;
 
     @Column(
-        name = "chart_entry_id",
+        name = "coa_entry_id",
         nullable = false)
-    @Convert(converter = ChartEntryIdConverter.class)
-    protected ChartEntryId chartEntryId;
+    @Convert(converter = CoaEntryIdConverter.class)
+    protected CoaEntryId coaEntryId;
 
-    public Account(ChartEntry chartEntry,
+    public Account(CoaEntry chartEntry,
                    AccountOwnerId ownerId,
                    Currency currency,
                    AccountCode code,
@@ -190,7 +190,7 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
         }
 
         this.id = new AccountId(Snowflake.get().nextId());
-        this.chartEntryId = chartEntry.getId();
+        this.coaEntryId = chartEntry.getId();
         this.ownerId = ownerId;
         this.type = chartEntry.getAccountType();
         this.currency = currency;
@@ -223,7 +223,7 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
         return new AccountData(
             this.getId(), this.ownerId, this.type, this.currency, this.code, this.name,
             this.description, this.createdAt, this.activationStatus, this.terminationStatus,
-            this.chartEntryId);
+            this.coaEntryId);
     }
 
     public void deactivate() {

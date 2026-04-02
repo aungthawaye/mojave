@@ -53,7 +53,7 @@ import org.mojave.core.accounting.contract.exception.definition.DefinitionDescri
 import org.mojave.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.ChartEntryCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
 
 import java.util.ArrayList;
@@ -164,11 +164,11 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                                         Side side,
                                         String description,
                                         AccountCache accountCache,
-                                        ChartEntryCache chartEntryCache) {
+                                        CoaEntryCache coaEntryCache) {
 
         var posting = new PostingDefinition(
             this, index, postingChannel, receiveInId, participant, amountName, side, description,
-            accountCache, chartEntryCache);
+            accountCache, coaEntryCache);
 
         this.postings.add(posting);
 

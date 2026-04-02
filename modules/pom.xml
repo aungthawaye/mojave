@@ -18,6 +18,7 @@
         <module>provider</module>
         <module>core</module>
         <module>rail</module>
+        <module>mono</module>
         <module>operation</module>
         <module>connector</module>
     </modules>
@@ -256,18 +257,18 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.mono</groupId>
-                <artifactId>mojave-core-mono-admin</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.mono</groupId>
-                <artifactId>mojave-core-mono-consumer</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.mono</groupId>
-                <artifactId>mojave-core-mono-intercom</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-intercom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -421,8 +422,8 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.rail.fspiop</groupId>
-                <artifactId>mojave-rail-fspiop-mono</artifactId>
+                <groupId>org.mojave.mono.rail</groupId>
+                <artifactId>mojave-mono-rail-fspiop</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

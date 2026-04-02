@@ -292,10 +292,10 @@
       ]
     },
     {
-      "name": "Charts",
+      "name": "CoAs",
       "item": [
         {
-          "name": "POST /charts",
+          "name": "POST /coas/create-coa",
           "request": {
             "method": "POST",
             "header": [
@@ -309,19 +309,20 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/charts",
+              "raw": "{{baseUrl}}/coas/create-coa",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts"
+                "coas",
+                "create-coa"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "POST /charts/entries",
+          "name": "POST /coa-entries/create-coa-entry",
           "request": {
             "method": "POST",
             "header": [
@@ -335,20 +336,20 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/charts/entries",
+              "raw": "{{baseUrl}}/coa-entries/create-coa-entry",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "entries"
+                "coa-entries",
+                "create-coa-entry"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "POST /charts/change-name",
+          "name": "POST /coas/change-coa-name",
           "request": {
             "method": "POST",
             "header": [
@@ -362,20 +363,20 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/charts/change-name",
+              "raw": "{{baseUrl}}/coas/change-coa-name",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "change-name"
+                "coas",
+                "change-coa-name"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "POST /charts/entries/change-properties",
+          "name": "POST /coa-entries/change-coa-entry-properties",
           "request": {
             "method": "POST",
             "header": [
@@ -389,54 +390,53 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/charts/entries/change-properties",
+              "raw": "{{baseUrl}}/coa-entries/change-coa-entry-properties",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "entries",
-                "change-properties"
+                "coa-entries",
+                "change-coa-entry-properties"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "GET /charts/get-all-charts",
+          "name": "GET /coas/get-all",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/get-all-charts",
+              "raw": "{{baseUrl}}/coas/get-all",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "get-all-charts"
+                "coas",
+                "get-all"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "GET /charts/get-by-chart-id",
+          "name": "GET /coas/get-by-id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/get-by-chart-id?chartId=1",
+              "raw": "{{baseUrl}}/coas/get-by-id?coaId=1",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "get-by-chart-id"
+                "coas",
+                "get-by-id"
               ],
               "query": [
                 {
-                  "key": "chartId",
+                  "key": "coaId",
                   "value": "1"
                 }
               ]
@@ -445,17 +445,17 @@
           "response": []
         },
         {
-          "name": "GET /charts/get-by-name-contains",
+          "name": "GET /coas/get-by-name-contains",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/get-by-name-contains?name=Assets",
+              "raw": "{{baseUrl}}/coas/get-by-name-contains?name=Assets",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
+                "coas",
                 "get-by-name-contains"
               ],
               "query": [
@@ -469,42 +469,40 @@
           "response": []
         },
         {
-          "name": "GET /charts/entries/get-all-entries",
+          "name": "GET /coa-entries/get-all",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/entries/get-all-entries",
+              "raw": "{{baseUrl}}/coa-entries/get-all",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "entries",
-                "get-all-entries"
+                "coa-entries",
+                "get-all"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "GET /charts/entries/get-by-entry-id",
+          "name": "GET /coa-entries/get-by-id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/entries/get-by-entry-id?entryId=1",
+              "raw": "{{baseUrl}}/coa-entries/get-by-id?coaEntryId=1",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "entries",
-                "get-by-entry-id"
+                "coa-entries",
+                "get-by-id"
               ],
               "query": [
                 {
-                  "key": "entryId",
+                  "key": "coaEntryId",
                   "value": "1"
                 }
               ]
@@ -513,23 +511,22 @@
           "response": []
         },
         {
-          "name": "GET /charts/entries/get-by-chart-id",
+          "name": "GET /coa-entries/get-by-coa-id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/entries/get-by-chart-id?chartId=1",
+              "raw": "{{baseUrl}}/coa-entries/get-by-coa-id?coaId=1",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "entries",
-                "get-by-chart-id"
+                "coa-entries",
+                "get-by-coa-id"
               ],
               "query": [
                 {
-                  "key": "chartId",
+                  "key": "coaId",
                   "value": "1"
                 }
               ]
@@ -538,18 +535,17 @@
           "response": []
         },
         {
-          "name": "GET /charts/entries/get-by-name-contains",
+          "name": "GET /coa-entries/get-by-name-contains",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/charts/entries/get-by-name-contains?name=Cash",
+              "raw": "{{baseUrl}}/coa-entries/get-by-name-contains?name=Cash",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "charts",
-                "entries",
+                "coa-entries",
                 "get-by-name-contains"
               ],
               "query": [

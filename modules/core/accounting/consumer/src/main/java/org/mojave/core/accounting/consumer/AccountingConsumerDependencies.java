@@ -21,13 +21,13 @@
 package org.mojave.core.accounting.consumer;
 
 import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.ChartEntryCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.cache.strategy.local.AccountLocalCache;
-import org.mojave.core.accounting.domain.cache.strategy.local.ChartEntryLocalCache;
+import org.mojave.core.accounting.domain.cache.strategy.local.CoaEntryLocalCache;
 import org.mojave.core.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
-import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
+import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.mojave.provider.ledger.contract.Ledger;
 import org.mojave.provider.ledger.mysql.MySqlLedger;
@@ -43,17 +43,17 @@ class AccountingConsumerDependencies
 
     private final AccountCache accountCache;
 
-    private final ChartEntryCache chartEntryCache;
+    private final CoaEntryCache coaEntryCache;
 
     private final FlowDefinitionCache flowDefinitionCache;
 
     public AccountingConsumerDependencies(AccountRepository accountRepository,
-                                          ChartEntryRepository chartEntryRepository,
+                                          CoaEntryRepository coaEntryRepository,
                                           FlowDefinitionRepository flowDefinitionRepository,
                                           ObjectMapper objectMapper) {
 
         Objects.requireNonNull(accountRepository);
-        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(coaEntryRepository);
         Objects.requireNonNull(flowDefinitionRepository);
         Objects.requireNonNull(objectMapper);
 
@@ -75,7 +75,7 @@ class AccountingConsumerDependencies
 
         this.accountCache = new AccountLocalCache(accountRepository);
 
-        this.chartEntryCache = new ChartEntryLocalCache(chartEntryRepository);
+        this.coaEntryCache = new CoaEntryLocalCache(coaEntryRepository);
 
         this.flowDefinitionCache = new FlowDefinitionLocalCache(flowDefinitionRepository);
 
@@ -90,9 +90,9 @@ class AccountingConsumerDependencies
 
     @Bean
     @Override
-    public ChartEntryCache chartEntryCache() {
+    public CoaEntryCache coaEntryCache() {
 
-        return this.chartEntryCache;
+        return this.coaEntryCache;
     }
 
     @Bean

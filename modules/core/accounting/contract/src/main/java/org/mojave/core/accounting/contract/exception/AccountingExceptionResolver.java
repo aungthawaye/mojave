@@ -28,25 +28,25 @@ import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundEx
 import org.mojave.core.accounting.contract.exception.account.AccountNameRequiredException;
 import org.mojave.core.accounting.contract.exception.account.AccountNameTooLongException;
 import org.mojave.core.accounting.contract.exception.account.AccountNotActiveException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryCodeAlreadyExistsException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryDescriptionTooLongException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryNameAlreadyExistsException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryNameRequiredException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryNameTooLongException;
-import org.mojave.core.accounting.contract.exception.chart.ChartIdNotFoundException;
-import org.mojave.core.accounting.contract.exception.chart.ChartNameRequiredException;
-import org.mojave.core.accounting.contract.exception.chart.ChartNameTooLongException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryCodeAlreadyExistsException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryDescriptionTooLongException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryNameAlreadyExistsException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryNameRequiredException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryNameTooLongException;
+import org.mojave.core.accounting.contract.exception.chart.CoaIdNotFoundException;
+import org.mojave.core.accounting.contract.exception.chart.CoaNameRequiredException;
+import org.mojave.core.accounting.contract.exception.chart.CoaNameTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.AccountConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.AmbiguousReceiveInConfigException;
-import org.mojave.core.accounting.contract.exception.definition.ChartEntryConflictInDefinitionException;
+import org.mojave.core.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotConfiguredException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import org.mojave.core.accounting.contract.exception.definition.ImmatureChartEntryException;
+import org.mojave.core.accounting.contract.exception.definition.ImmatureCoaEntryException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
@@ -79,27 +79,27 @@ public class AccountingExceptionResolver {
             case AccountNotActiveException.CODE -> AccountNotActiveException.from(extra);
 
             // chart
-            case ChartEntryCodeAlreadyExistsException.CODE ->
-                ChartEntryCodeAlreadyExistsException.from(extra);
-            case ChartEntryDescriptionTooLongException.CODE ->
-                ChartEntryDescriptionTooLongException.from(extra);
-            case ChartEntryIdNotFoundException.CODE -> ChartEntryIdNotFoundException.from(extra);
-            case ChartEntryNameAlreadyExistsException.CODE ->
-                ChartEntryNameAlreadyExistsException.from(extra);
-            case ChartEntryNameRequiredException.CODE ->
-                ChartEntryNameRequiredException.from(extra);
-            case ChartEntryNameTooLongException.CODE -> ChartEntryNameTooLongException.from(extra);
-            case ChartIdNotFoundException.CODE -> ChartIdNotFoundException.from(extra);
-            case ChartNameRequiredException.CODE -> ChartNameRequiredException.from(extra);
-            case ChartNameTooLongException.CODE -> ChartNameTooLongException.from(extra);
+            case CoaEntryCodeAlreadyExistsException.CODE ->
+                CoaEntryCodeAlreadyExistsException.from(extra);
+            case CoaEntryDescriptionTooLongException.CODE ->
+                CoaEntryDescriptionTooLongException.from(extra);
+            case CoaEntryIdNotFoundException.CODE -> CoaEntryIdNotFoundException.from(extra);
+            case CoaEntryNameAlreadyExistsException.CODE ->
+                CoaEntryNameAlreadyExistsException.from(extra);
+            case CoaEntryNameRequiredException.CODE ->
+                CoaEntryNameRequiredException.from(extra);
+            case CoaEntryNameTooLongException.CODE -> CoaEntryNameTooLongException.from(extra);
+            case CoaIdNotFoundException.CODE -> CoaIdNotFoundException.from(extra);
+            case CoaNameRequiredException.CODE -> CoaNameRequiredException.from(extra);
+            case CoaNameTooLongException.CODE -> CoaNameTooLongException.from(extra);
 
             // definition
             case AccountConflictInDefinitionException.CODE ->
                 AccountConflictInDefinitionException.from(extra);
             case AmbiguousReceiveInConfigException.CODE ->
                 AmbiguousReceiveInConfigException.from(extra);
-            case ChartEntryConflictInDefinitionException.CODE ->
-                ChartEntryConflictInDefinitionException.from(extra);
+            case CoaEntryConflictInDefinitionException.CODE ->
+                CoaEntryConflictInDefinitionException.from(extra);
             case DefinitionDescriptionTooLongException.CODE ->
                 DefinitionDescriptionTooLongException.from(extra);
             case DefinitionNameTooLongException.CODE -> DefinitionNameTooLongException.from(extra);
@@ -111,7 +111,7 @@ public class AccountingExceptionResolver {
                 FlowDefinitionNotFoundException.from(extra);
             case FlowDefinitionAlreadyConfiguredException.CODE ->
                 FlowDefinitionAlreadyConfiguredException.from(extra);
-            case ImmatureChartEntryException.CODE -> ImmatureChartEntryException.from(extra);
+            case ImmatureCoaEntryException.CODE -> ImmatureCoaEntryException.from(extra);
             case InvalidAmountNameForTransactionTypeException.CODE ->
                 InvalidAmountNameForTransactionTypeException.from(extra);
             case InvalidParticipantForTransactionTypeException.CODE ->

@@ -26,7 +26,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 
 import java.time.Instant;
@@ -42,7 +42,7 @@ public record AccountData(AccountId accountId,
                           Instant createdAt,
                           ActivationStatus activationStatus,
                           TerminationStatus terminationStatus,
-                          ChartEntryId chartEntryId) {
+                          CoaEntryId coaEntryId) {
 
     @Override
     public boolean equals(Object o) {

@@ -23,7 +23,7 @@ package org.mojave.core.accounting.domain.repository;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.model.Account_;
@@ -38,9 +38,9 @@ public interface AccountRepository
 
     class Filters {
 
-        public static Specification<Account> withChartEntryId(ChartEntryId chartEntryId) {
+        public static Specification<Account> withCoaEntryId(CoaEntryId coaEntryId) {
 
-            return (root, query, cb) -> cb.equal(root.get(Account_.chartEntryId), chartEntryId);
+            return (root, query, cb) -> cb.equal(root.get(Account_.coaEntryId), coaEntryId);
         }
 
         public static Specification<Account> withCode(AccountCode code) {

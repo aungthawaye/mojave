@@ -40,22 +40,22 @@ import org.mojave.common.datatype.converter.identifier.accounting.PostingDefinit
 import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.accounting.contract.exception.definition.AccountConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.AmbiguousReceiveInConfigException;
-import org.mojave.core.accounting.contract.exception.definition.ChartEntryConflictInDefinitionException;
+import org.mojave.core.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.DuplicatePostingDefinitionIndexException;
-import org.mojave.core.accounting.contract.exception.definition.ImmatureChartEntryException;
+import org.mojave.core.accounting.contract.exception.definition.ImmatureCoaEntryException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForReceiveInException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.ChartEntryCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -148,7 +148,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
                              Side side,
                              String description,
                              AccountCache accountCache,
-                             ChartEntryCache chartEntryCache) {
+                             CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(definition);
         Objects.requireNonNull(side);
@@ -157,7 +157,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         this.definition = definition;
         this.forPosting(
             step, postingChannel, postingChannelId, participant, amountName, side, accountCache,
-            chartEntryCache).description(description);
+            coaEntryCache).description(description);
     }
 
     public PostingDefinition description(String description) {
@@ -184,7 +184,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
                                         String amountName,
                                         Side side,
                                         AccountCache accountCache,
-                                        ChartEntryCache chartEntryCache) {
+                                        CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(step);
         Objects.requireNonNull(amountName);
@@ -192,7 +192,7 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         Objects.requireNonNull(postingChannel);
         Objects.requireNonNull(receiveInId);
         Objects.requireNonNull(accountCache);
-        Objects.requireNonNull(chartEntryCache);
+        Objects.requireNonNull(coaEntryCache);
 
         if (this.definition.postings.stream().anyMatch(pd -> pd.step.equals(step))) {
             throw new DuplicatePostingDefinitionIndexException(step);
@@ -233,8 +233,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         // Now verify whether the newly adding posting conflicts with any of the existing posting definition.
         // Here we need to verify these things:
-        // 1. When CHART_ENTRY, any account of the adding ChartEntryId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
-        // 2. When ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing ChartEntryId.
+        // 1. When CHART_ENTRY, any account of the adding CoaEntryId conflicts with any of the existing accounts or an account of the existing CoaEntryId.
+        // 2. When ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing CoaEntryId.
 
         // Find all the accounts, created under the same postingChannelId in the accounting system, and previously added for the same Side and AmountName.
         var existingAccountIds = this.definition.postings
@@ -257,20 +257,20 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         if (postingChannel == PostingChannel.CHART_ENTRY) {
 
-            var _chartEntryId = new ChartEntryId(receiveInId);
+            var coaEntryId = new CoaEntryId(receiveInId);
 
-            if (existingChartEntryIds.contains(_chartEntryId.getId())) {
-                var chartEntryData = chartEntryCache.get(_chartEntryId);
-                // There is the same Posting Definition for the same chartEntryId, participant, side and amountName.
-                throw new ChartEntryConflictInDefinitionException(chartEntryData.code());
+            if (existingChartEntryIds.contains(coaEntryId.getId())) {
+                var coaEntryData = coaEntryCache.get(coaEntryId);
+                // There is the same Posting Definition for the same coaEntryId, participant, side and amountName.
+                throw new CoaEntryConflictInDefinitionException(coaEntryData.code());
             }
 
-            var accounts = accountCache.get(_chartEntryId);
+            var accounts = accountCache.get(coaEntryId);
 
             if (accounts == null || accounts.isEmpty()) {
 
-                var _chartEntry = chartEntryCache.get(_chartEntryId);
-                throw new ImmatureChartEntryException(_chartEntry.code());
+                var coaEntry = coaEntryCache.get(coaEntryId);
+                throw new ImmatureCoaEntryException(coaEntry.code());
 
             } else {
 
@@ -295,11 +295,11 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
             // Then, make sure this AccountId won't conflict with any other Posting Definition configured with
             // BY_CHART_ENTRY for the same side and amountName.
-            // In this case, we need to check using the accounts of each ChartEntryId which are already
+            // In this case, we need to check using the accounts of each CoaEntryId which are already
             // added to the definition.
             for (var existingChartEntryId : existingChartEntryIds) {
 
-                var accounts = accountCache.get(new ChartEntryId(existingChartEntryId));
+                var accounts = accountCache.get(new CoaEntryId(existingChartEntryId));
 
                 accounts
                     .stream()

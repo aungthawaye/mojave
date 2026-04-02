@@ -23,7 +23,7 @@ package org.mojave.core.accounting.domain.command.ledger;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
@@ -118,7 +118,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                 }
 
                 accountData = this.accountCache.get(
-                    new ChartEntryId(posting.receiveInId()),
+                    new CoaEntryId(posting.receiveInId()),
                     accountOfParticipant, input.currency());
                 accountId = accountData.accountId();
 
@@ -159,7 +159,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
                     movements.add(new Output.Movement(
                         movement.ledgerMovementId(), movement.accountId(), accountData.ownerId(),
-                        accountData.chartEntryId(), movement.side(), movement.currency(),
+                        accountData.coaEntryId(), movement.side(), movement.currency(),
                         movement.amount(),
                         new Output.DrCr(movement.oldDrCr().debits(), movement.oldDrCr().credits()),
                         new Output.DrCr(movement.newDrCr().debits(), movement.newDrCr().credits()),

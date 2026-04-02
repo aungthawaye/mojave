@@ -23,13 +23,13 @@ package org.mojave.core.accounting.intercom;
 import org.mojave.component.web.spring.security.AuthenticationErrorWriter;
 import org.mojave.component.web.spring.security.Authenticator;
 import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.ChartEntryCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.cache.strategy.timer.AccountTimerCache;
-import org.mojave.core.accounting.domain.cache.strategy.timer.ChartEntryTimerCache;
+import org.mojave.core.accounting.domain.cache.strategy.timer.CoaEntryTimerCache;
 import org.mojave.core.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCache;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
-import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
+import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.mojave.core.accounting.intercom.controller.component.EmptyErrorWriter;
 import org.mojave.core.accounting.intercom.controller.component.EmptyGatekeeper;
@@ -47,17 +47,17 @@ final class AccountingIntercomDependencies
 
     private final AccountCache accountCache;
 
-    private final ChartEntryCache chartEntryCache;
+    private final CoaEntryCache coaEntryCache;
 
     private final FlowDefinitionCache flowDefinitionCache;
 
     public AccountingIntercomDependencies(AccountRepository accountRepository,
-                                          ChartEntryRepository chartEntryRepository,
+                                          CoaEntryRepository coaEntryRepository,
                                           FlowDefinitionRepository flowDefinitionRepository,
                                           ObjectMapper objectMapper) {
 
         Objects.requireNonNull(accountRepository);
-        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(coaEntryRepository);
         Objects.requireNonNull(flowDefinitionRepository);
         Objects.requireNonNull(objectMapper);
 
@@ -81,8 +81,8 @@ final class AccountingIntercomDependencies
             accountRepository, Integer.parseInt(
             System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
-        this.chartEntryCache = new ChartEntryTimerCache(
-            chartEntryRepository, Integer.parseInt(
+        this.coaEntryCache = new CoaEntryTimerCache(
+            coaEntryRepository, Integer.parseInt(
             System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
         this.flowDefinitionCache = new FlowDefinitionTimerCache(
@@ -117,9 +117,9 @@ final class AccountingIntercomDependencies
 
     @Bean
     @Override
-    public ChartEntryCache chartEntryCache() {
+    public CoaEntryCache coaEntryCache() {
 
-        return this.chartEntryCache;
+        return this.coaEntryCache;
     }
 
     @Bean
