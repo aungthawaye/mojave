@@ -27,13 +27,29 @@ import org.mojave.core.participant.intercom.client.service.ParticipantIntercomSe
 import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
+import org.mojave.rail.fspiop.quoting.domain.QuotingKafkaConfiguration;
+import org.mojave.rail.fspiop.quoting.domain.kafka.listener.CreateQuotesRequestStepListener;
+import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesErrorStepListener;
+import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesResponseStepListener;
 import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 final class QuotingServiceSettings implements QuotingServiceConfiguration.RequiredSettings {
+
+    @Bean
+    @Override
+    public CreateQuotesRequestStepListener.Settings createQuotesRequestStepListenerSettings() {
+
+        return new CreateQuotesRequestStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), CreateQuotesRequestStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    }
 
     @Bean
     @Override
@@ -88,6 +104,14 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
 
         return new QuotingDomainConfiguration.QuoteSettings(
             Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
+    }
+
+    @Bean
+    @Override
+    public QuotingKafkaConfiguration.ProducerSettings quotingProducerSettings() {
+
+        return new QuotingKafkaConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean
@@ -159,6 +183,26 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
         return new SpringSecurityConfigurer.Settings(new String[]{"/quotes/**"});
+    }
+
+    @Bean
+    @Override
+    public UpdateQuotesErrorStepListener.Settings updateQuotesErrorStepListenerSettings() {
+
+        return new UpdateQuotesErrorStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), UpdateQuotesErrorStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    }
+
+    @Bean
+    @Override
+    public UpdateQuotesResponseStepListener.Settings updateQuotesResponseStepListenerSettings() {
+
+        return new UpdateQuotesResponseStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), UpdateQuotesResponseStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
     }
 
 }

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.2</version>
+        <version>4.0.4</version>
     </parent>
     <groupId>org.mojave</groupId>
     <artifactId>mojave</artifactId>
@@ -18,6 +18,7 @@
         <module>provider</module>
         <module>core</module>
         <module>rail</module>
+        <module>mono</module>
         <module>operation</module>
         <module>connector</module>
     </modules>
@@ -256,18 +257,18 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.mono</groupId>
-                <artifactId>mojave-core-mono-admin</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.mono</groupId>
-                <artifactId>mojave-core-mono-consumer</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.mono</groupId>
-                <artifactId>mojave-core-mono-intercom</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-intercom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -307,42 +308,12 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-admin-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-consumer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
                 <artifactId>mojave-core-settlement-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.core.settlement</groupId>
                 <artifactId>mojave-core-settlement-domain</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-intercom</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-intercom-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -451,8 +422,8 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.rail.fspiop</groupId>
-                <artifactId>mojave-rail-fspiop-mono</artifactId>
+                <groupId>org.mojave.mono.rail</groupId>
+                <artifactId>mojave-mono-rail-fspiop</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

@@ -66,7 +66,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "[\n  {\n    \"accountId\": 1001,\n    \"ownerId\": 2001,\n    \"type\": \"ASSET\",\n    \"currency\": \"USD\",\n    \"code\": \"1000-001\",\n    \"name\": \"Hub Settlement Liquidity\",\n    \"description\": \"Liquidity account for settlements\",\n    \"createdAt\": \"2025-01-01T10:15:30Z\",\n    \"activationStatus\": \"ACTIVE\",\n    \"terminationStatus\": \"NONE\",\n    \"chartEntryId\": 3001,\n    \"ledgerBalance\": {\n      \"accountId\": 1001,\n      \"currency\": \"USD\",\n      \"scale\": 2,\n      \"nature\": \"DEBIT\",\n      \"postedDebits\": 100000.00,\n      \"postedCredits\": 25000.00,\n      \"overdraftMode\": \"BLOCK\",\n      \"overdraftLimit\": 0,\n      \"createdAt\": \"2025-01-01T10:15:30Z\"\n    }\n  }\n]"
+              "body": "[\n  {\n    \"accountId\": 1001,\n    \"ownerId\": 2001,\n    \"type\": \"ASSET\",\n    \"currency\": \"USD\",\n    \"code\": \"1000-001\",\n    \"name\": \"Hub Settlement Liquidity\",\n    \"description\": \"Liquidity account for settlements\",\n    \"createdAt\": \"2025-01-01T10:15:30Z\",\n    \"activationStatus\": \"ACTIVE\",\n    \"terminationStatus\": \"NONE\",\n    \"coaEntryId\": 3001,\n    \"ledgerBalance\": {\n      \"accountId\": 1001,\n      \"currency\": \"USD\",\n      \"scale\": 2,\n      \"nature\": \"DEBIT\",\n      \"postedDebits\": 100000.00,\n      \"postedCredits\": 25000.00,\n      \"overdraftMode\": \"BLOCK\",\n      \"overdraftLimit\": 0,\n      \"createdAt\": \"2025-01-01T10:15:30Z\"\n    }\n  }\n]"
             }
           ]
         }
@@ -92,7 +92,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"transactionId\": 74703307497472,\n  \"transactionType\": \"FUND_TRANSFER\",\n  \"transactionAt\": \"2025-10-13T08:49:00Z\",\n  \"postings\": [\n    {\n      \"ownerId\": 2001,\n      \"chartEntryId\": 3001,\n      \"currency\": \"USD\",\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00\n    },\n    {\n      \"ownerId\": 2002,\n      \"chartEntryId\": 3002,\n      \"currency\": \"USD\",\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00\n    }\n  ]\n}"
+              "raw": "{\n  \"transactionId\": 74703307497472,\n  \"transactionType\": \"FUND_TRANSFER\",\n  \"transactionAt\": \"2025-10-13T08:49:00Z\",\n  \"postings\": [\n    {\n      \"ownerId\": 2001,\n      \"coaEntryId\": 3001,\n      \"currency\": \"USD\",\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00\n    },\n    {\n      \"ownerId\": 2002,\n      \"coaEntryId\": 3002,\n      \"currency\": \"USD\",\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/ledgers/post-ledger-flow",
@@ -122,7 +122,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"transactionId\": 74703307497472,\n  \"transactionType\": \"FUND_TRANSFER\",\n  \"transactionAt\": \"2025-10-13T08:49:00Z\",\n  \"postings\": [\n    {\n      \"ownerId\": 2001,\n      \"chartEntryId\": 3001,\n      \"currency\": \"USD\",\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00\n    },\n    {\n      \"ownerId\": 2002,\n      \"chartEntryId\": 3002,\n      \"currency\": \"USD\",\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00\n    }\n  ]\n}"
+                  "raw": "{\n  \"transactionId\": 74703307497472,\n  \"transactionType\": \"FUND_TRANSFER\",\n  \"transactionAt\": \"2025-10-13T08:49:00Z\",\n  \"postings\": [\n    {\n      \"ownerId\": 2001,\n      \"coaEntryId\": 3001,\n      \"currency\": \"USD\",\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00\n    },\n    {\n      \"ownerId\": 2002,\n      \"coaEntryId\": 3002,\n      \"currency\": \"USD\",\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00\n    }\n  ]\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/ledgers/post-ledger-flow",
@@ -144,7 +144,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"flows\": [\n    {\n      \"accountId\": 5001,\n      \"ownerId\": 2001,\n      \"chartEntryId\": 3001,\n      \"ledgerMovementId\": 90001,\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00,\n      \"oldDrCr\": { \"debits\": 1000.00, \"credits\": 100.00 },\n      \"newDrCr\": { \"debits\": 1100.00, \"credits\": 100.00 },\n      \"movementStage\": \"POSTED\",\n      \"movementResult\": \"APPLIED\"\n    },\n    {\n      \"accountId\": 5002,\n      \"ownerId\": 2002,\n      \"chartEntryId\": 3002,\n      \"ledgerMovementId\": 90002,\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00,\n      \"oldDrCr\": { \"debits\": 200.00, \"credits\": 50.00 },\n      \"newDrCr\": { \"debits\": 200.00, \"credits\": 150.00 },\n      \"movementStage\": \"POSTED\",\n      \"movementResult\": \"APPLIED\"\n    }\n  ]\n}"
+              "body": "{\n  \"flows\": [\n    {\n      \"accountId\": 5001,\n      \"ownerId\": 2001,\n      \"coaEntryId\": 3001,\n      \"ledgerMovementId\": 90001,\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00,\n      \"oldDrCr\": { \"debits\": 1000.00, \"credits\": 100.00 },\n      \"newDrCr\": { \"debits\": 1100.00, \"credits\": 100.00 },\n      \"movementStage\": \"POSTED\",\n      \"movementResult\": \"APPLIED\"\n    },\n    {\n      \"accountId\": 5002,\n      \"ownerId\": 2002,\n      \"coaEntryId\": 3002,\n      \"ledgerMovementId\": 90002,\n      \"side\": \"CREDIT\",\n      \"amount\": 100.00,\n      \"oldDrCr\": { \"debits\": 200.00, \"credits\": 50.00 },\n      \"newDrCr\": { \"debits\": 200.00, \"credits\": 150.00 },\n      \"movementStage\": \"POSTED\",\n      \"movementResult\": \"APPLIED\"\n    }\n  ]\n}"
             },
             {
               "name": "400 Bad Request - Sample (Missing account)",
@@ -162,7 +162,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"transactionId\": 74703307497472,\n  \"transactionType\": \"FUND_TRANSFER\",\n  \"transactionAt\": \"2025-10-13T08:49:00Z\",\n  \"postings\": [\n    {\n      \"ownerId\": 999999,\n      \"chartEntryId\": 3001,\n      \"currency\": \"USD\",\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00\n    }\n  ]\n}"
+                  "raw": "{\n  \"transactionId\": 74703307497472,\n  \"transactionType\": \"FUND_TRANSFER\",\n  \"transactionAt\": \"2025-10-13T08:49:00Z\",\n  \"postings\": [\n    {\n      \"ownerId\": 999999,\n      \"coaEntryId\": 3001,\n      \"currency\": \"USD\",\n      \"side\": \"DEBIT\",\n      \"amount\": 100.00\n    }\n  ]\n}"
                 },
                 "url": {
                   "raw": "{{baseUrl}}/ledgers/post-ledger-flow",

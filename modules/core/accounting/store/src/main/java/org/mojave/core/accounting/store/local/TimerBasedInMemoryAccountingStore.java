@@ -24,7 +24,7 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
 import org.mojave.core.accounting.contract.query.AccountQuery;
@@ -116,26 +116,26 @@ public class TimerBasedInMemoryAccountingStore implements AccountingStore {
     }
 
     @Override
-    public AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
+    public AccountData get(CoaEntryId coaEntryId, AccountOwnerId ownerId, Currency currency) {
 
-        if (chartEntryId == null || ownerId == null || currency == null) {
+        if (coaEntryId == null || ownerId == null || currency == null) {
             return null;
         }
 
-        var key = chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
+        var key = coaEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
                       currency.name();
 
-        return this.snapshotRef.get().accountByChartEntryOwnerCurrency.get(key);
+        return this.snapshotRef.get().accountByCoaEntryOwnerCurrency.get(key);
     }
 
     @Override
-    public Set<AccountData> get(ChartEntryId chartEntryId) {
+    public Set<AccountData> get(CoaEntryId coaEntryId) {
 
-        if (chartEntryId == null) {
+        if (coaEntryId == null) {
             return Set.of();
         }
 
-        return this.snapshotRef.get().accountByChartEntryId.getOrDefault(chartEntryId, Set.of());
+        return this.snapshotRef.get().accountByCoaEntryId.getOrDefault(coaEntryId, Set.of());
     }
 
     private void refreshData() {
@@ -161,28 +161,28 @@ public class TimerBasedInMemoryAccountingStore implements AccountingStore {
                 AccountData::ownerId,
                 Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-        var _accountByChartEntryId = Collections.unmodifiableMap(
+        var _accountByCoaEntryId = Collections.unmodifiableMap(
             accounts.stream().collect(Collectors.groupingBy(
-                AccountData::chartEntryId,
+                AccountData::coaEntryId,
                 Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
-        var _accountByChartEntryOwnerCurrency = accounts.stream().collect(Collectors.toUnmodifiableMap(
-            acc -> acc.chartEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() +
+        var _accountByCoaEntryOwnerCurrency = accounts.stream().collect(Collectors.toUnmodifiableMap(
+            acc -> acc.coaEntryId().getId().toString() + ":" + acc.ownerId().getId().toString() +
                        ":" + acc.currency().name(), Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed Account data, count: {}", accounts.size());
 
         this.snapshotRef.set(new Snapshot(
-            _accountById, _accountByCode, _accountByOwnerId, _accountByChartEntryOwnerCurrency,
-            _accountByChartEntryId));
+            _accountById, _accountByCode, _accountByOwnerId, _accountByCoaEntryOwnerCurrency,
+            _accountByCoaEntryId));
 
     }
 
     private record Snapshot(Map<AccountId, AccountData> accountById,
                             Map<AccountCode, AccountData> accountByCode,
                             Map<AccountOwnerId, Set<AccountData>> accountByOwnerId,
-                            Map<String, AccountData> accountByChartEntryOwnerCurrency,
-                            Map<ChartEntryId, Set<AccountData>> accountByChartEntryId) {
+                            Map<String, AccountData> accountByCoaEntryOwnerCurrency,
+                            Map<CoaEntryId, Set<AccountData>> accountByCoaEntryId) {
 
         static Snapshot empty() {
 

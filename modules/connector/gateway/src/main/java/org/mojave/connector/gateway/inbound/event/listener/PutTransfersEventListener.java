@@ -19,7 +19,7 @@
  */
 package org.mojave.connector.gateway.inbound.event.listener;
 
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payer.HandlePutTransfersResponseCommand;
 import org.mojave.connector.gateway.inbound.event.PutTransfersEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

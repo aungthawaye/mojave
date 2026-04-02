@@ -23,7 +23,7 @@ package org.mojave.core.accounting.domain;
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.ChartEntryCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.provider.ledger.contract.Ledger;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,7 +44,7 @@ public class AccountingDomainConfiguration {
 
         AccountCache accountCache();
 
-        ChartEntryCache chartEntryCache();
+        CoaEntryCache coaEntryCache();
 
         FlowDefinitionCache flowDefinitionCache();
 

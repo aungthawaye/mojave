@@ -27,7 +27,7 @@ import org.mojave.core.accounting.contract.command.definition.CreateFlowDefiniti
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.ChartEntryCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.slf4j.Logger;
@@ -48,19 +48,19 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
     private final AccountCache accountCache;
 
-    private final ChartEntryCache chartEntryCache;
+    private final CoaEntryCache coaEntryCache;
 
     public CreateFlowDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
                                               final AccountCache accountCache,
-                                              final ChartEntryCache chartEntryCache) {
+                                              final CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(flowDefinitionRepository);
         Objects.requireNonNull(accountCache);
-        Objects.requireNonNull(chartEntryCache);
+        Objects.requireNonNull(coaEntryCache);
 
         this.flowDefinitionRepository = flowDefinitionRepository;
         this.accountCache = accountCache;
-        this.chartEntryCache = chartEntryCache;
+        this.coaEntryCache = coaEntryCache;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
             final var pd = definition.addPosting(
                 posting.step(), posting.postingChannel(), posting.postingChannelId(), posting.participant(),
                 posting.amountName(), posting.side(), posting.description(), this.accountCache,
-                this.chartEntryCache);
+                this.coaEntryCache);
             postingIds.add(pd.getId());
         }
 

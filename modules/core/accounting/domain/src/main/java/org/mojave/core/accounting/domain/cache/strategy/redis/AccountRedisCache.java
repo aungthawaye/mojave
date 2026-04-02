@@ -24,7 +24,7 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.redis.RedissonOpsClient;
 import org.mojave.core.accounting.contract.data.AccountData;
@@ -51,7 +51,7 @@ public class AccountRedisCache implements AccountCache {
 
     private final RSetMultimap<Long, AccountData> withOwnerId;
 
-    private final RMap<String, AccountData> withChartEntryIdOwnerIdCurrency;
+    private final RMap<String, AccountData> withCoaEntryIdOwnerIdCurrency;
 
     public AccountRedisCache(AccountRepository accountRepository,
                              RedissonOpsClient redissonOpsClient) {
@@ -66,10 +66,10 @@ public class AccountRedisCache implements AccountCache {
         this.withOwnerId = redissonOpsClient
                                .getRedissonClient()
                                .getSetMultimap(Names.WITH_OWNER_ID);
-        this.withChartEntryIdOwnerIdCurrency = redissonOpsClient
+        this.withCoaEntryIdOwnerIdCurrency = redissonOpsClient
                                                    .getRedissonClient()
                                                    .getMap(
-                                                       Names.WITH_CHARTENTRYID_OWNERID_CURRENCY);
+                                                       Names.WITH_COAENTRYID_OWNERID_CURRENCY);
 
     }
 
@@ -79,7 +79,7 @@ public class AccountRedisCache implements AccountCache {
         this.withId.clear();
         this.withCode.clear();
         this.withOwnerId.clear();
-        this.withChartEntryIdOwnerIdCurrency.clear();
+        this.withCoaEntryIdOwnerIdCurrency.clear();
     }
 
     @Override
@@ -104,9 +104,9 @@ public class AccountRedisCache implements AccountCache {
 
         }
 
-        var key = AccountCache.Keys.forChart(
-            deleted.chartEntryId(), deleted.ownerId(), deleted.currency());
-        this.withChartEntryIdOwnerIdCurrency.remove(key);
+        var key = AccountCache.Keys.forCoaEntry(
+            deleted.coaEntryId(), deleted.ownerId(), deleted.currency());
+        this.withCoaEntryIdOwnerIdCurrency.remove(key);
     }
 
     @Override
@@ -128,20 +128,20 @@ public class AccountRedisCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency) {
+    public AccountData get(CoaEntryId coaEntryId, AccountOwnerId ownerId, Currency currency) {
 
-        var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
+        var key = AccountCache.Keys.forCoaEntry(coaEntryId, ownerId, currency);
 
-        return this.withChartEntryIdOwnerIdCurrency.get(key);
+        return this.withCoaEntryIdOwnerIdCurrency.get(key);
     }
 
     @Override
-    public Set<AccountData> get(ChartEntryId chartEntryId) {
+    public Set<AccountData> get(CoaEntryId coaEntryId) {
 
         var result = new HashSet<AccountData>();
 
         for (var account : this.withId.values()) {
-            if (account.chartEntryId().equals(chartEntryId)) {
+            if (account.coaEntryId().equals(coaEntryId)) {
                 result.add(account);
             }
         }
@@ -169,10 +169,10 @@ public class AccountRedisCache implements AccountCache {
         this.withCode.put(account.code().value(), account);
         this.withOwnerId.put(account.ownerId().getId(), account);
 
-        var key = AccountCache.Keys.forChart(
-            account.chartEntryId(), account.ownerId(), account.currency());
+        var key = AccountCache.Keys.forCoaEntry(
+            account.coaEntryId(), account.ownerId(), account.currency());
 
-        this.withChartEntryIdOwnerIdCurrency.put(key, account);
+        this.withCoaEntryIdOwnerIdCurrency.put(key, account);
     }
 
 }

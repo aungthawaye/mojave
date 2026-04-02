@@ -19,7 +19,7 @@
  */
 package org.mojave.connector.gateway.inbound.event.listener;
 
-import org.mojave.connector.gateway.inbound.command.parties.HandlePutPartiesResponseCommand;
+import org.mojave.connector.gateway.inbound.command.parties.payer.HandlePutPartiesResponseCommand;
 import org.mojave.connector.gateway.inbound.event.PutPartiesEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

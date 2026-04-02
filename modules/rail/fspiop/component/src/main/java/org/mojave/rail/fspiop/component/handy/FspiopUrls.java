@@ -126,6 +126,12 @@ public class FspiopUrls {
                        "/error";
         }
 
+        public static String patchTransfersError(String baseUrl, String transferId) {
+
+            return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + "transfers/" + transferId +
+                       "/error";
+        }
+
     }
 
 }

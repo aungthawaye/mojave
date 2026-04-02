@@ -31,7 +31,7 @@ public class RequireParticipantForReceiveInException extends UncheckedDomainExce
 
     public static final String CODE = "REQUIRE_PARTICIPANT_FOR_RECEIVE_IN";
 
-    private static final String TEMPLATE = "Participant is required to receive through Chart Entry.";
+    private static final String TEMPLATE = "Participant is required to receive through CoA Entry.";
 
     public RequireParticipantForReceiveInException() {
 

@@ -23,7 +23,7 @@ package org.mojave.core.accounting.contract.query;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.misc.query.PagedRequest;
 import org.mojave.component.misc.query.PagedResult;
@@ -53,7 +53,7 @@ public interface AccountQuery {
             ACCOUNT_CODE,
             NAME,
             OWNER_ID,
-            CHART_ENTRY_ID,
+            COA_ENTRY_ID,
             CURRENCY
         }
 
@@ -67,7 +67,7 @@ public interface AccountQuery {
         public record Filter(AccountCode accountCode,
                              String name,
                              AccountOwnerId ownerId,
-                             ChartEntryId chartEntryId,
+                             CoaEntryId coaEntryId,
                              Currency currency) { }
 
     }

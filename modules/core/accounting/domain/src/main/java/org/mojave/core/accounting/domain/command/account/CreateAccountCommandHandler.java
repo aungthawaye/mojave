@@ -24,10 +24,10 @@ import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
 import org.mojave.core.accounting.contract.exception.account.AccountCodeAlreadyExistsException;
-import org.mojave.core.accounting.contract.exception.chart.ChartEntryIdNotFoundException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
 import org.mojave.core.accounting.domain.model.Account;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
-import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
+import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
 import org.mojave.provider.ledger.contract.Ledger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,20 +44,20 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
 
     private final AccountRepository accountRepository;
 
-    private final ChartEntryRepository chartEntryRepository;
+    private final CoaEntryRepository coaEntryRepository;
 
     private final Ledger ledger;
 
     public CreateAccountCommandHandler(AccountRepository accountRepository,
-                                       ChartEntryRepository chartEntryRepository,
+                                       CoaEntryRepository coaEntryRepository,
                                        Ledger ledger) {
 
         Objects.requireNonNull(accountRepository);
-        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(coaEntryRepository);
         Objects.requireNonNull(ledger);
 
         this.accountRepository = accountRepository;
-        this.chartEntryRepository = chartEntryRepository;
+        this.coaEntryRepository = coaEntryRepository;
         this.ledger = ledger;
     }
 
@@ -68,10 +68,10 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
 
         LOGGER.info("CreateAccountCommand : input: ({})", ObjectLogger.log(input));
 
-        var chartEntry = this.chartEntryRepository
-                             .findById(input.chartEntryId())
+        var coaEntry = this.coaEntryRepository
+                             .findById(input.coaEntryId())
                              .orElseThrow(
-                                 () -> new ChartEntryIdNotFoundException(input.chartEntryId()));
+                                 () -> new CoaEntryIdNotFoundException(input.coaEntryId()));
 
         var exist = this.accountRepository
                         .findOne(AccountRepository.Filters.withCode(input.code()))
@@ -83,7 +83,7 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
         }
 
         var account = new Account(
-            chartEntry, input.ownerId(), input.currency(), input.code(),
+            coaEntry, input.ownerId(), input.currency(), input.code(),
             input.name(), input.description(), input.overdraftMode(), input.overdraftLimit());
 
         account = this.accountRepository.save(account);

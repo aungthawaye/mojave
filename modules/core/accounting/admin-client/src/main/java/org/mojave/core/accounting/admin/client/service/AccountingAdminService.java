@@ -23,8 +23,8 @@ package org.mojave.core.accounting.admin.client.service;
 import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
-import org.mojave.common.datatype.identifier.accounting.ChartId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.misc.query.PagedResult;
@@ -34,10 +34,10 @@ import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
 import org.mojave.core.accounting.contract.command.account.CreateAccountByCategoryCommand;
 import org.mojave.core.accounting.contract.command.account.DeactivateAccountCommand;
 import org.mojave.core.accounting.contract.command.account.TerminateAccountCommand;
-import org.mojave.core.accounting.contract.command.chart.ChangeChartEntryPropertiesCommand;
-import org.mojave.core.accounting.contract.command.chart.ChangeChartNameCommand;
-import org.mojave.core.accounting.contract.command.chart.CreateChartCommand;
-import org.mojave.core.accounting.contract.command.chart.CreateChartEntryCommand;
+import org.mojave.core.accounting.contract.command.chart.ChangeCoaEntryPropertiesCommand;
+import org.mojave.core.accounting.contract.command.chart.ChangeCoaNameCommand;
+import org.mojave.core.accounting.contract.command.chart.CreateCoaCommand;
+import org.mojave.core.accounting.contract.command.chart.CreateCoaEntryCommand;
 import org.mojave.core.accounting.contract.command.definition.ActivateFlowDefinitionCommand;
 import org.mojave.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
 import org.mojave.core.accounting.contract.command.definition.ChangeFlowDefinitionCurrencyCommand;
@@ -48,8 +48,8 @@ import org.mojave.core.accounting.contract.command.definition.RemovePostingDefin
 import org.mojave.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
 import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import org.mojave.core.accounting.contract.data.AccountData;
-import org.mojave.core.accounting.contract.data.ChartData;
-import org.mojave.core.accounting.contract.data.ChartEntryData;
+import org.mojave.core.accounting.contract.data.CoaData;
+import org.mojave.core.accounting.contract.data.CoaEntryData;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -108,51 +108,51 @@ public interface AccountingAdminService {
 
     }
 
-    interface ChartCommand {
+    interface CoaCommand {
 
-        @POST(MODULE_PREFIX + "/chart-entries/change-chart-entry-properties")
-        Call<ChangeChartEntryPropertiesCommand.Output> changeEntryProperties(
-            @Body ChangeChartEntryPropertiesCommand.Input input);
+        @POST(MODULE_PREFIX + "/coa-entries/change-coa-entry-properties")
+        Call<ChangeCoaEntryPropertiesCommand.Output> changeEntryProperties(
+            @Body ChangeCoaEntryPropertiesCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/charts/change-chart-name")
-        Call<ChangeChartNameCommand.Output> changeName(@Body ChangeChartNameCommand.Input input);
+        @POST(MODULE_PREFIX + "/coas/change-coa-name")
+        Call<ChangeCoaNameCommand.Output> changeName(@Body ChangeCoaNameCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/charts/create-chart")
-        Call<CreateChartCommand.Output> create(@Body CreateChartCommand.Input input);
+        @POST(MODULE_PREFIX + "/coas/create-coa")
+        Call<CreateCoaCommand.Output> create(@Body CreateCoaCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/chart-entries/create-chart-entry")
-        Call<CreateChartEntryCommand.Output> createEntry(@Body CreateChartEntryCommand.Input input);
+        @POST(MODULE_PREFIX + "/coa-entries/create-coa-entry")
+        Call<CreateCoaEntryCommand.Output> createEntry(@Body CreateCoaEntryCommand.Input input);
 
     }
 
-    interface ChartQuery {
+    interface CoaQuery {
 
-        @GET(MODULE_PREFIX + "/chart-entries/get-all")
-        Call<List<ChartEntryData>> getAllChartEntries();
+        @GET(MODULE_PREFIX + "/coa-entries/get-all")
+        Call<List<CoaEntryData>> getAllCoaEntries();
 
-        @GET(MODULE_PREFIX + "/charts/get-all")
-        Call<List<ChartData>> getAllCharts();
+        @GET(MODULE_PREFIX + "/coas/get-all")
+        Call<List<CoaData>> getAllCoas();
 
-        // Chart entry queries
-        @GET(MODULE_PREFIX + "/chart-entries/get-by-id")
-        Call<ChartEntryData> getByChartEntryId(@Query("chartEntryId") ChartEntryId chartEntryId);
+        // CoA entry queries
+        @GET(MODULE_PREFIX + "/coa-entries/get-by-id")
+        Call<CoaEntryData> getByCoaEntryId(@Query("coaEntryId") CoaEntryId coaEntryId);
 
-        // Chart queries
-        @GET(MODULE_PREFIX + "/charts/get-by-id")
-        Call<ChartData> getByChartId(@Query("chartId") ChartId chartId);
+        // CoA queries
+        @GET(MODULE_PREFIX + "/coas/get-by-id")
+        Call<CoaData> getByCoaId(@Query("coaId") CoaId coaId);
 
-        @GET(MODULE_PREFIX + "/chart-entries/get-by-name-contains")
-        Call<List<ChartEntryData>> getChartEntriesByNameContains(@Query("name") String name);
+        @GET(MODULE_PREFIX + "/coa-entries/get-by-name-contains")
+        Call<List<CoaEntryData>> getCoaEntriesByNameContains(@Query("name") String name);
 
-        @GET(MODULE_PREFIX + "/charts/get-by-name-contains")
-        Call<List<ChartData>> getChartsByNameContains(@Query("name") String name);
+        @GET(MODULE_PREFIX + "/coas/get-by-name-contains")
+        Call<List<CoaData>> getCoasByNameContains(@Query("name") String name);
 
-        @GET(MODULE_PREFIX + "/chart-entries/get-by-category")
-        Call<List<ChartEntryData>> getEntriesByCategory(
+        @GET(MODULE_PREFIX + "/coa-entries/get-by-category")
+        Call<List<CoaEntryData>> getEntriesByCategory(
             @Query("category") ChartEntryCategory category);
 
-        @GET(MODULE_PREFIX + "/chart-entries/get-by-chart-id")
-        Call<List<ChartEntryData>> getEntriesByChartId(@Query("chartId") ChartId chartId);
+        @GET(MODULE_PREFIX + "/coa-entries/get-by-coa-id")
+        Call<List<CoaEntryData>> getEntriesByCoaId(@Query("coaId") CoaId coaId);
 
     }
 

@@ -24,7 +24,7 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
 import org.mojave.core.accounting.domain.cache.AccountCache;
@@ -47,9 +47,9 @@ public class AccountLocalCache implements AccountCache {
 
     private final Map<Long, Set<AccountData>> withOwnerId;
 
-    private final Map<Long, Set<AccountData>> withChartEntryId;
+    private final Map<Long, Set<AccountData>> withCoaEntryId;
 
-    private final Map<String, AccountData> withChartEntryIdOwnerIdCurrency;
+    private final Map<String, AccountData> withCoaEntryIdOwnerIdCurrency;
 
     public AccountLocalCache(final AccountRepository accountRepository) {
 
@@ -60,8 +60,8 @@ public class AccountLocalCache implements AccountCache {
         this.withId = new ConcurrentHashMap<>();
         this.withCode = new ConcurrentHashMap<>();
         this.withOwnerId = new ConcurrentHashMap<>();
-        this.withChartEntryId = new ConcurrentHashMap<>();
-        this.withChartEntryIdOwnerIdCurrency = new ConcurrentHashMap<>();
+        this.withCoaEntryId = new ConcurrentHashMap<>();
+        this.withCoaEntryIdOwnerIdCurrency = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AccountLocalCache implements AccountCache {
         this.withId.clear();
         this.withCode.clear();
         this.withOwnerId.clear();
-        this.withChartEntryIdOwnerIdCurrency.clear();
+        this.withCoaEntryIdOwnerIdCurrency.clear();
     }
 
     @Override
@@ -90,9 +90,9 @@ public class AccountLocalCache implements AccountCache {
             set.removeIf(a -> a.accountId().equals(accountId));
         }
 
-        final var key = AccountCache.Keys.forChart(
-            deleted.chartEntryId(), deleted.ownerId(), deleted.currency());
-        this.withChartEntryIdOwnerIdCurrency.remove(key);
+        final var key = AccountCache.Keys.forCoaEntry(
+            deleted.coaEntryId(), deleted.ownerId(), deleted.currency());
+        this.withCoaEntryIdOwnerIdCurrency.remove(key);
     }
 
     @Override
@@ -174,23 +174,23 @@ public class AccountLocalCache implements AccountCache {
     }
 
     @Override
-    public AccountData get(final ChartEntryId chartEntryId,
+    public AccountData get(final CoaEntryId coaEntryId,
                            final AccountOwnerId ownerId,
                            final Currency currency) {
 
-        if (chartEntryId == null || ownerId == null || currency == null) {
+        if (coaEntryId == null || ownerId == null || currency == null) {
             return null;
         }
 
-        final var key = AccountCache.Keys.forChart(chartEntryId, ownerId, currency);
+        final var key = AccountCache.Keys.forCoaEntry(coaEntryId, ownerId, currency);
 
-        var data = this.withChartEntryIdOwnerIdCurrency.get(key);
+        var data = this.withCoaEntryIdOwnerIdCurrency.get(key);
 
         if (data == null) {
 
             var entity = this.accountRepository
                              .findOne(AccountRepository.Filters
-                                          .withChartEntryId(chartEntryId)
+                                          .withCoaEntryId(coaEntryId)
                                           .and(AccountRepository.Filters.withOwnerId(ownerId))
                                           .and(AccountRepository.Filters.withCurrency(currency)))
                              .orElse(null);
@@ -207,17 +207,17 @@ public class AccountLocalCache implements AccountCache {
     }
 
     @Override
-    public Set<AccountData> get(final ChartEntryId chartEntryId) {
+    public Set<AccountData> get(final CoaEntryId coaEntryId) {
 
-        if (chartEntryId == null) {
+        if (coaEntryId == null) {
             return Set.of();
         }
 
-        final var result = this.withChartEntryId.getOrDefault(chartEntryId.getId(), Set.of());
+        final var result = this.withCoaEntryId.getOrDefault(coaEntryId.getId(), Set.of());
 
         if (result.isEmpty()) {
             final var entities = this.accountRepository.findAll(
-                AccountRepository.Filters.withChartEntryId(chartEntryId));
+                AccountRepository.Filters.withCoaEntryId(coaEntryId));
 
             entities.forEach(entity -> {
                 final var account = entity.convert();
@@ -251,14 +251,14 @@ public class AccountLocalCache implements AccountCache {
             account.ownerId().getId(), __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set.add(account);
 
-        final var set2 = this.withChartEntryId.computeIfAbsent(
-            account.chartEntryId().getId(),
+        final var set2 = this.withCoaEntryId.computeIfAbsent(
+            account.coaEntryId().getId(),
             __ -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
         set2.add(account);
 
-        final var key = AccountCache.Keys.forChart(
-            account.chartEntryId(), account.ownerId(), account.currency());
-        this.withChartEntryIdOwnerIdCurrency.put(key, account);
+        final var key = AccountCache.Keys.forCoaEntry(
+            account.coaEntryId(), account.ownerId(), account.currency());
+        this.withCoaEntryIdOwnerIdCurrency.put(key, account);
     }
 
 }

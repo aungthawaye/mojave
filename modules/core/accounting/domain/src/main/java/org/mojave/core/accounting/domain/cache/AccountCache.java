@@ -23,7 +23,7 @@ package org.mojave.core.accounting.domain.cache;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
 
@@ -41,9 +41,9 @@ public interface AccountCache {
 
     AccountData get(AccountId accountId);
 
-    AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency);
+    AccountData get(CoaEntryId coaEntryId, AccountOwnerId ownerId, Currency currency);
 
-    Set<AccountData> get(ChartEntryId chartEntryId);
+    Set<AccountData> get(CoaEntryId coaEntryId);
 
     void save(AccountData account);
 
@@ -59,11 +59,11 @@ public interface AccountCache {
 
     class Keys {
 
-        public static String forChart(ChartEntryId chartEntryId,
-                                      AccountOwnerId ownerId,
-                                      Currency currency) {
+        public static String forCoaEntry(CoaEntryId coaEntryId,
+                                         AccountOwnerId ownerId,
+                                         Currency currency) {
 
-            return chartEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
+            return coaEntryId.getId().toString() + ":" + ownerId.getId().toString() + ":" +
                        currency.name();
         }
 
@@ -77,7 +77,7 @@ public interface AccountCache {
 
         public static final String WITH_OWNER_ID = "acc-account-with-owner-id";
 
-        public static final String WITH_CHARTENTRYID_OWNERID_CURRENCY = "acc-account-with-chartentryid-ownerid-currency";
+        public static final String WITH_COAENTRYID_OWNERID_CURRENCY = "acc-account-with-coaentryid-ownerid-currency";
 
     }
 

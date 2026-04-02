@@ -260,7 +260,6 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
 
     @Column(
         name = "transfer_amount",
-        nullable = false,
         precision = 34,
         scale = 4)
     protected BigDecimal transferAmount;
@@ -279,7 +278,6 @@ public class Quote extends JpaEntity<QuoteId> implements DataConversion<QuoteDat
 
     @Column(
         name = "payee_receive_amount",
-        nullable = false,
         precision = 34,
         scale = 4)
     protected BigDecimal payeeReceiveAmount;

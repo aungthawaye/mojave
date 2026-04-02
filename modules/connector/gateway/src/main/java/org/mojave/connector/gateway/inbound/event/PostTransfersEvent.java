@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.inbound.event;
 
 import org.mojave.component.misc.spring.event.DomainEvent;
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payee.HandlePostTransfersRequestCommand;
 
 public class PostTransfersEvent extends DomainEvent<HandlePostTransfersRequestCommand.Input> {
 

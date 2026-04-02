@@ -20,9 +20,9 @@
 package org.mojave.connector.gateway.inbound.controller;
 
 import org.mojave.component.misc.spring.event.EventPublisher;
-import org.mojave.connector.gateway.inbound.command.quotes.HandlePostQuotesRequestCommand;
-import org.mojave.connector.gateway.inbound.command.quotes.HandlePutQuotesErrorCommand;
-import org.mojave.connector.gateway.inbound.command.quotes.HandlePutQuotesResponseCommand;
+import org.mojave.connector.gateway.inbound.command.quotes.payee.HandlePostQuotesRequestCommand;
+import org.mojave.connector.gateway.inbound.command.quotes.payer.HandlePutQuotesErrorCommand;
+import org.mojave.connector.gateway.inbound.command.quotes.payer.HandlePutQuotesResponseCommand;
 import org.mojave.connector.gateway.inbound.event.PostQuotesEvent;
 import org.mojave.connector.gateway.inbound.event.PutQuotesErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutQuotesEvent;

@@ -11,12 +11,12 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp1 to fsp2)">
-        <intProp name="ThreadGroup.num_threads">10</intProp>
-        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">100</stringProp>
+          <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
@@ -32,17 +32,17 @@
           <collectionProp name="Arguments.arguments">
             <elementProp name="tg1payerFsp" elementType="Argument">
               <stringProp name="Argument.name">tg1payerFsp</stringProp>
-              <stringProp name="Argument.value">fsp1</stringProp>
+              <stringProp name="Argument.value">wallet1</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg1payeeFsp" elementType="Argument">
               <stringProp name="Argument.name">tg1payeeFsp</stringProp>
-              <stringProp name="Argument.value">fsp2</stringProp>
+              <stringProp name="Argument.value">wallet2</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg1currency" elementType="Argument">
               <stringProp name="Argument.name">tg1currency</stringProp>
-              <stringProp name="Argument.value">BYN</stringProp>
+              <stringProp name="Argument.value">USD</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg1sourceHost" elementType="Argument">
@@ -52,7 +52,7 @@
             </elementProp>
             <elementProp name="tg1sourcePort" elementType="Argument">
               <stringProp name="Argument.name">tg1sourcePort</stringProp>
-              <stringProp name="Argument.value">8081</stringProp>
+              <stringProp name="Argument.value">3200</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
@@ -87,7 +87,7 @@
         <hashTree/>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Mojave Flow" enabled="true"/>
         <hashTree>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator">
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator" enabled="true">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
@@ -131,7 +131,7 @@ String ulid = timePart + randPart
 vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </JSR223Sampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2" enabled="true">
             <stringProp name="HTTPSampler.domain">${tg1sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg1sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -669,13 +669,13 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp2 to fsp1)">
-        <intProp name="ThreadGroup.num_threads">10</intProp>
-        <intProp name="ThreadGroup.ramp_time">5</intProp>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp2 to fsp1)" enabled="false">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">100</stringProp>
+          <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
@@ -1328,7 +1328,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -1366,7 +1366,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
-        <boolProp name="ResultCollector.error_logging">true</boolProp>
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
           <value class="SampleSaveConfiguration">

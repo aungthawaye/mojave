@@ -32,6 +32,14 @@
             <artifactId>mojave-component-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-retrofit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-store</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.settlement</groupId>
             <artifactId>mojave-core-settlement-contract</artifactId>
         </dependency>

@@ -17,18 +17,18 @@ public class TimeIndexUT {
 
         var now = TimeIndex.of(ZonedDateTime.now(ZoneOffset.UTC));
         var time = TimeIndex.toInstant(now);
-        LOGGER.info("{}", now);
-        LOGGER.info("{}", time);
+        LOGGER.info("utc: now: {}", now);
+        LOGGER.info("utc: index: {}", time);
 
-        now = TimeIndex.of(15, 0, ZoneId.of("GMT+06:30"));
+        now = TimeIndex.of(15, 0, 15, ZoneId.of("GMT+06:30"));
         time = TimeIndex.toInstant(now);
-        LOGGER.info("{}", now);
-        LOGGER.info("{}", time);
+        LOGGER.info("gmt+6:30: now: {}", now);
+        LOGGER.info("gmt+6:30: index: {}", time);
 
-        now = TimeIndex.of(16, 30, ZoneId.of("GMT+08:00"));
+        now = TimeIndex.of(16, 30, 15, ZoneId.of("GMT+08:00"));
         time = TimeIndex.toInstant(now);
-        LOGGER.info("{}", now);
-        LOGGER.info("{}", time);
+        LOGGER.info("gmt+8:00: now: {}", now);
+        LOGGER.info("gmt+8:00: index: {}", time);
 
     }
 }

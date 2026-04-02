@@ -108,7 +108,7 @@ public final class Jwt {
         try {
 
             Objects.requireNonNull(token);
-            LOGGER.debug("Verifying token : {}", token.full());
+            LOGGER.info("Verifying token : {}", token.full());
 
             Jwts.parser().verifyWith(publicKey).build().parseSignedContent(token.full());
 

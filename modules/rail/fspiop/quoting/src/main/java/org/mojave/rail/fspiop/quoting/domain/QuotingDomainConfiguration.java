@@ -33,20 +33,23 @@ import org.springframework.context.annotation.Import;
         MiscConfiguration.class,
         FspiopComponentConfiguration.class,
         ParticipantStoreConfiguration.class,
-        RoutingJpaConfiguration.class})
+        RoutingJpaConfiguration.class,
+        QuotingKafkaConfiguration.class})
 public class QuotingDomainConfiguration {
 
     public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies,
                                            FspiopComponentConfiguration.RequiredDependencies,
                                            ParticipantStoreConfiguration.RequiredDependencies,
-                                           RoutingJpaConfiguration.RequiredDependencies {
+                                           RoutingJpaConfiguration.RequiredDependencies,
+                                           QuotingKafkaConfiguration.RequiredDependencies {
 
     }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
                                               FspiopComponentConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
-                                              RoutingJpaConfiguration.RequiredSettings {
+                                              RoutingJpaConfiguration.RequiredSettings,
+                                              QuotingKafkaConfiguration.RequiredSettings {
 
         QuoteSettings quoteSettings();
 

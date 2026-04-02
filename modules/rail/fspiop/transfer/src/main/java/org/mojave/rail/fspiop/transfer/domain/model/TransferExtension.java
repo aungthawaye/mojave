@@ -102,4 +102,3 @@ public class TransferExtension extends JpaEntity<TransferExtensionId> {
     }
 
 }
-

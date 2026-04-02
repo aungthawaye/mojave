@@ -17,7 +17,6 @@
         <module>accounting</module>
         <module>wallet</module>
         <module>settlement</module>
-        <module>mono</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

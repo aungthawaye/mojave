@@ -25,10 +25,10 @@ CREATE TABLE `qot_quote`
     `payee_sub_id`         varchar(48)    DEFAULT NULL,
 
     `response_expiration`  bigint         DEFAULT NULL,
-    `transfer_amount`      decimal(34, 4) NOT NULL,
+    `transfer_amount`      decimal(34, 4) DEFAULT NULL,
     `payee_fsp_fee`        decimal(34, 4) DEFAULT NULL,
     `payee_fsp_commission` decimal(34, 4) DEFAULT NULL,
-    `payee_receive_amount` decimal(34, 4) NOT NULL,
+    `payee_receive_amount` decimal(34, 4) DEFAULT NULL,
 
     `requested_at`         bigint         NOT NULL,
     `responded_at`         bigint         DEFAULT NULL,

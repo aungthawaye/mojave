@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.inbound.event;
 
 import org.mojave.component.misc.spring.event.DomainEvent;
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payer.HandlePutTransfersResponseCommand;
 
 public class PutTransfersEvent extends DomainEvent<HandlePutTransfersResponseCommand.Input> {
 

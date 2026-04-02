@@ -7,6 +7,7 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Global Variables">
@@ -43,12 +44,12 @@
           </elementProp>
           <elementProp name="currency" elementType="Argument">
             <stringProp name="Argument.name">currency</stringProp>
-            <stringProp name="Argument.value">BYN</stringProp>
+            <stringProp name="Argument.value">USD</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="amount" elementType="Argument">
             <stringProp name="Argument.name">amount</stringProp>
-            <stringProp name="Argument.value">1.01</stringProp>
+            <stringProp name="Argument.value">100</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="hubCode" elementType="Argument">
@@ -58,38 +59,58 @@
           </elementProp>
           <elementProp name="fsp1InboundUrl" elementType="Argument">
             <stringProp name="Argument.name">fsp1InboundUrl</stringProp>
-            <stringProp name="Argument.value">http://localhost:8080</stringProp>
+            <stringProp name="Argument.value">http://localhost:3201</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp1Code" elementType="Argument">
             <stringProp name="Argument.name">fsp1Code</stringProp>
-            <stringProp name="Argument.value">fsp1</stringProp>
+            <stringProp name="Argument.value">wallet1</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp1Name" elementType="Argument">
             <stringProp name="Argument.name">fsp1Name</stringProp>
-            <stringProp name="Argument.value">fsp1</stringProp>
+            <stringProp name="Argument.value">Wallet1</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2InboundUrl" elementType="Argument">
             <stringProp name="Argument.name">fsp2InboundUrl</stringProp>
-            <stringProp name="Argument.value">http://localhost:9090</stringProp>
+            <stringProp name="Argument.value">http://localhost:3201</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2Code" elementType="Argument">
             <stringProp name="Argument.name">fsp2Code</stringProp>
-            <stringProp name="Argument.value">fsp2</stringProp>
+            <stringProp name="Argument.value">wallet2</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2Name" elementType="Argument">
             <stringProp name="Argument.name">fsp2Name</stringProp>
-            <stringProp name="Argument.value">fsp2</stringProp>
+            <stringProp name="Argument.value">Wallet2</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp1Ndc" elementType="Argument">
+            <stringProp name="Argument.name">fsp1Ndc</stringProp>
+            <stringProp name="Argument.value">10000000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp2Ndc" elementType="Argument">
+            <stringProp name="Argument.name">fsp2Ndc</stringProp>
+            <stringProp name="Argument.value">10000000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp1Liquidity" elementType="Argument">
+            <stringProp name="Argument.name">fsp1Liquidity</stringProp>
+            <stringProp name="Argument.value">10000000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="fsp2Liquidity" elementType="Argument">
+            <stringProp name="Argument.name">fsp2Liquidity</stringProp>
+            <stringProp name="Argument.value">10000000</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Participant Setup" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -390,7 +411,7 @@ if (val != null) {
         </HeaderManager>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -405,7 +426,7 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create chart" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -434,7 +455,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -468,7 +489,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. create CE_FSP_LIQUIDITY" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -502,7 +523,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. create CE_FSP_POSITION" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -536,7 +557,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. create CE_FSP_PAYABLE" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -570,7 +591,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. create CE_FSP_RECEIVABLE" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -604,7 +625,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. create FSP1 account" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -629,7 +650,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="8. create FSP2 account" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -654,7 +675,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="9. create HUB account" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -679,7 +700,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN definition">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10. create FUND_IN definition" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -724,7 +745,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER definition">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. create FUND_TRANSFER definition" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -820,7 +841,7 @@ if (val != null) {
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
     &quot;amounts&quot;: {&#xd;
-        &quot;LIQUIDITY_AMOUNT&quot;: &quot;1000000&quot;&#xd;
+        &quot;LIQUIDITY_AMOUNT&quot;: &quot;${fsp1Liquidity}&quot;&#xd;
     },&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
@@ -837,7 +858,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -852,7 +873,7 @@ if (val != null) {
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
     &quot;amounts&quot;: {&#xd;
-        &quot;LIQUIDITY_AMOUNT&quot;: &quot;1000000&quot;&#xd;
+        &quot;LIQUIDITY_AMOUNT&quot;: &quot;${fsp2Liquidity}&quot;&#xd;
     },&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;participants&quot;: {&#xd;
@@ -1039,7 +1060,7 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 balance">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 balance" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1070,7 +1091,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 balance">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 balance" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1222,7 +1243,7 @@ if (val != null) {
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Position Setup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Position Setup" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -1237,7 +1258,7 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 position">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 position" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1253,7 +1274,7 @@ if (val != null) {
                 <stringProp name="Argument.value">{&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;name&quot;: &quot;FSP1-${currency}&quot;,&#xd;
-    &quot;netDebitCap&quot;: &quot;700000&quot;,&#xd;
+    &quot;netDebitCap&quot;: &quot;${fsp1Ndc}&quot;,&#xd;
     &quot;walletOwnerId&quot;: &quot;${__property(FSP1_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
@@ -1337,7 +1358,7 @@ if (val != null) {
           </ResultCollector>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 position">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 position" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1353,7 +1374,7 @@ if (val != null) {
                 <stringProp name="Argument.value">{&#xd;
     &quot;currency&quot;: &quot;${currency}&quot;,&#xd;
     &quot;name&quot;: &quot;FSP2-${currency}&quot;,&#xd;
-    &quot;netDebitCap&quot;: &quot;700000&quot;,&#xd;
+    &quot;netDebitCap&quot;: &quot;${fsp2Ndc}&quot;,&#xd;
     &quot;walletOwnerId&quot;: &quot;${__property(FSP2_ID,)}&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
@@ -1558,7 +1579,7 @@ if (val != null) {
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>

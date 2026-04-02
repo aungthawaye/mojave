@@ -29,7 +29,7 @@ import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
@@ -69,7 +69,7 @@ public interface PostLedgerFlowCommand {
         public record Movement(LedgerMovementId ledgerMovementId,
                                AccountId accountId,
                                AccountOwnerId ownerId,
-                               ChartEntryId chartEntryId,
+                               CoaEntryId coaEntryId,
                                Side side,
                                Currency currency,
                                BigDecimal amount,

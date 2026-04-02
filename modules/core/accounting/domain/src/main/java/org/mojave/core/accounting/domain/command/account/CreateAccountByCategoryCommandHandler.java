@@ -26,7 +26,7 @@ import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
 import org.mojave.core.accounting.contract.command.account.CreateAccountByCategoryCommand;
-import org.mojave.core.accounting.domain.repository.ChartEntryRepository;
+import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,16 +43,16 @@ public class CreateAccountByCategoryCommandHandler implements CreateAccountByCat
 
     private final CreateAccountCommand createAccountCommand;
 
-    private final ChartEntryRepository chartEntryRepository;
+    private final CoaEntryRepository coaEntryRepository;
 
     public CreateAccountByCategoryCommandHandler(CreateAccountCommand createAccountCommand,
-                                             ChartEntryRepository chartEntryRepository) {
+                                                 CoaEntryRepository coaEntryRepository) {
 
         Objects.requireNonNull(createAccountCommand);
-        Objects.requireNonNull(chartEntryRepository);
+        Objects.requireNonNull(coaEntryRepository);
 
         this.createAccountCommand = createAccountCommand;
-        this.chartEntryRepository = chartEntryRepository;
+        this.coaEntryRepository = coaEntryRepository;
     }
 
     @Transactional
@@ -62,8 +62,8 @@ public class CreateAccountByCategoryCommandHandler implements CreateAccountByCat
 
         LOGGER.info("CreateAccountByCategoryCommand : input: ({})", ObjectLogger.log(input));
 
-        final var entries = this.chartEntryRepository.findAll(
-            ChartEntryRepository.Filters.withCategory(input.category()));
+        final var entries = this.coaEntryRepository.findAll(
+            CoaEntryRepository.Filters.withCategory(input.category()));
 
         final var accountIds = entries.stream().map(entry -> {
 

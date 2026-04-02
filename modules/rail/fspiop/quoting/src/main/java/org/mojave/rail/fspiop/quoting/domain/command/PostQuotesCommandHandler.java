@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,36 +17,30 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.quoting.domain.command;
 
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.jpa.transaction.TransactionContext;
-import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.Direction;
 import org.mojave.common.datatype.enums.participant.EndpointType;
 import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
-import org.mojave.rail.fspiop.quoting.contract.exception.ExpirationNotInFutureException;
-import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.quoting.domain.model.Party;
-import org.mojave.rail.fspiop.quoting.domain.model.Quote;
-import org.mojave.rail.fspiop.quoting.domain.repository.QuoteRepository;
+import org.mojave.rail.fspiop.bootstrap.api.forwarder.ForwardRequest;
+import org.mojave.rail.fspiop.bootstrap.api.quotes.RespondQuotes;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopMoney;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
-import org.mojave.rail.fspiop.bootstrap.api.forwarder.ForwardRequest;
-import org.mojave.rail.fspiop.bootstrap.api.quotes.RespondQuotes;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
+import org.mojave.rail.fspiop.quoting.contract.command.step.CreateQuotesRequestStep;
+import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -63,35 +57,29 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    private final QuoteRepository quoteRepository;
-
-    private final PlatformTransactionManager transactionManager;
+    private final CreateQuotesRequestStep createQuotesRequestStep;
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
     public PostQuotesCommandHandler(ParticipantStore participantStore,
                                     RespondQuotes respondQuotes,
                                     ForwardRequest forwardRequest,
-                                    QuoteRepository quoteRepository,
-                                    PlatformTransactionManager transactionManager,
+                                    CreateQuotesRequestStep createQuotesRequestStep,
                                     QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
-        Objects.requireNonNull(quoteRepository);
-        Objects.requireNonNull(transactionManager);
+        Objects.requireNonNull(createQuotesRequestStep);
         Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
-        this.quoteRepository = quoteRepository;
-        this.transactionManager = transactionManager;
+        this.createQuotesRequestStep = createQuotesRequestStep;
         this.quoteSettings = quoteSettings;
     }
 
-    @Write
     @Override
     public Output execute(Input input) {
 
@@ -142,13 +130,6 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             Instant requestExpiration = null;
 
-            if (fees != null && fees.getCurrency() != currency) {
-
-                throw new FspiopException(
-                    FspiopErrors.GENERIC_VALIDATION_ERROR,
-                    "The currency of amount and fees must be the same.");
-            }
-
             if (expiration != null) {
 
                 requestExpiration = FspiopDates.fromRequestBody(expiration);
@@ -165,49 +146,16 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (this.quoteSettings.stateful()) {
 
-                try {
-
-                    var quote = new Quote(
-                        payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
-                        new BigDecimal(amount.getAmount()),
-                        fees != null ? new BigDecimal(fees.getAmount()) : null,
-                        postQuotesRequest.getAmountType(), transactionType.getScenario(),
-                        transactionType.getSubScenario(), transactionType.getInitiator(),
-                        transactionType.getInitiatorType(), requestExpiration,
-                        new Party(
-                            payer.getPartyIdType(), payer.getPartyIdentifier(),
-                            payer.getPartySubIdOrType()),
-                        new Party(
-                            payee.getPartyIdType(), payee.getPartyIdentifier(),
-                            payee.getPartySubIdOrType()));
-
-                    if (postQuotesRequest.getExtensionList() != null &&
-                            postQuotesRequest.getExtensionList().getExtension() != null) {
-
-                        postQuotesRequest.getExtensionList().getExtension().forEach(extension -> {
-
-                            quote.addExtension(
-                                Direction.FROM_PAYEE, extension.getKey(), extension.getValue());
-                        });
-
-                    }
-
-                    TransactionContext.startNew(this.transactionManager, quote.getId().toString());
-                    this.quoteRepository.save(quote);
-                    TransactionContext.commit();
-
-                } catch (ExpirationNotInFutureException ignored) {
-
-                } catch (Exception e) {
-                    TransactionContext.rollback();
-                    LOGGER.error("Error:", e);
-                }
-
-            } else {
-
-//                LOGGER.warn(
-//                    "Quoting is not stateful. Ignoring saving the quote. udfQuoteId : ({})",
-//                    udfQuoteId.getId());
+                this.createQuotesRequestStep.execute(new CreateQuotesRequestStep.Input(
+                    payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
+                    new BigDecimal(amount.getAmount()),
+                    fees != null ? new BigDecimal(fees.getAmount()) : null,
+                    postQuotesRequest.getAmountType(), transactionType.getScenario(),
+                    transactionType.getSubScenario(), transactionType.getInitiator(),
+                    transactionType.getInitiatorType(), requestExpiration, payer.getPartyIdType(),
+                    payer.getPartyIdentifier(), payer.getPartySubIdOrType(), payee.getPartyIdType(),
+                    payee.getPartyIdentifier(), payee.getPartySubIdOrType(),
+                    postQuotesRequest.getExtensionList()));
             }
 
             var payeeBaseUrl = payeeFsp.endpoints().get(EndpointType.QUOTES).baseUrl();

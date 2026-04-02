@@ -21,10 +21,10 @@
 package org.mojave.connector.gateway.inbound.controller;
 
 import org.mojave.component.misc.spring.event.EventPublisher;
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePatchTransfersCommand;
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePostTransfersRequestCommand;
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfersErrorCommand;
-import org.mojave.connector.gateway.inbound.command.transfers.HandlePutTransfersResponseCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payee.HandlePatchTransfersCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payee.HandlePostTransfersRequestCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payer.HandlePutTransfersErrorCommand;
+import org.mojave.connector.gateway.inbound.command.transfers.payer.HandlePutTransfersResponseCommand;
 import org.mojave.connector.gateway.inbound.event.PostTransfersEvent;
 import org.mojave.connector.gateway.inbound.event.PutTransfersErrorEvent;
 import org.mojave.connector.gateway.inbound.event.PutTransfersEvent;

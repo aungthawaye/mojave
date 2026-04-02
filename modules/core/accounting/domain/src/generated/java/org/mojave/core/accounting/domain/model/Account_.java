@@ -11,7 +11,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.jpa.JpaEntity_;
 
@@ -74,9 +74,9 @@ public abstract class Account_ extends JpaEntity_ {
 	public static final String TERMINATION_STATUS = "terminationStatus";
 	
 	/**
-	 * @see #chartEntryId
+	 * @see #coaEntryId
 	 **/
-	public static final String CHART_ENTRY_ID = "chartEntryId";
+	public static final String COA_ENTRY_ID = "coaEntryId";
 
 	
 	/**
@@ -135,9 +135,9 @@ public abstract class Account_ extends JpaEntity_ {
 	public static volatile SingularAttribute<Account, TerminationStatus> terminationStatus;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.Account#chartEntryId}
+	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.Account#coaEntryId}
 	 **/
-	public static volatile SingularAttribute<Account, ChartEntryId> chartEntryId;
+	public static volatile SingularAttribute<Account, CoaEntryId> coaEntryId;
 
 }
 

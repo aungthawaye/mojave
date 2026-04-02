@@ -23,7 +23,7 @@ package org.mojave.core.accounting.store;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.ChartEntryId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
 
@@ -37,8 +37,8 @@ public interface AccountingStore {
 
     AccountData get(AccountId accountId);
 
-    AccountData get(ChartEntryId chartEntryId, AccountOwnerId ownerId, Currency currency);
+    AccountData get(CoaEntryId coaEntryId, AccountOwnerId ownerId, Currency currency);
 
-    Set<AccountData> get(ChartEntryId chartEntryId);
+    Set<AccountData> get(CoaEntryId coaEntryId);
 
 }
