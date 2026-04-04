@@ -105,7 +105,7 @@ CREATE TABLE `acc_ledger_movement`
     `transaction_at`        bigint         NOT NULL,
     `transaction_type`      varchar(32)    NOT NULL,
     `flow_definition_id`    bigint         NOT NULL,
-    `posting_definition_id` bigint         NOT NULL,
+    `flow_line_id` bigint         NOT NULL,
     `movement_stage`        varchar(32)    NOT NULL,
     `movement_result`       varchar(32)    NOT NULL,
     `created_at`            bigint         NOT NULL,
@@ -147,11 +147,11 @@ CREATE TABLE `acc_flow_definition`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_accounting.acc_posting_definition definition
+-- ml_accounting.acc_flow_line definition
 
-CREATE TABLE `acc_posting_definition`
+CREATE TABLE `acc_flow_line`
 (
-    `posting_definition_id` bigint      NOT NULL,
+    `flow_line_id` bigint      NOT NULL,
     `participant`           varchar(64)          DEFAULT NULL,
     `amount_name`           varchar(64) NOT NULL,
     `side`                  varchar(32) NOT NULL,
@@ -163,15 +163,15 @@ CREATE TABLE `acc_posting_definition`
     `rec_created_at`        bigint               DEFAULT NULL,
     `rec_updated_at`        bigint               DEFAULT NULL,
     `rec_version`           int                  DEFAULT NULL,
-    PRIMARY KEY (`posting_definition_id`),
-    UNIQUE KEY `acc_posting_definition_01_UK` (`definition_id`,
+    PRIMARY KEY (`flow_line_id`),
+    UNIQUE KEY `acc_flow_line_01_UK` (`definition_id`,
                                                `participant`,
                                                `amount_name`, `side`,
                                                `posting_channel`,
                                                `posting_channel_id`),
-    UNIQUE KEY `acc_posting_definition_02_UK` (`definition_id`, `step`),
-    KEY `acc_flow_definition_acc_posting_definition_FK_IDX` (`definition_id`),
-    CONSTRAINT `acc_flow_definition_acc_posting_definition_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    UNIQUE KEY `acc_flow_line_02_UK` (`definition_id`, `step`),
+    KEY `acc_flow_definition_acc_flow_line_FK_IDX` (`definition_id`),
+    CONSTRAINT `acc_flow_definition_acc_flow_line_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

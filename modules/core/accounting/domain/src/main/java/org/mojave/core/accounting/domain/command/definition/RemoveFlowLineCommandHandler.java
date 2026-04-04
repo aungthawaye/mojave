@@ -22,7 +22,7 @@ package org.mojave.core.accounting.domain.command.definition;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.accounting.contract.command.definition.RemovePostingDefinitionCommand;
+import org.mojave.core.accounting.contract.command.definition.RemoveFlowLineCommand;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
 import org.slf4j.Logger;
@@ -33,14 +33,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 @Service
-public class RemovePostingDefinitionCommandHandler implements RemovePostingDefinitionCommand {
+public class RemoveFlowLineCommandHandler implements RemoveFlowLineCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        RemovePostingDefinitionCommandHandler.class);
+        RemoveFlowLineCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
-    public RemovePostingDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository) {
+    public RemoveFlowLineCommandHandler(final FlowDefinitionRepository flowDefinitionRepository) {
 
         Objects.requireNonNull(flowDefinitionRepository);
 
@@ -52,19 +52,19 @@ public class RemovePostingDefinitionCommandHandler implements RemovePostingDefin
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("RemovePostingDefinitionCommand : input: ({})", ObjectLogger.log(input));
+        LOGGER.info("RemoveFlowLineCommand : input: ({})", ObjectLogger.log(input));
 
         final var definition = this.flowDefinitionRepository
                                    .findById(input.flowDefinitionId())
                                    .orElseThrow(() -> new FlowDefinitionNotFoundException(
                                        input.flowDefinitionId()));
 
-        definition.removePosting(input.postingDefinitionId());
+        definition.removeFlowLine(input.flowLineId());
 
         this.flowDefinitionRepository.save(definition);
-        var output = new Output(definition.getId());
+        final var output = new Output(definition.getId());
 
-        LOGGER.info("RemovePostingDefinitionCommand : output : ({})", ObjectLogger.log(output));
+        LOGGER.info("RemoveFlowLineCommand : output : ({})", ObjectLogger.log(output));
 
         return output;
     }

@@ -196,7 +196,7 @@ sequenceDiagram
 
     Rail->>Command: execute(Input)
     Command->>Cache: Get flow definition<br/>(transactionType, currency)
-    Cache-->>Command: FlowDefinition + PostingDefinitions
+    Cache-->>Command: FlowDefinition + FlowLines
     Command->>Command: Build posting batch JSON
     Command->>DB: Call stored procedure
     DB->>SP: sp_post_ledger_batch_with_movements
@@ -432,7 +432,7 @@ FlowDefinition {
     flowDefinitionId,
     transactionType,
     currency,
-    List<PostingDefinition> postings
+    List<FlowLine> flowLines
 }
 ```
 

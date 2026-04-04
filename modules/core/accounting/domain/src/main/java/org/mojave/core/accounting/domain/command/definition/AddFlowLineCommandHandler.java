@@ -22,7 +22,7 @@ package org.mojave.core.accounting.domain.command.definition;
 
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
+import org.mojave.core.accounting.contract.command.definition.AddFlowLineCommand;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
@@ -35,10 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 @Service
-public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionCommand {
+public class AddFlowLineCommandHandler implements AddFlowLineCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        AddPostingDefinitionCommandHandler.class);
+        AddFlowLineCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -46,7 +46,7 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
 
     private final CoaEntryCache coaEntryCache;
 
-    public AddPostingDefinitionCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
+    public AddFlowLineCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
                                               final AccountCache accountCache,
                                               final CoaEntryCache coaEntryCache) {
 
@@ -64,23 +64,23 @@ public class AddPostingDefinitionCommandHandler implements AddPostingDefinitionC
     @Write
     public Output execute(final Input input) {
 
-        LOGGER.info("AddPostingDefinitionCommand : input: ({})", ObjectLogger.log(input));
+        LOGGER.info("AddFlowLineCommand : input: ({})", ObjectLogger.log(input));
 
         final var definition = this.flowDefinitionRepository
                                    .findById(input.flowDefinitionId())
                                    .orElseThrow(() -> new FlowDefinitionNotFoundException(
                                        input.flowDefinitionId()));
-        final var posting = input.posting();
+        final var flowLine = input.flowLine();
 
-        var pd = definition.addPosting(
-            input.posting().step(), posting.postingChannel(), posting.postingChannelId(),
-            posting.participant(), posting.amountName(), posting.side(), posting.description(),
+        final var savedFlowLine = definition.addFlowLine(
+            flowLine.step(), flowLine.postingChannel(), flowLine.postingChannelId(),
+            flowLine.participant(), flowLine.amountName(), flowLine.side(), flowLine.description(),
             this.accountCache, this.coaEntryCache);
 
         this.flowDefinitionRepository.save(definition);
-        var output = new Output(definition.getId(), pd.getId());
+        final var output = new Output(definition.getId(), savedFlowLine.getId());
 
-        LOGGER.info("AddPostingDefinitionCommand : output : ({})", ObjectLogger.log(output));
+        LOGGER.info("AddFlowLineCommand : output : ({})", ObjectLogger.log(output));
 
         return output;
     }

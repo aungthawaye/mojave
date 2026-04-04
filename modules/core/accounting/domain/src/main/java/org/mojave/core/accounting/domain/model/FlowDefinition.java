@@ -43,7 +43,7 @@ import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
@@ -51,7 +51,7 @@ import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
-import org.mojave.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
+import org.mojave.core.accounting.contract.exception.definition.FlowLineNotFoundException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
@@ -135,7 +135,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         orphanRemoval = true,
         cascade = {jakarta.persistence.CascadeType.ALL},
         fetch = FetchType.EAGER)
-    protected List<PostingDefinition> postings = new ArrayList<>();
+    protected List<FlowLine> flowLines = new ArrayList<>();
 
     public FlowDefinition(TransactionType transactionType,
                           Currency currency,
@@ -156,40 +156,41 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
-    public PostingDefinition addPosting(Integer index,
-                                        PostingChannel postingChannel,
-                                        Long receiveInId,
-                                        String participant,
-                                        String amountName,
-                                        Side side,
-                                        String description,
-                                        AccountCache accountCache,
-                                        CoaEntryCache coaEntryCache) {
+    public FlowLine addFlowLine(Integer index,
+                                PostingChannel postingChannel,
+                                Long receiveInId,
+                                String participant,
+                                String amountName,
+                                Side side,
+                                String description,
+                                AccountCache accountCache,
+                                CoaEntryCache coaEntryCache) {
 
-        var posting = new PostingDefinition(
+        final var flowLine = new FlowLine(
             this, index, postingChannel, receiveInId, participant, amountName, side, description,
             accountCache, coaEntryCache);
 
-        this.postings.add(posting);
+        this.flowLines.add(flowLine);
 
-        return posting;
+        return flowLine;
 
     }
 
     @Override
     public FlowDefinitionData convert() {
 
-        var postingData = this.postings
-                              .stream()
-                              .map(p -> new FlowDefinitionData.PostingDefinitionData(
-                                  p.id, p.step, p.postingChannel, p.postingChannelId, p.participant,
-                                  p.amountName, p.side, p.description))
-                              .toList();
+        final var flowLineData = this.flowLines
+                                     .stream()
+                                     .map(line -> new FlowDefinitionData.FlowLineData(
+                                         line.id, line.step, line.postingChannel,
+                                         line.postingChannelId, line.participant,
+                                         line.amountName, line.side, line.description))
+                                     .toList();
 
         return new FlowDefinitionData(
             this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(),
             this.getDescription(), this.getActivationStatus(), this.getTerminationStatus(),
-            postingData);
+            flowLineData);
     }
 
     public FlowDefinition currency(Currency currency) {
@@ -229,9 +230,9 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this.id;
     }
 
-    public List<PostingDefinition> getPostings() {
+    public List<FlowLine> getFlowLines() {
 
-        return Collections.unmodifiableList(this.postings);
+        return Collections.unmodifiableList(this.flowLines);
     }
 
     public FlowDefinition name(String name) {
@@ -251,16 +252,16 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this;
     }
 
-    public void removePosting(PostingDefinitionId postingDefinitionId) {
+    public void removeFlowLine(FlowLineId flowLineId) {
 
-        Objects.requireNonNull(postingDefinitionId);
+        Objects.requireNonNull(flowLineId);
 
-        if (this.postings.stream().noneMatch(p -> p.getId().equals(postingDefinitionId))) {
+        if (this.flowLines.stream().noneMatch(flowLine -> flowLine.getId().equals(flowLineId))) {
 
-            throw new PostingDefinitionNotFoundException(postingDefinitionId);
+            throw new FlowLineNotFoundException(flowLineId);
         }
 
-        this.postings.removeIf(p -> p.getId().equals(postingDefinitionId));
+        this.flowLines.removeIf(flowLine -> flowLine.getId().equals(flowLineId));
 
     }
 

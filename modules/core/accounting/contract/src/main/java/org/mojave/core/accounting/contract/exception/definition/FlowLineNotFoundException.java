@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.contract.exception.definition;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 
@@ -29,29 +29,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public class PostingDefinitionNotFoundException extends UncheckedDomainException {
+public class FlowLineNotFoundException extends UncheckedDomainException {
 
-    public static final String CODE = "POSTING_DEFINITION_NOT_FOUND";
+    public static final String CODE = "FLOW_LINE_NOT_FOUND";
 
-    private static final String TEMPLATE = "Posting Definition Id ({0}) cannot be found.";
+    private static final String TEMPLATE = "Flow Line Id ({0}) cannot be found.";
 
-    private final PostingDefinitionId postingDefinitionId;
+    private final FlowLineId flowLineId;
 
-    public PostingDefinitionNotFoundException(final PostingDefinitionId postingDefinitionId) {
+    public FlowLineNotFoundException(final FlowLineId flowLineId) {
 
         super(new ErrorTemplate(
             CODE, TEMPLATE,
-            new String[]{postingDefinitionId.getId().toString()}));
+            new String[]{flowLineId.getId().toString()}));
 
-        this.postingDefinitionId = postingDefinitionId;
+        this.flowLineId = flowLineId;
     }
 
-    public static PostingDefinitionNotFoundException from(final Map<String, String> extras) {
+    public static FlowLineNotFoundException from(final Map<String, String> extras) {
 
-        final var id = new PostingDefinitionId(
-            Long.valueOf(extras.get(Keys.POSTING_DEFINITION_ID)));
+        final var id = new FlowLineId(
+            Long.valueOf(extras.get(Keys.FLOW_LINE_ID)));
 
-        return new PostingDefinitionNotFoundException(id);
+        return new FlowLineNotFoundException(id);
     }
 
     @Override
@@ -59,14 +59,14 @@ public class PostingDefinitionNotFoundException extends UncheckedDomainException
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.POSTING_DEFINITION_ID, this.postingDefinitionId.getId().toString());
+        extras.put(Keys.FLOW_LINE_ID, this.flowLineId.getId().toString());
 
         return extras;
     }
 
     public static class Keys {
 
-        public static final String POSTING_DEFINITION_ID = "postingDefinitionId";
+        public static final String FLOW_LINE_ID = "flowLineId";
 
     }
 

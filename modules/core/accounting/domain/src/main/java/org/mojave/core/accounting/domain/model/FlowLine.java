@@ -36,12 +36,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.accounting.PostingDefinitionIdJavaType;
+import org.mojave.common.datatype.converter.identifier.accounting.FlowLineIdJavaType;
 import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;
@@ -49,7 +49,7 @@ import org.mojave.core.accounting.contract.exception.definition.AccountConflictI
 import org.mojave.core.accounting.contract.exception.definition.AmbiguousReceiveInConfigException;
 import org.mojave.core.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
-import org.mojave.core.accounting.contract.exception.definition.DuplicatePostingDefinitionIndexException;
+import org.mojave.core.accounting.contract.exception.definition.DuplicateFlowLineIndexException;
 import org.mojave.core.accounting.contract.exception.definition.ImmatureCoaEntryException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
@@ -65,32 +65,32 @@ import static java.sql.Types.BIGINT;
 @Getter
 @Entity
 @Table(
-    name = "acc_posting_definition",
+    name = "acc_flow_line",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "acc_posting_definition_01_UK",
+            name = "acc_flow_line_01_UK",
             columnNames = {
                 "definition_id",
                 "participant",
                 "amount_name",
                 "side",
-                "receive_in",
-                "receive_in_id"}),
+                "posting_channel",
+                "posting_channel_id"}),
         @UniqueConstraint(
-            name = "acc_posting_definition_02_UK",
+            name = "acc_flow_line_02_UK",
             columnNames = {
                 "definition_id",
                 "step"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
+public class FlowLine extends JpaEntity<FlowLineId> {
 
     @Id
-    @JavaType(PostingDefinitionIdJavaType.class)
+    @JavaType(FlowLineIdJavaType.class)
     @JdbcTypeCode(BIGINT)
     @Column(
-        name = "posting_definition_id",
+        name = "flow_line_id",
         nullable = false)
-    protected PostingDefinitionId id;
+    protected FlowLineId id;
 
     @Column(
         name = "participant",
@@ -136,31 +136,32 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
     @JoinColumn(
         name = "definition_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "acc_posting_definition_acc_flow_definition_FK"))
+        foreignKey = @ForeignKey(name = "acc_flow_definition_acc_flow_line_FK"))
     protected FlowDefinition definition;
 
-    public PostingDefinition(FlowDefinition definition,
-                             Integer step,
-                             PostingChannel postingChannel,
-                             Long postingChannelId,
-                             String participant,
-                             String amountName,
-                             Side side,
-                             String description,
-                             AccountCache accountCache,
-                             CoaEntryCache coaEntryCache) {
+    public FlowLine(FlowDefinition definition,
+                    Integer step,
+                    PostingChannel postingChannel,
+                    Long postingChannelId,
+                    String participant,
+                    String amountName,
+                    Side side,
+                    String description,
+                    AccountCache accountCache,
+                    CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(definition);
         Objects.requireNonNull(side);
 
-        this.id = new PostingDefinitionId(Snowflake.get().nextId());
+        this.id = new FlowLineId(Snowflake.get().nextId());
         this.definition = definition;
-        this.forPosting(
+
+        this.forFlowLine(
             step, postingChannel, postingChannelId, participant, amountName, side, accountCache,
             coaEntryCache).description(description);
     }
 
-    public PostingDefinition description(String description) {
+    public FlowLine description(String description) {
 
         if (description == null) {
             return this;
@@ -177,14 +178,14 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         return this;
     }
 
-    public PostingDefinition forPosting(Integer step,
-                                        PostingChannel postingChannel,
-                                        Long receiveInId,
-                                        String participant,
-                                        String amountName,
-                                        Side side,
-                                        AccountCache accountCache,
-                                        CoaEntryCache coaEntryCache) {
+    public FlowLine forFlowLine(Integer step,
+                                PostingChannel postingChannel,
+                                Long receiveInId,
+                                String participant,
+                                String amountName,
+                                Side side,
+                                AccountCache accountCache,
+                                CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(step);
         Objects.requireNonNull(amountName);
@@ -194,8 +195,8 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
         Objects.requireNonNull(accountCache);
         Objects.requireNonNull(coaEntryCache);
 
-        if (this.definition.postings.stream().anyMatch(pd -> pd.step.equals(step))) {
-            throw new DuplicatePostingDefinitionIndexException(step);
+        if (this.definition.flowLines.stream().anyMatch(flowLine -> flowLine.step.equals(step))) {
+            throw new DuplicateFlowLineIndexException(step);
         }
 
         this.step = step;
@@ -224,48 +225,48 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
             }
         }
 
-        // Validate that the posting definition does not already exist for this flow definition.
+        // Validate that the flow line does not already exist for this flow definition.
         // First, check that the amount name/participant is valid for the flow definition's transaction type.
         if (!this.definition.transactionType.getAmounts().names().contains(amountName)) {
 
             throw new InvalidAmountNameForTransactionTypeException(this.definition.transactionType);
         }
 
-        // Now verify whether the newly adding posting conflicts with any of the existing posting definition.
+        // Now verify whether the newly added flow line conflicts with any of the existing flow lines.
         // Here we need to verify these things:
         // 1. When CHART_ENTRY, any account of the adding CoaEntryId conflicts with any of the existing accounts or an account of the existing CoaEntryId.
         // 2. When ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing CoaEntryId.
 
         // Find all the accounts, created under the same postingChannelId in the accounting system, and previously added for the same Side and AmountName.
-        var existingAccountIds = this.definition.postings
-                                     .stream()
-                                     .filter(pd -> pd.postingChannel == PostingChannel.ACCOUNT &&
-                                                       pd.side == side &&
-                                                       pd.amountName.equals(_amountName))
-                                     .map(pd -> pd.postingChannelId)
-                                     .collect(Collectors.toSet());
-
-        var existingChartEntryIds = this.definition.postings
+        final var existingAccountIds = this.definition.flowLines
                                         .stream()
-                                        .filter(
-                                            pd -> pd.postingChannel == PostingChannel.CHART_ENTRY &&
-                                                      pd.participant.equals(participant) &&
-                                                      pd.side == side &&
-                                                      pd.amountName.equals(_amountName))
-                                        .map(pd -> pd.postingChannelId)
+                                        .filter(line -> line.postingChannel == PostingChannel.ACCOUNT &&
+                                                            line.side == side &&
+                                                            line.amountName.equals(_amountName))
+                                        .map(line -> line.postingChannelId)
                                         .collect(Collectors.toSet());
+
+        final var existingChartEntryIds = this.definition.flowLines
+                                           .stream()
+                                           .filter(
+                                               line -> line.postingChannel == PostingChannel.CHART_ENTRY &&
+                                                           line.participant.equals(participant) &&
+                                                           line.side == side &&
+                                                           line.amountName.equals(_amountName))
+                                           .map(line -> line.postingChannelId)
+                                           .collect(Collectors.toSet());
 
         if (postingChannel == PostingChannel.CHART_ENTRY) {
 
             var coaEntryId = new CoaEntryId(receiveInId);
 
             if (existingChartEntryIds.contains(coaEntryId.getId())) {
-                var coaEntryData = coaEntryCache.get(coaEntryId);
-                // There is the same Posting Definition for the same coaEntryId, participant, side and amountName.
+                final var coaEntryData = coaEntryCache.get(coaEntryId);
+                // There is the same flow line for the same coaEntryId, participant, side and amountName.
                 throw new CoaEntryConflictInDefinitionException(coaEntryData.code());
             }
 
-            var accounts = accountCache.get(coaEntryId);
+            final var accounts = accountCache.get(coaEntryId);
 
             if (accounts == null || accounts.isEmpty()) {
 
@@ -285,21 +286,21 @@ public class PostingDefinition extends JpaEntity<PostingDefinitionId> {
 
         } else {
 
-            var _accountId = new AccountId(receiveInId);
-            var accountData = accountCache.get(_accountId);
+            final var _accountId = new AccountId(receiveInId);
+            final var accountData = accountCache.get(_accountId);
 
             if (existingAccountIds.contains(_accountId.getId())) {
-                // There is the same Posting Definition for the same AccountId, side and amountName.
+                // There is the same flow line for the same AccountId, side and amountName.
                 throw new AccountConflictInDefinitionException(accountData.code());
             }
 
-            // Then, make sure this AccountId won't conflict with any other Posting Definition configured with
+            // Then, make sure this AccountId won't conflict with any other flow line configured with
             // BY_CHART_ENTRY for the same side and amountName.
             // In this case, we need to check using the accounts of each CoaEntryId which are already
             // added to the definition.
             for (var existingChartEntryId : existingChartEntryIds) {
 
-                var accounts = accountCache.get(new CoaEntryId(existingChartEntryId));
+                final var accounts = accountCache.get(new CoaEntryId(existingChartEntryId));
 
                 accounts
                     .stream()

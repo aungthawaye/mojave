@@ -34,7 +34,7 @@ CREATE TABLE `lgr_ledger_movement`
     `transaction_at`        bigint         NOT NULL,
     `transaction_type`      varchar(32)    NOT NULL,
     `flow_definition_id`    bigint         NOT NULL,
-    `posting_definition_id` bigint         NOT NULL,
+    `flow_line_id` bigint         NOT NULL,
     `movement_stage`        varchar(32)    NOT NULL,
     `movement_result`       varchar(32)    NOT NULL,
     `created_at`            bigint         NOT NULL,

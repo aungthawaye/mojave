@@ -49,7 +49,7 @@ import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNo
 import org.mojave.core.accounting.contract.exception.definition.ImmatureCoaEntryException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
-import org.mojave.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
+import org.mojave.core.accounting.contract.exception.definition.FlowLineNotFoundException;
 import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForReceiveInException;
 import org.mojave.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
@@ -116,8 +116,8 @@ public class AccountingExceptionResolver {
                 InvalidAmountNameForTransactionTypeException.from(extra);
             case InvalidParticipantForTransactionTypeException.CODE ->
                 InvalidParticipantForTransactionTypeException.from(extra);
-            case PostingDefinitionNotFoundException.CODE ->
-                PostingDefinitionNotFoundException.from(extra);
+            case FlowLineNotFoundException.CODE ->
+                FlowLineNotFoundException.from(extra);
             case RequireParticipantForReceiveInException.CODE ->
                 RequireParticipantForReceiveInException.from(extra);
 

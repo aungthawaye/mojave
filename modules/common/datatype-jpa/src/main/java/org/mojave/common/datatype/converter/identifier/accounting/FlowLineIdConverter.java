@@ -22,21 +22,21 @@ package org.mojave.common.datatype.converter.identifier.accounting;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 
 @Converter(autoApply = true)
-public class PostingDefinitionIdConverter implements AttributeConverter<PostingDefinitionId, Long> {
+public class FlowLineIdConverter implements AttributeConverter<FlowLineId, Long> {
 
     @Override
-    public Long convertToDatabaseColumn(PostingDefinitionId attribute) {
+    public Long convertToDatabaseColumn(FlowLineId attribute) {
 
         return attribute == null ? null : attribute.getId();
     }
 
     @Override
-    public PostingDefinitionId convertToEntityAttribute(Long dbData) {
+    public FlowLineId convertToEntityAttribute(Long dbData) {
 
-        return dbData == null ? null : new PostingDefinitionId(dbData);
+        return dbData == null ? null : new FlowLineId(dbData);
     }
 
 }

@@ -217,9 +217,9 @@ sequenceDiagram
 
     Caller->>Command: execute(Input)
     Command->>Cache: Get flow definition
-    Cache-->>Command: FlowDefinition with PostingDefinitions
+    Cache-->>Command: FlowDefinition with FlowLines
 
-    loop For each PostingDefinition
+    loop For each FlowLine
         Command->>Resolver: Resolve account
         Note over Resolver: Owner + Currency + ChartEntry
         Resolver-->>Command: Account ID
@@ -421,7 +421,7 @@ FlowDefinition {
     flowDefinitionId,
     transactionType,
     currency,
-    List<PostingDefinition>
+    List<FlowLine>
 }
 ```
 

@@ -29,7 +29,7 @@ import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 import java.util.List;
@@ -42,19 +42,19 @@ public interface CreateFlowDefinitionCommand {
                  @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
-                 @JsonProperty(required = true) List<Posting> postings) {
+                 @JsonProperty(required = true) List<FlowLine> flowLines) {
 
-        public record Posting(@JsonProperty(required = true) @NotNull Integer step,
-                              @JsonProperty(required = true) @NotNull PostingChannel postingChannel,
-                              @JsonProperty(required = true) @NotNull Long postingChannelId,
-                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
-                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
-                              @JsonProperty(required = true) @NotNull Side side,
-                              @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
+        public record FlowLine(@JsonProperty(required = true) @NotNull Integer step,
+                               @JsonProperty(required = true) @NotNull PostingChannel postingChannel,
+                               @JsonProperty(required = true) @NotNull Long postingChannelId,
+                               @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
+                               @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
+                               @JsonProperty(required = true) @NotNull Side side,
+                               @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     }
 
     record Output(FlowDefinitionId flowDefinitionId,
-                  List<PostingDefinitionId> postingDefinitionIds) { }
+                  List<FlowLineId> flowLineIds) { }
 
 }

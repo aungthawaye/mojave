@@ -99,7 +99,7 @@ store/        → Read-optimized caching layer
 The `core/common/datatype` module provides shared domain primitives used across all bounded contexts:
 
 - **Identifiers:** Strongly-typed ID classes extending `EntityId<Long>` with JSON/REST support
-  - Accounting: `AccountId`, `ChartId`, `FlowDefinitionId`, `PostingDefinitionId`, `LedgerMovementId`
+  - Accounting: `AccountId`, `ChartId`, `FlowDefinitionId`, `FlowLineId`, `LedgerMovementId`
   - Participant: `FspId`, `HubId`, `OracleId`, `SspId`, `EndpointId`
   - Transaction: `TransactionId`, `TransactionStepId`
   - Wallet: `BalanceId`, `PositionId`

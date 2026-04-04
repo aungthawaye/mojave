@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.admin.controller.api.command.definition;
 
 import jakarta.validation.Valid;
-import org.mojave.core.accounting.contract.command.definition.RemovePostingDefinitionCommand;
+import org.mojave.core.accounting.contract.command.definition.AddFlowLineCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,27 +34,27 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-public class RemovePostingDefinitionController {
+public class AddFlowLineController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        RemovePostingDefinitionController.class);
+        AddFlowLineController.class);
 
-    private final RemovePostingDefinitionCommand removePostingDefinitionCommand;
+    private final AddFlowLineCommand addFlowLineCommand;
 
-    public RemovePostingDefinitionController(final RemovePostingDefinitionCommand removePostingDefinitionCommand) {
+    public AddFlowLineController(final AddFlowLineCommand addFlowLineCommand) {
 
-        Objects.requireNonNull(removePostingDefinitionCommand);
+        Objects.requireNonNull(addFlowLineCommand);
 
-        this.removePostingDefinitionCommand = removePostingDefinitionCommand;
+        this.addFlowLineCommand = addFlowLineCommand;
     }
 
-    @PostMapping("/accounting/flow-definitions/remove-posting-definition")
+    @PostMapping("/accounting/flow-definitions/add-flow-line")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public RemovePostingDefinitionCommand.Output execute(
-        @Valid @RequestBody final RemovePostingDefinitionCommand.Input input) {
+    public AddFlowLineCommand.Output execute(
+        @Valid @RequestBody final AddFlowLineCommand.Input input) {
 
-        return this.removePostingDefinitionCommand.execute(input);
+        return this.addFlowLineCommand.execute(input);
     }
 
 }

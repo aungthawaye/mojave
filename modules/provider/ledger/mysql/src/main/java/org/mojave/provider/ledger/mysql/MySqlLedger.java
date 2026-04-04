@@ -13,7 +13,7 @@ import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -239,7 +239,7 @@ public class MySqlLedger implements Ledger {
                                   request.currency().name(), request.amount().toPlainString(),
                                   transactionId.getId(), transactionAt.getEpochSecond(),
                                   transactionType.name(), request.flowDefinitionId().getId(),
-                                  request.postingDefinitionId().getId()))
+                                  request.flowLineId().getId()))
                               .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
@@ -380,7 +380,7 @@ public class MySqlLedger implements Ledger {
             var txnAt = Instant.ofEpochSecond(rs.getLong("transaction_at"));
             var txnType = TransactionType.valueOf(rs.getString("transaction_type"));
             var flowDefinitionId = new FlowDefinitionId(rs.getLong("flow_definition_id"));
-            var postingDefinitionId = new PostingDefinitionId(rs.getLong("posting_definition_id"));
+            var flowLineId = new FlowLineId(rs.getLong("flow_line_id"));
             var movementStage = MovementStage.valueOf(rs.getString("movement_stage"));
             var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
             var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
@@ -389,7 +389,7 @@ public class MySqlLedger implements Ledger {
                 new LedgerMovementId(ledgerMovementId), step, new AccountId(accountId),
                 Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
                 new DrCr(newDebits, newCredits), txnId, txnAt, txnType, flowDefinitionId,
-                postingDefinitionId, movementStage, movementResult, createdAt);
+                flowLineId, movementStage, movementResult, createdAt);
             movements.add(movement);
 
         } while (rs.next());
@@ -424,6 +424,6 @@ public class MySqlLedger implements Ledger {
                            long transactionAt,
                            String transactionType,
                            long flowDefinitionId,
-                           long postingDefinitionId) { }
+                           long flowLineId) { }
 
 }

@@ -27,24 +27,24 @@ import org.mojave.component.misc.exception.UncheckedDomainException;
 import java.util.Map;
 
 @Getter
-public class DuplicatePostingDefinitionIndexException extends UncheckedDomainException {
+public class DuplicateFlowLineIndexException extends UncheckedDomainException {
 
-    public static final String CODE = "DUPLICATE_POSTING_DEFINITION_INDEX";
+    public static final String CODE = "DUPLICATE_FLOW_LINE_INDEX";
 
-    private static final String TEMPLATE = "Posting Definition has duplicate index ({0})";
+    private static final String TEMPLATE = "Flow Line has duplicate index ({0})";
 
     private final Integer index;
 
-    public DuplicatePostingDefinitionIndexException(Integer index) {
+    public DuplicateFlowLineIndexException(Integer index) {
 
         super(new ErrorTemplate(CODE, TEMPLATE, new String[]{index.toString()}));
 
         this.index = index;
     }
 
-    public static DuplicatePostingDefinitionIndexException from(final Map<String, String> extras) {
+    public static DuplicateFlowLineIndexException from(final Map<String, String> extras) {
 
-        return new DuplicatePostingDefinitionIndexException(
+        return new DuplicateFlowLineIndexException(
             Integer.parseInt(extras.get(Keys.INDEX)));
     }
 

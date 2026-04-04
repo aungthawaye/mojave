@@ -55,7 +55,7 @@ sequenceDiagram
 
     Caller->>Handler: execute(Input)
     Handler->>Cache: Get flow definition
-    Cache-->>Handler: FlowDefinition + PostingDefinitions
+    Cache-->>Handler: FlowDefinition + FlowLines
 
     Handler->>Handler: Resolve accounts
     Handler->>Handler: Build posting batch JSON

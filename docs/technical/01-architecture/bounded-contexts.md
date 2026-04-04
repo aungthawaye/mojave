@@ -69,7 +69,7 @@ graph TB
 - Chart (Chart of accounts structure)
 - Account (Individual ledger account)
 - FlowDefinition (Transaction type → posting rules)
-- PostingDefinition (Debit/credit rules)
+- FlowLine (Debit/credit rules)
 
 **Key Operations:**
 - Chart of accounts management

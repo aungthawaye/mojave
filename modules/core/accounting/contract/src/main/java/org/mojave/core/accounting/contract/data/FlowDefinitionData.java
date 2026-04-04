@@ -27,7 +27,7 @@ import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 
 import java.util.Comparator;
 import java.util.List;
@@ -40,7 +40,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                                  String description,
                                  ActivationStatus activationStatus,
                                  TerminationStatus terminationStatus,
-                                 List<PostingDefinitionData> postings) {
+                                 List<FlowLineData> flowLines) {
 
     public FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                               TransactionType transactionType,
@@ -49,7 +49,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                               String description,
                               ActivationStatus activationStatus,
                               TerminationStatus terminationStatus,
-                              List<PostingDefinitionData> postings) {
+                              List<FlowLineData> flowLines) {
 
         this.flowDefinitionId = flowDefinitionId;
         this.transactionType = transactionType;
@@ -58,10 +58,10 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         this.description = description;
         this.activationStatus = activationStatus;
         this.terminationStatus = terminationStatus;
-        this.postings = postings
-                            .stream()
-                            .sorted(Comparator.comparing(PostingDefinitionData::step))
-                            .toList();
+        this.flowLines = flowLines
+                             .stream()
+                             .sorted(Comparator.comparing(FlowLineData::step))
+                             .toList();
     }
 
     @Override
@@ -79,32 +79,31 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         return Objects.hashCode(flowDefinitionId);
     }
 
-    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
-                                        Integer step,
-                                        PostingChannel postingChannel,
-                                        Long receiveInId,
-                                        String participant,
-                                        String amountName,
-                                        Side side,
-                                        String description) {
+    public record FlowLineData(FlowLineId flowLineId,
+                               Integer step,
+                               PostingChannel postingChannel,
+                               Long receiveInId,
+                               String participant,
+                               String amountName,
+                               Side side,
+                               String description) {
 
         @Override
         public boolean equals(Object o) {
 
-            if (!(o instanceof PostingDefinitionData that)) {
+            if (!(o instanceof FlowLineData that)) {
                 return false;
             }
 
-            return Objects.equals(postingDefinitionId, that.postingDefinitionId);
+            return Objects.equals(flowLineId, that.flowLineId);
         }
 
         @Override
         public int hashCode() {
 
-            return Objects.hashCode(postingDefinitionId);
+            return Objects.hashCode(flowLineId);
         }
 
     }
 
 }
-

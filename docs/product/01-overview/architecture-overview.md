@@ -181,7 +181,7 @@ Business logic organized by bounded context:
 | Module | Bounded Context | Key Aggregates |
 |--------|----------------|----------------|
 | **participant** | Participant management | Fsp, Hub, Oracle, Ssp, FspCurrency, FspEndpoint |
-| **accounting** | Double-entry ledger | Chart, Account, FlowDefinition, PostingDefinition |
+| **accounting** | Double-entry ledger | Chart, Account, FlowDefinition, FlowLine |
 | **wallet** | Position & balance | Position, Balance, PositionUpdate |
 | **settlement** | Settlement rules | SettlementDefinition, FilterGroup, SettlementRecord |
 | **transaction** | Transaction lifecycle | Transaction, TransactionStep |

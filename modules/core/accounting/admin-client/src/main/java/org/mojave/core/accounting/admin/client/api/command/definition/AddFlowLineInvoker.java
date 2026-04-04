@@ -24,7 +24,7 @@ import org.mojave.component.misc.error.RestErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.retrofit.RetrofitService;
 import org.mojave.core.accounting.admin.client.service.AccountingAdminService;
-import org.mojave.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
+import org.mojave.core.accounting.contract.command.definition.AddFlowLineCommand;
 import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
@@ -32,13 +32,13 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Objects;
 
 @Component
-public class AddPostingDefinitionInvoker implements AddPostingDefinitionCommand {
+public class AddFlowLineInvoker implements AddFlowLineCommand {
 
     private final AccountingAdminService.DefinitionCommand definitionCommand;
 
     private final ObjectMapper objectMapper;
 
-    public AddPostingDefinitionInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
+    public AddFlowLineInvoker(final AccountingAdminService.DefinitionCommand definitionCommand,
                                        final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(definitionCommand);
@@ -54,7 +54,7 @@ public class AddPostingDefinitionInvoker implements AddPostingDefinitionCommand 
         try {
 
             return RetrofitService.invoke(
-                this.definitionCommand.addPosting(input),
+                this.definitionCommand.addFlowLine(input),
                 (status, errorResponseBody) -> RestErrorResponse.decode(
                     errorResponseBody,
                     this.objectMapper)).body();

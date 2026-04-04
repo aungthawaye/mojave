@@ -20,7 +20,7 @@
 
 package org.mojave.core.accounting.domain.command.definition;
 
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
@@ -92,19 +92,20 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
         var definition = new FlowDefinition(
             input.transactionType(), currency, input.name(), input.description());
 
-        final var postingIds = new ArrayList<PostingDefinitionId>();
+        final var flowLineIds = new ArrayList<FlowLineId>();
 
-        for (final var posting : input.postings()) {
+        for (final var flowLine : input.flowLines()) {
 
-            final var pd = definition.addPosting(
-                posting.step(), posting.postingChannel(), posting.postingChannelId(), posting.participant(),
-                posting.amountName(), posting.side(), posting.description(), this.accountCache,
+            final var savedFlowLine = definition.addFlowLine(
+                flowLine.step(), flowLine.postingChannel(), flowLine.postingChannelId(),
+                flowLine.participant(), flowLine.amountName(), flowLine.side(),
+                flowLine.description(), this.accountCache,
                 this.coaEntryCache);
-            postingIds.add(pd.getId());
+            flowLineIds.add(savedFlowLine.getId());
         }
 
         definition = this.flowDefinitionRepository.save(definition);
-        var output = new Output(definition.getId(), postingIds);
+        final var output = new Output(definition.getId(), flowLineIds);
 
         LOGGER.info("CreateFlowDefinitionCommand : output : ({})", ObjectLogger.log(output));
 

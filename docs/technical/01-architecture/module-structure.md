@@ -171,11 +171,11 @@ Domain models: Fsp, Hub, Oracle, Ssp, FspCurrency, FspEndpoint
 
 #### accounting/ (8 modules)
 
-Domain models: Chart, Account, FlowDefinition, PostingDefinition, Movement
+Domain models: Chart, Account, FlowDefinition, FlowLine, Movement
 
 **Commands:**
 - CreateChart, CreateAccount
-- CreateFlowDefinition, AddPostingDefinition
+- CreateFlowDefinition, AddFlowLine
 - PostLedgerFlowCommand
 - ManualPostCommand
 

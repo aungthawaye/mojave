@@ -16,7 +16,7 @@ BEGIN
     DECLARE v_txn_at BIGINT;
     DECLARE v_txn_type VARCHAR(32);
     DECLARE v_flow_definition_id BIGINT;
-    DECLARE v_posting_definition_id BIGINT;
+    DECLARE v_flow_line_id BIGINT;
     DECLARE done INT DEFAULT 0;
     DECLARE v_dr_curr DECIMAL(34, 4);
     DECLARE v_cr_curr DECIMAL(34, 4);
@@ -46,7 +46,7 @@ BEGIN
                                       transaction_at,
                                       transaction_type,
                                       flow_definition_id,
-                                      posting_definition_id
+                                      flow_line_id
                                FROM tmp_lines
                                ORDER BY step;
 
@@ -78,7 +78,7 @@ BEGIN
         transaction_at        BIGINT         NOT NULL,
         transaction_type      VARCHAR(32)    NOT NULL,
         flow_definition_id    BIGINT         NOT NULL,
-        posting_definition_id BIGINT         NOT NULL
+        flow_line_id BIGINT         NOT NULL
     ) ENGINE = MEMORY;
 
     CREATE TEMPORARY TABLE tmp_movements
@@ -97,7 +97,7 @@ BEGIN
         transaction_at        BIGINT         NOT NULL,
         transaction_type      VARCHAR(32)    NOT NULL,
         flow_definition_id    BIGINT         NOT NULL,
-        posting_definition_id BIGINT         NOT NULL,
+        flow_line_id BIGINT         NOT NULL,
         movement_stage        VARCHAR(32)    NOT NULL,
         movement_result       VARCHAR(32)    NOT NULL,
         created_at            BIGINT         NOT NULL
@@ -115,9 +115,9 @@ BEGIN
            jt.transactionat,
            jt.transactiontype,
            jt.flowdefinitionid,
-           jt.postingdefinitionid
+           jt.flowlineid
     FROM JSON_TABLE(p_lines_json, '$[*]'
-                    COLUMNS ( ledgermovementid BIGINT PATH '$.ledgerMovementId', step INT PATH '$.step', accountid BIGINT PATH '$.accountId', side VARCHAR(32) PATH '$.side', currency VARCHAR(3) PATH '$.currency', amount DECIMAL(34, 4) PATH '$.amount', transactionid BIGINT PATH '$.transactionId', transactionat BIGINT PATH '$.transactionAt', transactiontype VARCHAR(32) PATH '$.transactionType', flowdefinitionid BIGINT PATH '$.flowDefinitionId', postingdefinitionid BIGINT PATH '$.postingDefinitionId' )) AS jt
+                    COLUMNS ( ledgermovementid BIGINT PATH '$.ledgerMovementId', step INT PATH '$.step', accountid BIGINT PATH '$.accountId', side VARCHAR(32) PATH '$.side', currency VARCHAR(3) PATH '$.currency', amount DECIMAL(34, 4) PATH '$.amount', transactionid BIGINT PATH '$.transactionId', transactionat BIGINT PATH '$.transactionAt', transactiontype VARCHAR(32) PATH '$.transactionType', flowdefinitionid BIGINT PATH '$.flowDefinitionId', flowlineid BIGINT PATH '$.flowLineId' )) AS jt
     ORDER BY jt.step;
 
     /* ---------------- INITIATE the movements (with handlers) ---------------- */
@@ -168,7 +168,7 @@ BEGIN
                NULL                    AS transaction_at,
                NULL                    AS transaction_type,
                v_flow_definition_id    AS flow_definition_id,
-               v_posting_definition_id AS posting_definition_id,
+               v_flow_line_id AS flow_line_id,
                'DEBIT_CREDIT'          AS movement_stage,
                'PENDING'               AS movement_result,
                UNIX_TIMESTAMP()        AS created_at;
@@ -191,7 +191,7 @@ BEGIN
                                      transaction_at,
                                      transaction_type,
                                      flow_definition_id,
-                                     posting_definition_id,
+                                     flow_line_id,
                                      movement_stage,
                                      movement_result,
                                      created_at,
@@ -212,7 +212,7 @@ BEGIN
            transaction_at,
            transaction_type,
            flow_definition_id,
-           posting_definition_id,
+           flow_line_id,
            'INITIATED',
            'PENDING',
            UNIX_TIMESTAMP(),
@@ -228,7 +228,7 @@ BEGIN
     post_loop
     :
     LOOP
-        FETCH c_lines INTO v_ledger_movement_id, v_step, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_txn_type, v_flow_definition_id, v_posting_definition_id;
+        FETCH c_lines INTO v_ledger_movement_id, v_step, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_txn_type, v_flow_definition_id, v_flow_line_id;
         IF done = 1 THEN LEAVE post_loop; END IF;
 
         -- T1: lock/update/stage
@@ -261,7 +261,7 @@ BEGIN
                        NULL                    AS transaction_at,
                        NULL                    AS transaction_type,
                        v_flow_definition_id    AS flow_definition_id,
-                       v_posting_definition_id AS posting_definition_id,
+                       v_flow_line_id AS flow_line_id,
                        'DEBIT_CREDIT'          AS movement_stage,
                        'PENDING'               AS movement_result,
                        UNIX_TIMESTAMP()        AS created_at;
@@ -349,7 +349,7 @@ BEGIN
                                        transaction_at,
                                        transaction_type,
                                        flow_definition_id,
-                                       posting_definition_id,
+                                       flow_line_id,
                                        movement_stage,
                                        movement_result,
                                        created_at)
@@ -367,7 +367,7 @@ BEGIN
                     v_txn_at,
                     v_txn_type,
                     v_flow_definition_id,
-                    v_posting_definition_id,
+                    v_flow_line_id,
                     'DEBIT_CREDIT',
                     'SUCCESS',
                     UNIX_TIMESTAMP());
@@ -443,7 +443,7 @@ BEGIN
                                NULL                 AS transaction_at,
                                NULL                 AS transaction_type,
                                NULL                 AS flow_definition_id,
-                               NULL                 AS posting_definition_id,
+                               NULL                 AS flow_line_id,
                                'DEBIT_CREDIT'       AS movement_stage,
                                'PENDING'            AS movement_result,
                                UNIX_TIMESTAMP()     AS created_at;
@@ -500,7 +500,7 @@ BEGIN
                NULL             AS transaction_at,
                NULL             AS transaction_type,
                NULL             AS flow_definition_id,
-               NULL             AS posting_definition_id,
+               NULL             AS flow_line_id,
                'DEBIT_CREDIT'   AS movement_stage,
                v_error_code     AS movement_result,
                UNIX_TIMESTAMP() AS created_at;
@@ -535,7 +535,7 @@ BEGIN
                transaction_at,
                transaction_type,
                flow_definition_id,
-               posting_definition_id,
+               flow_line_id,
                movement_stage,
                movement_result,
                created_at

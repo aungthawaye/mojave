@@ -39,12 +39,12 @@ import org.mojave.core.accounting.contract.command.chart.ChangeCoaNameCommand;
 import org.mojave.core.accounting.contract.command.chart.CreateCoaCommand;
 import org.mojave.core.accounting.contract.command.chart.CreateCoaEntryCommand;
 import org.mojave.core.accounting.contract.command.definition.ActivateFlowDefinitionCommand;
-import org.mojave.core.accounting.contract.command.definition.AddPostingDefinitionCommand;
+import org.mojave.core.accounting.contract.command.definition.AddFlowLineCommand;
 import org.mojave.core.accounting.contract.command.definition.ChangeFlowDefinitionCurrencyCommand;
 import org.mojave.core.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand;
 import org.mojave.core.accounting.contract.command.definition.CreateFlowDefinitionCommand;
 import org.mojave.core.accounting.contract.command.definition.DeactivateFlowDefinitionCommand;
-import org.mojave.core.accounting.contract.command.definition.RemovePostingDefinitionCommand;
+import org.mojave.core.accounting.contract.command.definition.RemoveFlowLineCommand;
 import org.mojave.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
 import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import org.mojave.core.accounting.contract.data.AccountData;
@@ -162,9 +162,9 @@ public interface AccountingAdminService {
         Call<ActivateFlowDefinitionCommand.Output> activate(
             @Body ActivateFlowDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/add-posting-definition")
-        Call<AddPostingDefinitionCommand.Output> addPosting(
-            @Body AddPostingDefinitionCommand.Input input);
+        @POST(MODULE_PREFIX + "/flow-definitions/add-flow-line")
+        Call<AddFlowLineCommand.Output> addFlowLine(
+            @Body AddFlowLineCommand.Input input);
 
         @POST(MODULE_PREFIX + "/flow-definitions/change-flow-definition-currency")
         Call<ChangeFlowDefinitionCurrencyCommand.Output> changeCurrency(
@@ -182,9 +182,9 @@ public interface AccountingAdminService {
         Call<DeactivateFlowDefinitionCommand.Output> deactivate(
             @Body DeactivateFlowDefinitionCommand.Input input);
 
-        @POST(MODULE_PREFIX + "/flow-definitions/remove-posting-definition")
-        Call<RemovePostingDefinitionCommand.Output> removePosting(
-            @Body RemovePostingDefinitionCommand.Input input);
+        @POST(MODULE_PREFIX + "/flow-definitions/remove-flow-line")
+        Call<RemoveFlowLineCommand.Output> removeFlowLine(
+            @Body RemoveFlowLineCommand.Input input);
 
         @POST(MODULE_PREFIX + "/flow-definitions/terminate-flow-definition")
         Call<TerminateFlowDefinitionCommand.Output> terminate(

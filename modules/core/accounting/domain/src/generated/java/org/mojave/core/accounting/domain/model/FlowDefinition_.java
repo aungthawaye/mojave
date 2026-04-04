@@ -56,9 +56,9 @@ public abstract class FlowDefinition_ extends JpaEntity_ {
 	public static final String TERMINATION_STATUS = "terminationStatus";
 	
 	/**
-	 * @see #postings
+	 * @see #flowLines
 	 **/
-	public static final String POSTINGS = "postings";
+	public static final String FLOW_LINES = "flowLines";
 
 	
 	/**
@@ -102,9 +102,8 @@ public abstract class FlowDefinition_ extends JpaEntity_ {
 	public static volatile SingularAttribute<FlowDefinition, TerminationStatus> terminationStatus;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.FlowDefinition#postings}
+	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.FlowDefinition#flowLines}
 	 **/
-	public static volatile ListAttribute<FlowDefinition, PostingDefinition> postings;
+	public static volatile ListAttribute<FlowDefinition, FlowLine> flowLines;
 
 }
-

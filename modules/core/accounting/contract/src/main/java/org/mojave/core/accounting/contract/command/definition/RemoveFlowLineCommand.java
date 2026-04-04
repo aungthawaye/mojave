@@ -23,23 +23,17 @@ package org.mojave.core.accounting.contract.command.definition;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 
-public interface RemovePostingDefinitionCommand {
+public interface RemoveFlowLineCommand {
 
     Output execute(Input input);
 
-    /**
-     * Input for creating a Fund-In Definition.
-     */
     record Input(@JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId,
-                 @JsonProperty(required = true) @NotNull PostingDefinitionId postingDefinitionId) {
+                 @JsonProperty(required = true) @NotNull FlowLineId flowLineId) {
 
     }
 
-    /**
-     * Output of creation, returning the generated DefinitionId.
-     */
     record Output(FlowDefinitionId flowDefinitionId) { }
 
 }

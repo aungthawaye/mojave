@@ -9,7 +9,7 @@ import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.enums.Currency;
 
@@ -49,7 +49,7 @@ public interface Ledger {
                    Currency currency,
                    BigDecimal amount,
                    FlowDefinitionId flowDefinitionId,
-                   PostingDefinitionId postingDefinitionId) {
+                   FlowLineId flowLineId) {
 
         public Request {
 
@@ -73,7 +73,7 @@ public interface Ledger {
                     Instant transactionAt,
                     TransactionType transactionType,
                     FlowDefinitionId flowDefinitionId,
-                    PostingDefinitionId postingDefinitionId,
+                    FlowLineId flowLineId,
                     MovementStage movementStage,
                     MovementResult movementResult,
                     Instant createdAt) {

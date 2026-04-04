@@ -31,19 +31,19 @@ import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
-@JsonDeserialize(using = PostingDefinitionId.Deserializer.class)
-public class PostingDefinitionId extends EntityId<Long> {
+@JsonDeserialize(using = FlowLineId.Deserializer.class)
+public class FlowLineId extends EntityId<Long> {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public PostingDefinitionId(Long id) {
+    public FlowLineId(Long id) {
 
         super(id);
     }
 
-    public static class Deserializer extends ValueDeserializer<PostingDefinitionId> {
+    public static class Deserializer extends ValueDeserializer<FlowLineId> {
 
         @Override
-        public PostingDefinitionId deserialize(JsonParser p, DeserializationContext ctx)
+        public FlowLineId deserialize(JsonParser p, DeserializationContext ctx)
             throws JacksonException {
 
             var field = p.currentName();
@@ -54,7 +54,7 @@ public class PostingDefinitionId extends EntityId<Long> {
             }
 
             try {
-                return new PostingDefinitionId(Long.parseLong(text));
+                return new FlowLineId(Long.parseLong(text));
             } catch (NumberFormatException e) {
                 throw InvalidFormatException.from(
                     p, "'" + field + "' has invalid format. Must be number.", e);
@@ -64,12 +64,12 @@ public class PostingDefinitionId extends EntityId<Long> {
     }
 
     @Component
-    public static class ParamConverter implements Converter<String, PostingDefinitionId> {
+    public static class ParamConverter implements Converter<String, FlowLineId> {
 
         @Override
-        public PostingDefinitionId convert(String source) {
+        public FlowLineId convert(String source) {
 
-            return new PostingDefinitionId(Long.parseLong(source));
+            return new FlowLineId(Long.parseLong(source));
         }
 
     }

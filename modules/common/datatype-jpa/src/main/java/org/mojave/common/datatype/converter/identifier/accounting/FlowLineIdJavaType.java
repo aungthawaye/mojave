@@ -26,21 +26,21 @@ import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 
-public class PostingDefinitionIdJavaType extends AbstractClassJavaType<PostingDefinitionId> {
+public class FlowLineIdJavaType extends AbstractClassJavaType<FlowLineId> {
 
-    public static final PostingDefinitionIdJavaType INSTANCE = new PostingDefinitionIdJavaType();
+    public static final FlowLineIdJavaType INSTANCE = new FlowLineIdJavaType();
 
-    public PostingDefinitionIdJavaType() {
+    public FlowLineIdJavaType() {
 
-        super(PostingDefinitionId.class, ImmutableMutabilityPlan.instance());
+        super(FlowLineId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public PostingDefinitionId fromString(CharSequence string) {
+    public FlowLineId fromString(CharSequence string) {
 
-        return (string == null) ? null : new PostingDefinitionId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new FlowLineId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -50,14 +50,14 @@ public class PostingDefinitionIdJavaType extends AbstractClassJavaType<PostingDe
     }
 
     @Override
-    public String toString(PostingDefinitionId value) {
+    public String toString(FlowLineId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(PostingDefinitionId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(FlowLineId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -77,12 +77,12 @@ public class PostingDefinitionIdJavaType extends AbstractClassJavaType<PostingDe
     }
 
     @Override
-    public PostingDefinitionId wrap(Object value, WrapperOptions options) {
+    public FlowLineId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case PostingDefinitionId id -> id;
-            case Number n -> new PostingDefinitionId(n.longValue());
+            case FlowLineId id -> id;
+            case Number n -> new FlowLineId(n.longValue());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };

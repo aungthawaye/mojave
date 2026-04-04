@@ -94,37 +94,37 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
 
         var requests = new ArrayList<Ledger.Request>();
 
-        flowDefinition.postings().forEach(posting -> {
+        flowDefinition.flowLines().forEach(flowLine -> {
 
-            var amount = input.amounts().get(posting.amountName());
+            final var amount = input.amounts().get(flowLine.amountName());
 
             if (amount == null) {
 
                 throw new RequiredAmountNameNotFoundInTransactionException(
-                    posting.amountName(), input.amounts().keySet(), transactionId);
+                    flowLine.amountName(), input.amounts().keySet(), transactionId);
             }
 
             AccountId accountId = null;
             AccountData accountData = null;
 
-            if (posting.postingChannel() == PostingChannel.CHART_ENTRY) {
+            if (flowLine.postingChannel() == PostingChannel.CHART_ENTRY) {
 
-                var accountOfParticipant = input.participants().get(posting.participant());
+                final var accountOfParticipant = input.participants().get(flowLine.participant());
 
                 if (accountOfParticipant == null) {
 
                     throw new RequiredParticipantNotFoundInTransactionException(
-                        posting.participant(), input.participants().keySet(), transactionId);
+                        flowLine.participant(), input.participants().keySet(), transactionId);
                 }
 
                 accountData = this.accountCache.get(
-                    new CoaEntryId(posting.receiveInId()),
+                    new CoaEntryId(flowLine.receiveInId()),
                     accountOfParticipant, input.currency());
                 accountId = accountData.accountId();
 
             } else {
 
-                accountId = new AccountId(posting.receiveInId());
+                accountId = new AccountId(flowLine.receiveInId());
                 accountData = this.accountCache.get(accountId);
 
                 if (accountData == null) {
@@ -138,9 +138,9 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
             }
 
             var request = new Ledger.Request(
-                new LedgerMovementId(Snowflake.get().nextId()), posting.step(), accountId,
-                posting.side(), input.currency(), amount, flowDefinition.flowDefinitionId(),
-                posting.postingDefinitionId());
+                new LedgerMovementId(Snowflake.get().nextId()), flowLine.step(), accountId,
+                flowLine.side(), input.currency(), amount, flowDefinition.flowDefinitionId(),
+                flowLine.flowLineId());
 
             requests.add(request);
         });

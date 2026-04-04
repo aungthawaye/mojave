@@ -731,7 +731,7 @@
           "response": []
         },
         {
-          "name": "POST /flow-definitions/add-postings",
+          "name": "POST /flow-definitions/add-flow-line",
           "request": {
             "method": "POST",
             "header": [
@@ -745,21 +745,21 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/flow-definitions/add-postings",
+              "raw": "{{baseUrl}}/flow-definitions/add-flow-line",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "definitions",
                 "flows",
-                "add-postings"
+                "add-flow-line"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "POST /flow-definitions/remove-posting",
+          "name": "POST /flow-definitions/remove-flow-line",
           "request": {
             "method": "POST",
             "header": [
@@ -773,14 +773,14 @@
               "raw": "{}"
             },
             "url": {
-              "raw": "{{baseUrl}}/flow-definitions/remove-posting",
+              "raw": "{{baseUrl}}/flow-definitions/remove-flow-line",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "definitions",
                 "flows",
-                "remove-posting"
+                "remove-flow-line"
               ]
             }
           },
