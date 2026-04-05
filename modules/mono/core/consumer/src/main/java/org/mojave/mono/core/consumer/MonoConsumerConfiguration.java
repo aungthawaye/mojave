@@ -20,8 +20,8 @@
 
 package org.mojave.mono.core.consumer;
 
-import org.mojave.core.accounting.consumer.AccountingConsumerConfiguration;
-import org.mojave.core.wallet.consumer.WalletConsumerConfiguration;
+import org.mojave.accounting.consumer.AccountingConsumerConfiguration;
+import org.mojave.wallet.consumer.WalletConsumerConfiguration;
 import org.springframework.context.annotation.Import;
 
 @Import(

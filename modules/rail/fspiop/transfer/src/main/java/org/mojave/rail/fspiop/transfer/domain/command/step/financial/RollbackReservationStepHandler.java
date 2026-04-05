@@ -25,7 +25,7 @@ import org.mojave.common.datatype.enums.transfer.DisputeReason;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
-import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
+import org.mojave.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.slf4j.Logger;

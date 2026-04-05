@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.transaction;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.LongId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -32,10 +33,10 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = StepParamId.Deserializer.class)
-public class StepParamId extends EntityId<Long> {
+public class StepParamId extends LongId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public StepParamId(Long id) {
+    public StepParamId(long id) {
 
         super(id);
     }
@@ -67,7 +68,7 @@ public class StepParamId extends EntityId<Long> {
     public static class ParamConverter implements Converter<String, StepParamId> {
 
         @Override
-        public StepParamId convert(String source) {
+        public StepParamId convert(final @NonNull String source) {
 
             return new StepParamId(Long.parseLong(source));
         }

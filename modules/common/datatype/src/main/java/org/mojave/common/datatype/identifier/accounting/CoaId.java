@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.accounting;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.LongId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -32,10 +33,10 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = CoaId.Deserializer.class)
-public class CoaId extends EntityId<Long> {
+public class CoaId extends LongId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public CoaId(Long id) {
+    public CoaId(long id) {
 
         super(id);
     }
@@ -67,7 +68,7 @@ public class CoaId extends EntityId<Long> {
     public static class ParamConverter implements Converter<String, CoaId> {
 
         @Override
-        public CoaId convert(String source) {
+        public CoaId convert(final @NonNull String source) {
 
             return new CoaId(Long.parseLong(source));
         }

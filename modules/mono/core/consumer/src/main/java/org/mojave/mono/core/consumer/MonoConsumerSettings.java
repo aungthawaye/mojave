@@ -22,9 +22,9 @@ package org.mojave.mono.core.consumer;
 
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
-import org.mojave.core.accounting.consumer.listener.PostLedgerFlowListener;
-import org.mojave.core.wallet.consumer.listener.FulfilPositionsListener;
-import org.mojave.core.wallet.consumer.listener.RollbackReservationListener;
+import org.mojave.accounting.consumer.command.PostLedgerFlowListener;
+import org.mojave.wallet.consumer.listener.FulfilPositionsListener;
+import org.mojave.wallet.consumer.listener.RollbackReservationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 

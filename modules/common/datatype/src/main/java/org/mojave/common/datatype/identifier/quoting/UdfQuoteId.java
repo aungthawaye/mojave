@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.quoting;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.StringId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -31,7 +32,7 @@ import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(using = UdfQuoteId.Deserializer.class)
-public class UdfQuoteId extends EntityId<String> {
+public class UdfQuoteId extends StringId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public UdfQuoteId(String id) {
@@ -60,7 +61,7 @@ public class UdfQuoteId extends EntityId<String> {
     public static class ParamConverter implements Converter<String, UdfQuoteId> {
 
         @Override
-        public UdfQuoteId convert(final String source) {
+        public UdfQuoteId convert(final @NonNull String source) {
 
             if (source == null || source.isBlank()) {
                 return null;

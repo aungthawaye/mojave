@@ -23,8 +23,8 @@ package org.mojave.rail.fspiop.transfer.contract.command.step.financial;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.core.participant.contract.data.FspData;
-import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import org.mojave.participant.contract.data.FspData;
+import org.mojave.wallet.contract.exception.position.FailedToCommitReservationException;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.scheme.fspiop.core.Currency;
 

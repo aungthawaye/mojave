@@ -20,8 +20,8 @@
 
 package org.mojave.mono.core.intercom;
 
-import org.mojave.core.participant.domain.ParticipantFlyway;
-import org.mojave.core.wallet.domain.WalletFlyway;
+import org.mojave.participant.domain.ParticipantFlyway;
+import org.mojave.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;

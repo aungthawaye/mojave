@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.quoting;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.LongId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -32,10 +33,10 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = QuoteId.Deserializer.class)
-public class QuoteId extends EntityId<Long> {
+public class QuoteId extends LongId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public QuoteId(Long id) {
+    public QuoteId(long id) {
 
         super(id);
     }
@@ -67,7 +68,7 @@ public class QuoteId extends EntityId<Long> {
     public static class ParamConverter implements Converter<String, QuoteId> {
 
         @Override
-        public QuoteId convert(String source) {
+        public QuoteId convert(final @NonNull String source) {
 
             return new QuoteId(Long.parseLong(source));
         }

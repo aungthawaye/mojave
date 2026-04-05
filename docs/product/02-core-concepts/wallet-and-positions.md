@@ -199,7 +199,7 @@ public interface ReservePositionCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/core/wallet/contract/command/position/ReservePositionCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 **Process:**
 1. Fetch current position for FSP and currency

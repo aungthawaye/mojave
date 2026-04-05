@@ -267,16 +267,16 @@ Key tables by module:
 `modules/rail/fspiop/transfer/src/main/java/org/mojave/rail/fspiop/transfer/domain/command/PostTransfersCommandHandler.java`
 
 ### Accounting Core
-`modules/core/accounting/contract/src/main/java/org/mojave/core/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+`modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
 
 ### Wallet Core
-`modules/core/wallet/contract/src/main/java/org/mojave/core/wallet/contract/command/position/ReservePositionCommand.java`
+`modules/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 ### Settlement Core
-`modules/core/settlement/domain/src/main/java/org/mojave/core/settlement/domain/model/SettlementDefinition.java`
+`modules/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
 
 ### Participant Core
-`modules/core/participant/domain/src/main/java/org/mojave/core/participant/domain/model/Fsp.java`
+`modules/participant/domain/src/main/java/org/mojave/participant/domain/model/Fsp.java`
 
 ## Development Workflow
 

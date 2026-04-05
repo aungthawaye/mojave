@@ -20,7 +20,7 @@
 
 package org.mojave.component.web.error;
 
-import org.mojave.component.misc.error.RestErrorResponse;
+import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.slf4j.Logger;
@@ -46,27 +46,27 @@ public class RestErrorControllerAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestErrorControllerAdvice.class);
 
     @ExceptionHandler(CheckedDomainException.class)
-    public ResponseEntity<RestErrorResponse> handle(CheckedDomainException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(CheckedDomainException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
+            new MojaveErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UncheckedDomainException.class)
-    public ResponseEntity<RestErrorResponse> handle(UncheckedDomainException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(UncheckedDomainException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
+            new MojaveErrorResponse(e.getTemplate().code(), e.getMessage(), e.extras()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<RestErrorResponse> handle(MethodArgumentNotValidException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(MethodArgumentNotValidException e) {
 
         LOGGER.error("Error:", e);
 
@@ -79,77 +79,77 @@ public class RestErrorControllerAdvice {
         });
 
         return new ResponseEntity<>(
-            new RestErrorResponse("ARGUMENT_NOT_VALID", errors.toString(), extra),
+            new MojaveErrorResponse("ARGUMENT_NOT_VALID", errors.toString(), extra),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<RestErrorResponse> handle(MethodArgumentTypeMismatchException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(MethodArgumentTypeMismatchException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("ARGUMENT_TYPE_MISMATCH", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("ARGUMENT_TYPE_MISMATCH", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<RestErrorResponse> handle(NoHandlerFoundException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(NoHandlerFoundException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("NO_HANDLER_FOUND", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("NO_HANDLER_FOUND", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<RestErrorResponse> handle(HttpMessageNotReadableException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(HttpMessageNotReadableException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("MESSAGE_NOT_READABLE", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("MESSAGE_NOT_READABLE", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<RestErrorResponse> handle(RuntimeException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(RuntimeException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<RestErrorResponse> handle(Exception e) {
+    public ResponseEntity<MojaveErrorResponse> handle(Exception e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("INTERNAL_SERVER_ERROR", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<RestErrorResponse> handle(MissingServletRequestParameterException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(MissingServletRequestParameterException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("MISSING_PARAMETER", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("MISSING_PARAMETER", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<RestErrorResponse> handle(BindException e) {
+    public ResponseEntity<MojaveErrorResponse> handle(BindException e) {
 
         LOGGER.error("Error:", e);
 
         return new ResponseEntity<>(
-            new RestErrorResponse("BINDING_FAILED", e.getMessage(), Map.of()),
+            new MojaveErrorResponse("BINDING_FAILED", e.getMessage(), Map.of()),
             HttpStatus.BAD_REQUEST);
     }
 

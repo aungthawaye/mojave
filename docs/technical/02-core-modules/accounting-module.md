@@ -8,7 +8,7 @@ The Accounting module implements double-entry bookkeeping with configurable flow
 
 ### PostLedgerFlowCommand
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/core/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
 
 ```java
 public interface PostLedgerFlowCommand {

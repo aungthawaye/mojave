@@ -14,7 +14,6 @@
     <modules>
         <module>forex</module>
         <module>settlement</module>
-        <module>ledger</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

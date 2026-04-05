@@ -23,7 +23,7 @@ package org.mojave.rail.fspiop.quoting.service;
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
-import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
+import org.mojave.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;

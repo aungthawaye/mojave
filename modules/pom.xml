@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,12 +17,11 @@
         <module>component</module>
         <module>common</module>
         <module>scheme</module>
-        <module>provider</module>
-        <module>core</module>
-        <module>rail</module>
-        <module>mono</module>
-        <module>operation</module>
-        <module>connector</module>
+        <module>accounting</module>
+        <module>participant</module>
+        <module>settlement</module>
+        <module>transaction</module>
+        <module>wallet</module>
     </modules>
     <properties>
         <java.version>25</java.version>
@@ -30,6 +31,12 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.nats</groupId>
+                <artifactId>jnats</artifactId>
+                <version>2.25.2</version>
+                <scope>compile</scope>
+            </dependency>
             <dependency>
                 <groupId>at.yawk.lz4</groupId>
                 <artifactId>lz4-java</artifactId>
@@ -168,6 +175,11 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-nats</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
                 <artifactId>mojave-component-openapi</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -212,48 +224,33 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-admin</artifactId>
+                <groupId>org.mojave.accounting</groupId>
+                <artifactId>mojave-accounting-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-admin-client</artifactId>
+                <groupId>org.mojave.accounting</groupId>
+                <artifactId>mojave-accounting-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-consumer</artifactId>
+                <groupId>org.mojave.accounting</groupId>
+                <artifactId>mojave-accounting-intercom-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-contract</artifactId>
+                <groupId>org.mojave.accounting.intercom</groupId>
+                <artifactId>mojave-accounting-intercom-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-domain</artifactId>
+                <groupId>org.mojave.accounting.intercom</groupId>
+                <artifactId>mojave-accounting-intercom-replier</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-intercom</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-intercom-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-producer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-store</artifactId>
+                <groupId>org.mojave.accounting.intercom</groupId>
+                <artifactId>mojave-accounting-intercom-requestor</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -272,123 +269,123 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-admin</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-admin-client</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-admin-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-contract</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-domain</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-intercom</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-intercom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-intercom-client</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-intercom-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-store</artifactId>
+                <groupId>org.mojave.participant</groupId>
+                <artifactId>mojave-participant-store</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.scheme</groupId>
-                <artifactId>mojave-core-scheme-rule</artifactId>
+                <groupId>org.mojave.scheme</groupId>
+                <artifactId>mojave-scheme-rule</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-contract</artifactId>
+                <groupId>org.mojave.settlement</groupId>
+                <artifactId>mojave-settlement-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.settlement</groupId>
-                <artifactId>mojave-core-settlement-domain</artifactId>
+                <groupId>org.mojave.settlement</groupId>
+                <artifactId>mojave-settlement-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-consumer</artifactId>
+                <groupId>org.mojave.transaction</groupId>
+                <artifactId>mojave-transactionconsumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-contract</artifactId>
+                <groupId>org.mojave.transaction</groupId>
+                <artifactId>mojave-transactioncontract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-domain</artifactId>
+                <groupId>org.mojave.transaction</groupId>
+                <artifactId>mojave-transactiondomain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-intercom</artifactId>
+                <groupId>org.mojave.transaction</groupId>
+                <artifactId>mojave-transactionintercom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-intercom-client</artifactId>
+                <groupId>org.mojave.transaction</groupId>
+                <artifactId>mojave-transactionintercom-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-producer</artifactId>
+                <groupId>org.mojave.transaction</groupId>
+                <artifactId>mojave-transactionproducer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-admin</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-admin</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-admin-client</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-admin-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-consumer</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-contract</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-domain</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-domain</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-intercom</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-intercom</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-intercom-client</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-intercom-client</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-producer</artifactId>
+                <groupId>org.mojave.wallet</groupId>
+                <artifactId>mojave-wallet-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -397,13 +394,8 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.provider.ledger</groupId>
-                <artifactId>mojave-provider-ledger-contract</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.provider.ledger</groupId>
-                <artifactId>mojave-provider-ledger-mysql</artifactId>
+                <groupId>org.mojave.accounting.ledger</groupId>
+                <artifactId>mojave-accounting-ledger-mysql</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
@@ -509,8 +501,10 @@
                 <artifactId>sortpom-maven-plugin</artifactId>
                 <version>4.0.0</version>
                 <configuration>
-                    <sortDependencies>groupId,artifactId,scope</sortDependencies>
-                    <sortDependencyManagement>groupId,artifactId,scope</sortDependencyManagement>
+                    <sortDependencies>groupId,artifactId,scope
+                    </sortDependencies>
+                    <sortDependencyManagement>groupId,artifactId,scope
+                    </sortDependencyManagement>
                     <sortPlugins>groupId,artifactId</sortPlugins>
                     <sortProperties>true</sortProperties>
                     <nrOfIndentSpace>4</nrOfIndentSpace>
@@ -524,7 +518,6 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <generatedSourcesDirectory>${project.basedir}/src/generated/java</generatedSourcesDirectory>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -553,7 +546,8 @@
                         </goals>
                         <phase>install</phase>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/lib
+                            </outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -565,26 +559,6 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.6.1</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <sources>
-                                <source>src/main/java</source>
-                                <source>src/generated/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <version>2.5.0</version>
                 <configuration>
@@ -593,7 +567,8 @@
                     <projectName>Mojave</projectName>
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
-                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+                    <addJavaLicenseAfterPackage>false
+                    </addJavaLicenseAfterPackage>
                     <processStartTag>===</processStartTag>
                     <sectionDelimiter>---</sectionDelimiter>
                     <processEndTag>===</processEndTag>

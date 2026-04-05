@@ -267,7 +267,7 @@ public class Fsp extends JpaEntity<FspId> {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/participant/domain/src/main/java/org/mojave/core/participant/domain/model/fsp/Fsp.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/participant/domain/src/main/java/org/mojave/participant/domain/model/fsp/Fsp.java`
 
 ## Hub Management
 

@@ -19,9 +19,9 @@
  */
 package org.mojave.operation.usecase;
 
-import org.mojave.core.accounting.admin.client.AccountingAdminClientConfiguration;
-import org.mojave.core.participant.admin.client.ParticipantAdminClientConfiguration;
-import org.mojave.core.wallet.admin.client.WalletAdminClientConfiguration;
+import org.mojave.accounting.admin.client.AccountingAdminClientConfiguration;
+import org.mojave.participant.admin.client.ParticipantAdminClientConfiguration;
+import org.mojave.wallet.admin.client.WalletAdminClientConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 

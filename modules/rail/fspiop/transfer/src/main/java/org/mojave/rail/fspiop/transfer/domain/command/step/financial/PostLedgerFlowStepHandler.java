@@ -21,12 +21,12 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
-import org.mojave.core.accounting.producer.publisher.PostLedgerFlowPublisher;
+import org.mojave.accounting.contract.command.ledger.PostLedgerFlowCommand;
+import org.mojave.accounting.producer.publisher.PostLedgerFlowPublisher;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.core.scheme.rule.dimension.FundTransferDimension;
-import org.mojave.core.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.dimension.FundTransferDimension;
+import org.mojave.scheme.rule.type.TransactionType;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;

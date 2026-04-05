@@ -20,42 +20,39 @@
 package org.mojave.component.misc.ddd;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
-
 import java.util.Objects;
 
 public abstract class EntityId<T> {
 
-    @Getter
     @JsonValue
-    private final T id;
-
-    public EntityId(T id) {
-
-        Objects.requireNonNull(id);
-        this.id = id;
-    }
+    public abstract T getId();
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
 
-        if (!(o instanceof EntityId<?> that)) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
 
-        return Objects.equals(this.id, that.id);
+        final var that = (EntityId<?>) o;
+
+        return Objects.equals(this.getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hashCode(this.id);
+        return Objects.hash(this.getClass(), this.getId());
     }
 
     @Override
     public String toString() {
 
-        return this.id.toString();
+        return this.getId().toString();
     }
 
 }

@@ -139,7 +139,7 @@ docker-compose up -d
 mvn clean install
 
 # Run a specific module (e.g., Accounting Admin)
-cd modules/core/accounting/admin
+cd modules/accounting/admin
 mvn spring-boot:run
 
 # Or run the mono module (all services)
@@ -268,7 +268,7 @@ Mojave fully implements FSPIOP v2.0 specification:
 mvn clean install
 
 # Build specific module
-mvn clean install -pl modules/core/accounting/admin -am
+mvn clean install -pl modules/accounting/admin -am
 
 # Run tests
 mvn test
@@ -277,7 +277,7 @@ mvn test
 mvn clean install -DskipTests
 
 # Run specific service
-cd modules/core/accounting/admin
+cd modules/accounting/admin
 mvn spring-boot:run
 ```
 
@@ -296,7 +296,7 @@ mvn spring-boot:run
 mvn test
 
 # Run tests for specific module
-cd modules/core/accounting
+cd modules/accounting
 mvn test
 
 # Integration tests

@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.participant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.LongId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -32,7 +33,7 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = HubId.Deserializer.class)
-public class HubId extends EntityId<Long> {
+public class HubId extends LongId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public HubId() {
@@ -71,7 +72,7 @@ public class HubId extends EntityId<Long> {
     public static class ParamConverter implements Converter<String, HubId> {
 
         @Override
-        public HubId convert(final String source) {
+        public HubId convert(final @NonNull String source) {
 
             var value = Long.parseLong(source);
             if (value != 1L) {

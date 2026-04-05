@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.wallet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.LongId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -32,10 +33,10 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = PositionId.Deserializer.class)
-public class PositionId extends EntityId<Long> {
+public class PositionId extends LongId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public PositionId(Long id) {
+    public PositionId(long id) {
 
         super(id);
     }
@@ -67,7 +68,7 @@ public class PositionId extends EntityId<Long> {
     public static class ParamConverter implements Converter<String, PositionId> {
 
         @Override
-        public PositionId convert(final String source) {
+        public PositionId convert(final @NonNull String source) {
 
             return new PositionId(Long.parseLong(source));
         }

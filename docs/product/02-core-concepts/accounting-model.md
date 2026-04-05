@@ -182,7 +182,7 @@ public interface PostLedgerFlowCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/core/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
 
 ### Posting Flow
 

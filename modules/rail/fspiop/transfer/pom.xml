@@ -41,28 +41,28 @@
             <artifactId>mojave-component-kafka</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.accounting</groupId>
-            <artifactId>mojave-core-accounting-producer</artifactId>
+            <groupId>org.mojave.accounting</groupId>
+            <artifactId>mojave-accounting-producer</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.scheme</groupId>
-            <artifactId>mojave-core-scheme-rule</artifactId>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-intercom-client</artifactId>
+            <groupId>org.mojave.participant</groupId>
+            <artifactId>mojave-participant-intercom-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-store</artifactId>
+            <groupId>org.mojave.participant</groupId>
+            <artifactId>mojave-participant-store</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-intercom-client</artifactId>
+            <groupId>org.mojave.wallet</groupId>
+            <artifactId>mojave-wallet-intercom-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-producer</artifactId>
+            <groupId>org.mojave.wallet</groupId>
+            <artifactId>mojave-wallet-producer</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.rail.fspiop</groupId>

@@ -21,7 +21,8 @@
 package org.mojave.common.datatype.identifier.settlement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.mojave.component.misc.ddd.EntityId;
+import org.jspecify.annotations.NonNull;
+import org.mojave.component.misc.ddd.LongId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
@@ -32,10 +33,10 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @JsonDeserialize(using = FilterItemId.Deserializer.class)
-public class FilterItemId extends EntityId<Long> {
+public class FilterItemId extends LongId {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public FilterItemId(Long id) {
+    public FilterItemId(long id) {
 
         super(id);
     }
@@ -67,7 +68,7 @@ public class FilterItemId extends EntityId<Long> {
     public static class ParamConverter implements Converter<String, FilterItemId> {
 
         @Override
-        public FilterItemId convert(String source) {
+        public FilterItemId convert(final @NonNull String source) {
 
             return new FilterItemId(Long.parseLong(source));
         }

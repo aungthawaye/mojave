@@ -20,9 +20,9 @@
 package org.mojave.rail.fspiop.transfer.service;
 
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
+import org.mojave.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
-import org.mojave.core.wallet.intercom.client.WalletIntercomClientConfiguration;
+import org.mojave.wallet.intercom.client.WalletIntercomClientConfiguration;
 import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;

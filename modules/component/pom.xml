@@ -17,6 +17,7 @@
         <module>web</module>
         <module>vault</module>
         <module>redis</module>
+        <module>nats</module>
         <module>retrofit</module>
         <module>jpa</module>
         <module>flyway</module>

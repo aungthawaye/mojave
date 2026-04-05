@@ -378,7 +378,7 @@ HashiCorp Vault integration for secrets:
 
 | Element | Convention | Example | Assessment |
 |---------|-----------|---------|------------|
-| Packages | lowercase, domain-aligned | `org.mojave.core.accounting.domain` | ✅ Excellent |
+| Packages | lowercase, domain-aligned | `org.mojave.accounting.domain` | ✅ Excellent |
 | Classes | PascalCase, noun-based | `PostLedgerFlowCommandHandler` | ✅ Excellent |
 | Methods | camelCase, verb-based | `createLedgerBalance()` | ✅ Excellent |
 | Constants | UPPER_SNAKE | `SQL_INSERT_LEDGER_BALANCE` | ✅ Excellent |
