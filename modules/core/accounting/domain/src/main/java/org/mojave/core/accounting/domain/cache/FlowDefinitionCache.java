@@ -21,9 +21,9 @@
 package org.mojave.core.accounting.domain.cache;
 
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 public interface FlowDefinitionCache {
 

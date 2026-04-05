@@ -23,11 +23,11 @@ package org.mojave.core.accounting.contract.data;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -81,9 +81,8 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
 
     public record FlowLineData(FlowLineId flowLineId,
                                Integer step,
-                               PostingChannel postingChannel,
-                               Long receiveInId,
                                String participant,
+                               CoaEntryId coaEntryId,
                                String amountName,
                                Side side,
                                String description) {

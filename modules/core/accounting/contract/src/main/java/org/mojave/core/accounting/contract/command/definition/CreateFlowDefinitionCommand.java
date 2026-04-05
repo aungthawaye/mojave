@@ -25,12 +25,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.util.List;
 
@@ -45,9 +45,8 @@ public interface CreateFlowDefinitionCommand {
                  @JsonProperty(required = true) List<FlowLine> flowLines) {
 
         public record FlowLine(@JsonProperty(required = true) @NotNull Integer step,
-                               @JsonProperty(required = true) @NotNull PostingChannel postingChannel,
-                               @JsonProperty(required = true) @NotNull Long postingChannelId,
                                @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
+                               @JsonProperty(required = true) @NotNull CoaEntryId coaEntryId,
                                @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
                                @JsonProperty(required = true) @NotNull Side side,
                                @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }

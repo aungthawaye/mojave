@@ -45,6 +45,10 @@
             <artifactId>mojave-core-accounting-producer</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.scheme</groupId>
+            <artifactId>mojave-core-scheme-rule</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.participant</groupId>
             <artifactId>mojave-core-participant-intercom-client</artifactId>
         </dependency>

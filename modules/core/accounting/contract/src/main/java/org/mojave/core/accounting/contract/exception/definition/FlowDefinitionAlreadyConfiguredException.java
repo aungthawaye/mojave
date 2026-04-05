@@ -22,9 +22,9 @@ package org.mojave.core.accounting.contract.exception.definition;
 
 import lombok.Getter;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.util.HashMap;
 import java.util.Map;

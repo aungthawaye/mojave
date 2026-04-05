@@ -14,6 +14,7 @@ public class BaseIT {
     public static void beforeAll() {
 
         ParticipantFlyway.migrate(WRITE_DB_URL, WRITE_DB_USER, WRITE_DB_PASSWORD);
+
     }
 
 }

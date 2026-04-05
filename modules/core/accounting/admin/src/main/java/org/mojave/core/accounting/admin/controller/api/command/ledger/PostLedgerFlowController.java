@@ -25,6 +25,7 @@ import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
 import org.mojave.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import org.mojave.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import org.mojave.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +50,7 @@ public class PostLedgerFlowController {
         @Valid @RequestBody PostLedgerFlowCommand.Input input) throws
                                                                InsufficientBalanceInAccountException,
                                                                DuplicatePostingInLedgerException,
+                                                               PostingAccountNotFoundException,
                                                                RestoreFailedInAccountException,
                                                                OverdraftLimitReachedInAccountException {
 

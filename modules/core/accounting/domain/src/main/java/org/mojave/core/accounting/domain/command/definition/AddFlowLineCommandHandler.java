@@ -27,6 +27,7 @@ import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNo
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.core.scheme.rule.query.SchemeTransactions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,7 @@ import java.util.Objects;
 @Service
 public class AddFlowLineCommandHandler implements AddFlowLineCommand {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(
-        AddFlowLineCommandHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddFlowLineCommandHandler.class);
 
     private final FlowDefinitionRepository flowDefinitionRepository;
 
@@ -47,8 +47,8 @@ public class AddFlowLineCommandHandler implements AddFlowLineCommand {
     private final CoaEntryCache coaEntryCache;
 
     public AddFlowLineCommandHandler(final FlowDefinitionRepository flowDefinitionRepository,
-                                              final AccountCache accountCache,
-                                              final CoaEntryCache coaEntryCache) {
+                                     final AccountCache accountCache,
+                                     final CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(flowDefinitionRepository);
         Objects.requireNonNull(accountCache);
@@ -71,11 +71,13 @@ public class AddFlowLineCommandHandler implements AddFlowLineCommand {
                                    .orElseThrow(() -> new FlowDefinitionNotFoundException(
                                        input.flowDefinitionId()));
         final var flowLine = input.flowLine();
+        final var transactionTypeDefinition = SchemeTransactions.get(
+            definition.getTransactionType());
 
         final var savedFlowLine = definition.addFlowLine(
-            flowLine.step(), flowLine.postingChannel(), flowLine.postingChannelId(),
-            flowLine.participant(), flowLine.amountName(), flowLine.side(), flowLine.description(),
-            this.accountCache, this.coaEntryCache);
+            flowLine.step(), flowLine.participant(), flowLine.coaEntryId(), flowLine.amountName(),
+            flowLine.side(), flowLine.description(), transactionTypeDefinition, this.accountCache,
+            this.coaEntryCache);
 
         this.flowDefinitionRepository.save(definition);
         final var output = new Output(definition.getId(), savedFlowLine.getId());

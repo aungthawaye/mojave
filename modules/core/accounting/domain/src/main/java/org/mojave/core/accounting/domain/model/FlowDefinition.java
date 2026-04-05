@@ -39,11 +39,10 @@ import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinition
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
@@ -55,6 +54,8 @@ import org.mojave.core.accounting.contract.exception.definition.FlowLineNotFound
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
+import org.mojave.core.scheme.rule.data.TransactionTypeDefinitionData;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -157,17 +158,18 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     }
 
     public FlowLine addFlowLine(Integer index,
-                                PostingChannel postingChannel,
-                                Long receiveInId,
                                 String participant,
+                                CoaEntryId coaEntryId,
                                 String amountName,
                                 Side side,
                                 String description,
+                                TransactionTypeDefinitionData transactionTypeDefinition,
                                 AccountCache accountCache,
                                 CoaEntryCache coaEntryCache) {
 
         final var flowLine = new FlowLine(
-            this, index, postingChannel, receiveInId, participant, amountName, side, description,
+            this, index, participant, coaEntryId, amountName, side, description,
+            transactionTypeDefinition,
             accountCache, coaEntryCache);
 
         this.flowLines.add(flowLine);
@@ -182,8 +184,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         final var flowLineData = this.flowLines
                                      .stream()
                                      .map(line -> new FlowDefinitionData.FlowLineData(
-                                         line.id, line.step, line.postingChannel,
-                                         line.postingChannelId, line.participant,
+                                         line.id, line.step, line.participant, line.coaEntryId,
                                          line.amountName, line.side, line.description))
                                      .toList();
 

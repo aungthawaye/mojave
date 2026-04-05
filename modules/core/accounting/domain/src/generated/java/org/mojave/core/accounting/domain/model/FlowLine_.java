@@ -4,8 +4,8 @@ import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.jpa.JpaEntity_;
 
@@ -38,14 +38,9 @@ public abstract class FlowLine_ extends JpaEntity_ {
 	public static final String SIDE = "side";
 	
 	/**
-	 * @see #postingChannel
+	 * @see #coaEntryId
 	 **/
-	public static final String POSTING_CHANNEL = "postingChannel";
-	
-	/**
-	 * @see #postingChannelId
-	 **/
-	public static final String POSTING_CHANNEL_ID = "postingChannelId";
+	public static final String COA_ENTRY_ID = "coaEntryId";
 	
 	/**
 	 * @see #description
@@ -89,14 +84,9 @@ public abstract class FlowLine_ extends JpaEntity_ {
 	public static volatile SingularAttribute<FlowLine, Side> side;
 	
 	/**
-	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.FlowLine#postingChannel}
+	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.FlowLine#coaEntryId}
 	 **/
-	public static volatile SingularAttribute<FlowLine, PostingChannel> postingChannel;
-	
-	/**
-	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.FlowLine#postingChannelId}
-	 **/
-	public static volatile SingularAttribute<FlowLine, Long> postingChannelId;
+	public static volatile SingularAttribute<FlowLine, CoaEntryId> coaEntryId;
 	
 	/**
 	 * Static metamodel for attribute {@link org.mojave.core.accounting.domain.model.FlowLine#description}

@@ -307,6 +307,11 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
+                <groupId>org.mojave.core.scheme</groupId>
+                <artifactId>mojave-core-scheme-rule</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mojave.core.settlement</groupId>
                 <artifactId>mojave-core-settlement-contract</artifactId>
                 <version>1.0.0</version>

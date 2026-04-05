@@ -25,14 +25,18 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class RequiredAmountNameNotFoundInTransactionException extends UncheckedDomainException {
 
     public static final String CODE = "REQUIRED_AMOUNT_NAME_NOT_FOUND_IN_TRANSACTION";
+
+    private static final String VALUES_DELIMITER = ",";
 
     private static final String TEMPLATE = "Required Amount name ({0}) cannot be found in amounts ({1}) of Transaction Id ({2}).";
 
@@ -60,7 +64,7 @@ public class RequiredAmountNameNotFoundInTransactionException extends UncheckedD
     public static RequiredAmountNameNotFoundInTransactionException from(final Map<String, String> extras) {
 
         final var name = extras.get(Keys.REQUIRED_AMOUNT_NAME);
-        final var amounts = Set.of(extras.get(Keys.AMOUNTS));
+        final var amounts = deserializeValues(extras.get(Keys.AMOUNTS));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
         return new RequiredAmountNameNotFoundInTransactionException(name, amounts, transactionId);
@@ -72,10 +76,27 @@ public class RequiredAmountNameNotFoundInTransactionException extends UncheckedD
         final var extras = new HashMap<String, String>();
 
         extras.put(Keys.REQUIRED_AMOUNT_NAME, this.requiredAmountName);
-        extras.put(Keys.AMOUNTS, this.amounts.toString());
+        extras.put(Keys.AMOUNTS, serializeValues(this.amounts));
         extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
 
         return extras;
+    }
+
+    private static Set<String> deserializeValues(final String values) {
+
+        if (values == null || values.isBlank()) {
+            return Set.of();
+        }
+
+        return Arrays.stream(values.split(VALUES_DELIMITER))
+                     .map(String::trim)
+                     .filter(value -> !value.isBlank())
+                     .collect(Collectors.toUnmodifiableSet());
+    }
+
+    private static String serializeValues(final Set<String> values) {
+
+        return String.join(VALUES_DELIMITER, values);
     }
 
     public static class Keys {

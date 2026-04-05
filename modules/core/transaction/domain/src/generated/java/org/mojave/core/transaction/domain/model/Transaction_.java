@@ -7,9 +7,9 @@ import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 import java.time.Instant;
 import org.mojave.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.component.jpa.JpaEntity_;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 /**
  * Static metamodel for {@link org.mojave.core.transaction.domain.model.Transaction}

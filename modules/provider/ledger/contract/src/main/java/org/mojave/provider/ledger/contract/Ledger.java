@@ -5,13 +5,13 @@ import org.mojave.common.datatype.enums.accounting.MovementResult;
 import org.mojave.common.datatype.enums.accounting.MovementStage;
 import org.mojave.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.enums.Currency;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -98,6 +98,11 @@ public interface Ledger {
             this.accountId = accountId;
         }
 
+        public AccountId getAccountId() {
+
+            return this.accountId;
+        }
+
     }
 
     @Getter
@@ -131,6 +136,31 @@ public interface Ledger {
             this.transactionId = transactionId;
         }
 
+        public AccountId getAccountId() {
+
+            return this.accountId;
+        }
+
+        public Side getSide() {
+
+            return this.side;
+        }
+
+        public BigDecimal getAmount() {
+
+            return this.amount;
+        }
+
+        public Ledger.DrCr getDrCr() {
+
+            return this.drCr;
+        }
+
+        public TransactionId getTransactionId() {
+
+            return this.transactionId;
+        }
+
     }
 
     @Getter
@@ -161,6 +191,31 @@ public interface Ledger {
             this.amount = amount;
             this.drCr = drCr;
             this.transactionId = transactionId;
+        }
+
+        public AccountId getAccountId() {
+
+            return this.accountId;
+        }
+
+        public Side getSide() {
+
+            return this.side;
+        }
+
+        public BigDecimal getAmount() {
+
+            return this.amount;
+        }
+
+        public Ledger.DrCr getDrCr() {
+
+            return this.drCr;
+        }
+
+        public TransactionId getTransactionId() {
+
+            return this.transactionId;
         }
 
     }
@@ -196,6 +251,31 @@ public interface Ledger {
             this.transactionId = transactionId;
         }
 
+        public AccountId getAccountId() {
+
+            return this.accountId;
+        }
+
+        public Side getSide() {
+
+            return this.side;
+        }
+
+        public BigDecimal getAmount() {
+
+            return this.amount;
+        }
+
+        public Ledger.DrCr getDrCr() {
+
+            return this.drCr;
+        }
+
+        public TransactionId getTransactionId() {
+
+            return this.transactionId;
+        }
+
     }
 
     @Getter
@@ -216,6 +296,21 @@ public interface Ledger {
             this.accountId = accountId;
             this.side = side;
             this.transactionId = transactionId;
+        }
+
+        public AccountId getAccountId() {
+
+            return this.accountId;
+        }
+
+        public Side getSide() {
+
+            return this.side;
+        }
+
+        public TransactionId getTransactionId() {
+
+            return this.transactionId;
         }
 
     }

@@ -36,12 +36,26 @@
             <artifactId>mojave-core-accounting-contract</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.scheme</groupId>
+            <artifactId>mojave-core-scheme-rule</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.provider.ledger</groupId>
             <artifactId>mojave-provider-ledger-contract</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.scheme.fspiop</groupId>
             <artifactId>mojave-scheme-fspiop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

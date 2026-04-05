@@ -37,8 +37,6 @@ import org.mojave.core.accounting.contract.exception.chart.CoaEntryNameTooLongEx
 import org.mojave.core.accounting.contract.exception.chart.CoaIdNotFoundException;
 import org.mojave.core.accounting.contract.exception.chart.CoaNameRequiredException;
 import org.mojave.core.accounting.contract.exception.chart.CoaNameTooLongException;
-import org.mojave.core.accounting.contract.exception.definition.AccountConflictInDefinitionException;
-import org.mojave.core.accounting.contract.exception.definition.AmbiguousReceiveInConfigException;
 import org.mojave.core.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
@@ -50,7 +48,7 @@ import org.mojave.core.accounting.contract.exception.definition.ImmatureCoaEntry
 import org.mojave.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.FlowLineNotFoundException;
-import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForReceiveInException;
+import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
 import org.mojave.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import org.mojave.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
@@ -94,10 +92,6 @@ public class AccountingExceptionResolver {
             case CoaNameTooLongException.CODE -> CoaNameTooLongException.from(extra);
 
             // definition
-            case AccountConflictInDefinitionException.CODE ->
-                AccountConflictInDefinitionException.from(extra);
-            case AmbiguousReceiveInConfigException.CODE ->
-                AmbiguousReceiveInConfigException.from(extra);
             case CoaEntryConflictInDefinitionException.CODE ->
                 CoaEntryConflictInDefinitionException.from(extra);
             case DefinitionDescriptionTooLongException.CODE ->
@@ -118,8 +112,8 @@ public class AccountingExceptionResolver {
                 InvalidParticipantForTransactionTypeException.from(extra);
             case FlowLineNotFoundException.CODE ->
                 FlowLineNotFoundException.from(extra);
-            case RequireParticipantForReceiveInException.CODE ->
-                RequireParticipantForReceiveInException.from(extra);
+            case RequireParticipantForCoaEntryException.CODE ->
+                RequireParticipantForCoaEntryException.from(extra);
 
             // ledger
             case DuplicatePostingInLedgerException.CODE ->

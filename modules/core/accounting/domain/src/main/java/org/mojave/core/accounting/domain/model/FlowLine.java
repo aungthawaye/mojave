@@ -36,26 +36,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.common.datatype.converter.identifier.accounting.CoaEntryIdJavaType;
 import org.mojave.common.datatype.converter.identifier.accounting.FlowLineIdJavaType;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
 import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.accounting.contract.exception.definition.AccountConflictInDefinitionException;
-import org.mojave.core.accounting.contract.exception.definition.AmbiguousReceiveInConfigException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
 import org.mojave.core.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
 import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.core.accounting.contract.exception.definition.DuplicateFlowLineIndexException;
 import org.mojave.core.accounting.contract.exception.definition.ImmatureCoaEntryException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
 import org.mojave.core.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
-import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForReceiveInException;
+import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
+import org.mojave.core.scheme.rule.data.TransactionTypeDefinitionData;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -74,8 +73,7 @@ import static java.sql.Types.BIGINT;
                 "participant",
                 "amount_name",
                 "side",
-                "posting_channel",
-                "posting_channel_id"}),
+                "coa_entry_id"}),
         @UniqueConstraint(
             name = "acc_flow_line_02_UK",
             columnNames = {
@@ -110,17 +108,12 @@ public class FlowLine extends JpaEntity<FlowLineId> {
     @Enumerated(EnumType.STRING)
     protected Side side;
 
+    @JavaType(CoaEntryIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
     @Column(
-        name = "posting_channel",
-        nullable = false,
-        length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected PostingChannel postingChannel;
-
-    @Column(
-        name = "posting_channel_id",
+        name = "coa_entry_id",
         nullable = false)
-    protected Long postingChannelId;
+    protected CoaEntryId coaEntryId;
 
     @Column(
         name = "description",
@@ -141,12 +134,12 @@ public class FlowLine extends JpaEntity<FlowLineId> {
 
     public FlowLine(FlowDefinition definition,
                     Integer step,
-                    PostingChannel postingChannel,
-                    Long postingChannelId,
                     String participant,
+                    CoaEntryId coaEntryId,
                     String amountName,
                     Side side,
                     String description,
+                    TransactionTypeDefinitionData transactionTypeDefinition,
                     AccountCache accountCache,
                     CoaEntryCache coaEntryCache) {
 
@@ -157,7 +150,7 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         this.definition = definition;
 
         this.forFlowLine(
-            step, postingChannel, postingChannelId, participant, amountName, side, accountCache,
+            step, participant, coaEntryId, amountName, side, transactionTypeDefinition, accountCache,
             coaEntryCache).description(description);
     }
 
@@ -179,19 +172,19 @@ public class FlowLine extends JpaEntity<FlowLineId> {
     }
 
     public FlowLine forFlowLine(Integer step,
-                                PostingChannel postingChannel,
-                                Long receiveInId,
                                 String participant,
+                                CoaEntryId coaEntryId,
                                 String amountName,
                                 Side side,
+                                TransactionTypeDefinitionData transactionTypeDefinition,
                                 AccountCache accountCache,
                                 CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(step);
         Objects.requireNonNull(amountName);
         Objects.requireNonNull(side);
-        Objects.requireNonNull(postingChannel);
-        Objects.requireNonNull(receiveInId);
+        Objects.requireNonNull(coaEntryId);
+        Objects.requireNonNull(transactionTypeDefinition);
         Objects.requireNonNull(accountCache);
         Objects.requireNonNull(coaEntryCache);
 
@@ -201,122 +194,61 @@ public class FlowLine extends JpaEntity<FlowLineId> {
 
         this.step = step;
 
-        var _amountName = amountName.trim().toUpperCase();
+        final var _amountName = amountName.trim().toUpperCase();
+        final var _participant = participant == null ? null : participant.trim();
 
-        if (postingChannel == PostingChannel.ACCOUNT) {
-
-            if (participant != null && participant.isBlank()) {
-
-                throw new AmbiguousReceiveInConfigException();
-            }
+        if (transactionTypeDefinition.transactionType() != this.definition.transactionType) {
+            throw new IllegalArgumentException("Mismatched transaction type definition.");
         }
 
-        if (postingChannel == PostingChannel.CHART_ENTRY) {
+        if (_participant == null || _participant.isBlank()) {
 
-            if (participant == null || participant.isBlank()) {
+            throw new RequireParticipantForCoaEntryException();
+        }
 
-                throw new RequireParticipantForReceiveInException();
-            }
+        if (!transactionTypeDefinition.containsParticipant(_participant)) {
 
-            if (!this.definition.transactionType.getParticipants().types().contains(participant)) {
-
-                throw new InvalidParticipantForTransactionTypeException(
-                    this.definition.transactionType);
-            }
+            throw new InvalidParticipantForTransactionTypeException(
+                this.definition.transactionType, transactionTypeDefinition.participants());
         }
 
         // Validate that the flow line does not already exist for this flow definition.
         // First, check that the amount name/participant is valid for the flow definition's transaction type.
-        if (!this.definition.transactionType.getAmounts().names().contains(amountName)) {
+        if (!transactionTypeDefinition.containsAmountName(_amountName)) {
 
-            throw new InvalidAmountNameForTransactionTypeException(this.definition.transactionType);
+            throw new InvalidAmountNameForTransactionTypeException(
+                this.definition.transactionType, transactionTypeDefinition.amountNames());
         }
 
-        // Now verify whether the newly added flow line conflicts with any of the existing flow lines.
-        // Here we need to verify these things:
-        // 1. When CHART_ENTRY, any account of the adding CoaEntryId conflicts with any of the existing accounts or an account of the existing CoaEntryId.
-        // 2. When ACCOUNT, the adding AccountId conflicts with any of the existing accounts or an account of the existing CoaEntryId.
+        final var coaEntryData = coaEntryCache.get(coaEntryId);
 
-        // Find all the accounts, created under the same postingChannelId in the accounting system, and previously added for the same Side and AmountName.
-        final var existingAccountIds = this.definition.flowLines
-                                        .stream()
-                                        .filter(line -> line.postingChannel == PostingChannel.ACCOUNT &&
-                                                            line.side == side &&
-                                                            line.amountName.equals(_amountName))
-                                        .map(line -> line.postingChannelId)
-                                        .collect(Collectors.toSet());
+        if (coaEntryData == null) {
+            throw new CoaEntryIdNotFoundException(coaEntryId);
+        }
 
-        final var existingChartEntryIds = this.definition.flowLines
+        final var existingCoaEntryIds = this.definition.flowLines
                                            .stream()
                                            .filter(
-                                               line -> line.postingChannel == PostingChannel.CHART_ENTRY &&
-                                                           line.participant.equals(participant) &&
+                                               line -> line.participant.equals(_participant) &&
                                                            line.side == side &&
                                                            line.amountName.equals(_amountName))
-                                           .map(line -> line.postingChannelId)
+                                           .map(line -> line.coaEntryId)
                                            .collect(Collectors.toSet());
 
-        if (postingChannel == PostingChannel.CHART_ENTRY) {
-
-            var coaEntryId = new CoaEntryId(receiveInId);
-
-            if (existingChartEntryIds.contains(coaEntryId.getId())) {
-                final var coaEntryData = coaEntryCache.get(coaEntryId);
-                // There is the same flow line for the same coaEntryId, participant, side and amountName.
-                throw new CoaEntryConflictInDefinitionException(coaEntryData.code());
-            }
-
-            final var accounts = accountCache.get(coaEntryId);
-
-            if (accounts == null || accounts.isEmpty()) {
-
-                var coaEntry = coaEntryCache.get(coaEntryId);
-                throw new ImmatureCoaEntryException(coaEntry.code());
-
-            } else {
-
-                accounts
-                    .stream()
-                    .filter(account -> existingAccountIds.contains(account.accountId().getId()))
-                    .findFirst()
-                    .ifPresent((conflict) -> {
-                        throw new AccountConflictInDefinitionException(conflict.code());
-                    });
-            }
-
-        } else {
-
-            final var _accountId = new AccountId(receiveInId);
-            final var accountData = accountCache.get(_accountId);
-
-            if (existingAccountIds.contains(_accountId.getId())) {
-                // There is the same flow line for the same AccountId, side and amountName.
-                throw new AccountConflictInDefinitionException(accountData.code());
-            }
-
-            // Then, make sure this AccountId won't conflict with any other flow line configured with
-            // BY_CHART_ENTRY for the same side and amountName.
-            // In this case, we need to check using the accounts of each CoaEntryId which are already
-            // added to the definition.
-            for (var existingChartEntryId : existingChartEntryIds) {
-
-                final var accounts = accountCache.get(new CoaEntryId(existingChartEntryId));
-
-                accounts
-                    .stream()
-                    .filter(account -> account.accountId().equals(_accountId))
-                    .findFirst()
-                    .ifPresent((conflict) -> {
-                        throw new AccountConflictInDefinitionException(conflict.code());
-                    });
-            }
+        if (existingCoaEntryIds.contains(coaEntryId)) {
+            throw new CoaEntryConflictInDefinitionException(coaEntryData.code());
         }
 
-        this.participant = participant;
+        final var accounts = accountCache.get(coaEntryId);
+
+        if (accounts == null || accounts.isEmpty()) {
+            throw new ImmatureCoaEntryException(coaEntryData.code());
+        }
+
+        this.participant = _participant;
         this.amountName = _amountName;
         this.side = side;
-        this.postingChannel = postingChannel;
-        this.postingChannelId = receiveInId;
+        this.coaEntryId = coaEntryId;
 
         return this;
     }

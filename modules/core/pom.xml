@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <name>Mojave - Core</name>
     <modules>
+        <module>scheme</module>
         <module>transaction</module>
         <module>participant</module>
         <module>accounting</module>

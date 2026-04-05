@@ -8,9 +8,9 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.component.jpa.JpaEntity_;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 /**
  * Static metamodel for {@link org.mojave.core.accounting.domain.model.FlowDefinition}
@@ -107,3 +107,4 @@ public abstract class FlowDefinition_ extends JpaEntity_ {
 	public static volatile ListAttribute<FlowDefinition, FlowLine> flowLines;
 
 }
+

@@ -21,20 +21,18 @@
 package org.mojave.core.accounting.domain.command.ledger;
 
 import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
+import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
-import org.mojave.core.accounting.contract.data.AccountData;
-import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundException;
 import org.mojave.core.accounting.contract.exception.account.AccountNotActiveException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotConfiguredException;
 import org.mojave.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import org.mojave.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import org.mojave.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import org.mojave.core.accounting.contract.exception.ledger.RequiredAmountNameNotFoundInTransactionException;
 import org.mojave.core.accounting.contract.exception.ledger.RequiredParticipantNotFoundInTransactionException;
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
@@ -78,6 +76,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                                        InsufficientBalanceInAccountException,
                                        OverdraftLimitReachedInAccountException,
                                        DuplicatePostingInLedgerException,
+                                       PostingAccountNotFoundException,
                                        RestoreFailedInAccountException {
 
         LOGGER.info("PostLedgerFlowCommand : input: ({})", ObjectLogger.log(input));
@@ -92,9 +91,18 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                 input.transactionType(), input.currency());
         }
 
+        if (flowDefinition.activationStatus() != ActivationStatus.ACTIVE ||
+                flowDefinition.terminationStatus() != TerminationStatus.ALIVE) {
+
+            throw new FlowDefinitionNotConfiguredException(
+                input.transactionType(), input.currency());
+        }
+
         var requests = new ArrayList<Ledger.Request>();
 
-        flowDefinition.flowLines().forEach(flowLine -> {
+        var lines = flowDefinition.flowLines();
+
+        for (var flowLine : lines) {
 
             final var amount = input.amounts().get(flowLine.amountName());
 
@@ -104,34 +112,24 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                     flowLine.amountName(), input.amounts().keySet(), transactionId);
             }
 
-            AccountId accountId = null;
-            AccountData accountData = null;
+            final var accountOfParticipant = input.participants().get(flowLine.participant());
 
-            if (flowLine.postingChannel() == PostingChannel.CHART_ENTRY) {
+            if (accountOfParticipant == null) {
 
-                final var accountOfParticipant = input.participants().get(flowLine.participant());
-
-                if (accountOfParticipant == null) {
-
-                    throw new RequiredParticipantNotFoundInTransactionException(
-                        flowLine.participant(), input.participants().keySet(), transactionId);
-                }
-
-                accountData = this.accountCache.get(
-                    new CoaEntryId(flowLine.receiveInId()),
-                    accountOfParticipant, input.currency());
-                accountId = accountData.accountId();
-
-            } else {
-
-                accountId = new AccountId(flowLine.receiveInId());
-                accountData = this.accountCache.get(accountId);
-
-                if (accountData == null) {
-                    throw new AccountIdNotFoundException(accountId);
-                }
-
+                throw new RequiredParticipantNotFoundInTransactionException(
+                    flowLine.participant(), input.participants().keySet(), transactionId);
             }
+
+            final var coaEntryId = flowLine.coaEntryId();
+            final var accountData = this.accountCache.get(
+                coaEntryId, accountOfParticipant, input.currency());
+
+            if (accountData == null) {
+                throw new PostingAccountNotFoundException(
+                    accountOfParticipant, coaEntryId, input.currency());
+            }
+
+            final AccountId accountId = accountData.accountId();
 
             if (accountData.activationStatus() != ActivationStatus.ACTIVE) {
                 throw new AccountNotActiveException(accountData.code());
@@ -143,7 +141,7 @@ public class PostLedgerFlowCommandHandler implements PostLedgerFlowCommand {
                 flowLine.flowLineId());
 
             requests.add(request);
-        });
+        }
 
         try {
 

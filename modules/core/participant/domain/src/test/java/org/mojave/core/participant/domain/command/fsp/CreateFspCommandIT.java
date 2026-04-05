@@ -8,6 +8,7 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.participant.EndpointType;
 import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.command.fsp.CreateFspCommand;
+import org.mojave.core.participant.contract.command.hub.CreateHubCommand;
 import org.mojave.core.participant.domain.BaseIT;
 import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
 import org.mojave.core.participant.domain.ParticipantDomainSettings;
@@ -24,12 +25,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class CreateFspCommandIT extends BaseIT {
 
     @Autowired
+    private CreateHubCommand createHubCommand;
+
+    @Autowired
     private CreateFspCommand createFspCommand;
 
     @Test
     @Order(1)
     @DisplayName("Create fsp successfully")
     public void successful() {
+
+        this.createHubCommand.execute(new CreateHubCommand.Input(
+            "hub", new Currency[]{
+            Currency.USD,
+            Currency.BYN}));
 
         this.createFspCommand.execute(new CreateFspCommand.Input(
             new FspCode("wallet1"), "Wallet 1", new Currency[]{Currency.USD},

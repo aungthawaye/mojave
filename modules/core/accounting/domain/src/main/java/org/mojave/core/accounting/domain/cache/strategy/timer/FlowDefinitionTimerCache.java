@@ -22,12 +22,12 @@ package org.mojave.core.accounting.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.core.scheme.rule.type.TransactionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

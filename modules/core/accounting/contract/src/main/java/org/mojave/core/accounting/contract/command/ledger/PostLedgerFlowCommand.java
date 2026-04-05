@@ -26,7 +26,6 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.accounting.MovementResult;
 import org.mojave.common.datatype.enums.accounting.MovementStage;
 import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
@@ -36,7 +35,9 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import org.mojave.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import org.mojave.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -49,6 +50,7 @@ public interface PostLedgerFlowCommand {
                                 InsufficientBalanceInAccountException,
                                 OverdraftLimitReachedInAccountException,
                                 DuplicatePostingInLedgerException,
+                                PostingAccountNotFoundException,
                                 RestoreFailedInAccountException;
 
     record Input(@JsonProperty(required = true) @NotNull TransactionType transactionType,

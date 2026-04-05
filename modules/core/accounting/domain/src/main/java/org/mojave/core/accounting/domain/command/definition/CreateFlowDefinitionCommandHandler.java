@@ -30,6 +30,7 @@ import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.core.scheme.rule.query.SchemeTransactions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -91,16 +92,16 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
         var definition = new FlowDefinition(
             input.transactionType(), currency, input.name(), input.description());
+        final var transactionTypeDefinition = SchemeTransactions.get(transactionType);
 
         final var flowLineIds = new ArrayList<FlowLineId>();
 
         for (final var flowLine : input.flowLines()) {
 
             final var savedFlowLine = definition.addFlowLine(
-                flowLine.step(), flowLine.postingChannel(), flowLine.postingChannelId(),
-                flowLine.participant(), flowLine.amountName(), flowLine.side(),
-                flowLine.description(), this.accountCache,
-                this.coaEntryCache);
+                flowLine.step(), flowLine.participant(), flowLine.coaEntryId(),
+                flowLine.amountName(), flowLine.side(), flowLine.description(),
+                transactionTypeDefinition, this.accountCache, this.coaEntryCache);
             flowLineIds.add(savedFlowLine.getId());
         }
 

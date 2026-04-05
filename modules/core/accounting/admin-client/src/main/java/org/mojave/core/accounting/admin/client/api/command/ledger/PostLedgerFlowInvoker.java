@@ -29,6 +29,7 @@ import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver
 import org.mojave.core.accounting.contract.exception.ledger.DuplicatePostingInLedgerException;
 import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceInAccountException;
 import org.mojave.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
+import org.mojave.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
@@ -57,6 +58,7 @@ public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
                                        InsufficientBalanceInAccountException,
                                        OverdraftLimitReachedInAccountException,
                                        DuplicatePostingInLedgerException,
+                                       PostingAccountNotFoundException,
                                        RestoreFailedInAccountException {
 
         try {
@@ -79,7 +81,8 @@ public class PostLedgerFlowInvoker implements PostLedgerFlowCommand {
                     case InsufficientBalanceInAccountException e1 -> throw e1;
                     case OverdraftLimitReachedInAccountException e2 -> throw e2;
                     case DuplicatePostingInLedgerException e3 -> throw e3;
-                    case RestoreFailedInAccountException e4 -> throw e4;
+                    case PostingAccountNotFoundException e4 -> throw e4;
+                    case RestoreFailedInAccountException e5 -> throw e5;
                     case UncheckedDomainException ude -> throw ude;
                     default -> throw new RuntimeException(e);
                 }

@@ -22,8 +22,8 @@ package org.mojave.core.transaction.contract.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.core.scheme.rule.type.TransactionType;
 
 import java.time.Instant;
 
