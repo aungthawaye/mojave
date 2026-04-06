@@ -38,6 +38,10 @@ import java.time.Instant;
 
 public interface DepositBalanceCommand {
 
+    String SUBJECT_NAME = "sub-wallet.deposit-balance-command";
+
+    String TOPIC_NAME = "tp-wallet.deposit-balance-command";
+
     Output execute(Input input) throws NoBalanceUpdateForTransactionException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,

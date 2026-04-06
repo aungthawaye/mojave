@@ -40,6 +40,10 @@ import java.time.Instant;
 
 public interface IncreasePositionCommand {
 
+    String SUBJECT_NAME = "sub-wallet.increase-position-command";
+
+    String TOPIC_NAME = "tp-wallet.increase-position-command";
+
     Output execute(Input input) throws
                                 NoPositionUpdateForTransactionException,
                                 PositionLimitExceededException,

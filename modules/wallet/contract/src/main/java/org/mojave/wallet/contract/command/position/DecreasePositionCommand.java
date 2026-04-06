@@ -38,6 +38,10 @@ import java.time.Instant;
 
 public interface DecreasePositionCommand {
 
+    String SUBJECT_NAME = "sub-wallet.decrease-position-command";
+
+    String TOPIC_NAME = "tp-wallet.decrease-position-command";
+
     Output execute(Input input) throws NoPositionUpdateForTransactionException;
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,

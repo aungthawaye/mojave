@@ -37,6 +37,10 @@ import java.time.Instant;
 
 public interface CommitReservationCommand {
 
+    String SUBJECT_NAME = "sub-wallet.commit-reservation-command";
+
+    String TOPIC_NAME = "tp-wallet.commit-reservation-command";
+
     Output execute(Input input) throws FailedToCommitReservationException;
 
     record Input(@JsonProperty(required = true) @NotNull PositionUpdateId reservationId,

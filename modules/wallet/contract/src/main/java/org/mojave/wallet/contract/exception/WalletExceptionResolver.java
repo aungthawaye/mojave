@@ -23,11 +23,13 @@ package org.mojave.wallet.contract.exception;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.wallet.contract.exception.balance.BalanceAlreadyExistsException;
 import org.mojave.wallet.contract.exception.balance.BalanceIdNotFoundException;
+import org.mojave.wallet.contract.exception.balance.BalanceNotExistException;
 import org.mojave.wallet.contract.exception.balance.BalanceUpdateIdNotFoundException;
 import org.mojave.wallet.contract.exception.balance.InsufficientBalanceException;
 import org.mojave.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
 import org.mojave.wallet.contract.exception.balance.ReversalFailedInWalletException;
 import org.mojave.wallet.contract.exception.position.FailedToCommitReservationException;
+import org.mojave.wallet.contract.exception.position.FailedToFulfilPositionsException;
 import org.mojave.wallet.contract.exception.position.FailedToRollbackReservationException;
 import org.mojave.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.wallet.contract.exception.position.PositionAlreadyExistsException;
@@ -53,10 +55,13 @@ public class WalletExceptionResolver {
                 ReversalFailedInWalletException.from(extras);
             case BalanceAlreadyExistsException.CODE -> BalanceAlreadyExistsException.from(extras);
             case BalanceIdNotFoundException.CODE -> BalanceIdNotFoundException.from(extras);
+            case BalanceNotExistException.CODE -> BalanceNotExistException.from(extras);
 
             // position package
             case FailedToCommitReservationException.CODE ->
                 FailedToCommitReservationException.from(extras);
+            case FailedToFulfilPositionsException.CODE ->
+                FailedToFulfilPositionsException.from(extras);
             case NoPositionUpdateForTransactionException.CODE ->
                 NoPositionUpdateForTransactionException.from(extras);
             case PositionAlreadyExistsException.CODE -> PositionAlreadyExistsException.from(extras);

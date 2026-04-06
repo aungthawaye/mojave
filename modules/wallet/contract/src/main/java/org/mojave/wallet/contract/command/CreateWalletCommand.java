@@ -11,6 +11,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateWalletCommand {
 
+    String SUBJECT_NAME = "sub-wallet.create-wallet-command";
+
+    String TOPIC_NAME = "tp-wallet.create-wallet-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,

@@ -39,6 +39,10 @@ import java.time.Instant;
 
 public interface WithdrawBalanceCommand {
 
+    String SUBJECT_NAME = "sub-wallet.withdraw-balance-command";
+
+    String TOPIC_NAME = "tp-wallet.withdraw-balance-command";
+
     Output execute(Input input)
         throws NoBalanceUpdateForTransactionException, InsufficientBalanceException;
 

@@ -13,8 +13,9 @@
     <name>Mojave - Wallet</name>
     <modules>
         <module>contract</module>
-        <module>domain</module>
         <module>engine</module>
+        <module>domain</module>
+        <module>intercom</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

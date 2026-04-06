@@ -40,6 +40,10 @@ import java.time.Instant;
 
 public interface ReservePositionCommand {
 
+    String SUBJECT_NAME = "sub-wallet.reserve-position-command";
+
+    String TOPIC_NAME = "tp-wallet.reserve-position-command";
+
     Output execute(Input input) throws
                                 PositionLimitExceededException,
                                 NoPositionUpdateForTransactionException,

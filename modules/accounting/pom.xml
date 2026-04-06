@@ -13,9 +13,9 @@
     <name>Mojave - Accounting</name>
     <modules>
         <module>contract</module>
+        <module>engine</module>
         <module>domain</module>
         <module>intercom</module>
-        <module>engine</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

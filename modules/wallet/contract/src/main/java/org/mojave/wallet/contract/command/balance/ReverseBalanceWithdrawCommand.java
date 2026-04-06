@@ -37,6 +37,10 @@ import java.time.Instant;
 
 public interface ReverseBalanceWithdrawCommand {
 
+    String SUBJECT_NAME = "sub-wallet.reverse-balance-withdraw-command";
+
+    String TOPIC_NAME = "tp-wallet.reverse-balance-withdraw-command";
+
     Output execute(Input input) throws ReversalFailedInWalletException;
 
     record Input(@JsonProperty(required = true) @NotNull BalanceUpdateId withdrawId,
