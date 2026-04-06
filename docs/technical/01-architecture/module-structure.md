@@ -226,12 +226,12 @@ Concrete implementations of storage interfaces.
 
 ```
 provider/
-├── ledger-mysql/    MySQL ledger implementation
+├── ledgerOperation-mysql/    MySQL ledgerOperation implementation
 ├── forex/           Foreign exchange provider
 └── settlement/      Settlement provider implementation
 ```
 
-#### ledger-mysql
+#### ledgerOperation-mysql
 
 **Features:**
 - MySQL stored procedure integration

@@ -2,7 +2,7 @@
 
 ## Use This Reference
 
-Read this file when the task depends on accounting design, ledger boundaries, journal posting rules, reconciliation, settlement positions, or finance controls in a payment platform.
+Read this file when the task depends on accounting design, ledgerOperation boundaries, journal posting rules, reconciliation, settlement positions, or finance controls in a payment platform.
 
 ## Core Invariants
 
@@ -15,7 +15,7 @@ Read this file when the task depends on accounting design, ledger boundaries, jo
 
 - Payment switch: own orchestration and business state.
 - Subledger: own transactional accounting truth for payment events.
-- General ledger: receive summarized or controlled postings based on finance policy.
+- General ledgerOperation: receive summarized or controlled postings based on finance policy.
 - Reconciliation layer: compare subledger, scheme statements, bank accounts, and GL balances.
 
 Do not use the payment switch itself as the durable accounting source unless the system is intentionally designed as both switch and subledger with strong accounting controls.
@@ -55,7 +55,7 @@ Avoid generic statements like "book the transaction" without naming the actual d
 
 Reconciliation usually spans multiple layers:
 
-- transaction-level matching between switch events and ledger journals
+- transaction-level matching between switch events and ledgerOperation journals
 - message-level matching between switch and scheme acknowledgements
 - statement-level matching between scheme settlement reports and bank or nostro movements
 - balance-level matching between subledger, GL, and funding accounts
@@ -67,7 +67,7 @@ Define break categories, ownership, aging, escalation, and auto-repair rules.
 When settlement is deferred or netted:
 
 - track gross obligations and net positions separately
-- distinguish operational exposure from posted ledger balances
+- distinguish operational exposure from posted ledgerOperation balances
 - define cut-off handling and carry-forward behavior
 - model prefunding, collateral, or liquidity usage explicitly
 

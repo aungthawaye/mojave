@@ -288,7 +288,7 @@ Transfer and settlement happen atomically
 Transaction phases:
   1. Reserve payer position
   2. Reserve in central bank (RTGS)
-  3. Post to ledger
+  3. Post to ledgerOperation
   4. Commit positions
   5. Confirm RTGS completion
 

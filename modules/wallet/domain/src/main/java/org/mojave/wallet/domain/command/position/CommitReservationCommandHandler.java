@@ -21,11 +21,12 @@
 package org.mojave.wallet.domain.command.position;
 
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.wallet.PositionId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.wallet.contract.command.position.CommitReservationCommand;
+import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.contract.exception.position.FailedToCommitReservationException;
-import org.mojave.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,12 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
     private static final Logger LOGGER = LoggerFactory.getLogger(
         CommitReservationCommandHandler.class);
 
-    private final PositionUpdater positionUpdater;
+    private final WalletEngine walletEngine;
 
-    public CommitReservationCommandHandler(final PositionUpdater positionUpdater) {
+    public CommitReservationCommandHandler(final WalletEngine walletEngine) {
 
-        Objects.requireNonNull(positionUpdater);
-        this.positionUpdater = positionUpdater;
+        Objects.requireNonNull(walletEngine);
+        this.walletEngine = walletEngine;
     }
 
     @Override
@@ -53,11 +54,13 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
 
         try {
 
-            final var committed = this.positionUpdater.commit(
-                input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
+            final var committed = this.walletEngine.commitPositionReservation(
+                new PositionUpdateId(Snowflake.get().nextId()), input.reservationId());
+
+            final var positionId = new PositionId(committed.walletId().getId());
 
             final var output = new Output(
-                committed.positionUpdateId(), committed.positionId(), committed.action(),
+                committed.positionUpdateId(), positionId, committed.action(),
                 committed.transactionId(), committed.currency(), committed.amount(),
                 committed.oldPosition(), committed.newPosition(), committed.oldReserved(),
                 committed.newReserved(), committed.netDebitCap(), committed.transactionAt());
@@ -66,7 +69,7 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
 
             return output;
 
-        } catch (final PositionUpdater.CommitFailedException e) {
+        } catch (final WalletEngine.PositionReservationCommitFailedException e) {
 
             LOGGER.error("Error:", e);
 

@@ -20,12 +20,12 @@
             <artifactId>mojave-accounting-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-nats</artifactId>
+            <groupId>org.mojave.accounting.engine</groupId>
+            <artifactId>mojave-accounting-engine-mysql</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.accounting.ledger</groupId>
-            <artifactId>mojave-accounting-ledger-mysql</artifactId>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-nats</artifactId>
         </dependency>
     </dependencies>
 </project>

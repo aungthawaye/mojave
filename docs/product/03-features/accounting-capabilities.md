@@ -2,7 +2,7 @@
 
 ## Overview
 
-Mojave's accounting capabilities provide a complete double-entry bookkeeping system with configurable flow definitions, atomic ledger posting, and comprehensive movement tracking. The system ensures financial integrity while providing the flexibility needed for different transaction types and business rules.
+Mojave's accounting capabilities provide a complete double-entry bookkeeping system with configurable flow definitions, atomic ledgerOperation posting, and comprehensive movement tracking. The system ensures financial integrity while providing the flexibility needed for different transaction types and business rules.
 
 ## Chart of Accounts Management
 
@@ -52,7 +52,7 @@ STANDARD_CHART:
 
 ### Account Creation
 
-Create individual ledger accounts:
+Create individual ledgerOperation accounts:
 
 **Account Attributes:**
 - Account ID (auto-generated)
@@ -179,7 +179,7 @@ P2P_TRANSFER_USD Posting Definitions:
 
 ### PostLedgerFlowCommand
 
-The primary command for posting transactions to the ledger:
+The primary command for posting transactions to the ledgerOperation:
 
 **Input Parameters:**
 ```java
@@ -202,7 +202,7 @@ record Output(
 ) {}
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ### Posting Execution Flow
 
@@ -342,7 +342,7 @@ if (side == Side.DEBIT) {
 List<Movement> getMovements(TransactionId transactionId);
 ```
 
-Returns all ledger movements for a specific transaction.
+Returns all ledgerOperation movements for a specific transaction.
 
 ### Query By Account
 
@@ -441,7 +441,7 @@ FlowDefinition {
 **Benefits:**
 - Reduce database queries
 - Faster account resolution
-- Lower ledger posting latency
+- Lower ledgerOperation posting latency
 
 ## Reporting
 

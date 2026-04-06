@@ -67,7 +67,7 @@ graph TB
 
 **Aggregates:**
 - Chart (Chart of accounts structure)
-- Account (Individual ledger account)
+- Account (Individual ledgerOperation account)
 - FlowDefinition (Transaction type → posting rules)
 - FlowLine (Debit/credit rules)
 
@@ -258,7 +258,7 @@ public void handle(TransactionCommitted event) {
 - Track transaction phases (that's Transaction)
 
 **Wallet should NOT:**
-- Post to ledger (that's Accounting)
+- Post to ledgerOperation (that's Accounting)
 - Create transactions (that's Transaction)
 - Match settlement providers (that's Settlement)
 

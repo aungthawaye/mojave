@@ -22,10 +22,8 @@ package org.mojave.wallet.domain;
 
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
-import org.mojave.wallet.domain.cache.BalanceCache;
-import org.mojave.wallet.domain.cache.PositionCache;
-import org.mojave.wallet.domain.component.BalanceUpdater;
-import org.mojave.wallet.domain.component.PositionUpdater;
+import org.mojave.wallet.contract.engine.WalletEngine;
+import org.mojave.wallet.domain.cache.WalletCache;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -38,13 +36,9 @@ public class WalletDomainConfiguration {
 
     public interface RequiredDependencies {
 
-        BalanceUpdater balanceUpdater();
+        WalletEngine walletEngine();
 
-        PositionCache positionCache();
-
-        PositionUpdater positionUpdater();
-
-        BalanceCache walletCache();
+        WalletCache walletCache();
 
     }
 

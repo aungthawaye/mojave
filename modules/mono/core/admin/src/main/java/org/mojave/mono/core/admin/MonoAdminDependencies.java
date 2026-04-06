@@ -28,7 +28,7 @@ import org.mojave.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.accounting.domain.cache.strategy.local.AccountLocalCache;
 import org.mojave.accounting.domain.cache.strategy.local.CoaEntryLocalCache;
 import org.mojave.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
-import org.mojave.accounting.contract.ledger.Ledger;
+import org.mojave.accounting.contract.engine.Ledger;
 import org.mojave.accounting.ledger.mysql.MySqlLedger;
 import org.mojave.accounting.domain.repository.AccountRepository;
 import org.mojave.accounting.domain.repository.CoaEntryRepository;

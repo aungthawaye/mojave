@@ -20,12 +20,12 @@
             <artifactId>mojave-common-datatype</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.scheme</groupId>
-            <artifactId>mojave-scheme-rule</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule</artifactId>
         </dependency>
     </dependencies>
 </project>

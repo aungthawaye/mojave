@@ -84,17 +84,17 @@ public class CreateAccountCommandIT extends BaseIT {
     @DisplayName("Rollback when ledger balance creation fails")
     public void ledgerBalanceCreationFailed() {
 
-        final var coaId = this.createCoa(this.createCoaCommand, "Ledger Failure CoA");
+        final var coaId = this.createCoa(this.createCoaCommand, "LedgerOperation Failure CoA");
         final var coaEntryId = this.createCoaEntry(
             this.createCoaEntryCommand, coaId, "FSP", "LEDGER_FAIL_ENTRY_01",
-            "Ledger Fail Entry 01", AccountType.ASSET);
+            "LedgerOperation Fail Entry 01", AccountType.ASSET);
 
         this.testLedger.failNextCreateLedgerBalance();
 
         assertThrows(
             RuntimeException.class, () -> this.createAccount(
                 this.createAccountCommand, coaEntryId, 203L, Currency.USD, "ACC_LEDGER_FAIL_01",
-                "Ledger Failure Account 01"));
+                "LedgerOperation Failure Account 01"));
         assertEquals(0, this.accountQuery.getAll().size());
     }
 

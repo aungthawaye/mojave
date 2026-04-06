@@ -20,15 +20,15 @@
 
 package org.mojave.accounting.domain.command.account;
 
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.accounting.contract.command.account.CreateAccountCommand;
+import org.mojave.accounting.contract.engine.LedgerEngine;
 import org.mojave.accounting.contract.exception.account.AccountCodeAlreadyExistsException;
 import org.mojave.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
 import org.mojave.accounting.domain.model.Account;
 import org.mojave.accounting.domain.repository.AccountRepository;
 import org.mojave.accounting.domain.repository.CoaEntryRepository;
-import org.mojave.accounting.contract.ledger.Ledger;
+import org.mojave.component.jpa.routing.annotation.Write;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -46,19 +46,19 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
 
     private final CoaEntryRepository coaEntryRepository;
 
-    private final Ledger ledger;
+    private final LedgerEngine ledgerEngine;
 
     public CreateAccountCommandHandler(AccountRepository accountRepository,
                                        CoaEntryRepository coaEntryRepository,
-                                       Ledger ledger) {
+                                       LedgerEngine ledgerEngine) {
 
         Objects.requireNonNull(accountRepository);
         Objects.requireNonNull(coaEntryRepository);
-        Objects.requireNonNull(ledger);
+        Objects.requireNonNull(ledgerEngine);
 
         this.accountRepository = accountRepository;
         this.coaEntryRepository = coaEntryRepository;
-        this.ledger = ledger;
+        this.ledgerEngine = ledgerEngine;
     }
 
     @Override
@@ -69,9 +69,8 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
         LOGGER.info("CreateAccountCommand : input: ({})", ObjectLogger.log(input));
 
         var coaEntry = this.coaEntryRepository
-                             .findById(input.coaEntryId())
-                             .orElseThrow(
-                                 () -> new CoaEntryIdNotFoundException(input.coaEntryId()));
+                           .findById(input.coaEntryId())
+                           .orElseThrow(() -> new CoaEntryIdNotFoundException(input.coaEntryId()));
 
         var exist = this.accountRepository
                         .findOne(AccountRepository.Filters.withCode(input.code()))
@@ -89,13 +88,13 @@ public class CreateAccountCommandHandler implements CreateAccountCommand {
         account = this.accountRepository.save(account);
 
         try {
-            this.ledger.createLedgerBalance(new Ledger.LedgerBalance(
+            this.ledgerEngine.createLedgerBalance(
                 account.getId(), account.getCurrency(), input.currency().getScale(),
                 account.getType().getSide(), BigDecimal.ZERO, BigDecimal.ZERO,
-                input.overdraftMode(), input.overdraftLimit(), account.getCreatedAt()));
-            LOGGER.info("Ledger balance created for account: ({})", account.getId());
+                input.overdraftMode(), input.overdraftLimit());
+            LOGGER.info("LedgerOperation balance created for account: ({})", account.getId());
 
-        } catch (Ledger.AccountIdAlreadyTakenException e) {
+        } catch (LedgerEngine.AccountIdAlreadyTakenException e) {
 
             LOGGER.error("Error:", e);
             throw new RuntimeException(e);

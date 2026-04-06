@@ -30,7 +30,7 @@ import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public interface CreateFlowDefinitionCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull TransactionType transactionType,
+    record Input(@JsonProperty(required = true) @NotNull AccountingScenario scenario,
                  @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
@@ -57,7 +57,6 @@ public interface CreateFlowDefinitionCommand {
 
     }
 
-    record Output(FlowDefinitionId flowDefinitionId,
-                  List<FlowLineId> flowLineIds) { }
+    record Output(FlowDefinitionId flowDefinitionId, List<FlowLineId> flowLineIds) { }
 
 }

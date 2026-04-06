@@ -33,7 +33,7 @@ public class LedgerBalanceAlreadyExistsException extends UncheckedDomainExceptio
 
     public static final String CODE = "LEDGER_BALANCE_ALREADY_EXISTS";
 
-    private static final String TEMPLATE = "The Ledger Balance ({0}) already exists.";
+    private static final String TEMPLATE = "The LedgerOperation Balance ({0}) already exists.";
 
     private final AccountId accountId;
 

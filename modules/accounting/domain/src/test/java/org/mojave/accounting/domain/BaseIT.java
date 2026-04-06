@@ -17,7 +17,7 @@ import org.mojave.common.datatype.identifier.accounting.CoaId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.common.datatype.type.accounting.CoaEntryCode;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -34,7 +34,7 @@ public class BaseIT {
     private static final String WRITE_DB_PASSWORD = "password";
 
     @Autowired(required = false)
-    protected AccountingDomainSettings.TestLedger testLedger;
+    protected AccountingDomainSettings.TestLedgerEngine testLedger;
 
     @BeforeAll
     public static void beforeAll() {
@@ -104,13 +104,14 @@ public class BaseIT {
 
         final var output = createCoaEntryCommand.execute(
             new CreateCoaEntryCommand.Input(
-                coaId, category, new CoaEntryCode(code), name, name + " description", accountType));
+                coaId, category, new CoaEntryCode(code), name,
+                name + " description", accountType));
 
         return output.coaEntryId();
     }
 
     protected FlowDefinitionId createFlowDefinition(final CreateFlowDefinitionCommand createFlowDefinitionCommand,
-                                                    final TransactionType transactionType,
+                                                    final AccountingScenario scenario,
                                                     final Currency currency,
                                                     final String name,
                                                     final CoaEntryId coaEntryId,
@@ -120,7 +121,7 @@ public class BaseIT {
 
         final var output = createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
-                transactionType, currency, name, name + " description", List.of(
+                scenario, currency, name, name + " description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, participant, coaEntryId, amountName, side,
                     name + " flow line description"))));

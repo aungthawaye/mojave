@@ -223,7 +223,7 @@ DepositCommand.execute(
 **Effect:**
 - Increase position
 - Create position update (action: DEPOSIT)
-- Record in accounting ledger
+- Record in accounting ledgerOperation
 - Update balance
 
 **Example:**

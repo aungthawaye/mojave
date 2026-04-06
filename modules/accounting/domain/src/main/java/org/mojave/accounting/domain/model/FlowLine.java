@@ -36,6 +36,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.mojave.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
+import org.mojave.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
+import org.mojave.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
+import org.mojave.accounting.contract.exception.definition.DuplicateFlowLineIndexException;
+import org.mojave.accounting.contract.exception.definition.ImmatureCoaEntryException;
+import org.mojave.accounting.contract.exception.definition.InvalidAmountNameForAccountingScenarioException;
+import org.mojave.accounting.contract.exception.definition.InvalidParticipantForAccountingScenarioException;
+import org.mojave.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
+import org.mojave.accounting.domain.cache.AccountCache;
+import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.common.datatype.converter.identifier.accounting.CoaEntryIdJavaType;
 import org.mojave.common.datatype.converter.identifier.accounting.FlowLineIdJavaType;
 import org.mojave.common.datatype.enums.accounting.Side;
@@ -44,17 +54,7 @@ import org.mojave.common.datatype.identifier.accounting.FlowLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
-import org.mojave.accounting.contract.exception.definition.CoaEntryConflictInDefinitionException;
-import org.mojave.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
-import org.mojave.accounting.contract.exception.definition.DuplicateFlowLineIndexException;
-import org.mojave.accounting.contract.exception.definition.ImmatureCoaEntryException;
-import org.mojave.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
-import org.mojave.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
-import org.mojave.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
-import org.mojave.accounting.domain.cache.AccountCache;
-import org.mojave.accounting.domain.cache.CoaEntryCache;
-import org.mojave.scheme.rule.data.TransactionTypeDefinitionData;
+import org.mojave.scheme.rule.accounting.AccountingScheme;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -139,7 +139,6 @@ public class FlowLine extends JpaEntity<FlowLineId> {
                     String amountName,
                     Side side,
                     String description,
-                    TransactionTypeDefinitionData transactionTypeDefinition,
                     AccountCache accountCache,
                     CoaEntryCache coaEntryCache) {
 
@@ -149,9 +148,11 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         this.id = new FlowLineId(Snowflake.get().nextId());
         this.definition = definition;
 
-        this.forFlowLine(
-            step, participant, coaEntryId, amountName, side, transactionTypeDefinition, accountCache,
-            coaEntryCache).description(description);
+        this
+            .forFlowLine(
+                step, participant, coaEntryId, amountName, side, accountCache,
+                coaEntryCache)
+            .description(description);
     }
 
     public FlowLine description(String description) {
@@ -176,15 +177,15 @@ public class FlowLine extends JpaEntity<FlowLineId> {
                                 CoaEntryId coaEntryId,
                                 String amountName,
                                 Side side,
-                                TransactionTypeDefinitionData transactionTypeDefinition,
                                 AccountCache accountCache,
                                 CoaEntryCache coaEntryCache) {
+
+        var scenarioDefinition = AccountingScheme.get(this.definition.scenario);
 
         Objects.requireNonNull(step);
         Objects.requireNonNull(amountName);
         Objects.requireNonNull(side);
         Objects.requireNonNull(coaEntryId);
-        Objects.requireNonNull(transactionTypeDefinition);
         Objects.requireNonNull(accountCache);
         Objects.requireNonNull(coaEntryCache);
 
@@ -197,27 +198,23 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         final var _amountName = amountName.trim().toUpperCase();
         final var _participant = participant == null ? null : participant.trim();
 
-        if (transactionTypeDefinition.transactionType() != this.definition.transactionType) {
-            throw new IllegalArgumentException("Mismatched transaction type definition.");
-        }
-
         if (_participant == null || _participant.isBlank()) {
 
             throw new RequireParticipantForCoaEntryException();
         }
 
-        if (!transactionTypeDefinition.containsParticipant(_participant)) {
+        if (!scenarioDefinition.containsParticipant(_participant)) {
 
-            throw new InvalidParticipantForTransactionTypeException(
-                this.definition.transactionType, transactionTypeDefinition.participants());
+            throw new InvalidParticipantForAccountingScenarioException(
+                this.definition.scenario, scenarioDefinition.participants());
         }
 
         // Validate that the flow line does not already exist for this flow definition.
         // First, check that the amount name/participant is valid for the flow definition's transaction type.
-        if (!transactionTypeDefinition.containsAmountName(_amountName)) {
+        if (!scenarioDefinition.containsAmountName(_amountName)) {
 
-            throw new InvalidAmountNameForTransactionTypeException(
-                this.definition.transactionType, transactionTypeDefinition.amountNames());
+            throw new InvalidAmountNameForAccountingScenarioException(
+                this.definition.scenario, scenarioDefinition.amounts());
         }
 
         final var coaEntryData = coaEntryCache.get(coaEntryId);
@@ -227,13 +224,12 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         }
 
         final var existingCoaEntryIds = this.definition.flowLines
-                                           .stream()
-                                           .filter(
-                                               line -> line.participant.equals(_participant) &&
-                                                           line.side == side &&
-                                                           line.amountName.equals(_amountName))
-                                           .map(line -> line.coaEntryId)
-                                           .collect(Collectors.toSet());
+                                            .stream()
+                                            .filter(line -> line.participant.equals(_participant) &&
+                                                                line.side == side &&
+                                                                line.amountName.equals(_amountName))
+                                            .map(line -> line.coaEntryId)
+                                            .collect(Collectors.toSet());
 
         if (existingCoaEntryIds.contains(coaEntryId)) {
             throw new CoaEntryConflictInDefinitionException(coaEntryData.code());

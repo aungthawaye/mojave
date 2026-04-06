@@ -27,7 +27,7 @@ Inspired by [Mojaloop](https://mojaloop.io/), Mojave implements the **FSPIOP v2.
 
 ✅ **Real-Time Processing** - Sub-second transaction execution with immediate finality
 ✅ **Multi-FSP Support** - Connect banks, mobile money operators, and fintech providers
-✅ **Double-Entry Accounting** - Complete ledger with audit trails and balance tracking
+✅ **Double-Entry Accounting** - Complete ledgerOperation with audit trails and balance tracking
 ✅ **Liquidity Management** - Position tracking with Net Debit Cap (NDC) enforcement
 ✅ **Flexible Settlement** - Support for DFN, CGS, and RTGS settlement models
 ✅ **FSPIOP v2.0 Compliant** - Full implementation of party lookup, quoting, and transfers
@@ -85,7 +85,7 @@ graph TB
 | Module | Purpose | Admin API | Intercom API |
 |--------|---------|-----------|--------------|
 | **Participant** | FSP/Hub/Oracle/SSP management | `/participant/*` | `/participant-intercom/*` |
-| **Accounting** | Double-entry ledger | `/accounting/*` | `/accounting-intercom/*` |
+| **Accounting** | Double-entry ledgerOperation | `/accounting/*` | `/accounting-intercom/*` |
 | **Wallet** | Position/balance tracking | `/wallet/*` | `/wallet-intercom/*` |
 | **Settlement** | Settlement processing | `/settlement/*` | `/settlement-intercom/*` |
 | **Transaction** | Transaction lifecycle | `/transaction/*` | `/transaction-intercom/*` |

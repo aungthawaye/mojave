@@ -13,7 +13,7 @@ A payment switch coordinates payment processing across channels, rails, and down
 - perform screening, risk, limits, and routing
 - orchestrate message exchange with external schemes or internal rails
 - manage business state transitions
-- hand off booking events to a ledger or accounting service
+- hand off booking events to a ledgerOperation or accounting service
 - surface operational visibility and repair controls
 
 Avoid turning the switch into the owner of every concern. Keep customer profile, pricing, GL, sanctions list management, and settlement statement processing in bounded services unless there is a strong reason to centralize them.
@@ -53,7 +53,7 @@ Design explicit responses for:
 - timeout before downstream receipt
 - timeout after downstream receipt but before response
 - downstream accept followed by late reject
-- ledger unavailable after external acceptance
+- ledgerOperation unavailable after external acceptance
 - scheme unavailable before cutoff
 - repeated retry causing message storms
 - replay after crash recovery
@@ -75,7 +75,7 @@ Switch activity is not enough on its own. Confirm consistency across:
 - switch business events
 - outbound and inbound scheme messages
 - settlement reports or statements
-- ledger journals and account balances
+- ledgerOperation journals and account balances
 - liquidity or prefunding positions
 
 Design daily and intraday controls for breaks, missing acknowledgements, unbooked settlements, duplicate postings, and stale suspense balances.

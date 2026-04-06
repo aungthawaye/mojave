@@ -185,7 +185,7 @@ Handled by Accounting module:
 - Resolve participant accounts
 - Build posting batch
 - Call MySQL stored procedure
-- Create ledger movements
+- Create ledgerOperation movements
 
 ### Step 5: ReserveTransferStep
 

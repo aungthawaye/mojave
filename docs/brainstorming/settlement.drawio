@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" version="29.6.4" pages="2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" pages="2">
   <diagram name="Page-1" id="HnoEsBInIMaEJ-GHx4Cd">
     <mxGraphModel dx="1826" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -83,55 +83,10 @@
     </mxGraphModel>
   </diagram>
   <diagram id="82JOX3-HU7EHNxLHxu_5" name="Page-2">
-    <mxGraphModel dx="1826" dy="1149" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="100" vertex="1">
-          <mxGeometry height="40" width="120" x="-40" y="-80" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;" value="Orange" vertex="1">
-          <mxGeometry height="30" width="60" x="-280" y="-75" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;" value="T1" vertex="1">
-          <mxGeometry height="30" width="60" x="-140" y="-75" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="55" vertex="1">
-          <mxGeometry height="40" width="120" x="90" y="-80" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;" value="Position" vertex="1">
-          <mxGeometry height="30" width="60" x="-10" y="-120" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;" value="Reserve" vertex="1">
-          <mxGeometry height="30" width="60" x="120" y="-120" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;" value="T2" vertex="1">
-          <mxGeometry height="30" width="60" x="-140" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-8" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;" value="Performed settlement so position resets" vertex="1">
-          <mxGeometry height="30" width="210" x="-380" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="0" vertex="1">
-          <mxGeometry height="40" width="120" x="-40" y="-10" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="55" vertex="1">
-          <mxGeometry height="40" width="120" x="90" y="-10" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="SW 10 -&amp;gt; 155" vertex="1">
-          <mxGeometry height="60" width="120" x="280" y="-100" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="Fulfill not done" vertex="1">
-          <mxGeometry height="60" width="120" x="280" y="-15" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="" vertex="1">
-          <mxGeometry height="370" width="30" x="140" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="close" vertex="1">
-          <mxGeometry height="370" width="30" x="-70" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="DfHZU1SBx8K-Vawxsh0M-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;fillColor=default;" value="" vertex="1">
-          <mxGeometry height="60" width="120" x="-210" y="160" as="geometry" />
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

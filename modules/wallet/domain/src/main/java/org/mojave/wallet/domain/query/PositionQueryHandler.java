@@ -22,13 +22,14 @@ package org.mojave.wallet.domain.query;
 
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.wallet.contract.data.PositionData;
+import org.mojave.wallet.contract.data.WalletData;
 import org.mojave.wallet.contract.exception.position.PositionIdNotFoundException;
 import org.mojave.wallet.contract.query.PositionQuery;
-import org.mojave.wallet.domain.model.Position;
-import org.mojave.wallet.domain.repository.PositionRepository;
+import org.mojave.wallet.domain.model.Wallet;
+import org.mojave.wallet.domain.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,22 +39,24 @@ import java.util.Objects;
 @Service
 public class PositionQueryHandler implements PositionQuery {
 
-    private final PositionRepository positionRepository;
+    private final WalletRepository walletRepository;
 
-    public PositionQueryHandler(final PositionRepository positionRepository) {
+    public PositionQueryHandler(final WalletRepository walletRepository) {
 
-        Objects.requireNonNull(positionRepository);
+        Objects.requireNonNull(walletRepository);
 
-        this.positionRepository = positionRepository;
+        this.walletRepository = walletRepository;
     }
 
     @Transactional(readOnly = true)
     @Read
     @Override
-    public PositionData get(final PositionId positionId) {
+    public WalletData get(final PositionId positionId) {
 
-        return this.positionRepository
-                   .findById(positionId)
+        final var walletId = new WalletId(positionId.getId());
+
+        return this.walletRepository
+                   .findById(walletId)
                    .orElseThrow(() -> new PositionIdNotFoundException(positionId))
                    .convert();
     }
@@ -61,21 +64,24 @@ public class PositionQueryHandler implements PositionQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<PositionData> get(final WalletOwnerId ownerId, final Currency currency) {
+    public List<WalletData> get(final WalletOwnerId ownerId, final Currency currency) {
 
-        var spec = PositionRepository.Filters
-                       .withOwnerId(ownerId)
-                       .and(PositionRepository.Filters.withCurrency(currency));
+        final var spec = WalletRepository.Filters
+                             .withOwnerId(ownerId)
+                             .and(WalletRepository.Filters.withCurrency(currency))
+                             .and(WalletRepository.Filters.withScenario(Wallet.DEFAULT_SCENARIO));
 
-        return this.positionRepository.findAll(spec).stream().map(Position::convert).toList();
+        return this.walletRepository.findAll(spec).stream().map(Wallet::convert).toList();
     }
 
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<PositionData> getAll() {
+    public List<WalletData> getAll() {
 
-        return this.positionRepository.findAll().stream().map(Position::convert).toList();
+        final var spec = WalletRepository.Filters.withScenario(Wallet.DEFAULT_SCENARIO);
+
+        return this.walletRepository.findAll(spec).stream().map(Wallet::convert).toList();
     }
 
 }

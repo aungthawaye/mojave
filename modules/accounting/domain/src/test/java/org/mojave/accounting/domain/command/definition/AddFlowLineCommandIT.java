@@ -13,8 +13,8 @@ import org.mojave.accounting.contract.exception.definition.CoaEntryConflictInDef
 import org.mojave.accounting.contract.exception.definition.DuplicateFlowLineIndexException;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import org.mojave.accounting.contract.exception.definition.ImmatureCoaEntryException;
-import org.mojave.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
-import org.mojave.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
+import org.mojave.accounting.contract.exception.definition.InvalidAmountNameForAccountingScenarioException;
+import org.mojave.accounting.contract.exception.definition.InvalidParticipantForAccountingScenarioException;
 import org.mojave.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
 import org.mojave.accounting.contract.query.FlowDefinitionQuery;
 import org.mojave.accounting.domain.AccountingDomainTestConfiguration;
@@ -24,7 +24,7 @@ import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -78,7 +78,7 @@ public class AddFlowLineCommandIT extends BaseIT {
             "Dup Flow Account 02");
 
         final var flowDefinitionId = this.createFlowDefinition(
-            this.createFlowDefinitionCommand, TransactionType.FUND_TRANSFER, Currency.BYN,
+            this.createFlowDefinitionCommand, AccountingScenario.FUND_TRANSFER, Currency.BYN,
             "duplicate-flow-line-definition", payerCoaEntryId, "PAYER_FSP", "TRANSFER_AMOUNT",
             Side.DEBIT);
 
@@ -123,7 +123,7 @@ public class AddFlowLineCommandIT extends BaseIT {
             "Add Flow Account 02");
 
         final var flowDefinitionId = this.createFlowDefinition(
-            this.createFlowDefinitionCommand, TransactionType.FUND_TRANSFER, Currency.USD,
+            this.createFlowDefinitionCommand, AccountingScenario.FUND_TRANSFER, Currency.USD,
             "add-flow-line-definition", payerCoaEntryId, "PAYER_FSP", "TRANSFER_AMOUNT",
             Side.DEBIT);
 
@@ -142,7 +142,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when participant is invalid for transaction type")
-    public void invalidParticipantForTransactionType() {
+    public void invalidParticipantForAccountingScenario() {
 
         final var coaId = this.createCoa(this.createCoaCommand, "Invalid Participant Add CoA");
         final var payerCoaEntryId = this.createCoaEntry(
@@ -163,7 +163,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
         final var flowDefinitionId = this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "invalid-participant-add-flow",
             payerCoaEntryId,
@@ -172,7 +172,7 @@ public class AddFlowLineCommandIT extends BaseIT {
             Side.DEBIT);
 
         assertThrows(
-            InvalidParticipantForTransactionTypeException.class,
+            InvalidParticipantForAccountingScenarioException.class,
             () -> this.addFlowLineCommand.execute(new AddFlowLineCommand.Input(
                 flowDefinitionId,
                 new AddFlowLineCommand.Input.FlowLine(
@@ -186,7 +186,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when amount name is invalid for transaction type")
-    public void invalidAmountNameForTransactionType() {
+    public void invalidAmountNameForAccountingScenario() {
 
         final var coaId = this.createCoa(this.createCoaCommand, "Invalid Amount Add CoA");
         final var payerCoaEntryId = this.createCoaEntry(
@@ -207,7 +207,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
         final var flowDefinitionId = this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "invalid-amount-add-flow",
             payerCoaEntryId,
@@ -216,7 +216,7 @@ public class AddFlowLineCommandIT extends BaseIT {
             Side.DEBIT);
 
         assertThrows(
-            InvalidAmountNameForTransactionTypeException.class,
+            InvalidAmountNameForAccountingScenarioException.class,
             () -> this.addFlowLineCommand.execute(new AddFlowLineCommand.Input(
                 flowDefinitionId,
                 new AddFlowLineCommand.Input.FlowLine(
@@ -251,7 +251,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
         final var flowDefinitionId = this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "required-participant-add-flow",
             payerCoaEntryId,
@@ -295,7 +295,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
         final var flowDefinitionId = this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "missing-entry-add-flow",
             payerCoaEntryId,
@@ -346,7 +346,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
         final var flowDefinitionId = this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "immature-entry-add-flow",
             payerCoaEntryId,
@@ -390,7 +390,7 @@ public class AddFlowLineCommandIT extends BaseIT {
 
         final var flowDefinitionId = this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "conflict-add-flow",
             payerCoaEntryId,

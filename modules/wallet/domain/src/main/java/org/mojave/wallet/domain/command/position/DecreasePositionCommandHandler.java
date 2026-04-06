@@ -20,14 +20,16 @@
 
 package org.mojave.wallet.domain.command.position;
 
+import org.mojave.common.datatype.identifier.wallet.PositionId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.wallet.contract.command.position.DecreasePositionCommand;
+import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.wallet.contract.exception.position.PositionNotExistException;
-import org.mojave.wallet.domain.cache.PositionCache;
-import org.mojave.wallet.domain.component.PositionUpdater;
+import org.mojave.wallet.domain.cache.WalletCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,18 +42,18 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(
         DecreasePositionCommandHandler.class);
 
-    private final PositionUpdater positionUpdater;
+    private final WalletEngine walletEngine;
 
-    private final PositionCache positionCache;
+    private final WalletCache walletCache;
 
-    public DecreasePositionCommandHandler(final PositionUpdater positionUpdater,
-                                          final PositionCache positionCache) {
+    public DecreasePositionCommandHandler(final WalletEngine walletEngine,
+                                          final WalletCache walletCache) {
 
-        Objects.requireNonNull(positionUpdater);
-        Objects.requireNonNull(positionCache);
+        Objects.requireNonNull(walletEngine);
+        Objects.requireNonNull(walletCache);
 
-        this.positionUpdater = positionUpdater;
-        this.positionCache = positionCache;
+        this.walletEngine = walletEngine;
+        this.walletCache = walletCache;
     }
 
     @Override
@@ -59,22 +61,24 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
         LOGGER.info("DecreasePositionCommand : input: ({})", ObjectLogger.log(input));
 
-        var position = this.positionCache.get(input.walletOwnerId(), input.currency());
+        final var wallet = this.walletCache.get(input.walletOwnerId(), input.currency());
 
-        if (position == null) {
+        if (wallet == null) {
 
             throw new PositionNotExistException(input.walletOwnerId(), input.currency());
         }
 
+        final var walletId = new WalletId(wallet.walletId().getId());
+        final var positionId = new PositionId(wallet.walletId().getId());
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
-            final var history = this.positionUpdater.decrease(
-                input.transactionId(), input.transactionAt(), positionUpdateId,
-                position.positionId(), input.amount(), input.description());
+            final var history = this.walletEngine.decreasePosition(
+                positionUpdateId, input.transactionId(), input.transactionAt(), walletId,
+                input.amount(), input.description());
 
             final var output = new Output(
-                history.positionUpdateId(), history.positionId(), history.action(),
+                history.positionUpdateId(), positionId, history.action(),
                 history.transactionId(), history.currency(), history.amount(),
                 history.oldPosition(), history.newPosition(), history.oldReserved(),
                 history.newReserved(), history.netDebitCap(), history.transactionAt());
@@ -83,7 +87,7 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
             return output;
 
-        } catch (final PositionUpdater.NoPositionUpdateException e) {
+        } catch (final WalletEngine.NoPositionUpdateException e) {
 
             LOGGER.error("Error:", e);
             throw new NoPositionUpdateForTransactionException(input.transactionId());

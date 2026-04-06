@@ -27,7 +27,7 @@ Position = Initial Funding
 
 ### Balance
 
-A **balance** represents the accounting book balance in the ledger.
+A **balance** represents the accounting book balance in the ledgerOperation.
 
 **Characteristics:**
 - Double-entry accounting balance
@@ -40,7 +40,7 @@ A **balance** represents the accounting book balance in the ledger.
 
 ```
 Position = "How much can I spend right now?"
-Balance  = "What does the accounting ledger say?"
+Balance  = "What does the accounting ledgerOperation say?"
 ```
 
 **Example:**
@@ -405,7 +405,7 @@ T9                           Update (v2→v3) ✓
 **1. Position vs Accounting:**
 ```
 Position.amount should equal:
-  Account Book Balance (from ledger)
+  Account Book Balance (from ledgerOperation)
 ```
 
 **2. Reserved vs In-Flight:**
@@ -472,7 +472,7 @@ DepositCommand.execute(
 **Effect:**
 - Increase position
 - Record movement
-- Update accounting ledger
+- Update accounting ledgerOperation
 
 ### Withdraw
 
@@ -490,7 +490,7 @@ WithdrawCommand.execute(
 **Effect:**
 - Decrease position
 - Record movement
-- Update accounting ledger
+- Update accounting ledgerOperation
 
 **Validation:**
 - Must have sufficient available balance

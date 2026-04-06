@@ -25,7 +25,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
         // 1. Unwrap FSPIOP request
         // 2. Create transaction
         // 3. Reserve payer position
-        // 4. Post to ledger
+        // 4. Post to ledgerOperation
         // 5. Reserve transfer state
         // 6. Find settlement provider
         // 7. Forward to payee FSP

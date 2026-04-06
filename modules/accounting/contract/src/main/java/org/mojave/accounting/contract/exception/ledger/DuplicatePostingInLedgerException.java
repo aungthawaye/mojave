@@ -35,7 +35,7 @@ public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
     public static final String CODE = "DUPLICATE_POSTING_IN_LEDGER";
 
-    private static final String TEMPLATE = "Duplicate Posting in Ledger : account ({0}) | side ({1}) | transaction Id : ({2}).";
+    private static final String TEMPLATE = "Duplicate Posting in LedgerOperation : account ({0}) | side ({1}) | transaction Id : ({2}).";
 
     private final AccountCode accountCode;
 

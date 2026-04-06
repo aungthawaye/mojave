@@ -12,8 +12,8 @@ import org.mojave.accounting.contract.exception.definition.CoaEntryConflictInDef
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import org.mojave.accounting.contract.exception.definition.ImmatureCoaEntryException;
-import org.mojave.accounting.contract.exception.definition.InvalidAmountNameForTransactionTypeException;
-import org.mojave.accounting.contract.exception.definition.InvalidParticipantForTransactionTypeException;
+import org.mojave.accounting.contract.exception.definition.InvalidAmountNameForAccountingScenarioException;
+import org.mojave.accounting.contract.exception.definition.InvalidParticipantForAccountingScenarioException;
 import org.mojave.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
 import org.mojave.accounting.contract.query.FlowDefinitionQuery;
 import org.mojave.accounting.domain.AccountingDomainTestConfiguration;
@@ -22,7 +22,7 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -67,12 +67,12 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             "Flow Dup Account 01");
 
         this.createFlowDefinition(
-            this.createFlowDefinitionCommand, TransactionType.FUND_TRANSFER, Currency.BYN,
+            this.createFlowDefinitionCommand, AccountingScenario.FUND_TRANSFER, Currency.BYN,
             "fund-transfer-usd-duplicate", coaEntryId, "PAYER_FSP", "TRANSFER_AMOUNT", Side.DEBIT);
 
         assertThrows(
             FlowDefinitionAlreadyConfiguredException.class, () -> this.createFlowDefinition(
-                this.createFlowDefinitionCommand, TransactionType.FUND_TRANSFER, Currency.BYN,
+                this.createFlowDefinitionCommand, AccountingScenario.FUND_TRANSFER, Currency.BYN,
                 "fund-transfer-usd-duplicate-2", coaEntryId, "PAYEE_FSP", "PAYEE_FSP_FEE",
                 Side.CREDIT));
     }
@@ -100,7 +100,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
 
         this.createFlowDefinition(
             this.createFlowDefinitionCommand,
-            TransactionType.FUND_TRANSFER,
+            AccountingScenario.FUND_TRANSFER,
             Currency.USD,
             "same-flow-name",
             coaEntryId,
@@ -112,7 +112,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             FlowDefinitionNameTakenException.class,
             () -> this.createFlowDefinition(
                 this.createFlowDefinitionCommand,
-                TransactionType.FUND_TRANSFER,
+                AccountingScenario.FUND_TRANSFER,
                 Currency.EUR,
                 "same-flow-name",
                 coaEntryId,
@@ -123,7 +123,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when amount name is invalid for transaction type")
-    public void invalidAmountNameForTransactionType() {
+    public void invalidAmountNameForAccountingScenario() {
 
         final var coaId = this.createCoa(this.createCoaCommand, "Flow Amount CoA");
         final var coaEntryId = this.createCoaEntry(
@@ -135,9 +135,9 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             "Flow Amount Account 01");
 
         assertThrows(
-            InvalidAmountNameForTransactionTypeException.class,
+            InvalidAmountNameForAccountingScenarioException.class,
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER, Currency.GBP, "flow-invalid-amount",
+                AccountingScenario.FUND_TRANSFER, Currency.GBP, "flow-invalid-amount",
                 "flow-invalid-amount description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, "PAYER_FSP", coaEntryId,
@@ -146,7 +146,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when participant is invalid for transaction type")
-    public void invalidParticipantForTransactionType() {
+    public void invalidParticipantForAccountingScenario() {
 
         final var coaId = this.createCoa(this.createCoaCommand, "Flow Participant CoA");
         final var coaEntryId = this.createCoaEntry(
@@ -158,9 +158,9 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             "Flow Participant Account 01");
 
         assertThrows(
-            InvalidParticipantForTransactionTypeException.class,
+            InvalidParticipantForAccountingScenarioException.class,
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER, Currency.EUR, "flow-invalid-participant",
+                AccountingScenario.FUND_TRANSFER, Currency.EUR, "flow-invalid-participant",
                 "flow-invalid-participant description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, "HUB", coaEntryId,
@@ -191,7 +191,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
         assertThrows(
             RequireParticipantForCoaEntryException.class,
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER,
+                AccountingScenario.FUND_TRANSFER,
                 Currency.USD,
                 "flow-participant-required",
                 "flow-participant-required description",
@@ -211,7 +211,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
         assertThrows(
             CoaEntryIdNotFoundException.class,
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER,
+                AccountingScenario.FUND_TRANSFER,
                 Currency.USD,
                 "flow-missing-entry",
                 "flow-missing-entry description",
@@ -240,7 +240,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
         assertThrows(
             ImmatureCoaEntryException.class,
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER,
+                AccountingScenario.FUND_TRANSFER,
                 Currency.USD,
                 "flow-immature-entry",
                 "flow-immature-entry description",
@@ -277,7 +277,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
         assertThrows(
             CoaEntryConflictInDefinitionException.class,
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER,
+                AccountingScenario.FUND_TRANSFER,
                 Currency.USD,
                 "flow-coa-conflict",
                 "flow-coa-conflict description",
@@ -313,7 +313,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
 
         final var output = this.createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER, Currency.USD, "fund-transfer-usd",
+                AccountingScenario.FUND_TRANSFER, Currency.USD, "fund-transfer-usd",
                 "fund-transfer-usd description",
                 List.of(new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, " PAYER_FSP ", coaEntryId, " transfer_amount ", Side.DEBIT,
@@ -321,7 +321,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
         final var definition = this.flowDefinitionQuery.get(output.flowDefinitionId());
 
         assertNotNull(output.flowDefinitionId());
-        assertEquals(TransactionType.FUND_TRANSFER, definition.transactionType());
+        assertEquals(AccountingScenario.FUND_TRANSFER, definition.scenario());
         assertEquals(Currency.USD, definition.currency());
         assertEquals(1, definition.flowLines().size());
         assertEquals("PAYER_FSP", definition.flowLines().getFirst().participant());

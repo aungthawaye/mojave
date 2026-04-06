@@ -35,18 +35,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.component.jpa.JpaEntity;
-import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.component.misc.data.DataConversion;
-import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.accounting.contract.data.FlowDefinitionData;
 import org.mojave.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.accounting.contract.exception.definition.DefinitionNameTooLongException;
@@ -54,8 +42,19 @@ import org.mojave.accounting.contract.exception.definition.FlowLineNotFoundExcep
 import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
-import org.mojave.scheme.rule.data.TransactionTypeDefinitionData;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
+import org.mojave.common.datatype.enums.ActivationStatus;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.enums.TerminationStatus;
+import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.component.jpa.JpaEntity;
+import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.component.misc.data.DataConversion;
+import org.mojave.component.misc.handy.Snowflake;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +72,7 @@ import static java.sql.Types.BIGINT;
         @UniqueConstraint(
             name = "acc_flow_definition_01_UK",
             columnNames = {
-                "transaction_type",
+                "scenario",
                 "currency"}),
         @UniqueConstraint(
             name = "acc_flow_definition_02_UK",
@@ -93,11 +92,11 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     protected FlowDefinitionId id;
 
     @Column(
-        name = "transaction_type",
+        name = "scenario",
         nullable = false,
         length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected TransactionType transactionType;
+    protected AccountingScenario scenario;
 
     @Column(
         name = "currency",
@@ -138,17 +137,17 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         fetch = FetchType.EAGER)
     protected List<FlowLine> flowLines = new ArrayList<>();
 
-    public FlowDefinition(TransactionType transactionType,
+    public FlowDefinition(AccountingScenario scenario,
                           Currency currency,
                           String name,
                           String description) {
 
-        Objects.requireNonNull(transactionType);
+        Objects.requireNonNull(scenario);
         Objects.requireNonNull(currency);
         Objects.requireNonNull(name);
 
         this.id = new FlowDefinitionId(Snowflake.get().nextId());
-        this.transactionType = transactionType;
+        this.scenario = scenario;
         this.name(name).currency(currency).description(description);
     }
 
@@ -163,14 +162,12 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                                 String amountName,
                                 Side side,
                                 String description,
-                                TransactionTypeDefinitionData transactionTypeDefinition,
                                 AccountCache accountCache,
                                 CoaEntryCache coaEntryCache) {
 
         final var flowLine = new FlowLine(
-            this, index, participant, coaEntryId, amountName, side, description,
-            transactionTypeDefinition,
-            accountCache, coaEntryCache);
+            this, index, participant, coaEntryId, amountName, side,
+            description, accountCache, coaEntryCache);
 
         this.flowLines.add(flowLine);
 
@@ -189,7 +186,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                                      .toList();
 
         return new FlowDefinitionData(
-            this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(),
+            this.getId(), this.getScenario(), this.getCurrency(), this.getName(),
             this.getDescription(), this.getActivationStatus(), this.getTerminationStatus(),
             flowLineData);
     }
@@ -225,15 +222,15 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this;
     }
 
+    public List<FlowLine> getFlowLines() {
+
+        return Collections.unmodifiableList(this.flowLines);
+    }
+
     @Override
     public FlowDefinitionId getId() {
 
         return this.id;
-    }
-
-    public List<FlowLine> getFlowLines() {
-
-        return Collections.unmodifiableList(this.flowLines);
     }
 
     public FlowDefinition name(String name) {

@@ -15,7 +15,7 @@
         <module>contract</module>
         <module>domain</module>
         <module>intercom</module>
-        <module>ledger</module>
+        <module>engine</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

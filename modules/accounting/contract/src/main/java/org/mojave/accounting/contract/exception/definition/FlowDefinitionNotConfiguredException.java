@@ -24,7 +24,7 @@ import lombok.Getter;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,25 +36,25 @@ public class FlowDefinitionNotConfiguredException extends UncheckedDomainExcepti
 
     private static final String TEMPLATE = "Flow Definition for Transaction Type ({0}) and Currency ({1}) is not yet configured.";
 
-    private final TransactionType transactionType;
+    private final AccountingScenario transactionType;
 
     private final Currency currency;
 
-    public FlowDefinitionNotConfiguredException(final TransactionType transactionType,
+    public FlowDefinitionNotConfiguredException(final AccountingScenario scenario,
                                                 final Currency currency) {
 
         super(new ErrorTemplate(
             CODE, TEMPLATE, new String[]{
-            transactionType.name(),
+            scenario.name(),
             currency.name()}));
 
-        this.transactionType = transactionType;
+        this.transactionType = scenario;
         this.currency = currency;
     }
 
     public static FlowDefinitionNotConfiguredException from(final Map<String, String> extras) {
 
-        final var type = TransactionType.valueOf(extras.get(Keys.TRANSACTION_TYPE));
+        final var type = AccountingScenario.valueOf(extras.get(Keys.SCENARIO));
         final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
 
         return new FlowDefinitionNotConfiguredException(type, currency);
@@ -65,7 +65,7 @@ public class FlowDefinitionNotConfiguredException extends UncheckedDomainExcepti
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.TRANSACTION_TYPE, this.transactionType.name());
+        extras.put(Keys.SCENARIO, this.transactionType.name());
         extras.put(Keys.CURRENCY, this.currency.name());
 
         return extras;
@@ -73,7 +73,7 @@ public class FlowDefinitionNotConfiguredException extends UncheckedDomainExcepti
 
     public static class Keys {
 
-        public static final String TRANSACTION_TYPE = "transactionType";
+        public static final String SCENARIO = "scenario";
 
         public static final String CURRENCY = "currency";
 

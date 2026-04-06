@@ -2,13 +2,13 @@
 
 ## Overview
 
-The Accounting module implements double-entry bookkeeping with configurable flow definitions. It uses MySQL stored procedures for atomic ledger posting and maintains complete audit trails of all financial movements.
+The Accounting module implements double-entry bookkeeping with configurable flow definitions. It uses MySQL stored procedures for atomic ledgerOperation posting and maintains complete audit trails of all financial movements.
 
 ## Domain Model
 
 ### PostLedgerFlowCommand
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ```java
 public interface PostLedgerFlowCommand {

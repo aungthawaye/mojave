@@ -200,6 +200,8 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
 
     }
 
+
+
     public void activate() {
 
         this.activationStatus = ActivationStatus.ACTIVE;

@@ -27,7 +27,7 @@ import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -330,7 +330,7 @@ public class FlowDefinitionLifecycleCommandIT extends BaseIT {
 
         final var output = this.createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER, currency, prefix + "-flow",
+                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
                 prefix + "-flow description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, "PAYER_FSP", payerCoaEntryId,

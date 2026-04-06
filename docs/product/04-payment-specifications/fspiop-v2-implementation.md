@@ -212,7 +212,7 @@ sequenceDiagram
     Note over Hub: 1. Verify JWS signature<br/>2. Decrypt ILP packet
     Hub->>Wallet: Reserve payer position
     Wallet-->>Hub: Reserved
-    Hub->>Accounting: Post ledger
+    Hub->>Accounting: Post ledgerOperation
     Accounting-->>Hub: Posted
     Hub->>Payee FSP: POST /transfers
     Hub-->>Payer FSP: 202 Accepted

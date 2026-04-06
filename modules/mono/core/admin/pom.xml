@@ -40,8 +40,8 @@
             <artifactId>mojave-accounting-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.accounting.ledger</groupId>
-            <artifactId>mojave-accounting-ledger-mysql</artifactId>
+            <groupId>org.mojave.accounting.ledgerEngine</groupId>
+            <artifactId>mojave-accounting-ledgerEngine-mysql</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.participant</groupId>

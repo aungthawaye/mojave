@@ -14,7 +14,7 @@ Mojave is a well-architected instant payment switch implementing the FSPIOP prot
 **Recent Updates (February 2026):**
 - ✅ Settlement module added with comprehensive domain modeling for settlement provider matching
 - ✅ Code quality improvement: Replaced assert statements with `Objects.requireNonNull()` for proper validation
-- ✅ Provider module refactored for better organization (forex, ledger, settlement providers)
+- ✅ Provider module refactored for better organization (forex, ledgerOperation, settlement providers)
 
 ### Overall Assessment: **B+ (Strong Architecture, Weak Testing)**
 
@@ -48,7 +48,7 @@ mojave/
 │   └── fspiop         # FSPIOP v2.0 generated models
 ├── core/              # Domain bounded contexts
 │   ├── participant    # FSP/Hub/Oracle management
-│   ├── accounting     # Double-entry ledger system
+│   ├── accounting     # Double-entry ledgerOperation system
 │   ├── transaction    # Transaction lifecycle
 │   ├── wallet         # Position/balance management
 │   ├── settlement     # Settlement definitions, records, filter groups
@@ -57,7 +57,7 @@ mojave/
 │   ├── adapter        # Protocol adapters
 │   └── gateway        # API gateway
 ├── provider/          # Storage implementations
-│   ├── ledger/mysql   # MySQL ledger with stored procedures
+│   ├── ledgerOperation/mysql   # MySQL ledgerOperation with stored procedures
 │   ├── forex          # Foreign exchange provider
 │   └── settlement     # Settlement provider
 ├── operation/         # Administrative use cases
@@ -295,7 +295,7 @@ public class ReadAspect {
 
 ### 3.2 MySQL Stored Procedure for Ledger
 
-The ledger posting uses a stored procedure for atomic double-entry bookkeeping:
+The ledgerOperation posting uses a stored procedure for atomic double-entry bookkeeping:
 
 ```java
 try (var stm = con.prepareCall("{call sp_post_ledger_batch_with_movements(?)}")) {
@@ -497,7 +497,7 @@ POST /transfers → TransfersController
 
 1. **Implement Test Suite**
    - Target: 80% code coverage minimum
-   - Priority: Command handlers, repository queries, ledger operations, settlement module
+   - Priority: Command handlers, repository queries, ledgerOperation operations, settlement module
 
 2. **Add Retry Semantics to Kafka Consumers**
    - Current silent error logging risks message loss

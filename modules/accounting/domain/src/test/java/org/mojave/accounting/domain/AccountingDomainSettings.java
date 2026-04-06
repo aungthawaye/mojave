@@ -1,14 +1,16 @@
 package org.mojave.accounting.domain;
 
-import org.mojave.accounting.contract.ledger.Ledger;
+import org.mojave.accounting.contract.engine.LedgerEngine;
+import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.accounting.MovementResult;
 import org.mojave.common.datatype.enums.accounting.MovementStage;
+import org.mojave.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
@@ -60,8 +62,6 @@ public class AccountingDomainSettings implements AccountingDomainConfiguration.R
 
     private static final int WRITE_DB_MAX_POOL_SIZE = 2;
 
-
-
     @Bean
     @Override
     public RoutingDataSourceConfigurer.ReadSettings routingDataSourceReadSettings() {
@@ -99,11 +99,11 @@ public class AccountingDomainSettings implements AccountingDomainConfiguration.R
         return new RoutingEntityManagerConfigurer.Settings("accounting-domain", false, false);
     }
 
-    public static final class TestLedger implements Ledger {
+    public static final class TestLedgerEngine implements LedgerEngine {
 
         private final Map<AccountId, LedgerBalance> balances = new HashMap<>();
 
-        private final Map<AccountId, Ledger.DrCr> drCrByAccountId = new HashMap<>();
+        private final Map<AccountId, LedgerEngine.DrCr> drCrByAccountId = new HashMap<>();
 
         private final List<Request> lastRequests = new ArrayList<>();
 
@@ -113,40 +113,15 @@ public class AccountingDomainSettings implements AccountingDomainConfiguration.R
 
         private Exception nextPostException;
 
-        public void failNextCreateLedgerBalance() {
-
-            this.failNextCreateLedgerBalance = true;
-            this.nextCreateLedgerBalanceRuntimeException = null;
-        }
-
-        public void failNextCreateLedgerBalance(final RuntimeException runtimeException) {
-
-            this.failNextCreateLedgerBalance = false;
-            this.nextCreateLedgerBalanceRuntimeException = runtimeException;
-        }
-
-        public void failNextPost(final Exception exception) {
-
-            this.nextPostException = exception;
-        }
-
-        public List<Request> getLastRequests() {
-
-            return List.copyOf(this.lastRequests);
-        }
-
-        public void reset() {
-
-            this.balances.clear();
-            this.drCrByAccountId.clear();
-            this.lastRequests.clear();
-            this.failNextCreateLedgerBalance = false;
-            this.nextCreateLedgerBalanceRuntimeException = null;
-            this.nextPostException = null;
-        }
-
         @Override
-        public void createLedgerBalance(final LedgerBalance ledgerBalance)
+        public LedgerBalance createLedgerBalance(AccountId accountId,
+                                                 Currency currency,
+                                                 Integer scale,
+                                                 Side nature,
+                                                 BigDecimal postedDebits,
+                                                 BigDecimal postedCredits,
+                                                 OverdraftMode overdraftMode,
+                                                 BigDecimal overdraftLimit)
             throws AccountIdAlreadyTakenException {
 
             if (this.nextCreateLedgerBalanceRuntimeException != null) {
@@ -162,29 +137,69 @@ public class AccountingDomainSettings implements AccountingDomainConfiguration.R
 
                 this.failNextCreateLedgerBalance = false;
 
-                throw new AccountIdAlreadyTakenException(ledgerBalance.accountId());
+                throw new AccountIdAlreadyTakenException(accountId);
             }
 
-            if (this.balances.containsKey(ledgerBalance.accountId())) {
-                throw new AccountIdAlreadyTakenException(ledgerBalance.accountId());
+            if (this.balances.containsKey(accountId)) {
+                throw new AccountIdAlreadyTakenException(accountId);
             }
 
-            this.balances.put(ledgerBalance.accountId(), ledgerBalance);
+            final var ledgerBalance = new LedgerBalance(
+                accountId, currency, scale, nature, postedDebits, postedCredits, overdraftMode,
+                overdraftLimit, Instant.now());
+
+            this.balances.put(accountId, ledgerBalance);
             this.drCrByAccountId.put(
                 ledgerBalance.accountId(),
-                new Ledger.DrCr(ledgerBalance.postedDebits(), ledgerBalance.postedCredits()));
+                new LedgerEngine.DrCr(ledgerBalance.postedDebits(), ledgerBalance.postedCredits()));
+
+            return ledgerBalance;
+        }
+
+        public void failNextCreateLedgerBalance(final RuntimeException runtimeException) {
+
+            this.failNextCreateLedgerBalance = false;
+            this.nextCreateLedgerBalanceRuntimeException = runtimeException;
+        }
+
+        public void failNextCreateLedgerBalance() {
+
+            this.failNextCreateLedgerBalance = true;
+            this.nextCreateLedgerBalanceRuntimeException = null;
+        }
+
+        public void failNextPost(final Exception exception) {
+
+            this.nextPostException = exception;
         }
 
         @Override
-        public List<Movement> post(final List<Request> requests,
-                                   final TransactionId transactionId,
-                                   final Instant transactionAt,
-                                   final TransactionType transactionType) throws
-                                                                          InsufficientBalanceException,
-                                                                          NegativeAmountException,
-                                                                          OverdraftExceededException,
-                                                                          RestoreFailedException,
-                                                                          DuplicatePostingException {
+        public DrCr getDrCr(AccountId accountId, Side side) {
+
+            return new DrCr(BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+
+        @Override
+        public String getEngineType() {
+
+            return "TEST";
+        }
+
+        public List<Request> getLastRequests() {
+
+            return List.copyOf(this.lastRequests);
+        }
+
+        @Override
+        public List<Movement> postAccountingFlow(final List<Request> requests,
+                                                 final TransactionId transactionId,
+                                                 final Instant transactionAt,
+                                                 final AccountingScenario scenario) throws
+                                                                                    InsufficientBalanceException,
+                                                                                    NegativeAmountException,
+                                                                                    OverdraftExceededException,
+                                                                                    RestoreFailedException,
+                                                                                    DuplicatePostingException {
 
             this.lastRequests.clear();
             this.lastRequests.addAll(requests);
@@ -227,44 +242,41 @@ public class AccountingDomainSettings implements AccountingDomainConfiguration.R
             for (final var request : requests) {
 
                 final var oldDrCr = this.drCrByAccountId.getOrDefault(
-                    request.accountId(), new Ledger.DrCr(BigDecimal.ZERO, BigDecimal.ZERO));
-                final Ledger.DrCr newDrCr;
+                    request.accountId(),
+                    new LedgerEngine.DrCr(BigDecimal.ZERO, BigDecimal.ZERO));
+                final LedgerEngine.DrCr newDrCr;
 
                 if (request.side() == Side.DEBIT) {
-                    newDrCr = new Ledger.DrCr(
+                    newDrCr = new LedgerEngine.DrCr(
                         oldDrCr.debits().add(request.amount()), oldDrCr.credits());
 
                 } else {
-                    newDrCr = new Ledger.DrCr(
+                    newDrCr = new LedgerEngine.DrCr(
                         oldDrCr.debits(), oldDrCr.credits().add(request.amount()));
                 }
 
                 this.drCrByAccountId.put(request.accountId(), newDrCr);
 
                 movements.add(new Movement(
-                    request.ledgerMovementId(),
-                    request.step(),
-                    request.accountId(),
-                    request.side(),
-                    request.currency(),
-                    request.amount(),
-                    oldDrCr,
-                    newDrCr,
-                    transactionId,
-                    transactionAt,
-                    transactionType,
-                    request.flowDefinitionId(),
-                    request.flowLineId(),
-                    MovementStage.COMMIT,
-                    MovementResult.SUCCESS,
-                    transactionAt));
+                    request.ledgerMovementId(), request.step(), request.accountId(), request.side(),
+                    request.currency(), request.amount(), oldDrCr, newDrCr, transactionId,
+                    transactionAt, scenario, request.flowDefinitionId(), request.flowLineId(),
+                    MovementStage.COMMIT, MovementResult.SUCCESS, transactionAt));
             }
 
             return movements;
         }
 
+        public void reset() {
+
+            this.balances.clear();
+            this.drCrByAccountId.clear();
+            this.lastRequests.clear();
+            this.failNextCreateLedgerBalance = false;
+            this.nextCreateLedgerBalanceRuntimeException = null;
+            this.nextPostException = null;
+        }
+
     }
-
-
 
 }

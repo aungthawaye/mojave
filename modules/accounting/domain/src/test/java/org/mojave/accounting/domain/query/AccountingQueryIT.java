@@ -35,7 +35,7 @@ import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.component.misc.ddd.EntityId;
 import org.mojave.component.misc.query.PagedRequest;
 import org.mojave.component.misc.query.SortingMode;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -91,8 +91,7 @@ public class AccountingQueryIT extends BaseIT {
                 AccountQuery.Sorting.Column.COA_ENTRY_ID, SortingMode.DESC,
                 "ACCOUNT_QUERY_B"),
             Arguments.of(
-                AccountQuery.Sorting.Column.CURRENCY, SortingMode.DESC,
-                "ACCOUNT_QUERY_B"));
+                AccountQuery.Sorting.Column.CURRENCY, SortingMode.DESC, "ACCOUNT_QUERY_B"));
     }
 
     @ParameterizedTest(name = "Sort accounts by {0} {1}")
@@ -252,8 +251,7 @@ public class AccountingQueryIT extends BaseIT {
                                                   .map(CoaData::coaId)
                                                   .sorted(
                                                       (left, right) -> Long.compare(
-                                                          left.getId(),
-                                                          right.getId()))
+                                                          left.getId(), right.getId()))
                                                   .toList());
     }
 
@@ -290,7 +288,7 @@ public class AccountingQueryIT extends BaseIT {
 
         final var firstOutput = this.createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER, Currency.USD, "flow-query-usd",
+                AccountingScenario.FUND_TRANSFER, Currency.USD, "flow-query-usd",
                 "flow-query-usd description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, "PAYER_FSP", usdCoaEntryId,
@@ -298,7 +296,7 @@ public class AccountingQueryIT extends BaseIT {
 
         final var secondOutput = this.createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
-                TransactionType.FUND_TRANSFER, Currency.EUR, "flow-query-eur",
+                AccountingScenario.FUND_TRANSFER, Currency.EUR, "flow-query-eur",
                 "flow-query-eur description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowLine(
                     1, "PAYER_FSP", eurCoaEntryId,

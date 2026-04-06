@@ -20,7 +20,7 @@
 
 package org.mojave.mono.core.consumer;
 
-import org.mojave.accounting.contract.ledger.Ledger;
+import org.mojave.accounting.contract.engine.Ledger;
 import org.mojave.accounting.ledger.mysql.MySqlLedger;
 import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;

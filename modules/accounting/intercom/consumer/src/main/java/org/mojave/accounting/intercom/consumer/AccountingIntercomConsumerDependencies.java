@@ -1,6 +1,6 @@
 package org.mojave.accounting.intercom.consumer;
 
-import org.mojave.accounting.contract.ledger.Ledger;
+import org.mojave.accounting.contract.engine.LedgerEngine;
 import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.cache.FlowDefinitionCache;
@@ -10,7 +10,7 @@ import org.mojave.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCach
 import org.mojave.accounting.domain.repository.AccountRepository;
 import org.mojave.accounting.domain.repository.CoaEntryRepository;
 import org.mojave.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.accounting.ledger.mysql.MySqlLedger;
+import org.mojave.accounting.engine.mysql.MySqlLedgerEngine;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
 
@@ -19,7 +19,7 @@ import java.util.Objects;
 public class AccountingIntercomConsumerDependencies
     implements AccountingIntercomConsumerConfiguration.RequiredDependencies {
 
-    private final Ledger ledger;
+    private final LedgerEngine ledgerEngine;
 
     private final AccountCache accountCache;
 
@@ -37,9 +37,9 @@ public class AccountingIntercomConsumerDependencies
         Objects.requireNonNull(flowDefinitionRepository);
         Objects.requireNonNull(objectMapper);
 
-        this.ledger = new MySqlLedger(
-            new MySqlLedger.LedgerDbSettings(
-                new MySqlLedger.LedgerDbSettings.Connection(
+        this.ledgerEngine = new MySqlLedgerEngine(
+            new MySqlLedgerEngine.LedgerDbSettings(
+                new MySqlLedgerEngine.LedgerDbSettings.Connection(
                     System.getenv("MYSQL_LEDGER_DB_URL"), System.getenv("MYSQL_LEDGER_DB_USER"),
                     System.getenv("MYSQL_LEDGER_DB_PASSWORD"),
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_CONNECTION_TIMEOUT")),
@@ -47,8 +47,8 @@ public class AccountingIntercomConsumerDependencies
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_MAX_LIFETIME_TIMEOUT")),
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_IDLE_TIMEOUT")),
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_KEEPALIVE_TIMEOUT")), false),
-                new MySqlLedger.LedgerDbSettings.Pool(
-                    "accounting-ledger",
+                new MySqlLedgerEngine.LedgerDbSettings.Pool(
+                    "accounting-ledgerOperation",
                     Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
                     Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
             objectMapper);
@@ -93,9 +93,9 @@ public class AccountingIntercomConsumerDependencies
 
     @Bean
     @Override
-    public Ledger ledger() {
+    public LedgerEngine ledger() {
 
-        return this.ledger;
+        return this.ledgerEngine;
     }
 
 }

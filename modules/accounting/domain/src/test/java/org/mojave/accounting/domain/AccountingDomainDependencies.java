@@ -20,7 +20,7 @@ import org.mojave.common.datatype.identifier.accounting.CoaId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.common.datatype.type.accounting.CoaEntryCode;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
@@ -62,9 +62,9 @@ public class AccountingDomainDependencies
 
     @Bean
     @Override
-    public AccountingDomainSettings.TestLedger ledger() {
+    public AccountingDomainSettings.TestLedgerEngine ledger() {
 
-        return new AccountingDomainSettings.TestLedger();
+        return new AccountingDomainSettings.TestLedgerEngine();
     }
 
     private record RepositoryBackedAccountCache(AccountRepository accountRepository)
@@ -204,12 +204,12 @@ public class AccountingDomainDependencies
         }
 
         @Override
-        public FlowDefinitionData get(final TransactionType transactionType,
+        public FlowDefinitionData get(final AccountingScenario transactionType,
                                       final Currency currency) {
 
             return this.flowDefinitionRepository
                        .findOne(FlowDefinitionRepository.Filters
-                                    .withTransactionType(transactionType)
+                                    .withScenario(transactionType)
                                     .and(FlowDefinitionRepository.Filters.withCurrency(currency)))
                        .map(FlowDefinition::convert)
                        .orElse(null);

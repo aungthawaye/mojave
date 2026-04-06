@@ -23,16 +23,16 @@ package org.mojave.wallet.contract.query;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.wallet.contract.data.BalanceData;
+import org.mojave.wallet.contract.data.WalletData;
 
 import java.util.List;
 
 public interface BalanceQuery {
 
-    BalanceData get(BalanceId balanceId);
+    WalletData get(BalanceId balanceId);
 
-    List<BalanceData> get(WalletOwnerId ownerId, Currency currency);
+    List<WalletData> get(WalletOwnerId ownerId, Currency currency);
 
-    List<BalanceData> getAll();
+    List<WalletData> getAll();
 
 }

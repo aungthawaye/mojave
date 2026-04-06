@@ -24,17 +24,17 @@ import org.mojave.common.datatype.enums.ActivationStatus;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.Side;
+import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.accounting.FlowLineId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
-                                 TransactionType transactionType,
+                                 AccountingScenario scenario,
                                  Currency currency,
                                  String name,
                                  String description,
@@ -43,7 +43,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                                  List<FlowLineData> flowLines) {
 
     public FlowDefinitionData(FlowDefinitionId flowDefinitionId,
-                              TransactionType transactionType,
+                              AccountingScenario scenario,
                               Currency currency,
                               String name,
                               String description,
@@ -52,7 +52,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                               List<FlowLineData> flowLines) {
 
         this.flowDefinitionId = flowDefinitionId;
-        this.transactionType = transactionType;
+        this.scenario = scenario;
         this.currency = currency;
         this.name = name;
         this.description = description;

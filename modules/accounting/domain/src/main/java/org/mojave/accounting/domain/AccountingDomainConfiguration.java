@@ -20,12 +20,12 @@
 
 package org.mojave.accounting.domain;
 
+import org.mojave.accounting.contract.engine.LedgerEngine;
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.cache.FlowDefinitionCache;
-import org.mojave.accounting.contract.ledger.Ledger;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -48,7 +48,7 @@ public class AccountingDomainConfiguration {
 
         FlowDefinitionCache flowDefinitionCache();
 
-        Ledger ledger();
+        LedgerEngine ledger();
 
     }
 

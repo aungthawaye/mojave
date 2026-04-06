@@ -20,9 +20,6 @@
 
 package org.mojave.accounting.domain.command.definition;
 
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.accounting.contract.command.definition.CreateFlowDefinitionCommand;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
@@ -30,7 +27,10 @@ import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.model.FlowDefinition;
 import org.mojave.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.scheme.rule.query.SchemeTransactions;
+import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.component.jpa.routing.annotation.Write;
+import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.scheme.rule.accounting.AccountingScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -71,17 +71,14 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
         LOGGER.info("CreateFlowDefinitionCommand : input: ({})", ObjectLogger.log(input));
 
-        final var transactionType = input.transactionType();
+        final var scenario = input.scenario();
         final var currency = input.currency();
 
-        final var withTransactionType = FlowDefinitionRepository.Filters.withTransactionType(
-            transactionType);
+        final var withScenario = FlowDefinitionRepository.Filters.withScenario(scenario);
         final var withCurrency = FlowDefinitionRepository.Filters.withCurrency(currency);
 
-        if (this.flowDefinitionRepository
-                .findOne(withTransactionType.and(withCurrency))
-                .isPresent()) {
-            throw new FlowDefinitionAlreadyConfiguredException(transactionType, currency);
+        if (this.flowDefinitionRepository.findOne(withScenario.and(withCurrency)).isPresent()) {
+            throw new FlowDefinitionAlreadyConfiguredException(scenario, currency);
         }
 
         if (this.flowDefinitionRepository
@@ -91,8 +88,7 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
         }
 
         var definition = new FlowDefinition(
-            input.transactionType(), currency, input.name(), input.description());
-        final var transactionTypeDefinition = SchemeTransactions.get(transactionType);
+            input.scenario(), currency, input.name(), input.description());
 
         final var flowLineIds = new ArrayList<FlowLineId>();
 
@@ -100,8 +96,8 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
 
             final var savedFlowLine = definition.addFlowLine(
                 flowLine.step(), flowLine.participant(), flowLine.coaEntryId(),
-                flowLine.amountName(), flowLine.side(), flowLine.description(),
-                transactionTypeDefinition, this.accountCache, this.coaEntryCache);
+                flowLine.amountName(), flowLine.side(), flowLine.description(), this.accountCache,
+                this.coaEntryCache);
             flowLineIds.add(savedFlowLine.getId());
         }
 

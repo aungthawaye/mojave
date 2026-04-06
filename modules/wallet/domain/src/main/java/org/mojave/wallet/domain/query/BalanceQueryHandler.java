@@ -22,13 +22,14 @@ package org.mojave.wallet.domain.query;
 
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.wallet.contract.data.BalanceData;
+import org.mojave.wallet.contract.data.WalletData;
 import org.mojave.wallet.contract.exception.balance.BalanceIdNotFoundException;
 import org.mojave.wallet.contract.query.BalanceQuery;
-import org.mojave.wallet.domain.model.Balance;
-import org.mojave.wallet.domain.repository.BalanceRepository;
+import org.mojave.wallet.domain.model.Wallet;
+import org.mojave.wallet.domain.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,22 +39,24 @@ import java.util.Objects;
 @Service
 public class BalanceQueryHandler implements BalanceQuery {
 
-    private final BalanceRepository balanceRepository;
+    private final WalletRepository walletRepository;
 
-    public BalanceQueryHandler(final BalanceRepository balanceRepository) {
+    public BalanceQueryHandler(final WalletRepository walletRepository) {
 
-        Objects.requireNonNull(balanceRepository);
+        Objects.requireNonNull(walletRepository);
 
-        this.balanceRepository = balanceRepository;
+        this.walletRepository = walletRepository;
     }
 
     @Transactional(readOnly = true)
     @Read
     @Override
-    public BalanceData get(final BalanceId balanceId) {
+    public WalletData get(final BalanceId balanceId) {
 
-        return this.balanceRepository
-                   .findById(balanceId)
+        final var walletId = new WalletId(balanceId.getId());
+
+        return this.walletRepository
+                   .findById(walletId)
                    .orElseThrow(() -> new BalanceIdNotFoundException(balanceId))
                    .convert();
     }
@@ -61,21 +64,24 @@ public class BalanceQueryHandler implements BalanceQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<BalanceData> get(final WalletOwnerId ownerId, final Currency currency) {
+    public List<WalletData> get(final WalletOwnerId ownerId, final Currency currency) {
 
-        var spec = BalanceRepository.Filters
-                       .withOwnerId(ownerId)
-                       .and(BalanceRepository.Filters.withCurrency(currency));
+        final var spec = WalletRepository.Filters
+                             .withOwnerId(ownerId)
+                             .and(WalletRepository.Filters.withCurrency(currency))
+                             .and(WalletRepository.Filters.withScenario(Wallet.DEFAULT_SCENARIO));
 
-        return this.balanceRepository.findAll(spec).stream().map(Balance::convert).toList();
+        return this.walletRepository.findAll(spec).stream().map(Wallet::convert).toList();
     }
 
     @Transactional(readOnly = true)
     @Read
     @Override
-    public List<BalanceData> getAll() {
+    public List<WalletData> getAll() {
 
-        return this.balanceRepository.findAll().stream().map(Balance::convert).toList();
+        final var spec = WalletRepository.Filters.withScenario(Wallet.DEFAULT_SCENARIO);
+
+        return this.walletRepository.findAll(spec).stream().map(Wallet::convert).toList();
     }
 
 }
