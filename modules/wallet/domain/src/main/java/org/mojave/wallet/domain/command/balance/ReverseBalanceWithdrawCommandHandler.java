@@ -21,7 +21,7 @@
 package org.mojave.wallet.domain.command.balance;
 
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;
@@ -58,10 +58,10 @@ public class ReverseBalanceWithdrawCommandHandler implements ReverseBalanceWithd
             final var history = this.walletEngine.refundBalance(
                 input.withdrawId(), new BalanceUpdateId(Snowflake.get().nextId()));
 
-            final var balanceId = new BalanceId(history.walletId().getId());
+            final var walletId = new WalletId(history.walletId().getId());
 
             final var output = new Output(
-                history.balanceUpdateId(), balanceId, history.action(),
+                history.balanceUpdateId(), walletId, history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt(), history.reversalId());
 

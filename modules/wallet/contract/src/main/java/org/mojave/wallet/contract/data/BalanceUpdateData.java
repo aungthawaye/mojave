@@ -23,7 +23,7 @@ package org.mojave.wallet.contract.data;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.BalanceAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record BalanceUpdateData(BalanceUpdateId balanceUpdateId,
-                                BalanceId balanceId,
+                                WalletId walletId,
                                 BalanceAction action,
                                 TransactionId transactionId,
                                 Currency currency,

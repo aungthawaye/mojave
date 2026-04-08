@@ -132,15 +132,9 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         foreignKey = @ForeignKey(name = "acc_flow_definition_acc_flow_line_FK"))
     protected FlowDefinition definition;
 
-    public FlowLine(FlowDefinition definition,
-                    Integer step,
-                    String participant,
-                    CoaEntryId coaEntryId,
-                    String amountName,
-                    Side side,
-                    String description,
-                    AccountCache accountCache,
-                    CoaEntryCache coaEntryCache) {
+    public FlowLine(FlowDefinition definition, Integer step, String participant,
+                    CoaEntryId coaEntryId, String amountName, Side side, String description,
+                    AccountCache accountCache, CoaEntryCache coaEntryCache) {
 
         Objects.requireNonNull(definition);
         Objects.requireNonNull(side);
@@ -172,12 +166,8 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         return this;
     }
 
-    public FlowLine forFlowLine(Integer step,
-                                String participant,
-                                CoaEntryId coaEntryId,
-                                String amountName,
-                                Side side,
-                                AccountCache accountCache,
+    public FlowLine forFlowLine(Integer step, String participant, CoaEntryId coaEntryId,
+                                String amountName, Side side, AccountCache accountCache,
                                 CoaEntryCache coaEntryCache) {
 
         var scenarioDefinition = AccountingScheme.get(this.definition.scenario);
@@ -214,7 +204,7 @@ public class FlowLine extends JpaEntity<FlowLineId> {
         if (!scenarioDefinition.containsAmountName(_amountName)) {
 
             throw new InvalidAmountNameForAccountingScenarioException(
-                this.definition.scenario, scenarioDefinition.amounts());
+                _amountName, this.definition.scenario, scenarioDefinition.amounts());
         }
 
         final var coaEntryData = coaEntryCache.get(coaEntryId);

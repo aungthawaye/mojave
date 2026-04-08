@@ -21,7 +21,7 @@
 package org.mojave.wallet.domain.command.position;
 
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.wallet.contract.command.position.RollbackReservationCommand;
@@ -57,10 +57,10 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
             final var history = this.walletEngine.rollbackPositionReservation(
                 new PositionUpdateId(Snowflake.get().nextId()), input.reservationId());
 
-            final var positionId = new PositionId(history.walletId().getId());
+            final var walletId = new WalletId(history.walletId().getId());
 
             final var output = new Output(
-                history.positionUpdateId(), positionId, history.action(),
+                history.positionUpdateId(), walletId, history.action(),
                 history.transactionId(), history.currency(), history.amount(),
                 history.oldPosition(), history.newPosition(), history.oldReserved(),
                 history.newReserved(), history.netDebitCap(), history.transactionAt());

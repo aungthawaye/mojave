@@ -89,13 +89,27 @@ public class CreateAccountCommandIT extends BaseIT {
             this.createCoaEntryCommand, coaId, "FSP", "LEDGER_FAIL_ENTRY_01",
             "LedgerOperation Fail Entry 01", AccountType.ASSET);
 
-        this.testLedger.failNextCreateLedgerBalance();
+        this.executeSql("DROP TRIGGER IF EXISTS trg_lgr_ledger_balance_fail_insert");
+        this.executeSql("""
+            CREATE TRIGGER trg_lgr_ledger_balance_fail_insert
+            BEFORE INSERT ON lgr_ledger_balance
+            FOR EACH ROW
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Forced ledger balance insert failure'
+            """);
 
-        assertThrows(
-            RuntimeException.class, () -> this.createAccount(
-                this.createAccountCommand, coaEntryId, 203L, Currency.USD, "ACC_LEDGER_FAIL_01",
-                "LedgerOperation Failure Account 01"));
-        assertEquals(0, this.accountQuery.getAll().size());
+        try {
+
+            assertThrows(
+                RuntimeException.class, () -> this.createAccount(
+                    this.createAccountCommand, coaEntryId, 203L, Currency.USD,
+                    "ACC_LEDGER_FAIL_01", "LedgerOperation Failure Account 01"));
+            assertEquals(0, this.accountQuery.getAll().size());
+
+        } finally {
+
+            this.executeSql("DROP TRIGGER IF EXISTS trg_lgr_ledger_balance_fail_insert");
+        }
     }
 
     @Test

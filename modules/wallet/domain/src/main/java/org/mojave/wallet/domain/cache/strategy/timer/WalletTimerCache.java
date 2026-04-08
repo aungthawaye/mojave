@@ -77,6 +77,13 @@ public class WalletTimerCache implements WalletCache {
             return null;
         }
 
+        final var walletData = this.snapshotRef.get().withId.get(walletId);
+
+        if (walletData != null) {
+            return walletData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withId.get(walletId);
     }
 
@@ -89,6 +96,13 @@ public class WalletTimerCache implements WalletCache {
 
         final var key = key(walletOwnerId, currency);
 
+        final var walletData = this.snapshotRef.get().withOwnerCurrency.get(key);
+
+        if (walletData != null) {
+            return walletData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withOwnerCurrency.get(key);
     }
 
@@ -99,6 +113,13 @@ public class WalletTimerCache implements WalletCache {
             return Set.of();
         }
 
+        final var wallets = this.snapshotRef.get().withOwnerId.get(walletOwnerId);
+
+        if (wallets != null && !wallets.isEmpty()) {
+            return wallets;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withOwnerId.getOrDefault(walletOwnerId, Set.of());
     }
 

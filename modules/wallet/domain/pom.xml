@@ -31,5 +31,9 @@
             <groupId>org.mojave.wallet</groupId>
             <artifactId>mojave-wallet-contract</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mojave.wallet.engine</groupId>
+            <artifactId>mojave-wallet-engine-mysql</artifactId>
+        </dependency>
     </dependencies>
 </project>

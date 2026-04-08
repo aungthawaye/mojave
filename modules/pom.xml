@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
     </parent>
     <groupId>org.mojave</groupId>
     <artifactId>mojave</artifactId>
@@ -250,21 +250,6 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.wallet</groupId>
-                <artifactId>mojave-wallet-admin</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.wallet</groupId>
-                <artifactId>mojave-wallet-admin-client</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.wallet</groupId>
-                <artifactId>mojave-wallet-consumer</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.wallet</groupId>
                 <artifactId>mojave-wallet-contract</artifactId>
                 <version>1.0.0</version>
             </dependency>
@@ -279,18 +264,23 @@
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.wallet</groupId>
-                <artifactId>mojave-wallet-intercom</artifactId>
+                <groupId>org.mojave.wallet.intercom</groupId>
+                <artifactId>mojave-wallet-intercom-consumer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.wallet</groupId>
-                <artifactId>mojave-wallet-intercom-client</artifactId>
+                <groupId>org.mojave.wallet.intercom</groupId>
+                <artifactId>mojave-wallet-intercom-producer</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.wallet</groupId>
-                <artifactId>mojave-wallet-producer</artifactId>
+                <groupId>org.mojave.wallet.intercom</groupId>
+                <artifactId>mojave-wallet-intercom-replier</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.wallet.intercom</groupId>
+                <artifactId>mojave-wallet-intercom-requestor</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>

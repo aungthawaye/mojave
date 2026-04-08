@@ -62,20 +62,33 @@ public class CreateWalletCommandIT extends BaseIT {
 
         assertEquals(firstOutput.walletId(), secondOutput.walletId());
         assertEquals(1, this.balanceQuery.getAll().size());
-        assertEquals(1, this.testWalletEngine.createdWalletCount());
     }
 
     @Test
     @DisplayName("Rollback when wallet engine creation fails")
     public void createWalletEngineFailed() {
 
-        this.testWalletEngine.failNextCreateWallet();
+        this.executeSql("DROP TRIGGER IF EXISTS trg_mwe_wallet_fail_insert");
+        this.executeSql("""
+            CREATE TRIGGER trg_mwe_wallet_fail_insert
+            BEFORE INSERT ON mwe_wallet
+            FOR EACH ROW
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Forced wallet engine insert failure'
+            """);
 
-        assertThrows(
-            RuntimeException.class, () -> this.createWallet(
-                this.createWalletCommand, 103L, Currency.USD, Wallet.DEFAULT_SCENARIO,
-                "Failure Wallet"));
-        assertEquals(0, this.balanceQuery.getAll().size());
+        try {
+
+            assertThrows(
+                RuntimeException.class, () -> this.createWallet(
+                    this.createWalletCommand, 103L, Currency.USD, Wallet.DEFAULT_SCENARIO,
+                    "Failure Wallet"));
+            assertEquals(0, this.balanceQuery.getAll().size());
+
+        } finally {
+
+            this.executeSql("DROP TRIGGER IF EXISTS trg_mwe_wallet_fail_insert");
+        }
     }
 
 }

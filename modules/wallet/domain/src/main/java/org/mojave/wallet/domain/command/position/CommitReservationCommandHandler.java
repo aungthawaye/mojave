@@ -21,7 +21,7 @@
 package org.mojave.wallet.domain.command.position;
 
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.wallet.contract.command.position.CommitReservationCommand;
@@ -57,10 +57,10 @@ public class CommitReservationCommandHandler implements CommitReservationCommand
             final var committed = this.walletEngine.commitPositionReservation(
                 new PositionUpdateId(Snowflake.get().nextId()), input.reservationId());
 
-            final var positionId = new PositionId(committed.walletId().getId());
+            final var walletId = new WalletId(committed.walletId().getId());
 
             final var output = new Output(
-                committed.positionUpdateId(), positionId, committed.action(),
+                committed.positionUpdateId(), walletId, committed.action(),
                 committed.transactionId(), committed.currency(), committed.amount(),
                 committed.oldPosition(), committed.newPosition(), committed.oldReserved(),
                 committed.newReserved(), committed.netDebitCap(), committed.transactionAt());

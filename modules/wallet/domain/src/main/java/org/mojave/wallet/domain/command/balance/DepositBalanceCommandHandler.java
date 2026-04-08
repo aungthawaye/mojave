@@ -20,7 +20,7 @@
 
 package org.mojave.wallet.domain.command.balance;
 
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
@@ -68,7 +68,6 @@ public class DepositBalanceCommandHandler implements DepositBalanceCommand {
         }
 
         final var walletId = new WalletId(wallet.walletId().getId());
-        final var balanceId = new BalanceId(wallet.walletId().getId());
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());
 
         try {
@@ -78,7 +77,7 @@ public class DepositBalanceCommandHandler implements DepositBalanceCommand {
                 input.description(), balanceUpdateId);
 
             final var output = new Output(
-                history.balanceUpdateId(), balanceId, history.action(),
+                history.balanceUpdateId(), walletId, history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt());
 

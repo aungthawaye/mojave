@@ -29,7 +29,9 @@ public final class FundTransferFlowDimension {
     }
 
     public enum Amounts {
-        TRANSFER_AMOUNT
+        TRANSFER_AMOUNT,
+        PAYEE_FSP_FEE,
+        PAYEE_FSP_COMMISSION
     }
 
 }

@@ -63,6 +63,38 @@ public class MySqlLedgerEngine implements LedgerEngine {
         WHERE account_id = ?
         """;
 
+    private static final String SQL_CHECK_DUPLICATE_POSTING = """
+        SELECT COUNT(*)
+        FROM lgr_ledger_movement
+        WHERE account_id = ?
+          AND side = ?
+          AND transaction_id = ?
+        """;
+
+    private static final String SQL_SELECT_MOVEMENTS_BY_TRANSACTION = """
+        SELECT ledger_movement_id,
+               step,
+               account_id,
+               side,
+               currency,
+               amount,
+               old_debits,
+               old_credits,
+               new_debits,
+               new_credits,
+               transaction_id,
+               transaction_at,
+               scenario,
+               flow_definition_id,
+               flow_line_id,
+               movement_stage,
+               movement_result,
+               created_at
+        FROM lgr_ledger_movement
+        WHERE transaction_id = ?
+        ORDER BY ledger_movement_id
+        """;
+
     private final JdbcTemplate jdbcTemplate;
 
     private final ObjectMapper objectMapper;
@@ -152,13 +184,9 @@ public class MySqlLedgerEngine implements LedgerEngine {
     }
 
     @Override
-    public LedgerBalance createLedgerBalance(AccountId accountId,
-                                             Currency currency,
-                                             Integer scale,
-                                             Side nature,
-                                             BigDecimal postedDebits,
-                                             BigDecimal postedCredits,
-                                             OverdraftMode overdraftMode,
+    public LedgerBalance createLedgerBalance(AccountId accountId, Currency currency, Integer scale,
+                                             Side nature, BigDecimal postedDebits,
+                                             BigDecimal postedCredits, OverdraftMode overdraftMode,
                                              BigDecimal overdraftLimit)
         throws AccountIdAlreadyTakenException {
 
@@ -274,14 +302,13 @@ public class MySqlLedgerEngine implements LedgerEngine {
     }
 
     @Override
-    public List<Movement> postAccountingFlow(List<Request> requests,
-                                             TransactionId transactionId,
-                                             Instant transactionAt,
-                                             AccountingScenario scenario) throws
-                                                                          InsufficientBalanceException,
-                                                                          OverdraftExceededException,
-                                                                          RestoreFailedException,
-                                                                          DuplicatePostingException {
+    public List<Movement> postAccountingFlow(List<Request> requests, TransactionId transactionId,
+                                             Instant transactionAt, AccountingScenario scenario)
+        throws
+        InsufficientBalanceException,
+        OverdraftExceededException,
+        RestoreFailedException,
+        DuplicatePostingException {
 
         try {
 
@@ -308,7 +335,7 @@ public class MySqlLedgerEngine implements LedgerEngine {
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
-            return this.jdbcTemplate.execute((ConnectionCallback<List<Movement>>) con -> {
+            final var output = this.jdbcTemplate.execute((ConnectionCallback<ProcedureOutput>) con -> {
 
                 var movements = new ArrayList<Movement>();
 
@@ -331,10 +358,10 @@ public class MySqlLedgerEngine implements LedgerEngine {
                                         handleError(rs, transactionId);
                                     }
                                     case "SUCCESS" -> {
-                                        return handleSuccess(rs, transactionId);
+                                        return new ProcedureOutput(ProcedureStatus.SUCCESS, movements);
                                     }
                                     case "IGNORED" -> {
-                                        return movements;
+                                        return new ProcedureOutput(ProcedureStatus.IGNORED, movements);
                                     }
                                     default -> { }
                                 }
@@ -346,9 +373,15 @@ public class MySqlLedgerEngine implements LedgerEngine {
                     }
                 }
 
-                return movements;
+                return new ProcedureOutput(ProcedureStatus.IGNORED, movements);
 
             });
+
+            if (output.status() == ProcedureStatus.SUCCESS) {
+                return this.fetchMovements(transactionId);
+            }
+
+            return output.movements();
 
         } catch (Exception e) {
 
@@ -389,6 +422,15 @@ public class MySqlLedgerEngine implements LedgerEngine {
         var debits = rs.getBigDecimal("err_debits");
         var credits = rs.getBigDecimal("err_credits");
 
+        if (code == null || code.isBlank()) {
+
+            if (this.isDuplicatePosting(accountId, side, transactionId)) {
+                code = "DUPLICATE_POSTING";
+            } else {
+                throw new NoMovementResultException();
+            }
+        }
+
         switch (code) {
 
             case "DUPLICATE_POSTING": {
@@ -424,42 +466,45 @@ public class MySqlLedgerEngine implements LedgerEngine {
         }
     }
 
-    private List<Movement> handleSuccess(ResultSet rs, TransactionId transactionId)
-        throws SQLException {
+    private boolean isDuplicatePosting(final long accountId, final String side,
+                                       final TransactionId transactionId) {
 
-        var movements = new ArrayList<Movement>();
+        if (accountId <= 0 || side == null || side.isBlank() || transactionId == null) {
+            return false;
+        }
 
-        do {
+        final var duplicatePostingCount = this.jdbcTemplate.queryForObject(
+            SQL_CHECK_DUPLICATE_POSTING,
+            Long.class,
+            accountId,
+            side,
+            transactionId.getId());
 
-            var ledgerMovementId = rs.getLong("ledger_movement_id");
-            var step = rs.getInt("step");
-            var accountId = rs.getLong("account_id");
-            var side = rs.getString("side");
-            var currency = Currency.valueOf(rs.getString("currency"));
-            var amount = rs.getBigDecimal("amount");
-            var oldDebits = rs.getBigDecimal("old_debits");
-            var oldCredits = rs.getBigDecimal("old_credits");
-            var newDebits = rs.getBigDecimal("new_debits");
-            var newCredits = rs.getBigDecimal("new_credits");
-            var txnId = new TransactionId(rs.getLong("transaction_id"));
-            var txnAt = Instant.ofEpochSecond(rs.getLong("transaction_at"));
-            var scenario = AccountingScenario.valueOf(rs.getString("scenario"));
-            var flowDefinitionId = new FlowDefinitionId(rs.getLong("flow_definition_id"));
-            var flowLineId = new FlowLineId(rs.getLong("flow_line_id"));
-            var movementStage = MovementStage.valueOf(rs.getString("movement_stage"));
-            var movementResult = MovementResult.valueOf(rs.getString("movement_result"));
-            var createdAt = Instant.ofEpochSecond(rs.getLong("created_at"));
+        return duplicatePostingCount != null && duplicatePostingCount > 0;
+    }
 
-            var movement = new Movement(
-                new LedgerMovementId(ledgerMovementId), step, new AccountId(accountId),
-                Side.valueOf(side), currency, amount, new DrCr(oldDebits, oldCredits),
-                new DrCr(newDebits, newCredits), txnId, txnAt, scenario, flowDefinitionId,
-                flowLineId, movementStage, movementResult, createdAt);
-            movements.add(movement);
+    private List<Movement> fetchMovements(final TransactionId transactionId) {
 
-        } while (rs.next());
-
-        return movements;
+        return this.jdbcTemplate.query(
+            SQL_SELECT_MOVEMENTS_BY_TRANSACTION,
+            (rs, __) -> new Movement(
+                new LedgerMovementId(rs.getLong("ledger_movement_id")),
+                rs.getInt("step"),
+                new AccountId(rs.getLong("account_id")),
+                Side.valueOf(rs.getString("side")),
+                Currency.valueOf(rs.getString("currency")),
+                rs.getBigDecimal("amount"),
+                new DrCr(rs.getBigDecimal("old_debits"), rs.getBigDecimal("old_credits")),
+                new DrCr(rs.getBigDecimal("new_debits"), rs.getBigDecimal("new_credits")),
+                new TransactionId(rs.getLong("transaction_id")),
+                Instant.ofEpochSecond(rs.getLong("transaction_at")),
+                AccountingScenario.valueOf(rs.getString("scenario")),
+                new FlowDefinitionId(rs.getLong("flow_definition_id")),
+                new FlowLineId(rs.getLong("flow_line_id")),
+                MovementStage.valueOf(rs.getString("movement_stage")),
+                MovementResult.valueOf(rs.getString("movement_result")),
+                Instant.ofEpochSecond(rs.getLong("created_at"))),
+            transactionId.getId());
     }
 
     public record LedgerDbSettings(LedgerDbSettings.Connection connection,
@@ -487,8 +532,15 @@ public class MySqlLedgerEngine implements LedgerEngine {
                            String amount,
                            long transactionId,
                            long transactionAt,
-                           String transactionType,
+                           String scenario,
                            long flowDefinitionId,
                            long flowLineId) { }
+
+    private record ProcedureOutput(ProcedureStatus status, List<Movement> movements) { }
+
+    private enum ProcedureStatus {
+        SUCCESS,
+        IGNORED
+    }
 
 }

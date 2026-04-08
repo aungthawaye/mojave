@@ -23,66 +23,63 @@ package org.mojave.common.datatype.converter.identifier.settlement;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
-import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
+import org.mojave.common.datatype.identifier.settlement.SettlementId;
 
-public class SettlementIdJavaType extends AbstractClassJavaType<BalanceId> {
+public class SettlementIdJavaType extends AbstractClassJavaType<SettlementId> {
 
     public static final SettlementIdJavaType INSTANCE = new SettlementIdJavaType();
 
     public SettlementIdJavaType() {
 
-        super(BalanceId.class, ImmutableMutabilityPlan.instance());
+        super(SettlementId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public BalanceId fromString(CharSequence string) {
+    public SettlementId fromString(CharSequence string) {
 
-        return (string == null) ? null : new BalanceId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new SettlementId(string.toString());
     }
 
     @Override
     public JdbcType getRecommendedJdbcType(JdbcTypeIndicators context) {
 
-        return BigIntJdbcType.INSTANCE;
+        return VarcharJdbcType.INSTANCE;
     }
 
     @Override
-    public String toString(BalanceId value) {
+    public String toString(SettlementId value) {
 
-        return value == null ? null : String.valueOf(value.getId());
+        return value == null ? null : value.getId();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(BalanceId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(SettlementId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
         }
 
-        Long primitive = value.getId();
+        String string = value.getId();
 
-        if (type.isAssignableFrom(Long.class)) {
-            return (X) primitive;
-        }
-
-        if (type.isAssignableFrom(Number.class)) {
-            return (X) primitive;
+        if (type.isAssignableFrom(String.class)) {
+            return (X) string;
         }
 
         throw new IllegalArgumentException("Unsupported unwrap to " + type);
     }
 
     @Override
-    public BalanceId wrap(Object value, WrapperOptions options) {
+    public SettlementId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case BalanceId balanceId -> balanceId;
-            case Number n -> new BalanceId(n.longValue());
+            case SettlementId settlementId -> settlementId;
+            case String s -> new SettlementId(s);
+            case Character c -> new SettlementId(c.toString());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };

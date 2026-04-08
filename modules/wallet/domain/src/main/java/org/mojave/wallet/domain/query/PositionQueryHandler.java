@@ -21,7 +21,6 @@
 package org.mojave.wallet.domain.query;
 
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.jpa.routing.annotation.Read;
@@ -51,13 +50,11 @@ public class PositionQueryHandler implements PositionQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public WalletData get(final PositionId positionId) {
-
-        final var walletId = new WalletId(positionId.getId());
+    public WalletData get(final WalletId walletId) {
 
         return this.walletRepository
                    .findById(walletId)
-                   .orElseThrow(() -> new PositionIdNotFoundException(positionId))
+                   .orElseThrow(() -> new PositionIdNotFoundException(walletId))
                    .convert();
     }
 

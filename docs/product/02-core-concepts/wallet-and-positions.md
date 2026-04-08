@@ -187,7 +187,7 @@ public interface ReservePositionCommand {
 
     record Output(
         PositionUpdateId positionUpdateId,
-        PositionId positionId,
+        WalletId positionId,
         PositionAction action,          // RESERVE
         BigDecimal oldPosition,
         BigDecimal newPosition,
@@ -289,7 +289,7 @@ Every position change is tracked:
 ```java
 record PositionUpdate(
     PositionUpdateId positionUpdateId,
-    PositionId positionId,
+    WalletId positionId,
     TransactionId transactionId,
     PositionAction action,         // RESERVE, COMMIT, ROLLBACK
     BigDecimal amount,
@@ -335,7 +335,7 @@ FSP A Positions:
 Position getPosition(WalletOwnerId ownerId, Currency currency);
 
 record Position(
-    PositionId positionId,
+    WalletId positionId,
     WalletOwnerId ownerId,
     Currency currency,
     BigDecimal amount,           // Current position

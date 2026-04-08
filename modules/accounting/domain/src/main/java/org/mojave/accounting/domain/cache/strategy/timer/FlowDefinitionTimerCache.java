@@ -81,6 +81,13 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
             return null;
         }
 
+        final var flowDefinitionData = this.snapshotRef.get().withId.get(flowDefinitionId);
+
+        if (flowDefinitionData != null) {
+            return flowDefinitionData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withId.get(flowDefinitionId);
     }
 
@@ -92,6 +99,13 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
         }
 
         final var key = FlowDefinitionCache.Keys.forTransaction(scenario, currency);
+        final var flowDefinitionData = this.snapshotRef.get().withScenarioCurrency.get(key);
+
+        if (flowDefinitionData != null) {
+            return flowDefinitionData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withScenarioCurrency.get(key);
     }
 

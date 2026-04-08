@@ -62,29 +62,25 @@ public class AccountingIntercomReplierDependencies
             System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
 
         this.flowDefinitionCache = new FlowDefinitionTimerCache(
-            flowDefinitionRepository,
-            Integer.parseInt(System
-                                 .getenv()
-                                 .getOrDefault(
-                                     "FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
+            flowDefinitionRepository, Integer.parseInt(System.getenv()
+                                                             .getOrDefault(
+                                                                 "FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS",
+                                                                 "5000")));
     }
 
     @Bean
-    @Override
     public AccountCache accountCache() {
 
         return this.accountCache;
     }
 
     @Bean
-    @Override
     public CoaEntryCache coaEntryCache() {
 
         return this.coaEntryCache;
     }
 
     @Bean
-    @Override
     public FlowDefinitionCache flowDefinitionCache() {
 
         return this.flowDefinitionCache;
@@ -92,7 +88,7 @@ public class AccountingIntercomReplierDependencies
 
     @Bean
     @Override
-    public LedgerEngine ledger() {
+    public LedgerEngine ledgerEngine() {
 
         return this.ledgerEngine;
     }

@@ -5,6 +5,6 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         AccountingDomainConfiguration.class,
-        AccountingDomainSettings.class,
+        AccountingDomainTestSettings.class,
         AccountingDomainDependencies.class})
 public class AccountingDomainTestConfiguration { }

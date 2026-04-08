@@ -21,7 +21,7 @@
 package org.mojave.wallet.contract.query;
 
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.data.WalletData;
 
@@ -29,7 +29,7 @@ import java.util.List;
 
 public interface PositionQuery {
 
-    WalletData get(PositionId positionId);
+    WalletData get(WalletId walletId);
 
     List<WalletData> get(WalletOwnerId ownerId, Currency currency);
 

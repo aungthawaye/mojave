@@ -20,7 +20,7 @@
 
 package org.mojave.wallet.domain.command.balance;
 
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
@@ -71,7 +71,6 @@ public class WithdrawBalanceCommandHandler implements WithdrawBalanceCommand {
         }
 
         final var walletId = new WalletId(wallet.walletId().getId());
-        final var balanceId = new BalanceId(wallet.walletId().getId());
         final var balanceUpdateId = new BalanceUpdateId(Snowflake.get().nextId());
 
         try {
@@ -81,7 +80,7 @@ public class WithdrawBalanceCommandHandler implements WithdrawBalanceCommand {
                 input.amount(), "Withdraw funds");
 
             final var output = new Output(
-                history.balanceUpdateId(), balanceId, history.action(),
+                history.balanceUpdateId(), walletId, history.action(),
                 history.transactionId(), history.currency(), history.amount(), history.oldBalance(),
                 history.newBalance(), history.transactionAt());
 
@@ -94,7 +93,7 @@ public class WithdrawBalanceCommandHandler implements WithdrawBalanceCommand {
 
         } catch (final WalletEngine.InsufficientBalanceException e) {
             throw new InsufficientBalanceException(
-                balanceId, e.getAmount(), e.getOldBalance(), e.getTransactionId());
+                walletId, e.getAmount(), e.getOldBalance(), e.getTransactionId());
         }
     }
 

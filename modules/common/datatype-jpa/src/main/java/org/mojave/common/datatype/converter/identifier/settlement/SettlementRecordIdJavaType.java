@@ -26,21 +26,21 @@ import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
 import org.hibernate.type.descriptor.jdbc.BigIntJdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcType;
 import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.settlement.SettlementRecordId;
 
-public class SettlementRecordIdJavaType extends AbstractClassJavaType<BalanceId> {
+public class SettlementRecordIdJavaType extends AbstractClassJavaType<SettlementRecordId> {
 
     public static final SettlementRecordIdJavaType INSTANCE = new SettlementRecordIdJavaType();
 
     public SettlementRecordIdJavaType() {
 
-        super(BalanceId.class, ImmutableMutabilityPlan.instance());
+        super(SettlementRecordId.class, ImmutableMutabilityPlan.instance());
     }
 
     @Override
-    public BalanceId fromString(CharSequence string) {
+    public SettlementRecordId fromString(CharSequence string) {
 
-        return (string == null) ? null : new BalanceId(Long.valueOf(string.toString()));
+        return (string == null) ? null : new SettlementRecordId(Long.valueOf(string.toString()));
     }
 
     @Override
@@ -50,14 +50,14 @@ public class SettlementRecordIdJavaType extends AbstractClassJavaType<BalanceId>
     }
 
     @Override
-    public String toString(BalanceId value) {
+    public String toString(SettlementRecordId value) {
 
         return value == null ? null : String.valueOf(value.getId());
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X unwrap(BalanceId value, Class<X> type, WrapperOptions options) {
+    public <X> X unwrap(SettlementRecordId value, Class<X> type, WrapperOptions options) {
 
         if (value == null) {
             return null;
@@ -77,12 +77,12 @@ public class SettlementRecordIdJavaType extends AbstractClassJavaType<BalanceId>
     }
 
     @Override
-    public BalanceId wrap(Object value, WrapperOptions options) {
+    public SettlementRecordId wrap(Object value, WrapperOptions options) {
 
         return switch (value) {
             case null -> null;
-            case BalanceId balanceId -> balanceId;
-            case Number n -> new BalanceId(n.longValue());
+            case SettlementRecordId settlementRecordId -> settlementRecordId;
+            case Number n -> new SettlementRecordId(n.longValue());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());
         };

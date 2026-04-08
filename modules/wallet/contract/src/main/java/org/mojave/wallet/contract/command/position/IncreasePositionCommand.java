@@ -27,7 +27,7 @@ import jakarta.validation.constraints.Size;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.PositionAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
@@ -57,7 +57,7 @@ public interface IncreasePositionCommand {
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(PositionUpdateId positionUpdateId,
-                  PositionId positionId,
+                  WalletId walletId,
                   PositionAction action,
                   TransactionId transactionId,
                   Currency currency,

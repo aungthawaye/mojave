@@ -38,17 +38,25 @@ public class InvalidAmountNameForAccountingScenarioException extends UncheckedDo
 
     private static final String VALUES_DELIMITER = ",";
 
-    private static final String TEMPLATE = "Amount Name is invalid for Accounting Scenario. It must be one of {0}.";
+    private static final String TEMPLATE = "Amount Name ({0}) is invalid for Accounting Scenario ({1}). It must be one of {2}.";
+
+    private final String amountName;
 
     private final AccountingScenario scenario;
 
     private final Set<String> amountNames;
 
-    public InvalidAmountNameForAccountingScenarioException(final AccountingScenario scenario,
+    public InvalidAmountNameForAccountingScenarioException(final String amountName,
+                                                           final AccountingScenario scenario,
                                                            final Set<String> amountNames) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{amountNames.toString()}));
+        super(new ErrorTemplate(
+            CODE, TEMPLATE, new String[]{
+            amountName,
+            scenario.name(),
+            amountNames.toString()}));
 
+        this.amountName = amountName;
         this.scenario = scenario;
         this.amountNames = amountNames;
     }
@@ -59,19 +67,20 @@ public class InvalidAmountNameForAccountingScenarioException extends UncheckedDo
             return Set.of();
         }
 
-        return Arrays
-                   .stream(values.split(VALUES_DELIMITER))
-                   .map(String::trim)
-                   .filter(value -> !value.isBlank())
-                   .collect(Collectors.toUnmodifiableSet());
+        return Arrays.stream(values.split(VALUES_DELIMITER))
+                     .map(String::trim)
+                     .filter(value -> !value.isBlank())
+                     .collect(Collectors.toUnmodifiableSet());
     }
 
-    public static InvalidAmountNameForAccountingScenarioException from(final Map<String, String> extras) {
+    public static InvalidAmountNameForAccountingScenarioException from(
+        final Map<String, String> extras) {
 
+        final var amountName = extras.get(Keys.AMOUNT_NAME);
         final var scenario = AccountingScenario.valueOf(extras.get(Keys.SCENARIO));
         final var amounts = deserializeValues(extras.get(Keys.AMOUNTS));
 
-        return new InvalidAmountNameForAccountingScenarioException(scenario, amounts);
+        return new InvalidAmountNameForAccountingScenarioException(amountName, scenario, amounts);
     }
 
     private static String serializeValues(final Set<String> values) {
@@ -84,6 +93,7 @@ public class InvalidAmountNameForAccountingScenarioException extends UncheckedDo
 
         final var extras = new HashMap<String, String>();
 
+        extras.put(Keys.AMOUNT_NAME, this.amountName);
         extras.put(Keys.SCENARIO, this.scenario.name());
         extras.put(Keys.AMOUNTS, serializeValues(this.amountNames));
 
@@ -91,6 +101,8 @@ public class InvalidAmountNameForAccountingScenarioException extends UncheckedDo
     }
 
     public static class Keys {
+
+        public static final String AMOUNT_NAME = "amountName";
 
         public static final String SCENARIO = "scenario";
 

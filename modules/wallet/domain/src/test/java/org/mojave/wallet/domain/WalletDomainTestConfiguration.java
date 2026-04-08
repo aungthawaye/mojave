@@ -5,6 +5,6 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         WalletDomainConfiguration.class,
-        WalletDomainSettings.class,
+        WalletDomainTestSettings.class,
         WalletDomainDependencies.class})
 public class WalletDomainTestConfiguration { }

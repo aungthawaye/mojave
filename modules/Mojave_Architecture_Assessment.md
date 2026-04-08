@@ -102,7 +102,7 @@ The `core/common/datatype` module provides shared domain primitives used across 
   - Accounting: `AccountId`, `ChartId`, `FlowDefinitionId`, `FlowLineId`, `LedgerMovementId`
   - Participant: `FspId`, `HubId`, `OracleId`, `SspId`, `EndpointId`
   - Transaction: `TransactionId`, `TransactionStepId`
-  - Wallet: `BalanceId`, `PositionId`
+  - Wallet: `WalletId`
   - Settlement: `SettlementDefinitionId`, `FilterGroupId`, `FilterItemId`, `SettlementRecordId`, `SettlementBatchId`
 
 - **Enumerations:** Domain-specific type-safe enums

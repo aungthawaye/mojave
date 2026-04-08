@@ -77,7 +77,7 @@ public interface ReservePositionCommand {
 
     record Output(
         PositionUpdateId positionUpdateId,
-        PositionId positionId,
+        WalletId positionId,
         PositionAction action,         // RESERVE
         BigDecimal oldPosition,
         BigDecimal newPosition,
@@ -386,7 +386,7 @@ Every position change is tracked:
 ```java
 record PositionUpdate(
     PositionUpdateId positionUpdateId,
-    PositionId positionId,
+    WalletId positionId,
     TransactionId transactionId,
     PositionAction action,           // RESERVE, COMMIT, ROLLBACK, DEPOSIT, WITHDRAW
     BigDecimal amount,
@@ -419,13 +419,13 @@ List<PositionUpdate> getUpdates(TransactionId transactionId);
 
 **By Position:**
 ```java
-List<PositionUpdate> getUpdates(PositionId positionId,
+List<PositionUpdate> getUpdates(WalletId positionId,
                                 Instant from, Instant to);
 ```
 
 **By Action:**
 ```java
-List<PositionUpdate> getUpdatesByAction(PositionId positionId,
+List<PositionUpdate> getUpdatesByAction(WalletId positionId,
                                         PositionAction action);
 ```
 
@@ -472,7 +472,7 @@ Position updates have timeout protection:
 @QueryHints({
     @QueryHint(name = "javax.persistence.lock.timeout", value = "5000")
 })
-Position findAndLockPosition(PositionId positionId);
+Position findAndLockPosition(WalletId positionId);
 ```
 
 ## Position Reconciliation

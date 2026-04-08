@@ -6,12 +6,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.BalanceAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
+import org.mojave.wallet.contract.command.balance.DepositBalanceCommand;
 import org.mojave.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;
+import org.mojave.wallet.contract.command.balance.WithdrawBalanceCommand;
+import org.mojave.wallet.contract.exception.balance.InsufficientBalanceException;
+import org.mojave.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
 import org.mojave.wallet.contract.exception.balance.ReversalFailedInWalletException;
-import org.mojave.wallet.contract.engine.WalletEngine;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.domain.BaseIT;
 import org.mojave.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -39,14 +44,17 @@ public class ReverseBalanceWithdrawCommandIT extends BaseIT {
     @Autowired
     private ReverseBalanceWithdrawCommand reverseBalanceWithdrawCommand;
 
+    @Autowired
+    private DepositBalanceCommand depositBalanceCommand;
+
+    @Autowired
+    private WithdrawBalanceCommand withdrawBalanceCommand;
+
     @Test
     @DisplayName("Throw when reversing missing withdraw")
     public void reversalFailed() {
 
         final var reversalId = new BalanceUpdateId(30401L);
-
-        this.testWalletEngine.failNextRefundBalance(
-            new WalletEngine.BalanceReversalFailedException(reversalId));
 
         final var exception = assertThrows(
             ReversalFailedInWalletException.class,
@@ -58,25 +66,32 @@ public class ReverseBalanceWithdrawCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Reverse withdraw successfully")
-    public void successful() throws ReversalFailedInWalletException {
+    public void successful() throws
+                             ReversalFailedInWalletException,
+                             NoBalanceUpdateForTransactionException,
+                             InsufficientBalanceException {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 305L, Currency.USD, "Reverse Wallet");
-        final var withdrawId = new BalanceUpdateId(30501L);
-        final var history = this.balanceHistory(
-            new BalanceUpdateId(30502L), walletId, BalanceAction.REVERSE_WITHDRAW,
-            new TransactionId(30503L), Currency.USD, new BigDecimal("7.50"),
-            new BigDecimal("20.00"), new BigDecimal("27.50"), TRANSACTION_AT, withdrawId);
+        this.depositBalanceCommand.execute(
+            new DepositBalanceCommand.Input(
+                new WalletOwnerId(305L), Currency.USD, new BigDecimal("20.00"),
+                new TransactionId(30501L), TRANSACTION_AT, "Seed balance"));
 
-        this.testWalletEngine.completeNextRefundBalance(history);
+        final var withdrawOutput = this.withdrawBalanceCommand.execute(
+            new WithdrawBalanceCommand.Input(
+                new WalletOwnerId(305L), Currency.USD, new BigDecimal("7.50"),
+                new TransactionId(30502L), TRANSACTION_AT, "Withdraw before reversal"));
 
         final var output = this.reverseBalanceWithdrawCommand.execute(
-            new ReverseBalanceWithdrawCommand.Input(withdrawId, "Reverse previous withdraw"));
+            new ReverseBalanceWithdrawCommand.Input(
+                withdrawOutput.balanceUpdateId(), "Reverse previous withdraw"));
 
-        assertEquals(history.balanceUpdateId(), output.balanceUpdateId());
-        assertEquals(new BalanceId(walletId.getId()), output.balanceId());
+        assertNotNull(output.balanceUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
         assertEquals(BalanceAction.REVERSE_WITHDRAW, output.action());
-        assertEquals(withdrawId, output.withdrawId());
+        assertEquals(withdrawOutput.balanceUpdateId(), output.withdrawId());
+        assertEquals(0, output.newBalance().compareTo(new BigDecimal("20.00")));
     }
 
 }

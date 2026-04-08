@@ -27,7 +27,7 @@ import jakarta.validation.constraints.Size;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.BalanceAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.wallet.contract.exception.balance.ReversalFailedInWalletException;
@@ -47,7 +47,7 @@ public interface ReverseBalanceWithdrawCommand {
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(BalanceUpdateId balanceUpdateId,
-                  BalanceId balanceId,
+                  WalletId walletId,
                   BalanceAction action,
                   TransactionId transactionId,
                   Currency currency,

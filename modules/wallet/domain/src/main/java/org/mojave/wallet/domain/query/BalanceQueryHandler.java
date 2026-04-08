@@ -21,7 +21,6 @@
 package org.mojave.wallet.domain.query;
 
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.jpa.routing.annotation.Read;
@@ -51,13 +50,11 @@ public class BalanceQueryHandler implements BalanceQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public WalletData get(final BalanceId balanceId) {
-
-        final var walletId = new WalletId(balanceId.getId());
+    public WalletData get(final WalletId walletId) {
 
         return this.walletRepository
                    .findById(walletId)
-                   .orElseThrow(() -> new BalanceIdNotFoundException(balanceId))
+                   .orElseThrow(() -> new BalanceIdNotFoundException(walletId))
                    .convert();
     }
 

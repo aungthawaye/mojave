@@ -92,8 +92,7 @@ public class PostAccountingFlowCommandHandler implements PostAccountingFlowComma
         if (flowDefinition.activationStatus() != ActivationStatus.ACTIVE ||
                 flowDefinition.terminationStatus() != TerminationStatus.ALIVE) {
 
-            throw new FlowDefinitionNotConfiguredException(
-                input.scenario(), input.currency());
+            throw new FlowDefinitionNotConfiguredException(input.scenario(), input.currency());
         }
 
         var requests = new ArrayList<LedgerEngine.Request>();
@@ -135,8 +134,8 @@ public class PostAccountingFlowCommandHandler implements PostAccountingFlowComma
 
             var request = new LedgerEngine.Request(
                 new LedgerMovementId(Snowflake.get().nextId()), flowLine.step(), accountId,
-                flowLine.side(), input.currency(), amount, flowDefinition.flowDefinitionId(),
-                flowLine.flowLineId());
+                flowLine.side(), input.currency(), amount, flowDefinition.scenario(),
+                flowDefinition.flowDefinitionId(), flowLine.flowLineId());
 
             requests.add(request);
         }

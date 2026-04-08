@@ -6,14 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.PositionAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
 import org.mojave.wallet.contract.command.position.DecreasePositionCommand;
 import org.mojave.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.wallet.contract.exception.position.PositionNotExistException;
-import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.domain.BaseIT;
 import org.mojave.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -57,21 +56,24 @@ public class DecreasePositionCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when engine returns no position update")
-    public void noPositionUpdate() {
+    public void noPositionUpdate() throws NoPositionUpdateForTransactionException {
 
-        this.createDefaultWallet(this.createWalletCommand, 404L, Currency.USD, "Decrease Wallet");
+        final var walletId = this.createDefaultWallet(
+            this.createWalletCommand, 404L, Currency.USD, "Decrease Wallet");
+        this.updateWalletEngineSnapshot(
+            walletId, BigDecimal.ZERO, new BigDecimal("20.00"), BigDecimal.ZERO,
+            new BigDecimal("50.00"));
 
         final var transactionId = new TransactionId(40401L);
+        final var input = new DecreasePositionCommand.Input(
+            new WalletOwnerId(404L), Currency.USD, new BigDecimal("4.00"),
+            transactionId, TRANSACTION_AT, "Decrease without update");
 
-        this.testWalletEngine.failNextDecreasePosition(
-            new WalletEngine.NoPositionUpdateException(transactionId));
+        this.decreasePositionCommand.execute(input);
 
         final var exception = assertThrows(
             NoPositionUpdateForTransactionException.class,
-            () -> this.decreasePositionCommand.execute(
-                new DecreasePositionCommand.Input(
-                    new WalletOwnerId(404L), Currency.USD, new BigDecimal("4.00"),
-                    transactionId, TRANSACTION_AT, "Decrease without update")));
+            () -> this.decreasePositionCommand.execute(input));
 
         assertEquals(transactionId, exception.getTransactionId());
     }
@@ -82,24 +84,21 @@ public class DecreasePositionCommandIT extends BaseIT {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 405L, Currency.USD, "Decrease Wallet");
+        this.updateWalletEngineSnapshot(
+            walletId, BigDecimal.ZERO, new BigDecimal("20.00"), BigDecimal.ZERO,
+            new BigDecimal("50.00"));
         final var transactionId = new TransactionId(40501L);
-        final var history = this.positionHistory(
-            new PositionUpdateId(40502L), walletId, PositionAction.DECREASE, transactionId,
-            Currency.USD, new BigDecimal("4.00"), new BigDecimal("20.00"),
-            new BigDecimal("16.00"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("50.00"),
-            TRANSACTION_AT);
-
-        this.testWalletEngine.completeNextDecreasePosition(history);
 
         final var output = this.decreasePositionCommand.execute(
             new DecreasePositionCommand.Input(
                 new WalletOwnerId(405L), Currency.USD, new BigDecimal("4.00"),
                 transactionId, TRANSACTION_AT, "Decrease position"));
 
-        assertEquals(history.positionUpdateId(), output.positionUpdateId());
-        assertEquals(new PositionId(walletId.getId()), output.positionId());
+        assertNotNull(output.positionUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
         assertEquals(PositionAction.DECREASE, output.action());
-        assertEquals(new BigDecimal("16.00"), output.newPosition());
+        assertEquals(0, output.oldPosition().compareTo(new BigDecimal("20.00")));
+        assertEquals(0, output.newPosition().compareTo(new BigDecimal("16.00")));
     }
 
 }

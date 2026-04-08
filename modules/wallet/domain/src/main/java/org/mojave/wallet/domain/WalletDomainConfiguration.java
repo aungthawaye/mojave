@@ -24,8 +24,13 @@ import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.domain.cache.WalletCache;
+import org.mojave.wallet.domain.cache.strategy.local.WalletLocalCache;
+import org.mojave.wallet.domain.repository.WalletRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+
+import java.util.Objects;
 
 @ComponentScan(basePackages = {"org.mojave.wallet.domain"})
 @Import(
@@ -34,11 +39,24 @@ import org.springframework.context.annotation.Import;
         RoutingJpaConfiguration.class})
 public class WalletDomainConfiguration {
 
+    private final WalletRepository walletRepository;
+
+    public WalletDomainConfiguration(final WalletRepository walletRepository) {
+
+        Objects.requireNonNull(walletRepository);
+
+        this.walletRepository = walletRepository;
+    }
+
+    @Bean
+    public WalletCache walletCache() {
+
+        return new WalletLocalCache(this.walletRepository);
+    }
+
     public interface RequiredDependencies {
 
         WalletEngine walletEngine();
-
-        WalletCache walletCache();
 
     }
 

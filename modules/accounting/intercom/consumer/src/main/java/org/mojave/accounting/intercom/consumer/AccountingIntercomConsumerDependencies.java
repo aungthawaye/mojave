@@ -71,21 +71,18 @@ public class AccountingIntercomConsumerDependencies
     }
 
     @Bean
-    @Override
     public AccountCache accountCache() {
 
         return this.accountCache;
     }
 
     @Bean
-    @Override
     public CoaEntryCache coaEntryCache() {
 
         return this.coaEntryCache;
     }
 
     @Bean
-    @Override
     public FlowDefinitionCache flowDefinitionCache() {
 
         return this.flowDefinitionCache;
@@ -93,7 +90,7 @@ public class AccountingIntercomConsumerDependencies
 
     @Bean
     @Override
-    public LedgerEngine ledger() {
+    public LedgerEngine ledgerEngine() {
 
         return this.ledgerEngine;
     }

@@ -25,7 +25,7 @@ public interface ReservePositionCommand {
 
     record Output(
         PositionUpdateId positionUpdateId,
-        PositionId positionId,
+        WalletId positionId,
         PositionAction action,
         BigDecimal oldPosition,
         BigDecimal newPosition,

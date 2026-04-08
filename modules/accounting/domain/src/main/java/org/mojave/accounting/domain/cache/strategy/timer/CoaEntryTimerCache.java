@@ -83,6 +83,13 @@ public class CoaEntryTimerCache implements CoaEntryCache {
             return null;
         }
 
+        final var coaEntryData = this.snapshotRef.get().withId.get(coaEntryId);
+
+        if (coaEntryData != null) {
+            return coaEntryData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withId.get(coaEntryId);
     }
 
@@ -93,6 +100,13 @@ public class CoaEntryTimerCache implements CoaEntryCache {
             return null;
         }
 
+        final var coaEntryData = this.snapshotRef.get().withCode.get(code);
+
+        if (coaEntryData != null) {
+            return coaEntryData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCode.get(code);
     }
 
@@ -103,6 +117,13 @@ public class CoaEntryTimerCache implements CoaEntryCache {
             return Set.of();
         }
 
+        final var coaEntries = this.snapshotRef.get().withCoaId.get(coaId);
+
+        if (coaEntries != null && !coaEntries.isEmpty()) {
+            return coaEntries;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCoaId.getOrDefault(coaId, Set.of());
     }
 

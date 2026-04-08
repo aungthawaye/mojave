@@ -20,7 +20,7 @@
 
 package org.mojave.wallet.domain.command.position;
 
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
@@ -72,7 +72,6 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
         }
 
         final var walletId = new WalletId(wallet.walletId().getId());
-        final var positionId = new PositionId(wallet.walletId().getId());
         final var positionUpdateId = new PositionUpdateId(Snowflake.get().nextId());
         LOGGER.info(
             "ReservePositionCommand : positionUpdateId: ({}), transactionId : ({})",
@@ -85,7 +84,7 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
                 input.amount(), input.description());
 
             final var output = new Output(
-                history.positionUpdateId(), positionId, history.action(),
+                history.positionUpdateId(), walletId, history.action(),
                 history.transactionId(), history.currency(), history.amount(),
                 history.oldPosition(), history.newPosition(), history.oldReserved(),
                 history.newReserved(), history.netDebitCap(), history.transactionAt());
@@ -99,7 +98,7 @@ public class ReservePositionCommandHandler implements ReservePositionCommand {
 
         } catch (final WalletEngine.PositionLimitExceededException e) {
             throw new PositionLimitExceededException(
-                positionId, e.getAmount(),
+                walletId, e.getAmount(),
                 e.getOldPosition(), e.getOldReserved(), e.getNetDebitCap(), e.getTransactionId());
         }
     }

@@ -16,16 +16,16 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.mojave.component</groupId>
+            <artifactId>mojave-component-nats</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.wallet</groupId>
             <artifactId>mojave-wallet-domain</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.wallet.engine</groupId>
             <artifactId>mojave-wallet-engine-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-nats</artifactId>
         </dependency>
     </dependencies>
 </project>

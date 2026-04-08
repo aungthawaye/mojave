@@ -5,13 +5,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.PositionAction;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
 import org.mojave.wallet.contract.command.position.CommitReservationCommand;
+import org.mojave.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.wallet.contract.exception.position.FailedToCommitReservationException;
-import org.mojave.wallet.contract.engine.WalletEngine;
+import org.mojave.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
+import org.mojave.wallet.contract.exception.position.PositionLimitExceededException;
+import org.mojave.wallet.contract.exception.position.PositionNotExistException;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.domain.BaseIT;
 import org.mojave.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -39,14 +44,14 @@ public class CommitReservationCommandIT extends BaseIT {
     @Autowired
     private CreateWalletCommand createWalletCommand;
 
+    @Autowired
+    private ReservePositionCommand reservePositionCommand;
+
     @Test
     @DisplayName("Fail to commit reservation when engine cannot commit")
     public void failed() {
 
         final var reservationId = new PositionUpdateId(40101L);
-
-        this.testWalletEngine.failNextCommitPositionReservation(
-            new WalletEngine.PositionReservationCommitFailedException(reservationId));
 
         final var exception = assertThrows(
             FailedToCommitReservationException.class,
@@ -58,26 +63,32 @@ public class CommitReservationCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Commit reservation successfully")
-    public void successful() throws FailedToCommitReservationException {
+    public void successful() throws
+                             FailedToCommitReservationException,
+                             NoPositionUpdateForTransactionException,
+                             PositionLimitExceededException,
+                             PositionNotExistException {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 402L, Currency.USD, "Commit Wallet");
-        final var reservationId = new PositionUpdateId(40201L);
-        final var history = this.positionHistory(
-            new PositionUpdateId(40202L), walletId, PositionAction.COMMIT,
-            new TransactionId(40203L), Currency.USD, new BigDecimal("10.00"),
-            new BigDecimal("50.00"), new BigDecimal("50.00"), new BigDecimal("10.00"),
-            BigDecimal.ZERO, new BigDecimal("100.00"), TRANSACTION_AT);
+        this.updateWalletEngineSnapshot(
+            walletId, BigDecimal.ZERO, new BigDecimal("50.00"), BigDecimal.ZERO,
+            new BigDecimal("100.00"));
 
-        this.testWalletEngine.completeNextCommitPositionReservation(history);
+        final var reservation = this.reservePositionCommand.execute(
+            new ReservePositionCommand.Input(
+                new WalletOwnerId(402L), Currency.USD, new BigDecimal("10.00"),
+                new TransactionId(40201L), TRANSACTION_AT, "Reserve before commit"));
 
         final var output = this.commitReservationCommand.execute(
-            new CommitReservationCommand.Input(reservationId, "Commit reservation"));
+            new CommitReservationCommand.Input(
+                reservation.positionUpdateId(), "Commit reservation"));
 
-        assertEquals(history.positionUpdateId(), output.positionUpdateId());
-        assertEquals(new PositionId(walletId.getId()), output.positionId());
+        assertNotNull(output.positionUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
         assertEquals(PositionAction.COMMIT, output.action());
-        assertEquals(BigDecimal.ZERO, output.newReserved());
+        assertEquals(0, output.newPosition().compareTo(new BigDecimal("60.00")));
+        assertEquals(0, output.newReserved().compareTo(BigDecimal.ZERO));
     }
 
 }

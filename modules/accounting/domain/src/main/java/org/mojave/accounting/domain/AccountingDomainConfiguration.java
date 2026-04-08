@@ -21,13 +21,22 @@
 package org.mojave.accounting.domain;
 
 import org.mojave.accounting.contract.engine.LedgerEngine;
-import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
-import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.cache.FlowDefinitionCache;
+import org.mojave.accounting.domain.cache.strategy.local.AccountLocalCache;
+import org.mojave.accounting.domain.cache.strategy.local.CoaEntryLocalCache;
+import org.mojave.accounting.domain.cache.strategy.local.FlowDefinitionLocalCache;
+import org.mojave.accounting.domain.repository.AccountRepository;
+import org.mojave.accounting.domain.repository.CoaEntryRepository;
+import org.mojave.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
+import org.mojave.component.misc.MiscConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+
+import java.util.Objects;
 
 @ComponentScan(basePackages = {"org.mojave.accounting.domain"})
 @Import(
@@ -36,19 +45,46 @@ import org.springframework.context.annotation.Import;
         RoutingJpaConfiguration.class})
 public class AccountingDomainConfiguration {
 
-    public AccountingDomainConfiguration() {
+    private final AccountRepository accountRepository;
 
+    private final CoaEntryRepository coaEntryRepository;
+
+    private final FlowDefinitionRepository flowDefinitionRepository;
+
+    public AccountingDomainConfiguration(final AccountRepository accountRepository,
+                                         final CoaEntryRepository coaEntryRepository,
+                                         final FlowDefinitionRepository flowDefinitionRepository) {
+
+        Objects.requireNonNull(accountRepository);
+        Objects.requireNonNull(coaEntryRepository);
+        Objects.requireNonNull(flowDefinitionRepository);
+
+        this.accountRepository = accountRepository;
+        this.coaEntryRepository = coaEntryRepository;
+        this.flowDefinitionRepository = flowDefinitionRepository;
+    }
+
+    @Bean
+    public AccountCache accountCache() {
+
+        return new AccountLocalCache(this.accountRepository);
+    }
+
+    @Bean
+    public CoaEntryCache coaEntryCache() {
+
+        return new CoaEntryLocalCache(this.coaEntryRepository);
+    }
+
+    @Bean
+    public FlowDefinitionCache flowDefinitionCache() {
+
+        return new FlowDefinitionLocalCache(this.flowDefinitionRepository);
     }
 
     public interface RequiredDependencies {
 
-        AccountCache accountCache();
-
-        CoaEntryCache coaEntryCache();
-
-        FlowDefinitionCache flowDefinitionCache();
-
-        LedgerEngine ledger();
+        LedgerEngine ledgerEngine();
 
     }
 

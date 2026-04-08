@@ -6,14 +6,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.BalanceAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
+import org.mojave.wallet.contract.command.balance.DepositBalanceCommand;
 import org.mojave.wallet.contract.command.balance.WithdrawBalanceCommand;
 import org.mojave.wallet.contract.exception.balance.InsufficientBalanceException;
 import org.mojave.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
-import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.domain.BaseIT;
 import org.mojave.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -41,6 +41,9 @@ public class WithdrawBalanceCommandIT extends BaseIT {
     @Autowired
     private WithdrawBalanceCommand withdrawBalanceCommand;
 
+    @Autowired
+    private DepositBalanceCommand depositBalanceCommand;
+
     @Test
     @DisplayName("Throw when withdrawing missing balance")
     public void balanceNotExist() {
@@ -54,35 +57,41 @@ public class WithdrawBalanceCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when engine returns no balance update")
-    public void noBalanceUpdate() {
+    public void noBalanceUpdate() throws
+                                  NoBalanceUpdateForTransactionException,
+                                  InsufficientBalanceException {
 
         this.createDefaultWallet(this.createWalletCommand, 307L, Currency.USD, "Withdraw Wallet");
+        this.depositBalanceCommand.execute(
+            new DepositBalanceCommand.Input(
+                new WalletOwnerId(307L), Currency.USD, new BigDecimal("20.00"),
+                new TransactionId(30700L), TRANSACTION_AT, "Seed balance"));
 
         final var transactionId = new TransactionId(30701L);
+        final var input = new WithdrawBalanceCommand.Input(
+            new WalletOwnerId(307L), Currency.USD, new BigDecimal("6.00"),
+            transactionId, TRANSACTION_AT, "Withdraw without update");
 
-        this.testWalletEngine.failNextWithdrawBalance(
-            new WalletEngine.NoBalanceUpdateException(transactionId));
+        this.withdrawBalanceCommand.execute(input);
 
         final var exception = assertThrows(
-            NoBalanceUpdateForTransactionException.class, () -> this.withdrawBalanceCommand.execute(
-                new WithdrawBalanceCommand.Input(
-                    new WalletOwnerId(307L), Currency.USD, new BigDecimal("6.00"),
-                    transactionId, TRANSACTION_AT, "Withdraw without update")));
+            NoBalanceUpdateForTransactionException.class,
+            () -> this.withdrawBalanceCommand.execute(input));
 
         assertEquals(transactionId, exception.getTransactionId());
     }
 
     @Test
     @DisplayName("Throw when withdraw exceeds balance")
-    public void insufficientBalance() {
+    public void insufficientBalance() throws NoBalanceUpdateForTransactionException {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 308L, Currency.USD, "Insufficient Wallet");
+        this.depositBalanceCommand.execute(
+            new DepositBalanceCommand.Input(
+                new WalletOwnerId(308L), Currency.USD, new BigDecimal("8.25"),
+                new TransactionId(30800L), TRANSACTION_AT, "Seed balance"));
         final var transactionId = new TransactionId(30801L);
-
-        this.testWalletEngine.failNextWithdrawBalance(
-            new WalletEngine.InsufficientBalanceException(
-                transactionId, walletId, new BigDecimal("15.00"), new BigDecimal("8.25")));
 
         final var exception = assertThrows(
             InsufficientBalanceException.class, () -> this.withdrawBalanceCommand.execute(
@@ -90,9 +99,9 @@ public class WithdrawBalanceCommandIT extends BaseIT {
                     new WalletOwnerId(308L), Currency.USD, new BigDecimal("15.00"),
                     transactionId, TRANSACTION_AT, "Withdraw too much")));
 
-        assertEquals(new BalanceId(walletId.getId()), exception.getBalanceId());
-        assertEquals(new BigDecimal("15.00"), exception.getAmount());
-        assertEquals(new BigDecimal("8.25"), exception.getOldBalance());
+        assertEquals(new WalletId(walletId.getId()), exception.getWalletId());
+        assertEquals(0, exception.getAmount().compareTo(new BigDecimal("15.00")));
+        assertEquals(0, exception.getOldBalance().compareTo(new BigDecimal("8.25")));
         assertEquals(transactionId, exception.getTransactionId());
     }
 
@@ -104,23 +113,22 @@ public class WithdrawBalanceCommandIT extends BaseIT {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 309L, Currency.USD, "Withdraw Wallet");
+        this.depositBalanceCommand.execute(
+            new DepositBalanceCommand.Input(
+                new WalletOwnerId(309L), Currency.USD, new BigDecimal("20.00"),
+                new TransactionId(30900L), TRANSACTION_AT, "Seed balance"));
         final var transactionId = new TransactionId(30901L);
-        final var history = this.balanceHistory(
-            new BalanceUpdateId(30902L), walletId, BalanceAction.WITHDRAW, transactionId,
-            Currency.USD, new BigDecimal("4.75"), new BigDecimal("20.00"),
-            new BigDecimal("15.25"), TRANSACTION_AT, null);
-
-        this.testWalletEngine.completeNextWithdrawBalance(history);
 
         final var output = this.withdrawBalanceCommand.execute(
             new WithdrawBalanceCommand.Input(
                 new WalletOwnerId(309L), Currency.USD, new BigDecimal("4.75"),
                 transactionId, TRANSACTION_AT, "Withdraw funds"));
 
-        assertEquals(history.balanceUpdateId(), output.balanceUpdateId());
-        assertEquals(new BalanceId(walletId.getId()), output.balanceId());
+        assertNotNull(output.balanceUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
         assertEquals(BalanceAction.WITHDRAW, output.action());
-        assertEquals(new BigDecimal("15.25"), output.newBalance());
+        assertEquals(0, output.oldBalance().compareTo(new BigDecimal("20.00")));
+        assertEquals(0, output.newBalance().compareTo(new BigDecimal("15.25")));
     }
 
 }

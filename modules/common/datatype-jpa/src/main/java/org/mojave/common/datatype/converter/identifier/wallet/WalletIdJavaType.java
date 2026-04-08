@@ -81,7 +81,7 @@ public class WalletIdJavaType extends AbstractClassJavaType<WalletId> {
 
         return switch (value) {
             case null -> null;
-            case WalletId balanceId -> balanceId;
+            case WalletId walletId -> walletId;
             case Number n -> new WalletId(n.longValue());
             default ->
                 throw new IllegalArgumentException("Unsupported wrap from " + value.getClass());

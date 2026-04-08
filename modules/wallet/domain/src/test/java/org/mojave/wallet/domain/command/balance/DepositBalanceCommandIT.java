@@ -6,14 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.BalanceAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
 import org.mojave.wallet.contract.command.balance.DepositBalanceCommand;
 import org.mojave.wallet.contract.exception.balance.BalanceNotExistException;
 import org.mojave.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
-import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.domain.BaseIT;
 import org.mojave.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -57,20 +56,20 @@ public class DepositBalanceCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when engine returns no balance update")
-    public void noBalanceUpdate() {
+    public void noBalanceUpdate() throws NoBalanceUpdateForTransactionException {
 
         this.createDefaultWallet(this.createWalletCommand, 302L, Currency.USD, "Deposit Wallet");
 
         final var transactionId = new TransactionId(30201L);
+        final var input = new DepositBalanceCommand.Input(
+            new WalletOwnerId(302L), Currency.USD, new BigDecimal("12.50"), transactionId,
+            TRANSACTION_AT, "Deposit without update");
 
-        this.testWalletEngine.failNextDepositBalance(
-            new WalletEngine.NoBalanceUpdateException(transactionId));
+        this.depositBalanceCommand.execute(input);
 
         final var exception = assertThrows(
-            NoBalanceUpdateForTransactionException.class, () -> this.depositBalanceCommand.execute(
-                new DepositBalanceCommand.Input(
-                    new WalletOwnerId(302L), Currency.USD, new BigDecimal("12.50"),
-                    transactionId, TRANSACTION_AT, "Deposit without update")));
+            NoBalanceUpdateForTransactionException.class,
+            () -> this.depositBalanceCommand.execute(input));
 
         assertEquals(transactionId, exception.getTransactionId());
     }
@@ -82,22 +81,17 @@ public class DepositBalanceCommandIT extends BaseIT {
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 303L, Currency.USD, "Deposit Wallet");
         final var transactionId = new TransactionId(30301L);
-        final var history = this.balanceHistory(
-            new BalanceUpdateId(30302L), walletId, BalanceAction.DEPOSIT, transactionId,
-            Currency.USD, new BigDecimal("25.50"), new BigDecimal("10.00"),
-            new BigDecimal("35.50"), TRANSACTION_AT, null);
-
-        this.testWalletEngine.completeNextDepositBalance(history);
 
         final var output = this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
                 new WalletOwnerId(303L), Currency.USD, new BigDecimal("25.50"),
                 transactionId, TRANSACTION_AT, "Deposit funds"));
 
-        assertEquals(history.balanceUpdateId(), output.balanceUpdateId());
-        assertEquals(new BalanceId(walletId.getId()), output.balanceId());
+        assertNotNull(output.balanceUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
         assertEquals(BalanceAction.DEPOSIT, output.action());
-        assertEquals(new BigDecimal("35.50"), output.newBalance());
+        assertEquals(0, output.oldBalance().compareTo(new BigDecimal("0.00")));
+        assertEquals(0, output.newBalance().compareTo(new BigDecimal("25.50")));
     }
 
 }

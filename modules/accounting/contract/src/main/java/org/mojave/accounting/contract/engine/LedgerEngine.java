@@ -20,13 +20,9 @@ import java.util.Objects;
 
 public interface LedgerEngine {
 
-    LedgerBalance createLedgerBalance(AccountId accountId,
-                                      Currency currency,
-                                      Integer scale,
-                                      Side nature,
-                                      BigDecimal postedDebits,
-                                      BigDecimal postedCredits,
-                                      OverdraftMode overdraftMode,
+    LedgerBalance createLedgerBalance(AccountId accountId, Currency currency, Integer scale,
+                                      Side nature, BigDecimal postedDebits,
+                                      BigDecimal postedCredits, OverdraftMode overdraftMode,
                                       BigDecimal overdraftLimit)
         throws AccountIdAlreadyTakenException;
 
@@ -34,15 +30,13 @@ public interface LedgerEngine {
 
     String getEngineType();
 
-    List<Movement> postAccountingFlow(List<Request> requests,
-                                      TransactionId transactionId,
-                                      Instant transactionAt,
-                                      AccountingScenario scenario) throws
-                                                                   InsufficientBalanceException,
-                                                                   NegativeAmountException,
-                                                                   OverdraftExceededException,
-                                                                   RestoreFailedException,
-                                                                   DuplicatePostingException;
+    List<Movement> postAccountingFlow(List<Request> requests, TransactionId transactionId,
+                                      Instant transactionAt, AccountingScenario scenario) throws
+                                                                                          InsufficientBalanceException,
+                                                                                          NegativeAmountException,
+                                                                                          OverdraftExceededException,
+                                                                                          RestoreFailedException,
+                                                                                          DuplicatePostingException;
 
     record LedgerBalance(AccountId accountId,
                          Currency currency,
@@ -60,6 +54,7 @@ public interface LedgerEngine {
                    Side side,
                    Currency currency,
                    BigDecimal amount,
+                   AccountingScenario scenario,
                    FlowDefinitionId flowDefinitionId,
                    FlowLineId flowLineId) {
 
@@ -125,11 +120,8 @@ public interface LedgerEngine {
 
         private final TransactionId transactionId;
 
-        public InsufficientBalanceException(AccountId accountId,
-                                            Side side,
-                                            BigDecimal amount,
-                                            LedgerEngine.DrCr drCr,
-                                            TransactionId transactionId) {
+        public InsufficientBalanceException(AccountId accountId, Side side, BigDecimal amount,
+                                            LedgerEngine.DrCr drCr, TransactionId transactionId) {
 
             super("Insufficient balance in Account (" + accountId.getId() + ") : side : " + side +
                       " | posted debits: " + drCr.debits + "| posted credits: " + drCr.credits +
@@ -158,11 +150,8 @@ public interface LedgerEngine {
 
         private final TransactionId transactionId;
 
-        public OverdraftExceededException(AccountId accountId,
-                                          Side side,
-                                          BigDecimal amount,
-                                          LedgerEngine.DrCr drCr,
-                                          TransactionId transactionId) {
+        public OverdraftExceededException(AccountId accountId, Side side, BigDecimal amount,
+                                          LedgerEngine.DrCr drCr, TransactionId transactionId) {
 
             super("Overdraft exceeded in Account (" + accountId + ") : posted debits: " +
                       drCr.debits + ", posted credits: " + drCr.credits + " | requested amount: " +
@@ -190,11 +179,8 @@ public interface LedgerEngine {
 
         private final TransactionId transactionId;
 
-        public RestoreFailedException(AccountId accountId,
-                                      Side side,
-                                      BigDecimal amount,
-                                      LedgerEngine.DrCr drCr,
-                                      TransactionId transactionId) {
+        public RestoreFailedException(AccountId accountId, Side side, BigDecimal amount,
+                                      LedgerEngine.DrCr drCr, TransactionId transactionId) {
 
             super("Unable to restore Dr/Cr : account (" + accountId + ") | side (" + side.name() +
                       ") | amount (" + amount.stripTrailingZeros().toPlainString() +
@@ -219,8 +205,7 @@ public interface LedgerEngine {
 
         private final TransactionId transactionId;
 
-        public DuplicatePostingException(AccountId accountId,
-                                         Side side,
+        public DuplicatePostingException(AccountId accountId, Side side,
                                          TransactionId transactionId) {
 
             super("Found duplicate posting for Account (" + accountId + ") : side (" + side +

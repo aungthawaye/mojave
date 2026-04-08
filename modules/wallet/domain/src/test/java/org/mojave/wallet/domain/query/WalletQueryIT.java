@@ -4,8 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
 import org.mojave.wallet.contract.exception.balance.BalanceIdNotFoundException;
@@ -44,7 +43,7 @@ public class WalletQueryIT extends BaseIT {
 
         assertThrows(
             BalanceIdNotFoundException.class,
-            () -> this.balanceQuery.get(new BalanceId(Long.MAX_VALUE)));
+            () -> this.balanceQuery.get(new WalletId(Long.MAX_VALUE)));
     }
 
     @Test
@@ -59,7 +58,7 @@ public class WalletQueryIT extends BaseIT {
             this.createWalletCommand, 201L, Currency.USD, "RESERVATION",
             "Balance Reservation Wallet");
 
-        final var byId = this.balanceQuery.get(new BalanceId(defaultWalletId.getId()));
+        final var byId = this.balanceQuery.get(new WalletId(defaultWalletId.getId()));
         final var byOwner = this.balanceQuery.get(new WalletOwnerId(201L), Currency.USD);
         final var all = this.balanceQuery.getAll();
 
@@ -76,7 +75,7 @@ public class WalletQueryIT extends BaseIT {
 
         assertThrows(
             PositionIdNotFoundException.class,
-            () -> this.positionQuery.get(new PositionId(Long.MAX_VALUE)));
+            () -> this.positionQuery.get(new WalletId(Long.MAX_VALUE)));
     }
 
     @Test
@@ -91,7 +90,7 @@ public class WalletQueryIT extends BaseIT {
             this.createWalletCommand, 202L, Currency.MMK, "LIMIT",
             "Position Limit Wallet");
 
-        final var byId = this.positionQuery.get(new PositionId(defaultWalletId.getId()));
+        final var byId = this.positionQuery.get(new WalletId(defaultWalletId.getId()));
         final var byOwner = this.positionQuery.get(new WalletOwnerId(202L), Currency.MMK);
         final var all = this.positionQuery.getAll();
 

@@ -21,7 +21,7 @@
 package org.mojave.wallet.contract.exception.balance;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 
@@ -35,18 +35,18 @@ public class BalanceIdNotFoundException extends UncheckedDomainException {
 
     private static final String TEMPLATE = "Balance Id ({0}) cannot be found.";
 
-    private final BalanceId balanceId;
+    private final WalletId walletId;
 
-    public BalanceIdNotFoundException(final BalanceId balanceId) {
+    public BalanceIdNotFoundException(final WalletId walletId) {
 
-        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{balanceId.getId().toString()}));
+        super(new ErrorTemplate(CODE, TEMPLATE, new String[]{walletId.getId().toString()}));
 
-        this.balanceId = balanceId;
+        this.walletId = walletId;
     }
 
     public static BalanceIdNotFoundException from(final Map<String, String> extras) {
 
-        final var id = new BalanceId(Long.valueOf(extras.get(Keys.BALANCE_ID)));
+        final var id = new WalletId(Long.valueOf(extras.get(Keys.WALLET_ID)));
 
         return new BalanceIdNotFoundException(id);
     }
@@ -56,14 +56,14 @@ public class BalanceIdNotFoundException extends UncheckedDomainException {
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.BALANCE_ID, this.balanceId.getId().toString());
+        extras.put(Keys.WALLET_ID, this.walletId.getId().toString());
 
         return extras;
     }
 
     public static class Keys {
 
-        public static final String BALANCE_ID = "balanceId";
+        public static final String WALLET_ID = "walletId";
 
     }
 

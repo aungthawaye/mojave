@@ -6,15 +6,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.wallet.PositionAction;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
 import org.mojave.wallet.contract.command.position.IncreasePositionCommand;
 import org.mojave.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.wallet.contract.exception.position.PositionNotExistException;
-import org.mojave.wallet.contract.engine.WalletEngine;
 import org.mojave.wallet.domain.BaseIT;
 import org.mojave.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -58,21 +57,27 @@ public class IncreasePositionCommandIT extends BaseIT {
 
     @Test
     @DisplayName("Throw when engine returns no position update")
-    public void noPositionUpdate() {
+    public void noPositionUpdate() throws
+                                   NoPositionUpdateForTransactionException,
+                                   PositionLimitExceededException,
+                                   PositionNotExistException {
 
-        this.createDefaultWallet(this.createWalletCommand, 410L, Currency.USD, "Increase Wallet");
+        final var walletId = this.createDefaultWallet(
+            this.createWalletCommand, 410L, Currency.USD, "Increase Wallet");
+        this.updateWalletEngineSnapshot(
+            walletId, BigDecimal.ZERO, new BigDecimal("5.00"), BigDecimal.ZERO,
+            new BigDecimal("100.00"));
 
         final var transactionId = new TransactionId(41001L);
+        final var input = new IncreasePositionCommand.Input(
+            new WalletOwnerId(410L), Currency.USD, new BigDecimal("9.00"),
+            transactionId, TRANSACTION_AT, "Increase without update");
 
-        this.testWalletEngine.failNextIncreasePosition(
-            new WalletEngine.NoPositionUpdateException(transactionId));
+        this.increasePositionCommand.execute(input);
 
         final var exception = assertThrows(
-            NoPositionUpdateForTransactionException.class,
-            () -> this.increasePositionCommand.execute(
-                new IncreasePositionCommand.Input(
-                    new WalletOwnerId(410L), Currency.USD, new BigDecimal("9.00"),
-                    transactionId, TRANSACTION_AT, "Increase without update")));
+            NoPositionUpdateForTransactionException.class, () -> this.increasePositionCommand.execute(
+                input));
 
         assertEquals(transactionId, exception.getTransactionId());
     }
@@ -83,12 +88,10 @@ public class IncreasePositionCommandIT extends BaseIT {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 411L, Currency.USD, "Limit Wallet");
+        this.updateWalletEngineSnapshot(
+            walletId, BigDecimal.ZERO, new BigDecimal("90.00"), new BigDecimal("5.00"),
+            new BigDecimal("100.00"));
         final var transactionId = new TransactionId(41101L);
-
-        this.testWalletEngine.failNextIncreasePosition(
-            new WalletEngine.PositionLimitExceededException(
-                walletId, new BigDecimal("20.00"), new BigDecimal("90.00"),
-                new BigDecimal("5.00"), new BigDecimal("100.00"), transactionId));
 
         final var exception = assertThrows(
             PositionLimitExceededException.class, () -> this.increasePositionCommand.execute(
@@ -96,11 +99,11 @@ public class IncreasePositionCommandIT extends BaseIT {
                     new WalletOwnerId(411L), Currency.USD, new BigDecimal("20.00"),
                     transactionId, TRANSACTION_AT, "Increase too much")));
 
-        assertEquals(new PositionId(walletId.getId()), exception.getPositionId());
-        assertEquals(new BigDecimal("20.00"), exception.getAmount());
-        assertEquals(new BigDecimal("90.00"), exception.getPosition());
-        assertEquals(new BigDecimal("5.00"), exception.getReserved());
-        assertEquals(new BigDecimal("100.00"), exception.getNetDebitCap());
+        assertEquals(new WalletId(walletId.getId()), exception.getWalletId());
+        assertEquals(0, exception.getAmount().compareTo(new BigDecimal("20.00")));
+        assertEquals(0, exception.getPosition().compareTo(new BigDecimal("90.00")));
+        assertEquals(0, exception.getReserved().compareTo(new BigDecimal("5.00")));
+        assertEquals(0, exception.getNetDebitCap().compareTo(new BigDecimal("100.00")));
         assertEquals(transactionId, exception.getTransactionId());
     }
 
@@ -113,24 +116,21 @@ public class IncreasePositionCommandIT extends BaseIT {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 412L, Currency.USD, "Increase Wallet");
+        this.updateWalletEngineSnapshot(
+            walletId, BigDecimal.ZERO, new BigDecimal("5.00"), BigDecimal.ZERO,
+            new BigDecimal("100.00"));
         final var transactionId = new TransactionId(41201L);
-        final var history = this.positionHistory(
-            new PositionUpdateId(41202L), walletId, PositionAction.INCREASE, transactionId,
-            Currency.USD, new BigDecimal("11.00"), new BigDecimal("5.00"),
-            new BigDecimal("16.00"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("100.00"),
-            TRANSACTION_AT);
-
-        this.testWalletEngine.completeNextIncreasePosition(history);
 
         final var output = this.increasePositionCommand.execute(
             new IncreasePositionCommand.Input(
                 new WalletOwnerId(412L), Currency.USD, new BigDecimal("11.00"),
                 transactionId, TRANSACTION_AT, "Increase position"));
 
-        assertEquals(history.positionUpdateId(), output.positionUpdateId());
-        assertEquals(new PositionId(walletId.getId()), output.positionId());
+        assertNotNull(output.positionUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
         assertEquals(PositionAction.INCREASE, output.action());
-        assertEquals(new BigDecimal("16.00"), output.newPosition());
+        assertEquals(0, output.oldPosition().compareTo(new BigDecimal("5.00")));
+        assertEquals(0, output.newPosition().compareTo(new BigDecimal("16.00")));
     }
 
 }
