@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_deposit_fund(
                                 IN p_transaction_id    BIGINT,
                                 IN p_transaction_at    BIGINT,
                                 IN p_balance_update_id BIGINT,
-                                IN p_balance_id        BIGINT,
+                                IN p_wallet_id        BIGINT,
                                 IN p_amount            DECIMAL(34, 4),
                                 IN p_description       VARCHAR(256))
 proc_deposit:
@@ -22,7 +22,7 @@ BEGIN
 
         SELECT 'ERROR'             AS result,
                p_balance_update_id AS balance_update_id,
-               p_balance_id        AS balance_id,
+               p_wallet_id        AS balance_id,
                'DEPOSIT'           AS action,
                p_transaction_id    AS transaction_id,
                NULL                AS currency,
@@ -38,11 +38,10 @@ BEGIN
 
     START TRANSACTION;
 
-    SELECT w.balance, dw.currency
+    SELECT w.balance, w.currency
     INTO v_old_balance, v_currency
     FROM mwe_wallet w
-             JOIN wlt_wallet dw ON dw.wallet_id = w.wallet_id
-    WHERE w.wallet_id = p_balance_id FOR
+    WHERE w.wallet_id = p_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -50,7 +49,7 @@ BEGIN
 
         SELECT 'ERROR'             AS result,
                p_balance_update_id AS balance_update_id,
-               p_balance_id        AS balance_id,
+               p_wallet_id        AS balance_id,
                'DEPOSIT'           AS action,
                p_transaction_id    AS transaction_id,
                NULL                AS currency,
@@ -66,7 +65,7 @@ BEGIN
 
     UPDATE mwe_wallet
     SET balance = v_new_balance
-    WHERE wallet_id = p_balance_id;
+    WHERE wallet_id = p_wallet_id;
 
     INSERT INTO mwe_balance_update (balance_update_id,
                                     balance_id,
@@ -83,7 +82,7 @@ BEGIN
                                     rec_updated_at,
                                     rec_version)
     VALUES (p_balance_update_id,
-            p_balance_id,
+            p_wallet_id,
             'DEPOSIT',
             p_transaction_id,
             v_currency,

@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.SspId;
 
 public interface ActivateSspCommand {
 
+    String SUBJECT_NAME = "sub-participant.activate-ssp-command";
+
+    String TOPIC_NAME = "tp-participant.activate-ssp-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspId sspId) { }

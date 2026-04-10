@@ -19,6 +19,6 @@
  */
 package org.mojave.connector.gateway.data;
 
-import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
 
 public record TransfersResult(String transferId, TransfersIDPutResponse response) { }

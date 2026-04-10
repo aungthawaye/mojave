@@ -21,7 +21,7 @@ package org.mojave.rail.fspiop.invoker.api.parties;
 
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.rail.fspiop.spec.core.PartyIdType;
 
 public interface GetParties {
 

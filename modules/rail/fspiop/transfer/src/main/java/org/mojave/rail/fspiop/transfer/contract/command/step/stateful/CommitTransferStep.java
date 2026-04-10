@@ -24,7 +24,7 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.rail.fspiop.spec.core.ExtensionList;
 
 import java.time.Instant;
 

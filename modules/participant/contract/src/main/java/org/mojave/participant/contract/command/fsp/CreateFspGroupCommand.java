@@ -29,6 +29,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateFspGroupCommand {
 
+    String SUBJECT_NAME = "sub-participant.create-fsp-group-command";
+
+    String TOPIC_NAME = "tp-participant.create-fsp-group-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name) {

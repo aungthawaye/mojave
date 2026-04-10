@@ -20,7 +20,7 @@
 package org.mojave.connector.gateway.inbound.command.quotes.payer;
 
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
+import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
 
 public interface HandlePutQuotesResponseCommand {
 

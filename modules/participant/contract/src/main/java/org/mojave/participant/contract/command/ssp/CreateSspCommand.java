@@ -31,6 +31,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateSspCommand {
 
+    String SUBJECT_NAME = "sub-participant.create-ssp-command";
+
+    String TOPIC_NAME = "tp-participant.create-ssp-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspCode sspCode,

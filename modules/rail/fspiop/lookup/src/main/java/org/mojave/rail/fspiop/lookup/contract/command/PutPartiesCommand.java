@@ -19,9 +19,9 @@
  */
 package org.mojave.rail.fspiop.lookup.contract.command;
 
-import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
-import org.mojave.scheme.fspiop.core.PartiesTypeIDPutResponse;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
+import org.mojave.rail.fspiop.spec.core.PartyIdType;
 
 public interface PutPartiesCommand {
 

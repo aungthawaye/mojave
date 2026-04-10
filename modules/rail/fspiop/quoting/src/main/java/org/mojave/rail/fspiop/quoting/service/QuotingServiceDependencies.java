@@ -27,7 +27,7 @@ import org.mojave.participant.contract.query.OracleQuery;
 import org.mojave.participant.contract.query.SspQuery;
 import org.mojave.participant.store.ParticipantStore;
 import org.mojave.participant.store.strategy.timer.TimerBasedInMemoryParticipantStore;
-import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
+import org.mojave.rail.fspiop.service.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;

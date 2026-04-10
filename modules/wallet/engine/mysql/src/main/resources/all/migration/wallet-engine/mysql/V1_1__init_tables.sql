@@ -4,7 +4,7 @@ CREATE TABLE `mwe_wallet`
 (
     `wallet_id`       bigint         NOT NULL,
     `wallet_owner_id` bigint         NOT NULL,
-    `name`            varchar(64)    NOT NULL,
+    `currency`        varchar(3)     NOT NULL,
     `balance`         decimal(34, 4) NOT NULL DEFAULT 0,
     `position`        decimal(34, 4) NOT NULL DEFAULT 0,
     `reserved`        decimal(34, 4) NOT NULL DEFAULT 0,

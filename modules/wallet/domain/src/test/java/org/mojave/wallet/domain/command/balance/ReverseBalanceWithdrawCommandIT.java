@@ -73,6 +73,7 @@ public class ReverseBalanceWithdrawCommandIT extends BaseIT {
 
         final var walletId = this.createDefaultWallet(
             this.createWalletCommand, 305L, Currency.USD, "Reverse Wallet");
+
         this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
                 new WalletOwnerId(305L), Currency.USD, new BigDecimal("20.00"),

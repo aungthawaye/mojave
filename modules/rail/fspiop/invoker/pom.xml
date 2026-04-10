@@ -21,8 +21,8 @@
             <artifactId>mojave-rail-fspiop-component</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.scheme.fspiop</groupId>
-            <artifactId>mojave-scheme-fspiop</artifactId>
+            <groupId>org.mojave.rail.fspiop</groupId>
+            <artifactId>mojave-rail-fspiop-spec</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

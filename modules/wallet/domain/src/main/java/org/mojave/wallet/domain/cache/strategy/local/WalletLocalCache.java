@@ -61,25 +61,11 @@ public class WalletLocalCache implements WalletCache {
         return walletOwnerId.getId().toString() + ":" + currency.name();
     }
 
-    @Override
-    public WalletData get(final WalletId walletId) {
+    public void clear() {
 
-        if (walletId == null) {
-            return null;
-        }
-
-        var data = this.withId.get(walletId.getId());
-
-        if (data == null) {
-            final var entity = this.walletRepository.findById(walletId).orElse(null);
-
-            if (entity != null && Wallet.DEFAULT_SCENARIO.equals(entity.getScenario())) {
-                data = entity.convert();
-                this.save(data);
-            }
-        }
-
-        return data;
+        this.withId.clear();
+        this.withOwnerCurrency.clear();
+        this.withOwnerId.clear();
     }
 
     @Override
@@ -98,7 +84,8 @@ public class WalletLocalCache implements WalletCache {
             final var entity = this.walletRepository
                                    .findOne(WalletRepository.Filters
                                                 .withOwnerId(walletOwnerId)
-                                                .and(WalletRepository.Filters.withCurrency(currency))
+                                                .and(
+                                                    WalletRepository.Filters.withCurrency(currency))
                                                 .and(WalletRepository.Filters.withScenario(
                                                     Wallet.DEFAULT_SCENARIO)))
                                    .orElse(null);
@@ -125,10 +112,11 @@ public class WalletLocalCache implements WalletCache {
 
             final var set2 = new HashSet<WalletData>();
 
-            final var entities = this.walletRepository.findAll(
-                WalletRepository.Filters
-                    .withOwnerId(walletOwnerId)
-                    .and(WalletRepository.Filters.withScenario(Wallet.DEFAULT_SCENARIO)));
+            final var entities = this.walletRepository.findAll(WalletRepository.Filters
+                                                                   .withOwnerId(walletOwnerId)
+                                                                   .and(
+                                                                       WalletRepository.Filters.withScenario(
+                                                                           Wallet.DEFAULT_SCENARIO)));
 
             entities.forEach((entity) -> {
                 final var wallet = entity.convert();
@@ -142,6 +130,27 @@ public class WalletLocalCache implements WalletCache {
         return set;
     }
 
+    @Override
+    public WalletData get(final WalletId walletId) {
+
+        if (walletId == null) {
+            return null;
+        }
+
+        var data = this.withId.get(walletId.getId());
+
+        if (data == null) {
+            final var entity = this.walletRepository.findById(walletId).orElse(null);
+
+            if (entity != null && Wallet.DEFAULT_SCENARIO.equals(entity.getScenario())) {
+                data = entity.convert();
+                this.save(data);
+            }
+        }
+
+        return data;
+    }
+
     @PostConstruct
     public void postConstruct() {
 
@@ -153,14 +162,7 @@ public class WalletLocalCache implements WalletCache {
         wallets.forEach((wallet) -> this.save(wallet.convert()));
     }
 
-    private void clear() {
-
-        this.withId.clear();
-        this.withOwnerCurrency.clear();
-        this.withOwnerId.clear();
-    }
-
-    private void save(final WalletData wallet) {
+    public void save(final WalletData wallet) {
 
         this.withId.put(wallet.walletId().getId(), wallet);
 

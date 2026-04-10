@@ -38,7 +38,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.accounting.contract.data.FlowDefinitionData;
 import org.mojave.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
 import org.mojave.accounting.contract.exception.definition.DefinitionNameTooLongException;
-import org.mojave.accounting.contract.exception.definition.FlowLineNotFoundException;
+import org.mojave.accounting.contract.exception.definition.FlowDefinitionLineNotFoundException;
 import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
@@ -49,7 +49,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
@@ -135,7 +135,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         orphanRemoval = true,
         cascade = {jakarta.persistence.CascadeType.ALL},
         fetch = FetchType.EAGER)
-    protected List<FlowLine> flowLines = new ArrayList<>();
+    protected List<FlowDefinitionLine> flowDefinitionLines = new ArrayList<>();
 
     public FlowDefinition(AccountingScenario scenario,
                           Currency currency,
@@ -156,7 +156,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
-    public FlowLine addFlowLine(Integer index,
+    public FlowDefinitionLine addFlowDefinitionLine(Integer index,
                                 String participant,
                                 CoaEntryId coaEntryId,
                                 String amountName,
@@ -165,22 +165,22 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
                                 AccountCache accountCache,
                                 CoaEntryCache coaEntryCache) {
 
-        final var flowLine = new FlowLine(
+        final var flowDefinitionLine = new FlowDefinitionLine(
             this, index, participant, coaEntryId, amountName, side,
             description, accountCache, coaEntryCache);
 
-        this.flowLines.add(flowLine);
+        this.flowDefinitionLines.add(flowDefinitionLine);
 
-        return flowLine;
+        return flowDefinitionLine;
 
     }
 
     @Override
     public FlowDefinitionData convert() {
 
-        final var flowLineData = this.flowLines
+        final var flowDefinitionLineData = this.flowDefinitionLines
                                      .stream()
-                                     .map(line -> new FlowDefinitionData.FlowLineData(
+                                     .map(line -> new FlowDefinitionData.FlowDefinitionLineData(
                                          line.id, line.step, line.participant, line.coaEntryId,
                                          line.amountName, line.side, line.description))
                                      .toList();
@@ -188,7 +188,7 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return new FlowDefinitionData(
             this.getId(), this.getScenario(), this.getCurrency(), this.getName(),
             this.getDescription(), this.getActivationStatus(), this.getTerminationStatus(),
-            flowLineData);
+            flowDefinitionLineData);
     }
 
     public FlowDefinition currency(Currency currency) {
@@ -222,9 +222,9 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this;
     }
 
-    public List<FlowLine> getFlowLines() {
+    public List<FlowDefinitionLine> getFlowDefinitionLines() {
 
-        return Collections.unmodifiableList(this.flowLines);
+        return Collections.unmodifiableList(this.flowDefinitionLines);
     }
 
     @Override
@@ -250,16 +250,16 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this;
     }
 
-    public void removeFlowLine(FlowLineId flowLineId) {
+    public void removeFlowDefinitionLine(FlowDefinitionLineId flowDefinitionLineId) {
 
-        Objects.requireNonNull(flowLineId);
+        Objects.requireNonNull(flowDefinitionLineId);
 
-        if (this.flowLines.stream().noneMatch(flowLine -> flowLine.getId().equals(flowLineId))) {
+        if (this.flowDefinitionLines.stream().noneMatch(flowDefinitionLine -> flowDefinitionLine.getId().equals(flowDefinitionLineId))) {
 
-            throw new FlowLineNotFoundException(flowLineId);
+            throw new FlowDefinitionLineNotFoundException(flowDefinitionLineId);
         }
 
-        this.flowLines.removeIf(flowLine -> flowLine.getId().equals(flowLineId));
+        this.flowDefinitionLines.removeIf(flowDefinitionLine -> flowDefinitionLine.getId().equals(flowDefinitionLineId));
 
     }
 

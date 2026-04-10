@@ -29,6 +29,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface DeactivateEndpointCommand {
 
+    String SUBJECT_NAME = "sub-participant.deactivate-endpoint-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-endpoint-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,

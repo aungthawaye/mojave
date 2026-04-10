@@ -24,7 +24,7 @@ import com.google.common.primitives.UnsignedLong;
 import org.mojave.component.misc.handy.MoneyUtil;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.Money;
+import org.mojave.rail.fspiop.spec.core.Money;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

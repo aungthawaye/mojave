@@ -29,6 +29,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeSspNameCommand {
 
+    String SUBJECT_NAME = "sub-participant.change-ssp-name-command";
+
+    String TOPIC_NAME = "tp-participant.change-ssp-name-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspId sspId,

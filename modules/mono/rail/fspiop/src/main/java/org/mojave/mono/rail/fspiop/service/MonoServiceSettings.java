@@ -28,7 +28,7 @@ import org.mojave.accounting.producer.AccountingProducerConfiguration;
 import org.mojave.participant.intercom.client.service.ParticipantIntercomService;
 import org.mojave.wallet.intercom.client.service.WalletIntercomService;
 import org.mojave.wallet.producer.WalletProducerConfiguration;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingKafkaConfiguration;
@@ -42,7 +42,7 @@ import org.mojave.rail.fspiop.transfer.domain.kafka.listener.CommitTransferStepL
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.DisputeTransferStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.PatchTransferToPayeeStepListener;
 import org.mojave.rail.fspiop.transfer.domain.kafka.listener.RollbackReservationStepListener;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.rail.fspiop.spec.core.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 

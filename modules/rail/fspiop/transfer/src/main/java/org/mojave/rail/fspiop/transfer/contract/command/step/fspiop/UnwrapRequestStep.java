@@ -24,7 +24,7 @@ import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.participant.contract.data.FspData;
 import org.mojave.rail.fspiop.component.data.Agreement;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.spec.core.TransfersPostRequest;
 
 import java.time.Instant;
 

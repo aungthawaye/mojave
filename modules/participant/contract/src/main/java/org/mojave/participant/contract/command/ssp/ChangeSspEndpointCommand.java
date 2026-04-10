@@ -29,6 +29,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeSspEndpointCommand {
 
+    String SUBJECT_NAME = "sub-participant.change-ssp-endpoint-command";
+
+    String TOPIC_NAME = "tp-participant.change-ssp-endpoint-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspId sspId,

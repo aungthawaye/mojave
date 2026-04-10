@@ -15,8 +15,6 @@ public class WalletIntercomConsumerDependencies
 
     private final WalletEngine walletEngine;
 
-    private final WalletCache walletCache;
-
     public WalletIntercomConsumerDependencies(final WalletRepository walletRepository,
                                               final ObjectMapper objectMapper) {
 
@@ -39,10 +37,6 @@ public class WalletIntercomConsumerDependencies
                     Integer.parseInt(System.getenv("MYSQL_WALLET_DB_MIN_POOL_SIZE")),
                     Integer.parseInt(System.getenv("MYSQL_WALLET_DB_MAX_POOL_SIZE")))));
 
-        this.walletCache = new WalletTimerCache(
-            walletRepository,
-            Integer.parseInt(
-                System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
     }
 
     @Bean
@@ -51,12 +45,4 @@ public class WalletIntercomConsumerDependencies
 
         return this.walletEngine;
     }
-
-    @Bean
-    @Override
-    public WalletCache walletCache() {
-
-        return this.walletCache;
-    }
-
 }

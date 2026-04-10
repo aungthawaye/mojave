@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.OracleId;
 
 public interface TerminateOracleCommand {
 
+    String SUBJECT_NAME = "sub-participant.terminate-oracle-command";
+
+    String TOPIC_NAME = "tp-participant.terminate-oracle-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull OracleId oracleId) { }

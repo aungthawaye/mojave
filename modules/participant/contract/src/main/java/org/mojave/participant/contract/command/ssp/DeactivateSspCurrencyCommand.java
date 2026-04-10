@@ -28,6 +28,10 @@ import org.mojave.common.datatype.identifier.participant.SspId;
 
 public interface DeactivateSspCurrencyCommand {
 
+    String SUBJECT_NAME = "sub-participant.deactivate-ssp-currency-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-ssp-currency-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspId sspId,

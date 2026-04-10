@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.quoting.service;
 
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;

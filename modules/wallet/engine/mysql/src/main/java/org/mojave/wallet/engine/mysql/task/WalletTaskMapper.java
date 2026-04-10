@@ -24,12 +24,20 @@ final class WalletTaskMapper {
                                                          final BalanceUpdateId reversalId)
         throws SQLException {
 
+        final var currency = rs.getString("currency");
+
+        if (currency == null) {
+            throw new IllegalStateException(
+                "Currency is null in balance history result for balance_update_id: " +
+                    rs.getLong("balance_update_id"));
+        }
+
         return new WalletEngine.BalanceHistory(
             new BalanceUpdateId(rs.getLong("balance_update_id")),
             new WalletId(rs.getLong("balance_id")),
             BalanceAction.valueOf(rs.getString("action")),
             new TransactionId(rs.getLong("transaction_id")),
-            Currency.valueOf(rs.getString("currency")),
+            Currency.valueOf(currency),
             rs.getBigDecimal("amount"),
             rs.getBigDecimal("old_balance"),
             rs.getBigDecimal("new_balance"),

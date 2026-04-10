@@ -71,6 +71,12 @@ public class WalletTimerCache implements WalletCache {
     }
 
     @Override
+    public void clear() {
+
+        this.snapshotRef.set(Snapshot.empty());
+    }
+
+    @Override
     public WalletData get(final WalletId walletId) {
 
         if (walletId == null) {
@@ -141,6 +147,11 @@ public class WalletTimerCache implements WalletCache {
             }, this.interval, this.interval);
     }
 
+    @Override
+    public void save(WalletData wallet) {
+
+    }
+
     private void refreshData() {
 
         LOGGER.info("Start refreshing wallet cache data");
@@ -153,8 +164,7 @@ public class WalletTimerCache implements WalletCache {
         final var withId = entries
                                .stream()
                                .collect(Collectors.toUnmodifiableMap(
-                                   WalletData::walletId,
-                                   Function.identity(), (a, b) -> a));
+                                   WalletData::walletId, Function.identity(), (a, b) -> a));
 
         final var withOwnerCurrency = entries
                                           .stream()
@@ -162,10 +172,13 @@ public class WalletTimerCache implements WalletCache {
                                               e -> key(e.walletOwnerId(), e.currency()),
                                               Function.identity(), (a, b) -> a));
 
-        final var withOwnerId = Collections.unmodifiableMap(
-            entries.stream().collect(Collectors.groupingBy(
-                WalletData::walletOwnerId,
-                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
+        final var withOwnerId = Collections.unmodifiableMap(entries
+                                                                .stream()
+                                                                .collect(Collectors.groupingBy(
+                                                                    WalletData::walletOwnerId,
+                                                                    Collectors.collectingAndThen(
+                                                                        Collectors.toSet(),
+                                                                        Collections::unmodifiableSet))));
 
         LOGGER.info("Refreshed Wallet cache data, count: {}", entries.size());
 

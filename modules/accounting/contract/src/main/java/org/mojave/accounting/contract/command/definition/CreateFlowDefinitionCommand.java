@@ -28,7 +28,7 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 
@@ -46,9 +46,9 @@ public interface CreateFlowDefinitionCommand {
                  @JsonProperty(required = true) @NotNull Currency currency,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,
-                 @JsonProperty(required = true) List<FlowLine> flowLines) {
+                 @JsonProperty(required = true) List<FlowDefinitionLine> flowDefinitionLines) {
 
-        public record FlowLine(@JsonProperty(required = true) @NotNull Integer step,
+        public record FlowDefinitionLine(@JsonProperty(required = true) @NotNull Integer step,
                                @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String participant,
                                @JsonProperty(required = true) @NotNull CoaEntryId coaEntryId,
                                @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String amountName,
@@ -57,6 +57,6 @@ public interface CreateFlowDefinitionCommand {
 
     }
 
-    record Output(FlowDefinitionId flowDefinitionId, List<FlowLineId> flowLineIds) { }
+    record Output(FlowDefinitionId flowDefinitionId, List<FlowDefinitionLineId> flowDefinitionLineIds) { }
 
 }

@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface DeactivateFspCommand {
 
+    String SUBJECT_NAME = "sub-participant.deactivate-fsp-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-fsp-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId) { }

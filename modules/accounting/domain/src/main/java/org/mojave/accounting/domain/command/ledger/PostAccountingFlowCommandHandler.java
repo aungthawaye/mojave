@@ -97,27 +97,27 @@ public class PostAccountingFlowCommandHandler implements PostAccountingFlowComma
 
         var requests = new ArrayList<LedgerEngine.Request>();
 
-        var lines = flowDefinition.flowLines();
+        var lines = flowDefinition.flowDefinitionLines();
 
-        for (var flowLine : lines) {
+        for (var flowDefinitionLine : lines) {
 
-            final var amount = input.amounts().get(flowLine.amountName());
+            final var amount = input.amounts().get(flowDefinitionLine.amountName());
 
             if (amount == null) {
 
                 throw new RequiredAmountNameNotFoundInTransactionException(
-                    flowLine.amountName(), input.amounts().keySet(), transactionId);
+                    flowDefinitionLine.amountName(), input.amounts().keySet(), transactionId);
             }
 
-            final var accountOfParticipant = input.participants().get(flowLine.participant());
+            final var accountOfParticipant = input.participants().get(flowDefinitionLine.participant());
 
             if (accountOfParticipant == null) {
 
                 throw new RequiredParticipantNotFoundInTransactionException(
-                    flowLine.participant(), input.participants().keySet(), transactionId);
+                    flowDefinitionLine.participant(), input.participants().keySet(), transactionId);
             }
 
-            final var coaEntryId = flowLine.coaEntryId();
+            final var coaEntryId = flowDefinitionLine.coaEntryId();
             final var accountData = this.accountCache.get(
                 coaEntryId, accountOfParticipant, input.currency());
 
@@ -133,9 +133,9 @@ public class PostAccountingFlowCommandHandler implements PostAccountingFlowComma
             }
 
             var request = new LedgerEngine.Request(
-                new LedgerMovementId(Snowflake.get().nextId()), flowLine.step(), accountId,
-                flowLine.side(), input.currency(), amount, flowDefinition.scenario(),
-                flowDefinition.flowDefinitionId(), flowLine.flowLineId());
+                new LedgerMovementId(Snowflake.get().nextId()), flowDefinitionLine.step(), accountId,
+                flowDefinitionLine.side(), input.currency(), amount, flowDefinition.scenario(),
+                flowDefinition.flowDefinitionId(), flowDefinitionLine.flowDefinitionLineId());
 
             requests.add(request);
         }

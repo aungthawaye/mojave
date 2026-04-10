@@ -27,6 +27,10 @@ import org.mojave.common.datatype.identifier.participant.OracleId;
 
 public interface ChangeOracleTypeCommand {
 
+    String SUBJECT_NAME = "sub-participant.change-oracle-type-command";
+
+    String TOPIC_NAME = "tp-participant.change-oracle-type-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull OracleId oracleId,

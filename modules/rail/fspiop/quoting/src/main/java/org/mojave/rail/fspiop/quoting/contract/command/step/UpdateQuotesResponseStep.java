@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.quoting.contract.command.step;
 
 import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.rail.fspiop.spec.core.ExtensionList;
 
 import java.math.BigDecimal;
 import java.time.Instant;

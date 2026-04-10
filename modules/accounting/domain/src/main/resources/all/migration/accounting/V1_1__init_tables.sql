@@ -89,11 +89,11 @@ CREATE TABLE `acc_flow_definition`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
--- ml_accounting.acc_flow_line definition
+-- ml_accounting.acc_flow_definition_line definition
 
-CREATE TABLE `acc_flow_line`
+CREATE TABLE `acc_flow_definition_line`
 (
-    `flow_line_id`   bigint      NOT NULL,
+    `flow_definition_line_id`   bigint      NOT NULL,
     `participant`    varchar(64)          DEFAULT NULL,
     `amount_name`    varchar(64) NOT NULL,
     `side`           varchar(32) NOT NULL,
@@ -104,17 +104,17 @@ CREATE TABLE `acc_flow_line`
     `rec_created_at` bigint               DEFAULT NULL,
     `rec_updated_at` bigint               DEFAULT NULL,
     `rec_version`    int                  DEFAULT NULL,
-    PRIMARY KEY (`flow_line_id`),
-    UNIQUE KEY `acc_flow_line_01_UK` (`definition_id`,
+    PRIMARY KEY (`flow_definition_line_id`),
+    UNIQUE KEY `acc_flow_definition_line_01_UK` (`definition_id`,
                                       `participant`,
                                       `amount_name`,
                                       `side`,
                                       `coa_entry_id`),
-    UNIQUE KEY `acc_flow_line_02_UK` (`definition_id`, `step`),
-    KEY `acc_coa_entry_acc_flow_line_FK_IDX` (`coa_entry_id`),
-    KEY `acc_flow_definition_acc_flow_line_FK_IDX` (`definition_id`),
-    CONSTRAINT `acc_coa_entry_acc_flow_line_FK` FOREIGN KEY (`coa_entry_id`) REFERENCES `acc_coa_entry` (`coa_entry_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `acc_flow_definition_acc_flow_line_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    UNIQUE KEY `acc_flow_definition_line_02_UK` (`definition_id`, `step`),
+    KEY `acc_coa_entry_acc_flow_definition_line_FK_IDX` (`coa_entry_id`),
+    KEY `acc_flow_definition_acc_flow_definition_line_FK_IDX` (`definition_id`),
+    CONSTRAINT `acc_coa_entry_acc_flow_definition_line_FK` FOREIGN KEY (`coa_entry_id`) REFERENCES `acc_coa_entry` (`coa_entry_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `acc_flow_definition_acc_flow_definition_line_FK` FOREIGN KEY (`definition_id`) REFERENCES `acc_flow_definition` (`flow_definition_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;

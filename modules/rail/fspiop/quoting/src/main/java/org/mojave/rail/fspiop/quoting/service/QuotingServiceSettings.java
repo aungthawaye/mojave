@@ -24,14 +24,14 @@ import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingKafkaConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.CreateQuotesRequestStepListener;
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesErrorStepListener;
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesResponseStepListener;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.rail.fspiop.spec.core.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 

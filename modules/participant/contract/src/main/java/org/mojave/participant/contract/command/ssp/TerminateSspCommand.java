@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.SspId;
 
 public interface TerminateSspCommand {
 
+    String SUBJECT_NAME = "sub-participant.terminate-ssp-command";
+
+    String TOPIC_NAME = "tp-participant.terminate-ssp-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspId sspId) { }

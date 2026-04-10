@@ -290,7 +290,7 @@ public class AccountingQueryIT extends BaseIT {
             new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, Currency.USD, "flow-query-usd",
                 "flow-query-usd description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, "PAYER_FSP", usdCoaEntryId,
                     "TRANSFER_AMOUNT", Side.DEBIT, "usd line"))));
 
@@ -298,7 +298,7 @@ public class AccountingQueryIT extends BaseIT {
             new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, Currency.EUR, "flow-query-eur",
                 "flow-query-eur description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, "PAYER_FSP", eurCoaEntryId,
                     "TRANSFER_AMOUNT", Side.DEBIT, "eur line"))));
 

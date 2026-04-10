@@ -19,6 +19,6 @@
  */
 package org.mojave.connector.gateway.data;
 
-import org.mojave.scheme.fspiop.core.QuotesIDPutResponse;
+import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
 
 public record QuotesResult(String quoteId, QuotesIDPutResponse response) { }

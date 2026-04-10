@@ -31,7 +31,7 @@ public class RequireParticipantForCoaEntryException extends UncheckedDomainExcep
 
     public static final String CODE = "REQUIRE_PARTICIPANT_FOR_COA_ENTRY";
 
-    private static final String TEMPLATE = "Participant is required for CoA Entry flow line.";
+    private static final String TEMPLATE = "Participant is required for CoA Entry flow definition line.";
 
     public RequireParticipantForCoaEntryException() {
 

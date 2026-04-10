@@ -27,6 +27,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface JoinFspGroupCommand {
 
+    String SUBJECT_NAME = "sub-participant.join-fsp-group-command";
+
+    String TOPIC_NAME = "tp-participant.join-fsp-group-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspGroupId fspGroupId,

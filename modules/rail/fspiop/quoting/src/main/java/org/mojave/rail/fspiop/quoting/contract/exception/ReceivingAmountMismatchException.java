@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.quoting.contract.exception;
 import lombok.Getter;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
-import org.mojave.scheme.fspiop.core.AmountType;
+import org.mojave.rail.fspiop.spec.core.AmountType;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

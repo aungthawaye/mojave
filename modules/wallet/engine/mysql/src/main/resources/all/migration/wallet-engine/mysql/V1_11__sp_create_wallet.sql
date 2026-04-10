@@ -25,7 +25,7 @@ BEGIN
 
     INSERT INTO mwe_wallet(wallet_id,
                            wallet_owner_id,
-                           name,
+                           currency,
                            balance,
                            position,
                            reserved,
@@ -34,28 +34,17 @@ BEGIN
                            rec_created_at,
                            rec_updated_at,
                            rec_version)
-    SELECT wallet_id,
-           wallet_owner_id,
-           name,
-           0,
-           0,
-           0,
-           0,
-           COALESCE(created_at, v_now),
-           v_now,
-           v_now,
-           0
-    FROM wlt_wallet
-    WHERE wallet_id = p_wallet_id;
-
-    IF ROW_COUNT() = 0 THEN
-        ROLLBACK;
-
-        SELECT 'WALLET_NOT_FOUND' AS status,
-               p_wallet_id        AS wallet_id;
-
-        LEAVE proc_create_wallet;
-    END IF;
+    VALUES (p_wallet_id,
+            p_wallet_id,
+            p_currency,
+            ROUND(0, p_scale),
+            ROUND(0, p_scale),
+            ROUND(0, p_scale),
+            ROUND(0, p_scale),
+            v_now,
+            v_now,
+            v_now,
+            0);
 
     COMMIT;
 

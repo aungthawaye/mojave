@@ -29,6 +29,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeHubNameCommand {
 
+    String SUBJECT_NAME = "sub-participant.change-hub-name-command";
+
+    String TOPIC_NAME = "tp-participant.change-hub-name-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,

@@ -26,7 +26,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 
 import java.util.Comparator;
@@ -40,7 +40,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                                  String description,
                                  ActivationStatus activationStatus,
                                  TerminationStatus terminationStatus,
-                                 List<FlowLineData> flowLines) {
+                                 List<FlowDefinitionLineData> flowDefinitionLines) {
 
     public FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                               AccountingScenario scenario,
@@ -49,7 +49,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
                               String description,
                               ActivationStatus activationStatus,
                               TerminationStatus terminationStatus,
-                              List<FlowLineData> flowLines) {
+                              List<FlowDefinitionLineData> flowDefinitionLines) {
 
         this.flowDefinitionId = flowDefinitionId;
         this.scenario = scenario;
@@ -58,9 +58,9 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         this.description = description;
         this.activationStatus = activationStatus;
         this.terminationStatus = terminationStatus;
-        this.flowLines = flowLines
+        this.flowDefinitionLines = flowDefinitionLines
                              .stream()
-                             .sorted(Comparator.comparing(FlowLineData::step))
+                             .sorted(Comparator.comparing(FlowDefinitionLineData::step))
                              .toList();
     }
 
@@ -79,7 +79,7 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         return Objects.hashCode(flowDefinitionId);
     }
 
-    public record FlowLineData(FlowLineId flowLineId,
+    public record FlowDefinitionLineData(FlowDefinitionLineId flowDefinitionLineId,
                                Integer step,
                                String participant,
                                CoaEntryId coaEntryId,
@@ -90,17 +90,17 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         @Override
         public boolean equals(Object o) {
 
-            if (!(o instanceof FlowLineData that)) {
+            if (!(o instanceof FlowDefinitionLineData that)) {
                 return false;
             }
 
-            return Objects.equals(flowLineId, that.flowLineId);
+            return Objects.equals(flowDefinitionLineId, that.flowDefinitionLineId);
         }
 
         @Override
         public int hashCode() {
 
-            return Objects.hashCode(flowLineId);
+            return Objects.hashCode(flowDefinitionLineId);
         }
 
     }

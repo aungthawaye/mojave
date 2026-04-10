@@ -23,7 +23,7 @@ import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopCommunicationException;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
 
 public class FspiopErrorResponder {
 

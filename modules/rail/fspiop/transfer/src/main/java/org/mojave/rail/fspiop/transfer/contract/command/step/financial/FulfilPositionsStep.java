@@ -26,7 +26,7 @@ import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.participant.contract.data.FspData;
 import org.mojave.wallet.contract.exception.position.FailedToCommitReservationException;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.rail.fspiop.spec.core.Currency;
 
 import java.time.Instant;
 

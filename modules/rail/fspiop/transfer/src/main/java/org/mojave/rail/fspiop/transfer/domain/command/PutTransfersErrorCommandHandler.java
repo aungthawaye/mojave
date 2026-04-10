@@ -38,7 +38,7 @@ import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.RollbackReservatio
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

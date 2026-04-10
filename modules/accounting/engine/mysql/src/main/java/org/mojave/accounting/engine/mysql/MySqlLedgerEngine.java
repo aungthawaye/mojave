@@ -11,7 +11,7 @@ import org.mojave.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.component.flyway.FlywayMigration;
@@ -86,7 +86,7 @@ public class MySqlLedgerEngine implements LedgerEngine {
                transaction_at,
                scenario,
                flow_definition_id,
-               flow_line_id,
+               flow_definition_line_id,
                movement_stage,
                movement_result,
                created_at
@@ -322,60 +322,68 @@ public class MySqlLedgerEngine implements LedgerEngine {
                 if (!added) {
                     throw new RuntimeException(
                         new DuplicatePostingException(
-                            request.accountId(), request.side(),
-                            transactionId));
+                            request.accountId(), request.side(), transactionId));
                 }
             });
 
-            var posting = requests.stream().map(request -> new Posting(
-                request.ledgerMovementId().getId(), request.step(), request.accountId().getId(),
-                request.side().name(), request.currency().name(), request.amount().toPlainString(),
-                transactionId.getId(), transactionAt.getEpochSecond(), scenario.name(),
-                request.flowDefinitionId().getId(), request.flowLineId().getId())).toList();
+            var posting = requests
+                              .stream()
+                              .map(request -> new Posting(
+                                  request.ledgerMovementId().getId(), request.step(),
+                                  request.accountId().getId(), request.side().name(),
+                                  request.currency().name(), request.amount().toPlainString(),
+                                  transactionId.getId(), transactionAt.getEpochSecond(),
+                                  scenario.name(), request.flowDefinitionId().getId(),
+                                  request.flowDefinitionLineId().getId()))
+                              .toList();
 
             var postingJson = this.objectMapper.writeValueAsString(posting);
 
-            final var output = this.jdbcTemplate.execute((ConnectionCallback<ProcedureOutput>) con -> {
+            final var output = this.jdbcTemplate.execute(
+                (ConnectionCallback<ProcedureOutput>) con -> {
 
-                var movements = new ArrayList<Movement>();
+                    var movements = new ArrayList<Movement>();
 
-                try (var stm = con.prepareCall("{call sp_post_ledger_batch_with_movements(?)}")) {
+                    try (var stm = con.prepareCall(
+                        "{call sp_post_ledger_batch_with_movements(?)}")) {
 
-                    stm.setString(1, postingJson);
+                        stm.setString(1, postingJson);
 
-                    var hasResults = stm.execute();
+                        var hasResults = stm.execute();
 
-                    while (hasResults) {
+                        while (hasResults) {
 
-                        try (var rs = stm.getResultSet()) {
+                            try (var rs = stm.getResultSet()) {
 
-                            if (rs != null && rs.next()) {
+                                if (rs != null && rs.next()) {
 
-                                var status = rs.getString("status");
+                                    var status = rs.getString("status");
 
-                                switch (status) {
-                                    case "ERROR" -> {
-                                        handleError(rs, transactionId);
+                                    switch (status) {
+                                        case "ERROR" -> {
+                                            handleError(rs, transactionId);
+                                        }
+                                        case "SUCCESS" -> {
+                                            return new ProcedureOutput(
+                                                ProcedureStatus.SUCCESS, movements);
+                                        }
+                                        case "IGNORED" -> {
+                                            return new ProcedureOutput(
+                                                ProcedureStatus.IGNORED, movements);
+                                        }
+                                        default -> { }
                                     }
-                                    case "SUCCESS" -> {
-                                        return new ProcedureOutput(ProcedureStatus.SUCCESS, movements);
-                                    }
-                                    case "IGNORED" -> {
-                                        return new ProcedureOutput(ProcedureStatus.IGNORED, movements);
-                                    }
-                                    default -> { }
                                 }
+
                             }
 
+                            hasResults = stm.getMoreResults();
                         }
-
-                        hasResults = stm.getMoreResults();
                     }
-                }
 
-                return new ProcedureOutput(ProcedureStatus.IGNORED, movements);
+                    return new ProcedureOutput(ProcedureStatus.IGNORED, movements);
 
-            });
+                });
 
             if (output.status() == ProcedureStatus.SUCCESS) {
                 return this.fetchMovements(transactionId);
@@ -412,6 +420,25 @@ public class MySqlLedgerEngine implements LedgerEngine {
         }
     }
 
+    private List<Movement> fetchMovements(final TransactionId transactionId) {
+
+        return this.jdbcTemplate.query(
+            SQL_SELECT_MOVEMENTS_BY_TRANSACTION, (rs, __) -> new Movement(
+                new LedgerMovementId(rs.getLong("ledger_movement_id")), rs.getInt("step"),
+                new AccountId(rs.getLong("account_id")), Side.valueOf(rs.getString("side")),
+                Currency.valueOf(rs.getString("currency")), rs.getBigDecimal("amount"),
+                new DrCr(rs.getBigDecimal("old_debits"), rs.getBigDecimal("old_credits")),
+                new DrCr(rs.getBigDecimal("new_debits"), rs.getBigDecimal("new_credits")),
+                new TransactionId(rs.getLong("transaction_id")),
+                Instant.ofEpochSecond(rs.getLong("transaction_at")),
+                AccountingScenario.valueOf(rs.getString("scenario")),
+                new FlowDefinitionId(rs.getLong("flow_definition_id")),
+                new FlowDefinitionLineId(rs.getLong("flow_definition_line_id")),
+                MovementStage.valueOf(rs.getString("movement_stage")),
+                MovementResult.valueOf(rs.getString("movement_result")),
+                Instant.ofEpochSecond(rs.getLong("created_at"))), transactionId.getId());
+    }
+
     private void handleError(ResultSet rs, TransactionId transactionId) throws SQLException {
 
         var code = rs.getString("err_code");
@@ -436,8 +463,7 @@ public class MySqlLedgerEngine implements LedgerEngine {
             case "DUPLICATE_POSTING": {
                 throw new RuntimeException(
                     new DuplicatePostingException(
-                        new AccountId(accountId), Side.valueOf(side),
-                        transactionId));
+                        new AccountId(accountId), Side.valueOf(side), transactionId));
             }
 
             case "INSUFFICIENT_BALANCE": {
@@ -474,37 +500,14 @@ public class MySqlLedgerEngine implements LedgerEngine {
         }
 
         final var duplicatePostingCount = this.jdbcTemplate.queryForObject(
-            SQL_CHECK_DUPLICATE_POSTING,
-            Long.class,
-            accountId,
-            side,
-            transactionId.getId());
+            SQL_CHECK_DUPLICATE_POSTING, Long.class, accountId, side, transactionId.getId());
 
         return duplicatePostingCount != null && duplicatePostingCount > 0;
     }
 
-    private List<Movement> fetchMovements(final TransactionId transactionId) {
-
-        return this.jdbcTemplate.query(
-            SQL_SELECT_MOVEMENTS_BY_TRANSACTION,
-            (rs, __) -> new Movement(
-                new LedgerMovementId(rs.getLong("ledger_movement_id")),
-                rs.getInt("step"),
-                new AccountId(rs.getLong("account_id")),
-                Side.valueOf(rs.getString("side")),
-                Currency.valueOf(rs.getString("currency")),
-                rs.getBigDecimal("amount"),
-                new DrCr(rs.getBigDecimal("old_debits"), rs.getBigDecimal("old_credits")),
-                new DrCr(rs.getBigDecimal("new_debits"), rs.getBigDecimal("new_credits")),
-                new TransactionId(rs.getLong("transaction_id")),
-                Instant.ofEpochSecond(rs.getLong("transaction_at")),
-                AccountingScenario.valueOf(rs.getString("scenario")),
-                new FlowDefinitionId(rs.getLong("flow_definition_id")),
-                new FlowLineId(rs.getLong("flow_line_id")),
-                MovementStage.valueOf(rs.getString("movement_stage")),
-                MovementResult.valueOf(rs.getString("movement_result")),
-                Instant.ofEpochSecond(rs.getLong("created_at"))),
-            transactionId.getId());
+    private enum ProcedureStatus {
+        SUCCESS,
+        IGNORED
     }
 
     public record LedgerDbSettings(LedgerDbSettings.Connection connection,
@@ -534,13 +537,8 @@ public class MySqlLedgerEngine implements LedgerEngine {
                            long transactionAt,
                            String scenario,
                            long flowDefinitionId,
-                           long flowLineId) { }
+                           long flowDefinitionLineId) { }
 
     private record ProcedureOutput(ProcedureStatus status, List<Movement> movements) { }
-
-    private enum ProcedureStatus {
-        SUCCESS,
-        IGNORED
-    }
 
 }

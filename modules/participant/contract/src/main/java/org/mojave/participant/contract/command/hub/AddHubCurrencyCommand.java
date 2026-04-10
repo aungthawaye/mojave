@@ -28,6 +28,10 @@ import org.mojave.common.datatype.identifier.participant.HubId;
 
 public interface AddHubCurrencyCommand {
 
+    String SUBJECT_NAME = "sub-participant.add-hub-currency-command";
+
+    String TOPIC_NAME = "tp-participant.add-hub-currency-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull HubId hubId,

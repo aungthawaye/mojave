@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.OracleId;
 
 public interface ActivateOracleCommand {
 
+    String SUBJECT_NAME = "sub-participant.activate-oracle-command";
+
+    String TOPIC_NAME = "tp-participant.activate-oracle-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull OracleId oracleId) { }

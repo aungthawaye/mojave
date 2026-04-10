@@ -5,11 +5,11 @@ CREATE PROCEDURE sp_fulfil_positions(
                                     IN p_reservation_id        BIGINT,
                                     IN p_reservation_commit_id BIGINT,
                                     IN p_position_decrement_id BIGINT,
-                                    IN p_payee_position_id     BIGINT,
+                                    IN p_payee_wallet_id     BIGINT,
                                     IN p_description           VARCHAR(256))
 proc_fulfil:
 BEGIN
-    DECLARE v_payer_position_id BIGINT;
+    DECLARE v_payer_wallet_id BIGINT;
     DECLARE v_action VARCHAR(32);
     DECLARE v_amount DECIMAL(34, 4);
     DECLARE v_transaction_id BIGINT;
@@ -50,7 +50,7 @@ BEGIN
            transaction_at,
            action,
            description
-    INTO v_payer_position_id, v_amount, v_transaction_id, v_transaction_at, v_action, v_description
+    INTO v_payer_wallet_id, v_amount, v_transaction_id, v_transaction_at, v_action, v_description
     FROM mwe_position_update
     WHERE position_update_id = p_reservation_id;
 
@@ -70,11 +70,10 @@ BEGIN
     SELECT position,
            reserved,
            ndc,
-           dw.currency
+           mw.currency
     INTO v_payer_old_position, v_payer_old_reserved, v_payer_ndc, v_payer_currency
     FROM mwe_wallet mw
-             JOIN wlt_wallet dw ON dw.wallet_id = mw.wallet_id
-    WHERE mw.wallet_id = v_payer_position_id FOR
+    WHERE mw.wallet_id = v_payer_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -93,18 +92,17 @@ BEGIN
 
     UPDATE mwe_wallet
     SET position = v_payer_new_position, reserved = v_payer_new_reserved
-    WHERE wallet_id = v_payer_position_id;
+    WHERE wallet_id = v_payer_wallet_id;
 
     SET v_not_found = FALSE;
 
     SELECT position,
            reserved,
            ndc,
-           dw.currency
+           mw.currency
     INTO v_payee_old_position, v_payee_old_reserved, v_payee_ndc, v_payee_currency
     FROM mwe_wallet mw
-             JOIN wlt_wallet dw ON dw.wallet_id = mw.wallet_id
-    WHERE mw.wallet_id = p_payee_position_id FOR
+    WHERE mw.wallet_id = p_payee_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -134,7 +132,7 @@ BEGIN
 
     UPDATE mwe_wallet
     SET position = v_payee_new_position
-    WHERE wallet_id = p_payee_position_id;
+    WHERE wallet_id = p_payee_wallet_id;
 
     INSERT INTO mwe_position_update (position_update_id,
                                      position_id,
@@ -155,7 +153,7 @@ BEGIN
                                      rec_updated_at,
                                      rec_version)
     VALUES (p_reservation_commit_id,
-            v_payer_position_id,
+            v_payer_wallet_id,
             'COMMIT',
             v_transaction_id,
             v_payer_currency,
@@ -192,7 +190,7 @@ BEGIN
                                      rec_updated_at,
                                      rec_version)
     VALUES (p_position_decrement_id,
-            p_payee_position_id,
+            p_payee_wallet_id,
             'DECREASE',
             v_transaction_id,
             v_payee_currency,

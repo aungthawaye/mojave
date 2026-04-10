@@ -6,7 +6,9 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.wallet.contract.command.CreateWalletCommand;
+import org.mojave.wallet.domain.cache.WalletCache;
 import org.mojave.wallet.domain.model.Wallet;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.sql.DriverManager;
@@ -43,7 +45,11 @@ public class BaseIT {
     static {
 
         configureWalletDomainDependenciesEnvironment();
+        resetWalletSchemaForTests();
     }
+
+    @Autowired
+    private WalletCache walletCache;
 
     @BeforeAll
     public static void beforeAll() {
@@ -70,32 +76,25 @@ public class BaseIT {
         System.setProperty(key, value);
     }
 
-    @BeforeEach
-    public void beforeEach() {
+    private static void resetWalletSchemaForTests() {
 
-        truncateDomainTables();
-    }
+        try (final var connection = DriverManager.getConnection(
+            WRITE_DB_URL, WRITE_DB_USER,
+            WRITE_DB_PASSWORD); final var statement = connection.createStatement()) {
 
-    protected WalletId createWallet(final CreateWalletCommand createWalletCommand,
-                                    final long walletOwnerId,
-                                    final Currency currency,
-                                    final String scenario,
-                                    final String name) {
+            statement.execute("SET FOREIGN_KEY_CHECKS = 0");
+            statement.execute("DROP TABLE IF EXISTS mwe_balance_update");
+            statement.execute("DROP TABLE IF EXISTS mwe_position_update");
+            statement.execute("DROP TABLE IF EXISTS mwe_ndc_update");
+            statement.execute("DROP TABLE IF EXISTS mwe_wallet");
+            statement.execute("DROP TABLE IF EXISTS wlt_wallet");
+            statement.execute("DROP TABLE IF EXISTS flyway_mysql_wallet_engine_history");
+            statement.execute("DROP TABLE IF EXISTS flyway_wallet_history");
+            statement.execute("SET FOREIGN_KEY_CHECKS = 1");
 
-        final var output = createWalletCommand.execute(
-            new CreateWalletCommand.Input(
-                new WalletOwnerId(walletOwnerId), currency, scenario, name));
-
-        return output.walletId();
-    }
-
-    protected WalletId createDefaultWallet(final CreateWalletCommand createWalletCommand,
-                                           final long walletOwnerId,
-                                           final Currency currency,
-                                           final String name) {
-
-        return this.createWallet(
-            createWalletCommand, walletOwnerId, currency, Wallet.DEFAULT_SCENARIO, name);
+        } catch (final SQLException e) {
+            throw new RuntimeException("Unable to reset wallet schema for tests.", e);
+        }
     }
 
     private static void truncateDomainTables() {
@@ -117,12 +116,38 @@ public class BaseIT {
         }
     }
 
+    @BeforeEach
+    public void beforeEach() {
+
+        truncateDomainTables();
+        this.walletCache.clear();
+    }
+
+    protected WalletId createDefaultWallet(final CreateWalletCommand createWalletCommand,
+                                           final long walletOwnerId, final Currency currency,
+                                           final String name) {
+
+        return this.createWallet(
+            createWalletCommand, walletOwnerId, currency, Wallet.DEFAULT_SCENARIO, name);
+    }
+
+    protected WalletId createWallet(final CreateWalletCommand createWalletCommand,
+                                    final long walletOwnerId, final Currency currency,
+                                    final String scenario, final String name) {
+
+        final var output = createWalletCommand.execute(
+            new CreateWalletCommand.Input(
+                new WalletOwnerId(walletOwnerId), currency, scenario,
+                name));
+
+        return output.walletId();
+    }
+
     protected void executeSql(final String... sqlStatements) {
 
         try (final var connection = DriverManager.getConnection(
             WRITE_DB_URL, WRITE_DB_USER,
-            WRITE_DB_PASSWORD);
-             final var statement = connection.createStatement()) {
+            WRITE_DB_PASSWORD); final var statement = connection.createStatement()) {
 
             for (final var sqlStatement : sqlStatements) {
                 statement.execute(sqlStatement);
@@ -133,20 +158,17 @@ public class BaseIT {
         }
     }
 
-    protected void updateWalletEngineSnapshot(final WalletId walletId,
-                                              final BigDecimal balance,
-                                              final BigDecimal position,
-                                              final BigDecimal reserved,
+    protected void updateWalletEngineSnapshot(final WalletId walletId, final BigDecimal balance,
+                                              final BigDecimal position, final BigDecimal reserved,
                                               final BigDecimal ndc) {
 
         try (final var connection = DriverManager.getConnection(
             WRITE_DB_URL, WRITE_DB_USER,
-            WRITE_DB_PASSWORD);
-             final var statement = connection.prepareStatement("""
-                                                                   UPDATE mwe_wallet
-                                                                   SET balance = ?, position = ?, reserved = ?, ndc = ?
-                                                                   WHERE wallet_id = ?
-                                                                   """)) {
+            WRITE_DB_PASSWORD); final var statement = connection.prepareStatement("""
+            UPDATE mwe_wallet
+            SET balance = ?, position = ?, reserved = ?, ndc = ?
+            WHERE wallet_id = ?
+            """)) {
 
             statement.setBigDecimal(1, balance);
             statement.setBigDecimal(2, position);

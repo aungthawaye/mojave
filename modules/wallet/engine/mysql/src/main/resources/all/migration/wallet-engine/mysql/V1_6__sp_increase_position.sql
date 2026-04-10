@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_increase_position(
                                      IN p_transaction_id     BIGINT,
                                      IN p_transaction_at     BIGINT,
                                      IN p_position_update_id BIGINT,
-                                     IN p_position_id        BIGINT,
+                                     IN p_wallet_id        BIGINT,
                                      IN p_amount             DECIMAL(34, 4),
                                      IN p_description        VARCHAR(256))
 proc_increase:
@@ -25,7 +25,7 @@ BEGIN
 
         SELECT 'ERROR'              AS status,
                p_position_update_id AS position_update_id,
-               p_position_id        AS position_id,
+               p_wallet_id        AS position_id,
                'INCREASE'           AS action,
                p_transaction_id     AS transaction_id,
                NULL                 AS currency,
@@ -47,11 +47,10 @@ BEGIN
     SELECT position,
            reserved,
            ndc,
-           dw.currency
+           mw.currency
     INTO v_old_position, v_old_reserved, v_ndc, v_currency
     FROM mwe_wallet mw
-             JOIN wlt_wallet dw ON dw.wallet_id = mw.wallet_id
-    WHERE mw.wallet_id = p_position_id FOR
+    WHERE mw.wallet_id = p_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -59,7 +58,7 @@ BEGIN
 
         SELECT 'ERROR'              AS status,
                p_position_update_id AS position_update_id,
-               p_position_id        AS position_id,
+               p_wallet_id        AS position_id,
                'INCREASE'           AS action,
                p_transaction_id     AS transaction_id,
                NULL                 AS currency,
@@ -75,14 +74,14 @@ BEGIN
     END IF;
 
     SET v_new_position = v_old_position + p_amount;
-    SET v_limit = v_old_position + v_new_position;
+    SET v_limit = v_new_position + v_old_reserved;
 
     IF v_limit > v_ndc THEN
         ROLLBACK;
 
         SELECT 'LIMIT_EXCEEDED'     AS status,
                p_position_update_id AS position_update_id,
-               p_position_id        AS position_id,
+               p_wallet_id        AS position_id,
                'INCREASE'           AS action,
                p_transaction_id     AS transaction_id,
                v_currency           AS currency,
@@ -99,7 +98,7 @@ BEGIN
 
     UPDATE mwe_wallet
     SET position = v_new_position
-    WHERE wallet_id = p_position_id;
+    WHERE wallet_id = p_wallet_id;
 
     INSERT INTO mwe_position_update (position_update_id,
                                      position_id,
@@ -120,7 +119,7 @@ BEGIN
                                      rec_updated_at,
                                      rec_version)
     VALUES (p_position_update_id,
-            p_position_id,
+            p_wallet_id,
             'INCREASE',
             p_transaction_id,
             v_currency,

@@ -21,7 +21,7 @@ package org.mojave.connector.gateway.inbound.command.quotes.payee;
 
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.scheme.fspiop.core.QuotesPostRequest;
+import org.mojave.rail.fspiop.spec.core.QuotesPostRequest;
 
 public interface HandlePostQuotesRequestCommand {
 

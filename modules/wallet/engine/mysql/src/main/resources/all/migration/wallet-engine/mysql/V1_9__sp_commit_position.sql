@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_commit_position(
                                    IN p_position_update_id BIGINT)
 proc_commit:
 BEGIN
-    DECLARE v_position_id BIGINT;
+    DECLARE v_wallet_id BIGINT;
     DECLARE v_action VARCHAR(32);
     DECLARE v_amount DECIMAL(34, 4);
     DECLARE v_transaction_id BIGINT;
@@ -27,7 +27,7 @@ BEGIN
 
         SELECT 'COMMIT_FAILED'  AS status,
                p_reservation_id AS position_update_id,
-               v_position_id    AS position_id,
+               v_wallet_id    AS position_id,
                'COMMIT'         AS action,
                v_transaction_id AS transaction_id,
                v_currency       AS currency,
@@ -50,14 +50,14 @@ BEGIN
            transaction_at,
            action,
            description
-    INTO v_position_id, v_amount, v_transaction_id, v_transaction_at, v_action, v_description
+    INTO v_wallet_id, v_amount, v_transaction_id, v_transaction_at, v_action, v_description
     FROM mwe_position_update
     WHERE position_update_id = p_reservation_id;
 
     IF v_not_found OR v_action != 'RESERVE' THEN
         SELECT 'COMMIT_FAILED'  AS status,
                p_reservation_id AS position_update_id,
-               v_position_id    AS position_id,
+               v_wallet_id    AS position_id,
                'COMMIT'         AS action,
                v_transaction_id AS transaction_id,
                v_currency       AS currency,
@@ -79,11 +79,10 @@ BEGIN
     SELECT position,
            reserved,
            ndc,
-           dw.currency
+           mw.currency
     INTO v_old_position, v_old_reserved, v_ndc, v_currency
     FROM mwe_wallet mw
-             JOIN wlt_wallet dw ON dw.wallet_id = mw.wallet_id
-    WHERE mw.wallet_id = v_position_id FOR
+    WHERE mw.wallet_id = v_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -91,7 +90,7 @@ BEGIN
 
         SELECT 'COMMIT_FAILED'  AS status,
                p_reservation_id AS position_update_id,
-               v_position_id    AS position_id,
+               v_wallet_id    AS position_id,
                'COMMIT'         AS action,
                v_transaction_id AS transaction_id,
                v_currency       AS currency,
@@ -111,7 +110,7 @@ BEGIN
 
     UPDATE mwe_wallet
     SET position = v_new_position, reserved = v_new_reserved
-    WHERE wallet_id = v_position_id;
+    WHERE wallet_id = v_wallet_id;
 
     INSERT INTO mwe_position_update (position_update_id,
                                      position_id,
@@ -132,7 +131,7 @@ BEGIN
                                      rec_updated_at,
                                      rec_version)
     VALUES (p_position_update_id,
-            v_position_id,
+            v_wallet_id,
             'COMMIT',
             v_transaction_id,
             v_currency,

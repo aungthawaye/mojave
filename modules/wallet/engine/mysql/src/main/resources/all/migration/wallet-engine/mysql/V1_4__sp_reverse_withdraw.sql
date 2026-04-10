@@ -6,7 +6,7 @@ CREATE PROCEDURE sp_reverse_fund(
                                 IN p_balance_update_id           BIGINT)
 proc_reverse:
 BEGIN
-    DECLARE v_balance_id BIGINT;
+    DECLARE v_wallet_id BIGINT;
     DECLARE v_action VARCHAR(32);
     DECLARE v_amount DECIMAL(34, 4);
     DECLARE v_currency VARCHAR(3);
@@ -44,7 +44,7 @@ BEGIN
            bu.currency,
            bu.transaction_id,
            bu.description
-    INTO v_balance_id, v_action, v_amount, v_currency, v_transaction_id, v_description
+    INTO v_wallet_id, v_action, v_amount, v_currency, v_transaction_id, v_description
     FROM mwe_balance_update bu
     WHERE bu.balance_update_id = p_reversing_balance_update_id
       AND bu.action = 'WITHDRAW';
@@ -81,6 +81,22 @@ BEGIN
         LEAVE proc_reverse;
     END IF;
 
+    IF v_currency IS NULL THEN
+        SELECT 'REVERSAL_FAILED'             AS status,
+               p_balance_update_id           AS balance_update_id,
+               NULL                          AS balance_id,
+               'REVERSE_WITHDRAW'            AS action,
+               NULL                          AS transaction_id,
+               NULL                          AS currency,
+               0                             AS amount,
+               0                             AS old_balance,
+               0                             AS new_balance,
+               NULL                          AS transaction_at,
+               p_reversing_balance_update_id AS withdraw_id;
+
+        LEAVE proc_reverse;
+    END IF;
+
     START TRANSACTION;
 
     SET v_not_found = FALSE;
@@ -88,7 +104,7 @@ BEGIN
     SELECT w.balance
     INTO v_old_balance
     FROM mwe_wallet w
-    WHERE w.wallet_id = v_balance_id FOR
+    WHERE w.wallet_id = v_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -113,7 +129,7 @@ BEGIN
 
     UPDATE mwe_wallet
     SET balance = v_new_balance
-    WHERE wallet_id = v_balance_id;
+    WHERE wallet_id = v_wallet_id;
 
     INSERT INTO mwe_balance_update (balance_update_id,
                                     balance_id,
@@ -131,7 +147,7 @@ BEGIN
                                     rec_updated_at,
                                     rec_version)
     VALUES (p_balance_update_id,
-            v_balance_id,
+            v_wallet_id,
             'REVERSE_WITHDRAW',
             v_transaction_id,
             v_currency,

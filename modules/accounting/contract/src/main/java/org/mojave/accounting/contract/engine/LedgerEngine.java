@@ -8,7 +8,7 @@ import org.mojave.common.datatype.enums.accounting.OverdraftMode;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.AccountId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
@@ -56,7 +56,7 @@ public interface LedgerEngine {
                    BigDecimal amount,
                    AccountingScenario scenario,
                    FlowDefinitionId flowDefinitionId,
-                   FlowLineId flowLineId) {
+                   FlowDefinitionLineId flowDefinitionLineId) {
 
         public Request {
 
@@ -80,7 +80,7 @@ public interface LedgerEngine {
                     Instant transactionAt,
                     AccountingScenario scenario,
                     FlowDefinitionId flowDefinitionId,
-                    FlowLineId flowLineId,
+                    FlowDefinitionLineId flowDefinitionLineId,
                     MovementStage movementStage,
                     MovementResult movementResult,
                     Instant createdAt) {

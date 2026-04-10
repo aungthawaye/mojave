@@ -28,6 +28,10 @@ import org.mojave.common.datatype.identifier.participant.SspId;
 
 public interface AddSspCurrencyCommand {
 
+    String SUBJECT_NAME = "sub-participant.add-ssp-currency-command";
+
+    String TOPIC_NAME = "tp-participant.add-ssp-currency-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull SspId sspId,

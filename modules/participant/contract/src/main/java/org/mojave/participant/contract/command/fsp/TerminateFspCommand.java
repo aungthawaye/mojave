@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface TerminateFspCommand {
 
+    String SUBJECT_NAME = "sub-participant.terminate-fsp-command";
+
+    String TOPIC_NAME = "tp-participant.terminate-fsp-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId) { }

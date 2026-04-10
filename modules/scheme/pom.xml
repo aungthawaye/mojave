@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
     <name>Mojave - Scheme</name>
     <modules>
-        <module>fspiop</module>
         <module>rule</module>
     </modules>
     <properties>

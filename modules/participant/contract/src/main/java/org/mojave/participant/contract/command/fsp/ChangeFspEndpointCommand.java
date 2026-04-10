@@ -31,6 +31,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeFspEndpointCommand {
 
+    String SUBJECT_NAME = "sub-participant.change-fsp-endpoint-command";
+
+    String TOPIC_NAME = "tp-participant.change-fsp-endpoint-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,

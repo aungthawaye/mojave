@@ -20,9 +20,9 @@
 package org.mojave.connector.gateway.outbound.data;
 
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.scheme.fspiop.core.ErrorInformationObject;
-import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
-import org.mojave.scheme.fspiop.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.core.TransfersPostRequest;
 
 public record Transfers() {
 

@@ -31,6 +31,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface AddEndpointCommand {
 
+    String SUBJECT_NAME = "sub-participant.add-endpoint-command";
+
+    String TOPIC_NAME = "tp-participant.add-endpoint-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,

@@ -30,6 +30,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateOracleCommand {
 
+    String SUBJECT_NAME = "sub-participant.create-oracle-command";
+
+    String TOPIC_NAME = "tp-participant.create-oracle-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull PartyIdType type,

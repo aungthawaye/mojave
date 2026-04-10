@@ -11,12 +11,12 @@ import org.mojave.accounting.contract.command.definition.ChangeFlowDefinitionCur
 import org.mojave.accounting.contract.command.definition.ChangeFlowDefinitionPropertiesCommand;
 import org.mojave.accounting.contract.command.definition.CreateFlowDefinitionCommand;
 import org.mojave.accounting.contract.command.definition.DeactivateFlowDefinitionCommand;
-import org.mojave.accounting.contract.command.definition.RemoveFlowLineCommand;
+import org.mojave.accounting.contract.command.definition.RemoveFlowDefinitionLineCommand;
 import org.mojave.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionNameTakenException;
 import org.mojave.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
-import org.mojave.accounting.contract.exception.definition.FlowLineNotFoundException;
+import org.mojave.accounting.contract.exception.definition.FlowDefinitionLineNotFoundException;
 import org.mojave.accounting.contract.query.FlowDefinitionQuery;
 import org.mojave.accounting.domain.AccountingDomainTestConfiguration;
 import org.mojave.accounting.domain.BaseIT;
@@ -26,7 +26,7 @@ import org.mojave.common.datatype.enums.TerminationStatus;
 import org.mojave.common.datatype.enums.accounting.AccountType;
 import org.mojave.common.datatype.enums.accounting.Side;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -72,7 +72,7 @@ public class FlowDefinitionLifecycleCommandIT extends BaseIT {
     private FlowDefinitionQuery flowDefinitionQuery;
 
     @Autowired
-    private RemoveFlowLineCommand removeFlowLineCommand;
+    private RemoveFlowDefinitionLineCommand removeFlowDefinitionLineCommand;
 
     @Autowired
     private TerminateFlowDefinitionCommand terminateFlowDefinitionCommand;
@@ -235,42 +235,42 @@ public class FlowDefinitionLifecycleCommandIT extends BaseIT {
     }
 
     @Test
-    @DisplayName("Throw when removing flow line from missing definition")
-    public void removeFlowLineDefinitionNotFound() {
+    @DisplayName("Throw when removing flow definition line from missing definition")
+    public void removeFlowDefinitionLineDefinitionNotFound() {
 
         assertThrows(
-            FlowDefinitionNotFoundException.class, () -> this.removeFlowLineCommand.execute(
-                new RemoveFlowLineCommand.Input(
+            FlowDefinitionNotFoundException.class, () -> this.removeFlowDefinitionLineCommand.execute(
+                new RemoveFlowDefinitionLineCommand.Input(
                     new FlowDefinitionId(Long.MAX_VALUE),
-                    new FlowLineId(Long.MAX_VALUE))));
+                    new FlowDefinitionLineId(Long.MAX_VALUE))));
     }
 
     @Test
-    @DisplayName("Throw when flow line cannot be found")
-    public void removeFlowLineNotFound() {
+    @DisplayName("Throw when flow definition line cannot be found")
+    public void removeFlowDefinitionLineNotFound() {
 
-        final var fixture = this.createTransferDefinition("REMOVE_FLOW_LINE_MISSING", Currency.USD);
+        final var fixture = this.createTransferDefinition("REMOVE_FLOW_DEFINITION_LINE_MISSING", Currency.USD);
 
         assertThrows(
-            FlowLineNotFoundException.class, () -> this.removeFlowLineCommand.execute(
-                new RemoveFlowLineCommand.Input(
+            FlowDefinitionLineNotFoundException.class, () -> this.removeFlowDefinitionLineCommand.execute(
+                new RemoveFlowDefinitionLineCommand.Input(
                     fixture.flowDefinitionId(),
-                    new FlowLineId(Long.MAX_VALUE))));
+                    new FlowDefinitionLineId(Long.MAX_VALUE))));
     }
 
     @Test
-    @DisplayName("Remove flow line successfully")
-    public void removeFlowLineSuccessful() {
+    @DisplayName("Remove flow definition line successfully")
+    public void removeFlowDefinitionLineSuccessful() {
 
-        final var fixture = this.createTransferDefinition("REMOVE_FLOW_LINE", Currency.USD);
+        final var fixture = this.createTransferDefinition("REMOVE_FLOW_DEFINITION_LINE", Currency.USD);
 
-        final var output = this.removeFlowLineCommand.execute(
-            new RemoveFlowLineCommand.Input(fixture.flowDefinitionId(), fixture.payeeFlowLineId()));
+        final var output = this.removeFlowDefinitionLineCommand.execute(
+            new RemoveFlowDefinitionLineCommand.Input(fixture.flowDefinitionId(), fixture.payeeFlowDefinitionLineId()));
         final var definition = this.flowDefinitionQuery.get(fixture.flowDefinitionId());
 
         assertEquals(fixture.flowDefinitionId(), output.flowDefinitionId());
-        assertEquals(1, definition.flowLines().size());
-        assertEquals(fixture.payerFlowLineId(), definition.flowLines().getFirst().flowLineId());
+        assertEquals(1, definition.flowDefinitionLines().size());
+        assertEquals(fixture.payerFlowDefinitionLineId(), definition.flowDefinitionLines().getFirst().flowDefinitionLineId());
     }
 
     @Test
@@ -332,20 +332,20 @@ public class FlowDefinitionLifecycleCommandIT extends BaseIT {
             new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
                 prefix + "-flow description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, "PAYER_FSP", payerCoaEntryId,
                     "TRANSFER_AMOUNT", Side.DEBIT, prefix + " payer line"),
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     2, "PAYEE_FSP", payeeCoaEntryId, "PAYEE_FSP_FEE", Side.CREDIT,
                     prefix + " payee line"))));
 
         return new TransferDefinitionFixture(
             output.flowDefinitionId(),
-            output.flowLineIds().getFirst(), output.flowLineIds().get(1));
+            output.flowDefinitionLineIds().getFirst(), output.flowDefinitionLineIds().get(1));
     }
 
     private record TransferDefinitionFixture(FlowDefinitionId flowDefinitionId,
-                                             FlowLineId payerFlowLineId,
-                                             FlowLineId payeeFlowLineId) { }
+                                             FlowDefinitionLineId payerFlowDefinitionLineId,
+                                             FlowDefinitionLineId payeeFlowDefinitionLineId) { }
 
 }

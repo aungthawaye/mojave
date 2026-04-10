@@ -139,7 +139,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, Currency.GBP, "flow-invalid-amount",
                 "flow-invalid-amount description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, "PAYER_FSP", coaEntryId,
                     "INVALID_AMOUNT", Side.DEBIT, "invalid amount")))));
     }
@@ -162,13 +162,13 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             () -> this.createFlowDefinitionCommand.execute(new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, Currency.EUR, "flow-invalid-participant",
                 "flow-invalid-participant description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, "HUB", coaEntryId,
                     "TRANSFER_AMOUNT", Side.DEBIT, "invalid participant")))));
     }
 
     @Test
-    @DisplayName("Throw when participant is required for flow line")
+    @DisplayName("Throw when participant is required for flow definition line")
     public void requireParticipantForCoaEntry() {
 
         final var coaId = this.createCoa(this.createCoaCommand, "Flow Participant Required CoA");
@@ -195,7 +195,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
                 Currency.USD,
                 "flow-participant-required",
                 "flow-participant-required description",
-                List.of(new CreateFlowDefinitionCommand.Input.FlowLine(
+                List.of(new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1,
                     "   ",
                     coaEntryId,
@@ -205,7 +205,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
     }
 
     @Test
-    @DisplayName("Throw when CoA entry id cannot be found in flow line")
+    @DisplayName("Throw when CoA entry id cannot be found in flow definition line")
     public void coaEntryIdNotFound() {
 
         assertThrows(
@@ -215,7 +215,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
                 Currency.USD,
                 "flow-missing-entry",
                 "flow-missing-entry description",
-                List.of(new CreateFlowDefinitionCommand.Input.FlowLine(
+                List.of(new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1,
                     "PAYER_FSP",
                     new CoaEntryId(Long.MAX_VALUE),
@@ -244,7 +244,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
                 Currency.USD,
                 "flow-immature-entry",
                 "flow-immature-entry description",
-                List.of(new CreateFlowDefinitionCommand.Input.FlowLine(
+                List.of(new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1,
                     "PAYER_FSP",
                     coaEntryId,
@@ -282,14 +282,14 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
                 "flow-coa-conflict",
                 "flow-coa-conflict description",
                 List.of(
-                    new CreateFlowDefinitionCommand.Input.FlowLine(
+                    new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                         1,
                         "PAYER_FSP",
                         coaEntryId,
                         "TRANSFER_AMOUNT",
                         Side.DEBIT,
                         "first line"),
-                    new CreateFlowDefinitionCommand.Input.FlowLine(
+                    new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                         2,
                         "PAYER_FSP",
                         coaEntryId,
@@ -315,7 +315,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
             new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, Currency.USD, "fund-transfer-usd",
                 "fund-transfer-usd description",
-                List.of(new CreateFlowDefinitionCommand.Input.FlowLine(
+                List.of(new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, " PAYER_FSP ", coaEntryId, " transfer_amount ", Side.DEBIT,
                     "payer transfer amount"))));
         final var definition = this.flowDefinitionQuery.get(output.flowDefinitionId());
@@ -323,9 +323,9 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
         assertNotNull(output.flowDefinitionId());
         assertEquals(AccountingScenario.FUND_TRANSFER, definition.scenario());
         assertEquals(Currency.USD, definition.currency());
-        assertEquals(1, definition.flowLines().size());
-        assertEquals("PAYER_FSP", definition.flowLines().getFirst().participant());
-        assertEquals("TRANSFER_AMOUNT", definition.flowLines().getFirst().amountName());
+        assertEquals(1, definition.flowDefinitionLines().size());
+        assertEquals("PAYER_FSP", definition.flowDefinitionLines().getFirst().participant());
+        assertEquals("TRANSFER_AMOUNT", definition.flowDefinitionLines().getFirst().amountName());
     }
 
 }

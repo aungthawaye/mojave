@@ -32,6 +32,10 @@ import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateFspCommand {
 
+    String SUBJECT_NAME = "sub-participant.create-fsp-command";
+
+    String TOPIC_NAME = "tp-participant.create-fsp-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspCode fspCode,

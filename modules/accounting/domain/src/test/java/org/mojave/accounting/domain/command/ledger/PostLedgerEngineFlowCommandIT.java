@@ -33,6 +33,7 @@ import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
 import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.accounting.scenario.AccountingScenario;
+import org.mojave.scheme.rule.accounting.scenario.dimension.FundTransferFlowDimension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -167,8 +168,7 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
         final var exception = assertThrows(
             InsufficientBalanceInAccountException.class,
             () -> this.postAccountingFlowCommand.execute(this.buildTransferInput(
-                fixture, transactionId,
-                Map.of("PAYER_FSP", fixture.payerOwnerId()),
+                fixture, transactionId, Map.of("PAYER_FSP", fixture.payerOwnerId()),
                 Map.of("TRANSFER_AMOUNT", new BigDecimal("100.00")))));
 
         assertEquals(this.code(fixture.prefix(), "ACC01"), exception.extras().get("accountCode"));
@@ -179,15 +179,14 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
     public void overdraftLimitReachedInAccount() {
 
         final var fixture = this.createSingleAssetCreditPostingFixture(
-            "POST_LEDGER_OVERDRAFT", Currency.USD, OverdraftMode.LIMITED,
-            new BigDecimal("10.00"));
+            "POST_LEDGER_OVERDRAFT",
+            Currency.USD, OverdraftMode.LIMITED, new BigDecimal("10.00"));
         final var transactionId = new TransactionId(910L);
 
         final var exception = assertThrows(
             OverdraftLimitReachedInAccountException.class,
             () -> this.postAccountingFlowCommand.execute(this.buildTransferInput(
-                fixture, transactionId,
-                Map.of("PAYER_FSP", fixture.payerOwnerId()),
+                fixture, transactionId, Map.of("PAYER_FSP", fixture.payerOwnerId()),
                 Map.of("TRANSFER_AMOUNT", new BigDecimal("100.00")))));
 
         assertEquals(this.code(fixture.prefix(), "ACC01"), exception.extras().get("accountCode"));
@@ -272,8 +271,7 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
             final var exception = assertThrows(
                 RestoreFailedInAccountException.class,
                 () -> this.postAccountingFlowCommand.execute(this.buildTransferInput(
-                    fixture, transactionId,
-                    Map.of(
+                    fixture, transactionId, Map.of(
                         "PAYER_FSP", fixture.payerOwnerId(), "PAYEE_FSP",
                         fixture.payeeOwnerId()),
                     Map.of("TRANSFER_AMOUNT", new BigDecimal("100.00")))));
@@ -306,8 +304,8 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
         assertEquals(fixture.payerAccountId(), output.movements().getFirst().accountId());
         assertEquals(fixture.payeeAccountId(), output.movements().get(1).accountId());
         assertEquals(
-            2L,
-            this.queryForLong("SELECT COUNT(*) FROM lgr_ledger_movement WHERE transaction_id = 901"));
+            2L, this.queryForLong(
+                "SELECT COUNT(*) FROM lgr_ledger_movement WHERE transaction_id = 901"));
     }
 
     @Test
@@ -351,117 +349,6 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
         return base + "_" + hash + "_" + suffix;
     }
 
-    private PostingFixture createTransferPostingFixture(final String prefix,
-                                                        final Currency currency) {
-
-        return this.createTransferPostingFixture(
-            prefix, currency, OverdraftMode.FORBID, BigDecimal.ZERO);
-    }
-
-    private PostingFixture createTransferPostingFixture(final String prefix,
-                                                        final Currency currency,
-                                                        final OverdraftMode payerOverdraftMode,
-                                                        final BigDecimal payerOverdraftLimit) {
-
-        final var coaId = this.createCoa(this.createCoaCommand, prefix + "-coa");
-
-        final var payerCoaEntryId = this.createCoaEntry(
-            this.createCoaEntryCommand, coaId, "FSP",
-            this.code(prefix, "PAYER01"), prefix + " Payer 01", AccountType.ASSET);
-
-        final var payeeCoaEntryId = this.createCoaEntry(
-            this.createCoaEntryCommand, coaId, "FSP",
-            this.code(prefix, "PAYEE01"), prefix + " Payee 01", AccountType.REVENUE);
-
-        final var payerOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 1000L);
-
-        final var payeeOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 2000L);
-
-        final var payerAccountId = this.createAccount(
-            this.createAccountCommand, payerCoaEntryId,
-            payerOwnerId.getId(), currency, this.code(prefix, "ACC01"), prefix + " Account 01",
-            payerOverdraftMode, payerOverdraftLimit);
-
-        final var payeeAccountId = this.createAccount(
-            this.createAccountCommand, payeeCoaEntryId,
-            payeeOwnerId.getId(), currency, this.code(prefix, "ACC02"), prefix + " Account 02");
-
-        final var flowDefinitionOutput = this.createFlowDefinitionCommand.execute(
-            new CreateFlowDefinitionCommand.Input(
-                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
-                prefix + "-flow description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
-                    1, "PAYER_FSP", payerCoaEntryId,
-                    "TRANSFER_AMOUNT", Side.DEBIT, prefix + " payer line"),
-                new CreateFlowDefinitionCommand.Input.FlowLine(
-                    2, "PAYEE_FSP", payeeCoaEntryId, "PAYEE_FSP_FEE", Side.CREDIT,
-                    prefix + " payee line"))));
-
-        return new PostingFixture(
-            prefix, flowDefinitionOutput.flowDefinitionId(), payerAccountId, payeeAccountId,
-            payerOwnerId, payeeOwnerId);
-    }
-
-    private PostingFixture createSingleCreditPostingFixture(final String prefix,
-                                                            final Currency currency) {
-
-        final var coaId = this.createCoa(this.createCoaCommand, prefix + "-coa");
-        final var payeeCoaEntryId = this.createCoaEntry(
-            this.createCoaEntryCommand, coaId, "FSP",
-            this.code(prefix, "PAYEE01"), prefix + " Payee 01", AccountType.REVENUE);
-        final var payeeOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 2000L);
-        final var payeeAccountId = this.createAccount(
-            this.createAccountCommand, payeeCoaEntryId,
-            payeeOwnerId.getId(), currency, this.code(prefix, "ACC01"), prefix + " Account 01");
-
-        final var flowDefinitionOutput = this.createFlowDefinitionCommand.execute(
-            new CreateFlowDefinitionCommand.Input(
-                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
-                prefix + "-flow description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
-                    1, "PAYEE_FSP", payeeCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT,
-                    prefix + " payee line"))));
-
-        return new PostingFixture(
-            prefix, flowDefinitionOutput.flowDefinitionId(), null, payeeAccountId, null,
-            payeeOwnerId);
-    }
-
-    private PostingFixture createSingleAssetCreditPostingFixture(final String prefix,
-                                                                 final Currency currency) {
-
-        return this.createSingleAssetCreditPostingFixture(
-            prefix, currency, OverdraftMode.FORBID, BigDecimal.ZERO);
-    }
-
-    private PostingFixture createSingleAssetCreditPostingFixture(final String prefix,
-                                                                 final Currency currency,
-                                                                 final OverdraftMode overdraftMode,
-                                                                 final BigDecimal overdraftLimit) {
-
-        final var coaId = this.createCoa(this.createCoaCommand, prefix + "-coa");
-        final var payerCoaEntryId = this.createCoaEntry(
-            this.createCoaEntryCommand, coaId, "FSP",
-            this.code(prefix, "PAYER01"), prefix + " Payer 01", AccountType.ASSET);
-        final var payerOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 1000L);
-        final var payerAccountId = this.createAccount(
-            this.createAccountCommand, payerCoaEntryId,
-            payerOwnerId.getId(), currency, this.code(prefix, "ACC01"), prefix + " Account 01",
-            overdraftMode, overdraftLimit);
-
-        final var flowDefinitionOutput = this.createFlowDefinitionCommand.execute(
-            new CreateFlowDefinitionCommand.Input(
-                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
-                prefix + "-flow description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
-                    1, "PAYER_FSP", payerCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT,
-                    prefix + " payer line"))));
-
-        return new PostingFixture(
-            prefix, flowDefinitionOutput.flowDefinitionId(), payerAccountId, null, payerOwnerId,
-            null);
-    }
-
     private PostingFixture createRestoreFailurePostingFixture(final String prefix,
                                                               final Currency currency) {
 
@@ -490,12 +377,125 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
             new CreateFlowDefinitionCommand.Input(
                 AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
                 prefix + "-flow description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
-                    1, "PAYEE_FSP", payeeCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT,
-                    prefix + " payee line"),
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    1, "PAYEE_FSP",
+                    payeeCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT, prefix + " payee line"),
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     2, "PAYER_FSP", payerCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT,
                     prefix + " payer line"))));
+
+        return new PostingFixture(
+            prefix, flowDefinitionOutput.flowDefinitionId(), payerAccountId, payeeAccountId,
+            payerOwnerId, payeeOwnerId);
+    }
+
+    private PostingFixture createSingleAssetCreditPostingFixture(final String prefix,
+                                                                 final Currency currency,
+                                                                 final OverdraftMode overdraftMode,
+                                                                 final BigDecimal overdraftLimit) {
+
+        final var coaId = this.createCoa(this.createCoaCommand, prefix + "-coa");
+        final var payerCoaEntryId = this.createCoaEntry(
+            this.createCoaEntryCommand, coaId, "FSP",
+            this.code(prefix, "PAYER01"), prefix + " Payer 01", AccountType.ASSET);
+        final var payerOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 1000L);
+        final var payerAccountId = this.createAccount(
+            this.createAccountCommand, payerCoaEntryId,
+            payerOwnerId.getId(), currency, this.code(prefix, "ACC01"), prefix + " Account 01",
+            overdraftMode, overdraftLimit);
+
+        final var flowDefinitionOutput = this.createFlowDefinitionCommand.execute(
+            new CreateFlowDefinitionCommand.Input(
+                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
+                prefix + "-flow description", List.of(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    1, "PAYER_FSP", payerCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT,
+                    prefix + " payer line"))));
+
+        return new PostingFixture(
+            prefix, flowDefinitionOutput.flowDefinitionId(), payerAccountId, null, payerOwnerId,
+            null);
+    }
+
+    private PostingFixture createSingleAssetCreditPostingFixture(final String prefix,
+                                                                 final Currency currency) {
+
+        return this.createSingleAssetCreditPostingFixture(
+            prefix, currency, OverdraftMode.FORBID, BigDecimal.ZERO);
+    }
+
+    private PostingFixture createSingleCreditPostingFixture(final String prefix,
+                                                            final Currency currency) {
+
+        final var coaId = this.createCoa(this.createCoaCommand, prefix + "-coa");
+        final var payeeCoaEntryId = this.createCoaEntry(
+            this.createCoaEntryCommand, coaId, "FSP",
+            this.code(prefix, "PAYEE01"), prefix + " Payee 01", AccountType.REVENUE);
+        final var payeeOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 2000L);
+        final var payeeAccountId = this.createAccount(
+            this.createAccountCommand, payeeCoaEntryId,
+            payeeOwnerId.getId(), currency, this.code(prefix, "ACC01"), prefix + " Account 01");
+
+        final var flowDefinitionOutput = this.createFlowDefinitionCommand.execute(
+            new CreateFlowDefinitionCommand.Input(
+                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
+                prefix + "-flow description", List.of(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    1, "PAYEE_FSP", payeeCoaEntryId, "TRANSFER_AMOUNT", Side.CREDIT,
+                    prefix + " payee line"))));
+
+        return new PostingFixture(
+            prefix, flowDefinitionOutput.flowDefinitionId(), null, payeeAccountId, null,
+            payeeOwnerId);
+    }
+
+    private PostingFixture createTransferPostingFixture(final String prefix,
+                                                        final Currency currency) {
+
+        return this.createTransferPostingFixture(
+            prefix, currency, OverdraftMode.FORBID, BigDecimal.ZERO);
+    }
+
+    private PostingFixture createTransferPostingFixture(final String prefix,
+                                                        final Currency currency,
+                                                        final OverdraftMode payerOverdraftMode,
+                                                        final BigDecimal payerOverdraftLimit) {
+
+        final var coaId = this.createCoa(this.createCoaCommand, prefix + "-coa");
+
+        final var payerCoaEntryId = this.createCoaEntry(
+            this.createCoaEntryCommand, coaId, "FSP",
+            this.code(prefix, "PAYER01"), prefix + " Payer 01", AccountType.ASSET);
+
+        final var payeeCoaEntryId = this.createCoaEntry(
+            this.createCoaEntryCommand, coaId, "FSP",
+            this.code(prefix, "PAYEE01"), prefix + " Payee 01", AccountType.REVENUE);
+
+        final var payerOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 1000L);
+
+        final var payeeOwnerId = new AccountOwnerId(Math.abs(prefix.hashCode()) + 2000L);
+
+        final var payerAccountId = this.createAccount(
+            this.createAccountCommand, payerCoaEntryId, payerOwnerId.getId(), currency,
+            this.code(prefix, "ACC01"), prefix + " Account 01", payerOverdraftMode,
+            payerOverdraftLimit);
+
+        final var payeeAccountId = this.createAccount(
+            this.createAccountCommand, payeeCoaEntryId,
+            payeeOwnerId.getId(), currency, this.code(prefix, "ACC02"), prefix + " Account 02");
+
+        final var flowDefinitionOutput = this.createFlowDefinitionCommand.execute(
+            new CreateFlowDefinitionCommand.Input(
+                AccountingScenario.FUND_TRANSFER, currency, prefix + "-flow",
+                prefix + "-flow description", List.of(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    1, "PAYER_FSP", payerCoaEntryId,
+                    FundTransferFlowDimension.Amounts.TRANSFER_AMOUNT.name(), Side.DEBIT,
+                    prefix + " payer line"),
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    2, "PAYEE_FSP", payeeCoaEntryId,
+                    FundTransferFlowDimension.Amounts.TRANSFER_AMOUNT.name(), Side.CREDIT,
+                    prefix + " payee line"))));
 
         return new PostingFixture(
             prefix, flowDefinitionOutput.flowDefinitionId(), payerAccountId, payeeAccountId,

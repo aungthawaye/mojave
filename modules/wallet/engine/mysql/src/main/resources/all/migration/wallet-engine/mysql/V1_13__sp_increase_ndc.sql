@@ -44,10 +44,9 @@ BEGIN
            mw.balance,
            mw.position,
            mw.reserved,
-           dw.currency
+           mw.currency
     INTO v_old_ndc, v_balance, v_position, v_reserved, v_currency
     FROM mwe_wallet mw
-             JOIN wlt_wallet dw ON dw.wallet_id = mw.wallet_id
     WHERE mw.wallet_id = p_wallet_id FOR
     UPDATE;
 

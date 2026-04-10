@@ -27,6 +27,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface LeaveFspGroupCommand {
 
+    String SUBJECT_NAME = "sub-participant.leave-fsp-group-command";
+
+    String TOPIC_NAME = "tp-participant.leave-fsp-group-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspGroupId fspGroupId,

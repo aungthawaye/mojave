@@ -26,6 +26,10 @@ import org.mojave.common.datatype.identifier.participant.OracleId;
 
 public interface DeactivateOracleCommand {
 
+    String SUBJECT_NAME = "sub-participant.deactivate-oracle-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-oracle-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull OracleId oracleId) { }

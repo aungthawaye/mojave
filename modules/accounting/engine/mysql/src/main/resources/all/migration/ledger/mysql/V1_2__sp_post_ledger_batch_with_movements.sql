@@ -16,7 +16,7 @@ BEGIN
     DECLARE v_txn_at BIGINT;
     DECLARE v_scenario VARCHAR(32);
     DECLARE v_flow_definition_id BIGINT;
-    DECLARE v_flow_line_id BIGINT;
+    DECLARE v_flow_definition_line_id BIGINT;
     DECLARE done INT DEFAULT 0;
     DECLARE v_dr_curr DECIMAL(34, 4);
     DECLARE v_cr_curr DECIMAL(34, 4);
@@ -46,7 +46,7 @@ BEGIN
                                       transaction_at,
                                       scenario,
                                       flow_definition_id,
-                                      flow_line_id
+                                      flow_definition_line_id
                                FROM tmp_lines
                                ORDER BY step;
 
@@ -78,7 +78,7 @@ BEGIN
         transaction_at     BIGINT         NOT NULL,
         scenario           VARCHAR(32)    NOT NULL,
         flow_definition_id BIGINT         NOT NULL,
-        flow_line_id       BIGINT         NOT NULL
+        flow_definition_line_id       BIGINT         NOT NULL
     ) ENGINE = MEMORY;
 
     CREATE TEMPORARY TABLE tmp_movements
@@ -97,7 +97,7 @@ BEGIN
         transaction_at     BIGINT         NOT NULL,
         scenario           VARCHAR(32)    NOT NULL,
         flow_definition_id BIGINT         NOT NULL,
-        flow_line_id       BIGINT         NOT NULL,
+        flow_definition_line_id       BIGINT         NOT NULL,
         movement_stage     VARCHAR(32)    NOT NULL,
         movement_result    VARCHAR(32)    NOT NULL,
         created_at         BIGINT         NOT NULL
@@ -116,7 +116,7 @@ BEGIN
            jt.transaction_at,
            jt.scenario,
            jt.flow_definition_id,
-           jt.flow_line_id
+           jt.flow_definition_line_id
     FROM JSON_TABLE(p_lines_json, '$[*]'
                     COLUMNS (
                         ledger_movement_id BIGINT PATH '$.ledgerMovementId',
@@ -129,7 +129,7 @@ BEGIN
                         transaction_at BIGINT PATH '$.transactionAt',
                         scenario VARCHAR(32) PATH '$.scenario',
                         flow_definition_id BIGINT PATH '$.flowDefinitionId',
-                        flow_line_id BIGINT PATH '$.flowLineId' )) AS jt
+                        flow_definition_line_id BIGINT PATH '$.flowDefinitionLineId' )) AS jt
     ORDER BY jt.step;
     -- //@@formatter:on
 
@@ -181,7 +181,7 @@ BEGIN
                NULL                 AS transaction_at,
                NULL                 AS scenario,
                v_flow_definition_id AS flow_definition_id,
-               v_flow_line_id       AS flow_line_id,
+               v_flow_definition_line_id       AS flow_definition_line_id,
                'DEBIT_CREDIT'       AS movement_stage,
                'PENDING'            AS movement_result,
                UNIX_TIMESTAMP()     AS created_at;
@@ -204,7 +204,7 @@ BEGIN
                                      transaction_at,
                                      scenario,
                                      flow_definition_id,
-                                     flow_line_id,
+                                     flow_definition_line_id,
                                      movement_stage,
                                      movement_result,
                                      created_at,
@@ -225,7 +225,7 @@ BEGIN
            transaction_at,
            scenario,
            flow_definition_id,
-           flow_line_id,
+           flow_definition_line_id,
            'INITIATED',
            'PENDING',
            UNIX_TIMESTAMP(),
@@ -241,7 +241,7 @@ BEGIN
     post_loop
     :
     LOOP
-        FETCH c_lines INTO v_ledger_movement_id, v_step, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_scenario, v_flow_definition_id, v_flow_line_id;
+        FETCH c_lines INTO v_ledger_movement_id, v_step, v_account_id, v_side, v_currency, v_amount, v_txn_id, v_txn_at, v_scenario, v_flow_definition_id, v_flow_definition_line_id;
         IF done = 1 THEN LEAVE post_loop; END IF;
 
         -- T1: lock/update/stage
@@ -274,7 +274,7 @@ BEGIN
                        NULL                 AS transaction_at,
                        NULL                 AS scenario,
                        v_flow_definition_id AS flow_definition_id,
-                       v_flow_line_id       AS flow_line_id,
+                       v_flow_definition_line_id       AS flow_definition_line_id,
                        'DEBIT_CREDIT'       AS movement_stage,
                        'PENDING'            AS movement_result,
                        UNIX_TIMESTAMP()     AS created_at;
@@ -362,7 +362,7 @@ BEGIN
                                        transaction_at,
                                        scenario,
                                        flow_definition_id,
-                                       flow_line_id,
+                                       flow_definition_line_id,
                                        movement_stage,
                                        movement_result,
                                        created_at)
@@ -380,7 +380,7 @@ BEGIN
                     v_txn_at,
                     v_scenario,
                     v_flow_definition_id,
-                    v_flow_line_id,
+                    v_flow_definition_line_id,
                     'DEBIT_CREDIT',
                     'SUCCESS',
                     UNIX_TIMESTAMP());
@@ -456,7 +456,7 @@ BEGIN
                                NULL                 AS transaction_at,
                                NULL                 AS scenario,
                                NULL                 AS flow_definition_id,
-                               NULL                 AS flow_line_id,
+                               NULL                 AS flow_definition_line_id,
                                'DEBIT_CREDIT'       AS movement_stage,
                                'PENDING'            AS movement_result,
                                UNIX_TIMESTAMP()     AS created_at;
@@ -513,7 +513,7 @@ BEGIN
                NULL             AS transaction_at,
                NULL             AS scenario,
                NULL             AS flow_definition_id,
-               NULL             AS flow_line_id,
+               NULL             AS flow_definition_line_id,
                'DEBIT_CREDIT'   AS movement_stage,
                v_error_code     AS movement_result,
                UNIX_TIMESTAMP() AS created_at;
@@ -548,7 +548,7 @@ BEGIN
                transaction_at,
                scenario,
                flow_definition_id,
-               flow_line_id,
+               flow_definition_line_id,
                movement_stage,
                movement_result,
                created_at

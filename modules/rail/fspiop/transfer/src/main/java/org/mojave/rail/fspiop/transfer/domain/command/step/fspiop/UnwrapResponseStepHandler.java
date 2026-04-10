@@ -26,7 +26,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.UnwrapRespon
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
-import org.mojave.scheme.fspiop.core.TransferState;
+import org.mojave.rail.fspiop.spec.core.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

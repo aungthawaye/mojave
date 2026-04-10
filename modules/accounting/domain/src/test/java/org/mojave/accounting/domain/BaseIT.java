@@ -103,7 +103,7 @@ public class BaseIT {
              final var statement = connection.createStatement()) {
 
             statement.execute("SET FOREIGN_KEY_CHECKS = 0");
-            statement.execute("TRUNCATE TABLE acc_flow_line");
+            statement.execute("TRUNCATE TABLE acc_flow_definition_line");
             statement.execute("TRUNCATE TABLE acc_flow_definition");
             statement.execute("TRUNCATE TABLE acc_account");
             statement.execute("TRUNCATE TABLE acc_coa_entry");
@@ -184,9 +184,9 @@ public class BaseIT {
         final var output = createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
                 scenario, currency, name, name + " description", List.of(
-                new CreateFlowDefinitionCommand.Input.FlowLine(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
                     1, participant, coaEntryId, amountName, side,
-                    name + " flow line description"))));
+                    name + " flow definition line description"))));
 
         return output.flowDefinitionId();
     }

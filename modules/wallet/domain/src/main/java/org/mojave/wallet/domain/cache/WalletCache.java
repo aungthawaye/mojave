@@ -31,11 +31,15 @@ import java.util.Set;
 
 public interface WalletCache {
 
+    void clear();
+
     WalletData get(WalletId walletId);
 
     WalletData get(WalletOwnerId walletOwnerId, Currency currency);
 
     Set<WalletData> get(WalletOwnerId walletOwnerId);
+
+    void save(WalletData wallet);
 
     class Updater {
 

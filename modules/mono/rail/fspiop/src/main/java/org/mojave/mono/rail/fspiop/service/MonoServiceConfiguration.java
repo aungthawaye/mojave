@@ -29,7 +29,7 @@ import org.mojave.participant.contract.query.FspQuery;
 import org.mojave.participant.contract.query.OracleQuery;
 import org.mojave.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import org.mojave.wallet.intercom.client.WalletIntercomClientConfiguration;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.lookup.domain.LookUpDomainConfiguration;
 import org.mojave.rail.fspiop.lookup.service.LookUpServiceConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;

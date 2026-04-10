@@ -27,7 +27,7 @@ import org.mojave.accounting.domain.cache.AccountCache;
 import org.mojave.accounting.domain.cache.CoaEntryCache;
 import org.mojave.accounting.domain.model.FlowDefinition;
 import org.mojave.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.common.datatype.identifier.accounting.FlowLineId;
+import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.scheme.rule.accounting.AccountingScheme;
@@ -90,19 +90,19 @@ public class CreateFlowDefinitionCommandHandler implements CreateFlowDefinitionC
         var definition = new FlowDefinition(
             input.scenario(), currency, input.name(), input.description());
 
-        final var flowLineIds = new ArrayList<FlowLineId>();
+        final var flowDefinitionLineIds = new ArrayList<FlowDefinitionLineId>();
 
-        for (final var flowLine : input.flowLines()) {
+        for (final var flowDefinitionLine : input.flowDefinitionLines()) {
 
-            final var savedFlowLine = definition.addFlowLine(
-                flowLine.step(), flowLine.participant(), flowLine.coaEntryId(),
-                flowLine.amountName(), flowLine.side(), flowLine.description(), this.accountCache,
+            final var savedFlowDefinitionLine = definition.addFlowDefinitionLine(
+                flowDefinitionLine.step(), flowDefinitionLine.participant(), flowDefinitionLine.coaEntryId(),
+                flowDefinitionLine.amountName(), flowDefinitionLine.side(), flowDefinitionLine.description(), this.accountCache,
                 this.coaEntryCache);
-            flowLineIds.add(savedFlowLine.getId());
+            flowDefinitionLineIds.add(savedFlowDefinitionLine.getId());
         }
 
         definition = this.flowDefinitionRepository.save(definition);
-        final var output = new Output(definition.getId(), flowLineIds);
+        final var output = new Output(definition.getId(), flowDefinitionLineIds);
 
         LOGGER.info("CreateFlowDefinitionCommand : output : ({})", ObjectLogger.log(output));
 

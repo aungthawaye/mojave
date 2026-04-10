@@ -5,7 +5,7 @@ CREATE PROCEDURE sp_withdraw_fund(
                                  IN p_transaction_id    BIGINT,
                                  IN p_transaction_at    BIGINT,
                                  IN p_balance_update_id BIGINT,
-                                 IN p_balance_id        BIGINT,
+                                 IN p_wallet_id        BIGINT,
                                  IN p_amount            DECIMAL(34, 4),
                                  IN p_description       VARCHAR(256))
 proc_withdraw:
@@ -22,7 +22,7 @@ BEGIN
 
         SELECT 'ERROR'             AS status,
                p_balance_update_id AS balance_update_id,
-               p_balance_id        AS balance_id,
+               p_wallet_id        AS balance_id,
                'WITHDRAW'          AS action,
                p_transaction_id    AS transaction_id,
                NULL                AS currency,
@@ -38,11 +38,10 @@ BEGIN
 
     START TRANSACTION;
 
-    SELECT w.balance, dw.currency
+    SELECT w.balance, w.currency
     INTO v_old_balance, v_currency
     FROM mwe_wallet w
-             JOIN wlt_wallet dw ON dw.wallet_id = w.wallet_id
-    WHERE w.wallet_id = p_balance_id FOR
+    WHERE w.wallet_id = p_wallet_id FOR
     UPDATE;
 
     IF v_not_found THEN
@@ -50,7 +49,7 @@ BEGIN
 
         SELECT 'ERROR'             AS status,
                p_balance_update_id AS balance_update_id,
-               p_balance_id        AS balance_id,
+               p_wallet_id        AS balance_id,
                'WITHDRAW'          AS action,
                p_transaction_id    AS transaction_id,
                NULL                AS currency,
@@ -69,21 +68,21 @@ BEGIN
 
         SELECT 'INSUFFICIENT_BALANCE' AS status,
                p_balance_update_id    AS balance_update_id,
-               p_balance_id           AS balance_id,
+               p_wallet_id           AS balance_id,
                'WITHDRAW'             AS action,
                p_transaction_id       AS transaction_id,
                v_currency             AS currency,
                p_amount               AS amount,
                v_old_balance          AS old_balance,
                v_new_balance          AS new_balance,
-               v_now                  AS transaction_at;
+               p_transaction_at       AS transaction_at;
 
         LEAVE proc_withdraw;
     END IF;
 
     UPDATE mwe_wallet
     SET balance = v_new_balance
-    WHERE wallet_id = p_balance_id;
+    WHERE wallet_id = p_wallet_id;
 
     INSERT INTO mwe_balance_update (balance_update_id,
                                     balance_id,
@@ -100,7 +99,7 @@ BEGIN
                                     rec_updated_at,
                                     rec_version)
     VALUES (p_balance_update_id,
-            p_balance_id,
+            p_wallet_id,
             'WITHDRAW',
             p_transaction_id,
             v_currency,
@@ -108,7 +107,7 @@ BEGIN
             v_old_balance,
             v_new_balance,
             p_description,
-            v_now,
+            p_transaction_at,
             v_now,
             v_now,
             v_now,

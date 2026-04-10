@@ -20,8 +20,8 @@
 package org.mojave.rail.fspiop.transfer.contract.command;
 
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
-import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
 
 public interface PutTransfersErrorCommand {
 

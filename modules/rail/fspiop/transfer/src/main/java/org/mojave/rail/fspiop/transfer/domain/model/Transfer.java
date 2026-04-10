@@ -62,10 +62,10 @@ import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.rail.fspiop.transfer.contract.data.TransferData;
-import org.mojave.scheme.fspiop.core.AmountType;
-import org.mojave.scheme.fspiop.core.Currency;
-import org.mojave.scheme.fspiop.core.Money;
-import org.mojave.scheme.fspiop.core.TransactionScenario;
+import org.mojave.rail.fspiop.spec.core.AmountType;
+import org.mojave.rail.fspiop.spec.core.Currency;
+import org.mojave.rail.fspiop.spec.core.Money;
+import org.mojave.rail.fspiop.spec.core.TransactionScenario;
 
 import java.math.BigDecimal;
 import java.sql.Types;

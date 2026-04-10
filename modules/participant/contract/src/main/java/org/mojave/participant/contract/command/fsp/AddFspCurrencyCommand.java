@@ -28,6 +28,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface AddFspCurrencyCommand {
 
+    String SUBJECT_NAME = "sub-participant.add-fsp-currency-command";
+
+    String TOPIC_NAME = "tp-participant.add-fsp-currency-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,

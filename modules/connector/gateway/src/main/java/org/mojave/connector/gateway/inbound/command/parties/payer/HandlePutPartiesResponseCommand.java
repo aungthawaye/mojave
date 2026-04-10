@@ -20,8 +20,8 @@
 package org.mojave.connector.gateway.inbound.command.parties.payer;
 
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.scheme.fspiop.core.PartiesTypeIDPutResponse;
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
+import org.mojave.rail.fspiop.spec.core.PartyIdType;
 
 public interface HandlePutPartiesResponseCommand {
 

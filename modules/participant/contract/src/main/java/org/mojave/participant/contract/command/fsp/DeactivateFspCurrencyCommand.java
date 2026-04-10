@@ -28,6 +28,10 @@ import org.mojave.common.datatype.identifier.participant.FspId;
 
 public interface DeactivateFspCurrencyCommand {
 
+    String SUBJECT_NAME = "sub-participant.deactivate-fsp-currency-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-fsp-currency-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull FspId fspId,
