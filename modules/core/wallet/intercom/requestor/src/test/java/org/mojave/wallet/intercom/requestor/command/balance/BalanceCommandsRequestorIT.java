@@ -1,0 +1,80 @@
+package org.mojave.wallet.intercom.requestor.command.balance;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.wallet.WalletPurpose;
+import org.mojave.wallet.contract.command.balance.DepositBalanceCommand;
+import org.mojave.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;
+import org.mojave.wallet.contract.command.balance.WithdrawBalanceCommand;
+import org.mojave.wallet.contract.exception.WalletNotFoundException;
+import org.mojave.wallet.contract.exception.balance.ReversalFailedInWalletException;
+import org.mojave.wallet.intercom.requestor.WalletIntercomRequestorTestConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(
+    classes = {
+        WalletIntercomRequestorTestConfiguration.class})
+@DisplayName("Balance Commands Requestor Integration Test")
+public class BalanceCommandsRequestorIT {
+
+    @Autowired
+    private DepositBalanceCommand depositBalanceCommand;
+
+    @Autowired
+    private ReverseBalanceWithdrawCommand reverseBalanceWithdrawCommand;
+
+    @Autowired
+    private WithdrawBalanceCommand withdrawBalanceCommand;
+
+    @Test
+    @DisplayName("Execute balance commands through requestor")
+    public void successful() {
+
+        final var transactionAt = Instant.now();
+
+        assertThrows(
+            WalletNotFoundException.class,
+            () -> this.depositBalanceCommand.execute(
+                new DepositBalanceCommand.Input(
+                    new WalletOwnerId(900101L),
+                    Currency.USD,
+                    WalletPurpose.ANY,
+                    new BigDecimal("15.00"),
+                    new TransactionId(90010101L),
+                    transactionAt,
+                    "requestor-deposit-missing-balance")));
+
+        assertThrows(
+            WalletNotFoundException.class,
+            () -> this.withdrawBalanceCommand.execute(
+                new WithdrawBalanceCommand.Input(
+                    new WalletOwnerId(900102L),
+                    Currency.USD,
+                    WalletPurpose.ANY,
+                    new BigDecimal("5.00"),
+                    new TransactionId(90010201L),
+                    transactionAt,
+                    "requestor-withdraw-missing-balance")));
+
+        assertThrows(
+            ReversalFailedInWalletException.class,
+            () -> this.reverseBalanceWithdrawCommand.execute(
+                new ReverseBalanceWithdrawCommand.Input(
+                    new BalanceUpdateId(90010301L),
+                    "requestor-reverse-missing-withdraw")));
+    }
+
+}

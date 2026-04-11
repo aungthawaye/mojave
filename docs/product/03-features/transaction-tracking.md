@@ -394,5 +394,5 @@ Identify and resolve discrepancies.
 ## See Also
 
 - [Transaction Lifecycle](../02-core-concepts/transaction-lifecycle.md) - Transaction concepts
-- [Transaction Module](../../technical/02-core-modules/transaction-module.md) - Technical implementation
+- [Transaction Module](../../technical/02-core-modules/core/transaction-module.md) - Technical implementation
 - [Transfer Flow](../../technical/03-flows/transfer-flow.md) - Complete transfer process

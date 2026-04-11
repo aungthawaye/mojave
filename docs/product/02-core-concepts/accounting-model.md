@@ -182,7 +182,7 @@ public interface PostLedgerFlowCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ### Posting Flow
 
@@ -488,4 +488,4 @@ System: Balanced (debits = credits)
 - [Wallet and Positions](wallet-and-positions.md) - Position management
 - [Transaction Lifecycle](transaction-lifecycle.md) - Transaction phases
 - [Accounting Capabilities](../03-features/accounting-capabilities.md) - Detailed accounting features
-- [Accounting Module](../../technical/02-core-modules/accounting-module.md) - Technical implementation
+- [Accounting Module](../../technical/02-core-modules/core/accounting-module.md) - Technical implementation

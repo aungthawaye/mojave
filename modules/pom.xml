@@ -14,9 +14,7 @@
     <module>component</module>
     <module>common</module>
     <module>scheme</module>
-    <module>participant</module>
-    <module>accounting</module>
-    <module>wallet</module>
+    <module>core</module>
     <module>rail</module>
   </modules>
   <properties>
@@ -231,31 +229,6 @@
         <version>1.0.0</version>
       </dependency>
       <dependency>
-        <groupId>org.mojave.participant</groupId>
-        <artifactId>mojave-participant-contract</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mojave.participant</groupId>
-        <artifactId>mojave-participant-domain</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mojave.participant.intercom</groupId>
-        <artifactId>mojave-participant-intercom-requestor</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mojave.participant.intercom</groupId>
-        <artifactId>mojave-participant-intercom-replier</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mojave.participant</groupId>
-        <artifactId>mojave-participant-store</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
         <groupId>org.mojave.accounting</groupId>
         <artifactId>mojave-accounting-contract</artifactId>
         <version>1.0.0</version>
@@ -291,6 +264,26 @@
         <version>1.0.0</version>
       </dependency>
       <dependency>
+        <groupId>org.mojave.transaction</groupId>
+        <artifactId>mojave-transactioncontract</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.transaction</groupId>
+        <artifactId>mojave-transactiondomain</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.settlement</groupId>
+        <artifactId>mojave-settlement-contract</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.settlement</groupId>
+        <artifactId>mojave-settlement-domain</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.mojave.wallet</groupId>
         <artifactId>mojave-wallet-contract</artifactId>
         <version>1.0.0</version>
@@ -323,6 +316,31 @@
       <dependency>
         <groupId>org.mojave.wallet.intercom</groupId>
         <artifactId>mojave-wallet-intercom-requestor</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.participant</groupId>
+        <artifactId>mojave-participant-contract</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.participant</groupId>
+        <artifactId>mojave-participant-domain</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.participant.intercom</groupId>
+        <artifactId>mojave-participant-intercom-requestor</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.participant.intercom</groupId>
+        <artifactId>mojave-participant-intercom-replier</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.participant</groupId>
+        <artifactId>mojave-participant-store</artifactId>
         <version>1.0.0</version>
       </dependency>
       <dependency>

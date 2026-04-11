@@ -224,7 +224,7 @@ public class SettlementDefinition {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
 
 **Process:**
 1. Extract currency, payer FSP, payee FSP from transfer
@@ -552,5 +552,5 @@ if (hubTotal != sspTotal) {
 - [Participants and Roles](participants-and-roles.md) - SSP role details
 - [Transaction Lifecycle](transaction-lifecycle.md) - How settlement fits in transaction flow
 - [Settlement Processing](../03-features/settlement-processing.md) - Detailed settlement features
-- [Settlement Module](../../technical/02-core-modules/settlement-module.md) - Technical implementation
+- [Settlement Module](../../technical/02-core-modules/core/settlement-module.md) - Technical implementation
 - [Settlement Flow](../../technical/03-flows/settlement-flow.md) - Technical flow details

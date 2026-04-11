@@ -199,7 +199,7 @@ public interface ReservePositionCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 **Process:**
 1. Fetch current position for FSP and currency
@@ -573,5 +573,5 @@ System: Balanced ($900 + $600 = $1,500, same as before)
 - [Accounting Model](accounting-model.md) - How positions relate to accounting
 - [Transaction Lifecycle](transaction-lifecycle.md) - How positions change during transfers
 - [Wallet Management](../03-features/wallet-management.md) - Detailed wallet features
-- [Wallet Module](../../technical/02-core-modules/wallet-module.md) - Technical implementation
+- [Wallet Module](../../technical/02-core-modules/core/wallet-module.md) - Technical implementation
 - [Position Management Flow](../../technical/03-flows/position-management-flow.md) - Technical flow details

@@ -552,5 +552,5 @@ Each type has its own flow definition for accounting.
 - [Wallet and Positions](wallet-and-positions.md) - How positions change
 - [Settlement Framework](settlement-framework.md) - How transactions settle
 - [Transaction Tracking](../03-features/transaction-tracking.md) - Query and monitoring features
-- [Transaction Module](../../technical/02-core-modules/transaction-module.md) - Technical implementation
+- [Transaction Module](../../technical/02-core-modules/core/transaction-module.md) - Technical implementation
 - [Transfer Flow](../../technical/03-flows/transfer-flow.md) - Detailed transfer processing

@@ -89,7 +89,7 @@ public interface ReservePositionCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 **Process:**
 1. Fetch current position
@@ -664,5 +664,5 @@ FreezePositionCommand.execute(positionId, reason);
 
 - [Wallet and Positions](../02-core-concepts/wallet-and-positions.md) - Position concepts
 - [Transaction Lifecycle](../02-core-concepts/transaction-lifecycle.md) - How positions change
-- [Wallet Module](../../technical/02-core-modules/wallet-module.md) - Technical implementation
+- [Wallet Module](../../technical/02-core-modules/core/wallet-module.md) - Technical implementation
 - [Position Management Flow](../../technical/03-flows/position-management-flow.md) - Technical flows

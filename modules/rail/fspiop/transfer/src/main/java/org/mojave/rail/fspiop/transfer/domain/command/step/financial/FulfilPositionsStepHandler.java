@@ -23,6 +23,7 @@ package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.wallet.contract.exception.position.FailedToCommitReservationException;
 import org.mojave.wallet.producer.publisher.FulfilPositionsPublisher;
@@ -62,7 +63,8 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
             var fulfilPositionsInput = new FulfilPositionsCommand.Input(
                 input.positionReservationId(), new WalletOwnerId(input.payeeFsp().fspId().getId()),
-                Currency.valueOf(input.currency().toString()), input.description());
+                Currency.valueOf(input.currency().toString()), WalletPurpose.ANY,
+                input.description());
 
             this.fulfilPositionsPublisher.publish(fulfilPositionsInput);
 

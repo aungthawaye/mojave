@@ -80,7 +80,7 @@ Mojave implements a clean, modular architecture:
 ### Code References
 Code examples reference actual source files with paths like:
 ```
-modules/accounting/domain/src/main/java/...
+modules/core/accounting/domain/src/main/java/...
 ```
 
 ### Diagrams

@@ -202,7 +202,7 @@ record Output(
 ) {}
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ### Posting Execution Flow
 
@@ -603,4 +603,4 @@ ReversePosting.execute(transactionId, reason, approver);
 
 - [Accounting Model](../02-core-concepts/accounting-model.md) - Accounting concepts
 - [Transaction Lifecycle](../02-core-concepts/transaction-lifecycle.md) - How transactions are recorded
-- [Accounting Module](../../technical/02-core-modules/accounting-module.md) - Technical implementation
+- [Accounting Module](../../technical/02-core-modules/core/accounting-module.md) - Technical implementation

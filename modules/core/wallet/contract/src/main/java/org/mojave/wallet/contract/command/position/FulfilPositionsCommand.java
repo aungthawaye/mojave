@@ -1,0 +1,46 @@
+/*-
+ * ===
+ * Mojave
+ * ---
+ * Copyright (C) 2025 Open Source
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===
+ */
+
+package org.mojave.wallet.contract.command.position;
+
+import org.mojave.common.datatype.enums.Currency;
+import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.wallet.WalletPurpose;
+import org.mojave.wallet.contract.constant.TopicNames;
+import org.mojave.wallet.contract.exception.position.FailedToFulfilPositionsException;
+
+public interface FulfilPositionsCommand {
+
+    String SUBJECT_NAME = "sub-wallet.fulfil-positions-command";
+
+    String TOPIC_NAME = TopicNames.FULFIL_POSITIONS;
+
+    Output execute(Input input) throws FailedToFulfilPositionsException;
+
+    record Input(PositionUpdateId reservationId,
+                 WalletOwnerId payeeWalletOwnerId,
+                 Currency currency,
+                 WalletPurpose purpose,
+                 String description) { }
+
+    record Output(PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) { }
+
+}

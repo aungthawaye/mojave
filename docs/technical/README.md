@@ -17,11 +17,11 @@ System architecture, design patterns, and infrastructure components.
 
 Detailed technical documentation for each domain module.
 
-- [Participant Module](02-core-modules/participant-module.md) - FSP, Hub, Oracle, SSP management
-- [Accounting Module](02-core-modules/accounting-module.md) - Double-entry ledgerOperation implementation
-- [Wallet Module](02-core-modules/wallet-module.md) - Position and balance management
-- [Settlement Module](02-core-modules/settlement-module.md) - Settlement definitions and provider matching
-- [Transaction Module](02-core-modules/transaction-module.md) - Transaction lifecycle tracking
+- [Participant Module](02-core-modules/core/participant-module.md) - FSP, Hub, Oracle, SSP management
+- [Accounting Module](02-core-modules/core/accounting-module.md) - Double-entry ledgerOperation implementation
+- [Wallet Module](02-core-modules/core/wallet-module.md) - Position and balance management
+- [Settlement Module](02-core-modules/core/settlement-module.md) - Settlement definitions and provider matching
+- [Transaction Module](02-core-modules/core/transaction-module.md) - Transaction lifecycle tracking
 
 ### 3. Critical Flows
 
@@ -267,16 +267,16 @@ Key tables by module:
 `modules/rail/fspiop/transfer/src/main/java/org/mojave/rail/fspiop/transfer/domain/command/PostTransfersCommandHandler.java`
 
 ### Accounting Core
-`modules/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
+`modules/core/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ### Wallet Core
-`modules/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
+`modules/core/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 ### Settlement Core
-`modules/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
+`modules/core/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
 
 ### Participant Core
-`modules/participant/domain/src/main/java/org/mojave/participant/domain/model/Fsp.java`
+`modules/core/participant/domain/src/main/java/org/mojave/participant/domain/model/Fsp.java`
 
 ## Development Workflow
 
