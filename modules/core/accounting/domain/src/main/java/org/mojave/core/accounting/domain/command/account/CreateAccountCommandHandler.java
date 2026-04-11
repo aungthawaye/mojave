@@ -1,0 +1,110 @@
+/*-
+ * ===
+ * Mojave
+ * ---
+ * Copyright (C) 2025 Open Source
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===
+ */
+
+package org.mojave.core.accounting.domain.command.account;
+
+import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;
+import org.mojave.core.accounting.contract.engine.LedgerEngine;
+import org.mojave.core.accounting.contract.exception.account.AccountCodeAlreadyExistsException;
+import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
+import org.mojave.core.accounting.domain.model.Account;
+import org.mojave.core.accounting.domain.repository.AccountRepository;
+import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
+import org.mojave.component.jpa.routing.annotation.Write;
+import org.mojave.component.misc.logger.ObjectLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+
+@Service
+public class CreateAccountCommandHandler implements CreateAccountCommand {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CreateAccountCommandHandler.class);
+
+    private final AccountRepository accountRepository;
+
+    private final CoaEntryRepository coaEntryRepository;
+
+    private final LedgerEngine ledgerEngine;
+
+    public CreateAccountCommandHandler(AccountRepository accountRepository,
+                                       CoaEntryRepository coaEntryRepository,
+                                       LedgerEngine ledgerEngine) {
+
+        Objects.requireNonNull(accountRepository);
+        Objects.requireNonNull(coaEntryRepository);
+        Objects.requireNonNull(ledgerEngine);
+
+        this.accountRepository = accountRepository;
+        this.coaEntryRepository = coaEntryRepository;
+        this.ledgerEngine = ledgerEngine;
+    }
+
+    @Override
+    @Transactional
+    @Write
+    public Output execute(Input input) {
+
+        LOGGER.info("CreateAccountCommand : input: ({})", ObjectLogger.log(input));
+
+        var coaEntry = this.coaEntryRepository
+                           .findById(input.coaEntryId())
+                           .orElseThrow(() -> new CoaEntryIdNotFoundException(input.coaEntryId()));
+
+        var exist = this.accountRepository
+                        .findOne(AccountRepository.Filters.withCode(input.code()))
+                        .isPresent();
+
+        if (exist) {
+            LOGGER.info("Account code already exists: ({})", input.code());
+            throw new AccountCodeAlreadyExistsException(input.code());
+        }
+
+        var account = new Account(
+            coaEntry, input.ownerId(), input.currency(), input.code(),
+            input.name(), input.description(), input.overdraftMode(), input.overdraftLimit());
+
+        account = this.accountRepository.save(account);
+
+        try {
+            this.ledgerEngine.createLedgerBalance(
+                account.getId(), account.getCurrency(), input.currency().getScale(),
+                account.getType().getSide(), BigDecimal.ZERO, BigDecimal.ZERO,
+                input.overdraftMode(), input.overdraftLimit());
+            LOGGER.info("LedgerOperation balance created for account: ({})", account.getId());
+
+        } catch (LedgerEngine.AccountIdAlreadyTakenException e) {
+
+            LOGGER.error("Error:", e);
+            throw new RuntimeException(e);
+        }
+
+        var output = new Output(account.getId());
+
+        LOGGER.info("CreateAccountCommand : output: ({})", ObjectLogger.log(output));
+
+        return output;
+    }
+
+}

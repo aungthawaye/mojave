@@ -1,0 +1,96 @@
+/*-
+ * ===
+ * Mojave
+ * ---
+ * Copyright (C) 2025 Open Source
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===
+ */
+
+package org.mojave.core.accounting.intercom.replier.command.account;
+
+import io.nats.client.Connection;
+import io.nats.client.Message;
+import org.mojave.core.accounting.contract.command.account.ChangeAccountPropertiesCommand;
+import org.mojave.component.misc.error.MojaveErrorResponse;
+import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.component.nats.CommandResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.Objects;
+
+@Component
+public class ChangeAccountPropertiesCommandReplier {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeAccountPropertiesCommandReplier.class);
+
+    private final ChangeAccountPropertiesCommand changeAccountPropertiesCommand;
+
+    private final Connection connection;
+
+    private final ObjectMapper objectMapper;
+
+    public ChangeAccountPropertiesCommandReplier(final ChangeAccountPropertiesCommand changeAccountPropertiesCommand,
+                                          final Connection connection,
+                                          final ObjectMapper objectMapper) {
+
+        Objects.requireNonNull(changeAccountPropertiesCommand);
+        Objects.requireNonNull(connection);
+        Objects.requireNonNull(objectMapper);
+
+        this.changeAccountPropertiesCommand = changeAccountPropertiesCommand;
+        this.connection = connection;
+        this.objectMapper = objectMapper;
+
+        this.connection.createDispatcher(this::handle).subscribe(ChangeAccountPropertiesCommand.SUBJECT_NAME);
+    }
+
+    private void handle(final Message message) {
+
+        final var replyTo = message.getReplyTo();
+
+        if (replyTo == null || replyTo.isBlank()) {
+            LOGGER.warn("ChangeAccountPropertiesCommandReplier : reply subject is missing.");
+            return;
+        }
+
+        try {
+
+            final var input = this.objectMapper.readValue(
+                message.getData(), ChangeAccountPropertiesCommand.Input.class);
+
+            LOGGER.info("ChangeAccountPropertiesCommandReplier : input: ({})", ObjectLogger.log(input));
+
+            final var output = this.changeAccountPropertiesCommand.execute(input);
+            final var response = CommandResponse.success(this.objectMapper.valueToTree(output));
+            final var responseData = this.objectMapper.writeValueAsBytes(response);
+
+            this.connection.publish(replyTo, responseData);
+
+            LOGGER.info("ChangeAccountPropertiesCommandReplier : output : ({})", ObjectLogger.log(output));
+
+        } catch (final Exception exception) {
+
+            final var output = MojaveErrorResponse.from(exception);
+            final var response = CommandResponse.failure(this.objectMapper.valueToTree(output));
+            final var responseData = this.objectMapper.writeValueAsBytes(response);
+
+            this.connection.publish(replyTo, responseData);
+        }
+    }
+
+}
