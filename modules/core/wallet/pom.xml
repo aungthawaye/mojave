@@ -7,8 +7,8 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <groupId>org.mojave.wallet</groupId>
-    <artifactId>mojave-wallet</artifactId>
+    <groupId>org.mojave.core.wallet</groupId>
+    <artifactId>mojave-core-wallet</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Wallet</name>
     <modules>

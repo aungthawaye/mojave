@@ -28,6 +28,10 @@ import org.mojave.rail.fspiop.component.exception.FspiopException;
 
 public interface DisputeTransferStep {
 
+    String SUBJECT_NAME = "sub-fspiop-transfer.dispute-transfer-step";
+
+    String TOPIC_NAME = "tp-fspiop-transfer.dispute-transfer-step";
+
     void execute(Input input) throws FspiopException;
 
     record Input(UdfTransferId udfTransferId,

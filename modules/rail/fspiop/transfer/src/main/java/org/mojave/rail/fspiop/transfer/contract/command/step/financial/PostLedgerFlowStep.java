@@ -24,7 +24,7 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.spec.core.Currency;
+import org.mojave.rail.fspiop.spec.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

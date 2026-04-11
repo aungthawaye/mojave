@@ -37,12 +37,12 @@ import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesErrorSte
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesResponseStepListener;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferKafkaConfiguration;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.AbortTransferStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.CommitTransferStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.DisputeTransferStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.PatchTransferToPayeeStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.RollbackReservationStepListener;
-import org.mojave.rail.fspiop.spec.core.Currency;
+import org.mojave.rail.fspiop.transfer.domain.async.consumer.AbortTransferStepListener;
+import org.mojave.rail.fspiop.transfer.domain.async.consumer.CommitTransferStepListener;
+import org.mojave.rail.fspiop.transfer.domain.async.consumer.DisputeTransferStepListener;
+import org.mojave.rail.fspiop.transfer.domain.async.consumer.PatchTransferToPayeeStepListener;
+import org.mojave.rail.fspiop.transfer.domain.async.consumer.RollbackReservationStepListener;
+import org.mojave.rail.fspiop.spec.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 

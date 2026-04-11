@@ -21,8 +21,8 @@ package org.mojave.rail.fspiop.invoker.api.quotes;
 
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 import retrofit2.http.Body;
 import retrofit2.http.Path;
 

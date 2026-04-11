@@ -90,7 +90,7 @@ public class TestWalletCommandReplier {
                 messageData, DepositBalanceCommand.Input.class);
 
             throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.purpose());
+                input.walletOwnerId(), input.currency(), input.tag());
         });
     }
 
@@ -102,7 +102,7 @@ public class TestWalletCommandReplier {
                 messageData, WithdrawBalanceCommand.Input.class);
 
             throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.purpose());
+                input.walletOwnerId(), input.currency(), input.tag());
         });
     }
 
@@ -125,7 +125,7 @@ public class TestWalletCommandReplier {
                 messageData, IncreasePositionCommand.Input.class);
 
             throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.purpose());
+                input.walletOwnerId(), input.currency(), input.tag());
         });
     }
 
@@ -137,7 +137,7 @@ public class TestWalletCommandReplier {
                 messageData, DecreasePositionCommand.Input.class);
 
             throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.purpose());
+                input.walletOwnerId(), input.currency(), input.tag());
         });
     }
 
@@ -149,7 +149,7 @@ public class TestWalletCommandReplier {
                 messageData, ReservePositionCommand.Input.class);
 
             throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.purpose());
+                input.walletOwnerId(), input.currency(), input.tag());
         });
     }
 
@@ -161,7 +161,7 @@ public class TestWalletCommandReplier {
                 messageData, FulfilPositionsCommand.Input.class);
 
             throw new WalletNotFoundException(
-                input.payeeWalletOwnerId(), input.currency(), input.purpose());
+                input.payeeWalletOwnerId(), input.currency(), input.tag());
         });
     }
 

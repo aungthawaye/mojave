@@ -20,16 +20,16 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.core.accounting.contract.command.ledger.PostLedgerFlowCommand;
-import org.mojave.core.accounting.producer.publisher.PostLedgerFlowPublisher;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.scheme.rule.dimension.FundTransferDimension;
-import org.mojave.scheme.rule.type.TransactionType;
+import org.mojave.component.misc.logger.ObjectLogger;
+import org.mojave.core.accounting.contract.command.ledger.PostAccountingFlowCommand;
+import org.mojave.core.accounting.intercom.producer.command.ledger.PostAccountingFlowProducer;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
+import org.mojave.scheme.rule.scenario.ScenarioType;
+import org.mojave.scheme.rule.scenario.dimension.P2PTransferDimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -44,13 +44,13 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlowStepHandler.class);
 
-    private final PostLedgerFlowPublisher postLedgerFlowPublisher;
+    private final PostAccountingFlowProducer postAccountingFlowProducer;
 
-    public PostLedgerFlowStepHandler(PostLedgerFlowPublisher postLedgerFlowPublisher) {
+    public PostLedgerFlowStepHandler(PostAccountingFlowProducer postAccountingFlowProducer) {
 
-        Objects.requireNonNull(postLedgerFlowPublisher);
+        Objects.requireNonNull(postAccountingFlowProducer);
 
-        this.postLedgerFlowPublisher = postLedgerFlowPublisher;
+        this.postAccountingFlowProducer = postAccountingFlowProducer;
     }
 
     @Override
@@ -66,23 +66,23 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
             var participants = new HashMap<String, AccountOwnerId>();
 
             participants.put(
-                FundTransferDimension.Participants.PAYER_FSP.name(),
+                P2PTransferDimension.Participants.PAYER_FSP.name(),
                 new AccountOwnerId(input.payerFsp().fspId().getId()));
             participants.put(
-                FundTransferDimension.Participants.PAYEE_FSP.name(),
+                P2PTransferDimension.Participants.PAYEE_FSP.name(),
                 new AccountOwnerId(input.payeeFsp().fspId().getId()));
 
             var amounts = new HashMap<String, BigDecimal>();
 
             amounts.put(
-                FundTransferDimension.Amounts.TRANSFER_AMOUNT.name(), input.transferAmount());
-            amounts.put(FundTransferDimension.Amounts.PAYEE_FSP_FEE.name(), input.payeeFspFee());
+                P2PTransferDimension.Amounts.TRANSFER_AMOUNT.name(), input.transferAmount());
+            amounts.put(P2PTransferDimension.Amounts.PAYEE_FSP_FEE.name(), input.payeeFspFee());
             amounts.put(
-                FundTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name(),
+                P2PTransferDimension.Amounts.PAYEE_FSP_COMMISSION.name(),
                 input.payeeFspCommission());
 
-            this.postLedgerFlowPublisher.publish(new PostLedgerFlowCommand.Input(
-                TransactionType.FUND_TRANSFER, Currency.valueOf(input.currency().toString()),
+            this.postAccountingFlowProducer.publish(new PostAccountingFlowCommand.Input(
+                ScenarioType.P2P_TRANSFER, Currency.valueOf(input.currency().toString()),
                 input.transactionId(), input.transactionAt(), participants, amounts));
 
             var endAt = System.nanoTime();

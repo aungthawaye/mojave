@@ -7,8 +7,8 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <groupId>org.mojave.participant</groupId>
-    <artifactId>mojave-participant</artifactId>
+    <groupId>org.mojave.core.participant</groupId>
+    <artifactId>mojave-core-participant</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Participant</name>
     <modules>

@@ -19,9 +19,9 @@
  */
 package org.mojave.rail.fspiop.invoker.api;
 
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
-import org.mojave.rail.fspiop.spec.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.TransfersPostRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

@@ -1,7 +1,7 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
-import org.mojave.rail.fspiop.spec.core.ErrorInformation;
-import org.mojave.rail.fspiop.spec.core.PartyIdInfo;
+import org.mojave.rail.fspiop.spec.ErrorInformation;
+import org.mojave.rail.fspiop.spec.PartyIdInfo;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

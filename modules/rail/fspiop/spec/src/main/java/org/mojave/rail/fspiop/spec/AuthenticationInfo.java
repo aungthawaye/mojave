@@ -1,7 +1,7 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
-import org.mojave.rail.fspiop.spec.core.AuthenticationType;
-import org.mojave.rail.fspiop.spec.core.AuthenticationValue;
+import org.mojave.rail.fspiop.spec.AuthenticationType;
+import org.mojave.rail.fspiop.spec.AuthenticationValue;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

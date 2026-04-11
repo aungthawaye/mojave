@@ -8,7 +8,6 @@ import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.mojave.core.wallet.domain.model.Wallet;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -129,16 +128,16 @@ public class BaseIT {
                                            final String name) {
 
         return this.createWallet(
-            createWalletCommand, walletOwnerId, currency, Wallet.DEFAULT_PURPOSE, name);
+            createWalletCommand, walletOwnerId, currency, Wallet.DEFAULT_TAG, name);
     }
 
     protected WalletId createWallet(final CreateWalletCommand createWalletCommand,
                                     final long walletOwnerId, final Currency currency,
-                                    final WalletPurpose purpose, final String name) {
+                                    final String tag, final String name) {
 
         final var output = createWalletCommand.execute(
             new CreateWalletCommand.Input(
-                new WalletOwnerId(walletOwnerId), currency, purpose,
+                new WalletOwnerId(walletOwnerId), currency, tag,
                 name));
 
         return output.walletId();

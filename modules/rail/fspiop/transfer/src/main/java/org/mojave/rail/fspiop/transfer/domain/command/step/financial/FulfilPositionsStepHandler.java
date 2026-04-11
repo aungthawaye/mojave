@@ -20,13 +20,12 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
-import org.mojave.core.wallet.producer.publisher.FulfilPositionsPublisher;
+import org.mojave.core.wallet.intercom.producer.command.position.FulfilPositionsProducer;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
@@ -34,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -41,9 +41,9 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FulfilPositionsStepHandler.class);
 
-    private final FulfilPositionsPublisher fulfilPositionsPublisher;
+    private final FulfilPositionsProducer fulfilPositionsPublisher;
 
-    public FulfilPositionsStepHandler(FulfilPositionsPublisher fulfilPositionsPublisher) {
+    public FulfilPositionsStepHandler(FulfilPositionsProducer fulfilPositionsPublisher) {
 
         Objects.requireNonNull(fulfilPositionsPublisher);
 
@@ -63,8 +63,7 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
             var fulfilPositionsInput = new FulfilPositionsCommand.Input(
                 input.positionReservationId(), new WalletOwnerId(input.payeeFsp().fspId().getId()),
-                Currency.valueOf(input.currency().toString()), WalletPurpose.ANY,
-                input.description());
+                Currency.valueOf(input.currency().toString()), "P2P_TRANSFER", input.description());
 
             this.fulfilPositionsPublisher.publish(fulfilPositionsInput);
 

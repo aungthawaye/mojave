@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
@@ -45,28 +44,28 @@ public class WalletQueryIT extends BaseIT {
     }
 
     @Test
-    @DisplayName("Get wallet by id owner currency purpose")
-    public void getByIdOwnerCurrencyPurposeSuccessful() {
+    @DisplayName("Get wallet by id owner currency tag")
+    public void getByIdOwnerCurrencyTagSuccessful() {
 
         final var anyWalletId = this.createWallet(
-            this.createWalletCommand, 201L, Currency.USD, Wallet.DEFAULT_PURPOSE,
+            this.createWalletCommand, 201L, Currency.USD, Wallet.DEFAULT_TAG,
             "Default Wallet");
 
         final var p2pWalletId = this.createWallet(
-            this.createWalletCommand, 201L, Currency.USD, WalletPurpose.P2P,
+            this.createWalletCommand, 201L, Currency.USD, "P2P_TRANSFER",
             "P2P Wallet");
 
         final var byId = this.walletQuery.get(new WalletId(anyWalletId.getId()));
         final var byOwner = this.walletQuery.get(new WalletOwnerId(201L));
         final var byOwnerCurrency = this.walletQuery.get(new WalletOwnerId(201L), Currency.USD);
-        final var byOwnerCurrencyPurpose = this.walletQuery.get(
-            new WalletOwnerId(201L), Currency.USD, WalletPurpose.P2P);
+        final var byOwnerCurrencyTag = this.walletQuery.get(
+            new WalletOwnerId(201L), Currency.USD, "P2P_TRANSFER");
         final var all = this.walletQuery.getAll();
 
         assertEquals(anyWalletId, byId.walletId());
         assertEquals(2, byOwner.size());
         assertEquals(2, byOwnerCurrency.size());
-        assertEquals(p2pWalletId, byOwnerCurrencyPurpose.walletId());
+        assertEquals(p2pWalletId, byOwnerCurrencyTag.walletId());
         assertEquals(2, all.size());
 
         assertTrue(byOwner.stream().anyMatch(w -> w.walletId().equals(anyWalletId)));
@@ -76,12 +75,12 @@ public class WalletQueryIT extends BaseIT {
     }
 
     @Test
-    @DisplayName("Throw when getting wallet by missing owner currency and purpose")
-    public void getByOwnerCurrencyPurposeNotFound() {
+    @DisplayName("Throw when getting wallet by missing owner currency and tag")
+    public void getByOwnerCurrencyTagNotFound() {
 
         assertThrows(
             WalletNotFoundException.class,
-            () -> this.walletQuery.get(new WalletOwnerId(999L), Currency.MMK, WalletPurpose.P2P));
+            () -> this.walletQuery.get(new WalletOwnerId(999L), Currency.MMK, "P2P_TRANSFER"));
     }
 
 }

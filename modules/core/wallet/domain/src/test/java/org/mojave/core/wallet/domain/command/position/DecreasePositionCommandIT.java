@@ -14,7 +14,6 @@ import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -48,12 +47,12 @@ public class DecreasePositionCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.decreasePositionCommand.execute(
                 new DecreasePositionCommand.Input(
-                    new WalletOwnerId(403L), Currency.USD, WalletPurpose.ANY, new BigDecimal("3.00"),
+                    new WalletOwnerId(403L), Currency.USD, "P2P_TRANSFER", new BigDecimal("3.00"),
                     new TransactionId(40301L), TRANSACTION_AT, "Decrease missing position")));
 
         assertEquals(new WalletOwnerId(403L), exception.getWalletOwnerId());
         assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals(WalletPurpose.ANY, exception.getPurpose());
+        assertEquals("P2P_TRANSFER", exception.getTag());
     }
 
     @Test
@@ -68,7 +67,7 @@ public class DecreasePositionCommandIT extends BaseIT {
 
         final var transactionId = new TransactionId(40401L);
         final var input = new DecreasePositionCommand.Input(
-            new WalletOwnerId(404L), Currency.USD, WalletPurpose.ANY, new BigDecimal("4.00"),
+            new WalletOwnerId(404L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.00"),
             transactionId, TRANSACTION_AT, "Decrease without update");
 
         this.decreasePositionCommand.execute(input);
@@ -93,7 +92,7 @@ public class DecreasePositionCommandIT extends BaseIT {
 
         final var output = this.decreasePositionCommand.execute(
             new DecreasePositionCommand.Input(
-                new WalletOwnerId(405L), Currency.USD, WalletPurpose.ANY, new BigDecimal("4.00"),
+                new WalletOwnerId(405L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.00"),
                 transactionId, TRANSACTION_AT, "Decrease position"));
 
         assertNotNull(output.positionUpdateId());

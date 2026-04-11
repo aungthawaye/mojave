@@ -7,8 +7,8 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <groupId>org.mojave.transaction</groupId>
-    <artifactId>mojave-transaction</artifactId>
+    <groupId>org.mojave.core.transaction</groupId>
+    <artifactId>mojave-core-transaction</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Transaction</name>
     <modules>

@@ -30,7 +30,6 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.core.wallet.contract.constant.TopicNames;
 import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 
 import java.math.BigDecimal;
@@ -40,7 +39,7 @@ public interface RollbackReservationCommand {
 
     String SUBJECT_NAME = "sub-wallet.rollback-reservation-command";
 
-    String TOPIC_NAME = TopicNames.ROLLBACK_RESERVATION;
+    String TOPIC_NAME = "tp-wallet.rollback-reservation-command";
 
     Output execute(Input input) throws FailedToRollbackReservationException;
 

@@ -29,12 +29,12 @@
             <artifactId>mojave-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.participant</groupId>
-            <artifactId>mojave-participant-intercom-client</artifactId>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-store</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.participant</groupId>
-            <artifactId>mojave-participant-store</artifactId>
+            <groupId>org.mojave.core.participant.intercom</groupId>
+            <artifactId>mojave-core-participant-intercom-requestor</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.rail.fspiop</groupId>

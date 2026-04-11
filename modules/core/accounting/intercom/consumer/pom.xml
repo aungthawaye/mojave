@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mojave.accounting.intercom</groupId>
-        <artifactId>mojave-accounting-intercom</artifactId>
+        <groupId>org.mojave.core.accounting.intercom</groupId>
+        <artifactId>mojave-core-accounting-intercom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-accounting-intercom-consumer</artifactId>
+    <artifactId>mojave-core-accounting-intercom-consumer</artifactId>
     <name>Mojave - Accounting - Intercom - Consumer</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -16,16 +16,16 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.accounting</groupId>
-            <artifactId>mojave-accounting-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.accounting.engine</groupId>
-            <artifactId>mojave-accounting-engine-mysql</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-nats</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.accounting</groupId>
+            <artifactId>mojave-core-accounting-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.accounting.engine</groupId>
+            <artifactId>mojave-core-accounting-engine-mysql</artifactId>
         </dependency>
     </dependencies>
 </project>

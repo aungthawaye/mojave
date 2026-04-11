@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,12 @@ package org.mojave.rail.fspiop.transfer.domain;
 
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
-import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
+import org.mojave.core.accounting.intercom.producer.AccountingIntercomProducerConfiguration;
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
-import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
-import org.mojave.core.wallet.producer.WalletProducerConfiguration;
+import org.mojave.core.wallet.intercom.producer.WalletIntercomProducerConfiguration;
+import org.mojave.core.wallet.intercom.requestor.WalletIntercomRequestorConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
+import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -35,20 +36,19 @@ import org.springframework.context.annotation.Import;
     value = {
         MiscConfiguration.class,
         FspiopComponentConfiguration.class,
-        TransferKafkaConfiguration.class,
-        AccountingProducerConfiguration.class,
-        WalletProducerConfiguration.class,
+        AccountingIntercomProducerConfiguration.class,
+        WalletIntercomProducerConfiguration.class,
+        WalletIntercomRequestorConfiguration.class,
         ParticipantStoreConfiguration.class,
         RoutingJpaConfiguration.class})
 public class TransferDomainConfiguration {
 
     public interface RequiredDependencies extends MiscConfiguration.RequiredDependencies,
-                                           FspiopComponentConfiguration.RequiredDependencies,
-                                           TransferKafkaConfiguration.RequiredDependencies,
-                                           AccountingProducerConfiguration.RequiredDependencies,
-                                           WalletProducerConfiguration.RequiredDependencies,
-                                           RoutingJpaConfiguration.RequiredDependencies,
-                                           ParticipantStoreConfiguration.RequiredDependencies {
+                                                  FspiopComponentConfiguration.RequiredDependencies,
+                                                  AccountingIntercomProducerConfiguration.RequiredDependencies,
+                                                  WalletIntercomProducerConfiguration.RequiredDependencies,
+                                                  RoutingJpaConfiguration.RequiredDependencies,
+                                                  ParticipantStoreConfiguration.RequiredDependencies {
 
         AgreementUnwrapper partyUnwrapper();
 
@@ -56,9 +56,8 @@ public class TransferDomainConfiguration {
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings,
                                               FspiopComponentConfiguration.RequiredSettings,
-                                              AccountingProducerConfiguration.RequiredSettings,
-                                              WalletProducerConfiguration.RequiredSettings,
-                                              TransferKafkaConfiguration.RequiredSettings,
+                                              AccountingIntercomProducerConfiguration.RequiredSettings,
+                                              WalletIntercomProducerConfiguration.RequiredSettings,
                                               ParticipantStoreConfiguration.RequiredSettings,
                                               RoutingJpaConfiguration.RequiredSettings {
 

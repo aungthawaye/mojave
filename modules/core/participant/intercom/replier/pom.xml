@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mojave.participant.intercom</groupId>
-        <artifactId>mojave-participant-intercom</artifactId>
+        <groupId>org.mojave.core.participant.intercom</groupId>
+        <artifactId>mojave-core-participant-intercom</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-participant-intercom-replier</artifactId>
+    <artifactId>mojave-core-participant-intercom-replier</artifactId>
     <name>Mojave - Participant - Intercom - Replier</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -20,8 +20,8 @@
             <artifactId>mojave-component-nats</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.participant</groupId>
-            <artifactId>mojave-participant-domain</artifactId>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-domain</artifactId>
         </dependency>
     </dependencies>
 </project>

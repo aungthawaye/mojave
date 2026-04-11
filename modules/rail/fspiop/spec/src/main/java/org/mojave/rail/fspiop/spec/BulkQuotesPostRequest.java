@@ -1,12 +1,12 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.mojave.rail.fspiop.spec.core.ExtensionList;
-import org.mojave.rail.fspiop.spec.core.GeoCode;
-import org.mojave.rail.fspiop.spec.core.IndividualQuote;
-import org.mojave.rail.fspiop.spec.core.Party;
+import org.mojave.rail.fspiop.spec.ExtensionList;
+import org.mojave.rail.fspiop.spec.GeoCode;
+import org.mojave.rail.fspiop.spec.IndividualQuote;
+import org.mojave.rail.fspiop.spec.Party;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

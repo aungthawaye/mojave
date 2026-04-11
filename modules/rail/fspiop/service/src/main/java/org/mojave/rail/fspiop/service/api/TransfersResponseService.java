@@ -20,9 +20,9 @@
 
 package org.mojave.rail.fspiop.service.api;
 
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPatchResponse;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.TransfersIDPatchResponse;
+import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;

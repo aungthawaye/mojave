@@ -1,9 +1,9 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.mojave.rail.fspiop.spec.core.Extension;
+import org.mojave.rail.fspiop.spec.Extension;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

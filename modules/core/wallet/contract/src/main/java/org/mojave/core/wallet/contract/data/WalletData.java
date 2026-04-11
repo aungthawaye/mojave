@@ -23,7 +23,6 @@ package org.mojave.core.wallet.contract.data;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -32,7 +31,7 @@ import java.util.Objects;
 public record WalletData(WalletId walletId,
                          WalletOwnerId walletOwnerId,
                          Currency currency,
-                         WalletPurpose purpose,
+                         String tag,
                          String name,
                          Instant createdAt) {
 

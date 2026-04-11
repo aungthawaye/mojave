@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mojave.transaction.engine</groupId>
-        <artifactId>mojave-transaction-engine</artifactId>
+        <groupId>org.mojave.core.transaction.engine</groupId>
+        <artifactId>mojave-core-transaction-engine</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-transaction-engine-fund</artifactId>
+    <artifactId>mojave-core-transaction-engine-fund</artifactId>
     <name>Mojave - Transaction - Engine - Fund</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

@@ -22,9 +22,9 @@ package org.mojave.rail.fspiop.service.api.transfers;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payee;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPatchResponse;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.TransfersIDPatchResponse;
+import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 
 public interface RespondTransfers {
 

@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mojave.accounting.engine</groupId>
-        <artifactId>mojave-accounting-engine</artifactId>
+        <groupId>org.mojave.core.accounting.engine</groupId>
+        <artifactId>mojave-core-accounting-engine</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-accounting-engine-mysql</artifactId>
+    <artifactId>mojave-core-accounting-engine-mysql</artifactId>
     <packaging>jar</packaging>
     <name>Mojave - Accounting - Engine - MySQL</name>
     <properties>
@@ -25,12 +25,12 @@
             <artifactId>HikariCP</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.accounting</groupId>
-            <artifactId>mojave-accounting-contract</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.accounting</groupId>
+            <artifactId>mojave-core-accounting-contract</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

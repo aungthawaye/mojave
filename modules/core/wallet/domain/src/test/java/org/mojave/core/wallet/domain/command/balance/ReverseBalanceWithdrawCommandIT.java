@@ -18,7 +18,6 @@ import org.mojave.core.wallet.contract.exception.balance.ReversalFailedInWalletE
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -77,12 +76,12 @@ public class ReverseBalanceWithdrawCommandIT extends BaseIT {
 
         this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
-                new WalletOwnerId(305L), Currency.USD, WalletPurpose.ANY, new BigDecimal("20.00"),
+                new WalletOwnerId(305L), Currency.USD, "P2P_TRANSFER", new BigDecimal("20.00"),
                 new TransactionId(30501L), TRANSACTION_AT, "Seed balance"));
 
         final var withdrawOutput = this.withdrawBalanceCommand.execute(
             new WithdrawBalanceCommand.Input(
-                new WalletOwnerId(305L), Currency.USD, WalletPurpose.ANY, new BigDecimal("7.50"),
+                new WalletOwnerId(305L), Currency.USD, "P2P_TRANSFER", new BigDecimal("7.50"),
                 new TransactionId(30502L), TRANSACTION_AT, "Withdraw before reversal"));
 
         final var output = this.reverseBalanceWithdrawCommand.execute(

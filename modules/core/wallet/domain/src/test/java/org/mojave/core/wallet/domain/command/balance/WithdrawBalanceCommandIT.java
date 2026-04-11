@@ -16,7 +16,6 @@ import org.mojave.core.wallet.contract.exception.balance.InsufficientBalanceExce
 import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -53,7 +52,7 @@ public class WithdrawBalanceCommandIT extends BaseIT {
         assertThrows(
             WalletNotFoundException.class, () -> this.withdrawBalanceCommand.execute(
                 new WithdrawBalanceCommand.Input(
-                    new WalletOwnerId(306L), Currency.USD, WalletPurpose.ANY, new BigDecimal("5.00"),
+                    new WalletOwnerId(306L), Currency.USD, "P2P_TRANSFER", new BigDecimal("5.00"),
                     new TransactionId(30601L), TRANSACTION_AT, "Withdraw missing balance")));
     }
 
@@ -66,12 +65,12 @@ public class WithdrawBalanceCommandIT extends BaseIT {
         this.createDefaultWallet(this.createWalletCommand, 307L, Currency.USD, "Withdraw Wallet");
         this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
-                new WalletOwnerId(307L), Currency.USD, WalletPurpose.ANY, new BigDecimal("20.00"),
+                new WalletOwnerId(307L), Currency.USD, "P2P_TRANSFER", new BigDecimal("20.00"),
                 new TransactionId(30700L), TRANSACTION_AT, "Seed balance"));
 
         final var transactionId = new TransactionId(30701L);
         final var input = new WithdrawBalanceCommand.Input(
-            new WalletOwnerId(307L), Currency.USD, WalletPurpose.ANY, new BigDecimal("6.00"),
+            new WalletOwnerId(307L), Currency.USD, "P2P_TRANSFER", new BigDecimal("6.00"),
             transactionId, TRANSACTION_AT, "Withdraw without update");
 
         this.withdrawBalanceCommand.execute(input);
@@ -91,14 +90,14 @@ public class WithdrawBalanceCommandIT extends BaseIT {
             this.createWalletCommand, 308L, Currency.USD, "Insufficient Wallet");
         this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
-                new WalletOwnerId(308L), Currency.USD, WalletPurpose.ANY, new BigDecimal("8.25"),
+                new WalletOwnerId(308L), Currency.USD, "P2P_TRANSFER", new BigDecimal("8.25"),
                 new TransactionId(30800L), TRANSACTION_AT, "Seed balance"));
         final var transactionId = new TransactionId(30801L);
 
         final var exception = assertThrows(
             InsufficientBalanceException.class, () -> this.withdrawBalanceCommand.execute(
                 new WithdrawBalanceCommand.Input(
-                    new WalletOwnerId(308L), Currency.USD, WalletPurpose.ANY, new BigDecimal("15.00"),
+                    new WalletOwnerId(308L), Currency.USD, "P2P_TRANSFER", new BigDecimal("15.00"),
                     transactionId, TRANSACTION_AT, "Withdraw too much")));
 
         assertEquals(new WalletId(walletId.getId()), exception.getWalletId());
@@ -117,13 +116,13 @@ public class WithdrawBalanceCommandIT extends BaseIT {
             this.createWalletCommand, 309L, Currency.USD, "Withdraw Wallet");
         this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
-                new WalletOwnerId(309L), Currency.USD, WalletPurpose.ANY, new BigDecimal("20.00"),
+                new WalletOwnerId(309L), Currency.USD, "P2P_TRANSFER", new BigDecimal("20.00"),
                 new TransactionId(30900L), TRANSACTION_AT, "Seed balance"));
         final var transactionId = new TransactionId(30901L);
 
         final var output = this.withdrawBalanceCommand.execute(
             new WithdrawBalanceCommand.Input(
-                new WalletOwnerId(309L), Currency.USD, WalletPurpose.ANY, new BigDecimal("4.75"),
+                new WalletOwnerId(309L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.75"),
                 transactionId, TRANSACTION_AT, "Withdraw funds"));
 
         assertNotNull(output.balanceUpdateId());

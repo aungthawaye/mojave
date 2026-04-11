@@ -24,12 +24,12 @@ import org.mojave.common.datatype.enums.quoting.QuotingStage;
 import org.mojave.common.datatype.identifier.participant.FspId;
 import org.mojave.common.datatype.identifier.quoting.QuoteId;
 import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
-import org.mojave.rail.fspiop.spec.core.AmountType;
-import org.mojave.rail.fspiop.spec.core.Currency;
-import org.mojave.rail.fspiop.spec.core.PartyIdType;
-import org.mojave.rail.fspiop.spec.core.TransactionInitiator;
-import org.mojave.rail.fspiop.spec.core.TransactionInitiatorType;
-import org.mojave.rail.fspiop.spec.core.TransactionScenario;
+import org.mojave.rail.fspiop.spec.AmountType;
+import org.mojave.rail.fspiop.spec.Currency;
+import org.mojave.rail.fspiop.spec.PartyIdType;
+import org.mojave.rail.fspiop.spec.TransactionInitiator;
+import org.mojave.rail.fspiop.spec.TransactionInitiatorType;
+import org.mojave.rail.fspiop.spec.TransactionScenario;
 
 import java.math.BigDecimal;
 import java.time.Instant;

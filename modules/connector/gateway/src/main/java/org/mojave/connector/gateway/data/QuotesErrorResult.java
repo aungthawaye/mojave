@@ -19,6 +19,6 @@
  */
 package org.mojave.connector.gateway.data;
 
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
 
 public record QuotesErrorResult(String quoteId, ErrorInformationObject errorInformation) { }

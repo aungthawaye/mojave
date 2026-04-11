@@ -21,9 +21,9 @@
 package org.mojave.rail.fspiop.lookup.service;
 
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.core.participant.intercom.requestor.ParticipantIntercomRequestorConfiguration;
 import org.mojave.rail.fspiop.lookup.domain.LookUpDomainConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -36,18 +36,18 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
     value = {
         LookUpDomainConfiguration.class,
         RequestIdMdcConfiguration.class,
-        ParticipantIntercomClientConfiguration.class,
+        ParticipantIntercomRequestorConfiguration.class,
         FspiopServiceConfiguration.class})
 public final class LookUpServiceConfiguration {
 
     public interface RequiredDependencies extends LookUpDomainConfiguration.RequiredDependencies,
                                                   RequestIdMdcConfiguration.RequiredDependencies,
-                                                  ParticipantIntercomClientConfiguration.RequiredDependencies,
+                                                  ParticipantIntercomRequestorConfiguration.RequiredDependencies,
                                                   FspiopServiceConfiguration.RequiredDependencies { }
 
     public interface RequiredSettings extends LookUpDomainConfiguration.RequiredSettings,
                                               RequestIdMdcConfiguration.RequiredSettings,
-                                              ParticipantIntercomClientConfiguration.RequiredSettings,
+                                              ParticipantIntercomRequestorConfiguration.RequiredSettings,
                                               FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings lookUpServiceTomcatSettings();

@@ -21,7 +21,7 @@ package org.mojave.rail.fspiop.transfer.contract.command;
 
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPatchResponse;
+import org.mojave.rail.fspiop.spec.TransfersIDPatchResponse;
 
 public interface PatchTransfersCommand {
 

@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mojave.wallet.engine</groupId>
-        <artifactId>mojave-wallet-engine</artifactId>
+        <groupId>org.mojave.core.wallet.engine</groupId>
+        <artifactId>mojave-core-wallet-engine</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-wallet-engine-mysql</artifactId>
+    <artifactId>mojave-core-wallet-engine-mysql</artifactId>
     <packaging>jar</packaging>
     <name>Mojave - Wallet - Engine - MySQL</name>
     <properties>
@@ -29,8 +29,8 @@
             <artifactId>mojave-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.wallet</groupId>
-            <artifactId>mojave-wallet-contract</artifactId>
+            <groupId>org.mojave.core.wallet</groupId>
+            <artifactId>mojave-core-wallet-contract</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

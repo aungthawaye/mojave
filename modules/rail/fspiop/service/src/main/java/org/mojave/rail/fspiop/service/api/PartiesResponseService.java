@@ -19,8 +19,8 @@
  */
 package org.mojave.rail.fspiop.service.api;
 
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.PartiesTypeIDPutResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;

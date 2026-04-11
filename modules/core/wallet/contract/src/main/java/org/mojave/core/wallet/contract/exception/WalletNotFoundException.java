@@ -25,7 +25,6 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,35 +35,35 @@ public class WalletNotFoundException extends UncheckedDomainException {
     public static final String CODE = "WALLET_NOT_FOUND";
 
     private static final String TEMPLATE =
-        "Wallet does not exist : walletOwnerId ({0}) | currency ({1}) | purpose ({2}).";
+        "Wallet does not exist : walletOwnerId ({0}) | currency ({1}) | tag ({2}).";
 
     private final WalletOwnerId walletOwnerId;
 
     private final Currency currency;
 
-    private final WalletPurpose purpose;
+    private final String tag;
 
     public WalletNotFoundException(final WalletOwnerId walletOwnerId, final Currency currency,
-                                   final WalletPurpose purpose) {
+                                   final String tag) {
 
         super(new ErrorTemplate(
             CODE, TEMPLATE, new String[]{
             walletOwnerId.getId().toString(),
             currency.name(),
-            purpose.name()}));
+            tag}));
 
         this.walletOwnerId = walletOwnerId;
         this.currency = currency;
-        this.purpose = purpose;
+        this.tag = tag;
     }
 
     public static WalletNotFoundException from(final Map<String, String> extras) {
 
         final var walletOwnerId = new WalletOwnerId(Long.parseLong(extras.get(Keys.WALLET_OWNER_ID)));
         final var currency = Currency.valueOf(extras.get(Keys.CURRENCY));
-        final var purpose = WalletPurpose.valueOf(extras.get(Keys.PURPOSE));
+        final var tag = extras.get(Keys.TAG);
 
-        return new WalletNotFoundException(walletOwnerId, currency, purpose);
+        return new WalletNotFoundException(walletOwnerId, currency, tag);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class WalletNotFoundException extends UncheckedDomainException {
 
         extras.put(Keys.WALLET_OWNER_ID, this.walletOwnerId.getId().toString());
         extras.put(Keys.CURRENCY, this.currency.name());
-        extras.put(Keys.PURPOSE, this.purpose.name());
+        extras.put(Keys.TAG, this.tag);
 
         return extras;
     }
@@ -85,7 +84,7 @@ public class WalletNotFoundException extends UncheckedDomainException {
 
         public static final String CURRENCY = "currency";
 
-        public static final String PURPOSE = "purpose";
+        public static final String TAG = "tag";
 
     }
 

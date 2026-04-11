@@ -27,8 +27,8 @@ import org.mojave.rail.fspiop.component.handy.FspiopHeaders;
 import org.mojave.rail.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.rail.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import org.mojave.rail.fspiop.invoker.api.QuotesService;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
 

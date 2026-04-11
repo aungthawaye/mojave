@@ -9,7 +9,6 @@ import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.common.datatype.identifier.wallet.NdcUpdateId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -21,7 +20,7 @@ public interface WalletEngine {
                                               PositionUpdateId reservationId)
         throws PositionReservationCommitFailedException;
 
-    void createWallet(WalletId walletId, Currency currency, int scale, WalletPurpose purpose)
+    void createWallet(WalletId walletId, Currency currency, int scale, String tag)
         throws WalletIdAlreadyTakenException;
 
     NdcHistory decreaseNdc(NdcUpdateId ndcUpdateId,

@@ -7,8 +7,8 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <groupId>org.mojave.accounting</groupId>
-    <artifactId>mojave-accounting</artifactId>
+    <groupId>org.mojave.core.accounting</groupId>
+    <artifactId>mojave-core-accounting</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Accounting</name>
     <modules>

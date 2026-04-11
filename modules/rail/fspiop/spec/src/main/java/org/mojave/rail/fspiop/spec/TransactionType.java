@@ -1,9 +1,9 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
-import org.mojave.rail.fspiop.spec.core.Refund;
-import org.mojave.rail.fspiop.spec.core.TransactionInitiator;
-import org.mojave.rail.fspiop.spec.core.TransactionInitiatorType;
-import org.mojave.rail.fspiop.spec.core.TransactionScenario;
+import org.mojave.rail.fspiop.spec.Refund;
+import org.mojave.rail.fspiop.spec.TransactionInitiator;
+import org.mojave.rail.fspiop.spec.TransactionInitiatorType;
+import org.mojave.rail.fspiop.spec.TransactionScenario;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

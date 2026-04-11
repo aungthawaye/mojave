@@ -24,7 +24,7 @@ import org.mojave.rail.fspiop.component.error.ErrorDefinition;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopCommunicationException;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationResponse;
 
 import javax.net.ssl.SSLException;
 import java.net.SocketException;

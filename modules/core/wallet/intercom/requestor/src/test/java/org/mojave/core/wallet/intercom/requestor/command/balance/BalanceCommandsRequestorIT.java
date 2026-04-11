@@ -7,7 +7,6 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.command.balance.DepositBalanceCommand;
 import org.mojave.core.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;
 import org.mojave.core.wallet.contract.command.balance.WithdrawBalanceCommand;
@@ -51,7 +50,7 @@ public class BalanceCommandsRequestorIT {
                 new DepositBalanceCommand.Input(
                     new WalletOwnerId(900101L),
                     Currency.USD,
-                    WalletPurpose.ANY,
+                    "P2P_TRANSFER",
                     new BigDecimal("15.00"),
                     new TransactionId(90010101L),
                     transactionAt,
@@ -63,7 +62,7 @@ public class BalanceCommandsRequestorIT {
                 new WithdrawBalanceCommand.Input(
                     new WalletOwnerId(900102L),
                     Currency.USD,
-                    WalletPurpose.ANY,
+                    "P2P_TRANSFER",
                     new BigDecimal("5.00"),
                     new TransactionId(90010201L),
                     transactionAt,

@@ -7,8 +7,8 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <groupId>org.mojave.settlement</groupId>
-    <artifactId>mojave-settlement</artifactId>
+    <groupId>org.mojave.core.settlement</groupId>
+    <artifactId>mojave-core-settlement</artifactId>
     <packaging>pom</packaging>
     <name>Mojave - Settlement</name>
     <modules>

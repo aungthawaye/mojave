@@ -1,4 +1,4 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;

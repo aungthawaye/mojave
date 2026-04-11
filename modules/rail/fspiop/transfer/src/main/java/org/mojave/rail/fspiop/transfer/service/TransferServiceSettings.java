@@ -22,74 +22,51 @@ package org.mojave.rail.fspiop.transfer.service;
 
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
+import org.mojave.component.nats.NatsConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
-import org.mojave.core.accounting.producer.AccountingProducerConfiguration;
-import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.core.wallet.intercom.client.service.WalletIntercomService;
-import org.mojave.core.wallet.producer.WalletProducerConfiguration;
-import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.spec.Currency;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
-import org.mojave.rail.fspiop.transfer.domain.TransferKafkaConfiguration;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.AbortTransferStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.CommitTransferStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.DisputeTransferStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.PatchTransferToPayeeStepListener;
-import org.mojave.rail.fspiop.transfer.domain.kafka.listener.RollbackReservationStepListener;
-import org.mojave.rail.fspiop.spec.core.Currency;
 import org.springframework.context.annotation.Bean;
-import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 final class TransferServiceSettings implements TransferServiceConfiguration.RequiredSettings {
 
-    @Bean
-    @Override
-    public AbortTransferStepListener.Settings abortTransferStepListenerSettings() {
+    private static String[] splitCsv(final String value) {
 
-        return new AbortTransferStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), AbortTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL);
+        return value.trim().split("\\s*,\\s*");
+    }
+
+    private static String toNullIfBlank(final String value) {
+
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value;
     }
 
     @Bean
     @Override
-    public AccountingProducerConfiguration.ProducerSettings accountingProducerSettings() {
+    public NatsConfiguration.NatsSettings natsSettings() {
 
-        return new AccountingProducerConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
+        final var servers = splitCsv(System.getenv("NATS_SERVERS"));
+        final var connectionName = System.getenv("NATS_CONNECTION_NAME");
+        final var username = toNullIfBlank(System.getenv("NATS_USERNAME"));
+        final var password = toNullIfBlank(System.getenv("NATS_PASSWORD"));
+        final var token = toNullIfBlank(System.getenv("NATS_TOKEN"));
+        final var connectionTimeoutMs = Integer.parseInt(
+            System.getenv("NATS_CONNECTION_TIMEOUT_MS"));
+        final var maxReconnects = Integer.parseInt(System.getenv("NATS_MAX_RECONNECTS"));
+        final var reconnectWaitMs = Integer.parseInt(System.getenv("NATS_RECONNECT_WAIT_MS"));
+        final var noEcho = Boolean.parseBoolean(System.getenv("NATS_NO_ECHO"));
 
-    @Bean
-    @Override
-    public CommitTransferStepListener.Settings commitTransferStepListenerSettings() {
-
-        return new CommitTransferStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), CommitTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
-    public DisputeTransferStepListener.Settings disputeTransferStepListenerSettings() {
-
-        return new DisputeTransferStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), DisputeTransferStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
-    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
-
-        return new ParticipantIntercomService.Settings(
-            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+        return new NatsConfiguration.NatsSettings(
+            servers, connectionName, username, password,
+            token, connectionTimeoutMs, maxReconnects, reconnectWaitMs, noEcho);
     }
 
     @Bean
@@ -128,26 +105,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
         return new FspiopComponentConfiguration.ParticipantSettings(
             hubCode, fspCode, fspName,
             currencies, ilpSecret, signJws, verifyJws, privateKeyPem, fspPublicKeyPem);
-    }
-
-    @Bean
-    @Override
-    public PatchTransferToPayeeStepListener.Settings patchTransferToPayeeStepListenerSettings() {
-
-        return new PatchTransferToPayeeStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), PatchTransferToPayeeStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL);
-    }
-
-    @Bean
-    @Override
-    public RollbackReservationStepListener.Settings rollbackReservationStepListenerSettings() {
-
-        return new RollbackReservationStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), RollbackReservationStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL);
     }
 
     @Bean
@@ -215,14 +172,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
 
     @Bean
     @Override
-    public TransferKafkaConfiguration.ProducerSettings transferProducerSettings() {
-
-        return new TransferKafkaConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
-    }
-
-    @Bean
-    @Override
     public TransferServiceConfiguration.TomcatSettings transferServiceTomcatSettings() {
 
         return new TransferServiceConfiguration.TomcatSettings(
@@ -236,22 +185,6 @@ final class TransferServiceSettings implements TransferServiceConfiguration.Requ
         return new TransferDomainConfiguration.TransferSettings(
             Integer.parseInt(System.getenv("TRANSFER_RESERVATION_TIMEOUT_MS")),
             Integer.parseInt(System.getenv("TRANSFER_EXPIRY_TIMEOUT_MS")));
-    }
-
-    @Bean
-    @Override
-    public WalletIntercomService.Settings walletIntercomServiceSettings() {
-
-        return new WalletIntercomService.Settings(System.getenv("WALLET_INTERCOM_BASE_URL"));
-
-    }
-
-    @Bean
-    @Override
-    public WalletProducerConfiguration.ProducerSettings walletProducerSettings() {
-
-        return new WalletProducerConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
 }

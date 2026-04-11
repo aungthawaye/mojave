@@ -21,7 +21,7 @@ package org.mojave.connector.gateway.inbound.command.transfers.payee;
 
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.spec.TransfersPostRequest;
 
 public interface HandlePostTransfersRequestCommand {
 

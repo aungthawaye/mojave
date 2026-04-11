@@ -42,7 +42,7 @@ public class CreateWalletCommandHandler implements CreateWalletCommand {
         final var spec = WalletRepository.Filters
                              .withOwnerId(input.walletOwnerId())
                              .and(WalletRepository.Filters.withCurrency(input.currency()))
-                             .and(WalletRepository.Filters.withPurpose(input.purpose()));
+                             .and(WalletRepository.Filters.withTag(input.tag()));
 
         final var existing = this.walletRepository.findOne(spec).orElse(null);
 
@@ -55,14 +55,14 @@ public class CreateWalletCommandHandler implements CreateWalletCommand {
         }
 
         final var wallet = new Wallet(
-            input.walletOwnerId(), input.currency(), input.purpose(), input.name());
+            input.walletOwnerId(), input.currency(), input.tag(), input.name());
 
         final var saved = this.walletRepository.save(wallet);
 
         try {
             this.walletEngine.createWallet(
                 saved.getId(), saved.getCurrency(),
-                saved.getCurrency().getScale(), saved.getPurpose());
+                saved.getCurrency().getScale(), saved.getTag());
 
         } catch (final WalletEngine.WalletIdAlreadyTakenException e) {
             throw new RuntimeException(e);

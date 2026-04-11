@@ -1,7 +1,7 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
-import org.mojave.rail.fspiop.spec.core.ExtensionList;
-import org.mojave.rail.fspiop.spec.core.TransactionState;
+import org.mojave.rail.fspiop.spec.ExtensionList;
+import org.mojave.rail.fspiop.spec.TransactionState;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

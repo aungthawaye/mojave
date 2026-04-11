@@ -23,7 +23,6 @@ import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.data.WalletData;
 
 import java.time.Instant;
@@ -40,11 +39,11 @@ import static java.sql.Types.BIGINT;
         columnNames = {
             "wallet_owner_id",
             "currency",
-            "purpose"}))
+            "tag"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wallet extends JpaEntity<WalletId> implements DataConversion<WalletData> {
 
-    public static final WalletPurpose DEFAULT_PURPOSE = WalletPurpose.ANY;
+    public static final String DEFAULT_TAG = "DEFAULT";
 
     @Id
     @JavaType(WalletIdJavaType.class)
@@ -66,12 +65,11 @@ public class Wallet extends JpaEntity<WalletId> implements DataConversion<Wallet
     protected Currency currency;
 
     @Column(
-        name = "purpose",
+        name = "tag",
         length = StringSizeConstraints.MAX_ENUM_LENGTH,
         nullable = false,
         updatable = false)
-    @Enumerated(EnumType.STRING)
-    protected WalletPurpose purpose;
+    protected String tag = DEFAULT_TAG;
 
     @Column(
         name = "name",
@@ -86,18 +84,18 @@ public class Wallet extends JpaEntity<WalletId> implements DataConversion<Wallet
 
     public Wallet(final WalletOwnerId walletOwnerId,
                   final Currency currency,
-                  final WalletPurpose purpose,
+                  final String tag,
                   final String name) {
 
         Objects.requireNonNull(walletOwnerId);
         Objects.requireNonNull(currency);
-        Objects.requireNonNull(purpose);
+        Objects.requireNonNull(tag);
         Objects.requireNonNull(name);
 
         this.id = new WalletId(Snowflake.get().nextId());
         this.walletOwnerId = walletOwnerId;
         this.currency = currency;
-        this.purpose = purpose;
+        this.tag = tag;
         this.name = name;
         this.createdAt = Instant.now();
 
@@ -107,7 +105,7 @@ public class Wallet extends JpaEntity<WalletId> implements DataConversion<Wallet
     public WalletData convert() {
 
         return new WalletData(
-            this.id, this.walletOwnerId, this.currency, this.purpose, this.name, this.createdAt);
+            this.id, this.walletOwnerId, this.currency, this.tag, this.name, this.createdAt);
     }
 
     @Override

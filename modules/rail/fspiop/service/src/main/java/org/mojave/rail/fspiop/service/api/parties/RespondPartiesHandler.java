@@ -27,8 +27,8 @@ import org.mojave.rail.fspiop.component.handy.FspiopHeaders;
 import org.mojave.rail.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.rail.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import org.mojave.rail.fspiop.service.api.PartiesResponseService;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.PartiesTypeIDPutResponse;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
 

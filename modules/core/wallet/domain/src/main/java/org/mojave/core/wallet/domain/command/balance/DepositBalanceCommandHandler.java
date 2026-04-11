@@ -61,11 +61,11 @@ public class DepositBalanceCommandHandler implements DepositBalanceCommand {
         LOGGER.info("DepositFundCommand : input: ({})", ObjectLogger.log(input));
 
         final var wallet = this.walletCache.get(
-            input.walletOwnerId(), input.currency(), input.purpose());
+            input.walletOwnerId(), input.currency(), input.tag());
 
         if (wallet == null) {
             throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.purpose());
+                input.walletOwnerId(), input.currency(), input.tag());
         }
 
         final var walletId = new WalletId(wallet.walletId().getId());

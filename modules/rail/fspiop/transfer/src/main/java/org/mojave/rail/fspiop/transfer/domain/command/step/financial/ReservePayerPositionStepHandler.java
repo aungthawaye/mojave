@@ -23,7 +23,6 @@ package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
@@ -83,7 +82,7 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
             var description = "-";
 
             var reservePayerPositionInput = new ReservePositionCommand.Input(
-                walletOwnerId, Currency.valueOf(currency.toString()), WalletPurpose.ANY,
+                walletOwnerId, Currency.valueOf(currency.toString()), "P2P_TRANSFER",
                 transferAmount, transactionId, transactionAt, description);
 
             var reservePositionOutput = this.reservePositionCommand.execute(

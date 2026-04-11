@@ -16,7 +16,6 @@ import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTra
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -55,12 +54,12 @@ public class FulfilPositionsCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.fulfilPositionsCommand.execute(
                 new FulfilPositionsCommand.Input(
-                    reservationId, new WalletOwnerId(406L), Currency.USD, WalletPurpose.ANY,
+                    reservationId, new WalletOwnerId(406L), Currency.USD, "P2P_TRANSFER",
                     "Fulfil missing payee")));
 
         assertEquals(new WalletOwnerId(406L), exception.getWalletOwnerId());
         assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals(WalletPurpose.ANY, exception.getPurpose());
+        assertEquals("P2P_TRANSFER", exception.getTag());
     }
 
     @Test
@@ -74,7 +73,7 @@ public class FulfilPositionsCommandIT extends BaseIT {
         final var exception = assertThrows(
             FailedToFulfilPositionsException.class, () -> this.fulfilPositionsCommand.execute(
                 new FulfilPositionsCommand.Input(
-                    reservationId, new WalletOwnerId(407L), Currency.USD, WalletPurpose.ANY,
+                    reservationId, new WalletOwnerId(407L), Currency.USD, "P2P_TRANSFER",
                     "Fulfil positions")));
 
         assertEquals(reservationId, exception.getReservationId());
@@ -102,13 +101,13 @@ public class FulfilPositionsCommandIT extends BaseIT {
 
         final var reservation = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(408L), Currency.USD, WalletPurpose.ANY, new BigDecimal("4.00"),
+                new WalletOwnerId(408L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.00"),
                 new TransactionId(40801L), TRANSACTION_AT, "Reserve for fulfilment"));
 
         final var output = this.fulfilPositionsCommand.execute(
             new FulfilPositionsCommand.Input(
                 reservation.positionUpdateId(), new WalletOwnerId(409L), Currency.USD,
-                WalletPurpose.ANY,
+                "P2P_TRANSFER",
                 "Fulfil positions"));
 
         assertNotNull(output.payerCommitId());

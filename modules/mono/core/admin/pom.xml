@@ -36,20 +36,20 @@
             <artifactId>mojave-component-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.accounting</groupId>
-            <artifactId>mojave-accounting-admin</artifactId>
+            <groupId>org.mojave.core.accounting</groupId>
+            <artifactId>mojave-core-accounting-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.accounting.ledgerEngine</groupId>
-            <artifactId>mojave-accounting-ledgerEngine-mysql</artifactId>
+            <groupId>org.mojave.core.accounting.ledgerEngine</groupId>
+            <artifactId>mojave-core-accounting-ledgerEngine-mysql</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.participant</groupId>
-            <artifactId>mojave-participant-admin</artifactId>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.wallet</groupId>
-            <artifactId>mojave-wallet-admin</artifactId>
+            <groupId>org.mojave.core.wallet</groupId>
+            <artifactId>mojave-core-wallet-admin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -2,7 +2,6 @@ package org.mojave.core.wallet.engine.mysql.task;
 
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +16,7 @@ public final class CreateWalletTask {
                                final WalletId walletId,
                                final Currency currency,
                                final int scale,
-                               final WalletPurpose purpose)
+                               final String tag)
         throws WalletEngine.WalletIdAlreadyTakenException {
 
         try {
@@ -27,7 +26,7 @@ public final class CreateWalletTask {
                     stm.setLong(1, walletId.getId());
                     stm.setString(2, currency.name());
                     stm.setInt(3, scale);
-                    stm.setString(4, purpose.name());
+                    stm.setString(4, tag);
 
                     var hasResults = stm.execute();
 

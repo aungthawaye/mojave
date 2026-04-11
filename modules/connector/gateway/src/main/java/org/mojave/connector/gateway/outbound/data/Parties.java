@@ -20,9 +20,9 @@
 package org.mojave.connector.gateway.outbound.data;
 
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
-import org.mojave.rail.fspiop.spec.core.PartyIdType;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.PartiesTypeIDPutResponse;
+import org.mojave.rail.fspiop.spec.PartyIdType;
 
 public record Parties() {
 

@@ -1,6 +1,6 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
-import org.mojave.rail.fspiop.spec.core.Currency;
+import org.mojave.rail.fspiop.spec.Currency;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

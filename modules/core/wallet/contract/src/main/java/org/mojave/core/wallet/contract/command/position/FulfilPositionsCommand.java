@@ -23,22 +23,20 @@ package org.mojave.core.wallet.contract.command.position;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
-import org.mojave.core.wallet.contract.constant.TopicNames;
 import org.mojave.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
 
 public interface FulfilPositionsCommand {
 
     String SUBJECT_NAME = "sub-wallet.fulfil-positions-command";
 
-    String TOPIC_NAME = TopicNames.FULFIL_POSITIONS;
+    String TOPIC_NAME = "tp-wallet.fulfil-positions-command";
 
     Output execute(Input input) throws FailedToFulfilPositionsException;
 
     record Input(PositionUpdateId reservationId,
                  WalletOwnerId payeeWalletOwnerId,
                  Currency currency,
-                 WalletPurpose purpose,
+                 String tag,
                  String description) { }
 
     record Output(PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) { }

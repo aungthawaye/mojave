@@ -1,11 +1,11 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.mojave.rail.fspiop.spec.core.Currency;
-import org.mojave.rail.fspiop.spec.core.PartyIdInfo;
-import org.mojave.rail.fspiop.spec.core.PartyPersonalInfo;
+import org.mojave.rail.fspiop.spec.Currency;
+import org.mojave.rail.fspiop.spec.PartyIdInfo;
+import org.mojave.rail.fspiop.spec.PartyPersonalInfo;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

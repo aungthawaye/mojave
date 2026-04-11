@@ -25,7 +25,6 @@ import jakarta.persistence.PostRemove;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.data.WalletData;
 
 import java.util.Set;
@@ -36,7 +35,7 @@ public interface WalletCache {
 
     WalletData get(WalletId walletId);
 
-    WalletData get(WalletOwnerId walletOwnerId, Currency currency, WalletPurpose purpose);
+    WalletData get(WalletOwnerId walletOwnerId, Currency currency, String tag);
 
     Set<WalletData> get(WalletOwnerId walletOwnerId);
 
@@ -59,8 +58,8 @@ public interface WalletCache {
     class Key {
 
         public static String get(final WalletOwnerId walletOwnerId, final Currency currency,
-                                 final WalletPurpose purpose) {
-            return walletOwnerId.getId().toString() + ":" + currency + ":" + purpose;
+                                 final String tag) {
+            return walletOwnerId.getId().toString() + ":" + currency + ":" + tag;
         }
     }
 

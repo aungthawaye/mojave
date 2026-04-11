@@ -19,8 +19,8 @@
  */
 package org.mojave.connector.gateway.data;
 
-import org.mojave.rail.fspiop.spec.core.PartiesTypeIDPutResponse;
-import org.mojave.rail.fspiop.spec.core.PartyIdType;
+import org.mojave.rail.fspiop.spec.PartiesTypeIDPutResponse;
+import org.mojave.rail.fspiop.spec.PartyIdType;
 
 public record PartiesResult(PartyIdType partyIdType,
                             String partyId,

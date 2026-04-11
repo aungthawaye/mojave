@@ -24,7 +24,6 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.data.WalletData;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
@@ -65,15 +64,15 @@ public class WalletQueryHandler implements WalletQuery {
     @Override
     public WalletData get(final WalletOwnerId ownerId,
                           final Currency currency,
-                          final WalletPurpose purpose) {
+                          final String tag) {
 
         final var spec = WalletRepository.Filters
                              .withOwnerId(ownerId)
                              .and(WalletRepository.Filters.withCurrency(currency))
-                             .and(WalletRepository.Filters.withPurpose(purpose));
+                             .and(WalletRepository.Filters.withTag(tag));
 
         return this.walletRepository.findOne(spec)
-                   .orElseThrow(() -> new WalletNotFoundException(ownerId, currency, purpose))
+                   .orElseThrow(() -> new WalletNotFoundException(ownerId, currency, tag))
                    .convert();
     }
 

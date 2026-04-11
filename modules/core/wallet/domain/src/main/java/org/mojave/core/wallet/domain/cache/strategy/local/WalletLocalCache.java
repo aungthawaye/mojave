@@ -24,7 +24,6 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.data.WalletData;
 import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.mojave.core.wallet.domain.model.Wallet;
@@ -43,7 +42,7 @@ public class WalletLocalCache implements WalletCache {
 
     private final Map<Long, WalletData> withId;
 
-    private final Map<String, WalletData> withOwnerCurrencyPurpose;
+    private final Map<String, WalletData> withOwnerCurrencyTag;
 
     private final Map<Long, Set<WalletData>> withOwnerId;
 
@@ -53,20 +52,20 @@ public class WalletLocalCache implements WalletCache {
 
         this.walletRepository = walletRepository;
         this.withId = new ConcurrentHashMap<>();
-        this.withOwnerCurrencyPurpose = new ConcurrentHashMap<>();
+        this.withOwnerCurrencyTag = new ConcurrentHashMap<>();
         this.withOwnerId = new ConcurrentHashMap<>();
     }
 
     private static String key(final WalletOwnerId walletOwnerId, final Currency currency,
-                              final WalletPurpose purpose) {
+                              final String tag) {
 
-        return WalletCache.Key.get(walletOwnerId, currency, purpose);
+        return WalletCache.Key.get(walletOwnerId, currency, tag);
     }
 
     public void clear() {
 
         this.withId.clear();
-        this.withOwnerCurrencyPurpose.clear();
+        this.withOwnerCurrencyTag.clear();
         this.withOwnerId.clear();
     }
 
@@ -82,7 +81,7 @@ public class WalletLocalCache implements WalletCache {
         if (data == null) {
             final var entity = this.walletRepository.findById(walletId).orElse(null);
 
-            if (entity != null && Wallet.DEFAULT_PURPOSE == entity.getPurpose()) {
+            if (entity != null && Wallet.DEFAULT_TAG.equals(entity.getTag())) {
                 data = entity.convert();
                 this.save(data);
             }
@@ -93,15 +92,15 @@ public class WalletLocalCache implements WalletCache {
 
     @Override
     public WalletData get(final WalletOwnerId walletOwnerId, final Currency currency,
-                          final WalletPurpose purpose) {
+                          final String tag) {
 
-        if (walletOwnerId == null || currency == null || purpose == null) {
+        if (walletOwnerId == null || currency == null || tag == null) {
             return null;
         }
 
-        final var key = key(walletOwnerId, currency, purpose);
+        final var key = key(walletOwnerId, currency, tag);
 
-        var data = this.withOwnerCurrencyPurpose.get(key);
+        var data = this.withOwnerCurrencyTag.get(key);
 
         if (data == null) {
 
@@ -110,7 +109,7 @@ public class WalletLocalCache implements WalletCache {
                                                 .withOwnerId(walletOwnerId)
                                                 .and(
                                                     WalletRepository.Filters.withCurrency(currency))
-                                                .and(WalletRepository.Filters.withPurpose(purpose)))
+                                                .and(WalletRepository.Filters.withTag(tag)))
                                    .orElse(null);
 
             if (entity != null) {
@@ -154,8 +153,8 @@ public class WalletLocalCache implements WalletCache {
 
         this.withId.put(wallet.walletId().getId(), wallet);
 
-        final var key = key(wallet.walletOwnerId(), wallet.currency(), wallet.purpose());
-        this.withOwnerCurrencyPurpose.put(key, wallet);
+        final var key = key(wallet.walletOwnerId(), wallet.currency(), wallet.tag());
+        this.withOwnerCurrencyTag.put(key, wallet);
 
         final var set = this.withOwnerId.computeIfAbsent(
             wallet.walletOwnerId().getId(),
@@ -170,7 +169,7 @@ public class WalletLocalCache implements WalletCache {
         this.clear();
 
         final var wallets = this.walletRepository.findAll(
-            WalletRepository.Filters.withPurpose(Wallet.DEFAULT_PURPOSE));
+            WalletRepository.Filters.withTag(Wallet.DEFAULT_TAG));
 
         wallets.forEach((wallet) -> this.save(wallet.convert()));
     }

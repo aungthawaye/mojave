@@ -7,7 +7,6 @@ import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.command.position.CommitReservationCommand;
 import org.mojave.core.wallet.contract.command.position.DecreasePositionCommand;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
@@ -64,7 +63,7 @@ public class PositionCommandsRequestorIT {
                 new IncreasePositionCommand.Input(
                     new WalletOwnerId(900201L),
                     Currency.USD,
-                    WalletPurpose.ANY,
+                    "P2P_TRANSFER",
                     new BigDecimal("10.00"),
                     new TransactionId(90020101L),
                     transactionAt,
@@ -76,7 +75,7 @@ public class PositionCommandsRequestorIT {
                 new DecreasePositionCommand.Input(
                     new WalletOwnerId(900202L),
                     Currency.USD,
-                    WalletPurpose.ANY,
+                    "P2P_TRANSFER",
                     new BigDecimal("8.00"),
                     new TransactionId(90020201L),
                     transactionAt,
@@ -88,7 +87,7 @@ public class PositionCommandsRequestorIT {
                 new ReservePositionCommand.Input(
                     new WalletOwnerId(900203L),
                     Currency.USD,
-                    WalletPurpose.ANY,
+                    "P2P_TRANSFER",
                     new BigDecimal("4.00"),
                     new TransactionId(90020301L),
                     transactionAt,
@@ -101,7 +100,7 @@ public class PositionCommandsRequestorIT {
                     new PositionUpdateId(90020401L),
                     new WalletOwnerId(900204L),
                     Currency.USD,
-                    WalletPurpose.ANY,
+                    "P2P_TRANSFER",
                     "requestor-fulfil-missing-payee-position")));
 
         assertThrows(

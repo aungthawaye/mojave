@@ -61,12 +61,12 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
         LOGGER.info("FulfilPositionsCommand : input: ({})", ObjectLogger.log(input));
 
         final var payeeWallet = this.walletCache.get(
-            input.payeeWalletOwnerId(), input.currency(), input.purpose());
+            input.payeeWalletOwnerId(), input.currency(), input.tag());
 
         if (payeeWallet == null) {
 
             throw new WalletNotFoundException(
-                input.payeeWalletOwnerId(), input.currency(), input.purpose());
+                input.payeeWalletOwnerId(), input.currency(), input.tag());
         }
 
         final var payeeWalletId = new WalletId(payeeWallet.walletId().getId());

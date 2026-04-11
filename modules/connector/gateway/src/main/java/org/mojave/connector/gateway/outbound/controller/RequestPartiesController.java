@@ -32,7 +32,7 @@ import org.mojave.connector.gateway.outbound.event.PartiesRequestEvent;
 import org.mojave.connector.gateway.outbound.event.PartiesResponseEvent;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.rail.fspiop.spec.core.PartyIdType;
+import org.mojave.rail.fspiop.spec.PartyIdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

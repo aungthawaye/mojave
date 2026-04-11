@@ -16,16 +16,16 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.accounting</groupId>
-            <artifactId>mojave-accounting-admin-client</artifactId>
+            <groupId>org.mojave.core.accounting</groupId>
+            <artifactId>mojave-core-accounting-admin-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.participant</groupId>
-            <artifactId>mojave-participant-admin-client</artifactId>
+            <groupId>org.mojave.core.participant</groupId>
+            <artifactId>mojave-core-participant-admin-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.wallet</groupId>
-            <artifactId>mojave-wallet-admin-client</artifactId>
+            <groupId>org.mojave.core.wallet</groupId>
+            <artifactId>mojave-core-wallet-admin-client</artifactId>
         </dependency>
     </dependencies>
 </project>

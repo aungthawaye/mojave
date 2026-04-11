@@ -10,7 +10,6 @@ import org.mojave.common.datatype.identifier.wallet.NdcUpdateId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.component.flyway.FlywayMigration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.mojave.core.wallet.engine.mysql.task.CommitPositionReservationTask;
 import org.mojave.core.wallet.engine.mysql.task.CreateWalletTask;
@@ -119,10 +118,10 @@ public class MySqlWalletEngine implements WalletEngine {
     public void createWallet(final WalletId walletId,
                              final Currency currency,
                              final int scale,
-                             final WalletPurpose purpose)
+                             final String tag)
         throws WalletIdAlreadyTakenException {
 
-        CreateWalletTask.execute(this.jdbcTemplate, walletId, currency, scale, purpose);
+        CreateWalletTask.execute(this.jdbcTemplate, walletId, currency, scale, tag);
     }
 
     @Override

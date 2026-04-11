@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS `sp_create_wallet` $$
 CREATE PROCEDURE sp_create_wallet(IN p_wallet_id BIGINT,
                                   IN p_currency VARCHAR(3),
                                   IN p_scale INT,
-                                  IN p_purpose VARCHAR(64))
+                                  IN p_scenario VARCHAR(64))
 proc_create_wallet:
 BEGIN
     DECLARE v_now BIGINT;

@@ -22,8 +22,8 @@ package org.mojave.rail.fspiop.transfer.contract.command.step.fspiop;
 
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.spec.core.TransferState;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.TransferState;
+import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 
 import java.time.Instant;
 

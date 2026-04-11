@@ -20,18 +20,19 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
-import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
+import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
+import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.DisputeTransferStepProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -42,16 +43,16 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
 
     private final RollbackReservationCommand rollbackReservationCommand;
 
-    private final DisputeTransferStepPublisher disputeTransferStepPublisher;
+    private final DisputeTransferStepProducer disputeTransferStepProducer;
 
     public RollbackReservationStepHandler(RollbackReservationCommand rollbackReservationCommand,
-                                          DisputeTransferStepPublisher disputeTransferStepPublisher) {
+                                          DisputeTransferStepProducer disputeTransferStepProducer) {
 
         Objects.requireNonNull(rollbackReservationCommand);
-        Objects.requireNonNull(disputeTransferStepPublisher);
+        Objects.requireNonNull(disputeTransferStepProducer);
 
         this.rollbackReservationCommand = rollbackReservationCommand;
-        this.disputeTransferStepPublisher = disputeTransferStepPublisher;
+        this.disputeTransferStepProducer = disputeTransferStepProducer;
     }
 
     @Override
@@ -85,7 +86,7 @@ public class RollbackReservationStepHandler implements RollbackReservationStep {
 
             LOGGER.error("Error:", e);
 
-            this.disputeTransferStepPublisher.publish(new DisputeTransferStep.Input(
+            this.disputeTransferStepProducer.publish(new DisputeTransferStep.Input(
                 input.udfTransferId(), input.transactionId(), input.transferId(),
                 DisputeReason.RESERVATION_ROLLBACK));
 

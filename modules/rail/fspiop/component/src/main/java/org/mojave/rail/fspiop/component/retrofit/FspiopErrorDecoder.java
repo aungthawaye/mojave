@@ -20,7 +20,7 @@
 package org.mojave.rail.fspiop.component.retrofit;
 
 import org.mojave.component.retrofit.RetrofitService;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationResponse;
 import tools.jackson.databind.ObjectMapper;
 import java.util.Objects;
 

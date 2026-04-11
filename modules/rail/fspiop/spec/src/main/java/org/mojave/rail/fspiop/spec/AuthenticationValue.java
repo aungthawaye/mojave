@@ -1,6 +1,6 @@
-package org.mojave.rail.fspiop.spec.core;
+package org.mojave.rail.fspiop.spec;
 
-import org.mojave.rail.fspiop.spec.core.U2FPinValue;
+import org.mojave.rail.fspiop.spec.U2FPinValue;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

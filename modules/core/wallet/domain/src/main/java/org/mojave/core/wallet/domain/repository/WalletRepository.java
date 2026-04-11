@@ -4,7 +4,6 @@ import jakarta.persistence.LockModeType;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.domain.model.Wallet;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,9 +39,9 @@ public interface WalletRepository
             return (root, query, cb) -> cb.equal(root.get("walletOwnerId"), ownerId);
         }
 
-        public static Specification<Wallet> withPurpose(final WalletPurpose purpose) {
+        public static Specification<Wallet> withTag(final String tag) {
 
-            return (root, query, cb) -> cb.equal(root.get("purpose"), purpose);
+            return (root, query, cb) -> cb.equal(root.get("tag"), tag);
         }
 
     }

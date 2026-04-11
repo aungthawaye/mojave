@@ -23,7 +23,7 @@ import org.mojave.common.datatype.identifier.quoting.QuoteId;
 import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote_;
-import org.mojave.rail.fspiop.spec.core.AmountType;
+import org.mojave.rail.fspiop.spec.AmountType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

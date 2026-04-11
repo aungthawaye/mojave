@@ -22,16 +22,16 @@ package org.mojave.rail.fspiop.quoting.service;
 
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
+import org.mojave.component.nats.NatsConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
-import org.mojave.core.participant.intercom.client.service.ParticipantIntercomService;
-import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingKafkaConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.CreateQuotesRequestStepListener;
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesErrorStepListener;
 import org.mojave.rail.fspiop.quoting.domain.kafka.listener.UpdateQuotesResponseStepListener;
-import org.mojave.rail.fspiop.spec.core.Currency;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.spec.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ContainerProperties;
 
@@ -40,6 +40,20 @@ import java.util.HashMap;
 import java.util.UUID;
 
 final class QuotingServiceSettings implements QuotingServiceConfiguration.RequiredSettings {
+
+    private static String[] splitCsv(final String value) {
+
+        return value.trim().split("\\s*,\\s*");
+    }
+
+    private static String toNullIfBlank(final String value) {
+
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value;
+    }
 
     @Bean
     @Override
@@ -53,10 +67,50 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
 
     @Bean
     @Override
-    public ParticipantIntercomService.Settings participantIntercomServiceSettings() {
+    public UpdateQuotesResponseStepListener.Settings updateQuotesResponseStepListenerSettings() {
 
-        return new ParticipantIntercomService.Settings(
-            System.getenv("PARTICIPANT_INTERCOM_BASE_URL"));
+        return new UpdateQuotesResponseStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), UpdateQuotesResponseStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    }
+
+    @Bean
+    @Override
+    public UpdateQuotesErrorStepListener.Settings updateQuotesErrorStepListenerSettings() {
+
+        return new UpdateQuotesErrorStepListener.Settings(
+            System.getenv("KAFKA_BROKER_URL"), UpdateQuotesErrorStepListener.GROUP_ID,
+            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
+            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+    }
+
+    @Bean
+    @Override
+    public QuotingKafkaConfiguration.ProducerSettings quotingProducerSettings() {
+
+        return new QuotingKafkaConfiguration.ProducerSettings(
+            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
+    }
+
+    @Bean
+    @Override
+    public NatsConfiguration.NatsSettings natsSettings() {
+
+        final var servers = splitCsv(System.getenv("NATS_SERVERS"));
+        final var connectionName = System.getenv("NATS_CONNECTION_NAME");
+        final var username = toNullIfBlank(System.getenv("NATS_USERNAME"));
+        final var password = toNullIfBlank(System.getenv("NATS_PASSWORD"));
+        final var token = toNullIfBlank(System.getenv("NATS_TOKEN"));
+        final var connectionTimeoutMs = Integer.parseInt(
+            System.getenv("NATS_CONNECTION_TIMEOUT_MS"));
+        final var maxReconnects = Integer.parseInt(System.getenv("NATS_MAX_RECONNECTS"));
+        final var reconnectWaitMs = Integer.parseInt(System.getenv("NATS_RECONNECT_WAIT_MS"));
+        final var noEcho = Boolean.parseBoolean(System.getenv("NATS_NO_ECHO"));
+
+        return new NatsConfiguration.NatsSettings(
+            servers, connectionName, username, password,
+            token, connectionTimeoutMs, maxReconnects, reconnectWaitMs, noEcho);
     }
 
     @Bean
@@ -104,14 +158,6 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
 
         return new QuotingDomainConfiguration.QuoteSettings(
             Boolean.parseBoolean(System.getenv("QUOTING_STATEFUL")));
-    }
-
-    @Bean
-    @Override
-    public QuotingKafkaConfiguration.ProducerSettings quotingProducerSettings() {
-
-        return new QuotingKafkaConfiguration.ProducerSettings(
-            System.getenv("KAFKA_BOOTSTRAP_SERVERS"), "all");
     }
 
     @Bean
@@ -183,26 +229,6 @@ final class QuotingServiceSettings implements QuotingServiceConfiguration.Requir
     public SpringSecurityConfigurer.Settings springSecuritySettings() {
 
         return new SpringSecurityConfigurer.Settings(new String[]{"/quotes/**"});
-    }
-
-    @Bean
-    @Override
-    public UpdateQuotesErrorStepListener.Settings updateQuotesErrorStepListenerSettings() {
-
-        return new UpdateQuotesErrorStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), UpdateQuotesErrorStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
-    }
-
-    @Bean
-    @Override
-    public UpdateQuotesResponseStepListener.Settings updateQuotesResponseStepListenerSettings() {
-
-        return new UpdateQuotesResponseStepListener.Settings(
-            System.getenv("KAFKA_BROKER_URL"), UpdateQuotesResponseStepListener.GROUP_ID,
-            UUID.randomUUID().toString(), "earliest", 1, 1000, false,
-            ContainerProperties.AckMode.MANUAL_IMMEDIATE);
     }
 
 }

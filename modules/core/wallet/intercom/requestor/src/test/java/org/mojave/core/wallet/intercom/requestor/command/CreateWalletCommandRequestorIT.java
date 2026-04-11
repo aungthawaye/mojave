@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.intercom.requestor.WalletIntercomRequestorTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class CreateWalletCommandRequestorIT {
             new CreateWalletCommand.Input(
                 new WalletOwnerId(900001L),
                 Currency.USD,
-                WalletPurpose.ANY,
+                "P2P_TRANSFER",
                 "Requestor Wallet"));
 
         assertNotNull(output.walletId());

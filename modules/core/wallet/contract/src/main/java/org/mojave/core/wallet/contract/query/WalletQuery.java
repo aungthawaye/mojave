@@ -23,7 +23,6 @@ package org.mojave.core.wallet.contract.query;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.data.WalletData;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public interface WalletQuery {
 
     WalletData get(WalletId walletId);
 
-    WalletData get(WalletOwnerId ownerId, Currency currency, WalletPurpose purpose);
+    WalletData get(WalletOwnerId ownerId, Currency currency, String tag);
 
     List<WalletData> get(WalletOwnerId ownerId);
 

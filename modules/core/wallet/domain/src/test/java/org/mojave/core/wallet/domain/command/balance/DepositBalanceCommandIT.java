@@ -14,7 +14,6 @@ import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -48,12 +47,12 @@ public class DepositBalanceCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.depositBalanceCommand.execute(
                 new DepositBalanceCommand.Input(
-                    new WalletOwnerId(301L), Currency.USD, WalletPurpose.ANY, new BigDecimal("25.00"),
+                    new WalletOwnerId(301L), Currency.USD, "P2P_TRANSFER", new BigDecimal("25.00"),
                     new TransactionId(30101L), TRANSACTION_AT, "Deposit missing balance")));
 
         assertEquals(new WalletOwnerId(301L), exception.getWalletOwnerId());
         assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals(WalletPurpose.ANY, exception.getPurpose());
+        assertEquals("P2P_TRANSFER", exception.getTag());
     }
 
     @Test
@@ -64,7 +63,7 @@ public class DepositBalanceCommandIT extends BaseIT {
 
         final var transactionId = new TransactionId(30201L);
         final var input = new DepositBalanceCommand.Input(
-            new WalletOwnerId(302L), Currency.USD, WalletPurpose.ANY, new BigDecimal("12.50"), transactionId,
+            new WalletOwnerId(302L), Currency.USD, "P2P_TRANSFER", new BigDecimal("12.50"), transactionId,
             TRANSACTION_AT, "Deposit without update");
 
         this.depositBalanceCommand.execute(input);
@@ -86,7 +85,7 @@ public class DepositBalanceCommandIT extends BaseIT {
 
         final var output = this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
-                new WalletOwnerId(303L), Currency.USD, WalletPurpose.ANY, new BigDecimal("25.50"),
+                new WalletOwnerId(303L), Currency.USD, "P2P_TRANSFER", new BigDecimal("25.50"),
                 transactionId, TRANSACTION_AT, "Deposit funds"));
 
         assertNotNull(output.balanceUpdateId());

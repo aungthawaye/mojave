@@ -10,7 +10,6 @@ import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
 import org.mojave.common.datatype.identifier.wallet.NdcUpdateId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.mojave.core.wallet.engine.mysql.task.CommitPositionReservationTask;
 import org.mojave.core.wallet.engine.mysql.task.CreateWalletTask;
@@ -86,20 +85,20 @@ public class MySqlWalletEngineIT {
         final var walletId = new WalletId(201L);
         final var currency = Currency.USD;
         final var scale = 2;
-        final var purpose = WalletPurpose.ANY;
+        final var tag = "P2P_TRANSFER";
 
         try (final MockedStatic<CreateWalletTask> mocked = mockStatic(CreateWalletTask.class)) {
 
             mocked.when(
                 () -> CreateWalletTask.execute(
-                    this.jdbcTemplate, walletId, currency, scale, purpose))
+                    this.jdbcTemplate, walletId, currency, scale, tag))
                 .thenAnswer(invocation -> null);
 
-            walletEngine.createWallet(walletId, currency, scale, purpose);
+            walletEngine.createWallet(walletId, currency, scale, tag);
 
             mocked.verify(
                 () -> CreateWalletTask.execute(
-                    this.jdbcTemplate, walletId, currency, scale, purpose));
+                    this.jdbcTemplate, walletId, currency, scale, tag));
         }
     }
 

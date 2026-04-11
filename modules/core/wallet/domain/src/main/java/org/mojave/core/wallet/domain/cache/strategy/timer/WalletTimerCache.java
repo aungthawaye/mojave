@@ -24,7 +24,6 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.common.datatype.enums.Currency;
 import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.data.WalletData;
 import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.mojave.core.wallet.domain.model.Wallet;
@@ -67,9 +66,9 @@ public class WalletTimerCache implements WalletCache {
     }
 
     private static String key(final WalletOwnerId walletOwnerId, final Currency currency,
-                              final WalletPurpose purpose) {
+                              final String tag) {
 
-        return WalletCache.Key.get(walletOwnerId, currency, purpose);
+        return WalletCache.Key.get(walletOwnerId, currency, tag);
     }
 
     @Override
@@ -97,22 +96,22 @@ public class WalletTimerCache implements WalletCache {
 
     @Override
     public WalletData get(final WalletOwnerId walletOwnerId, final Currency currency,
-                          final WalletPurpose purpose) {
+                          final String tag) {
 
-        if (walletOwnerId == null || currency == null || purpose == null) {
+        if (walletOwnerId == null || currency == null || tag == null) {
             return null;
         }
 
-        final var key = key(walletOwnerId, currency, purpose);
+        final var key = key(walletOwnerId, currency, tag);
 
-        final var walletData = this.snapshotRef.get().withOwnerCurrencyPurpose.get(key);
+        final var walletData = this.snapshotRef.get().withOwnerCurrencyTag.get(key);
 
         if (walletData != null) {
             return walletData;
         }
 
         this.refreshData();
-        return this.snapshotRef.get().withOwnerCurrencyPurpose.get(key);
+        return this.snapshotRef.get().withOwnerCurrencyTag.get(key);
     }
 
     @Override
@@ -160,7 +159,7 @@ public class WalletTimerCache implements WalletCache {
         LOGGER.info("Start refreshing wallet cache data");
 
         final var wallets = this.walletRepository.findAll(
-            WalletRepository.Filters.withPurpose(Wallet.DEFAULT_PURPOSE));
+            WalletRepository.Filters.withTag(Wallet.DEFAULT_TAG));
 
         final var entries = wallets.stream().map(Wallet::convert).toList();
 
@@ -169,12 +168,12 @@ public class WalletTimerCache implements WalletCache {
                                .collect(Collectors.toUnmodifiableMap(
                                    WalletData::walletId, Function.identity(), (a, b) -> a));
 
-        final var withOwnerCurrencyPurpose = entries
+        final var withOwnerCurrencyTag = entries
                                                  .stream()
                                                  .collect(Collectors.toUnmodifiableMap(
                                                      e -> key(
                                                          e.walletOwnerId(), e.currency(),
-                                                         e.purpose()), Function.identity(),
+                                                         e.tag()), Function.identity(),
                                                      (a, b) -> a));
 
         final var withOwnerId = Collections.unmodifiableMap(entries
@@ -187,11 +186,11 @@ public class WalletTimerCache implements WalletCache {
 
         LOGGER.info("Refreshed Wallet cache data, count: {}", entries.size());
 
-        this.snapshotRef.set(new Snapshot(withId, withOwnerCurrencyPurpose, withOwnerId));
+        this.snapshotRef.set(new Snapshot(withId, withOwnerCurrencyTag, withOwnerId));
     }
 
     private record Snapshot(Map<WalletId, WalletData> withId,
-                            Map<String, WalletData> withOwnerCurrencyPurpose,
+                            Map<String, WalletData> withOwnerCurrencyTag,
                             Map<WalletOwnerId, Set<WalletData>> withOwnerId) {
 
         static Snapshot empty() {

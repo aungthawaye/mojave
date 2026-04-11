@@ -18,7 +18,6 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -78,7 +77,7 @@ public class CommitReservationCommandIT extends BaseIT {
 
         final var reservation = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(402L), Currency.USD, WalletPurpose.ANY, new BigDecimal("10.00"),
+                new WalletOwnerId(402L), Currency.USD, "P2P_TRANSFER", new BigDecimal("10.00"),
                 new TransactionId(40201L), TRANSACTION_AT, "Reserve before commit"));
 
         final var output = this.commitReservationCommand.execute(

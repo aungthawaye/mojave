@@ -29,9 +29,9 @@ import org.mojave.rail.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.rail.fspiop.component.retrofit.FspiopInvocationExceptionResolver;
 import org.mojave.rail.fspiop.component.type.Payee;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPatchResponse;
-import org.mojave.rail.fspiop.spec.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.TransfersIDPatchResponse;
+import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

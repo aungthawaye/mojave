@@ -31,7 +31,6 @@ import org.mojave.common.datatype.identifier.wallet.WalletId;
 import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
 import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 
 import java.math.BigDecimal;
@@ -47,7 +46,7 @@ public interface DecreasePositionCommand {
 
     record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
                  @JsonProperty(required = true) @NotNull Currency currency,
-                 @JsonProperty(required = true) @NotNull WalletPurpose purpose,
+                 @JsonProperty(required = true) @NotNull String tag,
                  @JsonProperty(required = true) @NotNull BigDecimal amount,
                  @JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull Instant transactionAt,

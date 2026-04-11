@@ -21,8 +21,8 @@ package org.mojave.rail.fspiop.service.api.quotes;
 
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.spec.core.ErrorInformationObject;
-import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 
 public interface RespondQuotes {
 

@@ -42,7 +42,7 @@ import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesErrorStepPublisher;
 import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesResponseStepPublisher;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
-import org.mojave.rail.fspiop.spec.core.QuotesIDPutResponse;
+import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

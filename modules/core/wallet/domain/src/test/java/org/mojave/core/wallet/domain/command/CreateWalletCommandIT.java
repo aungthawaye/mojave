@@ -37,7 +37,7 @@ public class CreateWalletCommandIT extends BaseIT {
 
         final var output = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(
-                new WalletOwnerId(101L), Currency.USD, Wallet.DEFAULT_PURPOSE,
+                new WalletOwnerId(101L), Currency.USD, Wallet.DEFAULT_TAG,
                 "Settlement Wallet"));
         final var wallet = this.walletQuery.getAll().getFirst();
 
@@ -48,16 +48,16 @@ public class CreateWalletCommandIT extends BaseIT {
     }
 
     @Test
-    @DisplayName("Return existing wallet when owner currency and purpose already exist")
+    @DisplayName("Return existing wallet when owner currency and tag already exist")
     public void duplicateWalletReturnsExisting() {
 
         final var firstOutput = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(
-                new WalletOwnerId(102L), Currency.USD, Wallet.DEFAULT_PURPOSE,
+                new WalletOwnerId(102L), Currency.USD, Wallet.DEFAULT_TAG,
                 "Primary Wallet"));
         final var secondOutput = this.createWalletCommand.execute(
             new CreateWalletCommand.Input(
-                new WalletOwnerId(102L), Currency.USD, Wallet.DEFAULT_PURPOSE,
+                new WalletOwnerId(102L), Currency.USD, Wallet.DEFAULT_TAG,
                 "Ignored Wallet Name"));
 
         assertEquals(firstOutput.walletId(), secondOutput.walletId());
@@ -81,7 +81,7 @@ public class CreateWalletCommandIT extends BaseIT {
 
             assertThrows(
                 RuntimeException.class, () -> this.createWallet(
-                    this.createWalletCommand, 103L, Currency.USD, Wallet.DEFAULT_PURPOSE,
+                    this.createWalletCommand, 103L, Currency.USD, Wallet.DEFAULT_TAG,
                     "Failure Wallet"));
             assertEquals(0, this.walletQuery.getAll().size());
 

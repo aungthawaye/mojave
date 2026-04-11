@@ -15,7 +15,6 @@ import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTra
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.scheme.rule.wallet.WalletPurpose;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -49,12 +48,12 @@ public class ReservePositionCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.reservePositionCommand.execute(
                 new ReservePositionCommand.Input(
-                    new WalletOwnerId(413L), Currency.USD, WalletPurpose.ANY, new BigDecimal("2.00"),
+                    new WalletOwnerId(413L), Currency.USD, "P2P_TRANSFER", new BigDecimal("2.00"),
                     new TransactionId(41301L), TRANSACTION_AT, "Reserve missing position")));
 
         assertEquals(new WalletOwnerId(413L), exception.getWalletOwnerId());
         assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals(WalletPurpose.ANY, exception.getPurpose());
+        assertEquals("P2P_TRANSFER", exception.getTag());
     }
 
     @Test
@@ -72,7 +71,7 @@ public class ReservePositionCommandIT extends BaseIT {
 
         final var transactionId = new TransactionId(41401L);
         final var input = new ReservePositionCommand.Input(
-            new WalletOwnerId(414L), Currency.USD, WalletPurpose.ANY, new BigDecimal("2.00"),
+            new WalletOwnerId(414L), Currency.USD, "P2P_TRANSFER", new BigDecimal("2.00"),
             transactionId, TRANSACTION_AT, "Reserve without update");
 
         this.reservePositionCommand.execute(input);
@@ -98,7 +97,7 @@ public class ReservePositionCommandIT extends BaseIT {
         final var exception = assertThrows(
             PositionLimitExceededException.class, () -> this.reservePositionCommand.execute(
                 new ReservePositionCommand.Input(
-                    new WalletOwnerId(415L), Currency.USD, WalletPurpose.ANY, new BigDecimal("6.00"),
+                    new WalletOwnerId(415L), Currency.USD, "P2P_TRANSFER", new BigDecimal("6.00"),
                     transactionId, TRANSACTION_AT, "Reserve too much")));
 
         assertEquals(new WalletId(walletId.getId()), exception.getWalletId());
@@ -124,7 +123,7 @@ public class ReservePositionCommandIT extends BaseIT {
 
         final var output = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(416L), Currency.USD, WalletPurpose.ANY, new BigDecimal("2.50"),
+                new WalletOwnerId(416L), Currency.USD, "P2P_TRANSFER", new BigDecimal("2.50"),
                 transactionId, TRANSACTION_AT, "Reserve position"));
 
         assertNotNull(output.positionUpdateId());

@@ -26,9 +26,13 @@ import org.mojave.common.datatype.identifier.transaction.TransactionId;
 import org.mojave.common.datatype.identifier.transfer.TransferId;
 import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.spec.core.ExtensionList;
+import org.mojave.rail.fspiop.spec.ExtensionList;
 
 public interface AbortTransferStep {
+
+    String SUBJECT_NAME = "sub-fspiop-transfer.abort-transfer-step";
+
+    String TOPIC_NAME = "tp-fspiop-transfer.abort-transfer-step";
 
     void execute(Input input) throws FspiopException;
 
