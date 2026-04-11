@@ -21,8 +21,8 @@ package org.mojave.rail.fspiop.quoting.domain.command;
 
 import org.mojave.common.datatype.enums.participant.EndpointType;
 import org.mojave.common.datatype.type.participant.FspCode;
-import org.mojave.participant.contract.data.FspData;
-import org.mojave.participant.store.ParticipantStore;
+import org.mojave.core.participant.contract.data.FspData;
+import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.rail.fspiop.quoting.contract.command.PutQuotesErrorCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesErrorStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;

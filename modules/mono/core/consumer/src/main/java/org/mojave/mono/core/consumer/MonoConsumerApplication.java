@@ -20,8 +20,8 @@
 
 package org.mojave.mono.core.consumer;
 
-import org.mojave.accounting.domain.AccountingFlyway;
-import org.mojave.wallet.domain.WalletFlyway;
+import org.mojave.core.accounting.domain.AccountingFlyway;
+import org.mojave.core.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

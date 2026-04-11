@@ -13,6 +13,7 @@
     <name>Mojave - Transaction</name>
     <modules>
         <module>contract</module>
+        <module>engine</module>
         <module>domain</module>
     </modules>
     <properties>

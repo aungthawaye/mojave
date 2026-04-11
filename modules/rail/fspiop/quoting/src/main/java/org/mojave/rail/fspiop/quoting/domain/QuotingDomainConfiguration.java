@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.quoting.domain;
 
 import org.mojave.component.jpa.routing.RoutingJpaConfiguration;
 import org.mojave.component.misc.MiscConfiguration;
-import org.mojave.participant.store.ParticipantStoreConfiguration;
+import org.mojave.core.participant.store.ParticipantStoreConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;

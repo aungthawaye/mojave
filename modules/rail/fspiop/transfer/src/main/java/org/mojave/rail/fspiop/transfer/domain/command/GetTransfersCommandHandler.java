@@ -20,7 +20,7 @@
 package org.mojave.rail.fspiop.transfer.domain.command;
 
 import org.mojave.component.jpa.routing.annotation.Read;
-import org.mojave.participant.store.ParticipantStore;
+import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.contract.command.GetTransfersCommand;
 import org.mojave.rail.fspiop.transfer.domain.repository.TransferRepository;

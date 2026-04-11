@@ -7,7 +7,7 @@
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>mojave-transactioncontract</artifactId>
+    <artifactId>mojave-transaction-contract</artifactId>
     <name>Mojave - Transaction - Contract</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

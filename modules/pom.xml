@@ -265,12 +265,22 @@
       </dependency>
       <dependency>
         <groupId>org.mojave.transaction</groupId>
-        <artifactId>mojave-transactioncontract</artifactId>
+        <artifactId>mojave-transaction-contract</artifactId>
         <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.mojave.transaction</groupId>
-        <artifactId>mojave-transactiondomain</artifactId>
+        <artifactId>mojave-transaction-domain</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.transaction.engine</groupId>
+        <artifactId>mojave-transaction-engine-transfer</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mojave.transaction.engine</groupId>
+        <artifactId>mojave-transaction-engine-fund</artifactId>
         <version>1.0.0</version>
       </dependency>
       <dependency>

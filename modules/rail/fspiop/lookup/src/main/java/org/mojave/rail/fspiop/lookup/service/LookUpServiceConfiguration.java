@@ -21,7 +21,7 @@
 package org.mojave.rail.fspiop.lookup.service;
 
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
-import org.mojave.participant.intercom.client.ParticipantIntercomClientConfiguration;
+import org.mojave.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
 import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.lookup.domain.LookUpDomainConfiguration;
 import org.springframework.context.annotation.ComponentScan;

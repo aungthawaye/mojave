@@ -21,12 +21,12 @@
 package org.mojave.rail.fspiop.quoting.service;
 
 import org.mojave.common.datatype.type.participant.FspCode;
-import org.mojave.participant.contract.query.FspGroupQuery;
-import org.mojave.participant.contract.query.FspQuery;
-import org.mojave.participant.contract.query.OracleQuery;
-import org.mojave.participant.contract.query.SspQuery;
-import org.mojave.participant.store.ParticipantStore;
-import org.mojave.participant.store.strategy.timer.TimerBasedInMemoryParticipantStore;
+import org.mojave.core.participant.contract.query.FspGroupQuery;
+import org.mojave.core.participant.contract.query.FspQuery;
+import org.mojave.core.participant.contract.query.OracleQuery;
+import org.mojave.core.participant.contract.query.SspQuery;
+import org.mojave.core.participant.store.ParticipantStore;
+import org.mojave.core.participant.store.strategy.timer.TimerBasedInMemoryParticipantStore;
 import org.mojave.rail.fspiop.service.component.ParticipantVerifier;
 import org.springframework.context.annotation.Bean;
 
