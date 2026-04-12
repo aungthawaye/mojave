@@ -5,5 +5,5 @@ import org.springframework.context.annotation.Import;
 @Import(
     value = {
         AccountingIntercomRequestorConfiguration.class,
-        AccountingIntercomRequestorSettings.class})
+        AccountingIntercomRequestorTestSettings.class})
 public class AccountingIntercomRequestorTestConfiguration { }

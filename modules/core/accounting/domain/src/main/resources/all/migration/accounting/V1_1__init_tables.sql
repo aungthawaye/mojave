@@ -21,7 +21,7 @@ CREATE TABLE `acc_coa_entry`
 (
     `coa_entry_id`   bigint       NOT NULL,
     `category`       varchar(32)  NOT NULL,
-    `coa_entry_code` varchar(32)  NOT NULL,
+    `coa_entry_code` varchar(64)  NOT NULL,
     `name`           varchar(64)  NOT NULL,
     `description`    varchar(255) NOT NULL,
     `account_type`   varchar(32)  NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE `acc_account`
     `owner_id`           bigint      NOT NULL,
     `type`               varchar(32) NOT NULL,
     `currency`           varchar(3)  NOT NULL,
-    `code`               varchar(32) NOT NULL,
+    `code`               varchar(64) NOT NULL,
     `name`               varchar(64) NOT NULL,
     `description`        varchar(255) DEFAULT NULL,
     `created_at`         bigint      NOT NULL,

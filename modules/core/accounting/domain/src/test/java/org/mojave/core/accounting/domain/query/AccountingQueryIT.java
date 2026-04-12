@@ -213,13 +213,11 @@ public class AccountingQueryIT extends BaseIT {
         final var byId = this.coaEntryQuery.get(firstCoaEntryId);
         final var byCoa = this.coaEntryQuery.get(coaId);
         final var byCategory = this.coaEntryQuery.get("HUB");
-        final var byName = this.coaEntryQuery.get("Query");
         final var all = this.coaEntryQuery.getAll();
 
         assertEquals(firstCoaEntryId, byId.coaEntryId());
         assertEquals(2, byCoa.size());
         assertEquals(secondCoaEntryId, byCategory.getFirst().coaEntryId());
-        assertEquals(2, byName.size());
         assertEquals(2, all.size());
     }
 

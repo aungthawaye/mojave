@@ -20,8 +20,6 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.scheme.rule.enums.Currency;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
@@ -29,6 +27,8 @@ import org.mojave.core.wallet.intercom.producer.command.position.FulfilPositions
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -51,7 +51,7 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
     }
 
     @Override
-    public FulfilPositionsStep.Output execute(FulfilPositionsStep.Input input)
+    public void execute(FulfilPositionsStep.Input input)
         throws FailedToCommitReservationException, FspiopException {
 
         MDC.put("REQ_ID", input.udfTransferId().getId());
@@ -67,14 +67,8 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
             this.fulfilPositionsPublisher.publish(fulfilPositionsInput);
 
-            var output = new FulfilPositionsStepHandler.Output(null, null);
-
             var endAt = System.nanoTime();
-            LOGGER.info(
-                "FulfilPositionsStep : output : ({}) , took : {} ms",
-                ObjectLogger.log(output), (endAt - startAt) / 1_000_000);
-
-            return output;
+            LOGGER.info("FulfilPositionsStep : took : {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

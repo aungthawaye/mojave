@@ -65,15 +65,9 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
         try {
 
             var payerFsp = input.payerFsp();
-            var payerFspCode = payerFsp.code();
-
-            var payeeFsp = input.payeeFsp();
-            var payeeFspCode = payeeFsp.code();
-
             var currency = input.currency();
 
             var transferAmount = input.transferAmount();
-            var transferAmountString = transferAmount.stripTrailingZeros().toPlainString();
 
             var transactionId = input.transactionId();
             var transactionAt = input.transactionAt();

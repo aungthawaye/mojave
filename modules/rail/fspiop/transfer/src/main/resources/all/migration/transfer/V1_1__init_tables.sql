@@ -17,7 +17,7 @@ CREATE TABLE `tfr_transfer`
     `payee_sub_id`                  varchar(48)    DEFAULT NULL,
     `amount_type`                   varchar(32)    DEFAULT NULL,
     `scenario`                      varchar(32)    DEFAULT NULL,
-    `sub_scenario`                  varchar(128)   DEFAULT NULL,
+    `sub_scenario`                  varchar(64)   DEFAULT NULL,
 
     `transfer_currency`             varchar(3)     NOT NULL,
     `transfer_amount`               decimal(34, 4) NOT NULL,

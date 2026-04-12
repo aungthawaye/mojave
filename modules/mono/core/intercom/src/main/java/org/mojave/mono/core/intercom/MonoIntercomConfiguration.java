@@ -20,52 +20,39 @@
 
 package org.mojave.mono.core.intercom;
 
+import org.mojave.core.accounting.intercom.replier.AccountingIntercomReplierConfiguration;
+import org.mojave.core.participant.intercom.replier.ParticipantIntercomReplierConfiguration;
+import org.mojave.core.wallet.intercom.replier.WalletIntercomReplierConfiguration;
 import org.mojave.scheme.rule.DatatypeConfiguration;
-import org.mojave.component.openapi.OpenApiConfiguration;
-import org.mojave.component.web.error.RestErrorConfiguration;
-import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
-import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
-import org.mojave.core.participant.domain.ParticipantDomainConfiguration;
-import org.mojave.core.participant.intercom.ParticipantIntercomConfiguration;
-import org.mojave.core.wallet.domain.WalletDomainConfiguration;
-import org.mojave.core.wallet.intercom.WalletIntercomConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
-import tools.jackson.databind.ObjectMapper;
 
 @EnableAsync
 @ComponentScan(
     basePackages = {"org.mojave.mono.intercom.controller"})
 @Import(
     value = {
-        OpenApiConfiguration.class,
         DatatypeConfiguration.class,
-        RestErrorConfiguration.class,
-        SpringSecurityConfiguration.class,
-        ParticipantIntercomConfiguration.class,
-        WalletIntercomConfiguration.class})
-public class MonoIntercomConfiguration extends JsonWebMvcConfigurationSupport {
+        AccountingIntercomReplierConfiguration.class,
+        ParticipantIntercomReplierConfiguration.class,
+        WalletIntercomReplierConfiguration.class})
+public class MonoIntercomConfiguration {
 
-    public MonoIntercomConfiguration(ObjectMapper objectMapper) {
-
-        super(objectMapper);
-    }
-
-    public interface RequiredDependencies extends OpenApiConfiguration.RequiredDependencies,
-                                                  SpringSecurityConfiguration.RequiredDependencies,
-                                                  ParticipantIntercomConfiguration.RequiredDependencies,
-                                                  WalletIntercomConfiguration.RequiredDependencies { }
-
-    public interface RequiredSettings extends OpenApiConfiguration.RequiredSettings,
-                                              SpringSecurityConfiguration.RequiredSettings,
-                                              ParticipantDomainConfiguration.RequiredSettings,
-                                              WalletDomainConfiguration.RequiredSettings {
-
-        TomcatSettings tomcatSettings();
+    public MonoIntercomConfiguration() {
 
     }
 
-    public record TomcatSettings(int portNo) { }
+    public interface RequiredDependencies
+        extends ParticipantIntercomReplierConfiguration.RequiredDependencies,
+                WalletIntercomReplierConfiguration.RequiredDependencies,
+                AccountingIntercomReplierConfiguration.RequiredDependencies { }
+
+    public interface RequiredSettings
+        extends ParticipantIntercomReplierConfiguration.RequiredSettings,
+                WalletIntercomReplierConfiguration.RequiredSettings,
+                AccountingIntercomReplierConfiguration.RequiredSettings {
+
+    }
 
 }

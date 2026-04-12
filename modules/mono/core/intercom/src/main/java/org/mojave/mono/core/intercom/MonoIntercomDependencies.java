@@ -20,20 +20,10 @@
 
 package org.mojave.mono.core.intercom;
 
-import org.mojave.component.web.spring.security.AuthenticationErrorWriter;
-import org.mojave.component.web.spring.security.Authenticator;
-import org.mojave.mono.core.intercom.controller.component.EmptyErrorWriter;
-import org.mojave.mono.core.intercom.controller.component.EmptyGatekeeper;
-import org.mojave.core.wallet.domain.cache.BalanceCache;
-import org.mojave.core.wallet.domain.cache.PositionCache;
-import org.mojave.core.wallet.domain.cache.strategy.local.BalanceLocalCache;
-import org.mojave.core.wallet.domain.cache.strategy.local.PositionLocalCache;
-import org.mojave.core.wallet.domain.component.BalanceUpdater;
-import org.mojave.core.wallet.domain.component.PositionUpdater;
-import org.mojave.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import org.mojave.core.wallet.domain.component.mysql.MySqlPositionUpdater;
-import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.core.wallet.domain.repository.PositionRepository;
+import org.mojave.core.accounting.contract.engine.LedgerEngine;
+import org.mojave.core.accounting.engine.mysql.MySqlLedgerEngine;
+import org.mojave.core.wallet.contract.engine.WalletEngine;
+import org.mojave.core.wallet.engine.mysql.MySqlWalletEngine;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
 
@@ -41,93 +31,57 @@ import java.util.Objects;
 
 public class MonoIntercomDependencies implements MonoIntercomConfiguration.RequiredDependencies {
 
-    private final PositionCache positionCache;
+    private final WalletEngine walletEngine;
 
-    private final BalanceCache balanceCache;
+    private final LedgerEngine ledgerEngine;
 
-    private final BalanceUpdater balanceUpdater;
-
-    private final PositionUpdater positionUpdater;
-
-    public MonoIntercomDependencies(ObjectMapper objectMapper,
-                                    PositionRepository positionRepository,
-                                    BalanceRepository balanceRepository) {
+    public MonoIntercomDependencies(ObjectMapper objectMapper) {
 
         Objects.requireNonNull(objectMapper);
-        Objects.requireNonNull(positionRepository);
-        Objects.requireNonNull(balanceRepository);
 
-        this.positionCache = new PositionLocalCache(positionRepository);
-        this.balanceCache = new BalanceLocalCache(balanceRepository);
+        this.walletEngine = new MySqlWalletEngine(new MySqlWalletEngine.WalletDbSettings(
+            new MySqlWalletEngine.WalletDbSettings.Connection(
+                System.getenv("MYSQL_WALLET_DB_URL"), System.getenv("MYSQL_WALLET_DB_USER"),
+                System.getenv("MYSQL_WALLET_DB_PASSWORD"),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_CONNECTION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_VALIDATION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_MAX_LIFETIME_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_IDLE_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_KEEPALIVE_TIMEOUT")), false),
+            new MySqlWalletEngine.WalletDbSettings.Pool(
+                "wallet-engine", Integer.parseInt(System.getenv("MYSQL_WALLET_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("MYSQL_WALLET_DB_MAX_POOL_SIZE")))));
 
-        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
-            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-                System.getenv("MYSQL_BALANCE_DB_URL"), System.getenv("MYSQL_BALANCE_DB_USER"),
-                System.getenv("MYSQL_BALANCE_DB_PASSWORD"),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_CONNECTION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_VALIDATION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_MAX_LIFETIME_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_IDLE_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_KEEPALIVE_TIMEOUT")), false),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
-                "wallet-balance", Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
+        this.ledgerEngine = new MySqlLedgerEngine(
+            new MySqlLedgerEngine.LedgerDbSettings(
+                new MySqlLedgerEngine.LedgerDbSettings.Connection(
+                    System.getenv("MYSQL_LEDGER_DB_URL"), System.getenv("MYSQL_LEDGER_DB_USER"),
+                    System.getenv("MYSQL_LEDGER_DB_PASSWORD"),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_CONNECTION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_VALIDATION_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_MAX_LIFETIME_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_IDLE_TIMEOUT")),
+                    Long.parseLong(System.getenv("MYSQL_LEDGER_DB_KEEPALIVE_TIMEOUT")), false),
+                new MySqlLedgerEngine.LedgerDbSettings.Pool(
+                    "accounting-ledgerOperation",
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
+                    Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
+            objectMapper);
 
-        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
-            new MySqlPositionUpdater.PositionDbSettings.Connection(
-                System.getenv("MYSQL_POSITION_DB_URL"), System.getenv("MYSQL_POSITION_DB_USER"),
-                System.getenv("MYSQL_POSITION_DB_PASSWORD"),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_CONNECTION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_VALIDATION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_MAX_LIFETIME_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_IDLE_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_KEEPALIVE_TIMEOUT")), false),
-            new MySqlPositionUpdater.PositionDbSettings.Pool(
-                "wallet-position",
-                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
     }
 
     @Bean
     @Override
-    public AuthenticationErrorWriter authenticationErrorWriter() {
+    public LedgerEngine ledgerEngine() {
 
-        return new EmptyErrorWriter();
+        return this.ledgerEngine;
     }
 
     @Bean
     @Override
-    public Authenticator authenticator() {
+    public WalletEngine walletEngine() {
 
-        return new EmptyGatekeeper();
-    }
-
-    @Bean
-    @Override
-    public BalanceUpdater balanceUpdater() {
-
-        return this.balanceUpdater;
-    }
-
-    @Bean
-    @Override
-    public PositionCache positionCache() {
-
-        return this.positionCache;
-    }
-
-    @Bean
-    @Override
-    public PositionUpdater positionUpdater() {
-
-        return this.positionUpdater;
-    }
-
-    @Bean
-    @Override
-    public BalanceCache walletCache() {
-
-        return this.balanceCache;
+        return this.walletEngine;
     }
 
 }

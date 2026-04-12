@@ -225,7 +225,7 @@ public class PostLedgerEngineFlowCommandIT extends BaseIT {
             () -> this.postAccountingFlowCommand.execute(this.buildTransferInput(
                 fixture, new TransactionId(905L),
                 Map.of("PAYER_FSP", fixture.payerOwnerId(), "PAYEE_FSP", fixture.payeeOwnerId()),
-                Map.of("TRANSFER_AMOUNT", new BigDecimal("100.00")))));
+                Map.of("TRANSFER_AMOUNT_X", new BigDecimal("100.00")))));
     }
 
     @Test

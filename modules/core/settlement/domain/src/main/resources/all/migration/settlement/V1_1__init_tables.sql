@@ -7,7 +7,7 @@ CREATE TABLE `stm_settlement_definition`
     `currency`                 VARCHAR(3)   NOT NULL,
     `start_at`                 BIGINT       NOT NULL,
     `desired_provider_id`      BIGINT       NOT NULL,
-    `activation_status`        VARCHAR(20)  NOT NULL,
+    `activation_status`        VARCHAR(32)  NOT NULL,
     `rec_created_at`           BIGINT DEFAULT NULL,
     `rec_updated_at`           BIGINT DEFAULT NULL,
     `rec_version`              INT    DEFAULT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE `stm_settlement_definition`
 CREATE TABLE `stm_settlement_record`
 (
     `settlement_record_id` BIGINT         NOT NULL,
-    `settlement_type`      VARCHAR(20)    NOT NULL,
+    `settlement_type`      VARCHAR(32)    NOT NULL,
     `settlement_id`        VARCHAR(255),
     `settlement_batch_id`  VARCHAR(255),
     `payer_fsp_id`         BIGINT         NOT NULL,

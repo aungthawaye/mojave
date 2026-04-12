@@ -21,7 +21,7 @@ package org.mojave.component.misc.constraint;
 
 public class StringSizeConstraints {
 
-    public static final int MAX_CODE_LENGTH = 32;
+    public static final int MAX_CODE_LENGTH = 64;
 
     public static final int MAX_CURRENCY_LENGTH = 3;
 
@@ -31,7 +31,7 @@ public class StringSizeConstraints {
 
     public static final int MAX_HTTP_URL_LENGTH = 255;
 
-    public static final int MAX_NAME_TITLE_LENGTH = 64;
+    public static final int MAX_NAME_TITLE_LENGTH = 255;
 
     public static final int MAX_PARAGRAPH_LENGTH = 2048;
 

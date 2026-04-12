@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.connector</groupId>
         <artifactId>mojave-connector</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-connector-adapter</artifactId>

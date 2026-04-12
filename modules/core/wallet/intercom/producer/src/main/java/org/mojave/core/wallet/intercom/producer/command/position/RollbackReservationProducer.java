@@ -1,0 +1,46 @@
+package org.mojave.core.wallet.intercom.producer.command.position;
+
+import io.nats.client.Connection;
+import jakarta.annotation.PostConstruct;
+import org.mojave.component.nats.CommandPublisher;
+import org.mojave.component.nats.JetStreamConfigurer;
+import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
+import org.mojave.core.wallet.contract.constant.WalletStreamName;
+import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.Objects;
+
+@Service
+public class RollbackReservationProducer {
+
+    private final Connection connection;
+
+    private final ObjectMapper objectMapper;
+
+    public RollbackReservationProducer(final Connection connection,
+                                       final ObjectMapper objectMapper) {
+
+        Objects.requireNonNull(connection);
+        Objects.requireNonNull(objectMapper);
+
+        this.connection = connection;
+        this.objectMapper = objectMapper;
+    }
+
+    @PostConstruct
+    public void initialize() {
+
+        JetStreamConfigurer.ensureStream(
+            this.connection, WalletStreamName.STREAM_NAME,
+            RollbackReservationCommand.TOPIC_NAME);
+    }
+
+    public void publish(final RollbackReservationCommand.Input input) {
+
+        CommandPublisher.publish(
+            this.connection, RollbackReservationCommand.TOPIC_NAME, input,
+            this.objectMapper);
+    }
+
+}

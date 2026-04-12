@@ -177,7 +177,7 @@ public class AddFlowDefinitionLineCommandIT extends BaseIT {
                 flowDefinitionId,
                 new AddFlowDefinitionLineCommand.Input.FlowDefinitionLine(
                     2,
-                    "HUB",
+                    "HUB_X",
                     payerCoaEntryId,
                     "PAYEE_FSP_FEE",
                     Side.CREDIT,

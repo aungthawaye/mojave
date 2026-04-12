@@ -29,7 +29,7 @@ import org.mojave.rail.fspiop.spec.Currency;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public interface PostLedgerFlowStep {
+public interface PostAccountingFlowStep {
 
     void execute(Input input) throws FspiopException;
 

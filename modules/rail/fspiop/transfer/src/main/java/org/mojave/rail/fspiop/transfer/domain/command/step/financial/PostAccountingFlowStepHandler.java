@@ -20,14 +20,14 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.scheme.rule.enums.Currency;
-import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.ledger.PostAccountingFlowCommand;
 import org.mojave.core.accounting.intercom.producer.command.ledger.PostAccountingFlowProducer;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
+import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostAccountingFlowStep;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 import org.mojave.scheme.rule.scenario.dimension.P2PTransferDimension;
 import org.slf4j.Logger;
@@ -40,13 +40,14 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @Service
-public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
+public class PostAccountingFlowStepHandler implements PostAccountingFlowStep {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PostLedgerFlowStepHandler.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(
+        PostAccountingFlowStepHandler.class);
 
     private final PostAccountingFlowProducer postAccountingFlowProducer;
 
-    public PostLedgerFlowStepHandler(PostAccountingFlowProducer postAccountingFlowProducer) {
+    public PostAccountingFlowStepHandler(PostAccountingFlowProducer postAccountingFlowProducer) {
 
         Objects.requireNonNull(postAccountingFlowProducer);
 
@@ -54,12 +55,12 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
     }
 
     @Override
-    public void execute(PostLedgerFlowStep.Input input) throws FspiopException {
+    public void execute(PostAccountingFlowStep.Input input) throws FspiopException {
 
         MDC.put("REQ_ID", input.udfTransferId().getId());
         var startAt = System.nanoTime();
 
-        LOGGER.info("PostLedgerFlowStep : input : ({})", ObjectLogger.log(input));
+        LOGGER.info("PostAccountingFlowStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
@@ -86,7 +87,8 @@ public class PostLedgerFlowStepHandler implements PostLedgerFlowStep {
                 input.transactionId(), input.transactionAt(), participants, amounts));
 
             var endAt = System.nanoTime();
-            LOGGER.info("PostLedgerFlowStep : done , took {} ms", (endAt - startAt) / 1_000_000);
+            LOGGER.info(
+                "PostAccountingFlowStep : done , took {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

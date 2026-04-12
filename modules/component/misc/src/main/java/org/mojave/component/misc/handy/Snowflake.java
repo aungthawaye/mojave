@@ -59,6 +59,7 @@ public final class Snowflake {
     private Snowflake(int nodeId) {
 
         this.nodeId = nodeId & MAX_NODE_ID;
+        LOGGER.info("Snowflake initialized with nodeId={}", this.nodeId);
     }
 
     private static int createNodeIdFromMac() {
@@ -106,26 +107,29 @@ public final class Snowflake {
 
         if (s != null && !s.isBlank()) {
             s = s.trim();
+
+            // Case 1: explicit integer
             try {
                 return Integer.parseInt(s) & MAX_NODE_ID;
             } catch (NumberFormatException ignored) { }
 
-            // StatefulSet pod name: <name>-<ordinal>
+            // Case 2: StatefulSet style name, e.g. xxx-xxx-3
             int dash = s.lastIndexOf('-');
             if (dash >= 0 && dash + 1 < s.length()) {
                 try {
                     return Integer.parseInt(s.substring(dash + 1)) & MAX_NODE_ID;
                 } catch (NumberFormatException ignored) { }
             }
+
+            // Case 3: Deployment pod name or any unique string
+            return Math.abs(s.hashCode()) & MAX_NODE_ID;
         }
 
-        // Fail-fast in K8s to prevent silent duplicates
         if (inK8s) {
             throw new IllegalStateException(
                 "SNOWFLAKE_NODE_ID (or -Dsnowflake.nodeId) must be set in Kubernetes to avoid duplicate IDs.");
         }
 
-        // non-K8s fallback only
         return createNodeIdFromMac();
     }
 
@@ -176,7 +180,7 @@ public final class Snowflake {
         this.lastTimestamp = currentTimestamp;
 
         return (currentTimestamp << TIMESTAMP_SHIFT) | ((long) this.nodeId << NODE_ID_SHIFT) |
-                      (this.sequence & MAX_SEQUENCE);
+                   (this.sequence & MAX_SEQUENCE);
     }
 
 }

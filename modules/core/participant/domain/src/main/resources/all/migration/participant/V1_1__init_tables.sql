@@ -52,7 +52,7 @@ CREATE TABLE `pcp_fsp_group`
 CREATE TABLE `pcp_fsp`
 (
     `fsp_id`             bigint      NOT NULL,
-    `code`               varchar(32) NOT NULL,
+    `code`               varchar(64) NOT NULL,
     `name`               varchar(64) NOT NULL,
     `activation_status`  varchar(32) NOT NULL,
     `termination_status` varchar(32) NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `pcp_oracle`
 CREATE TABLE `pcp_ssp`
 (
     `ssp_id`             bigint       NOT NULL,
-    `code`               varchar(32)  NOT NULL,
+    `code`               varchar(64) NOT NULL,
     `name`               varchar(64)  NOT NULL,
     `base_url`           varchar(255) NOT NULL,
     `activation_status`  varchar(32)  NOT NULL,

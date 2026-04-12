@@ -163,7 +163,7 @@ public class CreateFlowDefinitionCommandIT extends BaseIT {
                 ScenarioType.P2P_TRANSFER, Currency.EUR, "flow-invalid-participant",
                 "flow-invalid-participant description", List.of(
                 new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
-                    1, "HUB", coaEntryId,
+                    1, "HUB_X", coaEntryId,
                     "TRANSFER_AMOUNT", Side.DEBIT, "invalid participant")))));
     }
 

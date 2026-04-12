@@ -39,7 +39,7 @@ import org.mojave.rail.fspiop.spec.Currency;
 import org.mojave.rail.fspiop.spec.TransferState;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
+import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostAccountingFlowStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
@@ -80,7 +80,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     private final RollbackReservationStepProducer rollbackReservationStepProducer;
 
-    private final PostLedgerFlowStep postLedgerFlowStep;
+    private final PostAccountingFlowStep postAccountingFlowStep;
 
     // FSPIOP steps
     private final UnwrapResponseStep unwrapResponseStep;
@@ -99,7 +99,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                                       CommitTransferStepProducer commitTransferStepProducer,
                                       FulfilPositionsStep fulfilPositionsStep,
                                       RollbackReservationStepProducer rollbackReservationStepProducer,
-                                      PostLedgerFlowStep postLedgerFlowStep,
+                                      PostAccountingFlowStep postAccountingFlowStep,
                                       UnwrapResponseStep unwrapResponseStep,
                                       CommitTransferToPayerStep commitTransferToPayerStep,
                                       ForwardToDestinationStep forwardToDestinationStep,
@@ -112,7 +112,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         Objects.requireNonNull(commitTransferStepProducer);
         Objects.requireNonNull(fulfilPositionsStep);
         Objects.requireNonNull(rollbackReservationStepProducer);
-        Objects.requireNonNull(postLedgerFlowStep);
+        Objects.requireNonNull(postAccountingFlowStep);
         Objects.requireNonNull(unwrapResponseStep);
         Objects.requireNonNull(commitTransferToPayerStep);
         Objects.requireNonNull(forwardToDestinationStep);
@@ -125,7 +125,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
         this.commitTransferStepProducer = commitTransferStepProducer;
         this.fulfilPositionsStep = fulfilPositionsStep;
         this.rollbackReservationStepProducer = rollbackReservationStepProducer;
-        this.postLedgerFlowStep = postLedgerFlowStep;
+        this.postAccountingFlowStep = postAccountingFlowStep;
         this.unwrapResponseStep = unwrapResponseStep;
         this.commitTransferToPayerStep = commitTransferToPayerStep;
         this.forwardToDestinationStep = forwardToDestinationStep;
@@ -356,7 +356,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             udfTransferId, transactionId, transactionAt, payerFsp, payeeFsp,
                             reservationId, currency, "-"));
 
-                        this.postLedgerFlowStep.execute(new PostLedgerFlowStep.Input(
+                        this.postAccountingFlowStep.execute(new PostAccountingFlowStep.Input(
                             udfTransferId, transactionId, transactionAt, currency, payerFsp,
                             payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
 

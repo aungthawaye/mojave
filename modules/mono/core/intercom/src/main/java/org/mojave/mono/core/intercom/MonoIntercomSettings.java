@@ -22,17 +22,43 @@ package org.mojave.mono.core.intercom;
 
 import org.mojave.component.jpa.routing.RoutingDataSourceConfigurer;
 import org.mojave.component.jpa.routing.RoutingEntityManagerConfigurer;
-import org.mojave.component.openapi.OpenApiConfiguration;
-import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
+import org.mojave.component.nats.NatsConfiguration;
 import org.springframework.context.annotation.Bean;
 
 public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredSettings {
 
+    private static String[] splitCsv(final String value) {
+
+        return value.trim().split("\\s*,\\s*");
+    }
+
+    private static String toNullIfBlank(final String value) {
+
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value;
+    }
+
     @Bean
     @Override
-    public OpenApiConfiguration.ApiSettings apiSettings() {
+    public NatsConfiguration.NatsSettings natsSettings() {
 
-        return new OpenApiConfiguration.ApiSettings("Mojave - Intercom", "1.0.0");
+        final var servers = splitCsv(System.getenv("NATS_SERVERS"));
+        final var connectionName = System.getenv("NATS_CONNECTION_NAME");
+        final var username = toNullIfBlank(System.getenv("NATS_USERNAME"));
+        final var password = toNullIfBlank(System.getenv("NATS_PASSWORD"));
+        final var token = toNullIfBlank(System.getenv("NATS_TOKEN"));
+        final var connectionTimeoutMs = Integer.parseInt(
+            System.getenv("NATS_CONNECTION_TIMEOUT_MS"));
+        final var maxReconnects = Integer.parseInt(System.getenv("NATS_MAX_RECONNECTS"));
+        final var reconnectWaitMs = Integer.parseInt(System.getenv("NATS_RECONNECT_WAIT_MS"));
+        final var noEcho = Boolean.parseBoolean(System.getenv("NATS_NO_ECHO"));
+
+        return new NatsConfiguration.NatsSettings(
+            servers, connectionName, username, password,
+            token, connectionTimeoutMs, maxReconnects, reconnectWaitMs, noEcho);
     }
 
     @Bean
@@ -49,7 +75,8 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
             Long.parseLong(System.getenv("READ_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.ReadSettings.Pool(
-            "mojave-admin-read", Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
+            "mojave-admin-read",
+            Integer.parseInt(System.getenv("READ_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("READ_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.ReadSettings(connection, pool);
@@ -69,7 +96,8 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
             Long.parseLong(System.getenv("WRITE_DB_KEEPALIVE_TIMEOUT")), false);
 
         var pool = new RoutingDataSourceConfigurer.WriteSettings.Pool(
-            "mojave-admin-write", Integer.parseInt(System.getenv("WRITE_DB_MIN_POOL_SIZE")),
+            "mojave-admin-write",
+            Integer.parseInt(System.getenv("WRITE_DB_MIN_POOL_SIZE")),
             Integer.parseInt(System.getenv("WRITE_DB_MAX_POOL_SIZE")));
 
         return new RoutingDataSourceConfigurer.WriteSettings(connection, pool);
@@ -80,21 +108,6 @@ public class MonoIntercomSettings implements MonoIntercomConfiguration.RequiredS
     public RoutingEntityManagerConfigurer.Settings routingEntityManagerSettings() {
 
         return new RoutingEntityManagerConfigurer.Settings("mojave-intercom", false, false);
-    }
-
-    @Bean
-    @Override
-    public SpringSecurityConfigurer.Settings springSecuritySettings() {
-
-        return new SpringSecurityConfigurer.Settings(null);
-    }
-
-    @Bean
-    @Override
-    public MonoIntercomConfiguration.TomcatSettings tomcatSettings() {
-
-        return new MonoIntercomConfiguration.TomcatSettings(
-            Integer.parseInt(System.getenv("MOJAVE_INTERCOM_PORT")));
     }
 
 }

@@ -17,8 +17,8 @@ import org.mojave.core.accounting.intercom.requestor.AccountingIntercomRequestor
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.enums.accounting.AccountType;
 import org.mojave.scheme.rule.enums.accounting.Side;
-import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.scheme.rule.scenario.ScenarioType;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -76,53 +76,32 @@ public class DefinitionCommandsRequestorIT {
 
         final var debitEntryOutput = this.createCoaEntryCommand.execute(
             new CreateCoaEntryCommand.Input(
-                createCoaOutput.coaId(),
-                "FSP",
-                new CoaEntryCode("REQ_FLOW_DB_" + suffix),
+                createCoaOutput.coaId(), "FSP", new CoaEntryCode("REQ_FLOW_DB_" + suffix),
                 "Requestor Flow Debit Entry " + suffix,
-                "Requestor Flow Debit Entry Description " + suffix,
-                AccountType.ASSET));
+                "Requestor Flow Debit Entry Description " + suffix, AccountType.ASSET));
 
         final var creditEntryOutput = this.createCoaEntryCommand.execute(
             new CreateCoaEntryCommand.Input(
-                createCoaOutput.coaId(),
-                "FSP",
-                new CoaEntryCode("REQ_FLOW_CR_" + suffix),
+                createCoaOutput.coaId(), "FSP", new CoaEntryCode("REQ_FLOW_CR_" + suffix),
                 "Requestor Flow Credit Entry " + suffix,
-                "Requestor Flow Credit Entry Description " + suffix,
-                AccountType.LIABILITY));
+                "Requestor Flow Credit Entry Description " + suffix, AccountType.LIABILITY));
 
         final var createDefinitionOutput = this.createFlowDefinitionCommand.execute(
             new CreateFlowDefinitionCommand.Input(
-                ScenarioType.P2P_TRANSFER,
-                Currency.BYN,
-                "requestor-flow-" + suffix,
-                "requestor-flow-description-" + suffix,
-                List.of(
-                    new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
-                        1,
-                        "PAYER_FSP",
-                        debitEntryOutput.coaEntryId(),
-                        "TRANSFER_AMOUNT",
-                        Side.DEBIT,
-                        "requestor-flow-line-debit-" + suffix),
-                    new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
-                        2,
-                        "PAYEE_FSP",
-                        creditEntryOutput.coaEntryId(),
-                        "TRANSFER_AMOUNT",
-                        Side.CREDIT,
-                        "requestor-flow-line-credit-" + suffix))));
+                ScenarioType.P2P_TRANSFER, Currency.BYN, "requestor-flow-" + suffix,
+                "requestor-flow-description-" + suffix, List.of(
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    1, "PAYER_FSP", debitEntryOutput.coaEntryId(), "TRANSFER_AMOUNT", Side.DEBIT,
+                    "requestor-flow-line-debit-" + suffix),
+                new CreateFlowDefinitionCommand.Input.FlowDefinitionLine(
+                    2, "PAYEE_FSP", creditEntryOutput.coaEntryId(), "TRANSFER_AMOUNT", Side.CREDIT,
+                    "requestor-flow-line-credit-" + suffix))));
 
         final var addLineOutput = this.addFlowDefinitionLineCommand.execute(
             new AddFlowDefinitionLineCommand.Input(
                 createDefinitionOutput.flowDefinitionId(),
                 new AddFlowDefinitionLineCommand.Input.FlowDefinitionLine(
-                    3,
-                    "HUB",
-                    creditEntryOutput.coaEntryId(),
-                    "TRANSFER_FEE",
-                    Side.CREDIT,
+                    3, "HUB", creditEntryOutput.coaEntryId(), "TRANSFER_FEE", Side.CREDIT,
                     "requestor-flow-line-fee-" + suffix)));
 
         final var removeLineOutput = this.removeFlowDefinitionLineCommand.execute(
@@ -132,8 +111,7 @@ public class DefinitionCommandsRequestorIT {
 
         final var changePropertiesOutput = this.changeFlowDefinitionPropertiesCommand.execute(
             new ChangeFlowDefinitionPropertiesCommand.Input(
-                createDefinitionOutput.flowDefinitionId(),
-                "requestor-flow-updated-" + suffix,
+                createDefinitionOutput.flowDefinitionId(), "requestor-flow-updated-" + suffix,
                 "requestor-flow-description-updated-" + suffix));
 
         final var changeCurrencyOutput = this.changeFlowDefinitionCurrencyCommand.execute(
@@ -154,10 +132,14 @@ public class DefinitionCommandsRequestorIT {
         assertNotNull(createDefinitionOutput.flowDefinitionLineIds());
         assertNotNull(addLineOutput.flowDefinitionLineId());
 
-        assertEquals(createDefinitionOutput.flowDefinitionId(), removeLineOutput.flowDefinitionId());
-        assertEquals(createDefinitionOutput.flowDefinitionId(), changePropertiesOutput.flowDefinitionId());
-        assertEquals(createDefinitionOutput.flowDefinitionId(), changeCurrencyOutput.flowDefinitionId());
-        assertEquals(createDefinitionOutput.flowDefinitionId(), deactivateOutput.flowDefinitionId());
+        assertEquals(
+            createDefinitionOutput.flowDefinitionId(), removeLineOutput.flowDefinitionId());
+        assertEquals(
+            createDefinitionOutput.flowDefinitionId(), changePropertiesOutput.flowDefinitionId());
+        assertEquals(
+            createDefinitionOutput.flowDefinitionId(), changeCurrencyOutput.flowDefinitionId());
+        assertEquals(
+            createDefinitionOutput.flowDefinitionId(), deactivateOutput.flowDefinitionId());
         assertEquals(createDefinitionOutput.flowDefinitionId(), activateOutput.flowDefinitionId());
         assertEquals(createDefinitionOutput.flowDefinitionId(), terminateOutput.flowDefinitionId());
     }

@@ -20,19 +20,19 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.financial;
 
-import org.mojave.scheme.rule.identifier.transaction.TransactionId;
-import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
-import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.spec.Currency;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 
 import java.time.Instant;
 
 public interface FulfilPositionsStep {
 
-    Output execute(Input input) throws FailedToCommitReservationException, FspiopException;
+    void execute(Input input) throws FailedToCommitReservationException, FspiopException;
 
     record Input(UdfTransferId udfTransferId,
                  TransactionId transactionId,
@@ -42,7 +42,5 @@ public interface FulfilPositionsStep {
                  PositionUpdateId positionReservationId,
                  Currency currency,
                  String description) { }
-
-    record Output(PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) { }
 
 }

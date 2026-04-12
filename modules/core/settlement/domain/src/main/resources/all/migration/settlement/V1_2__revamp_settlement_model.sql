@@ -12,8 +12,8 @@ ALTER TABLE `stm_settlement_definition`
 
 ALTER TABLE `stm_settlement_record`
     ADD COLUMN `party_fsp_id` BIGINT NULL AFTER `payee_fsp_id`,
-    ADD COLUMN `liquidity_direction` VARCHAR(20) NULL AFTER `party_fsp_id`,
-    ADD COLUMN `amount_type` VARCHAR(20) NULL AFTER `liquidity_direction`,
+    ADD COLUMN `liquidity_direction` VARCHAR(32) NULL AFTER `party_fsp_id`,
+    ADD COLUMN `amount_type` VARCHAR(32) NULL AFTER `liquidity_direction`,
     ADD COLUMN `line_no` INT NULL AFTER `amount_type`;
 
 UPDATE `stm_settlement_record`
@@ -34,8 +34,8 @@ WHERE `line_no` IS NULL;
 
 ALTER TABLE `stm_settlement_record`
     MODIFY COLUMN `party_fsp_id` BIGINT NOT NULL,
-    MODIFY COLUMN `liquidity_direction` VARCHAR(20) NOT NULL,
-    MODIFY COLUMN `amount_type` VARCHAR(20) NOT NULL,
+    MODIFY COLUMN `liquidity_direction` VARCHAR(32) NOT NULL,
+    MODIFY COLUMN `amount_type` VARCHAR(32) NOT NULL,
     MODIFY COLUMN `line_no` INT NOT NULL;
 
 ALTER TABLE `stm_settlement_record`

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.core.settlement</groupId>
         <artifactId>mojave-core-settlement</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-settlement-domain</artifactId>

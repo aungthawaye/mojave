@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.core.accounting.intercom</groupId>
         <artifactId>mojave-core-accounting-intercom</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-accounting-intercom-consumer</artifactId>
