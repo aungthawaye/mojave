@@ -23,17 +23,17 @@ package org.mojave.component.nats;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import tools.jackson.databind.JsonNode;
 
-public record CommandResponse(@JsonInclude(JsonInclude.Include.ALWAYS) boolean success,
-                              JsonNode payload) {
+public record Envelope(@JsonInclude(JsonInclude.Include.ALWAYS) boolean success,
+                       @JsonInclude(JsonInclude.Include.ALWAYS) JsonNode payload) {
 
-    public static CommandResponse failure(final JsonNode payload) {
+    public static Envelope failure(final JsonNode payload) {
 
-        return new CommandResponse(false, payload);
+        return new Envelope(false, payload);
     }
 
-    public static CommandResponse success(final JsonNode payload) {
+    public static Envelope success(final JsonNode payload) {
 
-        return new CommandResponse(true, payload);
+        return new Envelope(true, payload);
     }
 
 }

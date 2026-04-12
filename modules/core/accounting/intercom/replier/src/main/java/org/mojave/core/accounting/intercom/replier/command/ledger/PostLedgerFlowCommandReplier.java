@@ -25,7 +25,7 @@ import io.nats.client.Message;
 import org.mojave.core.accounting.contract.command.ledger.PostAccountingFlowCommand;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandResponse;
+import org.mojave.component.nats.Envelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -77,7 +77,7 @@ public class PostLedgerFlowCommandReplier {
             LOGGER.info("PostLedgerFlowCommandReplier : input: ({})", ObjectLogger.log(input));
 
             final var output = this.postAccountingFlowCommand.execute(input);
-            final var response = CommandResponse.success(this.objectMapper.valueToTree(output));
+            final var response = Envelope.success(this.objectMapper.valueToTree(output));
             final var responseData = this.objectMapper.writeValueAsBytes(response);
 
             this.connection.publish(replyTo, responseData);
@@ -87,7 +87,7 @@ public class PostLedgerFlowCommandReplier {
         } catch (final Exception exception) {
 
             final var output = MojaveErrorResponse.from(exception);
-            final var response = CommandResponse.failure(this.objectMapper.valueToTree(output));
+            final var response = Envelope.failure(this.objectMapper.valueToTree(output));
             final var responseData = this.objectMapper.writeValueAsBytes(response);
 
             this.connection.publish(replyTo, responseData);

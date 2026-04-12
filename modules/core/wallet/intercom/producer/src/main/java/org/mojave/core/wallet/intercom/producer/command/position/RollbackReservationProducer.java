@@ -2,7 +2,7 @@ package org.mojave.core.wallet.intercom.producer.command.position;
 
 import io.nats.client.Connection;
 import jakarta.annotation.PostConstruct;
-import org.mojave.component.nats.CommandPublisher;
+import org.mojave.component.nats.NatsPublisher;
 import org.mojave.component.nats.JetStreamConfigurer;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.core.wallet.contract.constant.WalletStreamName;
@@ -38,7 +38,7 @@ public class RollbackReservationProducer {
 
     public void publish(final RollbackReservationCommand.Input input) {
 
-        CommandPublisher.publish(
+        NatsPublisher.publish(
             this.connection, RollbackReservationCommand.TOPIC_NAME, input,
             this.objectMapper);
     }

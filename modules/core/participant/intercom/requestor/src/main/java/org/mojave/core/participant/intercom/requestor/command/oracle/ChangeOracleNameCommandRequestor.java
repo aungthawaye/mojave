@@ -4,7 +4,7 @@ import io.nats.client.Connection;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandRequestor;
+import org.mojave.component.nats.NatsRequestor;
 import org.mojave.core.participant.contract.command.oracle.ChangeOracleNameCommand;
 import org.mojave.core.participant.contract.exception.ParticipantExceptionResolver;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class ChangeOracleNameCommandRequestor implements ChangeOracleNameCommand
 
         try {
 
-            final var output = CommandRequestor.request(
+            final var output = NatsRequestor.request(
                 this.connection, ChangeOracleNameCommand.SUBJECT_NAME,
                 input, Output.class, this.objectMapper);
 
@@ -47,7 +47,7 @@ public class ChangeOracleNameCommandRequestor implements ChangeOracleNameCommand
 
             return output;
 
-        } catch (final CommandRequestor.InvocationException exception) {
+        } catch (final NatsRequestor.InvocationException exception) {
 
             final var decodedErrorResponse = exception.getDecodedErrorResponse();
 

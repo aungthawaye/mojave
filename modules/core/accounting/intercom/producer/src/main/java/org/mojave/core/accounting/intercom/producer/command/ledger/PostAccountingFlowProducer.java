@@ -24,7 +24,7 @@ import io.nats.client.Connection;
 import jakarta.annotation.PostConstruct;
 import org.mojave.core.accounting.contract.command.ledger.PostAccountingFlowCommand;
 import org.mojave.core.accounting.contract.constant.AccountingStreamName;
-import org.mojave.component.nats.CommandPublisher;
+import org.mojave.component.nats.NatsPublisher;
 import org.mojave.component.nats.JetStreamConfigurer;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -58,7 +58,7 @@ public class PostAccountingFlowProducer {
 
     public void publish(final PostAccountingFlowCommand.Input input) {
 
-        CommandPublisher.publish(
+        NatsPublisher.publish(
             this.connection, PostAccountingFlowCommand.TOPIC_NAME, input,
             this.objectMapper);
     }

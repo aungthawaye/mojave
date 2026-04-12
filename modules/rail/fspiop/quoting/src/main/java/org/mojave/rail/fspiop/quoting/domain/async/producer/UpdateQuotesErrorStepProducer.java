@@ -2,7 +2,7 @@ package org.mojave.rail.fspiop.quoting.domain.async.producer;
 
 import io.nats.client.Connection;
 import jakarta.annotation.PostConstruct;
-import org.mojave.component.nats.CommandPublisher;
+import org.mojave.component.nats.NatsPublisher;
 import org.mojave.component.nats.JetStreamConfigurer;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesErrorStep;
 import org.mojave.rail.fspiop.quoting.contract.constant.QuotingStreamName;
@@ -38,7 +38,7 @@ public class UpdateQuotesErrorStepProducer {
 
     public void publish(final UpdateQuotesErrorStep.Input input) {
 
-        CommandPublisher.publish(
+        NatsPublisher.publish(
             this.connection, UpdateQuotesErrorStep.TOPIC_NAME, input,
             this.objectMapper);
     }

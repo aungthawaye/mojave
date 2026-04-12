@@ -20,6 +20,8 @@
 
 package org.mojave.core.accounting.contract.query;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import org.mojave.core.accounting.contract.data.CoaEntryData;
 import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
 import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
@@ -29,6 +31,14 @@ import java.util.List;
 
 public interface CoaEntryQuery {
 
+    String GET_BY_ID_SUBJECT_NAME = "sub-accounting.coa-entry-query.get-by-id";
+
+    String GET_BY_COA_ID_SUBJECT_NAME = "sub-accounting.coa-entry-query.get-by-coa-id";
+
+    String GET_BY_CATEGORY_SUBJECT_NAME = "sub-accounting.coa-entry-query.get-by-category";
+
+    String GET_ALL_SUBJECT_NAME = "sub-accounting.coa-entry-query.get-all";
+
     CoaEntryData get(CoaEntryId coaEntryId) throws CoaEntryIdNotFoundException;
 
     List<CoaEntryData> get(CoaId coaId);
@@ -36,5 +46,13 @@ public interface CoaEntryQuery {
     List<CoaEntryData> get(String category);
 
     List<CoaEntryData> getAll();
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull CoaEntryId coaEntryId) { }
+
+    record GetByCoaIdInput(@JsonProperty(required = true) @NotNull CoaId coaId) { }
+
+    record GetByCategoryInput(@JsonProperty(required = true) @NotNull String category) { }
+
+    record GetAllInput() { }
 
 }

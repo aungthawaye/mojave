@@ -4,7 +4,7 @@ import io.nats.client.Connection;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandRequestor;
+import org.mojave.component.nats.NatsRequestor;
 import org.mojave.core.wallet.contract.command.position.CommitReservationCommand;
 import org.mojave.core.wallet.contract.exception.WalletExceptionResolver;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
@@ -41,7 +41,7 @@ public class CommitReservationCommandRequestor implements CommitReservationComma
 
         try {
 
-            final var output = CommandRequestor.request(
+            final var output = NatsRequestor.request(
                 this.connection, CommitReservationCommand.SUBJECT_NAME,
                 input, Output.class, this.objectMapper);
 
@@ -49,7 +49,7 @@ public class CommitReservationCommandRequestor implements CommitReservationComma
 
             return output;
 
-        } catch (final CommandRequestor.InvocationException exception) {
+        } catch (final NatsRequestor.InvocationException exception) {
 
             final var decodedErrorResponse = exception.getDecodedErrorResponse();
 

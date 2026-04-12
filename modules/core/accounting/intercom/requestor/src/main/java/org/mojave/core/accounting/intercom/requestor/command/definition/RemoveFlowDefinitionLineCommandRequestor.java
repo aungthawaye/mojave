@@ -26,7 +26,7 @@ import org.mojave.core.accounting.contract.exception.AccountingExceptionResolver
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandRequestor;
+import org.mojave.component.nats.NatsRequestor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class RemoveFlowDefinitionLineCommandRequestor implements RemoveFlowDefin
 
         try {
 
-            final var output = CommandRequestor.request(
+            final var output = NatsRequestor.request(
                 this.connection, RemoveFlowDefinitionLineCommand.SUBJECT_NAME,
                 input, Output.class, this.objectMapper);
 
@@ -68,7 +68,7 @@ public class RemoveFlowDefinitionLineCommandRequestor implements RemoveFlowDefin
 
             return output;
 
-        } catch (final CommandRequestor.InvocationException exception) {
+        } catch (final NatsRequestor.InvocationException exception) {
 
             final var decodedErrorResponse = exception.getDecodedErrorResponse();
 

@@ -4,7 +4,7 @@ import io.nats.client.Connection;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandRequestor;
+import org.mojave.component.nats.NatsRequestor;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.WalletExceptionResolver;
@@ -46,7 +46,7 @@ public class ReservePositionCommandRequestor implements ReservePositionCommand {
 
         try {
 
-            final var output = CommandRequestor.request(
+            final var output = NatsRequestor.request(
                 this.connection, ReservePositionCommand.SUBJECT_NAME,
                 input, Output.class, this.objectMapper);
 
@@ -54,7 +54,7 @@ public class ReservePositionCommandRequestor implements ReservePositionCommand {
 
             return output;
 
-        } catch (final CommandRequestor.InvocationException exception) {
+        } catch (final NatsRequestor.InvocationException exception) {
 
             final var decodedErrorResponse = exception.getDecodedErrorResponse();
 

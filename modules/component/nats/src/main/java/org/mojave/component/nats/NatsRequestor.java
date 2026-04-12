@@ -23,17 +23,19 @@ package org.mojave.component.nats;
 import io.nats.client.Connection;
 import lombok.Getter;
 import org.mojave.component.misc.error.MojaveErrorResponse;
+import tools.jackson.databind.JavaType;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
-public final class CommandRequestor {
+public final class NatsRequestor {
 
     private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(5);
 
-    private static boolean isCommandResponse(final JsonNode root) {
+    private static boolean isWrappedResponse(final JsonNode root) {
 
         return root != null && root.isObject() && root.has("success");
     }
@@ -44,7 +46,7 @@ public final class CommandRequestor {
 
         if (successNode == null || successNode.isNull()) {
             throw new InvocationException(
-                new IllegalStateException("NATS command response success field is missing."));
+                new IllegalStateException("NATS response success field is missing."));
         }
 
         if (successNode.isBoolean()) {
@@ -56,13 +58,40 @@ public final class CommandRequestor {
         }
 
         throw new InvocationException(
-            new IllegalStateException("NATS command response success field is invalid."));
+            new IllegalStateException("NATS response success field is invalid."));
     }
 
     public static <I, O> O request(final Connection connection,
                                    final String subject,
                                    final I input,
                                    final Class<O> outputType,
+                                   final ObjectMapper objectMapper) throws InvocationException {
+
+        Objects.requireNonNull(outputType);
+
+        return request(
+            connection, subject, input, objectMapper.constructType(outputType), objectMapper);
+    }
+
+    public static <I, O> List<O> requestList(final Connection connection,
+                                             final String subject,
+                                             final I input,
+                                             final Class<O> outputType,
+                                             final ObjectMapper objectMapper)
+        throws InvocationException {
+
+        Objects.requireNonNull(outputType);
+
+        return request(
+            connection, subject, input,
+            objectMapper.getTypeFactory().constructCollectionType(List.class, outputType),
+            objectMapper);
+    }
+
+    public static <I, O> O request(final Connection connection,
+                                   final String subject,
+                                   final I input,
+                                   final JavaType outputType,
                                    final ObjectMapper objectMapper) throws InvocationException {
 
         Objects.requireNonNull(connection);
@@ -86,9 +115,9 @@ public final class CommandRequestor {
 
             final var root = objectMapper.readTree(reply.getData());
 
-            if (!isCommandResponse(root)) {
-
-                return objectMapper.treeToValue(root, outputType);
+            if (!isWrappedResponse(root)) {
+                return objectMapper.readValue(
+                    objectMapper.treeAsTokens(root), outputType);
             }
 
             if (!isSuccessful(root)) {
@@ -100,8 +129,7 @@ public final class CommandRequestor {
                 if (payload != null && !payload.isNull()) {
 
                     decodedErrorResponse = objectMapper.treeToValue(
-                        payload,
-                        MojaveErrorResponse.class);
+                        payload, MojaveErrorResponse.class);
                     originalErrorMessage = decodedErrorResponse.message();
 
                 } else {
@@ -119,7 +147,8 @@ public final class CommandRequestor {
                 return null;
             }
 
-            return objectMapper.treeToValue(payload, outputType);
+            return objectMapper.readValue(
+                objectMapper.treeAsTokens(payload), outputType);
 
         } catch (final InvocationException exception) {
 

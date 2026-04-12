@@ -26,10 +26,22 @@ import java.util.List;
 
 public interface HubQuery {
 
+    String COUNT_SUBJECT_NAME = "sub-participant.hub-query.count";
+
+    String GET_SUBJECT_NAME = "sub-participant.hub-query.get";
+
+    String GET_ALL_SUBJECT_NAME = "sub-participant.hub-query.get-all";
+
     long count();
 
     HubData get();
 
     List<HubData> getAll();
+
+    record CountInput() { }
+
+    record GetInput() { }
+
+    record GetAllInput() { }
 
 }

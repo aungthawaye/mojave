@@ -25,7 +25,7 @@ import io.nats.client.Message;
 import org.mojave.core.accounting.contract.command.definition.DeactivateFlowDefinitionCommand;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandResponse;
+import org.mojave.component.nats.Envelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -76,7 +76,7 @@ public class DeactivateFlowDefinitionCommandReplier {
             LOGGER.info("DeactivateFlowDefinitionCommandReplier : input: ({})", ObjectLogger.log(input));
 
             final var output = this.deactivateFlowDefinitionCommand.execute(input);
-            final var response = CommandResponse.success(this.objectMapper.valueToTree(output));
+            final var response = Envelope.success(this.objectMapper.valueToTree(output));
             final var responseData = this.objectMapper.writeValueAsBytes(response);
 
             this.connection.publish(replyTo, responseData);
@@ -86,7 +86,7 @@ public class DeactivateFlowDefinitionCommandReplier {
         } catch (final Exception exception) {
 
             final var output = MojaveErrorResponse.from(exception);
-            final var response = CommandResponse.failure(this.objectMapper.valueToTree(output));
+            final var response = Envelope.failure(this.objectMapper.valueToTree(output));
             final var responseData = this.objectMapper.writeValueAsBytes(response);
 
             this.connection.publish(replyTo, responseData);

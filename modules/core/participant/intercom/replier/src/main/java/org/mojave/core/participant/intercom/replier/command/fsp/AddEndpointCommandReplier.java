@@ -4,7 +4,7 @@ import io.nats.client.Connection;
 import io.nats.client.Message;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandResponse;
+import org.mojave.component.nats.Envelope;
 import org.mojave.core.participant.contract.command.fsp.AddEndpointCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class AddEndpointCommandReplier {
             LOGGER.info("AddEndpointCommandReplier : input: ({})", ObjectLogger.log(input));
 
             final var output = this.addEndpointCommand.execute(input);
-            final var response = CommandResponse.success(this.objectMapper.valueToTree(output));
+            final var response = Envelope.success(this.objectMapper.valueToTree(output));
             final var responseData = this.objectMapper.writeValueAsBytes(response);
 
             this.connection.publish(replyTo, responseData);
@@ -66,7 +66,7 @@ public class AddEndpointCommandReplier {
         } catch (final Exception exception) {
 
             final var output = MojaveErrorResponse.from(exception);
-            final var response = CommandResponse.failure(this.objectMapper.valueToTree(output));
+            final var response = Envelope.failure(this.objectMapper.valueToTree(output));
             final var responseData = this.objectMapper.writeValueAsBytes(response);
 
             this.connection.publish(replyTo, responseData);

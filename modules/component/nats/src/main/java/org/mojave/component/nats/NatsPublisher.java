@@ -21,7 +21,6 @@
 package org.mojave.component.nats;
 
 import io.nats.client.Connection;
-import io.nats.client.JetStream;
 import io.nats.client.JetStreamApiException;
 import io.nats.client.api.PublishAck;
 import tools.jackson.databind.ObjectMapper;
@@ -29,7 +28,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Objects;
 
-public final class CommandPublisher {
+public final class NatsPublisher {
 
     public static <I> PublishAck publish(final Connection connection,
                                          final String subject,
@@ -53,7 +52,7 @@ public final class CommandPublisher {
         }
     }
 
-    private CommandPublisher() {
+    private NatsPublisher() {
 
     }
 

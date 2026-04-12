@@ -20,6 +20,8 @@
 
 package org.mojave.core.participant.contract.query;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import org.mojave.scheme.rule.identifier.participant.FspId;
 import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
@@ -28,10 +30,22 @@ import java.util.List;
 
 public interface FspQuery {
 
+    String GET_BY_ID_SUBJECT_NAME = "sub-participant.fsp-query.get-by-id";
+
+    String GET_BY_CODE_SUBJECT_NAME = "sub-participant.fsp-query.get-by-code";
+
+    String GET_ALL_SUBJECT_NAME = "sub-participant.fsp-query.get-all";
+
     FspData get(FspId fspId);
 
     FspData get(FspCode fspCode);
 
     List<FspData> getAll();
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull FspId fspId) { }
+
+    record GetByCodeInput(@JsonProperty(required = true) @NotNull FspCode fspCode) { }
+
+    record GetAllInput() { }
 
 }

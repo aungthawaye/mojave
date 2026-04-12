@@ -4,7 +4,7 @@ import io.nats.client.Connection;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.component.nats.CommandRequestor;
+import org.mojave.component.nats.NatsRequestor;
 import org.mojave.core.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;
 import org.mojave.core.wallet.contract.exception.WalletExceptionResolver;
 import org.mojave.core.wallet.contract.exception.balance.ReversalFailedInWalletException;
@@ -43,7 +43,7 @@ public class ReverseBalanceWithdrawCommandRequestor implements ReverseBalanceWit
 
         try {
 
-            final var output = CommandRequestor.request(
+            final var output = NatsRequestor.request(
                 this.connection,
                 ReverseBalanceWithdrawCommand.SUBJECT_NAME, input, Output.class, this.objectMapper);
 
@@ -52,7 +52,7 @@ public class ReverseBalanceWithdrawCommandRequestor implements ReverseBalanceWit
 
             return output;
 
-        } catch (final CommandRequestor.InvocationException exception) {
+        } catch (final NatsRequestor.InvocationException exception) {
 
             final var decodedErrorResponse = exception.getDecodedErrorResponse();
 

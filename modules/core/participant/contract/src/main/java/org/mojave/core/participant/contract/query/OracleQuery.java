@@ -20,6 +20,8 @@
 
 package org.mojave.core.participant.contract.query;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import org.mojave.scheme.rule.enums.participant.PartyIdType;
 import org.mojave.scheme.rule.identifier.participant.OracleId;
 import org.mojave.core.participant.contract.data.OracleData;
@@ -29,6 +31,14 @@ import java.util.Optional;
 
 public interface OracleQuery {
 
+    String FIND_BY_TYPE_SUBJECT_NAME = "sub-participant.oracle-query.find-by-type";
+
+    String GET_BY_TYPE_SUBJECT_NAME = "sub-participant.oracle-query.get-by-type";
+
+    String GET_BY_ID_SUBJECT_NAME = "sub-participant.oracle-query.get-by-id";
+
+    String GET_ALL_SUBJECT_NAME = "sub-participant.oracle-query.get-all";
+
     Optional<OracleData> find(PartyIdType type);
 
     OracleData get(PartyIdType type);
@@ -36,5 +46,13 @@ public interface OracleQuery {
     OracleData get(OracleId oracleId);
 
     List<OracleData> getAll();
+
+    record FindByTypeInput(@JsonProperty(required = true) @NotNull PartyIdType type) { }
+
+    record GetByTypeInput(@JsonProperty(required = true) @NotNull PartyIdType type) { }
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull OracleId oracleId) { }
+
+    record GetAllInput() { }
 
 }

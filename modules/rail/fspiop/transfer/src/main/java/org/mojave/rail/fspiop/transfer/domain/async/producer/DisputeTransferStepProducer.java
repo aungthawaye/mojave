@@ -2,7 +2,7 @@ package org.mojave.rail.fspiop.transfer.domain.async.producer;
 
 import io.nats.client.Connection;
 import jakarta.annotation.PostConstruct;
-import org.mojave.component.nats.CommandPublisher;
+import org.mojave.component.nats.NatsPublisher;
 import org.mojave.component.nats.JetStreamConfigurer;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.constant.TransferStreamName;
@@ -37,7 +37,7 @@ public class DisputeTransferStepProducer {
 
     public void publish(final DisputeTransferStep.Input input) {
 
-        CommandPublisher.publish(
+        NatsPublisher.publish(
             this.connection, DisputeTransferStep.TOPIC_NAME, input,
             this.objectMapper);
 

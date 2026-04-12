@@ -20,6 +20,8 @@
 
 package org.mojave.core.accounting.contract.query;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.core.accounting.contract.data.CoaData;
 import org.mojave.core.accounting.contract.exception.chart.CoaIdNotFoundException;
@@ -28,10 +30,22 @@ import java.util.List;
 
 public interface CoaQuery {
 
+    String GET_BY_ID_SUBJECT_NAME = "sub-accounting.coa-query.get-by-id";
+
+    String GET_ALL_SUBJECT_NAME = "sub-accounting.coa-query.get-all";
+
+    String GET_BY_NAME_CONTAINS_SUBJECT_NAME = "sub-accounting.coa-query.get-by-name-contains";
+
     CoaData get(CoaId coaId) throws CoaIdNotFoundException;
 
     List<CoaData> getAll();
 
     List<CoaData> getByNameContains(String name);
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull CoaId coaId) { }
+
+    record GetAllInput() { }
+
+    record GetByNameContainsInput(@JsonProperty(required = true) @NotNull String name) { }
 
 }

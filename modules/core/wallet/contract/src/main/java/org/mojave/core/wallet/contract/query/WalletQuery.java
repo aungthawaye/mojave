@@ -20,6 +20,8 @@
 
 package org.mojave.core.wallet.contract.query;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
@@ -28,6 +30,18 @@ import org.mojave.core.wallet.contract.data.WalletData;
 import java.util.List;
 
 public interface WalletQuery {
+
+    String GET_BY_ID_SUBJECT_NAME = "sub-wallet.wallet-query.get-by-id";
+
+    String GET_BY_OWNER_ID_CURRENCY_TAG_SUBJECT_NAME =
+        "sub-wallet.wallet-query.get-by-owner-id-currency-tag";
+
+    String GET_BY_OWNER_ID_SUBJECT_NAME = "sub-wallet.wallet-query.get-by-owner-id";
+
+    String GET_BY_OWNER_ID_CURRENCY_SUBJECT_NAME =
+        "sub-wallet.wallet-query.get-by-owner-id-currency";
+
+    String GET_ALL_SUBJECT_NAME = "sub-wallet.wallet-query.get-all";
 
     WalletData get(WalletId walletId);
 
@@ -38,5 +52,20 @@ public interface WalletQuery {
     List<WalletData> get(WalletOwnerId ownerId, Currency currency);
 
     List<WalletData> getAll();
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull WalletId walletId) { }
+
+    record GetByOwnerIdCurrencyTagInput(
+        @JsonProperty(required = true) @NotNull WalletOwnerId ownerId,
+        @JsonProperty(required = true) @NotNull Currency currency,
+        @JsonProperty(required = true) @NotNull String tag) { }
+
+    record GetByOwnerIdInput(@JsonProperty(required = true) @NotNull WalletOwnerId ownerId) { }
+
+    record GetByOwnerIdCurrencyInput(
+        @JsonProperty(required = true) @NotNull WalletOwnerId ownerId,
+        @JsonProperty(required = true) @NotNull Currency currency) { }
+
+    record GetAllInput() { }
 
 }
