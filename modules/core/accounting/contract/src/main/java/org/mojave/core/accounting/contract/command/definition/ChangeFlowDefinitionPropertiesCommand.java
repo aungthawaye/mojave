@@ -23,7 +23,7 @@ package org.mojave.core.accounting.contract.command.definition;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeFlowDefinitionPropertiesCommand {

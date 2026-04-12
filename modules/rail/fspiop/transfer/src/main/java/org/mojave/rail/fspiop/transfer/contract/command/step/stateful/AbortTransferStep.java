@@ -20,11 +20,11 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.stateful;
 
-import org.mojave.common.datatype.enums.Direction;
-import org.mojave.common.datatype.enums.transfer.AbortReason;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.transfer.TransferId;
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.enums.Direction;
+import org.mojave.scheme.rule.enums.transfer.AbortReason;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.spec.ExtensionList;
 

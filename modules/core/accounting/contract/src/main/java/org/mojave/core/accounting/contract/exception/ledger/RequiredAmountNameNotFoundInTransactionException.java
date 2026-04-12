@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.contract.exception.ledger;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

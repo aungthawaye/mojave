@@ -22,9 +22,9 @@ package org.mojave.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.identifier.participant.FspEndpointId;
-import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.identifier.participant.FspEndpointId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
 
 public interface ActivateEndpointCommand {
 

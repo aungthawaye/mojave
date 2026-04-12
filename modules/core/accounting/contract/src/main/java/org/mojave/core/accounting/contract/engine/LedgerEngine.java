@@ -1,16 +1,16 @@
 package org.mojave.core.accounting.contract.engine;
 
 import lombok.Getter;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.MovementResult;
-import org.mojave.common.datatype.enums.accounting.MovementStage;
-import org.mojave.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
-import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.accounting.MovementResult;
+import org.mojave.scheme.rule.enums.accounting.MovementStage;
+import org.mojave.scheme.rule.enums.accounting.OverdraftMode;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionLineId;
+import org.mojave.scheme.rule.identifier.accounting.LedgerMovementId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.math.BigDecimal;

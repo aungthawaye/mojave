@@ -33,10 +33,10 @@ import org.mojave.core.accounting.contract.exception.ledger.RequiredParticipantN
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.LedgerMovementId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.slf4j.Logger;

@@ -20,8 +20,8 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.ledger.PostAccountingFlowCommand;
 import org.mojave.core.accounting.intercom.producer.command.ledger.PostAccountingFlowProducer;

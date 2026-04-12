@@ -20,10 +20,10 @@
 
 package org.mojave.core.participant.domain.repository;
 
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
-import org.mojave.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.enums.participant.PartyIdType;
+import org.mojave.scheme.rule.identifier.participant.OracleId;
 import org.mojave.core.participant.domain.model.oracle.Oracle;
 import org.mojave.core.participant.domain.model.oracle.Oracle_;
 import org.springframework.data.jpa.domain.Specification;

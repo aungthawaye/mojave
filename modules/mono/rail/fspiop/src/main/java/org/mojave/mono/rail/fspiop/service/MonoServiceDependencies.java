@@ -20,7 +20,7 @@
 
 package org.mojave.mono.rail.fspiop.service;
 
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.core.participant.contract.query.FspGroupQuery;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;

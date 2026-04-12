@@ -1,7 +1,7 @@
 package org.mojave.core.transaction.contract.engine;
 
-import org.mojave.common.datatype.identifier.wallet.WalletId;
-import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 

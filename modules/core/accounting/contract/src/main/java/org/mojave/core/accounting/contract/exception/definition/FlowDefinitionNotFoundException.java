@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.contract.exception.definition;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

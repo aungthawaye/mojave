@@ -20,14 +20,14 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
-import org.mojave.common.datatype.enums.Direction;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.enums.transfer.AbortReason;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.transfer.TransferId;
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.Direction;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.transfer.AbortReason;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;

@@ -20,12 +20,12 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.stateful;
 
-import org.mojave.common.datatype.enums.transfer.TransferStatus;
-import org.mojave.common.datatype.identifier.participant.FspId;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.transfer.TransferId;
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.enums.transfer.TransferStatus;
+import org.mojave.scheme.rule.identifier.participant.FspId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.spec.Currency;
 

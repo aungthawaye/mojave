@@ -12,10 +12,10 @@ import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundEx
 import org.mojave.core.accounting.contract.query.AccountQuery;
 import org.mojave.core.accounting.domain.AccountingDomainTestConfiguration;
 import org.mojave.core.accounting.domain.BaseIT;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;

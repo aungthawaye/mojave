@@ -20,7 +20,7 @@
 
 package org.mojave.core.participant.domain.command.ssp;
 
-import org.mojave.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.rule.identifier.participant.HubId;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.command.ssp.CreateSspCommand;

@@ -212,8 +212,7 @@ mojave/
 │   │   └── fspiop/
 │   ├── provider/                  # Storage implementations
 │   ├── connector/                 # External integrations
-│   ├── operation/                 # Admin operations
-│   └── scheme/                    # Protocol definitions
+│   └── operation/                 # Admin operations
 ├── assets/                        # Code styles and resources
 ├── docker-compose.yml             # Infrastructure setup
 └── pom.xml                        # Parent POM
@@ -357,7 +356,7 @@ We welcome contributions from the community!
 
 - 📖 [Documentation](docs/README.md)
 - 🏗️ [Architecture Assessment](modules/Mojave_Architecture_Assessment.md)
-- 🔍 [FSPIOP Specification](modules/scheme/fspiop/interface/fspiop_v2.0.yaml)
+- 🔍 [FSPIOP Specification](modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml)
 - 🌐 [Mojaloop Project](https://mojaloop.io/)
 
 ### Get Help

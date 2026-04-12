@@ -14,10 +14,10 @@ import org.mojave.core.accounting.contract.command.definition.DeactivateFlowDefi
 import org.mojave.core.accounting.contract.command.definition.RemoveFlowDefinitionLineCommand;
 import org.mojave.core.accounting.contract.command.definition.TerminateFlowDefinitionCommand;
 import org.mojave.core.accounting.intercom.requestor.AccountingIntercomRequestorTestConfiguration;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

@@ -161,10 +161,10 @@ graph TB
 
 ### Shared Kernel
 
-Common data types shared across contexts:
+Scheme rules shared across contexts:
 
 ```
-core/common/datatype/
+scheme/rule/
 ├── identifier/      Strongly-typed IDs
 ├── enums/          Domain enumerations
 └── type/           Value objects

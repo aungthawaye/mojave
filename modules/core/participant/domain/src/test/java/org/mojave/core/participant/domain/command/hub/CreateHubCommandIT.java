@@ -3,7 +3,7 @@ package org.mojave.core.participant.domain.command.hub;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.common.datatype.enums.Currency;
+import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.core.participant.contract.command.hub.CreateHubCommand;
 import org.mojave.core.participant.contract.data.HubData;
 import org.mojave.core.participant.contract.exception.hub.HubCountLimitReachedException;

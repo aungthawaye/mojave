@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.accounting.OverdraftMode;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 import java.math.BigDecimal;

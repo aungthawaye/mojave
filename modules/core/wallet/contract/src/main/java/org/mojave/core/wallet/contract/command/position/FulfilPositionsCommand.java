@@ -20,9 +20,9 @@
 
 package org.mojave.core.wallet.contract.command.position;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
 
 public interface FulfilPositionsCommand {

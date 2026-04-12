@@ -20,7 +20,7 @@
 
 package org.mojave.core.accounting.contract.query;
 
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 

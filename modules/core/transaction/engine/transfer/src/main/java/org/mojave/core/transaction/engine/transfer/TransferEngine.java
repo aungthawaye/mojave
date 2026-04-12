@@ -1,7 +1,7 @@
 package org.mojave.core.transaction.engine.transfer;
 
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.slf4j.Logger;

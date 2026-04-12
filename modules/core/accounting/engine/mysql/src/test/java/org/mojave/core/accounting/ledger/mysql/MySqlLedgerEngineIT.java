@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mojave.core.accounting.contract.engine.LedgerEngine;
 import org.mojave.core.accounting.engine.mysql.MySqlLedgerEngine;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 

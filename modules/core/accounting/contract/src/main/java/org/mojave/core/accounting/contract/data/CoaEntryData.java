@@ -20,10 +20,10 @@
 
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 
 import java.time.Instant;
 import java.util.Objects;

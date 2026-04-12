@@ -25,8 +25,8 @@ import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundExc
 import org.mojave.core.accounting.contract.query.CoaEntryQuery;
 import org.mojave.core.accounting.domain.model.CoaEntry;
 import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.component.jpa.routing.annotation.Read;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

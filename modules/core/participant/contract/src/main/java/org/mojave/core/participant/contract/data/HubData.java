@@ -20,10 +20,10 @@
 
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.HubCurrencyId;
-import org.mojave.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.participant.HubCurrencyId;
+import org.mojave.scheme.rule.identifier.participant.HubId;
 
 import java.util.Objects;
 

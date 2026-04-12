@@ -9,7 +9,7 @@ Mojave implements the Financial Services Provider Interoperability Protocol (FSP
 ### Protocol Specification
 
 **Source:** FSPIOP v2.0 OpenAPI Specification
-**Location:** `/Users/aungthawaye/Development/Jdev/mojave/modules/scheme/fspiop/interface/fspiop_v2.0.yaml`
+**Location:** `/Users/aungthawaye/Development/Jdev/mojave/modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml`
 
 **Key Features:**
 - RESTful API design

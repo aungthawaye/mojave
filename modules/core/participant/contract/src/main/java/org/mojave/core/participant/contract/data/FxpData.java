@@ -20,9 +20,9 @@
 
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.FxRatePairId;
-import org.mojave.common.datatype.identifier.participant.FxpId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.participant.FxRatePairId;
+import org.mojave.scheme.rule.identifier.participant.FxpId;
 
 import java.math.BigDecimal;
 import java.util.Map;

@@ -20,9 +20,9 @@
 
 package org.mojave.core.accounting.domain.query;
 
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.component.misc.query.PagedResult;
 import org.mojave.component.misc.query.SortingMode;

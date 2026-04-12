@@ -20,7 +20,7 @@
 
 package org.mojave.mono.core.intercom;
 
-import org.mojave.common.datatype.DatatypeConfiguration;
+import org.mojave.scheme.rule.DatatypeConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;

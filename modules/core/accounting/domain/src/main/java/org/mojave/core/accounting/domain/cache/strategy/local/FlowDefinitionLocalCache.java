@@ -24,8 +24,8 @@ import jakarta.annotation.PostConstruct;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.util.Map;

@@ -46,12 +46,11 @@ Mojave is architected as a modular monolith with 83 modules organized into 7 cat
 ```
 mojave/
 ├── component/          # 6 infrastructure modules
-├── scheme/             # 1 protocol definition module
 ├── core/               # 40 domain modules (5 contexts × 8 modules)
 ├── provider/           # 3 storage implementation modules
 ├── operation/          # Administrative modules
 ├── connector/          # 2 integration modules
-└── rail/               # 15 FSPIOP implementation modules (3 services × 5)
+└── rail/               # 15 FSPIOP implementation and specification modules
 ```
 
 ## Layer Architecture

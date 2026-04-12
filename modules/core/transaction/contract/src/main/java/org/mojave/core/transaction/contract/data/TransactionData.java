@@ -20,8 +20,8 @@
 
 package org.mojave.core.transaction.contract.data;
 
-import org.mojave.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.enums.trasaction.TransactionPhase;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.time.Instant;

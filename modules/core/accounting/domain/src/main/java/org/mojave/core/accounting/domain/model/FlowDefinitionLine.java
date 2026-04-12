@@ -46,11 +46,11 @@ import org.mojave.core.accounting.contract.exception.definition.InvalidParticipa
 import org.mojave.core.accounting.contract.exception.definition.RequireParticipantForCoaEntryException;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
-import org.mojave.common.datatype.converter.identifier.accounting.CoaEntryIdJavaType;
-import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionLineIdJavaType;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
+import org.mojave.scheme.rule.converter.identifier.accounting.CoaEntryIdJavaType;
+import org.mojave.scheme.rule.converter.identifier.accounting.FlowDefinitionLineIdJavaType;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.handy.Snowflake;

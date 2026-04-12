@@ -20,8 +20,8 @@
 
 package org.mojave.core.wallet.domain.command.position;
 
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;

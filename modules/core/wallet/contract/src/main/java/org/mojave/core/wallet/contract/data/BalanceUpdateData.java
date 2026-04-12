@@ -20,11 +20,11 @@
 
 package org.mojave.core.wallet.contract.data;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.wallet.BalanceAction;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.WalletId;
-import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.wallet.BalanceAction;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.BalanceUpdateId;
 
 import java.math.BigDecimal;
 import java.time.Instant;

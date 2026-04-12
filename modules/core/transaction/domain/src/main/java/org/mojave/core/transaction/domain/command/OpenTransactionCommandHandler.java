@@ -20,7 +20,7 @@
 
 package org.mojave.core.transaction.domain.command;
 
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;

@@ -20,7 +20,7 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.fspiop;
 
-import org.mojave.common.datatype.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;

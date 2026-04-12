@@ -21,7 +21,7 @@
 package org.mojave.core.wallet.contract.exception.position;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

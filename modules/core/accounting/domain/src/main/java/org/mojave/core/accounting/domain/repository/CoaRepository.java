@@ -20,7 +20,7 @@
 
 package org.mojave.core.accounting.domain.repository;
 
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.core.accounting.domain.model.Coa;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

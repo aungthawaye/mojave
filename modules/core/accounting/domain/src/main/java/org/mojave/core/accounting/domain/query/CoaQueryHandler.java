@@ -20,7 +20,7 @@
 
 package org.mojave.core.accounting.domain.query;
 
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.core.accounting.contract.data.CoaData;
 import org.mojave.core.accounting.contract.exception.chart.CoaIdNotFoundException;

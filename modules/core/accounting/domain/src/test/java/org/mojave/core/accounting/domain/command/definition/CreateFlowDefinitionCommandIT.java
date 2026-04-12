@@ -18,10 +18,10 @@ import org.mojave.core.accounting.contract.exception.definition.RequireParticipa
 import org.mojave.core.accounting.contract.query.FlowDefinitionQuery;
 import org.mojave.core.accounting.domain.AccountingDomainTestConfiguration;
 import org.mojave.core.accounting.domain.BaseIT;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

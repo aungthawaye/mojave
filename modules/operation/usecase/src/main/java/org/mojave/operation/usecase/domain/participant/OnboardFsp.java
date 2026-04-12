@@ -20,8 +20,8 @@
 
 package org.mojave.operation.usecase.domain.participant;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.type.participant.FspCode;
 
 public interface OnboardFsp {
 

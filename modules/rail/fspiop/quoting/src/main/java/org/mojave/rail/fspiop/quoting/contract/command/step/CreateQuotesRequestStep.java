@@ -20,8 +20,8 @@
 
 package org.mojave.rail.fspiop.quoting.contract.command.step;
 
-import org.mojave.common.datatype.identifier.participant.FspId;
-import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
+import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.spec.AmountType;
 import org.mojave.rail.fspiop.spec.Currency;

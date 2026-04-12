@@ -20,9 +20,9 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.transfer.DisputeReason;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;

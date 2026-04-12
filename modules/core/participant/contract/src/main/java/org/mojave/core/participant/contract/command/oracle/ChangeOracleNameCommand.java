@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.rule.identifier.participant.OracleId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeOracleNameCommand {

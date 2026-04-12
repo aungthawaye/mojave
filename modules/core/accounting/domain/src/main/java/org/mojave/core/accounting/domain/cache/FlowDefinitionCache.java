@@ -21,8 +21,8 @@
 package org.mojave.core.accounting.domain.cache;
 
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 
 public interface FlowDefinitionCache {

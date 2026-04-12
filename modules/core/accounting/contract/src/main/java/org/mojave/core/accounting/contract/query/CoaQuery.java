@@ -20,7 +20,7 @@
 
 package org.mojave.core.accounting.contract.query;
 
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.core.accounting.contract.data.CoaData;
 import org.mojave.core.accounting.contract.exception.chart.CoaIdNotFoundException;
 

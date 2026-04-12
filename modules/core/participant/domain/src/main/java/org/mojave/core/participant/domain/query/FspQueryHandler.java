@@ -20,10 +20,10 @@
 
 package org.mojave.core.participant.domain.query;
 
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.identifier.participant.FspId;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.identifier.participant.FspId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.exception.fsp.FspCodeNotFoundException;

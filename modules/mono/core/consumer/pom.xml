@@ -16,16 +16,16 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.core.accounting</groupId>
+            <groupId>org.mojave.core.accounting.intercom</groupId>
             <artifactId>mojave-core-accounting-intercom-consumer</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.accounting.ledgerEngine</groupId>
-            <artifactId>mojave-core-accounting-ledgerEngine-mysql</artifactId>
+            <groupId>org.mojave.core.accounting.ledger</groupId>
+            <artifactId>mojave-core-accounting-ledger-mysql</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-consumer</artifactId>
+            <groupId>org.mojave.core.wallet.intercom</groupId>
+            <artifactId>mojave-core-wallet-intercom-consumer</artifactId>
         </dependency>
     </dependencies>
 </project>

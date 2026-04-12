@@ -27,7 +27,7 @@ import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.slf4j.Logger;

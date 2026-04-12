@@ -22,8 +22,8 @@ package org.mojave.core.participant.contract.command.hub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.participant.HubId;
 
 public interface ActivateHubCurrencyCommand {
 

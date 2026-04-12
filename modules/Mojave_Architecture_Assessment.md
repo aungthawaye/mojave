@@ -44,8 +44,8 @@ mojave/
 │   ├── vault          # HashiCorp Vault integration
 │   ├── misc           # Utilities (crypto, JWT, DDD, event publishing)
 │   └── web            # HTTP/REST utilities
-├── scheme/            # Protocol definitions
-│   └── fspiop         # FSPIOP v2.0 generated models
+├── rail/              # Protocol implementations and specifications
+│   └── fspiop/spec    # FSPIOP v2.0 generated models and source spec
 ├── core/              # Domain bounded contexts
 │   ├── participant    # FSP/Hub/Oracle management
 │   ├── accounting     # Double-entry ledgerOperation system
@@ -94,9 +94,9 @@ store/        → Read-optimized caching layer
 
 **Assessment:** Excellent separation of concerns. The contract layer provides a stable API boundary, enabling independent evolution of implementations.
 
-**Common Data Types Module:**
+**Scheme Rule Module:**
 
-The `core/common/datatype` module provides shared domain primitives used across all bounded contexts:
+The `scheme/rule` module provides shared domain primitives used across all bounded contexts:
 
 - **Identifiers:** Strongly-typed ID classes extending `EntityId<Long>` with JSON/REST support
   - Accounting: `AccountId`, `ChartId`, `FlowDefinitionId`, `FlowLineId`, `LedgerMovementId`

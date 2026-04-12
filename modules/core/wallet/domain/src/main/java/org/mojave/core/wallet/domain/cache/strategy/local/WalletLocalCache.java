@@ -21,9 +21,9 @@
 package org.mojave.core.wallet.domain.cache.strategy.local;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.WalletId;
-import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.WalletData;
 import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.mojave.core.wallet.domain.model.Wallet;

@@ -103,7 +103,7 @@ To contribute to this documentation:
 
 - [Main Project README](../README.md)
 - [Architecture Assessment](../modules/Mojave_Architecture_Assessment.md)
-- [FSPIOP v2.0 Specification](../modules/scheme/fspiop/interface/fspiop_v2.0.yaml)
+- [FSPIOP v2.0 Specification](../modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml)
 
 ## Support
 

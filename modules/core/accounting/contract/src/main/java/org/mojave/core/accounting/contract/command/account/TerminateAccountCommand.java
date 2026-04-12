@@ -22,7 +22,7 @@ package org.mojave.core.accounting.contract.command.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
 
 public interface TerminateAccountCommand {
 

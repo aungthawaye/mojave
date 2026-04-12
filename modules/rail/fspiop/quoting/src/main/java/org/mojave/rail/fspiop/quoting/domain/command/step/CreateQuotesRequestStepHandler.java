@@ -20,7 +20,7 @@
 
 package org.mojave.rail.fspiop.quoting.domain.command.step;
 
-import org.mojave.common.datatype.enums.Direction;
+import org.mojave.scheme.rule.enums.Direction;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;

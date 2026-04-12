@@ -2,7 +2,7 @@ package org.mojave.core.wallet.intercom.requestor;
 
 import io.nats.client.Connection;
 import io.nats.client.Message;
-import org.mojave.common.datatype.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.error.MojaveErrorResponse;
 import org.mojave.component.nats.CommandResponse;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;

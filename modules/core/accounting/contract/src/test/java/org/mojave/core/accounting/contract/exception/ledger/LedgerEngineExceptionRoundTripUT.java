@@ -1,7 +1,7 @@
 package org.mojave.core.accounting.contract.exception.ledger;
 
 import org.junit.jupiter.api.Test;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 
 import java.util.Set;
 

@@ -20,7 +20,7 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
-import org.mojave.common.datatype.enums.transfer.DisputeReason;
+import org.mojave.scheme.rule.enums.transfer.DisputeReason;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;

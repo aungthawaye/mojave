@@ -20,8 +20,8 @@
 
 package org.mojave.core.wallet.domain.command.balance;
 
-import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
-import org.mojave.common.datatype.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.BalanceUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;

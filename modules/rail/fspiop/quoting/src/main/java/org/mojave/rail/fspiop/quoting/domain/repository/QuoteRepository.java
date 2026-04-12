@@ -19,8 +19,8 @@
  */
 package org.mojave.rail.fspiop.quoting.domain.repository;
 
-import org.mojave.common.datatype.identifier.quoting.QuoteId;
-import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.scheme.rule.identifier.quoting.QuoteId;
+import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote_;
 import org.mojave.rail.fspiop.spec.AmountType;

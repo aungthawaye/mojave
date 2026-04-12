@@ -20,7 +20,7 @@
 
 package org.mojave.core.accounting.domain.repository;
 
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionLineId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.core.accounting.domain.model.FlowDefinitionLine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

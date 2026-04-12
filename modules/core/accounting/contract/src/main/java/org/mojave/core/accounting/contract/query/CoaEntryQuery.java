@@ -22,8 +22,8 @@ package org.mojave.core.accounting.contract.query;
 
 import org.mojave.core.accounting.contract.data.CoaEntryData;
 import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 
 import java.util.List;
 

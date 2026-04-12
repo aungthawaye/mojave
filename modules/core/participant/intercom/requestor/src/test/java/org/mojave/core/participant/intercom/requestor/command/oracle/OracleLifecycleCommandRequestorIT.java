@@ -3,7 +3,7 @@ package org.mojave.core.participant.intercom.requestor.command.oracle;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
+import org.mojave.scheme.rule.enums.participant.PartyIdType;
 import org.mojave.core.participant.contract.command.oracle.ActivateOracleCommand;
 import org.mojave.core.participant.contract.command.oracle.ChangeOracleNameCommand;
 import org.mojave.core.participant.contract.command.oracle.ChangeOracleTypeCommand;

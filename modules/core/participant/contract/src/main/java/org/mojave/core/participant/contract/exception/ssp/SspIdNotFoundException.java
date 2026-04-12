@@ -21,7 +21,7 @@
 package org.mojave.core.participant.contract.exception.ssp;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.scheme.rule.identifier.participant.SspId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

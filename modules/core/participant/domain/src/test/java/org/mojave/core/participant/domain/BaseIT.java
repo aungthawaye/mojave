@@ -2,9 +2,9 @@ package org.mojave.core.participant.domain;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.core.participant.contract.command.fsp.CreateFspCommand;
 import org.mojave.core.participant.contract.command.hub.CreateHubCommand;
 

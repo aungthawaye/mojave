@@ -11,9 +11,9 @@ import org.mojave.core.accounting.contract.exception.chart.CoaIdNotFoundExceptio
 import org.mojave.core.accounting.contract.query.CoaEntryQuery;
 import org.mojave.core.accounting.domain.AccountingDomainTestConfiguration;
 import org.mojave.core.accounting.domain.BaseIT;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;

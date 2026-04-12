@@ -8,6 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-scheme-rule</artifactId>
+    <packaging>jar</packaging>
     <name>Mojave - Scheme - Rule</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -16,8 +17,8 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype</artifactId>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>

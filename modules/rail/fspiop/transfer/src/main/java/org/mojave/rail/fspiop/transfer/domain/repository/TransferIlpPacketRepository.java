@@ -19,7 +19,7 @@
  */
 package org.mojave.rail.fspiop.transfer.domain.repository;
 
-import org.mojave.common.datatype.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
 import org.mojave.rail.fspiop.transfer.domain.model.TransferIlpPacket;
 import org.mojave.rail.fspiop.transfer.domain.model.TransferIlpPacket_;
 import org.springframework.data.jpa.domain.Specification;

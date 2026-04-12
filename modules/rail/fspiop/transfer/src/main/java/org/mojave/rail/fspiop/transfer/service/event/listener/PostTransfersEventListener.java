@@ -21,7 +21,7 @@
 package org.mojave.rail.fspiop.transfer.service.event.listener;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
 import org.mojave.rail.fspiop.transfer.contract.command.PostTransfersCommand;
 import org.mojave.rail.fspiop.transfer.service.event.PostTransfersEvent;
 import org.slf4j.Logger;

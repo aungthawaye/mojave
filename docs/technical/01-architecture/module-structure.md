@@ -118,15 +118,15 @@ public RedissonClient redissonClient() {
 - **event:** Domain event publishing
 - **logger:** Structured logging utilities
 
-### 2. Scheme Modules (Protocol Definitions)
+### 2. Rail Specification Modules
 
 Protocol specifications and generated models.
 
 **Total:** 1 module
 
 ```
-scheme/
-└── fspiop/          FSPIOP v2.0 OpenAPI-generated models
+rail/
+└── fspiop/spec/     FSPIOP v2.0 OpenAPI-generated models
 ```
 
 **Generated Classes:**
@@ -136,7 +136,7 @@ scheme/
 - PartiesGetResponse
 - ErrorInformation
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/scheme/fspiop/interface/fspiop_v2.0.yaml`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml`
 
 ### 3. Core Modules (Domain Bounded Contexts)
 

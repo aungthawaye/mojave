@@ -21,13 +21,13 @@
 package org.mojave.core.participant.store.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
-import org.mojave.common.datatype.identifier.participant.FspGroupId;
-import org.mojave.common.datatype.identifier.participant.FspId;
-import org.mojave.common.datatype.identifier.participant.OracleId;
-import org.mojave.common.datatype.identifier.participant.SspId;
-import org.mojave.common.datatype.type.participant.FspCode;
-import org.mojave.common.datatype.type.participant.SspCode;
+import org.mojave.scheme.rule.enums.participant.PartyIdType;
+import org.mojave.scheme.rule.identifier.participant.FspGroupId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
+import org.mojave.scheme.rule.identifier.participant.OracleId;
+import org.mojave.scheme.rule.identifier.participant.SspId;
+import org.mojave.scheme.rule.type.participant.FspCode;
+import org.mojave.scheme.rule.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.contract.data.FspGroupData;
 import org.mojave.core.participant.contract.data.OracleData;

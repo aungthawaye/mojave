@@ -27,16 +27,16 @@ import org.mojave.core.accounting.contract.exception.ledger.InsufficientBalanceI
 import org.mojave.core.accounting.contract.exception.ledger.OverdraftLimitReachedInAccountException;
 import org.mojave.core.accounting.contract.exception.ledger.PostingAccountNotFoundException;
 import org.mojave.core.accounting.contract.exception.ledger.RestoreFailedInAccountException;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.MovementResult;
-import org.mojave.common.datatype.enums.accounting.MovementStage;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.LedgerMovementId;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.accounting.MovementResult;
+import org.mojave.scheme.rule.enums.accounting.MovementStage;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.LedgerMovementId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.math.BigDecimal;
