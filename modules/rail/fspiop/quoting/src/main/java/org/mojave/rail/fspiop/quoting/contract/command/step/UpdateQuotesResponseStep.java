@@ -29,6 +29,10 @@ import java.time.Instant;
 
 public interface UpdateQuotesResponseStep {
 
+    String SUBJECT_NAME = "sub-fspiop-quoting.update-quotes-response-step";
+
+    String TOPIC_NAME = "tp-fspiop-quoting.update-quotes-response-step";
+
     void execute(Input input) throws FspiopException;
 
     record Input(

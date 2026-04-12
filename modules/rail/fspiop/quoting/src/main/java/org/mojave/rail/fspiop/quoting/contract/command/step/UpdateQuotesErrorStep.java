@@ -26,6 +26,10 @@ import org.mojave.rail.fspiop.spec.ExtensionList;
 
 public interface UpdateQuotesErrorStep {
 
+    String SUBJECT_NAME = "sub-fspiop-quoting.update-quotes-error-step";
+
+    String TOPIC_NAME = "tp-fspiop-quoting.update-quotes-error-step";
+
     void execute(Input input) throws FspiopException;
 
     record Input(

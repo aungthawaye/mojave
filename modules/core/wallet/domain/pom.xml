@@ -16,10 +16,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.scheme</groupId>
-            <artifactId>mojave-scheme-rule-jpa</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
         </dependency>
@@ -34,6 +30,10 @@
         <dependency>
             <groupId>org.mojave.core.wallet.engine</groupId>
             <artifactId>mojave-core-wallet-engine-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule-jpa</artifactId>
         </dependency>
     </dependencies>
 </project>

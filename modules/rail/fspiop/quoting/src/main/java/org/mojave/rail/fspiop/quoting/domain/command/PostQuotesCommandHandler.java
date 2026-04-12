@@ -38,6 +38,7 @@ import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.step.CreateQuotesRequestStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
+import org.mojave.rail.fspiop.quoting.domain.async.producer.CreateQuotesRequestStepProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,26 +58,26 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    private final CreateQuotesRequestStep createQuotesRequestStep;
+    private final CreateQuotesRequestStepProducer createQuotesRequestStepProducer;
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
     public PostQuotesCommandHandler(ParticipantStore participantStore,
                                     RespondQuotes respondQuotes,
                                     ForwardRequest forwardRequest,
-                                    CreateQuotesRequestStep createQuotesRequestStep,
+                                    CreateQuotesRequestStepProducer createQuotesRequestStepProducer,
                                     QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
-        Objects.requireNonNull(createQuotesRequestStep);
+        Objects.requireNonNull(createQuotesRequestStepProducer);
         Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
-        this.createQuotesRequestStep = createQuotesRequestStep;
+        this.createQuotesRequestStepProducer = createQuotesRequestStepProducer;
         this.quoteSettings = quoteSettings;
     }
 
@@ -146,7 +147,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (this.quoteSettings.stateful()) {
 
-                this.createQuotesRequestStep.execute(new CreateQuotesRequestStep.Input(
+                this.createQuotesRequestStepProducer.publish(new CreateQuotesRequestStep.Input(
                     payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
                     new BigDecimal(amount.getAmount()),
                     fees != null ? new BigDecimal(fees.getAmount()) : null,

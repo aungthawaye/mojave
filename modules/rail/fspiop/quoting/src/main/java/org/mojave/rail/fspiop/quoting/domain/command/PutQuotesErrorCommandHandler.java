@@ -26,7 +26,7 @@ import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.rail.fspiop.quoting.contract.command.PutQuotesErrorCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesErrorStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesErrorStepPublisher;
+import org.mojave.rail.fspiop.quoting.domain.async.producer.UpdateQuotesErrorStepProducer;
 import org.mojave.rail.fspiop.component.exception.FspiopCommunicationException;
 import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
@@ -50,26 +50,26 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
     private final ForwardRequest forwardRequest;
 
-    private final UpdateQuotesErrorStepPublisher updateQuotesErrorStepPublisher;
+    private final UpdateQuotesErrorStepProducer updateQuotesErrorStepProducer;
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
     public PutQuotesErrorCommandHandler(ParticipantStore participantStore,
                                         RespondQuotes respondQuotes,
                                         ForwardRequest forwardRequest,
-                                        UpdateQuotesErrorStepPublisher updateQuotesErrorStepPublisher,
+                                        UpdateQuotesErrorStepProducer updateQuotesErrorStepProducer,
                                         QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
-        Objects.requireNonNull(updateQuotesErrorStepPublisher);
+        Objects.requireNonNull(updateQuotesErrorStepProducer);
         Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
-        this.updateQuotesErrorStepPublisher = updateQuotesErrorStepPublisher;
+        this.updateQuotesErrorStepProducer = updateQuotesErrorStepProducer;
         this.quoteSettings = quoteSettings;
     }
 
@@ -92,7 +92,7 @@ public class PutQuotesErrorCommandHandler implements PutQuotesErrorCommand {
 
             if (this.quoteSettings.stateful()) {
 
-                this.updateQuotesErrorStepPublisher.publish(
+                this.updateQuotesErrorStepProducer.publish(
                     new UpdateQuotesErrorStep.Input(
                         udfQuoteId,
                         error.getErrorInformation().getErrorDescription(),

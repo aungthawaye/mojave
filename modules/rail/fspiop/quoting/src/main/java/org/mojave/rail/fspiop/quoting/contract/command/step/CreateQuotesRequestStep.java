@@ -36,6 +36,10 @@ import java.time.Instant;
 
 public interface CreateQuotesRequestStep {
 
+    String SUBJECT_NAME = "sub-fspiop-quoting.create-quotes-request-step";
+
+    String TOPIC_NAME = "tp-fspiop-quoting.create-quotes-request-step";
+
     void execute(Input input) throws FspiopException;
 
     record Input(

@@ -39,8 +39,8 @@ import org.mojave.rail.fspiop.quoting.contract.command.step.FindQuotesStep;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesErrorStep;
 import org.mojave.rail.fspiop.quoting.contract.command.step.UpdateQuotesResponseStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesErrorStepPublisher;
-import org.mojave.rail.fspiop.quoting.domain.kafka.publisher.UpdateQuotesResponseStepPublisher;
+import org.mojave.rail.fspiop.quoting.domain.async.producer.UpdateQuotesErrorStepProducer;
+import org.mojave.rail.fspiop.quoting.domain.async.producer.UpdateQuotesResponseStepProducer;
 import org.mojave.rail.fspiop.quoting.domain.model.Quote;
 import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 import org.slf4j.Logger;
@@ -64,9 +64,9 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
     private final FindQuotesStep findQuotesStep;
 
-    private final UpdateQuotesResponseStepPublisher updateQuotesResponseStepPublisher;
+    private final UpdateQuotesResponseStepProducer updateQuotesResponseStepProducer;
 
-    private final UpdateQuotesErrorStepPublisher updateQuotesErrorStepPublisher;
+    private final UpdateQuotesErrorStepProducer updateQuotesErrorStepProducer;
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
@@ -74,24 +74,24 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                                    RespondQuotes respondQuotes,
                                    ForwardRequest forwardRequest,
                                    FindQuotesStep findQuotesStep,
-                                   UpdateQuotesResponseStepPublisher updateQuotesResponseStepPublisher,
-                                   UpdateQuotesErrorStepPublisher updateQuotesErrorStepPublisher,
+                                   UpdateQuotesResponseStepProducer updateQuotesResponseStepProducer,
+                                   UpdateQuotesErrorStepProducer updateQuotesErrorStepProducer,
                                    QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
         Objects.requireNonNull(findQuotesStep);
-        Objects.requireNonNull(updateQuotesResponseStepPublisher);
-        Objects.requireNonNull(updateQuotesErrorStepPublisher);
+        Objects.requireNonNull(updateQuotesResponseStepProducer);
+        Objects.requireNonNull(updateQuotesErrorStepProducer);
         Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
         this.findQuotesStep = findQuotesStep;
-        this.updateQuotesResponseStepPublisher = updateQuotesResponseStepPublisher;
-        this.updateQuotesErrorStepPublisher = updateQuotesErrorStepPublisher;
+        this.updateQuotesResponseStepProducer = updateQuotesResponseStepProducer;
+        this.updateQuotesErrorStepProducer = updateQuotesErrorStepProducer;
         this.quoteSettings = quoteSettings;
     }
 
@@ -162,7 +162,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                             "Payee FSP responded with the wrong expiration format. Responded expiration format : " +
                                 quoteIdPutResponse.getExpiration();
 
-                        this.updateQuotesErrorStepPublisher.publish(
+                        this.updateQuotesErrorStepProducer.publish(
                             new UpdateQuotesErrorStep.Input(udfQuoteId, error, null));
 
                         throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
@@ -178,7 +178,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
 
                     var error = "Payee FSP responded with incorrect currency information. The currency of quote, transferAmount, payeeFspFee, payeeFspCommission and payeeReceiveAmount must be the same.";
 
-                    this.updateQuotesErrorStepPublisher.publish(
+                    this.updateQuotesErrorStepProducer.publish(
                         new UpdateQuotesErrorStep.Input(udfQuoteId, error, null));
 
                     throw new FspiopException(FspiopErrors.GENERIC_PAYEE_ERROR, error);
@@ -192,7 +192,7 @@ public class PutQuotesCommandHandler implements PutQuotesCommand {
                 var payeeReceiveAmount = new BigDecimal(
                     quoteIdPutResponse.getPayeeReceiveAmount().getAmount());
 
-                this.updateQuotesResponseStepPublisher.publish(new UpdateQuotesResponseStep.Input(
+                this.updateQuotesResponseStepProducer.publish(new UpdateQuotesResponseStep.Input(
                     udfQuoteId, responseExpiration, transferAmount, payeeFspFee, payeeFspCommission,
                     payeeReceiveAmount, quoteIdPutResponse.getIlpPacket(),
                     quoteIdPutResponse.getCondition(), quoteIdPutResponse.getExtensionList()));
