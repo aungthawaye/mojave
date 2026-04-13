@@ -3,6 +3,7 @@ package org.mojave.mono.core.admin;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
+import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.core.accounting.intercom.requestor.AccountingIntercomRequestorConfiguration;
 import org.mojave.core.participant.intercom.requestor.ParticipantIntercomRequestorConfiguration;
 import org.mojave.core.wallet.intercom.requestor.WalletIntercomRequestorConfiguration;
@@ -21,6 +22,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
         DatatypeConfiguration.class,
         RequestIdMdcConfiguration.class,
         RestErrorConfiguration.class,
+        SpringSecurityConfiguration.class,
         AccountingIntercomRequestorConfiguration.class,
         ParticipantIntercomRequestorConfiguration.class,
         WalletIntercomRequestorConfiguration.class})
@@ -30,6 +32,7 @@ public class MonoAdminConfiguration {
                                                   DatatypeConfiguration.RequiredDependencies,
                                                   RequestIdMdcConfiguration.RequiredDependencies,
                                                   RestErrorConfiguration.RequiredDependencies,
+                                                  SpringSecurityConfiguration.RequiredDependencies,
                                                   AccountingIntercomRequestorConfiguration.RequiredDependencies,
                                                   ParticipantIntercomRequestorConfiguration.RequiredDependencies,
                                                   WalletIntercomRequestorConfiguration.RequiredDependencies {
@@ -40,6 +43,7 @@ public class MonoAdminConfiguration {
                                               DatatypeConfiguration.RequiredSettings,
                                               RequestIdMdcConfiguration.RequiredSettings,
                                               RestErrorConfiguration.RequiredSettings,
+                                              SpringSecurityConfiguration.RequiredSettings,
                                               AccountingIntercomRequestorConfiguration.RequiredSettings,
                                               ParticipantIntercomRequestorConfiguration.RequiredSettings,
                                               WalletIntercomRequestorConfiguration.RequiredSettings {

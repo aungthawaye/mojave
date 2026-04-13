@@ -2,6 +2,7 @@ package org.mojave.mono.core.admin;
 
 import org.mojave.component.nats.NatsConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
+import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.springframework.context.annotation.Bean;
 
 public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSettings {
@@ -24,7 +25,7 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
     @Override
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
-        return new OpenApiConfiguration.ApiSettings("Mojave - Admin", "1.0.0");
+        return new OpenApiConfiguration.ApiSettings("Mojave - Core Admin", "1.0.0");
     }
 
     @Bean
@@ -45,6 +46,13 @@ public class MonoAdminSettings implements MonoAdminConfiguration.RequiredSetting
         return new NatsConfiguration.NatsSettings(
             servers, connectionName, username, password,
             token, connectionTimeoutMs, maxReconnects, reconnectWaitMs, noEcho);
+    }
+
+    @Bean
+    @Override
+    public SpringSecurityConfigurer.Settings springSecuritySettings() {
+
+        return new SpringSecurityConfigurer.Settings(null);
     }
 
     @Bean
