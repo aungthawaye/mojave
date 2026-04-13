@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <name>Mojave - Mono - Core</name>
     <modules>
+        <module>admin</module>
         <module>intercom</module>
         <module>consumer</module>
     </modules>

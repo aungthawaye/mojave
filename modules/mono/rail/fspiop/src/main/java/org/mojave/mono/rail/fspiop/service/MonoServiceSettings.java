@@ -55,7 +55,7 @@ public class MonoServiceSettings implements MonoServiceConfiguration.RequiredSet
     @Override
     public OpenApiConfiguration.ApiSettings apiSettings() {
 
-        return new OpenApiConfiguration.ApiSettings("Mojave - Service", "1.0.0");
+        return new OpenApiConfiguration.ApiSettings("Mojave - FSPIOP Rail", "1.0.0");
     }
 
     @Bean

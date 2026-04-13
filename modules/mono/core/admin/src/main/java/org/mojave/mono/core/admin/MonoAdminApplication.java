@@ -1,29 +1,5 @@
-/*-
- * ===
- * Mojave
- * ---
- * Copyright (C) 2025 Open Source
- * ---
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ===
- */
+package org.mojave.mono.core.admin;
 
-package org.mojave.mono.rail.fspiop.service;
-
-import org.mojave.rail.fspiop.quoting.domain.QuotingFlyway;
-import org.mojave.rail.fspiop.transfer.domain.TransferFlyway;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -42,27 +18,17 @@ import org.springframework.context.annotation.Import;
         UserDetailsServiceAutoConfiguration.class})
 @Import(
     value = {
-        MonoServiceConfiguration.class,
-        MonoServiceDependencies.class,
-        MonoServiceSettings.class})
-public class MonoServiceApplication {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MonoServiceApplication.class);
+        MonoAdminConfiguration.class,
+        MonoAdminDependencies.class,
+        MonoAdminSettings.class})
+public class MonoAdminApplication {
 
     static void main(String[] args) {
 
-        QuotingFlyway.migrate(
-            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
-            System.getenv("FLYWAY_DB_PASSWORD"));
-
-        TransferFlyway.migrate(
-            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
-            System.getenv("FLYWAY_DB_PASSWORD"));
-
-        new SpringApplicationBuilder(MonoServiceApplication.class)
+        new SpringApplicationBuilder(MonoAdminApplication.class)
             .web(WebApplicationType.SERVLET)
             .properties(
-                "spring.application.name=MonoServiceApplication",
+                "spring.application.name=MonoAdminApplication",
                 "management.endpoints.web.base-path=/actuator",
                 "management.endpoint.health.show-details=always",
                 "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
@@ -78,7 +44,7 @@ public class MonoServiceApplication {
 
     @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        MonoServiceConfiguration.TomcatSettings settings) {
+        MonoAdminConfiguration.TomcatSettings settings) {
 
         return factory -> factory.setPort(settings.portNo());
     }

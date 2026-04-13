@@ -24,8 +24,6 @@ import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
-import org.mojave.core.participant.contract.query.FspQuery;
-import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.rail.fspiop.lookup.domain.LookUpDomainConfiguration;
 import org.mojave.rail.fspiop.lookup.service.LookUpServiceConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
@@ -42,7 +40,7 @@ import tools.jackson.databind.ObjectMapper;
 @EnableAsync
 @ComponentScan(
     basePackages = {
-        "org.mojave.mono.rail.fspiop.service.controller"})
+        "org.mojave.mono.rail.fspiop.service"})
 @Import(
     value = {
         OpenApiConfiguration.class,
@@ -55,8 +53,7 @@ import tools.jackson.databind.ObjectMapper;
         TransferServiceConfiguration.class})
 public final class MonoServiceConfiguration extends JsonWebMvcConfigurationSupport {
 
-    public MonoServiceConfiguration(ObjectMapper objectMapper, FspQuery fspQuery,
-                                    OracleQuery oracleQuery) {
+    public MonoServiceConfiguration(ObjectMapper objectMapper) {
 
         super(objectMapper);
 

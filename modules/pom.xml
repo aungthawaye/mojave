@@ -320,6 +320,21 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-consumer</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-intercom</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.mono.rail</groupId>
+                <artifactId>mojave-mono-rail-fspiop</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mojave.rail.fspiop</groupId>
                 <artifactId>mojave-rail-fspiop-component</artifactId>
                 <version>${revision}</version>

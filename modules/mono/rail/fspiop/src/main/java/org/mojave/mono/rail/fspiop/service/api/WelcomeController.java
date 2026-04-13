@@ -18,15 +18,21 @@
  * ===
  */
 
-package org.mojave.component.web.error;
+package org.mojave.mono.rail.fspiop.service.api;
 
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@ComponentScan(basePackageClasses = RestErrorControllerAdvice.class)
-public class RestErrorConfiguration {
+@RestController
+public class WelcomeController {
 
-    public interface RequiredDependencies { }
+    @GetMapping("/**")
+    public ResponseEntity<Response> welcome() {
 
-    public interface RequiredSettings { }
+        return ResponseEntity.ok(new Response("1.0", "Welcome to the Mojave FSPIOP Rail API."));
+    }
+
+    public record Response(String version, String message) { }
 
 }

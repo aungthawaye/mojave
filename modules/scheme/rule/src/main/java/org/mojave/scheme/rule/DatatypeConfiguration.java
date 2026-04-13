@@ -23,4 +23,10 @@ package org.mojave.scheme.rule;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = {"org.mojave.scheme.rule"})
-public class DatatypeConfiguration { }
+public class DatatypeConfiguration {
+
+    public interface RequiredDependencies { }
+
+    public interface RequiredSettings { }
+
+}
