@@ -77,9 +77,17 @@ public class IncreaseNdcCommandIT extends BaseIT {
         final var output = this.increaseNdcCommand.execute(
             new IncreaseNdcCommand.Input(
                 walletId, new BigDecimal("15.00"), new TransactionId(Snowflake.get().nextId()),
-                Instant.now(), ""));
+                Instant.now(), "Increase NDC for test"));
 
         assertNotNull(output.ndcUpdateId());
+
+        final var snapshot = this.loadNdcUpdateSnapshot(output.ndcUpdateId());
+
+        assertEquals("INCREASE", snapshot.action());
+        assertEquals(0, snapshot.amount().compareTo(new BigDecimal("15.00")));
+        assertEquals(0, snapshot.oldNdc().compareTo(new BigDecimal("30.00")));
+        assertEquals(0, snapshot.newNdc().compareTo(new BigDecimal("45.00")));
+        assertEquals("Increase NDC for test", snapshot.description());
     }
 
     @Test

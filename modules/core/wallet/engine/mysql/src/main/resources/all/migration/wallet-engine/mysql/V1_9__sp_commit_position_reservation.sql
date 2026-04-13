@@ -1,10 +1,10 @@
 DELIMITER
 $$
-DROP PROCEDURE IF EXISTS `sp_rollback_position` $$
-CREATE PROCEDURE sp_rollback_position(
-                                     IN p_reservation_id     BIGINT,
-                                     IN p_position_update_id BIGINT)
-proc_rollback:
+DROP PROCEDURE IF EXISTS `sp_commit_position_reservation` $$
+CREATE PROCEDURE sp_commit_position_reservation(
+                                   IN p_reservation_id     BIGINT,
+                                   IN p_position_update_id BIGINT)
+proc_commit_position_reservation:
 BEGIN
     DECLARE v_wallet_id BIGINT;
     DECLARE v_action VARCHAR(32);
@@ -14,6 +14,7 @@ BEGIN
     DECLARE v_description VARCHAR(255);
     DECLARE v_now BIGINT;
     DECLARE v_old_position DECIMAL(34, 4);
+    DECLARE v_new_position DECIMAL(34, 4);
     DECLARE v_old_reserved DECIMAL(34, 4);
     DECLARE v_new_reserved DECIMAL(34, 4);
     DECLARE v_ndc DECIMAL(34, 4);
@@ -24,19 +25,19 @@ BEGIN
     BEGIN
         ROLLBACK;
 
-        SELECT 'ROLLBACK_FAILED' AS status,
-               p_reservation_id  AS position_update_id,
-               v_wallet_id     AS position_id,
-               'ROLLBACK'        AS action,
-               v_transaction_id  AS transaction_id,
-               v_currency        AS currency,
-               v_amount          AS amount,
-               v_old_position    AS old_position,
-               v_old_position    AS new_position,
-               v_old_reserved    AS old_reserved,
-               v_new_reserved    AS new_reserved,
-               v_ndc             AS ndc,
-               v_transaction_at  AS transaction_at;
+        SELECT 'COMMIT_FAILED'  AS status,
+               p_reservation_id AS position_update_id,
+               v_wallet_id    AS position_id,
+               'COMMIT'         AS action,
+               v_transaction_id AS transaction_id,
+               v_currency       AS currency,
+               v_amount         AS amount,
+               v_old_position   AS old_position,
+               v_old_position   AS new_position,
+               v_old_reserved   AS old_reserved,
+               v_new_reserved   AS new_reserved,
+               v_ndc            AS ndc,
+               v_transaction_at AS transaction_at;
     END;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
@@ -54,21 +55,21 @@ BEGIN
     WHERE position_update_id = p_reservation_id;
 
     IF v_not_found OR v_action != 'RESERVE' THEN
-        SELECT 'ROLLBACK_FAILED' AS status,
-               p_reservation_id  AS position_update_id,
-               v_wallet_id     AS position_id,
-               'ROLLBACK'        AS action,
-               v_transaction_id  AS transaction_id,
-               v_currency        AS currency,
-               v_amount          AS amount,
-               v_old_position    AS old_position,
-               v_old_position    AS new_position,
-               v_old_reserved    AS old_reserved,
-               v_new_reserved    AS new_reserved,
-               v_ndc             AS ndc,
-               v_transaction_at  AS transaction_at;
+        SELECT 'COMMIT_FAILED'  AS status,
+               p_reservation_id AS position_update_id,
+               v_wallet_id    AS position_id,
+               'COMMIT'         AS action,
+               v_transaction_id AS transaction_id,
+               v_currency       AS currency,
+               v_amount         AS amount,
+               v_old_position   AS old_position,
+               v_old_position   AS new_position,
+               v_old_reserved   AS old_reserved,
+               v_new_reserved   AS new_reserved,
+               v_ndc            AS ndc,
+               v_transaction_at AS transaction_at;
 
-        LEAVE proc_rollback;
+        LEAVE proc_commit_position_reservation;
     END IF;
 
     START TRANSACTION;
@@ -87,27 +88,28 @@ BEGIN
     IF v_not_found THEN
         ROLLBACK;
 
-        SELECT 'ROLLBACK_FAILED' AS status,
-               p_reservation_id  AS position_update_id,
-               v_wallet_id     AS position_id,
-               'ROLLBACK'        AS action,
-               v_transaction_id  AS transaction_id,
-               v_currency        AS currency,
-               v_amount          AS amount,
-               v_old_position    AS old_position,
-               v_old_position    AS new_position,
-               v_old_reserved    AS old_reserved,
-               v_new_reserved    AS new_reserved,
-               v_ndc             AS ndc,
-               v_transaction_at  AS transaction_at;
+        SELECT 'COMMIT_FAILED'  AS status,
+               p_reservation_id AS position_update_id,
+               v_wallet_id    AS position_id,
+               'COMMIT'         AS action,
+               v_transaction_id AS transaction_id,
+               v_currency       AS currency,
+               v_amount         AS amount,
+               v_old_position   AS old_position,
+               v_old_position   AS new_position,
+               v_old_reserved   AS old_reserved,
+               v_new_reserved   AS new_reserved,
+               v_ndc            AS ndc,
+               v_transaction_at AS transaction_at;
 
-        LEAVE proc_rollback;
+        LEAVE proc_commit_position_reservation;
     END IF;
 
     SET v_new_reserved = v_old_reserved - v_amount;
+    SET v_new_position = v_old_position + v_amount;
 
     UPDATE mwe_wallet
-    SET reserved = v_new_reserved
+    SET position = v_new_position, reserved = v_new_reserved
     WHERE wallet_id = v_wallet_id;
 
     INSERT INTO mwe_position_update (position_update_id,
@@ -130,12 +132,12 @@ BEGIN
                                      rec_version)
     VALUES (p_position_update_id,
             v_wallet_id,
-            'ROLLBACK',
+            'COMMIT',
             v_transaction_id,
             v_currency,
             v_amount,
             v_old_position,
-            v_old_position,
+            v_new_position,
             v_old_reserved,
             v_new_reserved,
             v_ndc,

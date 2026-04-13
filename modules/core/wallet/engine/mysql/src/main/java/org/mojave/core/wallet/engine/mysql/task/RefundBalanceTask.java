@@ -29,7 +29,7 @@ public final class RefundBalanceTask {
 
             return jdbcTemplate.execute((ConnectionCallback<WalletEngine.BalanceHistory>) con -> {
 
-                try (var stm = con.prepareStatement("CALL sp_reverse_fund(?, ?)")) {
+                try (var stm = con.prepareStatement("CALL sp_reverse_balance_withdraw(?, ?)")) {
 
                     stm.setLong(1, reversalId.getId());
                     stm.setLong(2, nextBalanceUpdateId.getId());

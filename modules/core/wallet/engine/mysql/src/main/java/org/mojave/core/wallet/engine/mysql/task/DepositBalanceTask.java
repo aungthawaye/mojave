@@ -29,7 +29,7 @@ public final class DepositBalanceTask {
 
             return jdbcTemplate.execute((ConnectionCallback<WalletEngine.BalanceHistory>) con -> {
 
-                try (var stm = con.prepareStatement("CALL sp_deposit_fund(?, ?, ?, ?, ?, ?)")) {
+                try (var stm = con.prepareStatement("CALL sp_deposit_balance(?, ?, ?, ?, ?, ?)")) {
 
                     stm.setLong(1, transactionId.getId());
                     stm.setLong(2, transactionAt.getEpochSecond());

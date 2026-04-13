@@ -3,6 +3,7 @@ package org.mojave.core.wallet.domain;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.NdcUpdateId;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
@@ -181,5 +182,43 @@ public class BaseIT {
             throw new RuntimeException("Unable to update wallet snapshot.", e);
         }
     }
+
+    protected NdcUpdateSnapshot loadNdcUpdateSnapshot(final NdcUpdateId ndcUpdateId) {
+
+        try (final var connection = DriverManager.getConnection(
+            WRITE_DB_URL, WRITE_DB_USER,
+            WRITE_DB_PASSWORD); final var statement = connection.prepareStatement("""
+            SELECT action, amount, old_ndc, new_ndc, description
+            FROM mwe_ndc_update
+            WHERE ndc_update_id = ?
+            """)) {
+
+            statement.setLong(1, ndcUpdateId.getId());
+
+            try (final var resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return new NdcUpdateSnapshot(
+                        resultSet.getString("action"),
+                        resultSet.getBigDecimal("amount"),
+                        resultSet.getBigDecimal("old_ndc"),
+                        resultSet.getBigDecimal("new_ndc"),
+                        resultSet.getString("description"));
+                }
+            }
+
+            throw new IllegalStateException(
+                "Unable to find NDC update snapshot for ndcUpdateId: " + ndcUpdateId);
+
+        } catch (final SQLException e) {
+            throw new RuntimeException("Unable to load NDC update snapshot.", e);
+        }
+    }
+
+    protected record NdcUpdateSnapshot(String action,
+                                       BigDecimal amount,
+                                       BigDecimal oldNdc,
+                                       BigDecimal newNdc,
+                                       String description) { }
 
 }

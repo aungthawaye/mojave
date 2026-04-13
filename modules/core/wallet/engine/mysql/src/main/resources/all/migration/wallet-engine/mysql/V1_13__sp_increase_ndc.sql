@@ -26,9 +26,10 @@ BEGIN
         SELECT 'ERROR'               AS status,
                p_ndc_update_id       AS ndc_update_id,
                p_wallet_id           AS wallet_id,
+               'INCREASE'            AS action,
                p_transaction_id      AS transaction_id,
-               NULL                  AS currency,
                p_amount              AS amount,
+               NULL                  AS currency,
                0                     AS old_ndc,
                0                     AS new_ndc,
                p_transaction_at      AS transaction_at;
@@ -56,9 +57,10 @@ BEGIN
         SELECT 'NOT_FOUND'           AS status,
                p_ndc_update_id       AS ndc_update_id,
                p_wallet_id           AS wallet_id,
+               'INCREASE'            AS action,
                p_transaction_id      AS transaction_id,
-               NULL                  AS currency,
                p_amount              AS amount,
+               NULL                  AS currency,
                0                     AS old_ndc,
                0                     AS new_ndc,
                p_transaction_at      AS transaction_at;
@@ -74,9 +76,10 @@ BEGIN
         SELECT 'BALANCE_LOWER_THAN_NEW_NDC' AS status,
                p_ndc_update_id              AS ndc_update_id,
                p_wallet_id                  AS wallet_id,
+               'INCREASE'                   AS action,
                p_transaction_id             AS transaction_id,
-               v_currency                   AS currency,
                p_amount                     AS amount,
+               v_currency                   AS currency,
                v_old_ndc                    AS old_ndc,
                v_new_ndc                    AS new_ndc,
                v_balance                    AS old_balance,
@@ -91,18 +94,24 @@ BEGIN
 
     INSERT INTO mwe_ndc_update(ndc_update_id,
                                wallet_id,
+                               action,
                                transaction_id,
+                               amount,
                                old_ndc,
                                new_ndc,
+                               description,
                                transaction_at,
                                rec_created_at,
                                rec_updated_at,
                                rec_version)
     VALUES (p_ndc_update_id,
             p_wallet_id,
+            'INCREASE',
             p_transaction_id,
+            p_amount,
             v_old_ndc,
             v_new_ndc,
+            p_description,
             p_transaction_at,
             v_now,
             v_now,
@@ -110,15 +119,18 @@ BEGIN
 
     COMMIT;
 
-    SELECT 'SUCCESS'          AS status,
-           p_ndc_update_id    AS ndc_update_id,
-           p_wallet_id        AS wallet_id,
-           p_transaction_id   AS transaction_id,
-           v_currency         AS currency,
-           p_amount           AS amount,
-           v_old_ndc          AS old_ndc,
-           v_new_ndc          AS new_ndc,
-           p_transaction_at   AS transaction_at;
+    SELECT 'SUCCESS' AS status,
+           nu.ndc_update_id,
+           nu.wallet_id,
+           nu.action,
+           nu.transaction_id,
+           v_currency AS currency,
+           nu.amount,
+           nu.old_ndc,
+           nu.new_ndc,
+           nu.transaction_at
+    FROM mwe_ndc_update nu
+    WHERE nu.ndc_update_id = p_ndc_update_id;
 END $$
 
 DELIMITER ;

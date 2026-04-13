@@ -62,13 +62,12 @@ final class WalletTaskMapper {
             Instant.ofEpochSecond(rs.getLong("transaction_at")));
     }
 
-    static WalletEngine.NdcHistory mapNdcHistory(final ResultSet rs, final PositionAction action)
-        throws SQLException {
+    static WalletEngine.NdcHistory mapNdcHistory(final ResultSet rs) throws SQLException {
 
         return new WalletEngine.NdcHistory(
             new NdcUpdateId(rs.getLong("ndc_update_id")),
             new WalletId(rs.getLong("wallet_id")),
-            action,
+            PositionAction.valueOf(rs.getString("action")),
             new TransactionId(rs.getLong("transaction_id")),
             Currency.valueOf(rs.getString("currency")),
             rs.getBigDecimal("amount"),

@@ -1,6 +1,5 @@
 package org.mojave.core.wallet.engine.mysql.task;
 
-import org.mojave.scheme.rule.enums.wallet.PositionAction;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.NdcUpdateId;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
@@ -48,7 +47,7 @@ public final class DecreaseNdcTask {
                                 final var status = rs.getString("status");
 
                                 if ("SUCCESS".equals(status)) {
-                                    return WalletTaskMapper.mapNdcHistory(rs, PositionAction.DECREASE);
+                                    return WalletTaskMapper.mapNdcHistory(rs);
                                 }
 
                                 if ("POSITION_RESERVED_EXCEEDS_NDC".equals(status)) {

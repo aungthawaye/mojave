@@ -1,10 +1,10 @@
 DELIMITER
 $$
-DROP PROCEDURE IF EXISTS `sp_reverse_fund` $$
-CREATE PROCEDURE sp_reverse_fund(
+DROP PROCEDURE IF EXISTS `sp_reverse_balance_withdraw` $$
+CREATE PROCEDURE sp_reverse_balance_withdraw(
                                 IN p_reversing_balance_update_id BIGINT,
                                 IN p_balance_update_id           BIGINT)
-proc_reverse:
+proc_reverse_balance_withdraw:
 BEGIN
     DECLARE v_wallet_id BIGINT;
     DECLARE v_action VARCHAR(32);
@@ -62,7 +62,7 @@ BEGIN
                NULL                          AS transaction_at,
                p_reversing_balance_update_id AS withdraw_id;
 
-        LEAVE proc_reverse;
+        LEAVE proc_reverse_balance_withdraw;
     END IF;
 
     IF v_action != 'WITHDRAW' THEN
@@ -78,7 +78,7 @@ BEGIN
                NULL                          AS transaction_at,
                p_reversing_balance_update_id AS withdraw_id;
 
-        LEAVE proc_reverse;
+        LEAVE proc_reverse_balance_withdraw;
     END IF;
 
     IF v_currency IS NULL THEN
@@ -94,7 +94,7 @@ BEGIN
                NULL                          AS transaction_at,
                p_reversing_balance_update_id AS withdraw_id;
 
-        LEAVE proc_reverse;
+        LEAVE proc_reverse_balance_withdraw;
     END IF;
 
     START TRANSACTION;
@@ -122,7 +122,7 @@ BEGIN
                NULL                          AS transaction_at,
                p_reversing_balance_update_id AS withdraw_id;
 
-        LEAVE proc_reverse;
+        LEAVE proc_reverse_balance_withdraw;
     END IF;
 
     SET v_new_balance = v_old_balance + v_amount;

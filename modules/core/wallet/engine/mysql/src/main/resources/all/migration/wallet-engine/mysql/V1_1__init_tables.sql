@@ -25,16 +25,19 @@ CREATE TABLE `mwe_ndc_update`
 (
     `ndc_update_id`  bigint         NOT NULL,
     `wallet_id`      bigint         NOT NULL,
+    `action`         varchar(32)    NOT NULL,
     `transaction_id` bigint         NOT NULL,
+    `amount`         decimal(34, 4) NOT NULL,
     `old_ndc`        decimal(34, 4) NOT NULL,
     `new_ndc`        decimal(34, 4) NOT NULL,
+    `description`    varchar(255) DEFAULT NULL,
     `transaction_at` bigint         NOT NULL,
     `rec_created_at` bigint DEFAULT NULL,
     `rec_updated_at` bigint DEFAULT NULL,
     `rec_version`    int    DEFAULT NULL,
     PRIMARY KEY (`ndc_update_id`),
-    UNIQUE KEY `mwe_ndc_update_01_UK` (`transaction_id`),
-    KEY `mwe_ndc_update_01_IDX` (`wallet_id`, `transaction_at`),
+    UNIQUE KEY `mwe_ndc_update_01_UK` (`wallet_id`, `action`, `transaction_id`),
+    KEY `mwe_ndc_update_01_IDX` (`wallet_id`, `action`, `transaction_at`),
     KEY `mwe_wallet_mwe_ndc_update_FK_IDX` (`wallet_id`),
     CONSTRAINT `mwe_wallet_mwe_ndc_update_FK` FOREIGN KEY (`wallet_id`) REFERENCES `mwe_wallet` (`wallet_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB

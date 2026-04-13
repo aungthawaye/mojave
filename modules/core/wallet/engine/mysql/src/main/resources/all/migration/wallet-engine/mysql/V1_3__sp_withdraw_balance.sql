@@ -1,14 +1,14 @@
 DELIMITER
 $$
-DROP PROCEDURE IF EXISTS `sp_withdraw_fund` $$
-CREATE PROCEDURE sp_withdraw_fund(
+DROP PROCEDURE IF EXISTS `sp_withdraw_balance` $$
+CREATE PROCEDURE sp_withdraw_balance(
                                  IN p_transaction_id    BIGINT,
                                  IN p_transaction_at    BIGINT,
                                  IN p_balance_update_id BIGINT,
                                  IN p_wallet_id        BIGINT,
                                  IN p_amount            DECIMAL(34, 4),
                                  IN p_description       VARCHAR(256))
-proc_withdraw:
+proc_withdraw_balance:
 BEGIN
     DECLARE v_old_balance DECIMAL(34, 4);
     DECLARE v_new_balance DECIMAL(34, 4);
@@ -58,7 +58,7 @@ BEGIN
                0                   AS new_balance,
                p_transaction_at    AS transaction_at;
 
-        LEAVE proc_withdraw;
+        LEAVE proc_withdraw_balance;
     END IF;
 
     SET v_new_balance = v_old_balance - p_amount;
@@ -77,7 +77,7 @@ BEGIN
                v_new_balance          AS new_balance,
                p_transaction_at       AS transaction_at;
 
-        LEAVE proc_withdraw;
+        LEAVE proc_withdraw_balance;
     END IF;
 
     UPDATE mwe_wallet

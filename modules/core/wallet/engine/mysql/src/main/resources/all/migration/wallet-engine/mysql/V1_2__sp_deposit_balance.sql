@@ -1,14 +1,14 @@
 DELIMITER
 $$
-DROP PROCEDURE IF EXISTS `sp_deposit_fund` $$
-CREATE PROCEDURE sp_deposit_fund(
+DROP PROCEDURE IF EXISTS `sp_deposit_balance` $$
+CREATE PROCEDURE sp_deposit_balance(
                                 IN p_transaction_id    BIGINT,
                                 IN p_transaction_at    BIGINT,
                                 IN p_balance_update_id BIGINT,
                                 IN p_wallet_id        BIGINT,
                                 IN p_amount            DECIMAL(34, 4),
                                 IN p_description       VARCHAR(256))
-proc_deposit:
+proc_deposit_balance:
 BEGIN
     DECLARE v_old_balance DECIMAL(34, 4);
     DECLARE v_new_balance DECIMAL(34, 4);
@@ -58,7 +58,7 @@ BEGIN
                0                   AS new_balance,
                p_transaction_at    AS transaction_at;
 
-        LEAVE proc_deposit;
+        LEAVE proc_deposit_balance;
     END IF;
 
     SET v_new_balance = v_old_balance + p_amount;

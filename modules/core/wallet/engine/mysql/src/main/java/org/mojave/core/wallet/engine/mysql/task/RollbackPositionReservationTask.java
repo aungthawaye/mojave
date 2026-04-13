@@ -18,7 +18,7 @@ public final class RollbackPositionReservationTask {
 
         try {
             return jdbcTemplate.execute((ConnectionCallback<WalletEngine.PositionHistory>) con -> {
-                try (var stm = con.prepareStatement("CALL sp_rollback_position(?, ?)")) {
+                try (var stm = con.prepareStatement("CALL sp_rollback_position_reservation(?, ?)")) {
 
                     stm.setLong(1, reservationId.getId());
                     stm.setLong(2, nextPositionUpdateId.getId());
