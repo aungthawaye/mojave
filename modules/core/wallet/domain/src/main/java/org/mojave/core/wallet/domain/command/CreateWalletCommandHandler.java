@@ -4,6 +4,7 @@ import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.contract.engine.WalletEngine;
+import org.mojave.core.wallet.contract.exception.WalletTagRequiredException;
 import org.mojave.core.wallet.domain.model.Wallet;
 import org.mojave.core.wallet.domain.repository.WalletRepository;
 import org.slf4j.Logger;
@@ -38,6 +39,12 @@ public class CreateWalletCommandHandler implements CreateWalletCommand {
     public Output execute(final Input input) {
 
         LOGGER.info("CreateWalletCommand : input: ({})", ObjectLogger.log(input));
+
+        if (input.tag() == null || input.tag().isBlank()) {
+
+            LOGGER.info("CreateWalletCommand : tag is required");
+            throw new WalletTagRequiredException();
+        }
 
         final var spec = WalletRepository.Filters
                              .withOwnerId(input.walletOwnerId())

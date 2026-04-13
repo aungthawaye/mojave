@@ -13,17 +13,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.scheme.rule.converter.identifier.wallet.WalletIdJavaType;
-import org.mojave.scheme.rule.converter.identifier.wallet.WalletOwnerIdJavaType;
-import org.mojave.scheme.rule.enums.Currency;
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.core.wallet.contract.data.WalletData;
+import org.mojave.scheme.rule.converter.identifier.wallet.WalletIdJavaType;
+import org.mojave.scheme.rule.converter.identifier.wallet.WalletOwnerIdJavaType;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -82,20 +82,17 @@ public class Wallet extends JpaEntity<WalletId> implements DataConversion<Wallet
     @Convert(converter = JpaInstantConverter.class)
     protected Instant createdAt;
 
-    public Wallet(final WalletOwnerId walletOwnerId,
-                  final Currency currency,
-                  final String tag,
+    public Wallet(final WalletOwnerId walletOwnerId, final Currency currency, final String tag,
                   final String name) {
 
         Objects.requireNonNull(walletOwnerId);
         Objects.requireNonNull(currency);
-        Objects.requireNonNull(tag);
         Objects.requireNonNull(name);
 
         this.id = new WalletId(Snowflake.get().nextId());
         this.walletOwnerId = walletOwnerId;
         this.currency = currency;
-        this.tag = tag;
+        this.tag = tag == null || tag.isBlank() ? DEFAULT_TAG : tag;
         this.name = name;
         this.createdAt = Instant.now();
 
