@@ -73,7 +73,7 @@ public class SspCommandController extends BaseApiController {
         this.terminateSspCommand = terminateSspCommand;
     }
 
-    @PostMapping("/participant/ssps/activate-ssp")
+    @PostMapping("/participant/ssp/activate-ssp")
     public ResponseEntity<ActivateSspCommand.Output> activateSsp(
         @RequestBody final ActivateSspCommand.Input input) {
 
@@ -84,7 +84,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.activateSspCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/activate-ssp-currency")
+    @PostMapping("/participant/ssp/activate-ssp-currency")
     public ResponseEntity<ActivateSspCurrencyCommand.Output> activateSspCurrency(
         @RequestBody final ActivateSspCurrencyCommand.Input input) {
 
@@ -95,7 +95,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.activateSspCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/add-ssp-currency")
+    @PostMapping("/participant/ssp/add-ssp-currency")
     public ResponseEntity<AddSspCurrencyCommand.Output> addSspCurrency(
         @RequestBody final AddSspCurrencyCommand.Input input) {
 
@@ -106,7 +106,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.addSspCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/change-ssp-endpoint")
+    @PostMapping("/participant/ssp/change-ssp-endpoint")
     public ResponseEntity<ChangeSspEndpointCommand.Output> changeSspEndpoint(
         @RequestBody final ChangeSspEndpointCommand.Input input) {
 
@@ -117,7 +117,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.changeSspEndpointCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/change-ssp-name")
+    @PostMapping("/participant/ssp/change-ssp-name")
     public ResponseEntity<ChangeSspNameCommand.Output> changeSspName(
         @RequestBody final ChangeSspNameCommand.Input input) {
 
@@ -128,7 +128,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.changeSspNameCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/create-ssp")
+    @PostMapping("/participant/ssp/create-ssp")
     public ResponseEntity<CreateSspCommand.Output> createSsp(
         @RequestBody final CreateSspCommand.Input input) {
 
@@ -139,7 +139,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.createSspCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/deactivate-ssp")
+    @PostMapping("/participant/ssp/deactivate-ssp")
     public ResponseEntity<DeactivateSspCommand.Output> deactivateSsp(
         @RequestBody final DeactivateSspCommand.Input input) {
 
@@ -150,7 +150,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.deactivateSspCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/deactivate-ssp-currency")
+    @PostMapping("/participant/ssp/deactivate-ssp-currency")
     public ResponseEntity<DeactivateSspCurrencyCommand.Output> deactivateSspCurrency(
         @RequestBody final DeactivateSspCurrencyCommand.Input input) {
 
@@ -161,7 +161,7 @@ public class SspCommandController extends BaseApiController {
             () -> this.deactivateSspCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/ssps/terminate-ssp")
+    @PostMapping("/participant/ssp/terminate-ssp")
     public ResponseEntity<TerminateSspCommand.Output> terminateSsp(
         @RequestBody final TerminateSspCommand.Input input) {
 

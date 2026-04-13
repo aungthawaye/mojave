@@ -22,7 +22,7 @@ package org.mojave.core.wallet.contract.command.position;
 
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
 
 public interface FulfilPositionsCommand {
@@ -34,9 +34,7 @@ public interface FulfilPositionsCommand {
     Output execute(Input input) throws FailedToFulfilPositionsException;
 
     record Input(PositionUpdateId reservationId,
-                 WalletOwnerId payeeWalletOwnerId,
-                 Currency currency,
-                 String tag,
+                 WalletId payeeWalletId,
                  String description) { }
 
     record Output(PositionUpdateId payerCommitId, PositionUpdateId payeeCommitId) { }

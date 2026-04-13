@@ -29,7 +29,7 @@ public class LedgerCommandController {
         this.postAccountingFlowCommand = postAccountingFlowCommand;
     }
 
-    @PostMapping("/accounting/ledgers/post-accounting-flow")
+    @PostMapping("/accounting/ledger/post-accounting-flow")
     public ResponseEntity<PostAccountingFlowCommand.Output> postAccountingFlow(
         @RequestBody final PostAccountingFlowCommand.Input input) throws
                                                                  InsufficientBalanceInAccountException,

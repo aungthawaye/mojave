@@ -3,10 +3,9 @@ package org.mojave.core.wallet.intercom.requestor.command.balance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.BalanceUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.core.wallet.contract.command.balance.DepositBalanceCommand;
 import org.mojave.core.wallet.contract.command.balance.ReverseBalanceWithdrawCommand;
 import org.mojave.core.wallet.contract.command.balance.WithdrawBalanceCommand;
@@ -48,9 +47,7 @@ public class BalanceCommandsRequestorIT {
             WalletNotFoundException.class,
             () -> this.depositBalanceCommand.execute(
                 new DepositBalanceCommand.Input(
-                    new WalletOwnerId(900101L),
-                    Currency.USD,
-                    "P2P_TRANSFER",
+                    new WalletId(90010101L),
                     new BigDecimal("15.00"),
                     new TransactionId(90010101L),
                     transactionAt,
@@ -60,9 +57,7 @@ public class BalanceCommandsRequestorIT {
             WalletNotFoundException.class,
             () -> this.withdrawBalanceCommand.execute(
                 new WithdrawBalanceCommand.Input(
-                    new WalletOwnerId(900102L),
-                    Currency.USD,
-                    "P2P_TRANSFER",
+                    new WalletId(90010201L),
                     new BigDecimal("5.00"),
                     new TransactionId(90010201L),
                     transactionAt,

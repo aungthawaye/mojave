@@ -49,7 +49,7 @@ public class HubCommandController extends BaseApiController {
         this.deactivateHubCurrencyCommand = deactivateHubCurrencyCommand;
     }
 
-    @PostMapping("/participant/hubs/activate-hub-currency")
+    @PostMapping("/participant/hub/activate-hub-currency")
     public ResponseEntity<ActivateHubCurrencyCommand.Output> activateHubCurrency(
         @RequestBody final ActivateHubCurrencyCommand.Input input) {
 
@@ -60,7 +60,7 @@ public class HubCommandController extends BaseApiController {
             () -> this.activateHubCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/hubs/add-hub-currency")
+    @PostMapping("/participant/hub/add-hub-currency")
     public ResponseEntity<AddHubCurrencyCommand.Output> addHubCurrency(
         @RequestBody final AddHubCurrencyCommand.Input input) {
 
@@ -71,7 +71,7 @@ public class HubCommandController extends BaseApiController {
             () -> this.addHubCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/hubs/change-hub-name")
+    @PostMapping("/participant/hub/change-hub-name")
     public ResponseEntity<ChangeHubNameCommand.Output> changeHubName(
         @RequestBody final ChangeHubNameCommand.Input input) {
 
@@ -82,7 +82,7 @@ public class HubCommandController extends BaseApiController {
             () -> this.changeHubNameCommand.execute(input));
     }
 
-    @PostMapping("/participant/hubs/create-hub")
+    @PostMapping("/participant/hub/create-hub")
     public ResponseEntity<CreateHubCommand.Output> createHub(
         @RequestBody final CreateHubCommand.Input input) {
 
@@ -93,7 +93,7 @@ public class HubCommandController extends BaseApiController {
             () -> this.createHubCommand.execute(input));
     }
 
-    @PostMapping("/participant/hubs/deactivate-hub-currency")
+    @PostMapping("/participant/hub/deactivate-hub-currency")
     public ResponseEntity<DeactivateHubCurrencyCommand.Output> deactivateHubCurrency(
         @RequestBody final DeactivateHubCurrencyCommand.Input input) {
 

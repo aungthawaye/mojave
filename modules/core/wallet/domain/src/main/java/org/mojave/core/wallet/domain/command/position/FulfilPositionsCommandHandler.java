@@ -21,7 +21,6 @@
 package org.mojave.core.wallet.domain.command.position;
 
 import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
@@ -56,25 +55,22 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
     }
 
     @Override
-    public Output execute(Input input) throws FailedToFulfilPositionsException {
+    public Output execute(final Input input) throws FailedToFulfilPositionsException {
 
         LOGGER.info("FulfilPositionsCommand : input: ({})", ObjectLogger.log(input));
 
-        final var payeeWallet = this.walletCache.get(
-            input.payeeWalletOwnerId(), input.currency(), input.tag());
+        final var payeeWallet = this.walletCache.get(input.payeeWalletId());
 
         if (payeeWallet == null) {
-
-            throw new WalletNotFoundException(
-                input.payeeWalletOwnerId(), input.currency(), input.tag());
+            throw new WalletNotFoundException(input.payeeWalletId());
         }
 
-        final var payeeWalletId = new WalletId(payeeWallet.walletId().getId());
+        final var payeeWalletId = input.payeeWalletId();
         final var reservationCommitId = new PositionUpdateId(Snowflake.get().nextId());
         final var payeePositionCommitId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
-            final var result = this.walletEngine.fulfil(
+            final var result = this.walletEngine.fulfilPositions(
                 input.reservationId(), reservationCommitId, payeePositionCommitId, payeeWalletId,
                 input.description());
 

@@ -30,7 +30,7 @@ public class WalletQueryController extends BaseApiController {
         this.walletQuery = walletQuery;
     }
 
-    @GetMapping("/wallet/wallets/get-by-id")
+    @GetMapping("/wallet/get-by-id")
     public ResponseEntity<WalletData> getById(@RequestParam final WalletId walletId) {
 
         return this.respond(
@@ -40,7 +40,7 @@ public class WalletQueryController extends BaseApiController {
             () -> this.walletQuery.get(walletId));
     }
 
-    @GetMapping("/wallet/wallets/get-by-owner-id-currency-tag")
+    @GetMapping("/wallet/get-by-owner-id-currency-tag")
     public ResponseEntity<WalletData> getByOwnerIdCurrencyTag(@RequestParam final WalletOwnerId ownerId,
                                                               @RequestParam final Currency currency,
                                                               @RequestParam final String tag) {
@@ -52,7 +52,7 @@ public class WalletQueryController extends BaseApiController {
             () -> this.walletQuery.get(ownerId, currency, tag));
     }
 
-    @GetMapping("/wallet/wallets/get-by-owner-id")
+    @GetMapping("/wallet/get-by-owner-id")
     public ResponseEntity<List<WalletData>> getByOwnerId(@RequestParam final WalletOwnerId ownerId) {
 
         return this.respond(
@@ -62,7 +62,7 @@ public class WalletQueryController extends BaseApiController {
             () -> this.walletQuery.get(ownerId));
     }
 
-    @GetMapping("/wallet/wallets/get-by-owner-id-currency")
+    @GetMapping("/wallet/get-by-owner-id-currency")
     public ResponseEntity<List<WalletData>> getByOwnerIdCurrency(
         @RequestParam final WalletOwnerId ownerId,
         @RequestParam final Currency currency) {
@@ -74,7 +74,7 @@ public class WalletQueryController extends BaseApiController {
             () -> this.walletQuery.get(ownerId, currency));
     }
 
-    @GetMapping("/wallet/wallets/get-all")
+    @GetMapping("/wallet/get-all")
     public ResponseEntity<List<WalletData>> getAll() {
 
         return this.respond(

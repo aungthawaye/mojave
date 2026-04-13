@@ -79,7 +79,7 @@ BEGIN
                p_amount                     AS amount,
                v_old_ndc                    AS old_ndc,
                v_new_ndc                    AS new_ndc,
-               v_balance                    AS balance,
+               v_balance                    AS old_balance,
                p_transaction_at             AS transaction_at;
 
         LEAVE proc_increase_ndc;

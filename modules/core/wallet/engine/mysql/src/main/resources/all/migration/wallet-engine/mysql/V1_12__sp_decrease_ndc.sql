@@ -83,8 +83,8 @@ BEGIN
                p_amount                        AS amount,
                v_old_ndc                       AS old_ndc,
                v_new_ndc                       AS new_ndc,
-               v_position                      AS position,
-               v_reserved                      AS reserved,
+               v_position                      AS old_position,
+               v_reserved                      AS old_reserved,
                p_transaction_at                AS transaction_at;
 
         LEAVE proc_decrease_ndc;

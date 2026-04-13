@@ -24,6 +24,7 @@ import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
+import org.mojave.core.wallet.contract.query.WalletQuery;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
@@ -41,51 +42,58 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
     private static final Logger LOGGER = LoggerFactory.getLogger(
         ReservePayerPositionStepHandler.class);
 
+    private final WalletQuery walletQuery;
+
     private final ReservePositionCommand reservePositionCommand;
 
-    public ReservePayerPositionStepHandler(ReservePositionCommand reservePositionCommand) {
+    public ReservePayerPositionStepHandler(final WalletQuery walletQuery,
+                                           final ReservePositionCommand reservePositionCommand) {
 
+        Objects.requireNonNull(walletQuery);
         Objects.requireNonNull(reservePositionCommand);
 
+        this.walletQuery = walletQuery;
         this.reservePositionCommand = reservePositionCommand;
     }
 
     @Override
-    public ReservePayerPositionStep.Output execute(ReservePayerPositionStep.Input input) throws
-                                                                                         FspiopException,
-                                                                                         NoPositionUpdateForTransactionException,
-                                                                                         PositionLimitExceededException {
+    public ReservePayerPositionStep.Output execute(final ReservePayerPositionStep.Input input) throws
+                                                                                               FspiopException,
+                                                                                               NoPositionUpdateForTransactionException,
+                                                                                               PositionLimitExceededException {
 
         MDC.put("REQ_ID", input.udfTransferId().getId());
 
-        var startAt = System.nanoTime();
+        final var startAt = System.nanoTime();
 
         LOGGER.info("ReservePayerPositionStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
-            var payerFsp = input.payerFsp();
-            var currency = input.currency();
+            final var payerFsp = input.payerFsp();
+            final var currency = input.currency();
 
-            var transferAmount = input.transferAmount();
+            final var transferAmount = input.transferAmount();
 
-            var transactionId = input.transactionId();
-            var transactionAt = input.transactionAt();
+            final var transactionId = input.transactionId();
+            final var transactionAt = input.transactionAt();
 
-            var walletOwnerId = new WalletOwnerId(payerFsp.fspId().getId());
-            var description = "-";
+            final var walletOwnerId = new WalletOwnerId(payerFsp.fspId().getId());
+            final var wallet = this.walletQuery.get(
+                walletOwnerId, Currency.valueOf(currency.toString()), "P2P_TRANSFER");
+            final var description = "-";
 
-            var reservePayerPositionInput = new ReservePositionCommand.Input(
-                walletOwnerId, Currency.valueOf(currency.toString()), "P2P_TRANSFER",
+            final var reservePayerPositionInput = new ReservePositionCommand.Input(
+                wallet.walletId(),
                 transferAmount, transactionId, transactionAt, description);
 
-            var reservePositionOutput = this.reservePositionCommand.execute(
+            final var reservePositionOutput = this.reservePositionCommand.execute(
                 reservePayerPositionInput);
 
-            var output = new ReservePayerPositionStep.Output(
+            final var output = new ReservePayerPositionStep.Output(
                 reservePositionOutput.positionUpdateId());
 
-            var endAt = System.nanoTime();
+            final var endAt = System.nanoTime();
             LOGGER.info(
                 "ReservePayerPositionStep : output : ({}) , took : {} ms",
                 ObjectLogger.log(output), (endAt - startAt) / 1_000_000);

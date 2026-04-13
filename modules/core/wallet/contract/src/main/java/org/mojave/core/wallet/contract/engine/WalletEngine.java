@@ -23,71 +23,52 @@ public interface WalletEngine {
     void createWallet(WalletId walletId, Currency currency, int scale, String tag)
         throws WalletIdAlreadyTakenException;
 
-    NdcHistory decreaseNdc(NdcUpdateId ndcUpdateId,
-                           TransactionId transactionId,
-                           Instant transactionAt,
-                           WalletId walletId,
-                           BigDecimal amount,
+    NdcHistory decreaseNdc(NdcUpdateId ndcUpdateId, TransactionId transactionId,
+                           Instant transactionAt, WalletId walletId, BigDecimal amount,
                            String description)
         throws NoBalanceUpdateException, PositionReservedExceedsNdcException;
 
     PositionHistory decreasePosition(PositionUpdateId nextPositionUpdateId,
-                                     TransactionId transactionId,
-                                     Instant transactionAt,
-                                     WalletId walletId,
-                                     BigDecimal amount,
-                                     String description) throws NoPositionUpdateException;
+                                     TransactionId transactionId, Instant transactionAt,
+                                     WalletId walletId, BigDecimal amount, String description)
+        throws NoPositionUpdateException;
 
-    BalanceHistory depositBalance(TransactionId transactionId,
-                                  Instant transactionAt,
-                                  WalletId walletId,
-                                  BigDecimal amount,
-                                  String description,
+    BalanceHistory depositBalance(TransactionId transactionId, Instant transactionAt,
+                                  WalletId walletId, BigDecimal amount, String description,
                                   BalanceUpdateId nextBalanceUpdateId)
         throws WalletEngine.NoBalanceUpdateException;
 
-    FulfilResult fulfil(PositionUpdateId reservationId,
-                        PositionUpdateId reservationCommitId,
-                        PositionUpdateId positionDecrementId,
-                        WalletId payeeWalletId,
-                        String description) throws NoPositionFulfilmentException;
+    PositionFulfilmentResult fulfilPositions(PositionUpdateId reservationId,
+                                             PositionUpdateId reservationCommitId,
+                                             PositionUpdateId positionDecrementId,
+                                             WalletId payeeWalletId, String description)
+        throws NoPositionFulfilmentException;
 
-    NdcHistory increaseNdc(NdcUpdateId ndcUpdateId,
-                           TransactionId transactionId,
-                           Instant transactionAt,
-                           WalletId walletId,
-                           BigDecimal amount,
+    NdcHistory increaseNdc(NdcUpdateId ndcUpdateId, TransactionId transactionId,
+                           Instant transactionAt, WalletId walletId, BigDecimal amount,
                            String description)
         throws NoBalanceUpdateException, BalanceLowerThanNewNdcException;
 
     PositionHistory increasePosition(PositionUpdateId nextPositionUpdateId,
-                                     TransactionId transactionId,
-                                     Instant transactionAt,
-                                     WalletId walletId,
-                                     BigDecimal amount,
-                                     String description)
+                                     TransactionId transactionId, Instant transactionAt,
+                                     WalletId walletId, BigDecimal amount, String description)
         throws NoPositionUpdateException, PositionLimitExceededException;
-
-    BalanceHistory refundBalance(BalanceUpdateId reversalId, BalanceUpdateId nextBalanceUpdateId)
-        throws BalanceReversalFailedException;
 
     PositionHistory reservePosition(PositionUpdateId nextPositionUpdateId,
-                                    TransactionId transactionId,
-                                    Instant transactionAt,
-                                    WalletId walletId,
-                                    BigDecimal amount,
-                                    String description)
+                                    TransactionId transactionId, Instant transactionAt,
+                                    WalletId walletId, BigDecimal amount, String description)
         throws NoPositionUpdateException, PositionLimitExceededException;
+
+    BalanceHistory reverseBalanceWithdraw(BalanceUpdateId reversalId,
+                                          BalanceUpdateId nextBalanceUpdateId)
+        throws BalanceReversalFailedException;
 
     PositionHistory rollbackPositionReservation(PositionUpdateId nextPositionUpdateId,
                                                 PositionUpdateId reservationId)
         throws PositionReservationRollbackFailedException;
 
-    BalanceHistory withdrawBalance(BalanceUpdateId nextBalanceUpdateId,
-                                   TransactionId transactionId,
-                                   Instant transactionAt,
-                                   WalletId walletId,
-                                   BigDecimal amount,
+    BalanceHistory withdrawBalance(BalanceUpdateId nextBalanceUpdateId, TransactionId transactionId,
+                                   Instant transactionAt, WalletId walletId, BigDecimal amount,
                                    String description)
         throws NoBalanceUpdateException, InsufficientBalanceException;
 
@@ -143,10 +124,8 @@ public interface WalletEngine {
 
         private final BigDecimal oldBalance;
 
-        public InsufficientBalanceException(TransactionId transactionId,
-                                            WalletId walletId,
-                                            BigDecimal amount,
-                                            BigDecimal oldBalance) {
+        public InsufficientBalanceException(TransactionId transactionId, WalletId walletId,
+                                            BigDecimal amount, BigDecimal oldBalance) {
 
             super("Insufficient balance in walletId: " + walletId + " amount: " + amount +
                       " transactionId: " + transactionId + " oldBalance: " +
@@ -189,19 +168,16 @@ public interface WalletEngine {
 
         private final TransactionId transactionId;
 
-        public PositionReservedExceedsNdcException(final WalletId walletId,
-                                                   final BigDecimal amount,
+        public PositionReservedExceedsNdcException(final WalletId walletId, final BigDecimal amount,
                                                    final BigDecimal position,
                                                    final BigDecimal reserved,
                                                    final BigDecimal newNdc,
                                                    final TransactionId transactionId) {
 
-            super("Position plus reserved exceeds new NDC for walletId: " + walletId +
-                      ", amount: " + amount +
-                      ", position: " + position +
-                      ", reserved: " + reserved +
-                      ", newNdc: " + newNdc +
-                      ", transactionId: " + transactionId);
+            super(
+                "Position plus reserved exceeds new NDC for walletId: " + walletId + ", amount: " +
+                    amount + ", position: " + position + ", reserved: " + reserved + ", newNdc: " +
+                    newNdc + ", transactionId: " + transactionId);
 
             this.walletId = walletId;
             this.amount = amount;
@@ -226,17 +202,14 @@ public interface WalletEngine {
 
         private final TransactionId transactionId;
 
-        public BalanceLowerThanNewNdcException(final WalletId walletId,
-                                               final BigDecimal amount,
-                                               final BigDecimal balance,
-                                               final BigDecimal newNdc,
+        public BalanceLowerThanNewNdcException(final WalletId walletId, final BigDecimal amount,
+                                               final BigDecimal balance, final BigDecimal newNdc,
                                                final TransactionId transactionId) {
 
-            super("Balance is lower than new NDC for walletId: " + walletId +
-                      ", amount: " + amount +
-                      ", balance: " + balance +
-                      ", newNdc: " + newNdc +
-                      ", transactionId: " + transactionId);
+            super(
+                "Balance is lower than new NDC for walletId: " + walletId + ", amount: " + amount +
+                    ", balance: " + balance + ", newNdc: " + newNdc + ", transactionId: " +
+                    transactionId);
 
             this.walletId = walletId;
             this.amount = amount;
@@ -270,7 +243,8 @@ public interface WalletEngine {
                            BigDecimal netDebitCap,
                            Instant transactionAt) { }
 
-    record FulfilResult(PositionUpdateId payerCommitmentId, PositionUpdateId payeeCommitmentId) { }
+    record PositionFulfilmentResult(PositionUpdateId payerCommitmentId,
+                                    PositionUpdateId payeeCommitmentId) { }
 
     @Getter
     class NoPositionUpdateException extends Exception {
@@ -313,12 +287,9 @@ public interface WalletEngine {
 
         private final TransactionId transactionId;
 
-        public PositionLimitExceededException(WalletId walletId,
-                                              BigDecimal amount,
-                                              BigDecimal oldPosition,
-                                              BigDecimal oldReserved,
-                                              BigDecimal netDebitCap,
-                                              TransactionId transactionId) {
+        public PositionLimitExceededException(WalletId walletId, BigDecimal amount,
+                                              BigDecimal oldPosition, BigDecimal oldReserved,
+                                              BigDecimal netDebitCap, TransactionId transactionId) {
 
             super("Position limit exceeded for walletId: " + walletId + ", amount: " + amount +
                       ", oldPosition: " + oldPosition + ", oldReserved: " + oldReserved +

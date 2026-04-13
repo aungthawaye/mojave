@@ -28,7 +28,7 @@ public class FlowDefinitionQueryController extends BaseApiController {
         this.flowDefinitionQuery = flowDefinitionQuery;
     }
 
-    @GetMapping("/accounting/definitions/get-by-id")
+    @GetMapping("/accounting/definition/get-by-id")
     public ResponseEntity<FlowDefinitionData> getById(
         @RequestParam final FlowDefinitionId flowDefinitionId) {
 
@@ -39,7 +39,7 @@ public class FlowDefinitionQueryController extends BaseApiController {
             () -> this.flowDefinitionQuery.get(flowDefinitionId));
     }
 
-    @GetMapping("/accounting/definitions/get-all")
+    @GetMapping("/accounting/definition/get-all")
     public ResponseEntity<List<FlowDefinitionData>> getAll() {
 
         return this.respond(
@@ -49,7 +49,7 @@ public class FlowDefinitionQueryController extends BaseApiController {
             this.flowDefinitionQuery::getAll);
     }
 
-    @GetMapping("/accounting/definitions/get-by-name-contains")
+    @GetMapping("/accounting/definition/get-by-name-contains")
     public ResponseEntity<List<FlowDefinitionData>> getByNameContains(
         @RequestParam final String name) {
 

@@ -55,7 +55,7 @@ public class ReverseBalanceWithdrawCommandHandler implements ReverseBalanceWithd
 
         try {
 
-            final var history = this.walletEngine.refundBalance(
+            final var history = this.walletEngine.reverseBalanceWithdraw(
                 input.withdrawId(), new BalanceUpdateId(Snowflake.get().nextId()));
 
             final var walletId = new WalletId(history.walletId().getId());

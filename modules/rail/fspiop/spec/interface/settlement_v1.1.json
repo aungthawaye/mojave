@@ -59,37 +59,37 @@
           "200": {
             "description": "A settlement window's data returned.",
             "schema": {
-              "$ref": "#/definitions/SettlementWindow"
+              "$ref": "#/definition/SettlementWindow"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -117,7 +117,7 @@
             "name": "payload",
             "description": "A JSON object containing settlement window closure info.",
             "schema": {
-              "$ref": "#/definitions/SettlementWindowClosurePayload"
+              "$ref": "#/definition/SettlementWindowClosurePayload"
             },
             "required": true
           }
@@ -130,37 +130,37 @@
           "200": {
             "description": "Settlement window closed and new window opened.",
             "schema": {
-              "$ref": "#/definitions/SettlementWindow"
+              "$ref": "#/definition/SettlementWindow"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -229,37 +229,37 @@
           "200": {
             "description": "Settlement window(s) returned by the filtering parameters.",
             "schema": {
-              "$ref": "#/definitions/SettlementWindows"
+              "$ref": "#/definition/SettlementWindows"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -360,37 +360,37 @@
           "200": {
             "description": "Settlement window(s) returned by the filtering parameters.",
             "schema": {
-              "$ref": "#/definitions/Settlements"
+              "$ref": "#/definition/Settlements"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -412,7 +412,7 @@
             "name": "payload",
             "description": "A JSON object containing settlement windows to be included.",
             "schema": {
-              "$ref": "#/definitions/SettlementEventPayload"
+              "$ref": "#/definition/SettlementEventPayload"
             },
             "required": true
           }
@@ -425,37 +425,37 @@
           "200": {
             "description": "Created settlement with all windows and accounts.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -487,37 +487,37 @@
           "200": {
             "description": "Settlement successfully returned by the filtering/Query parameters.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -546,7 +546,7 @@
             "name": "payload",
             "description": "A JSON object containing settlement update info.",
             "schema": {
-              "$ref": "#/definitions/SettlementUpdateBySettlementIdPayload"
+              "$ref": "#/definition/SettlementUpdateBySettlementIdPayload"
             },
             "required": true
           }
@@ -559,37 +559,37 @@
           "200": {
             "description": "Settlements updated.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -628,37 +628,37 @@
           "200": {
             "description": "Settlement, settlement windows and settlement accounts returned by the filtering parameters.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -694,7 +694,7 @@
             "name": "payload",
             "description": "A JSON object containing settlement update info.",
             "schema": {
-              "$ref": "#/definitions/SettlementUpdateBySettlementParticipantPayload"
+              "$ref": "#/definition/SettlementUpdateBySettlementParticipantPayload"
             },
             "required": true
           }
@@ -707,43 +707,43 @@
           "200": {
             "description": "Settlements updated.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
       }
     },
-    "/settlements/{sid}/participants/{pid}/accounts/{aid}": {
+    "/settlements/{sid}/participants/{pid}/account/{aid}": {
       "get": {
         "produces": [
           "application/json"
@@ -783,37 +783,37 @@
           "200": {
             "description": "Settlement, settlement windows and settlement accounts returned by the filtering parameters.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -856,7 +856,7 @@
             "name": "payload",
             "description": "A JSON object containing settlement update info.",
             "schema": {
-              "$ref": "#/definitions/SettlementUpdateBySettlementParticipantAccount"
+              "$ref": "#/definition/SettlementUpdateBySettlementParticipantAccount"
             },
             "required": true
           }
@@ -869,37 +869,37 @@
           "200": {
             "description": "Settlements updated.",
             "schema": {
-              "$ref": "#/definitions/Settlement"
+              "$ref": "#/definition/Settlement"
             }
           },
           "400": {
             "description": "Bad request.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "401": {
             "description": "Authorisation information is missing or invalid.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "404": {
             "description": "No data found.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "415": {
             "description": "Unsupported Media Type.",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           },
           "default": {
             "description": "Unexpected error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definition/Error"
             }
           }
         }
@@ -923,7 +923,7 @@
           "example": "PENDING_SETTLEMENT"
         },
         "netSettlementAmount": {
-          "$ref": "#/definitions/netSettlementAmount"
+          "$ref": "#/definition/netSettlementAmount"
         }
       }
     },
@@ -946,7 +946,7 @@
         "participants": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SettlementUpdateBySettlementIDOuterPayload"
+            "$ref": "#/definition/SettlementUpdateBySettlementIDOuterPayload"
           }
         }
       }
@@ -961,7 +961,7 @@
         "accounts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SettlementUpdateBySettlementIdInnerPayload"
+            "$ref": "#/definition/SettlementUpdateBySettlementIdInnerPayload"
           }
         }
       }
@@ -1000,7 +1000,7 @@
         "accounts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SettlementUpdateBySettlementIdInnerPayload"
+            "$ref": "#/definition/SettlementUpdateBySettlementIdInnerPayload"
           }
         }
       }
@@ -1021,7 +1021,7 @@
           "example": "PENDING_SETTLEMENT"
         },
         "netSettlementAmount": {
-          "$ref": "#/definitions/netSettlementAmount"
+          "$ref": "#/definition/netSettlementAmount"
         }
       }
     },
@@ -1087,7 +1087,7 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": {
-            "$ref": "#/definitions/SettlementWindowId"
+            "$ref": "#/definition/SettlementWindowId"
           }
         }
       },
@@ -1129,7 +1129,7 @@
         "content": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SettlementWindowContent"
+            "$ref": "#/definition/SettlementWindowContent"
           }
         }
       },
@@ -1175,7 +1175,7 @@
     "SettlementWindows": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/SettlementWindow"
+        "$ref": "#/definition/SettlementWindow"
       }
     },
     "netSettlementAmount": {
@@ -1198,7 +1198,7 @@
         "accounts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Accounts"
+            "$ref": "#/definition/Accounts"
           }
         }
       }
@@ -1206,7 +1206,7 @@
     "Settlements": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/Settlement"
+        "$ref": "#/definition/Settlement"
       }
     },
     "Settlement": {
@@ -1221,13 +1221,13 @@
         "settlementWindows": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/SettlementWindows"
+            "$ref": "#/definition/SettlementWindows"
           }
         },
         "participants": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Participant"
+            "$ref": "#/definition/Participant"
           }
         }
       }
@@ -1252,7 +1252,7 @@
                 "extension": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/Extension"
+                    "$ref": "#/definition/Extension"
                   }
                 }
               }

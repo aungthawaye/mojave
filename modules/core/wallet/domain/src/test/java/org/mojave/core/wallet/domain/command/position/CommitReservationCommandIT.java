@@ -15,7 +15,6 @@ import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservat
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +76,8 @@ public class CommitReservationCommandIT extends BaseIT {
 
         final var reservation = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(402L), Currency.USD, "P2P_TRANSFER", new BigDecimal("10.00"),
+                walletId,
+                new BigDecimal("10.00"),
                 new TransactionId(40201L), TRANSACTION_AT, "Reserve before commit"));
 
         final var output = this.commitReservationCommand.execute(

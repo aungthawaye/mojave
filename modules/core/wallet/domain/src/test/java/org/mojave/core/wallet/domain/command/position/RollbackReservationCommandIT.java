@@ -15,7 +15,6 @@ import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReservationException;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +76,8 @@ public class RollbackReservationCommandIT extends BaseIT {
 
         final var reservation = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(418L), Currency.USD, "P2P_TRANSFER", new BigDecimal("3.00"),
+                walletId,
+                new BigDecimal("3.00"),
                 new TransactionId(41801L), TRANSACTION_AT, "Reserve before rollback"));
 
         final var output = this.rollbackReservationCommand.execute(

@@ -115,7 +115,7 @@ public class FspCommandController extends BaseApiController {
         this.terminateFspCommand = terminateFspCommand;
     }
 
-    @PostMapping("/participant/fsps/activate-endpoint")
+    @PostMapping("/participant/fsp/activate-endpoint")
     public ResponseEntity<ActivateEndpointCommand.Output> activateEndpoint(
         @RequestBody final ActivateEndpointCommand.Input input) {
 
@@ -126,7 +126,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.activateEndpointCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/activate-fsp")
+    @PostMapping("/participant/fsp/activate-fsp")
     public ResponseEntity<ActivateFspCommand.Output> activateFsp(
         @RequestBody final ActivateFspCommand.Input input) {
 
@@ -137,7 +137,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.activateFspCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/activate-fsp-currency")
+    @PostMapping("/participant/fsp/activate-fsp-currency")
     public ResponseEntity<ActivateFspCurrencyCommand.Output> activateFspCurrency(
         @RequestBody final ActivateFspCurrencyCommand.Input input) {
 
@@ -148,7 +148,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.activateFspCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/add-endpoint")
+    @PostMapping("/participant/fsp/add-endpoint")
     public ResponseEntity<AddEndpointCommand.Output> addEndpoint(
         @RequestBody final AddEndpointCommand.Input input) {
 
@@ -159,7 +159,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.addEndpointCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/add-fsp-currency")
+    @PostMapping("/participant/fsp/add-fsp-currency")
     public ResponseEntity<AddFspCurrencyCommand.Output> addFspCurrency(
         @RequestBody final AddFspCurrencyCommand.Input input) {
 
@@ -170,7 +170,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.addFspCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/change-fsp-endpoint")
+    @PostMapping("/participant/fsp/change-fsp-endpoint")
     public ResponseEntity<ChangeFspEndpointCommand.Output> changeFspEndpoint(
         @RequestBody final ChangeFspEndpointCommand.Input input) {
 
@@ -181,7 +181,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.changeFspEndpointCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/change-fsp-name")
+    @PostMapping("/participant/fsp/change-fsp-name")
     public ResponseEntity<ChangeFspNameCommand.Output> changeFspName(
         @RequestBody final ChangeFspNameCommand.Input input) {
 
@@ -192,7 +192,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.changeFspNameCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/create-fsp")
+    @PostMapping("/participant/fsp/create-fsp")
     public ResponseEntity<CreateFspCommand.Output> createFsp(
         @RequestBody final CreateFspCommand.Input input) {
 
@@ -214,7 +214,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.createFspGroupCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/deactivate-endpoint")
+    @PostMapping("/participant/fsp/deactivate-endpoint")
     public ResponseEntity<DeactivateEndpointCommand.Output> deactivateEndpoint(
         @RequestBody final DeactivateEndpointCommand.Input input) {
 
@@ -225,7 +225,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.deactivateEndpointCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/deactivate-fsp")
+    @PostMapping("/participant/fsp/deactivate-fsp")
     public ResponseEntity<DeactivateFspCommand.Output> deactivateFsp(
         @RequestBody final DeactivateFspCommand.Input input) {
 
@@ -236,7 +236,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.deactivateFspCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/deactivate-fsp-currency")
+    @PostMapping("/participant/fsp/deactivate-fsp-currency")
     public ResponseEntity<DeactivateFspCurrencyCommand.Output> deactivateFspCurrency(
         @RequestBody final DeactivateFspCurrencyCommand.Input input) {
 
@@ -280,7 +280,7 @@ public class FspCommandController extends BaseApiController {
             () -> this.removeFspGroupCommand.execute(input));
     }
 
-    @PostMapping("/participant/fsps/terminate-fsp")
+    @PostMapping("/participant/fsp/terminate-fsp")
     public ResponseEntity<TerminateFspCommand.Output> terminateFsp(
         @RequestBody final TerminateFspCommand.Input input) {
 

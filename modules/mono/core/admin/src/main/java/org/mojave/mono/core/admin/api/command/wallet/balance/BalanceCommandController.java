@@ -39,7 +39,7 @@ public class BalanceCommandController {
         this.withdrawBalanceCommand = withdrawBalanceCommand;
     }
 
-    @PostMapping("/wallet/balances/deposit-balance")
+    @PostMapping("/wallet/balance/deposit-balance")
     public ResponseEntity<DepositBalanceCommand.Output> depositBalance(
         @RequestBody final DepositBalanceCommand.Input input)
         throws NoBalanceUpdateForTransactionException {
@@ -53,7 +53,7 @@ public class BalanceCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/balances/reverse-balance-withdraw")
+    @PostMapping("/wallet/balance/reverse-balance-withdraw")
     public ResponseEntity<ReverseBalanceWithdrawCommand.Output> reverseBalanceWithdraw(
         @RequestBody final ReverseBalanceWithdrawCommand.Input input)
         throws ReversalFailedInWalletException {
@@ -67,11 +67,10 @@ public class BalanceCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/balances/withdraw-balance")
+    @PostMapping("/wallet/balance/withdraw-balance")
     public ResponseEntity<WithdrawBalanceCommand.Output> withdrawBalance(
-        @RequestBody final WithdrawBalanceCommand.Input input) throws
-                                                              NoBalanceUpdateForTransactionException,
-                                                              InsufficientBalanceException {
+        @RequestBody final WithdrawBalanceCommand.Input input)
+        throws NoBalanceUpdateForTransactionException, InsufficientBalanceException {
 
         LOGGER.info("WithdrawBalanceCommand: input ({})", input);
 

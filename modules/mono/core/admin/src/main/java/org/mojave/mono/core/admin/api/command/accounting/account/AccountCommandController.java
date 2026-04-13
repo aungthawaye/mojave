@@ -55,7 +55,7 @@ public class AccountCommandController extends BaseApiController {
         this.terminateAccountCommand = terminateAccountCommand;
     }
 
-    @PostMapping("/accounting/accounts/activate-account")
+    @PostMapping("/accounting/account/activate-account")
     public ResponseEntity<ActivateAccountCommand.Output> activateAccount(
         @RequestBody final ActivateAccountCommand.Input input) {
 
@@ -66,7 +66,7 @@ public class AccountCommandController extends BaseApiController {
             () -> this.activateAccountCommand.execute(input));
     }
 
-    @PostMapping("/accounting/accounts/change-account-properties")
+    @PostMapping("/accounting/account/change-account-properties")
     public ResponseEntity<ChangeAccountPropertiesCommand.Output> changeAccountProperties(
         @RequestBody final ChangeAccountPropertiesCommand.Input input) {
 
@@ -77,7 +77,7 @@ public class AccountCommandController extends BaseApiController {
             () -> this.changeAccountPropertiesCommand.execute(input));
     }
 
-    @PostMapping("/accounting/accounts/create-account-by-category")
+    @PostMapping("/accounting/account/create-account-by-category")
     public ResponseEntity<CreateAccountByCategoryCommand.Output> createAccountByCategory(
         @RequestBody final CreateAccountByCategoryCommand.Input input) {
 
@@ -88,7 +88,7 @@ public class AccountCommandController extends BaseApiController {
             () -> this.createAccountByCategoryCommand.execute(input));
     }
 
-    @PostMapping("/accounting/accounts/create-account")
+    @PostMapping("/accounting/account/create-account")
     public ResponseEntity<CreateAccountCommand.Output> createAccount(
         @RequestBody final CreateAccountCommand.Input input) {
 
@@ -99,7 +99,7 @@ public class AccountCommandController extends BaseApiController {
             () -> this.createAccountCommand.execute(input));
     }
 
-    @PostMapping("/accounting/accounts/deactivate-account")
+    @PostMapping("/accounting/account/deactivate-account")
     public ResponseEntity<DeactivateAccountCommand.Output> deactivateAccount(
         @RequestBody final DeactivateAccountCommand.Input input) {
 
@@ -110,7 +110,7 @@ public class AccountCommandController extends BaseApiController {
             () -> this.deactivateAccountCommand.execute(input));
     }
 
-    @PostMapping("/accounting/accounts/terminate-account")
+    @PostMapping("/accounting/account/terminate-account")
     public ResponseEntity<TerminateAccountCommand.Output> terminateAccount(
         @RequestBody final TerminateAccountCommand.Input input) {
 

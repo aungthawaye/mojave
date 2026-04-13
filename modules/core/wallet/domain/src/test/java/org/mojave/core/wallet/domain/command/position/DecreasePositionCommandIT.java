@@ -3,11 +3,10 @@ package org.mojave.core.wallet.domain.command.position;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.enums.wallet.PositionAction;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.contract.command.position.DecreasePositionCommand;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
@@ -47,12 +46,11 @@ public class DecreasePositionCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.decreasePositionCommand.execute(
                 new DecreasePositionCommand.Input(
-                    new WalletOwnerId(403L), Currency.USD, "P2P_TRANSFER", new BigDecimal("3.00"),
+                    new WalletId(40301L),
+                    new BigDecimal("3.00"),
                     new TransactionId(40301L), TRANSACTION_AT, "Decrease missing position")));
 
-        assertEquals(new WalletOwnerId(403L), exception.getWalletOwnerId());
-        assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals("P2P_TRANSFER", exception.getTag());
+        assertEquals(new WalletId(40301L), exception.getWalletId());
     }
 
     @Test
@@ -67,7 +65,8 @@ public class DecreasePositionCommandIT extends BaseIT {
 
         final var transactionId = new TransactionId(40401L);
         final var input = new DecreasePositionCommand.Input(
-            new WalletOwnerId(404L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.00"),
+            walletId,
+            new BigDecimal("4.00"),
             transactionId, TRANSACTION_AT, "Decrease without update");
 
         this.decreasePositionCommand.execute(input);
@@ -92,7 +91,8 @@ public class DecreasePositionCommandIT extends BaseIT {
 
         final var output = this.decreasePositionCommand.execute(
             new DecreasePositionCommand.Input(
-                new WalletOwnerId(405L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.00"),
+                walletId,
+                new BigDecimal("4.00"),
                 transactionId, TRANSACTION_AT, "Decrease position"));
 
         assertNotNull(output.positionUpdateId());

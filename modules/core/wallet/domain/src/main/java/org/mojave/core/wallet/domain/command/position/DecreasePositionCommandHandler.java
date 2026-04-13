@@ -20,8 +20,8 @@
 
 package org.mojave.core.wallet.domain.command.position;
 
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.DecreasePositionCommand;
@@ -60,13 +60,11 @@ public class DecreasePositionCommandHandler implements DecreasePositionCommand {
 
         LOGGER.info("DecreasePositionCommand : input: ({})", ObjectLogger.log(input));
 
-        final var wallet = this.walletCache.get(
-            input.walletOwnerId(), input.currency(), input.tag());
+        final var wallet = this.walletCache.get(input.walletId());
 
         if (wallet == null) {
 
-            throw new WalletNotFoundException(
-                input.walletOwnerId(), input.currency(), input.tag());
+            throw new WalletNotFoundException(input.walletId());
         }
 
         final var walletId = new WalletId(wallet.walletId().getId());

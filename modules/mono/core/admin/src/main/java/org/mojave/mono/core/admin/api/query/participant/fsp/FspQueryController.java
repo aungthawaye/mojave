@@ -29,7 +29,7 @@ public class FspQueryController extends BaseApiController {
         this.fspQuery = fspQuery;
     }
 
-    @GetMapping("/participant/fsps/get-by-id")
+    @GetMapping("/participant/fsp/get-by-id")
     public ResponseEntity<FspData> getById(@RequestParam final FspId fspId) {
 
         return this.respond(
@@ -39,7 +39,7 @@ public class FspQueryController extends BaseApiController {
             () -> this.fspQuery.get(fspId));
     }
 
-    @GetMapping("/participant/fsps/get-by-code")
+    @GetMapping("/participant/fsp/get-by-code")
     public ResponseEntity<FspData> getByCode(@RequestParam final FspCode fspCode) {
 
         return this.respond(
@@ -49,7 +49,7 @@ public class FspQueryController extends BaseApiController {
             () -> this.fspQuery.get(fspCode));
     }
 
-    @GetMapping("/participant/fsps/get-all")
+    @GetMapping("/participant/fsp/get-all")
     public ResponseEntity<List<FspData>> getAll() {
 
         return this.respond(

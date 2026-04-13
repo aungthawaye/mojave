@@ -60,7 +60,7 @@ public class PositionCommandController {
         this.rollbackReservationCommand = rollbackReservationCommand;
     }
 
-    @PostMapping("/wallet/positions/commit-reservation")
+    @PostMapping("/wallet/position/commit-reservation")
     public ResponseEntity<CommitReservationCommand.Output> commitReservation(
         @RequestBody final CommitReservationCommand.Input input)
         throws FailedToCommitReservationException {
@@ -74,7 +74,7 @@ public class PositionCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/positions/decrease-position")
+    @PostMapping("/wallet/position/decrease-position")
     public ResponseEntity<DecreasePositionCommand.Output> decreasePosition(
         @RequestBody final DecreasePositionCommand.Input input)
         throws NoPositionUpdateForTransactionException {
@@ -88,7 +88,7 @@ public class PositionCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/positions/fulfil-positions")
+    @PostMapping("/wallet/position/fulfil-positions")
     public ResponseEntity<FulfilPositionsCommand.Output> fulfilPositions(
         @RequestBody final FulfilPositionsCommand.Input input)
         throws FailedToFulfilPositionsException {
@@ -102,7 +102,7 @@ public class PositionCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/positions/increase-position")
+    @PostMapping("/wallet/position/increase-position")
     public ResponseEntity<IncreasePositionCommand.Output> increasePosition(
         @RequestBody final IncreasePositionCommand.Input input) throws
                                                               NoPositionUpdateForTransactionException,
@@ -118,7 +118,7 @@ public class PositionCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/positions/reserve-position")
+    @PostMapping("/wallet/position/reserve-position")
     public ResponseEntity<ReservePositionCommand.Output> reservePosition(
         @RequestBody final ReservePositionCommand.Input input) throws
                                                              PositionLimitExceededException,
@@ -134,7 +134,7 @@ public class PositionCommandController {
         return ResponseEntity.ok(output);
     }
 
-    @PostMapping("/wallet/positions/rollback-reservation")
+    @PostMapping("/wallet/position/rollback-reservation")
     public ResponseEntity<RollbackReservationCommand.Output> rollbackReservation(
         @RequestBody final RollbackReservationCommand.Input input)
         throws FailedToRollbackReservationException {

@@ -3,11 +3,10 @@ package org.mojave.core.wallet.domain.command.balance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.enums.wallet.BalanceAction;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.contract.command.balance.DepositBalanceCommand;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
@@ -47,24 +46,24 @@ public class DepositBalanceCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.depositBalanceCommand.execute(
                 new DepositBalanceCommand.Input(
-                    new WalletOwnerId(301L), Currency.USD, "P2P_TRANSFER", new BigDecimal("25.00"),
+                    new WalletId(30101L),
+                    new BigDecimal("25.00"),
                     new TransactionId(30101L), TRANSACTION_AT, "Deposit missing balance")));
 
-        assertEquals(new WalletOwnerId(301L), exception.getWalletOwnerId());
-        assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals("P2P_TRANSFER", exception.getTag());
+        assertEquals(new WalletId(30101L), exception.getWalletId());
     }
 
     @Test
     @DisplayName("Throw when engine returns no balance update")
     public void noBalanceUpdate() throws NoBalanceUpdateForTransactionException {
 
-        this.createDefaultWallet(this.createWalletCommand, 302L, Currency.USD, "Deposit Wallet");
+        final var walletId = this.createDefaultWallet(
+            this.createWalletCommand, 302L, Currency.USD, "Deposit Wallet");
 
         final var transactionId = new TransactionId(30201L);
         final var input = new DepositBalanceCommand.Input(
-            new WalletOwnerId(302L), Currency.USD, "P2P_TRANSFER", new BigDecimal("12.50"), transactionId,
-            TRANSACTION_AT, "Deposit without update");
+            walletId, new BigDecimal("12.50"), transactionId, TRANSACTION_AT,
+            "Deposit without update");
 
         this.depositBalanceCommand.execute(input);
 
@@ -85,8 +84,8 @@ public class DepositBalanceCommandIT extends BaseIT {
 
         final var output = this.depositBalanceCommand.execute(
             new DepositBalanceCommand.Input(
-                new WalletOwnerId(303L), Currency.USD, "P2P_TRANSFER", new BigDecimal("25.50"),
-                transactionId, TRANSACTION_AT, "Deposit funds"));
+                walletId, new BigDecimal("25.50"), transactionId, TRANSACTION_AT,
+                "Deposit funds"));
 
         assertNotNull(output.balanceUpdateId());
         assertEquals(new WalletId(walletId.getId()), output.walletId());

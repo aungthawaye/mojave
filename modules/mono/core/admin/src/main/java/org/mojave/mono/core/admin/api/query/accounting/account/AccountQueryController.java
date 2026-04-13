@@ -33,7 +33,7 @@ public class AccountQueryController extends BaseApiController {
         this.accountQuery = accountQuery;
     }
 
-    @PostMapping("/accounting/accounts/find")
+    @PostMapping("/accounting/account/find")
     public ResponseEntity<PagedResult<AccountData>> find(
         @RequestBody final AccountQuery.Criteria criteria) {
 
@@ -44,7 +44,7 @@ public class AccountQueryController extends BaseApiController {
             () -> this.accountQuery.find(criteria));
     }
 
-    @GetMapping("/accounting/accounts/get-by-code")
+    @GetMapping("/accounting/account/get-by-code")
     public ResponseEntity<AccountData> getByCode(@RequestParam final AccountCode accountCode) {
 
         return this.respond(
@@ -54,7 +54,7 @@ public class AccountQueryController extends BaseApiController {
             () -> this.accountQuery.get(accountCode));
     }
 
-    @GetMapping("/accounting/accounts/get-by-owner-id")
+    @GetMapping("/accounting/account/get-by-owner-id")
     public ResponseEntity<List<AccountData>> getByOwnerId(
         @RequestParam final AccountOwnerId ownerId) {
 
@@ -65,7 +65,7 @@ public class AccountQueryController extends BaseApiController {
             () -> this.accountQuery.get(ownerId));
     }
 
-    @GetMapping("/accounting/accounts/get-by-id")
+    @GetMapping("/accounting/account/get-by-id")
     public ResponseEntity<AccountData> getById(@RequestParam final AccountId accountId) {
 
         return this.respond(
@@ -75,7 +75,7 @@ public class AccountQueryController extends BaseApiController {
             () -> this.accountQuery.get(accountId));
     }
 
-    @GetMapping("/accounting/accounts/get-all")
+    @GetMapping("/accounting/account/get-all")
     public ResponseEntity<List<AccountData>> getAll() {
 
         return this.respond(

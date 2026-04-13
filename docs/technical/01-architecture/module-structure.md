@@ -438,7 +438,7 @@ Service-to-service HTTP calls:
 ```java
 @FeignClient(name = "participant-intercom", url = "http://localhost:9001")
 public interface ParticipantIntercomClient {
-    @GetMapping("/fsps/{code}")
+    @GetMapping("/fsp/{code}")
     FspData getFsp(@PathVariable String code);
 }
 ```

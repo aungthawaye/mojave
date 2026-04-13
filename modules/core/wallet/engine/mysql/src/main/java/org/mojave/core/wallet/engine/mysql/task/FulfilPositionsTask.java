@@ -12,17 +12,17 @@ public final class FulfilPositionsTask {
 
     }
 
-    public static WalletEngine.FulfilResult execute(final JdbcTemplate jdbcTemplate,
-                                                    final PositionUpdateId reservationId,
-                                                    final PositionUpdateId reservationCommitId,
-                                                    final PositionUpdateId positionDecrementId,
-                                                    final WalletId payeeWalletId,
-                                                    final String description)
+    public static WalletEngine.PositionFulfilmentResult execute(final JdbcTemplate jdbcTemplate,
+                                                                final PositionUpdateId reservationId,
+                                                                final PositionUpdateId reservationCommitId,
+                                                                final PositionUpdateId positionDecrementId,
+                                                                final WalletId payeeWalletId,
+                                                                final String description)
         throws WalletEngine.NoPositionFulfilmentException {
 
         try {
 
-            return jdbcTemplate.execute((ConnectionCallback<WalletEngine.FulfilResult>) con -> {
+            return jdbcTemplate.execute((ConnectionCallback<WalletEngine.PositionFulfilmentResult>) con -> {
 
                 try (var stm = con.prepareStatement("CALL sp_fulfil_positions(?, ?, ?, ?, ?)")) {
 
@@ -47,7 +47,7 @@ public final class FulfilPositionsTask {
                                     final var payeeCommitId = new PositionUpdateId(
                                         rs.getLong("payee_commit_id"));
 
-                                    return new WalletEngine.FulfilResult(payerCommitId, payeeCommitId);
+                                    return new WalletEngine.PositionFulfilmentResult(payerCommitId, payeeCommitId);
                                 }
 
                                 throw new RuntimeException(

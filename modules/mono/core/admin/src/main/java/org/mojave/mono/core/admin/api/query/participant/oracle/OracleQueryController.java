@@ -29,7 +29,7 @@ public class OracleQueryController extends BaseApiController {
         this.oracleQuery = oracleQuery;
     }
 
-    @GetMapping("/participant/oracles/find-by-type")
+    @GetMapping("/participant/oracle/find-by-type")
     public ResponseEntity<OracleData> findByType(@RequestParam final PartyIdType type) {
 
         return this.respondOptional(
@@ -39,7 +39,7 @@ public class OracleQueryController extends BaseApiController {
             () -> this.oracleQuery.find(type));
     }
 
-    @GetMapping("/participant/oracles/get-by-type")
+    @GetMapping("/participant/oracle/get-by-type")
     public ResponseEntity<OracleData> getByType(@RequestParam final PartyIdType type) {
 
         return this.respond(
@@ -49,7 +49,7 @@ public class OracleQueryController extends BaseApiController {
             () -> this.oracleQuery.get(type));
     }
 
-    @GetMapping("/participant/oracles/get-by-id")
+    @GetMapping("/participant/oracle/get-by-id")
     public ResponseEntity<OracleData> getById(@RequestParam final OracleId oracleId) {
 
         return this.respond(
@@ -59,7 +59,7 @@ public class OracleQueryController extends BaseApiController {
             () -> this.oracleQuery.get(oracleId));
     }
 
-    @GetMapping("/participant/oracles/get-all")
+    @GetMapping("/participant/oracle/get-all")
     public ResponseEntity<List<OracleData>> getAll() {
 
         return this.respond(

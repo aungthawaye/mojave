@@ -167,11 +167,11 @@ public class MySqlWalletEngine implements WalletEngine {
     }
 
     @Override
-    public FulfilResult fulfil(final PositionUpdateId reservationId,
-                               final PositionUpdateId reservationCommitId,
-                               final PositionUpdateId positionDecrementId,
-                               final WalletId payeeWalletId,
-                               final String description) throws NoPositionFulfilmentException {
+    public PositionFulfilmentResult fulfilPositions(final PositionUpdateId reservationId,
+                                                    final PositionUpdateId reservationCommitId,
+                                                    final PositionUpdateId positionDecrementId,
+                                                    final WalletId payeeWalletId,
+                                                    final String description) throws NoPositionFulfilmentException {
 
         return FulfilPositionsTask.execute(
             this.jdbcTemplate, reservationId, reservationCommitId, positionDecrementId,
@@ -207,8 +207,8 @@ public class MySqlWalletEngine implements WalletEngine {
     }
 
     @Override
-    public BalanceHistory refundBalance(final BalanceUpdateId reversalId,
-                                        final BalanceUpdateId nextBalanceUpdateId)
+    public BalanceHistory reverseBalanceWithdraw(final BalanceUpdateId reversalId,
+                                                 final BalanceUpdateId nextBalanceUpdateId)
         throws BalanceReversalFailedException {
 
         return RefundBalanceTask.execute(this.jdbcTemplate, reversalId, nextBalanceUpdateId);

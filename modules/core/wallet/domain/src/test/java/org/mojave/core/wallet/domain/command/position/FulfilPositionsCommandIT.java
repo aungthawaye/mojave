@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
@@ -54,12 +54,10 @@ public class FulfilPositionsCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.fulfilPositionsCommand.execute(
                 new FulfilPositionsCommand.Input(
-                    reservationId, new WalletOwnerId(406L), Currency.USD, "P2P_TRANSFER",
+                    reservationId, new WalletId(40601L),
                     "Fulfil missing payee")));
 
-        assertEquals(new WalletOwnerId(406L), exception.getWalletOwnerId());
-        assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals("P2P_TRANSFER", exception.getTag());
+        assertEquals(new WalletId(40601L), exception.getWalletId());
     }
 
     @Test
@@ -68,12 +66,13 @@ public class FulfilPositionsCommandIT extends BaseIT {
 
         final var reservationId = new PositionUpdateId(40701L);
 
-        this.createDefaultWallet(this.createWalletCommand, 407L, Currency.USD, "Payee Wallet");
+        final var payeeWalletId = this.createDefaultWallet(
+            this.createWalletCommand, 407L, Currency.USD, "Payee Wallet");
 
         final var exception = assertThrows(
             FailedToFulfilPositionsException.class, () -> this.fulfilPositionsCommand.execute(
                 new FulfilPositionsCommand.Input(
-                    reservationId, new WalletOwnerId(407L), Currency.USD, "P2P_TRANSFER",
+                    reservationId, payeeWalletId,
                     "Fulfil positions")));
 
         assertEquals(reservationId, exception.getReservationId());
@@ -101,13 +100,13 @@ public class FulfilPositionsCommandIT extends BaseIT {
 
         final var reservation = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(408L), Currency.USD, "P2P_TRANSFER", new BigDecimal("4.00"),
+                payerWalletId,
+                new BigDecimal("4.00"),
                 new TransactionId(40801L), TRANSACTION_AT, "Reserve for fulfilment"));
 
         final var output = this.fulfilPositionsCommand.execute(
             new FulfilPositionsCommand.Input(
-                reservation.positionUpdateId(), new WalletOwnerId(409L), Currency.USD,
-                "P2P_TRANSFER",
+                reservation.positionUpdateId(), payeeWalletId,
                 "Fulfil positions"));
 
         assertNotNull(output.payerCommitId());

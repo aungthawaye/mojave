@@ -25,7 +25,7 @@ public class WalletCommandController extends BaseApiController {
         this.createWalletCommand = createWalletCommand;
     }
 
-    @PostMapping("/wallet/wallets/create-wallet")
+    @PostMapping("/wallet/create-wallet")
     public ResponseEntity<CreateWalletCommand.Output> createWallet(
         @RequestBody final CreateWalletCommand.Input input) {
 

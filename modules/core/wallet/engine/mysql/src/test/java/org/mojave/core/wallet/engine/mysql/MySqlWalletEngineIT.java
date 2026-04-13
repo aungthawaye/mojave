@@ -191,7 +191,7 @@ public class MySqlWalletEngineIT {
     }
 
     @Test
-    public void fulfil_shouldDelegateToTask() throws Exception {
+    public void fulfil_Positions_shouldDelegateToTask() throws Exception {
 
         final var walletEngine = this.walletEngine();
         final var reservationId = new PositionUpdateId(601L);
@@ -199,7 +199,7 @@ public class MySqlWalletEngineIT {
         final var positionDecrementId = new PositionUpdateId(603L);
         final var payeeWalletId = new WalletId(604L);
         final var description = "Fulfil Positions";
-        final var expected = new WalletEngine.FulfilResult(
+        final var expected = new WalletEngine.PositionFulfilmentResult(
             new PositionUpdateId(605L), new PositionUpdateId(606L));
 
         try (final MockedStatic<FulfilPositionsTask> mocked = mockStatic(FulfilPositionsTask.class)) {
@@ -210,7 +210,7 @@ public class MySqlWalletEngineIT {
                     payeeWalletId, description))
                 .thenReturn(expected);
 
-            final var actual = walletEngine.fulfil(
+            final var actual = walletEngine.fulfilPositions(
                 reservationId, reservationCommitId, positionDecrementId, payeeWalletId,
                 description);
 
@@ -278,7 +278,7 @@ public class MySqlWalletEngineIT {
     }
 
     @Test
-    public void refundBalance_shouldDelegateToTask() throws Exception {
+    public void reverseBalance_Withdraw_shouldDelegateToTask() throws Exception {
 
         final var walletEngine = this.walletEngine();
         final var reversalId = new BalanceUpdateId(901L);
@@ -295,7 +295,7 @@ public class MySqlWalletEngineIT {
                     this.jdbcTemplate, reversalId, nextBalanceUpdateId))
                 .thenReturn(expected);
 
-            final var actual = walletEngine.refundBalance(reversalId, nextBalanceUpdateId);
+            final var actual = walletEngine.reverseBalanceWithdraw(reversalId, nextBalanceUpdateId);
 
             assertSame(expected, actual);
         }
@@ -451,13 +451,13 @@ public class MySqlWalletEngineIT {
             any(), any(), any(), any(), any(), anyString());
         doCallRealMethod().when(walletEngine).depositBalance(
             any(), any(), any(), any(), anyString(), any());
-        doCallRealMethod().when(walletEngine).fulfil(
+        doCallRealMethod().when(walletEngine).fulfilPositions(
             any(), any(), any(), any(), anyString());
         doCallRealMethod().when(walletEngine).increaseNdc(
             any(), any(), any(), any(), any(), anyString());
         doCallRealMethod().when(walletEngine).increasePosition(
             any(), any(), any(), any(), any(), anyString());
-        doCallRealMethod().when(walletEngine).refundBalance(any(), any());
+        doCallRealMethod().when(walletEngine).reverseBalanceWithdraw(any(), any());
         doCallRealMethod().when(walletEngine).reservePosition(
             any(), any(), any(), any(), any(), anyString());
         doCallRealMethod().when(walletEngine).rollbackPositionReservation(any(), any());

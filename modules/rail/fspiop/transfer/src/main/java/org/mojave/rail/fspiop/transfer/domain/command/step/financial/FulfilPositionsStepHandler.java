@@ -23,6 +23,7 @@ package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
+import org.mojave.core.wallet.contract.query.WalletQuery;
 import org.mojave.core.wallet.intercom.producer.command.position.FulfilPositionsProducer;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
@@ -41,33 +42,41 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FulfilPositionsStepHandler.class);
 
+    private final WalletQuery walletQuery;
+
     private final FulfilPositionsProducer fulfilPositionsPublisher;
 
-    public FulfilPositionsStepHandler(FulfilPositionsProducer fulfilPositionsPublisher) {
+    public FulfilPositionsStepHandler(final WalletQuery walletQuery,
+                                      final FulfilPositionsProducer fulfilPositionsPublisher) {
 
+        Objects.requireNonNull(walletQuery);
         Objects.requireNonNull(fulfilPositionsPublisher);
 
+        this.walletQuery = walletQuery;
         this.fulfilPositionsPublisher = fulfilPositionsPublisher;
     }
 
     @Override
-    public void execute(FulfilPositionsStep.Input input)
+    public void execute(final FulfilPositionsStep.Input input)
         throws FailedToCommitReservationException, FspiopException {
 
         MDC.put("REQ_ID", input.udfTransferId().getId());
-        var startAt = System.nanoTime();
+        final var startAt = System.nanoTime();
 
         LOGGER.info("FulfilPositionsStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
-            var fulfilPositionsInput = new FulfilPositionsCommand.Input(
-                input.positionReservationId(), new WalletOwnerId(input.payeeFsp().fspId().getId()),
-                Currency.valueOf(input.currency().toString()), "P2P_TRANSFER", input.description());
+            final var payeeWallet = this.walletQuery.get(
+                new WalletOwnerId(input.payeeFsp().fspId().getId()),
+                Currency.valueOf(input.currency().toString()),
+                "P2P_TRANSFER");
+            final var fulfilPositionsInput = new FulfilPositionsCommand.Input(
+                input.positionReservationId(), payeeWallet.walletId(), input.description());
 
             this.fulfilPositionsPublisher.publish(fulfilPositionsInput);
 
-            var endAt = System.nanoTime();
+            final var endAt = System.nanoTime();
             LOGGER.info("FulfilPositionsStep : took : {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {

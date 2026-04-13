@@ -26,7 +26,7 @@ public class HubQueryController extends BaseApiController {
         this.hubQuery = hubQuery;
     }
 
-    @GetMapping("/participant/hubs/count")
+    @GetMapping("/participant/hub/count")
     public ResponseEntity<Long> count() {
 
         return this.respond(
@@ -36,7 +36,7 @@ public class HubQueryController extends BaseApiController {
             this.hubQuery::count);
     }
 
-    @GetMapping("/participant/hubs/get")
+    @GetMapping("/participant/hub/get")
     public ResponseEntity<HubData> get() {
 
         return this.respond(
@@ -46,7 +46,7 @@ public class HubQueryController extends BaseApiController {
             this.hubQuery::get);
     }
 
-    @GetMapping("/participant/hubs/get-all")
+    @GetMapping("/participant/hub/get-all")
     public ResponseEntity<List<HubData>> getAll() {
 
         return this.respond(

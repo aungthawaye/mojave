@@ -8,6 +8,8 @@ import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -50,11 +52,14 @@ public final class DecreaseNdcTask {
                                 }
 
                                 if ("POSITION_RESERVED_EXCEEDS_NDC".equals(status)) {
+                                    final var walletSnapshot = loadWalletSnapshot(con, walletId);
+                                    final var newNdc = walletSnapshot.ndc().subtract(amount)
+                                                              .max(BigDecimal.ZERO);
+
                                     throw new RuntimeException(
                                         new WalletEngine.PositionReservedExceedsNdcException(
-                                            walletId, amount, rs.getBigDecimal("position"),
-                                            rs.getBigDecimal("reserved"),
-                                            rs.getBigDecimal("new_ndc"), transactionId));
+                                            walletId, amount, walletSnapshot.position(),
+                                            walletSnapshot.reserved(), newNdc, transactionId));
                                 }
                             }
                         }
@@ -78,5 +83,32 @@ public final class DecreaseNdcTask {
             throw e;
         }
     }
+
+    private static WalletSnapshot loadWalletSnapshot(final Connection connection,
+                                                     final WalletId walletId) throws SQLException {
+
+        try (var statement = connection.prepareStatement("""
+            SELECT position, reserved, ndc
+            FROM mwe_wallet
+            WHERE wallet_id = ?
+            """)) {
+
+            statement.setLong(1, walletId.getId());
+
+            try (var resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return new WalletSnapshot(
+                        resultSet.getBigDecimal("position"),
+                        resultSet.getBigDecimal("reserved"),
+                        resultSet.getBigDecimal("ndc"));
+                }
+            }
+        }
+
+        throw new IllegalStateException("Wallet snapshot not found for walletId: " + walletId);
+    }
+
+    private record WalletSnapshot(BigDecimal position, BigDecimal reserved, BigDecimal ndc) { }
 
 }

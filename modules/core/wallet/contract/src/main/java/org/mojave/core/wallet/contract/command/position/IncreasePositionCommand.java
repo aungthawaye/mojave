@@ -27,9 +27,8 @@ import jakarta.validation.constraints.Size;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.enums.wallet.PositionAction;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
@@ -49,9 +48,7 @@ public interface IncreasePositionCommand {
                                 PositionLimitExceededException,
                                 WalletNotFoundException;
 
-    record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
-                 @JsonProperty(required = true) @NotNull Currency currency,
-                 @JsonProperty(required = true) @NotNull String tag,
+    record Input(@JsonProperty(required = true) @NotNull WalletId walletId,
                  @JsonProperty(required = true) @NotNull BigDecimal amount,
                  @JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull Instant transactionAt,

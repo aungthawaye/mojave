@@ -67,7 +67,7 @@ public class DefinitionCommandController extends BaseApiController {
         this.terminateFlowDefinitionCommand = terminateFlowDefinitionCommand;
     }
 
-    @PostMapping("/accounting/definitions/activate-flow-definition")
+    @PostMapping("/accounting/definition/activate-flow-definition")
     public ResponseEntity<ActivateFlowDefinitionCommand.Output> activateFlowDefinition(
         @RequestBody final ActivateFlowDefinitionCommand.Input input) {
 
@@ -78,7 +78,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.activateFlowDefinitionCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/add-flow-definition-line")
+    @PostMapping("/accounting/definition/add-flow-definition-line")
     public ResponseEntity<AddFlowDefinitionLineCommand.Output> addFlowDefinitionLine(
         @RequestBody final AddFlowDefinitionLineCommand.Input input) {
 
@@ -89,7 +89,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.addFlowDefinitionLineCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/change-flow-definition-currency")
+    @PostMapping("/accounting/definition/change-flow-definition-currency")
     public ResponseEntity<ChangeFlowDefinitionCurrencyCommand.Output> changeFlowDefinitionCurrency(
         @RequestBody final ChangeFlowDefinitionCurrencyCommand.Input input) {
 
@@ -100,7 +100,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.changeFlowDefinitionCurrencyCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/change-flow-definition-properties")
+    @PostMapping("/accounting/definition/change-flow-definition-properties")
     public ResponseEntity<ChangeFlowDefinitionPropertiesCommand.Output> changeFlowDefinitionProperties(
         @RequestBody final ChangeFlowDefinitionPropertiesCommand.Input input) {
 
@@ -111,7 +111,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.changeFlowDefinitionPropertiesCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/create-flow-definition")
+    @PostMapping("/accounting/definition/create-flow-definition")
     public ResponseEntity<CreateFlowDefinitionCommand.Output> createFlowDefinition(
         @RequestBody final CreateFlowDefinitionCommand.Input input) {
 
@@ -122,7 +122,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.createFlowDefinitionCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/deactivate-flow-definition")
+    @PostMapping("/accounting/definition/deactivate-flow-definition")
     public ResponseEntity<DeactivateFlowDefinitionCommand.Output> deactivateFlowDefinition(
         @RequestBody final DeactivateFlowDefinitionCommand.Input input) {
 
@@ -133,7 +133,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.deactivateFlowDefinitionCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/remove-flow-definition-line")
+    @PostMapping("/accounting/definition/remove-flow-definition-line")
     public ResponseEntity<RemoveFlowDefinitionLineCommand.Output> removeFlowDefinitionLine(
         @RequestBody final RemoveFlowDefinitionLineCommand.Input input) {
 
@@ -144,7 +144,7 @@ public class DefinitionCommandController extends BaseApiController {
             () -> this.removeFlowDefinitionLineCommand.execute(input));
     }
 
-    @PostMapping("/accounting/definitions/terminate-flow-definition")
+    @PostMapping("/accounting/definition/terminate-flow-definition")
     public ResponseEntity<TerminateFlowDefinitionCommand.Output> terminateFlowDefinition(
         @RequestBody final TerminateFlowDefinitionCommand.Input input) {
 

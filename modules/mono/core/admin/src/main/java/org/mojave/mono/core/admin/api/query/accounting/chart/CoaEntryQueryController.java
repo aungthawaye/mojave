@@ -29,7 +29,7 @@ public class CoaEntryQueryController extends BaseApiController {
         this.coaEntryQuery = coaEntryQuery;
     }
 
-    @GetMapping("/accounting/charts/get-entry-by-id")
+    @GetMapping("/accounting/chart/get-entry-by-id")
     public ResponseEntity<CoaEntryData> getById(@RequestParam final CoaEntryId coaEntryId) {
 
         return this.respond(
@@ -39,7 +39,7 @@ public class CoaEntryQueryController extends BaseApiController {
             () -> this.coaEntryQuery.get(coaEntryId));
     }
 
-    @GetMapping("/accounting/charts/get-entries-by-coa-id")
+    @GetMapping("/accounting/chart/get-entries-by-coa-id")
     public ResponseEntity<List<CoaEntryData>> getByCoaId(@RequestParam final CoaId coaId) {
 
         return this.respond(
@@ -49,7 +49,7 @@ public class CoaEntryQueryController extends BaseApiController {
             () -> this.coaEntryQuery.get(coaId));
     }
 
-    @GetMapping("/accounting/charts/get-entries-by-category")
+    @GetMapping("/accounting/chart/get-entries-by-category")
     public ResponseEntity<List<CoaEntryData>> getByCategory(@RequestParam final String category) {
 
         return this.respond(
@@ -59,7 +59,7 @@ public class CoaEntryQueryController extends BaseApiController {
             () -> this.coaEntryQuery.get(category));
     }
 
-    @GetMapping("/accounting/charts/get-all-entries")
+    @GetMapping("/accounting/chart/get-all-entries")
     public ResponseEntity<List<CoaEntryData>> getAll() {
 
         return this.respond(

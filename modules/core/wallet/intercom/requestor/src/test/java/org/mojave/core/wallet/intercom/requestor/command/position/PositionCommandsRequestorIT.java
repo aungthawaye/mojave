@@ -3,10 +3,9 @@ package org.mojave.core.wallet.intercom.requestor.command.position;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.core.wallet.contract.command.position.CommitReservationCommand;
 import org.mojave.core.wallet.contract.command.position.DecreasePositionCommand;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
@@ -61,9 +60,7 @@ public class PositionCommandsRequestorIT {
             WalletNotFoundException.class,
             () -> this.increasePositionCommand.execute(
                 new IncreasePositionCommand.Input(
-                    new WalletOwnerId(900201L),
-                    Currency.USD,
-                    "P2P_TRANSFER",
+                    new WalletId(90020101L),
                     new BigDecimal("10.00"),
                     new TransactionId(90020101L),
                     transactionAt,
@@ -73,9 +70,7 @@ public class PositionCommandsRequestorIT {
             WalletNotFoundException.class,
             () -> this.decreasePositionCommand.execute(
                 new DecreasePositionCommand.Input(
-                    new WalletOwnerId(900202L),
-                    Currency.USD,
-                    "P2P_TRANSFER",
+                    new WalletId(90020201L),
                     new BigDecimal("8.00"),
                     new TransactionId(90020201L),
                     transactionAt,
@@ -85,9 +80,7 @@ public class PositionCommandsRequestorIT {
             WalletNotFoundException.class,
             () -> this.reservePositionCommand.execute(
                 new ReservePositionCommand.Input(
-                    new WalletOwnerId(900203L),
-                    Currency.USD,
-                    "P2P_TRANSFER",
+                    new WalletId(90020301L),
                     new BigDecimal("4.00"),
                     new TransactionId(90020301L),
                     transactionAt,
@@ -98,9 +91,7 @@ public class PositionCommandsRequestorIT {
             () -> this.fulfilPositionsCommand.execute(
                 new FulfilPositionsCommand.Input(
                     new PositionUpdateId(90020401L),
-                    new WalletOwnerId(900204L),
-                    Currency.USD,
-                    "P2P_TRANSFER",
+                    new WalletId(90020401L),
                     "requestor-fulfil-missing-payee-position")));
 
         assertThrows(

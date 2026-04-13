@@ -25,11 +25,15 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.utils.SpringDocUtils;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class OpenApiConfiguration {
@@ -58,38 +62,136 @@ public class OpenApiConfiguration {
 
         return (operation, handlerMethod) -> {
 
-            Class<?> controllerClass = handlerMethod.getBeanType();
-            String className = controllerClass.getSimpleName();
+            final var controllerClass = handlerMethod.getBeanType();
+            final var className = controllerClass.getSimpleName();
+            final var operationPath = resolveOperationPath(handlerMethod);
+            final var pathSegments = splitPathSegments(operationPath);
+            final var requestName = resolveRequestName(pathSegments, className, handlerMethod.getMethod().getName());
+            final var tags = buildFolderTags(pathSegments);
 
-            RequestMapping annotation = handlerMethod.getMethodAnnotation(RequestMapping.class);
-
-            operation.getTags().clear();
-
-            String operationId = null;
-
-            if (annotation != null) {
-
-                String[] paths = annotation.value();
-
-                operationId = paths[0].substring(1);
-
-                operation.getTags().add(operationId);
-            }
+            operation.setTags(tags);
 
             if (operation.getSummary() == null || operation.getSummary().isBlank()) {
-                operation.setSummary(className.replace("Controller", ""));
+                operation.setSummary(requestName);
             }
 
             if (operation.getOperationId() == null ||
-                    operation.getOperationId().startsWith("execute")) {
+                operation.getOperationId().isBlank() ||
+                operation.getOperationId().startsWith("execute")) {
 
                 operation.setOperationId(Objects.requireNonNullElseGet(
-                    operationId,
+                    buildOperationId(pathSegments),
                     () -> className + "_" + handlerMethod.getMethod().getName()));
             }
 
             return operation;
         };
+    }
+
+    private static String resolveOperationPath(final org.springframework.web.method.HandlerMethod handlerMethod) {
+
+        final var classMapping = AnnotatedElementUtils.findMergedAnnotation(
+            handlerMethod.getBeanType(),
+            RequestMapping.class);
+        final var methodMapping = AnnotatedElementUtils.findMergedAnnotation(
+            handlerMethod.getMethod(),
+            RequestMapping.class);
+        final var classPath = resolveFirstPath(classMapping);
+        final var methodPath = resolveFirstPath(methodMapping);
+
+        if (classPath == null) {
+            return methodPath;
+        }
+
+        if (methodPath == null) {
+            return classPath;
+        }
+
+        return joinPaths(classPath, methodPath);
+    }
+
+    private static String resolveFirstPath(final RequestMapping requestMapping) {
+
+        if (requestMapping == null) {
+            return null;
+        }
+
+        final var values = requestMapping.value();
+
+        if (values.length > 0 && !values[0].isBlank()) {
+            return values[0];
+        }
+
+        final var paths = requestMapping.path();
+
+        if (paths.length > 0 && !paths[0].isBlank()) {
+            return paths[0];
+        }
+
+        return null;
+    }
+
+    private static String joinPaths(final String classPath, final String methodPath) {
+
+        final var normalizedClassPath = trimSlashes(classPath);
+        final var normalizedMethodPath = trimSlashes(methodPath);
+
+        if (normalizedClassPath.isEmpty()) {
+            return "/" + normalizedMethodPath;
+        }
+
+        if (normalizedMethodPath.isEmpty()) {
+            return "/" + normalizedClassPath;
+        }
+
+        return "/" + normalizedClassPath + "/" + normalizedMethodPath;
+    }
+
+    private static List<String> splitPathSegments(final String path) {
+
+        if (path == null || path.isBlank()) {
+            return List.of();
+        }
+
+        return Arrays.stream(path.split("/"))
+            .filter(segment -> !segment.isBlank())
+            .toList();
+    }
+
+    private static List<String> buildFolderTags(final List<String> pathSegments) {
+
+        if (pathSegments.size() <= 1) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(pathSegments.subList(0, pathSegments.size() - 1));
+    }
+
+    private static String resolveRequestName(final List<String> pathSegments,
+                                             final String className,
+                                             final String methodName) {
+
+        if (!pathSegments.isEmpty()) {
+            return pathSegments.get(pathSegments.size() - 1);
+        }
+
+        return className.replace("Controller", "") + "_" + methodName;
+    }
+
+    private static String buildOperationId(final List<String> pathSegments) {
+
+        if (pathSegments.isEmpty()) {
+            return null;
+        }
+
+        return String.join("_", pathSegments);
+    }
+
+    private static String trimSlashes(final String value) {
+
+        final var leadingTrimmed = value.startsWith("/") ? value.substring(1) : value;
+
+        return leadingTrimmed.endsWith("/") ? leadingTrimmed.substring(0, leadingTrimmed.length() - 1) : leadingTrimmed;
     }
 
     public interface RequiredDependencies { }

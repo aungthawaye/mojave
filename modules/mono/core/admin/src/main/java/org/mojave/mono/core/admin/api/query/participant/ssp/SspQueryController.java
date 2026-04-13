@@ -29,7 +29,7 @@ public class SspQueryController extends BaseApiController {
         this.sspQuery = sspQuery;
     }
 
-    @GetMapping("/participant/ssps/get-by-id")
+    @GetMapping("/participant/ssp/get-by-id")
     public ResponseEntity<SspData> getById(@RequestParam final SspId sspId) {
 
         return this.respond(
@@ -39,7 +39,7 @@ public class SspQueryController extends BaseApiController {
             () -> this.sspQuery.get(sspId));
     }
 
-    @GetMapping("/participant/ssps/get-by-code")
+    @GetMapping("/participant/ssp/get-by-code")
     public ResponseEntity<SspData> getByCode(@RequestParam final SspCode sspCode) {
 
         return this.respond(
@@ -49,7 +49,7 @@ public class SspQueryController extends BaseApiController {
             () -> this.sspQuery.get(sspCode));
     }
 
-    @GetMapping("/participant/ssps/get-all")
+    @GetMapping("/participant/ssp/get-all")
     public ResponseEntity<List<SspData>> getAll() {
 
         return this.respond(

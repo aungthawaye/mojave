@@ -28,7 +28,7 @@ public class CoaQueryController extends BaseApiController {
         this.coaQuery = coaQuery;
     }
 
-    @GetMapping("/accounting/charts/get-by-id")
+    @GetMapping("/accounting/chart/get-by-id")
     public ResponseEntity<CoaData> getById(@RequestParam final CoaId coaId) {
 
         return this.respond(
@@ -38,7 +38,7 @@ public class CoaQueryController extends BaseApiController {
             () -> this.coaQuery.get(coaId));
     }
 
-    @GetMapping("/accounting/charts/get-all")
+    @GetMapping("/accounting/chart/get-all")
     public ResponseEntity<List<CoaData>> getAll() {
 
         return this.respond(
@@ -48,7 +48,7 @@ public class CoaQueryController extends BaseApiController {
             this.coaQuery::getAll);
     }
 
-    @GetMapping("/accounting/charts/get-by-name-contains")
+    @GetMapping("/accounting/chart/get-by-name-contains")
     public ResponseEntity<List<CoaData>> getByNameContains(@RequestParam final String name) {
 
         return this.respond(

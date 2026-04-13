@@ -43,7 +43,7 @@ public class ChartCommandController extends BaseApiController {
         this.createCoaEntryCommand = createCoaEntryCommand;
     }
 
-    @PostMapping("/accounting/charts/change-coa-entry-properties")
+    @PostMapping("/accounting/chart/change-coa-entry-properties")
     public ResponseEntity<ChangeCoaEntryPropertiesCommand.Output> changeCoaEntryProperties(
         @RequestBody final ChangeCoaEntryPropertiesCommand.Input input) {
 
@@ -54,7 +54,7 @@ public class ChartCommandController extends BaseApiController {
             () -> this.changeCoaEntryPropertiesCommand.execute(input));
     }
 
-    @PostMapping("/accounting/charts/change-coa-name")
+    @PostMapping("/accounting/chart/change-coa-name")
     public ResponseEntity<ChangeCoaNameCommand.Output> changeCoaName(
         @RequestBody final ChangeCoaNameCommand.Input input) {
 
@@ -65,7 +65,7 @@ public class ChartCommandController extends BaseApiController {
             () -> this.changeCoaNameCommand.execute(input));
     }
 
-    @PostMapping("/accounting/charts/create-coa")
+    @PostMapping("/accounting/chart/create-coa")
     public ResponseEntity<CreateCoaCommand.Output> createCoa(
         @RequestBody final CreateCoaCommand.Input input) {
 
@@ -76,7 +76,7 @@ public class ChartCommandController extends BaseApiController {
             () -> this.createCoaCommand.execute(input));
     }
 
-    @PostMapping("/accounting/charts/create-coa-entry")
+    @PostMapping("/accounting/chart/create-coa-entry")
     public ResponseEntity<CreateCoaEntryCommand.Output> createCoaEntry(
         @RequestBody final CreateCoaEntryCommand.Input input) {
 

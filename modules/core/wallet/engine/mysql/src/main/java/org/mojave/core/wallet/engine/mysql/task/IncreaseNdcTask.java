@@ -8,6 +8,8 @@ import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -50,10 +52,12 @@ public final class IncreaseNdcTask {
                                 }
 
                                 if ("BALANCE_LOWER_THAN_NEW_NDC".equals(status)) {
+                                    final var walletSnapshot = loadWalletSnapshot(con, walletId);
+
                                     throw new RuntimeException(
                                         new WalletEngine.BalanceLowerThanNewNdcException(
-                                            walletId, amount, rs.getBigDecimal("balance"),
-                                            rs.getBigDecimal("new_ndc"), transactionId));
+                                            walletId, amount, walletSnapshot.balance(),
+                                            walletSnapshot.ndc().add(amount), transactionId));
                                 }
                             }
                         }
@@ -77,5 +81,31 @@ public final class IncreaseNdcTask {
             throw e;
         }
     }
+
+    private static WalletSnapshot loadWalletSnapshot(final Connection connection,
+                                                     final WalletId walletId) throws SQLException {
+
+        try (var statement = connection.prepareStatement("""
+            SELECT balance, ndc
+            FROM mwe_wallet
+            WHERE wallet_id = ?
+            """)) {
+
+            statement.setLong(1, walletId.getId());
+
+            try (var resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return new WalletSnapshot(
+                        resultSet.getBigDecimal("balance"),
+                        resultSet.getBigDecimal("ndc"));
+                }
+            }
+        }
+
+        throw new IllegalStateException("Wallet snapshot not found for walletId: " + walletId);
+    }
+
+    private record WalletSnapshot(BigDecimal balance, BigDecimal ndc) { }
 
 }

@@ -27,9 +27,8 @@ import jakarta.validation.constraints.Size;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.enums.wallet.BalanceAction;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.BalanceUpdateId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.core.wallet.contract.exception.balance.InsufficientBalanceException;
 import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
@@ -46,9 +45,7 @@ public interface WithdrawBalanceCommand {
     Output execute(Input input)
         throws NoBalanceUpdateForTransactionException, InsufficientBalanceException;
 
-    record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
-                 @JsonProperty(required = true) @NotNull Currency currency,
-                 @JsonProperty(required = true) @NotNull String tag,
+    record Input(@JsonProperty(required = true) @NotNull WalletId walletId,
                  @JsonProperty(required = true) @NotNull BigDecimal amount,
                  @JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull Instant transactionAt,

@@ -55,7 +55,7 @@ public class OracleCommandController extends BaseApiController {
         this.terminateOracleCommand = terminateOracleCommand;
     }
 
-    @PostMapping("/participant/oracles/activate-oracle")
+    @PostMapping("/participant/oracle/activate-oracle")
     public ResponseEntity<ActivateOracleCommand.Output> activateOracle(
         @RequestBody final ActivateOracleCommand.Input input) {
 
@@ -66,7 +66,7 @@ public class OracleCommandController extends BaseApiController {
             () -> this.activateOracleCommand.execute(input));
     }
 
-    @PostMapping("/participant/oracles/change-oracle-name")
+    @PostMapping("/participant/oracle/change-oracle-name")
     public ResponseEntity<ChangeOracleNameCommand.Output> changeOracleName(
         @RequestBody final ChangeOracleNameCommand.Input input) {
 
@@ -77,7 +77,7 @@ public class OracleCommandController extends BaseApiController {
             () -> this.changeOracleNameCommand.execute(input));
     }
 
-    @PostMapping("/participant/oracles/change-oracle-type")
+    @PostMapping("/participant/oracle/change-oracle-type")
     public ResponseEntity<ChangeOracleTypeCommand.Output> changeOracleType(
         @RequestBody final ChangeOracleTypeCommand.Input input) {
 
@@ -88,7 +88,7 @@ public class OracleCommandController extends BaseApiController {
             () -> this.changeOracleTypeCommand.execute(input));
     }
 
-    @PostMapping("/participant/oracles/create-oracle")
+    @PostMapping("/participant/oracle/create-oracle")
     public ResponseEntity<CreateOracleCommand.Output> createOracle(
         @RequestBody final CreateOracleCommand.Input input) {
 
@@ -99,7 +99,7 @@ public class OracleCommandController extends BaseApiController {
             () -> this.createOracleCommand.execute(input));
     }
 
-    @PostMapping("/participant/oracles/deactivate-oracle")
+    @PostMapping("/participant/oracle/deactivate-oracle")
     public ResponseEntity<DeactivateOracleCommand.Output> deactivateOracle(
         @RequestBody final DeactivateOracleCommand.Input input) {
 
@@ -110,7 +110,7 @@ public class OracleCommandController extends BaseApiController {
             () -> this.deactivateOracleCommand.execute(input));
     }
 
-    @PostMapping("/participant/oracles/terminate-oracle")
+    @PostMapping("/participant/oracle/terminate-oracle")
     public ResponseEntity<TerminateOracleCommand.Output> terminateOracle(
         @RequestBody final TerminateOracleCommand.Input input) {
 

@@ -3,11 +3,10 @@ package org.mojave.core.wallet.domain.command.position;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.enums.wallet.PositionAction;
 import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
@@ -48,12 +47,11 @@ public class ReservePositionCommandIT extends BaseIT {
         final var exception = assertThrows(
             WalletNotFoundException.class, () -> this.reservePositionCommand.execute(
                 new ReservePositionCommand.Input(
-                    new WalletOwnerId(413L), Currency.USD, "P2P_TRANSFER", new BigDecimal("2.00"),
+                    new WalletId(41301L),
+                    new BigDecimal("2.00"),
                     new TransactionId(41301L), TRANSACTION_AT, "Reserve missing position")));
 
-        assertEquals(new WalletOwnerId(413L), exception.getWalletOwnerId());
-        assertEquals(Currency.USD, exception.getCurrency());
-        assertEquals("P2P_TRANSFER", exception.getTag());
+        assertEquals(new WalletId(41301L), exception.getWalletId());
     }
 
     @Test
@@ -71,7 +69,8 @@ public class ReservePositionCommandIT extends BaseIT {
 
         final var transactionId = new TransactionId(41401L);
         final var input = new ReservePositionCommand.Input(
-            new WalletOwnerId(414L), Currency.USD, "P2P_TRANSFER", new BigDecimal("2.00"),
+            walletId,
+            new BigDecimal("2.00"),
             transactionId, TRANSACTION_AT, "Reserve without update");
 
         this.reservePositionCommand.execute(input);
@@ -97,7 +96,8 @@ public class ReservePositionCommandIT extends BaseIT {
         final var exception = assertThrows(
             PositionLimitExceededException.class, () -> this.reservePositionCommand.execute(
                 new ReservePositionCommand.Input(
-                    new WalletOwnerId(415L), Currency.USD, "P2P_TRANSFER", new BigDecimal("6.00"),
+                    walletId,
+                    new BigDecimal("6.00"),
                     transactionId, TRANSACTION_AT, "Reserve too much")));
 
         assertEquals(new WalletId(walletId.getId()), exception.getWalletId());
@@ -123,7 +123,8 @@ public class ReservePositionCommandIT extends BaseIT {
 
         final var output = this.reservePositionCommand.execute(
             new ReservePositionCommand.Input(
-                new WalletOwnerId(416L), Currency.USD, "P2P_TRANSFER", new BigDecimal("2.50"),
+                walletId,
+                new BigDecimal("2.50"),
                 transactionId, TRANSACTION_AT, "Reserve position"));
 
         assertNotNull(output.positionUpdateId());
