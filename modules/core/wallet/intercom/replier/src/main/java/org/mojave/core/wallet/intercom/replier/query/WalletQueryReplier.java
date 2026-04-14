@@ -44,8 +44,7 @@ public class WalletQueryReplier {
 
     private final ObjectMapper objectMapper;
 
-    public WalletQueryReplier(final WalletQuery walletQuery,
-                              final Connection connection,
+    public WalletQueryReplier(final WalletQuery walletQuery, final Connection connection,
                               final ObjectMapper objectMapper) {
 
         Objects.requireNonNull(walletQuery);
@@ -56,77 +55,95 @@ public class WalletQueryReplier {
         this.connection = connection;
         this.objectMapper = objectMapper;
 
-        this.connection.createDispatcher(this::handleGetById)
+        this.connection
+            .createDispatcher(this::handleGetById)
             .subscribe(WalletQuery.GET_BY_ID_SUBJECT_NAME);
-        this.connection.createDispatcher(this::handleGetByOwnerIdCurrencyTag)
+        this.connection
+            .createDispatcher(this::handleGetByOwnerIdCurrencyTag)
             .subscribe(WalletQuery.GET_BY_OWNER_ID_CURRENCY_TAG_SUBJECT_NAME);
-        this.connection.createDispatcher(this::handleGetByOwnerId)
+        this.connection
+            .createDispatcher(this::handleGetByOwnerId)
             .subscribe(WalletQuery.GET_BY_OWNER_ID_SUBJECT_NAME);
-        this.connection.createDispatcher(this::handleGetByOwnerIdCurrency)
+        this.connection
+            .createDispatcher(this::handleGetByOwnerIdCurrency)
             .subscribe(WalletQuery.GET_BY_OWNER_ID_CURRENCY_SUBJECT_NAME);
-        this.connection.createDispatcher(this::handleGetAll)
+        this.connection
+            .createDispatcher(this::handleGetAll)
             .subscribe(WalletQuery.GET_ALL_SUBJECT_NAME);
-    }
-
-    private void handleGetById(final Message message) {
-
-        this.reply(message, WalletQuery.GetByIdInput.class, input -> {
-            LOGGER.info("WalletQueryReplier.get(WalletId) : input: ({})", ObjectLogger.log(input));
-            final var output = this.walletQuery.get(input.walletId());
-            LOGGER.info("WalletQueryReplier.get(WalletId) : output : ({})",
-                        ObjectLogger.log(output));
-            return output;
-        });
-    }
-
-    private void handleGetByOwnerIdCurrencyTag(final Message message) {
-
-        this.reply(message, WalletQuery.GetByOwnerIdCurrencyTagInput.class, input -> {
-            LOGGER.info("WalletQueryReplier.get(WalletOwnerId, Currency, String) : input: ({})",
-                        ObjectLogger.log(input));
-            final var output = this.walletQuery.get(input.ownerId(), input.currency(), input.tag());
-            LOGGER.info("WalletQueryReplier.get(WalletOwnerId, Currency, String) : output : ({})",
-                        ObjectLogger.log(output));
-            return output;
-        });
-    }
-
-    private void handleGetByOwnerId(final Message message) {
-
-        this.reply(message, WalletQuery.GetByOwnerIdInput.class, input -> {
-            LOGGER.info("WalletQueryReplier.get(WalletOwnerId) : input: ({})",
-                        ObjectLogger.log(input));
-            final var output = this.walletQuery.get(input.ownerId());
-            LOGGER.info("WalletQueryReplier.get(WalletOwnerId) : output : ({})",
-                        ObjectLogger.log(output));
-            return output;
-        });
-    }
-
-    private void handleGetByOwnerIdCurrency(final Message message) {
-
-        this.reply(message, WalletQuery.GetByOwnerIdCurrencyInput.class, input -> {
-            LOGGER.info("WalletQueryReplier.get(WalletOwnerId, Currency) : input: ({})",
-                        ObjectLogger.log(input));
-            final var output = this.walletQuery.get(input.ownerId(), input.currency());
-            LOGGER.info("WalletQueryReplier.get(WalletOwnerId, Currency) : output : ({})",
-                        ObjectLogger.log(output));
-            return output;
-        });
     }
 
     private void handleGetAll(final Message message) {
 
-        this.reply(message, WalletQuery.GetAllInput.class, input -> {
-            LOGGER.info("WalletQueryReplier.getAll : input: ({})", ObjectLogger.log(input));
-            final var output = this.walletQuery.getAll();
-            LOGGER.info("WalletQueryReplier.getAll : output : ({})", ObjectLogger.log(output));
-            return output;
-        });
+        this.reply(
+            message, WalletQuery.GetAllInput.class, input -> {
+                LOGGER.info("WalletQueryReplier.getAll : input: ({})", ObjectLogger.log(input));
+                final var output = this.walletQuery.getAll();
+                LOGGER.info("WalletQueryReplier.getAll : output : ({})", ObjectLogger.log(output));
+                return output;
+            });
     }
 
-    private <I> void reply(final Message message,
-                           final Class<I> inputType,
+    private void handleGetById(final Message message) {
+
+        this.reply(
+            message, WalletQuery.GetByIdInput.class, input -> {
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletId) : input: ({})", ObjectLogger.log(input));
+                final var output = this.walletQuery.get(input.walletId());
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletId) : output : ({})",
+                    ObjectLogger.log(output));
+                return output;
+            });
+    }
+
+    private void handleGetByOwnerId(final Message message) {
+
+        this.reply(
+            message, WalletQuery.GetByOwnerIdInput.class, input -> {
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletOwnerId) : input: ({})",
+                    ObjectLogger.log(input));
+                final var output = this.walletQuery.get(input.ownerId());
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletOwnerId) : output : ({})",
+                    ObjectLogger.log(output));
+                return output;
+            });
+    }
+
+    private void handleGetByOwnerIdCurrency(final Message message) {
+
+        this.reply(
+            message, WalletQuery.GetByOwnerIdCurrencyInput.class, input -> {
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletOwnerId, Currency) : input: ({})",
+                    ObjectLogger.log(input));
+                final var output = this.walletQuery.get(input.ownerId(), input.currency());
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletOwnerId, Currency) : output : ({})",
+                    ObjectLogger.log(output));
+                return output;
+            });
+    }
+
+    private void handleGetByOwnerIdCurrencyTag(final Message message) {
+
+        this.reply(
+            message, WalletQuery.GetByOwnerIdCurrencyTagInput.class, input -> {
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletOwnerId, Currency, String) : input: ({})",
+                    ObjectLogger.log(input));
+                final var output = this.walletQuery.get(
+                    input.ownerId(), input.currency(), input.tag());
+                LOGGER.info(
+                    "WalletQueryReplier.get(WalletOwnerId, Currency, String) : output : ({})",
+                    ObjectLogger.log(output));
+                return output;
+            });
+    }
+
+    private <I> void reply(final Message message, final Class<I> inputType,
                            final Handler<I> handler) {
 
         final var replyTo = message.getReplyTo();

@@ -48,6 +48,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Objects;
 
 @RestController
@@ -90,7 +91,8 @@ public class RequestQuotesController {
                                                                .initiator(
                                                                    TransactionInitiator.PAYER)
                                                                .initiatorType(
-                                                                   TransactionInitiatorType.CONSUMER));
+                                                                   TransactionInitiatorType.CONSUMER)
+                                                               .subScenario(request.scenario()));
 
         final var payee = new Payee(request.payeeFsp);
 
@@ -120,7 +122,8 @@ public class RequestQuotesController {
 
     }
 
-    public record Request(@JsonProperty(required = false) @NotNull @NotBlank String quoteId,
+    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String quoteId,
+                          @JsonProperty(required = true) @NotNull @NotBlank String scenario,
                           @JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
                           @JsonProperty(required = true) @NotNull AmountType amountType,
                           @JsonProperty(required = true) @NotNull Money amount,

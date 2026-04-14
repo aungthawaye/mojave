@@ -65,7 +65,6 @@ import java.util.Objects;
         SpringSecurityConfiguration.class,})
 @ComponentScan(basePackages = {"org.mojave.connector.gateway.inbound"})
 public class ConnectorInboundConfiguration implements MiscConfiguration.RequiredDependencies,
-                                                      FspiopInvokerConfiguration.RequiredDependencies,
                                                       SpringSecurityConfiguration.RequiredDependencies,
                                                       SpringSecurityConfiguration.RequiredSettings {
 
@@ -156,7 +155,8 @@ public class ConnectorInboundConfiguration implements MiscConfiguration.Required
         }
     }
 
-    public interface RequiredDependencies extends ConnectorAdapterConfiguration.RequiredDependencies {
+    public interface RequiredDependencies extends FspiopInvokerConfiguration.RequiredDependencies,
+                                                  ConnectorAdapterConfiguration.RequiredDependencies {
 
         PubSubClient pubSubClient();
 

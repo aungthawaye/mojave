@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.rail.fspiop.service;
 
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,8 +26,8 @@ import org.mojave.component.web.spring.security.AuthenticationErrorWriter;
 import org.mojave.component.web.spring.security.Authenticator;
 import org.mojave.component.web.spring.security.SpringSecurityConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
-import org.mojave.rail.fspiop.component.participant.ParticipantContext;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
+import org.mojave.rail.fspiop.component.participant.ParticipantContext;
 import org.mojave.rail.fspiop.component.retrofit.FspiopSigningInterceptor;
 import org.mojave.rail.fspiop.service.api.PartiesResponseService;
 import org.mojave.rail.fspiop.service.api.QuotesResponseService;
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import tools.jackson.databind.ObjectMapper;
+
 import java.util.Objects;
 
 @ComponentScan(basePackages = {"org.mojave.rail.fspiop.service"})
@@ -45,7 +47,8 @@ import java.util.Objects;
     value = {
         FspiopComponentConfiguration.class,
         SpringSecurityConfiguration.class})
-public class FspiopServiceConfiguration implements SpringSecurityConfiguration.RequiredDependencies {
+public class FspiopServiceConfiguration
+    implements SpringSecurityConfiguration.RequiredDependencies {
 
     private final SpringSecurityConfigurer.Settings springSecuritySettings;
 
@@ -104,7 +107,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
     }
 
     @Bean
-    public PartiesResponseService partiesResponseService(FspiopSigningInterceptor fspiopSigningInterceptor) {
+    public PartiesResponseService partiesResponseService(
+        FspiopSigningInterceptor fspiopSigningInterceptor) {
 
         return RetrofitService
                    .newBuilder(PartiesResponseService.class, "https://2ne1.com")
@@ -115,7 +119,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
     }
 
     @Bean
-    public QuotesResponseService quotesResponseService(FspiopSigningInterceptor fspiopSigningInterceptor) {
+    public QuotesResponseService quotesResponseService(
+        FspiopSigningInterceptor fspiopSigningInterceptor) {
 
         return RetrofitService
                    .newBuilder(QuotesResponseService.class, "https://2ne1.com")
@@ -126,7 +131,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
     }
 
     @Bean
-    public TransfersResponseService transfersResponseService(FspiopSigningInterceptor fspiopSigningInterceptor) {
+    public TransfersResponseService transfersResponseService(
+        FspiopSigningInterceptor fspiopSigningInterceptor) {
 
         return RetrofitService
                    .newBuilder(TransfersResponseService.class, "https://2ne1.com")
@@ -136,7 +142,8 @@ public class FspiopServiceConfiguration implements SpringSecurityConfiguration.R
                    .build();
     }
 
-    public interface RequiredDependencies {
+    public interface RequiredDependencies
+        extends FspiopComponentConfiguration.RequiredDependencies {
 
         ParticipantVerifier participantVerifier();
 

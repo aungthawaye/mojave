@@ -2,13 +2,13 @@ package org.mojave.core.wallet.domain;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.mojave.core.wallet.contract.command.CreateWalletCommand;
+import org.mojave.core.wallet.contract.constant.WalletDefaultTag;
+import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.wallet.NdcUpdateId;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
-import org.mojave.core.wallet.contract.command.CreateWalletCommand;
-import org.mojave.core.wallet.domain.cache.WalletCache;
-import org.mojave.core.wallet.domain.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -72,11 +72,6 @@ public class BaseIT {
         setEnvironmentOverride(MYSQL_WALLET_DB_MAX_POOL_SIZE, "2");
     }
 
-    private static void setEnvironmentOverride(final String key, final String value) {
-
-        System.setProperty(key, value);
-    }
-
     private static void resetWalletSchemaForTests() {
 
         try (final var connection = DriverManager.getConnection(
@@ -96,6 +91,11 @@ public class BaseIT {
         } catch (final SQLException e) {
             throw new RuntimeException("Unable to reset wallet schema for tests.", e);
         }
+    }
+
+    private static void setEnvironmentOverride(final String key, final String value) {
+
+        System.setProperty(key, value);
     }
 
     private static void truncateDomainTables() {
@@ -129,7 +129,7 @@ public class BaseIT {
                                            final String name) {
 
         return this.createWallet(
-            createWalletCommand, walletOwnerId, currency, Wallet.DEFAULT_TAG, name);
+            createWalletCommand, walletOwnerId, currency, WalletDefaultTag.DEFAULT_TAG, name);
     }
 
     protected WalletId createWallet(final CreateWalletCommand createWalletCommand,
@@ -137,9 +137,7 @@ public class BaseIT {
                                     final String tag, final String name) {
 
         final var output = createWalletCommand.execute(
-            new CreateWalletCommand.Input(
-                new WalletOwnerId(walletOwnerId), currency, tag,
-                name));
+            new CreateWalletCommand.Input(new WalletOwnerId(walletOwnerId), currency, tag, name));
 
         return output.walletId();
     }
@@ -156,6 +154,36 @@ public class BaseIT {
 
         } catch (final SQLException e) {
             throw new RuntimeException("Unable to execute SQL statements.", e);
+        }
+    }
+
+    protected NdcUpdateSnapshot loadNdcUpdateSnapshot(final NdcUpdateId ndcUpdateId) {
+
+        try (final var connection = DriverManager.getConnection(
+            WRITE_DB_URL, WRITE_DB_USER,
+            WRITE_DB_PASSWORD); final var statement = connection.prepareStatement("""
+            SELECT action, amount, old_ndc, new_ndc, description
+            FROM mwe_ndc_update
+            WHERE ndc_update_id = ?
+            """)) {
+
+            statement.setLong(1, ndcUpdateId.getId());
+
+            try (final var resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return new NdcUpdateSnapshot(
+                        resultSet.getString("action"), resultSet.getBigDecimal("amount"),
+                        resultSet.getBigDecimal("old_ndc"), resultSet.getBigDecimal("new_ndc"),
+                        resultSet.getString("description"));
+                }
+            }
+
+            throw new IllegalStateException(
+                "Unable to find NDC update snapshot for ndcUpdateId: " + ndcUpdateId);
+
+        } catch (final SQLException e) {
+            throw new RuntimeException("Unable to load NDC update snapshot.", e);
         }
     }
 
@@ -180,38 +208,6 @@ public class BaseIT {
 
         } catch (final SQLException e) {
             throw new RuntimeException("Unable to update wallet snapshot.", e);
-        }
-    }
-
-    protected NdcUpdateSnapshot loadNdcUpdateSnapshot(final NdcUpdateId ndcUpdateId) {
-
-        try (final var connection = DriverManager.getConnection(
-            WRITE_DB_URL, WRITE_DB_USER,
-            WRITE_DB_PASSWORD); final var statement = connection.prepareStatement("""
-            SELECT action, amount, old_ndc, new_ndc, description
-            FROM mwe_ndc_update
-            WHERE ndc_update_id = ?
-            """)) {
-
-            statement.setLong(1, ndcUpdateId.getId());
-
-            try (final var resultSet = statement.executeQuery()) {
-
-                if (resultSet.next()) {
-                    return new NdcUpdateSnapshot(
-                        resultSet.getString("action"),
-                        resultSet.getBigDecimal("amount"),
-                        resultSet.getBigDecimal("old_ndc"),
-                        resultSet.getBigDecimal("new_ndc"),
-                        resultSet.getString("description"));
-                }
-            }
-
-            throw new IllegalStateException(
-                "Unable to find NDC update snapshot for ndcUpdateId: " + ndcUpdateId);
-
-        } catch (final SQLException e) {
-            throw new RuntimeException("Unable to load NDC update snapshot.", e);
         }
     }
 

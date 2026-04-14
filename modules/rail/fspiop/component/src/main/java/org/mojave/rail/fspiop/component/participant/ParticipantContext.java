@@ -70,64 +70,70 @@ public record ParticipantContext(String hubCode,
         }
     }
 
-    public static ParticipantContext with(String hubCode,
-                                          String fspCode,
-                                          String fspName,
-                                          List<Currency> currencies,
-                                          String ilpSecret,
-                                          boolean signJws,
-                                          boolean verifyJws,
+    public static ParticipantContext with(String hubCode, String fspCode, String fspName,
+                                          List<Currency> currencies, String ilpSecret,
+                                          boolean signJws, boolean verifyJws,
                                           String base64PrivateKey,
-                                          Map<String, String> base64PublicKeys)
-        throws NoSuchAlgorithmException, InvalidKeySpecException {
+                                          Map<String, String> base64PublicKeys) {
 
-        if (hubCode == null || hubCode.isEmpty()) {
-            throw new IllegalArgumentException("Hub Code is required");
+        try {
+            if (hubCode == null || hubCode.isEmpty()) {
+                throw new IllegalArgumentException("Hub Code is required");
+            }
+
+            if (fspCode == null || fspCode.isEmpty()) {
+                throw new IllegalArgumentException("FSP Code is required");
+            }
+
+            if (fspName == null || fspName.isEmpty()) {
+                throw new IllegalArgumentException("FSP Name is required");
+            }
+
+            if (currencies == null || currencies.isEmpty()) {
+                throw new IllegalArgumentException("Currencies are required");
+            }
+
+            if (ilpSecret == null || ilpSecret.isEmpty()) {
+                throw new IllegalArgumentException("ILP Secret is required");
+            }
+
+            if (signJws && (base64PrivateKey == null || base64PrivateKey.isEmpty())) {
+                throw new IllegalArgumentException(
+                    "Signing Key (Private Key) is required when signing JWS");
+            }
+
+            if (verifyJws && (base64PublicKeys == null || base64PublicKeys.isEmpty())) {
+                throw new IllegalArgumentException(
+                    "Verification Key (Public Key) of FSPs are required when verifying JWS");
+            }
+
+            var signingKey = KeyPairs.Rsa.privateKeyOf(base64PrivateKey);
+            LOGGER.info("FspCode: ({}), PrivateKey: ({})", fspCode, base64PrivateKey);
+
+            var publicKeys = new HashMap<String, PublicKey>();
+
+            for (var entry : base64PublicKeys.entrySet()) {
+
+                var publicKey = KeyPairs.Rsa.publicKeyOf(entry.getValue());
+                publicKeys.put(entry.getKey(), publicKey);
+                LOGGER.info(
+                    "FspCode: ({}), PublicKey: ({}), Size: ({})", entry.getKey(), entry.getValue(),
+                    KeyPairs.checkKeySize(publicKey));
+            }
+
+            return new ParticipantContext(
+                hubCode, fspCode, fspName, currencies, ilpSecret, signJws,
+                verifyJws, signingKey, publicKeys);
+
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-        if (fspCode == null || fspCode.isEmpty()) {
-            throw new IllegalArgumentException("FSP Code is required");
-        }
+    public interface Loader {
 
-        if (fspName == null || fspName.isEmpty()) {
-            throw new IllegalArgumentException("FSP Name is required");
-        }
+        ParticipantContext load();
 
-        if (currencies == null || currencies.isEmpty()) {
-            throw new IllegalArgumentException("Currencies are required");
-        }
-
-        if (ilpSecret == null || ilpSecret.isEmpty()) {
-            throw new IllegalArgumentException("ILP Secret is required");
-        }
-
-        if (signJws && (base64PrivateKey == null || base64PrivateKey.isEmpty())) {
-            throw new IllegalArgumentException(
-                "Signing Key (Private Key) is required when signing JWS");
-        }
-
-        if (verifyJws && (base64PublicKeys == null || base64PublicKeys.isEmpty())) {
-            throw new IllegalArgumentException(
-                "Verification Key (Public Key) of FSPs are required when verifying JWS");
-        }
-
-        var signingKey = KeyPairs.Rsa.privateKeyOf(base64PrivateKey);
-        LOGGER.info("FspCode: ({}), PrivateKey: ({})", fspCode, base64PrivateKey);
-
-        var publicKeys = new HashMap<String, PublicKey>();
-
-        for (var entry : base64PublicKeys.entrySet()) {
-
-            var publicKey = KeyPairs.Rsa.publicKeyOf(entry.getValue());
-            publicKeys.put(entry.getKey(), publicKey);
-            LOGGER.info(
-                "FspCode: ({}), PublicKey: ({}), Size: ({})", entry.getKey(), entry.getValue(),
-                KeyPairs.checkKeySize(publicKey));
-        }
-
-        return new ParticipantContext(
-            hubCode, fspCode, fspName, currencies, ilpSecret, signJws,
-            verifyJws, signingKey, publicKeys);
     }
 
 }

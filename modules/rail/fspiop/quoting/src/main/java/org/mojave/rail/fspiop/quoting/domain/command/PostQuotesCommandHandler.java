@@ -20,14 +20,9 @@
 
 package org.mojave.rail.fspiop.quoting.domain.command;
 
-import org.mojave.scheme.rule.enums.participant.EndpointType;
-import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
-import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.rail.fspiop.service.api.forwarder.ForwardRequest;
-import org.mojave.rail.fspiop.service.api.quotes.RespondQuotes;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
@@ -38,7 +33,11 @@ import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.step.CreateQuotesRequestStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.quoting.domain.async.producer.CreateQuotesRequestStepProducer;
+import org.mojave.rail.fspiop.service.api.forwarder.ForwardRequest;
+import org.mojave.rail.fspiop.service.api.quotes.RespondQuotes;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -58,26 +57,25 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
     private final ForwardRequest forwardRequest;
 
-    private final CreateQuotesRequestStepProducer createQuotesRequestStepProducer;
+    private final CreateQuotesRequestStep createQuotesRequestStep;
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
-    public PostQuotesCommandHandler(ParticipantStore participantStore,
-                                    RespondQuotes respondQuotes,
+    public PostQuotesCommandHandler(ParticipantStore participantStore, RespondQuotes respondQuotes,
                                     ForwardRequest forwardRequest,
-                                    CreateQuotesRequestStepProducer createQuotesRequestStepProducer,
+                                    CreateQuotesRequestStep createQuotesRequestStep,
                                     QuotingDomainConfiguration.QuoteSettings quoteSettings) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(respondQuotes);
         Objects.requireNonNull(forwardRequest);
-        Objects.requireNonNull(createQuotesRequestStepProducer);
+        Objects.requireNonNull(createQuotesRequestStep);
         Objects.requireNonNull(quoteSettings);
 
         this.participantStore = participantStore;
         this.respondQuotes = respondQuotes;
         this.forwardRequest = forwardRequest;
-        this.createQuotesRequestStepProducer = createQuotesRequestStepProducer;
+        this.createQuotesRequestStep = createQuotesRequestStep;
         this.quoteSettings = quoteSettings;
     }
 
@@ -147,7 +145,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
             if (this.quoteSettings.stateful()) {
 
-                this.createQuotesRequestStepProducer.publish(new CreateQuotesRequestStep.Input(
+                this.createQuotesRequestStep.execute(new CreateQuotesRequestStep.Input(
                     payerFsp.fspId(), payeeFsp.fspId(), udfQuoteId, currency,
                     new BigDecimal(amount.getAmount()),
                     fees != null ? new BigDecimal(fees.getAmount()) : null,

@@ -7,6 +7,7 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Global Variables">
@@ -58,7 +59,7 @@
           </elementProp>
           <elementProp name="fsp1InboundUrl" elementType="Argument">
             <stringProp name="Argument.name">fsp1InboundUrl</stringProp>
-            <stringProp name="Argument.value">http://localhost:3201</stringProp>
+            <stringProp name="Argument.value">http://localhost:8080</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp1Code" elementType="Argument">
@@ -73,7 +74,7 @@
           </elementProp>
           <elementProp name="fsp2InboundUrl" elementType="Argument">
             <stringProp name="Argument.name">fsp2InboundUrl</stringProp>
-            <stringProp name="Argument.value">http://localhost:3201</stringProp>
+            <stringProp name="Argument.value">http://localhost:9090</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="fsp2Code" elementType="Argument">
@@ -216,13 +217,13 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fsp1Id</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.fspId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -415,7 +416,7 @@ if (val != null) {
         </HeaderManager>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Accounting Setup" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -459,7 +460,7 @@ if (val != null) {
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create CE_HUB_LIQUIDITY" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -822,7 +823,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="12. do fsp1 FUND_IN">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="12. do fsp1 FUND_IN" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -854,7 +855,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="13. do fsp2 FUND_IN" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -886,7 +887,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="14. do fsp1 FUND_TRANSFER" enabled="true">
           <stringProp name="HTTPSampler.domain">${accountingAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${accountingAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1041,7 +1042,7 @@ if (val != null) {
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Wallet Setup">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Wallet Setup" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -1056,7 +1057,7 @@ if (val != null) {
           <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 wallet">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. create FSP1 wallet" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1081,14 +1082,14 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fsp1WalletId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.walletId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 wallet">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. create FSP2 wallet" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1113,14 +1114,14 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">fsp2WalletId</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.walletId</stringProp>
             <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. deposit FSP1 balance">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="3. deposit FSP1 balance" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1146,7 +1147,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. deposit FSP2 balance">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="4. deposit FSP2 balance" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1172,7 +1173,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. increase FSP1 ndc">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="5. increase FSP1 ndc" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1198,7 +1199,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. increase FSP2 ndc">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="6. increase FSP2 ndc" enabled="true">
           <stringProp name="HTTPSampler.domain">${walletAdminHost}</stringProp>
           <stringProp name="HTTPSampler.port">${walletAdminPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1224,7 +1225,7 @@ if (val != null) {
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>

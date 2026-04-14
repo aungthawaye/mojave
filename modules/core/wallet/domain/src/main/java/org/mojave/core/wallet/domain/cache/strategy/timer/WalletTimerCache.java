@@ -21,13 +21,13 @@
 package org.mojave.core.wallet.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.scheme.rule.enums.Currency;
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.data.WalletData;
 import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.mojave.core.wallet.domain.model.Wallet;
 import org.mojave.core.wallet.domain.repository.WalletRepository;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,31 +158,26 @@ public class WalletTimerCache implements WalletCache {
 
         LOGGER.info("Start refreshing wallet cache data");
 
-        final var wallets = this.walletRepository.findAll(
-            WalletRepository.Filters.withTag(Wallet.DEFAULT_TAG));
+        final var wallets = this.walletRepository.findAll();
 
         final var entries = wallets.stream().map(Wallet::convert).toList();
 
         final var withId = entries
                                .stream()
                                .collect(Collectors.toUnmodifiableMap(
-                                   WalletData::walletId, Function.identity(), (a, b) -> a));
+                                   WalletData::walletId,
+                                   Function.identity(), (a, b) -> a));
 
         final var withOwnerCurrencyTag = entries
-                                                 .stream()
-                                                 .collect(Collectors.toUnmodifiableMap(
-                                                     e -> key(
-                                                         e.walletOwnerId(), e.currency(),
-                                                         e.tag()), Function.identity(),
-                                                     (a, b) -> a));
+                                             .stream()
+                                             .collect(Collectors.toUnmodifiableMap(
+                                                 e -> key(e.walletOwnerId(), e.currency(), e.tag()),
+                                                 Function.identity(), (a, b) -> a));
 
-        final var withOwnerId = Collections.unmodifiableMap(entries
-                                                                .stream()
-                                                                .collect(Collectors.groupingBy(
-                                                                    WalletData::walletOwnerId,
-                                                                    Collectors.collectingAndThen(
-                                                                        Collectors.toSet(),
-                                                                        Collections::unmodifiableSet))));
+        final var withOwnerId = Collections.unmodifiableMap(
+            entries.stream().collect(Collectors.groupingBy(
+                WalletData::walletOwnerId,
+                Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet))));
 
         LOGGER.info("Refreshed Wallet cache data, count: {}", entries.size());
 

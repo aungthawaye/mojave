@@ -3,23 +3,21 @@ package org.mojave.core.wallet.domain.query;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mojave.scheme.rule.enums.Currency;
-import org.mojave.scheme.rule.identifier.wallet.WalletId;
-import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.CreateWalletCommand;
+import org.mojave.core.wallet.contract.constant.WalletDefaultTag;
 import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.balance.BalanceIdNotFoundException;
 import org.mojave.core.wallet.contract.query.WalletQuery;
 import org.mojave.core.wallet.domain.BaseIT;
 import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
-import org.mojave.core.wallet.domain.model.Wallet;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(
@@ -48,12 +46,12 @@ public class WalletQueryIT extends BaseIT {
     public void getByIdOwnerCurrencyTagSuccessful() {
 
         final var anyWalletId = this.createWallet(
-            this.createWalletCommand, 201L, Currency.USD, Wallet.DEFAULT_TAG,
+            this.createWalletCommand, 201L, Currency.USD, WalletDefaultTag.DEFAULT_TAG,
             "Default Wallet");
 
         final var p2pWalletId = this.createWallet(
-            this.createWalletCommand, 201L, Currency.USD, "P2P_TRANSFER",
-            "P2P Wallet");
+            this.createWalletCommand, 201L, Currency.USD,
+            "P2P_TRANSFER", "P2P Wallet");
 
         final var byId = this.walletQuery.get(new WalletId(anyWalletId.getId()));
         final var byOwner = this.walletQuery.get(new WalletOwnerId(201L));

@@ -23,8 +23,8 @@ package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
-import org.mojave.core.wallet.contract.query.WalletQuery;
 import org.mojave.core.wallet.intercom.producer.command.position.FulfilPositionsProducer;
+import org.mojave.core.wallet.store.WalletStore;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
@@ -42,17 +42,17 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FulfilPositionsStepHandler.class);
 
-    private final WalletQuery walletQuery;
+    private final WalletStore walletStore;
 
     private final FulfilPositionsProducer fulfilPositionsPublisher;
 
-    public FulfilPositionsStepHandler(final WalletQuery walletQuery,
+    public FulfilPositionsStepHandler(final WalletStore walletStore,
                                       final FulfilPositionsProducer fulfilPositionsPublisher) {
 
-        Objects.requireNonNull(walletQuery);
+        Objects.requireNonNull(walletStore);
         Objects.requireNonNull(fulfilPositionsPublisher);
 
-        this.walletQuery = walletQuery;
+        this.walletStore = walletStore;
         this.fulfilPositionsPublisher = fulfilPositionsPublisher;
     }
 
@@ -67,7 +67,7 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
         try {
 
-            final var payeeWallet = this.walletQuery.get(
+            final var payeeWallet = this.walletStore.getWalletData(
                 new WalletOwnerId(input.payeeFsp().fspId().getId()),
                 Currency.valueOf(input.currency().toString()),
                 "P2P_TRANSFER");

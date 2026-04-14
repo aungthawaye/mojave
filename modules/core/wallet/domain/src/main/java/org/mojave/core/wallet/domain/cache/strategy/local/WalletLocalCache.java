@@ -21,13 +21,12 @@
 package org.mojave.core.wallet.domain.cache.strategy.local;
 
 import jakarta.annotation.PostConstruct;
+import org.mojave.core.wallet.contract.data.WalletData;
+import org.mojave.core.wallet.domain.cache.WalletCache;
+import org.mojave.core.wallet.domain.repository.WalletRepository;
 import org.mojave.scheme.rule.enums.Currency;
 import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
-import org.mojave.core.wallet.contract.data.WalletData;
-import org.mojave.core.wallet.domain.cache.WalletCache;
-import org.mojave.core.wallet.domain.model.Wallet;
-import org.mojave.core.wallet.domain.repository.WalletRepository;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -81,7 +80,7 @@ public class WalletLocalCache implements WalletCache {
         if (data == null) {
             final var entity = this.walletRepository.findById(walletId).orElse(null);
 
-            if (entity != null && Wallet.DEFAULT_TAG.equals(entity.getTag())) {
+            if (entity != null) {
                 data = entity.convert();
                 this.save(data);
             }
@@ -168,8 +167,7 @@ public class WalletLocalCache implements WalletCache {
 
         this.clear();
 
-        final var wallets = this.walletRepository.findAll(
-            WalletRepository.Filters.withTag(Wallet.DEFAULT_TAG));
+        final var wallets = this.walletRepository.findAll();
 
         wallets.forEach((wallet) -> this.save(wallet.convert()));
     }

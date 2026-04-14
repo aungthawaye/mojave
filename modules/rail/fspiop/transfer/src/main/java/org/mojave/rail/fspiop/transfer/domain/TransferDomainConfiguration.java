@@ -26,6 +26,7 @@ import org.mojave.core.accounting.intercom.producer.AccountingIntercomProducerCo
 import org.mojave.core.participant.store.ParticipantStoreConfiguration;
 import org.mojave.core.wallet.intercom.producer.WalletIntercomProducerConfiguration;
 import org.mojave.core.wallet.intercom.requestor.WalletIntercomRequestorConfiguration;
+import org.mojave.core.wallet.store.WalletStoreConfiguration;
 import org.mojave.rail.fspiop.component.FspiopComponentConfiguration;
 import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,6 +40,7 @@ import org.springframework.context.annotation.Import;
         AccountingIntercomProducerConfiguration.class,
         WalletIntercomProducerConfiguration.class,
         WalletIntercomRequestorConfiguration.class,
+        WalletStoreConfiguration.class,
         ParticipantStoreConfiguration.class,
         RoutingJpaConfiguration.class})
 public class TransferDomainConfiguration {
@@ -47,6 +49,7 @@ public class TransferDomainConfiguration {
                                                   FspiopComponentConfiguration.RequiredDependencies,
                                                   AccountingIntercomProducerConfiguration.RequiredDependencies,
                                                   WalletIntercomProducerConfiguration.RequiredDependencies,
+                                                  WalletStoreConfiguration.RequiredDependencies,
                                                   RoutingJpaConfiguration.RequiredDependencies,
                                                   ParticipantStoreConfiguration.RequiredDependencies {
 

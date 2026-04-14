@@ -45,7 +45,8 @@ public interface ReservePayerPositionStep {
                  FspData payerFsp,
                  FspData payeeFsp,
                  Currency currency,
-                 BigDecimal transferAmount) { }
+                 BigDecimal transferAmount,
+                 String scenario) { }
 
     record Output(PositionUpdateId positionReservationId) { }
 

@@ -49,10 +49,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class TimerBasedInMemoryParticipantStore implements ParticipantStore {
+public class LocalParticipantStore implements ParticipantStore {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(
-        TimerBasedInMemoryParticipantStore.class);
+        LocalParticipantStore.class);
 
     private final FspQuery fspQuery;
 
@@ -62,17 +62,17 @@ public class TimerBasedInMemoryParticipantStore implements ParticipantStore {
 
     private final OracleQuery oracleQuery;
 
-    private final TimerBasedInMemoryParticipantStore.Settings settings;
+    private final LocalParticipantStore.Settings settings;
 
     private final AtomicReference<Snapshot> snapshotRef = new AtomicReference<>(Snapshot.empty());
 
-    private final Timer timer = new Timer("TimerBasedInMemoryParticipantStore", true);
+    private final Timer timer = new Timer("LocalParticipantStore", true);
 
-    public TimerBasedInMemoryParticipantStore(FspQuery fspQuery,
-                                              FspGroupQuery fspGroupQuery,
-                                              SspQuery sspQuery,
-                                              OracleQuery oracleQuery,
-                                              TimerBasedInMemoryParticipantStore.Settings settings) {
+    public LocalParticipantStore(FspQuery fspQuery,
+                                 FspGroupQuery fspGroupQuery,
+                                 SspQuery sspQuery,
+                                 OracleQuery oracleQuery,
+                                 LocalParticipantStore.Settings settings) {
 
         Objects.requireNonNull(fspQuery);
         Objects.requireNonNull(fspGroupQuery);
@@ -99,7 +99,7 @@ public class TimerBasedInMemoryParticipantStore implements ParticipantStore {
         this.timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                TimerBasedInMemoryParticipantStore.this.refreshData();
+                LocalParticipantStore.this.refreshData();
             }
         }, interval, interval);
     }

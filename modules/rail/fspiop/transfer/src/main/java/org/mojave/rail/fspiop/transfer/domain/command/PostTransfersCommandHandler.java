@@ -20,14 +20,6 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
-import org.mojave.scheme.rule.enums.Direction;
-import org.mojave.scheme.rule.enums.participant.EndpointType;
-import org.mojave.scheme.rule.enums.transfer.AbortReason;
-import org.mojave.scheme.rule.identifier.transaction.TransactionId;
-import org.mojave.scheme.rule.identifier.transfer.TransferId;
-import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
-import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
-import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
@@ -49,6 +41,14 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReceiveTra
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.ReserveTransferStep;
 import org.mojave.rail.fspiop.transfer.domain.async.producer.AbortTransferStepProducer;
 import org.mojave.rail.fspiop.transfer.domain.async.producer.RollbackReservationStepProducer;
+import org.mojave.scheme.rule.enums.Direction;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.transfer.AbortReason;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -169,7 +169,8 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
                     new ReservePayerPositionStep.Input(
                         udfTransferId, transactionId, transactionAt, payerFsp, payeeFsp,
                         agreement.transferAmount().getCurrency(),
-                        new BigDecimal(agreement.transferAmount().getAmount())));
+                        new BigDecimal(agreement.transferAmount().getAmount()),
+                        agreement.subScenario()));
 
                 positionReservationId = reservePayerPositionOutput.positionReservationId();
 
@@ -205,8 +206,7 @@ public class PostTransfersCommandHandler implements PostTransfersCommand {
 
                 this.reserveTransferStep.execute(
                     new ReserveTransferStep.Input(
-                        udfTransferId, transactionId, transferId,
-                        positionReservationId));
+                        udfTransferId, transactionId, transferId, positionReservationId));
 
             } catch (Exception e) {
 

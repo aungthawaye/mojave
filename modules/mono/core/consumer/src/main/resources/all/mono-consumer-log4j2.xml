@@ -50,7 +50,6 @@
     <Loggers>
         <Root level="info">
             <AppenderRef ref="ASYNC_FILE"/>
-            <AppenderRef ref="ASYNC_CONSOLE"/>
         </Root>
     </Loggers>
 </Configuration>

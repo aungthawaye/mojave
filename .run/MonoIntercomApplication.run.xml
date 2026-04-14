@@ -5,6 +5,7 @@
     </option>
     <option name="MAIN_CLASS_NAME" value="org.mojave.mono.core.intercom.MonoIntercomApplication" />
     <module name="mojave-mono-core-intercom" />
+    <option name="VM_PARAMETERS" value="-Dsnowflake.nodeId=2 -Dlog4j.configurationFile=classpath:mono-intercom-log4j2.xml" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.mono.core.intercom.*" />

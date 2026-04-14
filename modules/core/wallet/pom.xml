@@ -16,6 +16,7 @@
         <module>engine</module>
         <module>domain</module>
         <module>intercom</module>
+        <module>store</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

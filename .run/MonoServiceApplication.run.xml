@@ -8,6 +8,7 @@
       <option name="environmentVariables" />
     </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.mojave.mono.rail.fspiop.service.MonoServiceApplication" />
+    <option name="VM_PARAMETERS" value="-Dsnowflake.nodeId=10 -Dlog4j.configurationFile=classpath:mono-fspiop-log4j2.xml" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.mojave.mono.rail.fspiop.service.*" />

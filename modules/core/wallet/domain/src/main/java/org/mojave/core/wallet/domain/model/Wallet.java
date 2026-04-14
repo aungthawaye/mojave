@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
+import static org.mojave.core.wallet.contract.constant.WalletDefaultTag.DEFAULT_TAG;
 
 @Getter
 @Entity
@@ -42,8 +43,6 @@ import static java.sql.Types.BIGINT;
             "tag"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wallet extends JpaEntity<WalletId> implements DataConversion<WalletData> {
-
-    public static final String DEFAULT_TAG = "DEFAULT";
 
     @Id
     @JavaType(WalletIdJavaType.class)
