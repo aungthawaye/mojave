@@ -22,11 +22,15 @@ package org.mojave.core.participant.contract.command.hub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.HubCurrencyId;
-import org.mojave.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.participant.HubCurrencyId;
+import org.mojave.scheme.rule.identifier.participant.HubId;
 
 public interface AddHubCurrencyCommand {
+
+    String SUBJECT_NAME = "sub-participant.add-hub-currency-command";
+
+    String TOPIC_NAME = "tp-participant.add-hub-currency-command";
 
     Output execute(Input input);
 

@@ -20,27 +20,13 @@
 
 package org.mojave.mono.core.consumer;
 
-import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.CoaEntryCache;
-import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
-import org.mojave.core.accounting.domain.cache.strategy.timer.AccountTimerCache;
-import org.mojave.core.accounting.domain.cache.strategy.timer.CoaEntryTimerCache;
-import org.mojave.core.accounting.domain.cache.strategy.timer.FlowDefinitionTimerCache;
+import org.mojave.core.accounting.contract.engine.LedgerEngine;
 import org.mojave.core.accounting.domain.repository.AccountRepository;
 import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
-import org.mojave.core.wallet.domain.cache.BalanceCache;
-import org.mojave.core.wallet.domain.cache.PositionCache;
-import org.mojave.core.wallet.domain.cache.strategy.timer.BalanceTimerCache;
-import org.mojave.core.wallet.domain.cache.strategy.timer.PositionTimerCache;
-import org.mojave.core.wallet.domain.component.BalanceUpdater;
-import org.mojave.core.wallet.domain.component.PositionUpdater;
-import org.mojave.core.wallet.domain.component.mysql.MySqlBalanceUpdater;
-import org.mojave.core.wallet.domain.component.mysql.MySqlPositionUpdater;
-import org.mojave.core.wallet.domain.repository.BalanceRepository;
-import org.mojave.core.wallet.domain.repository.PositionRepository;
-import org.mojave.provider.ledger.contract.Ledger;
-import org.mojave.provider.ledger.mysql.MySqlLedger;
+import org.mojave.core.accounting.engine.mysql.MySqlLedgerEngine;
+import org.mojave.core.wallet.contract.engine.WalletEngine;
+import org.mojave.core.wallet.engine.mysql.MySqlWalletEngine;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
 
@@ -48,27 +34,13 @@ import java.util.Objects;
 
 public class MonoConsumerDependencies implements MonoConsumerConfiguration.RequiredDependencies {
 
-    private final Ledger ledger;
+    private final WalletEngine walletEngine;
 
-    private final AccountCache accountCache;
-
-    private final CoaEntryCache coaEntryCache;
-
-    private final FlowDefinitionCache flowDefinitionCache;
-
-    private final BalanceUpdater balanceUpdater;
-
-    private final PositionUpdater positionUpdater;
-
-    private final BalanceCache balanceCache;
-
-    private final PositionCache positionCache;
+    private final LedgerEngine ledgerEngine;
 
     public MonoConsumerDependencies(AccountRepository accountRepository,
                                     CoaEntryRepository coaEntryRepository,
                                     FlowDefinitionRepository flowDefinitionRepository,
-                                    BalanceRepository balanceRepository,
-                                    PositionRepository positionRepository,
                                     ObjectMapper objectMapper) {
 
         Objects.requireNonNull(accountRepository);
@@ -76,9 +48,22 @@ public class MonoConsumerDependencies implements MonoConsumerConfiguration.Requi
         Objects.requireNonNull(flowDefinitionRepository);
         Objects.requireNonNull(objectMapper);
 
-        this.ledger = new MySqlLedger(
-            new MySqlLedger.LedgerDbSettings(
-                new MySqlLedger.LedgerDbSettings.Connection(
+        this.walletEngine = new MySqlWalletEngine(new MySqlWalletEngine.WalletDbSettings(
+            new MySqlWalletEngine.WalletDbSettings.Connection(
+                System.getenv("MYSQL_WALLET_DB_URL"), System.getenv("MYSQL_WALLET_DB_USER"),
+                System.getenv("MYSQL_WALLET_DB_PASSWORD"),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_CONNECTION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_VALIDATION_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_MAX_LIFETIME_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_IDLE_TIMEOUT")),
+                Long.parseLong(System.getenv("MYSQL_WALLET_DB_KEEPALIVE_TIMEOUT")), false),
+            new MySqlWalletEngine.WalletDbSettings.Pool(
+                "wallet-engine", Integer.parseInt(System.getenv("MYSQL_WALLET_DB_MIN_POOL_SIZE")),
+                Integer.parseInt(System.getenv("MYSQL_WALLET_DB_MAX_POOL_SIZE")))));
+
+        this.ledgerEngine = new MySqlLedgerEngine(
+            new MySqlLedgerEngine.LedgerDbSettings(
+                new MySqlLedgerEngine.LedgerDbSettings.Connection(
                     System.getenv("MYSQL_LEDGER_DB_URL"), System.getenv("MYSQL_LEDGER_DB_USER"),
                     System.getenv("MYSQL_LEDGER_DB_PASSWORD"),
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_CONNECTION_TIMEOUT")),
@@ -86,118 +71,26 @@ public class MonoConsumerDependencies implements MonoConsumerConfiguration.Requi
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_MAX_LIFETIME_TIMEOUT")),
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_IDLE_TIMEOUT")),
                     Long.parseLong(System.getenv("MYSQL_LEDGER_DB_KEEPALIVE_TIMEOUT")), false),
-                new MySqlLedger.LedgerDbSettings.Pool(
-                    "accounting-ledger",
+                new MySqlLedgerEngine.LedgerDbSettings.Pool(
+                    "accounting-ledgerOperation",
                     Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MIN_POOL_SIZE")),
                     Integer.parseInt(System.getenv("MYSQL_LEDGER_DB_MAX_POOL_SIZE")))),
             objectMapper);
 
-        this.accountCache = new AccountTimerCache(
-            accountRepository, Integer.parseInt(
-            System.getenv().getOrDefault("ACCOUNT_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
-        this.coaEntryCache = new CoaEntryTimerCache(
-            coaEntryRepository, Integer.parseInt(
-            System.getenv().getOrDefault("CHART_ENTRY_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
-        this.flowDefinitionCache = new FlowDefinitionTimerCache(
-            flowDefinitionRepository,
-            Integer.parseInt(System
-                                 .getenv()
-                                 .getOrDefault(
-                                     "FLOW_DEFINITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
-        this.balanceUpdater = new MySqlBalanceUpdater(new MySqlBalanceUpdater.BalanceDbSettings(
-            new MySqlBalanceUpdater.BalanceDbSettings.Connection(
-                System.getenv("MYSQL_BALANCE_DB_URL"), System.getenv("MYSQL_BALANCE_DB_USER"),
-                System.getenv("MYSQL_BALANCE_DB_PASSWORD"),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_CONNECTION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_VALIDATION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_MAX_LIFETIME_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_IDLE_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_BALANCE_DB_KEEPALIVE_TIMEOUT")), false),
-            new MySqlBalanceUpdater.BalanceDbSettings.Pool(
-                "wallet-balance", Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("MYSQL_BALANCE_DB_MAX_POOL_SIZE")))));
-
-        this.positionUpdater = new MySqlPositionUpdater(new MySqlPositionUpdater.PositionDbSettings(
-            new MySqlPositionUpdater.PositionDbSettings.Connection(
-                System.getenv("MYSQL_POSITION_DB_URL"), System.getenv("MYSQL_POSITION_DB_USER"),
-                System.getenv("MYSQL_POSITION_DB_PASSWORD"),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_CONNECTION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_VALIDATION_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_MAX_LIFETIME_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_IDLE_TIMEOUT")),
-                Long.parseLong(System.getenv("MYSQL_POSITION_DB_KEEPALIVE_TIMEOUT")), false),
-            new MySqlPositionUpdater.PositionDbSettings.Pool(
-                "wallet-position",
-                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MIN_POOL_SIZE")),
-                Integer.parseInt(System.getenv("MYSQL_POSITION_DB_MAX_POOL_SIZE")))));
-
-        this.balanceCache = new BalanceTimerCache(
-            balanceRepository, Integer.parseInt(
-            System.getenv().getOrDefault("WALLET_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
-        this.positionCache = new PositionTimerCache(
-            positionRepository, Integer.parseInt(
-            System.getenv().getOrDefault("POSITION_TIMER_CACHE_REFRESH_INTERVAL_MS", "5000")));
-
     }
 
     @Bean
     @Override
-    public AccountCache accountCache() {
+    public LedgerEngine ledgerEngine() {
 
-        return this.accountCache;
+        return this.ledgerEngine;
     }
 
     @Bean
     @Override
-    public BalanceUpdater balanceUpdater() {
+    public WalletEngine walletEngine() {
 
-        return this.balanceUpdater;
-    }
-
-    @Bean
-    @Override
-    public CoaEntryCache coaEntryCache() {
-
-        return this.coaEntryCache;
-    }
-
-    @Bean
-    @Override
-    public FlowDefinitionCache flowDefinitionCache() {
-
-        return this.flowDefinitionCache;
-    }
-
-    @Bean
-    @Override
-    public Ledger ledger() {
-
-        return this.ledger;
-    }
-
-    @Bean
-    @Override
-    public PositionCache positionCache() {
-
-        return this.positionCache;
-    }
-
-    @Bean
-    @Override
-    public PositionUpdater positionUpdater() {
-
-        return this.positionUpdater;
-    }
-
-    @Bean
-    @Override
-    public BalanceCache walletCache() {
-
-        return this.balanceCache;
+        return this.walletEngine;
     }
 
 }

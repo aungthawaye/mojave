@@ -1,0 +1,66 @@
+/*-
+ * ===
+ * Mojave
+ * ---
+ * Copyright (C) 2025 Open Source
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===
+ */
+
+package org.mojave.core.wallet.domain.cache;
+
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
+import org.mojave.core.wallet.contract.data.WalletData;
+
+import java.util.Set;
+
+public interface WalletCache {
+
+    void clear();
+
+    WalletData get(WalletId walletId);
+
+    WalletData get(WalletOwnerId walletOwnerId, Currency currency, String tag);
+
+    Set<WalletData> get(WalletOwnerId walletOwnerId);
+
+    void save(WalletData wallet);
+
+    class Updater {
+
+        @PostRemove
+        public void remove() {
+
+        }
+
+        @PostPersist
+        public void save() {
+
+        }
+
+    }
+
+    class Key {
+
+        public static String get(final WalletOwnerId walletOwnerId, final Currency currency,
+                                 final String tag) {
+            return walletOwnerId.getId().toString() + ":" + currency + ":" + tag;
+        }
+    }
+
+}

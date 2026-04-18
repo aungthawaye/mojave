@@ -20,11 +20,11 @@
 
 package org.mojave.core.transaction.contract.exception;
 
-import org.mojave.component.misc.error.RestErrorResponse;
+import org.mojave.component.misc.error.MojaveErrorResponse;
 
 public class TransactionExceptionResolver {
 
-    public static Throwable resolve(final RestErrorResponse error) {
+    public static Throwable resolve(final MojaveErrorResponse error) {
 
         final var code = error.code();
         final var extras = error.extras();
@@ -32,7 +32,7 @@ public class TransactionExceptionResolver {
         return switch (code) {
             case TransactionIdNotFoundException.CODE -> TransactionIdNotFoundException.from(extras);
 
-            default -> throw new RuntimeException("Unknown exception code: " + code);
+            default -> throw new RuntimeException(error.message());
         };
     }
 

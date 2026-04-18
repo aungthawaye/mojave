@@ -22,9 +22,13 @@ package org.mojave.core.accounting.contract.command.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
 
 public interface ActivateAccountCommand {
+
+    String SUBJECT_NAME = "sub-accounting.activate-account-command";
+
+    String TOPIC_NAME = "tp-accounting.activate-account-command";
 
     Output execute(Input input);
 

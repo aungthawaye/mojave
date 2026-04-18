@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/proto" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources/all" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources/local" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources/all" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources/local" type="java-test-resource" />
+    </content>
+  </component>
+</module>

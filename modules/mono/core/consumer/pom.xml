@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.mono.core</groupId>
         <artifactId>mojave-mono-core</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-mono-core-consumer</artifactId>
@@ -16,12 +16,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.core.accounting</groupId>
-            <artifactId>mojave-core-accounting-consumer</artifactId>
+            <groupId>org.mojave.core.accounting.intercom</groupId>
+            <artifactId>mojave-core-accounting-intercom-consumer</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-consumer</artifactId>
+            <groupId>org.mojave.core.wallet.intercom</groupId>
+            <artifactId>mojave-core-wallet-intercom-consumer</artifactId>
         </dependency>
     </dependencies>
 </project>

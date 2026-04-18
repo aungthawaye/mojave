@@ -21,7 +21,7 @@
 package org.mojave.core.participant.contract.exception.fsp;
 
 import lombok.Getter;
-import org.mojave.common.datatype.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

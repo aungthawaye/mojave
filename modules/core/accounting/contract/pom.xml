@@ -4,11 +4,11 @@
     <parent>
         <groupId>org.mojave.core.accounting</groupId>
         <artifactId>mojave-core-accounting</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-accounting-contract</artifactId>
-    <name>Mojave - Core - Accounting - Contract</name>
+    <name>Mojave - Accounting - Contract</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
@@ -16,12 +16,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule</artifactId>
         </dependency>
     </dependencies>
 </project>

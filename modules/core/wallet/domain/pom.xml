@@ -4,21 +4,17 @@
     <parent>
         <groupId>org.mojave.core.wallet</groupId>
         <artifactId>mojave-core-wallet</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-wallet-domain</artifactId>
-    <name>Mojave - Core - Wallet - Domain</name>
+    <name>Mojave - Wallet - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype-jpa</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
@@ -30,6 +26,14 @@
         <dependency>
             <groupId>org.mojave.core.wallet</groupId>
             <artifactId>mojave-core-wallet-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.core.wallet.engine</groupId>
+            <artifactId>mojave-core-wallet-engine-mysql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule-jpa</artifactId>
         </dependency>
     </dependencies>
 </project>

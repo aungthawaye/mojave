@@ -19,7 +19,7 @@
  */
 package org.mojave.rail.fspiop.component.handy;
 
-import org.mojave.scheme.fspiop.core.PartyIdType;
+import org.mojave.rail.fspiop.spec.PartyIdType;
 
 public class FspiopUrls {
 

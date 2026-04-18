@@ -21,9 +21,9 @@
 package org.mojave.core.accounting.contract.exception.ledger;
 
 import lombok.Getter;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 

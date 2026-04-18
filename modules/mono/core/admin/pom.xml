@@ -4,10 +4,11 @@
     <parent>
         <groupId>org.mojave.mono.core</groupId>
         <artifactId>mojave-mono-core</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-mono-core-admin</artifactId>
+    <packaging>jar</packaging>
     <name>Mojave - Mono - Core - Admin</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -25,10 +26,6 @@
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-flyway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-openapi</artifactId>
         </dependency>
         <dependency>
@@ -36,16 +33,16 @@
             <artifactId>mojave-component-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.accounting</groupId>
-            <artifactId>mojave-core-accounting-admin</artifactId>
+            <groupId>org.mojave.core.accounting.intercom</groupId>
+            <artifactId>mojave-core-accounting-intercom-requestor</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-admin</artifactId>
+            <groupId>org.mojave.core.participant.intercom</groupId>
+            <artifactId>mojave-core-participant-intercom-requestor</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-admin</artifactId>
+            <groupId>org.mojave.core.wallet.intercom</groupId>
+            <artifactId>mojave-core-wallet-intercom-requestor</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

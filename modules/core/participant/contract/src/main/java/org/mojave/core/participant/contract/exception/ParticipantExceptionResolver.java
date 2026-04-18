@@ -20,7 +20,8 @@
 
 package org.mojave.core.participant.contract.exception;
 
-import org.mojave.component.misc.error.RestErrorResponse;
+import org.mojave.component.misc.error.MojaveErrorResponse;
+import org.mojave.component.misc.handy.ExceptionResolver;
 import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspCurrencyException;
 import org.mojave.core.participant.contract.exception.fsp.CannotActivateFspEndpointException;
 import org.mojave.core.participant.contract.exception.fsp.FspCodeAlreadyExistsException;
@@ -60,73 +61,15 @@ import org.mojave.core.participant.contract.exception.ssp.SspNameTooLongExceptio
 
 public class ParticipantExceptionResolver {
 
-    public static Throwable resolve(RestErrorResponse error) {
+    private static final String EXCEPTION_PACKAGE = "org.mojave.core.participant.contract.exception";
 
-        var code = error.code();
-        var extra = error.extras();
+    private ParticipantExceptionResolver() {
 
-        return switch (code) {
+    }
 
-            // fsp
-            case CannotActivateFspCurrencyException.CODE ->
-                CannotActivateFspCurrencyException.from(extra);
-            case CannotActivateFspEndpointException.CODE ->
-                CannotActivateFspEndpointException.from(extra);
-            case FspCodeAlreadyExistsException.CODE -> FspCodeAlreadyExistsException.from(extra);
-            case FspCodeNotFoundException.CODE -> FspCodeNotFoundException.from(extra);
-            case FspCodeRequiredException.CODE -> FspCodeRequiredException.from(extra);
-            case FspCurrencyAlreadySupportedException.CODE ->
-                FspCurrencyAlreadySupportedException.from(extra);
-            case FspCurrencyNotSupportedByHubException.CODE ->
-                FspCurrencyNotSupportedByHubException.from(extra);
-            case FspEndpointAlreadyConfiguredException.CODE ->
-                FspEndpointAlreadyConfiguredException.from(extra);
-            case FspEndpointBaseUrlRequiredException.CODE ->
-                FspEndpointBaseUrlRequiredException.from(extra);
-            case FspEndpointBaseUrlTooLongException.CODE ->
-                FspEndpointBaseUrlTooLongException.from(extra);
-            case FspIdNotFoundException.CODE -> FspIdNotFoundException.from(extra);
-            case FspNameRequiredException.CODE -> FspNameRequiredException.from(extra);
-            case FspNameTooLongException.CODE -> FspNameTooLongException.from(extra);
-            case TerminatedFspIdException.CODE -> TerminatedFspIdException.from(extra);
+    public static Throwable resolve(final MojaveErrorResponse error) {
 
-            // fsp group
-            case FspGroupNameAlreadyExistsException.CODE ->
-                FspGroupNameAlreadyExistsException.from(extra);
-            case FspGroupNameRequiredException.CODE -> FspGroupNameRequiredException.from(extra);
-            case FspGroupNameTooLongException.CODE -> FspGroupNameTooLongException.from(extra);
-
-            // hub
-            case HubCountLimitReachedException.CODE -> HubCountLimitReachedException.from(extra);
-            case HubCurrencyAlreadySupportedException.CODE ->
-                HubCurrencyAlreadySupportedException.from(extra);
-            case HubNameRequiredException.CODE -> HubNameRequiredException.from(extra);
-            case HubNameTooLongException.CODE -> HubNameTooLongException.from(extra);
-            case HubNotFoundException.CODE -> HubNotFoundException.from(extra);
-
-            // oracle
-            case OracleAlreadyExistsException.CODE -> OracleAlreadyExistsException.from(extra);
-            case OracleBaseUrlRequiredException.CODE -> OracleBaseUrlRequiredException.from(extra);
-            case OracleBaseUrlTooLongException.CODE -> OracleBaseUrlTooLongException.from(extra);
-            case OracleIdNotFoundException.CODE -> OracleIdNotFoundException.from(extra);
-            case OracleNameRequiredException.CODE -> OracleNameRequiredException.from(extra);
-            case OracleNameTooLongException.CODE -> OracleNameTooLongException.from(extra);
-            case OracleTypeNotFoundException.CODE -> OracleTypeNotFoundException.from(extra);
-
-            // ssp
-            case SspEndpointBaseUrlRequiredException.CODE ->
-                SspEndpointBaseUrlRequiredException.from(extra);
-            case SspEndpointBaseUrlTooLongException.CODE ->
-                SspEndpointBaseUrlTooLongException.from(extra);
-            case SspIdNotFoundException.CODE -> SspIdNotFoundException.from(extra);
-            case SspNameRequiredException.CODE -> SspNameRequiredException.from(extra);
-            case SspNameTooLongException.CODE -> SspNameTooLongException.from(extra);
-            case SspCodeRequiredException.CODE -> SspCodeRequiredException.from(extra);
-            case SspCurrencyNotSupportedByHubException.CODE ->
-                SspCurrencyNotSupportedByHubException.from(extra);
-
-            default -> throw new RuntimeException("Unknown exception code: " + code);
-        };
+        return ExceptionResolver.resolve(EXCEPTION_PACKAGE, error);
     }
 
 }

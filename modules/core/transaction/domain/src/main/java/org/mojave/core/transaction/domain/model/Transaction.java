@@ -20,37 +20,30 @@
 
 package org.mojave.core.transaction.domain.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.transaction.TransactionIdJavaType;
-import org.mojave.common.datatype.enums.trasaction.StepPhase;
-import org.mojave.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.converter.identifier.transaction.TransactionIdJavaType;
+import org.mojave.scheme.rule.enums.trasaction.TransactionPhase;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 import org.mojave.core.transaction.contract.data.TransactionData;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import static java.sql.Types.BIGINT;
@@ -62,10 +55,10 @@ import static java.sql.Types.BIGINT;
     indexes = {
         @Index(
             name = "txn_transaction_01_IDX",
-            columnList = "type, phase, open_at"),
+            columnList = "scenario, phase, open_at"),
         @Index(
             name = "txn_transaction_02_IDX",
-            columnList = "type, phase, close_at"),
+            columnList = "scenario, phase, close_at"),
         @Index(
             name = "txn_transaction_03_IDX",
             columnList = "open_at"),
@@ -86,12 +79,12 @@ public class Transaction extends JpaEntity<TransactionId>
     protected TransactionId id;
 
     @Column(
-        name = "type",
+        name = "scenario",
         nullable = false,
         updatable = false,
         length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected TransactionType type;
+    protected ScenarioType scenario;
 
     @Column(
         name = "phase",
@@ -114,33 +107,17 @@ public class Transaction extends JpaEntity<TransactionId>
     protected String error;
 
     @Column(name = "success")
-    protected Boolean success = true;
+    protected boolean success = true;
 
-    @OneToMany(
-        mappedBy = "transaction",
-        orphanRemoval = true,
-        cascade = {CascadeType.ALL},
-        fetch = FetchType.EAGER)
-    protected List<TransactionStep> steps = new ArrayList<>();
-
-    public Transaction(TransactionId transactionId, TransactionType type) {
+    public Transaction(TransactionId transactionId, ScenarioType scenario) {
 
         Objects.requireNonNull(transactionId);
-        Objects.requireNonNull(type);
+        Objects.requireNonNull(scenario);
 
         this.id = transactionId;
-        this.type = type;
+        this.scenario = scenario;
         this.phase = TransactionPhase.OPEN;
         this.openAt = Instant.now();
-    }
-
-    public TransactionStep addStep(StepPhase phase, String name, String context, String payload) {
-
-        var step = new TransactionStep(this, phase, name, context, payload);
-
-        this.steps.add(step);
-
-        return step;
     }
 
     public void close(String error) {
@@ -153,16 +130,9 @@ public class Transaction extends JpaEntity<TransactionId>
 
     public TransactionData convert() {
 
-        var stepData = this.steps.stream().map(TransactionStep::convert).toList();
-
         return new TransactionData(
-            this.id, this.type, this.phase, this.openAt, this.closeAt, this.error, this.success,
-            stepData);
-    }
-
-    public List<TransactionStep> getSteps() {
-
-        return Collections.unmodifiableList(this.steps);
+            this.id, this.scenario, this.phase, this.openAt, this.closeAt, this.error,
+            this.success);
     }
 
 }

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Mojave's accounting capabilities provide a complete double-entry bookkeeping system with configurable flow definitions, atomic ledger posting, and comprehensive movement tracking. The system ensures financial integrity while providing the flexibility needed for different transaction types and business rules.
+Mojave's accounting capabilities provide a complete double-entry bookkeeping system with configurable flow definitions, atomic ledgerOperation posting, and comprehensive movement tracking. The system ensures financial integrity while providing the flexibility needed for different transaction types and business rules.
 
 ## Chart of Accounts Management
 
@@ -52,7 +52,7 @@ STANDARD_CHART:
 
 ### Account Creation
 
-Create individual ledger accounts:
+Create individual ledgerOperation accounts:
 
 **Account Attributes:**
 - Account ID (auto-generated)
@@ -179,7 +179,7 @@ P2P_TRANSFER_USD Posting Definitions:
 
 ### PostLedgerFlowCommand
 
-The primary command for posting transactions to the ledger:
+The primary command for posting transactions to the ledgerOperation:
 
 **Input Parameters:**
 ```java
@@ -202,7 +202,7 @@ record Output(
 ) {}
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/core/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ### Posting Execution Flow
 
@@ -217,9 +217,9 @@ sequenceDiagram
 
     Caller->>Command: execute(Input)
     Command->>Cache: Get flow definition
-    Cache-->>Command: FlowDefinition with PostingDefinitions
+    Cache-->>Command: FlowDefinition with FlowLines
 
-    loop For each PostingDefinition
+    loop For each FlowLine
         Command->>Resolver: Resolve account
         Note over Resolver: Owner + Currency + ChartEntry
         Resolver-->>Command: Account ID
@@ -342,7 +342,7 @@ if (side == Side.DEBIT) {
 List<Movement> getMovements(TransactionId transactionId);
 ```
 
-Returns all ledger movements for a specific transaction.
+Returns all ledgerOperation movements for a specific transaction.
 
 ### Query By Account
 
@@ -421,7 +421,7 @@ FlowDefinition {
     flowDefinitionId,
     transactionType,
     currency,
-    List<PostingDefinition>
+    List<FlowLine>
 }
 ```
 
@@ -441,7 +441,7 @@ FlowDefinition {
 **Benefits:**
 - Reduce database queries
 - Faster account resolution
-- Lower ledger posting latency
+- Lower ledgerOperation posting latency
 
 ## Reporting
 
@@ -603,4 +603,4 @@ ReversePosting.execute(transactionId, reason, approver);
 
 - [Accounting Model](../02-core-concepts/accounting-model.md) - Accounting concepts
 - [Transaction Lifecycle](../02-core-concepts/transaction-lifecycle.md) - How transactions are recorded
-- [Accounting Module](../../technical/02-core-modules/accounting-module.md) - Technical implementation
+- [Accounting Module](../../technical/02-core-modules/core/accounting-module.md) - Technical implementation

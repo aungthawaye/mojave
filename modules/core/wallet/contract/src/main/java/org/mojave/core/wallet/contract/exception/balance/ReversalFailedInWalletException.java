@@ -21,7 +21,7 @@
 package org.mojave.core.wallet.contract.exception.balance;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.wallet.BalanceUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.BalanceUpdateId;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 

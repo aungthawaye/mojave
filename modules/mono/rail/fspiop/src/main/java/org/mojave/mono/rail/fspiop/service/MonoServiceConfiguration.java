@@ -24,28 +24,23 @@ import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.error.RestErrorConfiguration;
 import org.mojave.component.web.logging.RequestIdMdcConfiguration;
 import org.mojave.component.web.spring.mvc.JsonWebMvcConfigurationSupport;
-import org.mojave.common.datatype.DatatypeConfiguration;
-import org.mojave.core.participant.contract.query.FspQuery;
-import org.mojave.core.participant.contract.query.OracleQuery;
-import org.mojave.core.participant.intercom.client.ParticipantIntercomClientConfiguration;
-import org.mojave.core.wallet.intercom.client.WalletIntercomClientConfiguration;
-import org.mojave.rail.fspiop.bootstrap.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.lookup.domain.LookUpDomainConfiguration;
 import org.mojave.rail.fspiop.lookup.service.LookUpServiceConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.service.QuotingServiceConfiguration;
+import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.service.TransferServiceConfiguration;
+import org.mojave.scheme.rule.DatatypeConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.ObjectMapper;
 
 @EnableAsync
 @ComponentScan(
     basePackages = {
-        "org.mojave.mono.rail.fspiop.service.controller"})
+        "org.mojave.mono.rail.fspiop.service"})
 @Import(
     value = {
         OpenApiConfiguration.class,
@@ -58,9 +53,7 @@ import tools.jackson.databind.ObjectMapper;
         TransferServiceConfiguration.class})
 public final class MonoServiceConfiguration extends JsonWebMvcConfigurationSupport {
 
-    public MonoServiceConfiguration(ObjectMapper objectMapper,
-                                    FspQuery fspQuery,
-                                    OracleQuery oracleQuery) {
+    public MonoServiceConfiguration(ObjectMapper objectMapper) {
 
         super(objectMapper);
 
@@ -75,9 +68,7 @@ public final class MonoServiceConfiguration extends JsonWebMvcConfigurationSuppo
                                               LookUpDomainConfiguration.RequiredSettings,
                                               QuotingDomainConfiguration.RequiredSettings,
                                               TransferDomainConfiguration.RequiredSettings,
-                                              FspiopServiceConfiguration.RequiredSettings,
-                                              ParticipantIntercomClientConfiguration.RequiredSettings,
-                                              WalletIntercomClientConfiguration.RequiredSettings {
+                                              FspiopServiceConfiguration.RequiredSettings {
 
         TomcatSettings tomcatSettings();
 

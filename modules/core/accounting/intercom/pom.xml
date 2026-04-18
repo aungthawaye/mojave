@@ -4,72 +4,22 @@
     <parent>
         <groupId>org.mojave.core.accounting</groupId>
         <artifactId>mojave-core-accounting</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    <groupId>org.mojave.core.accounting.intercom</groupId>
     <artifactId>mojave-core-accounting-intercom</artifactId>
-    <name>Mojave - Core - Accounting - Intercom</name>
+    <packaging>pom</packaging>
+    <name>Mojave - Accounting - Intercom</name>
+    <modules>
+        <module>consumer</module>
+        <module>producer</module>
+        <module>replier</module>
+        <module>requestor</module>
+    </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-flyway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-openapi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.core.accounting</groupId>
-            <artifactId>mojave-core-accounting-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.provider.ledger</groupId>
-            <artifactId>mojave-provider-ledger-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-log4j2</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-log4j2</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
 </project>

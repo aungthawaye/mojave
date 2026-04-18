@@ -20,7 +20,7 @@
 
 package org.mojave.core.participant.domain.repository;
 
-import org.mojave.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.rule.identifier.participant.HubId;
 import org.mojave.core.participant.domain.model.hub.Hub;
 import org.mojave.core.participant.domain.model.hub.Hub_;
 import org.springframework.data.jpa.domain.Specification;

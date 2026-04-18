@@ -20,13 +20,13 @@
 
 package org.mojave.core.accounting.domain.repository;
 
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.model.FlowDefinition_;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -69,15 +69,15 @@ public interface FlowDefinitionRepository extends JpaRepository<FlowDefinition, 
             return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.name), name);
         }
 
+        public static Specification<FlowDefinition> withScenario(ScenarioType scenario) {
+
+            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.scenario), scenario);
+        }
+
         public static Specification<FlowDefinition> withTerminationStatus(TerminationStatus status) {
 
             return (root, query, cb) -> cb.equal(
                 root.get(FlowDefinition_.terminationStatus), status);
-        }
-
-        public static Specification<FlowDefinition> withTransactionType(TransactionType type) {
-
-            return (root, query, cb) -> cb.equal(root.get(FlowDefinition_.transactionType), type);
         }
 
     }

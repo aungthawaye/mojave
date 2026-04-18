@@ -1,0 +1,97 @@
+package org.mojave.core.wallet.domain.command.balance;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mojave.scheme.rule.enums.wallet.BalanceAction;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.core.wallet.contract.command.CreateWalletCommand;
+import org.mojave.core.wallet.contract.command.balance.DepositBalanceCommand;
+import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
+import org.mojave.core.wallet.contract.exception.balance.NoBalanceUpdateForTransactionException;
+import org.mojave.core.wallet.domain.BaseIT;
+import org.mojave.core.wallet.domain.WalletDomainTestConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(
+    classes = {
+        WalletDomainTestConfiguration.class})
+@DisplayName("Deposit Balance Command Integration Test")
+public class DepositBalanceCommandIT extends BaseIT {
+
+    private static final Instant TRANSACTION_AT = Instant.parse("2026-01-10T10:15:30Z");
+
+    @Autowired
+    private CreateWalletCommand createWalletCommand;
+
+    @Autowired
+    private DepositBalanceCommand depositBalanceCommand;
+
+    @Test
+    @DisplayName("Throw when depositing to missing balance")
+    public void balanceNotExist() {
+
+        final var exception = assertThrows(
+            WalletNotFoundException.class, () -> this.depositBalanceCommand.execute(
+                new DepositBalanceCommand.Input(
+                    new WalletId(30101L),
+                    new BigDecimal("25.00"),
+                    new TransactionId(30101L), TRANSACTION_AT, "Deposit missing balance")));
+
+        assertEquals(new WalletId(30101L), exception.getWalletId());
+    }
+
+    @Test
+    @DisplayName("Throw when engine returns no balance update")
+    public void noBalanceUpdate() throws NoBalanceUpdateForTransactionException {
+
+        final var walletId = this.createDefaultWallet(
+            this.createWalletCommand, 302L, Currency.USD, "Deposit Wallet");
+
+        final var transactionId = new TransactionId(30201L);
+        final var input = new DepositBalanceCommand.Input(
+            walletId, new BigDecimal("12.50"), transactionId, TRANSACTION_AT,
+            "Deposit without update");
+
+        this.depositBalanceCommand.execute(input);
+
+        final var exception = assertThrows(
+            NoBalanceUpdateForTransactionException.class,
+            () -> this.depositBalanceCommand.execute(input));
+
+        assertEquals(transactionId, exception.getTransactionId());
+    }
+
+    @Test
+    @DisplayName("Deposit balance successfully")
+    public void successful() throws NoBalanceUpdateForTransactionException {
+
+        final var walletId = this.createDefaultWallet(
+            this.createWalletCommand, 303L, Currency.USD, "Deposit Wallet");
+        final var transactionId = new TransactionId(30301L);
+
+        final var output = this.depositBalanceCommand.execute(
+            new DepositBalanceCommand.Input(
+                walletId, new BigDecimal("25.50"), transactionId, TRANSACTION_AT,
+                "Deposit funds"));
+
+        assertNotNull(output.balanceUpdateId());
+        assertEquals(new WalletId(walletId.getId()), output.walletId());
+        assertEquals(BalanceAction.DEPOSIT, output.action());
+        assertEquals(0, output.oldBalance().compareTo(new BigDecimal("0.00")));
+        assertEquals(0, output.newBalance().compareTo(new BigDecimal("25.50")));
+    }
+
+}

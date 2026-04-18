@@ -20,14 +20,14 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.financial;
 
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.Currency;
+import org.mojave.rail.fspiop.spec.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -45,7 +45,8 @@ public interface ReservePayerPositionStep {
                  FspData payerFsp,
                  FspData payeeFsp,
                  Currency currency,
-                 BigDecimal transferAmount) { }
+                 BigDecimal transferAmount,
+                 String scenario) { }
 
     record Output(PositionUpdateId positionReservationId) { }
 

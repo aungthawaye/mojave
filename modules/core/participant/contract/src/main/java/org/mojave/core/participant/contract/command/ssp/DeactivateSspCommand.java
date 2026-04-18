@@ -22,9 +22,13 @@ package org.mojave.core.participant.contract.command.ssp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.scheme.rule.identifier.participant.SspId;
 
 public interface DeactivateSspCommand {
+
+    String SUBJECT_NAME = "sub-participant.deactivate-ssp-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-ssp-command";
 
     Output execute(Input input);
 

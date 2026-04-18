@@ -2,13 +2,13 @@
 <Configuration status="WARN">
     <Properties>
         <!-- OS user's home directory -->
-        <Property name="LOG_DIR">${sys:user.home}/logs/mojave/mono-admin</Property>
+        <Property name="LOG_DIR">${sys:user.home}/logs/mojave/mono-fspiop</Property>
 
         <!-- main active log file -->
-        <Property name="LOG_FILE">${LOG_DIR}/mono-admin.log</Property>
+        <Property name="LOG_FILE">${LOG_DIR}/mono-fspiop.log</Property>
 
         <!-- rolled file pattern (compressed) -->
-        <Property name="LOG_FILE_PATTERN">${LOG_DIR}/mono-admin-%d{yyyy-MM-dd}-%i.log.gz</Property>
+        <Property name="LOG_FILE_PATTERN">${LOG_DIR}/mono-fspiop-%d{yyyy-MM-dd}-%i.log.gz</Property>
 
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss}{GMT+06:30}|%level|REQ_ID=%X{REQ_ID}|%t|%logger{36} - %msg%xEx%n</Property>
     </Properties>
@@ -40,6 +40,7 @@
         <Async name="ASYNC_FILE" bufferSize="262144" blocking="true">
             <AppenderRef ref="ROLLING_FILE"/>
         </Async>
+
         <!-- Asynchronous wrapper -->
         <Async name="ASYNC_CONSOLE" bufferSize="262144" blocking="true">
             <AppenderRef ref="CONSOLE"/>

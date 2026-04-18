@@ -20,14 +20,9 @@
 
 package org.mojave.rail.fspiop.quoting.domain.command;
 
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
-import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.rail.fspiop.bootstrap.api.forwarder.ForwardRequest;
-import org.mojave.rail.fspiop.bootstrap.api.quotes.RespondQuotes;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopDates;
@@ -38,6 +33,11 @@ import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.quoting.contract.command.PostQuotesCommand;
 import org.mojave.rail.fspiop.quoting.contract.command.step.CreateQuotesRequestStep;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
+import org.mojave.rail.fspiop.service.api.forwarder.ForwardRequest;
+import org.mojave.rail.fspiop.service.api.quotes.RespondQuotes;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -61,8 +61,7 @@ public class PostQuotesCommandHandler implements PostQuotesCommand {
 
     private final QuotingDomainConfiguration.QuoteSettings quoteSettings;
 
-    public PostQuotesCommandHandler(ParticipantStore participantStore,
-                                    RespondQuotes respondQuotes,
+    public PostQuotesCommandHandler(ParticipantStore participantStore, RespondQuotes respondQuotes,
                                     ForwardRequest forwardRequest,
                                     CreateQuotesRequestStep createQuotesRequestStep,
                                     QuotingDomainConfiguration.QuoteSettings quoteSettings) {

@@ -52,7 +52,7 @@
             </elementProp>
             <elementProp name="tg1sourcePort" elementType="Argument">
               <stringProp name="Argument.name">tg1sourcePort</stringProp>
-              <stringProp name="Argument.value">3200</stringProp>
+              <stringProp name="Argument.value">8081</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
@@ -230,7 +230,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
             </ResultCollector>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="quote fsp1-fsp2" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="quote fsp1-fsp2">
             <stringProp name="HTTPSampler.domain">${tg1sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg1sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -245,11 +245,12 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.value">{&#xd;
     &quot;quoteId&quot;: &quot;${tg1quoteId}&quot;,&#xd;
+    &quot;scenario&quot;: &quot;P2P_TRANSFER&quot;,&#xd;
     &quot;payeeFsp&quot;: &quot;${tg1payeeFsp}&quot;,&#xd;
     &quot;amountType&quot;: &quot;RECEIVE&quot;,&#xd;
     &quot;amount&quot;: {&#xd;
         &quot;currency&quot;: &quot;${tg1currency}&quot;,&#xd;
-        &quot;amount&quot;: &quot;1.0000&quot;&#xd;
+        &quot;amount&quot;: &quot;1.00&quot;&#xd;
     },&#xd;
     &quot;payer&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
@@ -293,7 +294,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
             </JSONPostProcessor>
             <hashTree/>
             <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-              <boolProp name="ResultCollector.error_logging">false</boolProp>
+              <boolProp name="ResultCollector.error_logging">true</boolProp>
               <objProp>
                 <name>saveConfig</name>
                 <value class="SampleSaveConfiguration">
@@ -404,7 +405,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
             </ResultCollector>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="transfer fsp1-fsp2" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="transfer fsp1-fsp2">
             <stringProp name="HTTPSampler.domain">${tg1sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg1sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -445,7 +446,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </HTTPSamplerProxy>
           <hashTree>
             <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-              <boolProp name="ResultCollector.error_logging">false</boolProp>
+              <boolProp name="ResultCollector.error_logging">true</boolProp>
               <objProp>
                 <name>saveConfig</name>
                 <value class="SampleSaveConfiguration">
@@ -557,8 +558,8 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
@@ -594,7 +595,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <stringProp name="filename">/Users/aungthawaye/Downloads/result.csv</stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table">
           <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -631,7 +632,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <stringProp name="filename">/Users/aungthawaye/Downloads/result2.csv</stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -1328,7 +1329,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -1366,7 +1367,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
-        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <boolProp name="ResultCollector.error_logging">true</boolProp>
         <objProp>
           <name>saveConfig</name>
           <value class="SampleSaveConfiguration">

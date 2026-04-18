@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="0A6fq-UgYmel_D66pteS">
+    <mxGraphModel dx="1414" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-7" edge="1" parent="1" source="QYjl5VkG1OO3NkvsiAuy-3" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;endArrow=open;endFill=0;curved=0;" target="QYjl5VkG1OO3NkvsiAuy-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Accounting" vertex="1">
+          <mxGeometry height="40" width="120" x="280" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-4" edge="1" parent="1" source="QYjl5VkG1OO3NkvsiAuy-3" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;endArrow=open;endFill=0;" target="QYjl5VkG1OO3NkvsiAuy-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-8" edge="1" parent="1" source="QYjl5VkG1OO3NkvsiAuy-5" style="edgeStyle=orthogonalEdgeStyle;shape=connector;curved=0;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;endArrow=open;endFill=0;" target="QYjl5VkG1OO3NkvsiAuy-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Wallet" vertex="1">
+          <mxGeometry height="40" width="120" x="520" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Transaction" vertex="1">
+          <mxGeometry height="40" width="120" x="400" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Flow Definition" vertex="1">
+          <mxGeometry height="20" width="120" x="280" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Position" vertex="1">
+          <mxGeometry height="20" width="120" x="520" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Flow Definition" vertex="1">
+          <mxGeometry height="20" width="120" x="400" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="QYjl5VkG1OO3NkvsiAuy-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Fira Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DFira%2BSans;fontSize=12;fontColor=default;labelBackgroundColor=none;fillColor=default;" value="Position" vertex="1">
+          <mxGeometry height="20" width="120" x="400" y="380" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

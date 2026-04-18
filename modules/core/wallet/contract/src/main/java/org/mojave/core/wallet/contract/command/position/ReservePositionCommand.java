@@ -24,36 +24,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.wallet.PositionAction;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.wallet.PositionAction;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
+import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
-import org.mojave.core.wallet.contract.exception.position.PositionNotExistException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 public interface ReservePositionCommand {
 
+    String SUBJECT_NAME = "sub-wallet.reserve-position-command";
+
+    String TOPIC_NAME = "tp-wallet.reserve-position-command";
+
     Output execute(Input input) throws
                                 PositionLimitExceededException,
                                 NoPositionUpdateForTransactionException,
-                                PositionNotExistException;
+                                WalletNotFoundException;
 
-    record Input(@JsonProperty(required = true) @NotNull WalletOwnerId walletOwnerId,
-                 @JsonProperty(required = true) @NotNull Currency currency,
+    record Input(@JsonProperty(required = true) @NotNull WalletId walletId,
                  @JsonProperty(required = true) @NotNull BigDecimal amount,
                  @JsonProperty(required = true) @NotNull TransactionId transactionId,
                  @JsonProperty(required = true) @NotNull Instant transactionAt,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description) { }
 
     record Output(PositionUpdateId positionUpdateId,
-                  PositionId positionId,
+                  WalletId walletId,
                   PositionAction action,
                   TransactionId transactionId,
                   Currency currency,

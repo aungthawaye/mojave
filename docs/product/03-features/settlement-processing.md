@@ -116,7 +116,7 @@ public boolean matches(Currency currency,
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/settlement/domain/src/main/java/org/mojave/core/settlement/domain/model/SettlementDefinition.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
 
 ### Matching Example
 
@@ -288,7 +288,7 @@ Transfer and settlement happen atomically
 Transaction phases:
   1. Reserve payer position
   2. Reserve in central bank (RTGS)
-  3. Post to ledger
+  3. Post to ledgerOperation
   4. Commit positions
   5. Confirm RTGS completion
 
@@ -521,5 +521,5 @@ ReverseSettlementCommand.execute(
 
 - [Settlement Framework](../02-core-concepts/settlement-framework.md) - Settlement concepts
 - [Participants and Roles](../02-core-concepts/participants-and-roles.md) - SSP role
-- [Settlement Module](../../technical/02-core-modules/settlement-module.md) - Technical implementation
+- [Settlement Module](../../technical/02-core-modules/core/settlement-module.md) - Technical implementation
 - [Settlement Flow](../../technical/03-flows/settlement-flow.md) - Technical flow details

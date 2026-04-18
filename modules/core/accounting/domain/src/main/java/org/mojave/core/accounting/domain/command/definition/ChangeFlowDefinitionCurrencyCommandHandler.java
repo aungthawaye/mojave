@@ -20,12 +20,12 @@
 
 package org.mojave.core.accounting.domain.command.definition;
 
-import org.mojave.component.jpa.routing.annotation.Write;
-import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.definition.ChangeFlowDefinitionCurrencyCommand;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionAlreadyConfiguredException;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.component.jpa.routing.annotation.Write;
+import org.mojave.component.misc.logger.ObjectLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -62,17 +62,16 @@ public class ChangeFlowDefinitionCurrencyCommandHandler
                                        input.flowDefinitionId()));
 
         // Ensure no other definition already uses the target currency
-        final var transactionType = definition.getTransactionType();
+        final var transactionType = definition.getScenario();
         final var currency = input.currency();
 
-        final var withTransactionType = FlowDefinitionRepository.Filters.withTransactionType(
-            transactionType);
+        final var withScenario = FlowDefinitionRepository.Filters.withScenario(transactionType);
         final var withCurrency = FlowDefinitionRepository.Filters.withCurrency(currency);
         final var withIdNotEquals = FlowDefinitionRepository.Filters.withIdNotEquals(
             definition.getId());
 
         final var conflict = this.flowDefinitionRepository.findOne(
-            withTransactionType.and(withCurrency).and(withIdNotEquals));
+            withScenario.and(withCurrency).and(withIdNotEquals));
 
         if (conflict.isPresent()) {
             throw new FlowDefinitionAlreadyConfiguredException(transactionType, currency);

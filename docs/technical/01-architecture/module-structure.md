@@ -118,15 +118,15 @@ public RedissonClient redissonClient() {
 - **event:** Domain event publishing
 - **logger:** Structured logging utilities
 
-### 2. Scheme Modules (Protocol Definitions)
+### 2. Rail Specification Modules
 
 Protocol specifications and generated models.
 
 **Total:** 1 module
 
 ```
-scheme/
-└── fspiop/          FSPIOP v2.0 OpenAPI-generated models
+rail/
+└── fspiop/spec/     FSPIOP v2.0 OpenAPI-generated models
 ```
 
 **Generated Classes:**
@@ -136,7 +136,7 @@ scheme/
 - PartiesGetResponse
 - ErrorInformation
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/scheme/fspiop/interface/fspiop_v2.0.yaml`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml`
 
 ### 3. Core Modules (Domain Bounded Contexts)
 
@@ -171,11 +171,11 @@ Domain models: Fsp, Hub, Oracle, Ssp, FspCurrency, FspEndpoint
 
 #### accounting/ (8 modules)
 
-Domain models: Chart, Account, FlowDefinition, PostingDefinition, Movement
+Domain models: Chart, Account, FlowDefinition, FlowLine, Movement
 
 **Commands:**
 - CreateChart, CreateAccount
-- CreateFlowDefinition, AddPostingDefinition
+- CreateFlowDefinition, AddFlowLine
 - PostLedgerFlowCommand
 - ManualPostCommand
 
@@ -226,12 +226,12 @@ Concrete implementations of storage interfaces.
 
 ```
 provider/
-├── ledger-mysql/    MySQL ledger implementation
+├── ledgerOperation-mysql/    MySQL ledgerOperation implementation
 ├── forex/           Foreign exchange provider
 └── settlement/      Settlement provider implementation
 ```
 
-#### ledger-mysql
+#### ledgerOperation-mysql
 
 **Features:**
 - MySQL stored procedure integration
@@ -438,7 +438,7 @@ Service-to-service HTTP calls:
 ```java
 @FeignClient(name = "participant-intercom", url = "http://localhost:9001")
 public interface ParticipantIntercomClient {
-    @GetMapping("/fsps/{code}")
+    @GetMapping("/fsp/{code}")
     FspData getFsp(@PathVariable String code);
 }
 ```

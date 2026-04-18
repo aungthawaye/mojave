@@ -21,7 +21,7 @@
 package org.mojave.core.participant.contract.exception.oracle;
 
 import lombok.Getter;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
+import org.mojave.scheme.rule.enums.participant.PartyIdType;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

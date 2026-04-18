@@ -10,7 +10,7 @@ The Participant module manages all entities that participate in the payment netw
 
 **Aggregate Root:** Fsp
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/participant/domain/src/main/java/org/mojave/core/participant/domain/model/fsp/Fsp.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/participant/domain/src/main/java/org/mojave/participant/domain/model/fsp/Fsp.java`
 
 ```java
 @Entity

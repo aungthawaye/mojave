@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.rail</groupId>
         <artifactId>mojave-rail</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.rail.fspiop</groupId>
@@ -12,9 +12,10 @@
     <packaging>pom</packaging>
     <name>Mojave - Rail - FSPIOP</name>
     <modules>
+        <module>spec</module>
         <module>component</module>
         <module>invoker</module>
-        <module>bootstrap</module>
+        <module>service</module>
         <module>lookup</module>
         <module>quoting</module>
         <module>transfer</module>

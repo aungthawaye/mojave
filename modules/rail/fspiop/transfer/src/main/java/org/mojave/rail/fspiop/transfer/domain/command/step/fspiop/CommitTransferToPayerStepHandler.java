@@ -21,15 +21,15 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.fspiop;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
-import org.mojave.scheme.fspiop.core.TransferState;
-import org.mojave.scheme.fspiop.core.TransfersIDPutResponse;
+import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.spec.TransferState;
+import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

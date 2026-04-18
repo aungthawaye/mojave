@@ -21,13 +21,13 @@
 package org.mojave.core.accounting.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.model.FlowDefinition;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,18 +81,32 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
             return null;
         }
 
+        final var flowDefinitionData = this.snapshotRef.get().withId.get(flowDefinitionId);
+
+        if (flowDefinitionData != null) {
+            return flowDefinitionData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withId.get(flowDefinitionId);
     }
 
     @Override
-    public FlowDefinitionData get(final TransactionType transactionType, final Currency currency) {
+    public FlowDefinitionData get(final ScenarioType scenario, final Currency currency) {
 
-        if (transactionType == null || currency == null) {
+        if (scenario == null || currency == null) {
             return null;
         }
 
-        final var key = FlowDefinitionCache.Keys.forTransaction(transactionType, currency);
-        return this.snapshotRef.get().withTxnTypeCurrency.get(key);
+        final var key = FlowDefinitionCache.Keys.forTransaction(scenario, currency);
+        final var flowDefinitionData = this.snapshotRef.get().withScenarioCurrency.get(key);
+
+        if (flowDefinitionData != null) {
+            return flowDefinitionData;
+        }
+
+        this.refreshData();
+        return this.snapshotRef.get().withScenarioCurrency.get(key);
     }
 
     @PostConstruct
@@ -102,12 +116,15 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
 
         this.refreshData();
 
-        this.timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                FlowDefinitionTimerCache.this.refreshData();
-            }
-        }, this.interval, this.interval);
+        this.timer.scheduleAtFixedRate(
+            new TimerTask() {
+
+                @Override
+                public void run() {
+
+                    FlowDefinitionTimerCache.this.refreshData();
+                }
+            }, this.interval, this.interval);
     }
 
     @Override
@@ -129,17 +146,17 @@ public class FlowDefinitionTimerCache implements FlowDefinitionCache {
                                   FlowDefinitionData::flowDefinitionId, Function.identity(),
                                   (a, b) -> a));
 
-        var _withTxnTypeCurrency = entries.stream().collect(Collectors.toUnmodifiableMap(
-            e -> FlowDefinitionCache.Keys.forTransaction(e.transactionType(), e.currency()),
+        var _withScenarioCurrency = entries.stream().collect(Collectors.toUnmodifiableMap(
+            e -> FlowDefinitionCache.Keys.forTransaction(e.scenario(), e.currency()),
             Function.identity(), (a, b) -> a));
 
         LOGGER.info("Refreshed FlowDefinition cache data, count: {}", entries.size());
 
-        this.snapshotRef.set(new Snapshot(_withId, _withTxnTypeCurrency));
+        this.snapshotRef.set(new Snapshot(_withId, _withScenarioCurrency));
     }
 
     private record Snapshot(Map<FlowDefinitionId, FlowDefinitionData> withId,
-                            Map<String, FlowDefinitionData> withTxnTypeCurrency) {
+                            Map<String, FlowDefinitionData> withScenarioCurrency) {
 
         static Snapshot empty() {
 

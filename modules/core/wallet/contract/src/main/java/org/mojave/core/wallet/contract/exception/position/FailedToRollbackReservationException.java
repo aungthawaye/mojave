@@ -21,7 +21,7 @@
 package org.mojave.core.wallet.contract.exception.position;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 

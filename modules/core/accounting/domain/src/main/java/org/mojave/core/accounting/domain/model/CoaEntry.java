@@ -37,12 +37,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.accounting.CoaEntryIdJavaType;
-import org.mojave.common.datatype.converter.type.accounting.CoaEntryCodeConverter;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.converter.identifier.accounting.CoaEntryIdJavaType;
+import org.mojave.scheme.rule.converter.type.accounting.CoaEntryCodeConverter;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
@@ -85,8 +84,7 @@ public class CoaEntry extends JpaEntity<CoaEntryId> implements DataConversion<Co
         name = "category",
         nullable = false,
         length = StringSizeConstraints.MAX_ENUM_LENGTH)
-    @Enumerated(EnumType.STRING)
-    protected ChartEntryCategory category;
+    protected String category;
 
     @Column(
         name = "coa_entry_code",
@@ -131,7 +129,7 @@ public class CoaEntry extends JpaEntity<CoaEntryId> implements DataConversion<Co
     protected Coa coa;
 
     public CoaEntry(Coa coa,
-                    ChartEntryCategory category,
+                    String category,
                     CoaEntryCode code,
                     String name,
                     String description,

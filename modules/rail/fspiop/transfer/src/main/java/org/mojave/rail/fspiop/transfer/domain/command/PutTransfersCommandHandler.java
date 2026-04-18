@@ -20,24 +20,26 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
-import org.mojave.common.datatype.enums.Direction;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.enums.transfer.AbortReason;
-import org.mojave.common.datatype.enums.transfer.TransferStatus;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.transfer.TransferId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.Direction;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.transfer.AbortReason;
+import org.mojave.scheme.rule.enums.transfer.TransferStatus;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.spec.Currency;
+import org.mojave.rail.fspiop.spec.TransferState;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
-import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostLedgerFlowStep;
+import org.mojave.rail.fspiop.transfer.contract.command.step.financial.PostAccountingFlowStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.CommitTransferToPayerStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
@@ -45,14 +47,12 @@ import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.PatchTransfe
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.UnwrapResponseStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.AbortTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.FetchTransferStep;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.AbortTransferStepProducer;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.CommitTransferStepProducer;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.RollbackReservationStepProducer;
 import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.CommitTransferToPayerStepHandler;
 import org.mojave.rail.fspiop.transfer.domain.command.step.fspiop.PatchTransferToPayeeStepHandler;
 import org.mojave.rail.fspiop.transfer.domain.command.step.stateful.CommitTransferStepHandler;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.CommitTransferStepPublisher;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
-import org.mojave.scheme.fspiop.core.Currency;
-import org.mojave.scheme.fspiop.core.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -71,16 +71,16 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
     // Stateful steps
     private final FetchTransferStep fetchTransferStep;
 
-    private final AbortTransferStepPublisher abortTransferStepPublisher;
+    private final AbortTransferStepProducer abortTransferStepProducer;
 
-    private final CommitTransferStepPublisher commitTransferStepPublisher;
+    private final CommitTransferStepProducer commitTransferStepProducer;
 
     // Financial steps
     private final FulfilPositionsStep fulfilPositionsStep;
 
-    private final RollbackReservationStepPublisher rollbackReservationStepPublisher;
+    private final RollbackReservationStepProducer rollbackReservationStepProducer;
 
-    private final PostLedgerFlowStep postLedgerFlowStep;
+    private final PostAccountingFlowStep postAccountingFlowStep;
 
     // FSPIOP steps
     private final UnwrapResponseStep unwrapResponseStep;
@@ -95,11 +95,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
     public PutTransfersCommandHandler(ParticipantStore participantStore,
                                       FetchTransferStep fetchTransferStep,
-                                      AbortTransferStepPublisher abortTransferStepPublisher,
-                                      CommitTransferStepPublisher commitTransferStepPublisher,
+                                      AbortTransferStepProducer abortTransferStepProducer,
+                                      CommitTransferStepProducer commitTransferStepProducer,
                                       FulfilPositionsStep fulfilPositionsStep,
-                                      RollbackReservationStepPublisher rollbackReservationStepPublisher,
-                                      PostLedgerFlowStep postLedgerFlowStep,
+                                      RollbackReservationStepProducer rollbackReservationStepProducer,
+                                      PostAccountingFlowStep postAccountingFlowStep,
                                       UnwrapResponseStep unwrapResponseStep,
                                       CommitTransferToPayerStep commitTransferToPayerStep,
                                       ForwardToDestinationStep forwardToDestinationStep,
@@ -108,11 +108,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(fetchTransferStep);
-        Objects.requireNonNull(abortTransferStepPublisher);
-        Objects.requireNonNull(commitTransferStepPublisher);
+        Objects.requireNonNull(abortTransferStepProducer);
+        Objects.requireNonNull(commitTransferStepProducer);
         Objects.requireNonNull(fulfilPositionsStep);
-        Objects.requireNonNull(rollbackReservationStepPublisher);
-        Objects.requireNonNull(postLedgerFlowStep);
+        Objects.requireNonNull(rollbackReservationStepProducer);
+        Objects.requireNonNull(postAccountingFlowStep);
         Objects.requireNonNull(unwrapResponseStep);
         Objects.requireNonNull(commitTransferToPayerStep);
         Objects.requireNonNull(forwardToDestinationStep);
@@ -121,11 +121,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
 
         this.participantStore = participantStore;
         this.fetchTransferStep = fetchTransferStep;
-        this.abortTransferStepPublisher = abortTransferStepPublisher;
-        this.commitTransferStepPublisher = commitTransferStepPublisher;
+        this.abortTransferStepProducer = abortTransferStepProducer;
+        this.commitTransferStepProducer = commitTransferStepProducer;
         this.fulfilPositionsStep = fulfilPositionsStep;
-        this.rollbackReservationStepPublisher = rollbackReservationStepPublisher;
-        this.postLedgerFlowStep = postLedgerFlowStep;
+        this.rollbackReservationStepProducer = rollbackReservationStepProducer;
+        this.postAccountingFlowStep = postAccountingFlowStep;
         this.unwrapResponseStep = unwrapResponseStep;
         this.commitTransferToPayerStep = commitTransferToPayerStep;
         this.forwardToDestinationStep = forwardToDestinationStep;
@@ -242,12 +242,12 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 LOGGER.error("Error:", e);
                 // Payee responded with some validation error.
                 // Roll back the Payer position reservation.
-                this.rollbackReservationStepPublisher.publish(
+                this.rollbackReservationStepProducer.publish(
                     new RollbackReservationStep.Input(
                         udfTransferId, transactionId, transferId,
                         reservationId, e.getMessage()));
 
-                this.abortTransferStepPublisher.publish(new AbortTransferStep.Input(
+                this.abortTransferStepProducer.publish(new AbortTransferStep.Input(
                     udfTransferId, transactionId, transferId,
                     AbortReason.VALIDATION_ERROR_IN_PAYEE_RESPONSE, Direction.FROM_PAYEE,
                     putTransfersResponse.getExtensionList()));
@@ -296,11 +296,11 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                 }
 
                 // Roll back the Payer position reservation.
-                this.rollbackReservationStepPublisher.publish(new RollbackReservationStep.Input(
+                this.rollbackReservationStepProducer.publish(new RollbackReservationStep.Input(
                     udfTransferId, transactionId, transferId, reservationId,
                     "Payee aborted the transfer."));
 
-                this.abortTransferStepPublisher.publish(new AbortTransferStep.Input(
+                this.abortTransferStepProducer.publish(new AbortTransferStep.Input(
                     udfTransferId, transactionId, transferId, AbortReason.PAYEE_ABORTED_TRANSFER,
                     Direction.FROM_PAYEE, putTransfersResponse.getExtensionList()));
 
@@ -356,16 +356,15 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                             udfTransferId, transactionId, transactionAt, payerFsp, payeeFsp,
                             reservationId, currency, "-"));
 
-                        this.postLedgerFlowStep.execute(new PostLedgerFlowStep.Input(
+                        this.postAccountingFlowStep.execute(new PostAccountingFlowStep.Input(
                             udfTransferId, transactionId, transactionAt, currency, payerFsp,
                             payeeFsp, transferAmount, BigDecimal.ZERO, BigDecimal.ZERO));
 
-                        this.commitTransferStepPublisher.publish(
-                            new CommitTransferStepHandler.Input(
-                                udfTransferId, transactionId, transferId,
-                                unwrapResponseOutput.ilpFulfilment(),
-                                unwrapResponseOutput.completedAt(),
-                                putTransfersResponse.getExtensionList()));
+                        this.commitTransferStepProducer.publish(new CommitTransferStepHandler.Input(
+                            udfTransferId, transactionId, transferId,
+                            unwrapResponseOutput.ilpFulfilment(),
+                            unwrapResponseOutput.completedAt(),
+                            putTransfersResponse.getExtensionList()));
 
                     } catch (Exception e) {
 
@@ -394,7 +393,7 @@ public class PutTransfersCommandHandler implements PutTransfersCommand {
                     // So, we need to roll back the Payer position reservation.
                     try {
 
-                        this.rollbackReservationStepPublisher.publish(
+                        this.rollbackReservationStepProducer.publish(
                             new RollbackReservationStep.Input(
                                 udfTransferId, transactionId, transferId, reservationId,
                                 "Failed to COMMIT transfer to Payer."));

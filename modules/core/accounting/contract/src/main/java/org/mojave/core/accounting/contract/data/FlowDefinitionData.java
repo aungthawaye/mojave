@@ -20,48 +20,48 @@
 
 package org.mojave.core.accounting.contract.data;
 
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionLineId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
-                                 TransactionType transactionType,
+                                 ScenarioType scenario,
                                  Currency currency,
                                  String name,
                                  String description,
                                  ActivationStatus activationStatus,
                                  TerminationStatus terminationStatus,
-                                 List<PostingDefinitionData> postings) {
+                                 List<FlowDefinitionLineData> flowDefinitionLines) {
 
     public FlowDefinitionData(FlowDefinitionId flowDefinitionId,
-                              TransactionType transactionType,
+                              ScenarioType scenario,
                               Currency currency,
                               String name,
                               String description,
                               ActivationStatus activationStatus,
                               TerminationStatus terminationStatus,
-                              List<PostingDefinitionData> postings) {
+                              List<FlowDefinitionLineData> flowDefinitionLines) {
 
         this.flowDefinitionId = flowDefinitionId;
-        this.transactionType = transactionType;
+        this.scenario = scenario;
         this.currency = currency;
         this.name = name;
         this.description = description;
         this.activationStatus = activationStatus;
         this.terminationStatus = terminationStatus;
-        this.postings = postings
-                            .stream()
-                            .sorted(Comparator.comparing(PostingDefinitionData::step))
-                            .toList();
+        this.flowDefinitionLines = flowDefinitionLines
+                             .stream()
+                             .sorted(Comparator.comparing(FlowDefinitionLineData::step))
+                             .toList();
     }
 
     @Override
@@ -79,32 +79,30 @@ public record FlowDefinitionData(FlowDefinitionId flowDefinitionId,
         return Objects.hashCode(flowDefinitionId);
     }
 
-    public record PostingDefinitionData(PostingDefinitionId postingDefinitionId,
-                                        Integer step,
-                                        PostingChannel postingChannel,
-                                        Long receiveInId,
-                                        String participant,
-                                        String amountName,
-                                        Side side,
-                                        String description) {
+    public record FlowDefinitionLineData(FlowDefinitionLineId flowDefinitionLineId,
+                               Integer step,
+                               String participant,
+                               CoaEntryId coaEntryId,
+                               String amountName,
+                               Side side,
+                               String description) {
 
         @Override
         public boolean equals(Object o) {
 
-            if (!(o instanceof PostingDefinitionData that)) {
+            if (!(o instanceof FlowDefinitionLineData that)) {
                 return false;
             }
 
-            return Objects.equals(postingDefinitionId, that.postingDefinitionId);
+            return Objects.equals(flowDefinitionLineId, that.flowDefinitionLineId);
         }
 
         @Override
         public int hashCode() {
 
-            return Objects.hashCode(postingDefinitionId);
+            return Objects.hashCode(flowDefinitionLineId);
         }
 
     }
 
 }
-

@@ -20,7 +20,9 @@
 
 package org.mojave.core.accounting.contract.query;
 
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionNotFoundException;
 
@@ -28,11 +30,25 @@ import java.util.List;
 
 public interface FlowDefinitionQuery {
 
+    String GET_BY_ID_SUBJECT_NAME = "sub-accounting.flow-definition-query.get-by-id";
+
+    String GET_ALL_SUBJECT_NAME = "sub-accounting.flow-definition-query.get-all";
+
+    String GET_BY_NAME_CONTAINS_SUBJECT_NAME =
+        "sub-accounting.flow-definition-query.get-by-name-contains";
+
     FlowDefinitionData get(FlowDefinitionId flowDefinitionId)
         throws FlowDefinitionNotFoundException;
 
     List<FlowDefinitionData> getAll();
 
     List<FlowDefinitionData> getByNameContains(String name);
+
+    record GetByIdInput(
+        @JsonProperty(required = true) @NotNull FlowDefinitionId flowDefinitionId) { }
+
+    record GetAllInput() { }
+
+    record GetByNameContainsInput(@JsonProperty(required = true) @NotNull String name) { }
 
 }

@@ -9,7 +9,7 @@ Mojave implements the Financial Services Provider Interoperability Protocol (FSP
 ### Protocol Specification
 
 **Source:** FSPIOP v2.0 OpenAPI Specification
-**Location:** `/Users/aungthawaye/Development/Jdev/mojave/modules/scheme/fspiop/interface/fspiop_v2.0.yaml`
+**Location:** `/Users/aungthawaye/Development/Jdev/mojave/modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml`
 
 **Key Features:**
 - RESTful API design
@@ -212,7 +212,7 @@ sequenceDiagram
     Note over Hub: 1. Verify JWS signature<br/>2. Decrypt ILP packet
     Hub->>Wallet: Reserve payer position
     Wallet-->>Hub: Reserved
-    Hub->>Accounting: Post ledger
+    Hub->>Accounting: Post ledgerOperation
     Accounting-->>Hub: Posted
     Hub->>Payee FSP: POST /transfers
     Hub-->>Payer FSP: 202 Accepted

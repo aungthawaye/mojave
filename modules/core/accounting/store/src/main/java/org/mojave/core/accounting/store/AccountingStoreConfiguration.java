@@ -20,25 +20,16 @@
 
 package org.mojave.core.accounting.store;
 
-import org.mojave.core.accounting.intercom.client.AccountingIntercomClientConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
+public class AccountingStoreConfiguration {
 
-@Import(value = {AccountingIntercomClientConfiguration.class})
-@ComponentScan(basePackages = {"org.mojave.core.accounting.store"})
-public class AccountingStoreConfiguration
-    implements AccountingIntercomClientConfiguration.RequiredDependencies {
+    public interface RequiredDependencies {
 
-    public interface RequiredDependencies
-        extends AccountingIntercomClientConfiguration.RequiredDependencies { }
-
-    public interface RequiredSettings
-        extends AccountingIntercomClientConfiguration.RequiredSettings {
-
-        AccountingStoreConfiguration.Settings accountingStoreSettings();
+        AccountingStore accountingStore();
 
     }
 
-    public record Settings(int refreshIntervalMs) { }
+    public interface RequiredSettings {
+
+    }
 
 }

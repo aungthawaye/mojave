@@ -20,22 +20,20 @@
 
 package org.mojave.core.transaction.contract.data;
 
-import org.mojave.common.datatype.enums.trasaction.TransactionPhase;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.enums.trasaction.TransactionPhase;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
 public record TransactionData(TransactionId transactionId,
-                              TransactionType type,
+                              ScenarioType scenario,
                               TransactionPhase phase,
                               Instant openAt,
                               Instant closeAt,
                               String error,
-                              Boolean success,
-                              List<TransactionStepData> steps) {
+                              Boolean success) {
 
     @Override
     public boolean equals(Object o) {

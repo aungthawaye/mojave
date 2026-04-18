@@ -20,16 +20,21 @@
 
 package org.mojave.rail.fspiop.transfer.service;
 
-import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.query.FspGroupQuery;
 import org.mojave.core.participant.contract.query.FspQuery;
 import org.mojave.core.participant.contract.query.OracleQuery;
 import org.mojave.core.participant.contract.query.SspQuery;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.core.participant.store.strategy.timer.TimerBasedInMemoryParticipantStore;
-import org.mojave.rail.fspiop.bootstrap.component.ParticipantVerifier;
+import org.mojave.core.participant.store.strategy.timer.LocalParticipantStore;
+import org.mojave.core.wallet.contract.query.WalletQuery;
+import org.mojave.core.wallet.store.WalletStore;
+import org.mojave.core.wallet.store.strategy.timer.LocalWalletStore;
+import org.mojave.rail.fspiop.component.participant.ParticipantContext;
+import org.mojave.rail.fspiop.component.participant.loader.EnvBasedParticipantContextLoader;
+import org.mojave.rail.fspiop.service.component.ParticipantVerifier;
 import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.mojave.rail.fspiop.transfer.domain.component.interledger.unwrapper.MojaveAgreementUnwrapper;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.springframework.context.annotation.Bean;
 import tools.jackson.databind.ObjectMapper;
 
@@ -40,26 +45,39 @@ public class TransferServiceDependencies
 
     private final ParticipantStore participantStore;
 
+    private final WalletStore walletStore;
+
     private final ObjectMapper objectMapper;
 
-    public TransferServiceDependencies(FspQuery fspQuery,
-                                       FspGroupQuery fspGroupQuery,
-                                       SspQuery sspQuery,
-                                       OracleQuery oracleQuery,
-                                       ObjectMapper objectMapper) {
+    public TransferServiceDependencies(FspQuery fspQuery, FspGroupQuery fspGroupQuery,
+                                       SspQuery sspQuery, OracleQuery oracleQuery,
+                                       WalletQuery walletQuery, ObjectMapper objectMapper) {
 
         Objects.requireNonNull(fspQuery);
         Objects.requireNonNull(fspGroupQuery);
         Objects.requireNonNull(sspQuery);
         Objects.requireNonNull(oracleQuery);
+        Objects.requireNonNull(walletQuery);
         Objects.requireNonNull(objectMapper);
 
-        this.participantStore = new TimerBasedInMemoryParticipantStore(
-            fspQuery, fspGroupQuery, sspQuery, oracleQuery,
-            new TimerBasedInMemoryParticipantStore.Settings(
-                Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
+        this.participantStore = new LocalParticipantStore(
+            fspQuery, fspGroupQuery, sspQuery, oracleQuery, new LocalParticipantStore.Settings(
+            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
+
+        this.walletStore = new LocalWalletStore(
+            walletQuery, new LocalWalletStore.Settings(
+            Integer.parseInt(System.getenv("PARTICIPANT_STORE_REFRESH_INTERVAL_MS"))));
 
         this.objectMapper = objectMapper;
+    }
+
+    @Bean
+    @Override
+    public ParticipantContext participantContext() {
+
+        var loader = new EnvBasedParticipantContextLoader();
+
+        return loader.load();
     }
 
     @Bean
@@ -81,6 +99,13 @@ public class TransferServiceDependencies
     public AgreementUnwrapper partyUnwrapper() {
 
         return new MojaveAgreementUnwrapper(this.objectMapper);
+    }
+
+    @Bean
+    @Override
+    public WalletStore walletStore() {
+
+        return this.walletStore;
     }
 
 }

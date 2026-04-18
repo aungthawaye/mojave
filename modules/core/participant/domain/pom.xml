@@ -4,21 +4,17 @@
     <parent>
         <groupId>org.mojave.core.participant</groupId>
         <artifactId>mojave-core-participant</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-participant-domain</artifactId>
-    <name>Mojave - Core - Participant - Domain</name>
+    <name>Mojave - Participant - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype-jpa</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
@@ -34,6 +30,10 @@
         <dependency>
             <groupId>org.mojave.core.participant</groupId>
             <artifactId>mojave-core-participant-contract</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule-jpa</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -33,21 +33,22 @@ import org.mojave.connector.gateway.outbound.event.QuotesRequestEvent;
 import org.mojave.connector.gateway.outbound.event.QuotesResponseEvent;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.scheme.fspiop.core.AmountType;
-import org.mojave.scheme.fspiop.core.Money;
-import org.mojave.scheme.fspiop.core.Party;
-import org.mojave.scheme.fspiop.core.PartyIdInfo;
-import org.mojave.scheme.fspiop.core.QuotesPostRequest;
-import org.mojave.scheme.fspiop.core.TransactionInitiator;
-import org.mojave.scheme.fspiop.core.TransactionInitiatorType;
-import org.mojave.scheme.fspiop.core.TransactionScenario;
-import org.mojave.scheme.fspiop.core.TransactionType;
+import org.mojave.rail.fspiop.spec.AmountType;
+import org.mojave.rail.fspiop.spec.Money;
+import org.mojave.rail.fspiop.spec.Party;
+import org.mojave.rail.fspiop.spec.PartyIdInfo;
+import org.mojave.rail.fspiop.spec.QuotesPostRequest;
+import org.mojave.rail.fspiop.spec.TransactionInitiator;
+import org.mojave.rail.fspiop.spec.TransactionInitiatorType;
+import org.mojave.rail.fspiop.spec.TransactionScenario;
+import org.mojave.rail.fspiop.spec.TransactionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Objects;
 
 @RestController
@@ -90,7 +91,8 @@ public class RequestQuotesController {
                                                                .initiator(
                                                                    TransactionInitiator.PAYER)
                                                                .initiatorType(
-                                                                   TransactionInitiatorType.CONSUMER));
+                                                                   TransactionInitiatorType.CONSUMER)
+                                                               .subScenario(request.scenario()));
 
         final var payee = new Payee(request.payeeFsp);
 
@@ -120,7 +122,8 @@ public class RequestQuotesController {
 
     }
 
-    public record Request(@JsonProperty(required = false) @NotNull @NotBlank String quoteId,
+    public record Request(@JsonProperty(required = true) @NotNull @NotBlank String quoteId,
+                          @JsonProperty(required = true) @NotNull @NotBlank String scenario,
                           @JsonProperty(required = true) @NotNull @NotBlank String payeeFsp,
                           @JsonProperty(required = true) @NotNull AmountType amountType,
                           @JsonProperty(required = true) @NotNull Money amount,

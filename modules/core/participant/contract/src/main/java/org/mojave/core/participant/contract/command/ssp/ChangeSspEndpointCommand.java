@@ -24,10 +24,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.scheme.rule.identifier.participant.SspId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeSspEndpointCommand {
+
+    String SUBJECT_NAME = "sub-participant.change-ssp-endpoint-command";
+
+    String TOPIC_NAME = "tp-participant.change-ssp-endpoint-command";
 
     Output execute(Input input);
 

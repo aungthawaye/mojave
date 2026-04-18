@@ -48,7 +48,7 @@ Payment Request Flow:
   1. Participant Module identifies and routes to FSPs
   2. Transaction Module creates audit trail
   3. Wallet Module reserves positions (NDC check)
-  4. Accounting Module posts double-entry ledger
+  4. Accounting Module posts double-entry ledgerOperation
   5. Settlement Module matches settlement provider
   6. Transaction Module closes with final state
 ```

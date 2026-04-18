@@ -21,9 +21,9 @@
 package org.mojave.core.accounting.contract.exception.ledger;
 
 import lombok.Getter;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 
@@ -35,7 +35,7 @@ public class DuplicatePostingInLedgerException extends CheckedDomainException {
 
     public static final String CODE = "DUPLICATE_POSTING_IN_LEDGER";
 
-    private static final String TEMPLATE = "Duplicate Posting in Ledger : account ({0}) | side ({1}) | transaction Id : ({2}).";
+    private static final String TEMPLATE = "Duplicate Posting in LedgerOperation : account ({0}) | side ({1}) | transaction Id : ({2}).";
 
     private final AccountCode accountCode;
 

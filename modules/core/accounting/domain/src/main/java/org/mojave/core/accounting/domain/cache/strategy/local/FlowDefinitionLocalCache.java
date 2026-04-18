@@ -21,12 +21,12 @@
 package org.mojave.core.accounting.domain.cache.strategy.local;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
 import org.mojave.core.accounting.domain.cache.FlowDefinitionCache;
 import org.mojave.core.accounting.domain.repository.FlowDefinitionRepository;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +38,7 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
     private final Map<Long, FlowDefinitionData> withId;
 
-    private final Map<String, FlowDefinitionData> withTxnTypeCurrency;
+    private final Map<String, FlowDefinitionData> withScenarioCurrency;
 
     public FlowDefinitionLocalCache(final FlowDefinitionRepository flowDefinitionRepository) {
 
@@ -47,14 +47,14 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
         this.flowDefinitionRepository = flowDefinitionRepository;
 
         this.withId = new ConcurrentHashMap<>();
-        this.withTxnTypeCurrency = new ConcurrentHashMap<>();
+        this.withScenarioCurrency = new ConcurrentHashMap<>();
     }
 
     @Override
     public void clear() {
 
         this.withId.clear();
-        this.withTxnTypeCurrency.clear();
+        this.withScenarioCurrency.clear();
     }
 
     @Override
@@ -64,8 +64,8 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
 
         if (removed != null) {
             final var key = FlowDefinitionCache.Keys.forTransaction(
-                removed.transactionType(), removed.currency());
-            this.withTxnTypeCurrency.remove(key);
+                removed.scenario(), removed.currency());
+            this.withScenarioCurrency.remove(key);
         }
     }
 
@@ -94,21 +94,21 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
     }
 
     @Override
-    public FlowDefinitionData get(final TransactionType transactionType, final Currency currency) {
+    public FlowDefinitionData get(final ScenarioType scenario, final Currency currency) {
 
-        if (transactionType == null || currency == null) {
+        if (scenario == null || currency == null) {
             return null;
         }
 
-        final var key = FlowDefinitionCache.Keys.forTransaction(transactionType, currency);
+        final var key = FlowDefinitionCache.Keys.forTransaction(scenario, currency);
 
-        var data = this.withTxnTypeCurrency.get(key);
+        var data = this.withScenarioCurrency.get(key);
 
         if (data == null) {
 
             var entity = this.flowDefinitionRepository
                              .findOne(FlowDefinitionRepository.Filters
-                                          .withTransactionType(transactionType)
+                                          .withScenario(scenario)
                                           .and(FlowDefinitionRepository.Filters.withCurrency(
                                               currency)))
                              .orElse(null);
@@ -142,8 +142,8 @@ public class FlowDefinitionLocalCache implements FlowDefinitionCache {
         this.withId.put(flowDefinition.flowDefinitionId().getId(), flowDefinition);
 
         final var key = FlowDefinitionCache.Keys.forTransaction(
-            flowDefinition.transactionType(), flowDefinition.currency());
-        this.withTxnTypeCurrency.put(key, flowDefinition);
+            flowDefinition.scenario(), flowDefinition.currency());
+        this.withScenarioCurrency.put(key, flowDefinition);
     }
 
 }

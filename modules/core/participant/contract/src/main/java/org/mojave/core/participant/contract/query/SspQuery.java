@@ -20,18 +20,32 @@
 
 package org.mojave.core.participant.contract.query;
 
-import org.mojave.common.datatype.identifier.participant.SspId;
-import org.mojave.common.datatype.type.participant.SspCode;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import org.mojave.scheme.rule.identifier.participant.SspId;
+import org.mojave.scheme.rule.type.participant.SspCode;
 import org.mojave.core.participant.contract.data.SspData;
 
 import java.util.List;
 
 public interface SspQuery {
 
+    String GET_BY_ID_SUBJECT_NAME = "sub-participant.ssp-query.get-by-id";
+
+    String GET_BY_CODE_SUBJECT_NAME = "sub-participant.ssp-query.get-by-code";
+
+    String GET_ALL_SUBJECT_NAME = "sub-participant.ssp-query.get-all";
+
     SspData get(SspId sspId);
 
     SspData get(SspCode sspCode);
 
     List<SspData> getAll();
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull SspId sspId) { }
+
+    record GetByCodeInput(@JsonProperty(required = true) @NotNull SspCode sspCode) { }
+
+    record GetAllInput() { }
 
 }

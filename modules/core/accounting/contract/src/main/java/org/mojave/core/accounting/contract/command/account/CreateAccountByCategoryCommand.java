@@ -20,22 +20,25 @@
 
 package org.mojave.core.accounting.contract.command.account;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.type.participant.FspCode;
 
 import java.util.List;
 
 public interface CreateAccountByCategoryCommand {
+
+    String SUBJECT_NAME = "sub-accounting.create-account-by-category-command";
+
+    String TOPIC_NAME = "tp-accounting.create-account-by-category-command";
 
     Output execute(Input input);
 
     record Input(AccountOwnerId ownerId,
                  FspCode fspCode,
                  Currency currency,
-                 ChartEntryCategory category) { }
+                 String category) { }
 
     record Output(List<AccountId> accountIds) { }
 

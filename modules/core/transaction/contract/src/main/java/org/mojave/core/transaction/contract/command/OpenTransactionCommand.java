@@ -22,8 +22,8 @@ package org.mojave.core.transaction.contract.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.time.Instant;
 
@@ -31,7 +31,7 @@ public interface OpenTransactionCommand {
 
     Output execute(Input input);
 
-    record Input(@JsonProperty(required = true) @NotNull TransactionType type) { }
+    record Input(@JsonProperty(required = true) @NotNull ScenarioType scenario) { }
 
     record Output(TransactionId transactionId, Instant transactionAt) { }
 

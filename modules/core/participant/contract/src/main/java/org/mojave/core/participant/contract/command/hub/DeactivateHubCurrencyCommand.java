@@ -22,11 +22,15 @@ package org.mojave.core.participant.contract.command.hub;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.HubCurrencyId;
-import org.mojave.common.datatype.identifier.participant.HubId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.participant.HubCurrencyId;
+import org.mojave.scheme.rule.identifier.participant.HubId;
 
 public interface DeactivateHubCurrencyCommand {
+
+    String SUBJECT_NAME = "sub-participant.deactivate-hub-currency-command";
+
+    String TOPIC_NAME = "tp-participant.deactivate-hub-currency-command";
 
     Output execute(Input input);
 

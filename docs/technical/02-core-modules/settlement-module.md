@@ -8,7 +8,7 @@ The Settlement module implements settlement provider matching and settlement lif
 
 ### SettlementDefinition
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/settlement/domain/src/main/java/org/mojave/core/settlement/domain/model/SettlementDefinition.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/settlement/domain/src/main/java/org/mojave/settlement/domain/model/SettlementDefinition.java`
 
 ```java
 @Entity

@@ -21,18 +21,20 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.position.ReservePositionCommand;
 import org.mojave.core.wallet.contract.exception.position.NoPositionUpdateForTransactionException;
 import org.mojave.core.wallet.contract.exception.position.PositionLimitExceededException;
+import org.mojave.core.wallet.store.WalletStore;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.ReservePayerPositionStep;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -41,57 +43,58 @@ public class ReservePayerPositionStepHandler implements ReservePayerPositionStep
     private static final Logger LOGGER = LoggerFactory.getLogger(
         ReservePayerPositionStepHandler.class);
 
+    private final WalletStore walletStore;
+
     private final ReservePositionCommand reservePositionCommand;
 
-    public ReservePayerPositionStepHandler(ReservePositionCommand reservePositionCommand) {
+    public ReservePayerPositionStepHandler(final WalletStore walletStore,
+                                           final ReservePositionCommand reservePositionCommand) {
 
+        Objects.requireNonNull(walletStore);
         Objects.requireNonNull(reservePositionCommand);
 
+        this.walletStore = walletStore;
         this.reservePositionCommand = reservePositionCommand;
     }
 
     @Override
-    public ReservePayerPositionStep.Output execute(ReservePayerPositionStep.Input input) throws
-                                                                                         FspiopException,
-                                                                                         NoPositionUpdateForTransactionException,
-                                                                                         PositionLimitExceededException {
+    public ReservePayerPositionStep.Output execute(final ReservePayerPositionStep.Input input)
+        throws
+        FspiopException,
+        NoPositionUpdateForTransactionException,
+        PositionLimitExceededException {
 
         MDC.put("REQ_ID", input.udfTransferId().getId());
 
-        var startAt = System.nanoTime();
+        final var startAt = System.nanoTime();
 
         LOGGER.info("ReservePayerPositionStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
-            var payerFsp = input.payerFsp();
-            var payerFspCode = payerFsp.code();
+            final var payerFsp = input.payerFsp();
+            final var currency = input.currency();
 
-            var payeeFsp = input.payeeFsp();
-            var payeeFspCode = payeeFsp.code();
+            final var transferAmount = input.transferAmount();
 
-            var currency = input.currency();
+            final var transactionId = input.transactionId();
+            final var transactionAt = input.transactionAt();
 
-            var transferAmount = input.transferAmount();
-            var transferAmountString = transferAmount.stripTrailingZeros().toPlainString();
+            final var walletOwnerId = new WalletOwnerId(payerFsp.fspId().getId());
+            final var wallet = this.walletStore.getWalletData(
+                walletOwnerId, Currency.valueOf(currency.toString()), input.scenario());
+            final var description = "-";
 
-            var transactionId = input.transactionId();
-            var transactionAt = input.transactionAt();
+            final var reservePayerPositionInput = new ReservePositionCommand.Input(
+                wallet.walletId(), transferAmount, transactionId, transactionAt, description);
 
-            var walletOwnerId = new WalletOwnerId(payerFsp.fspId().getId());
-            var description = "-";
-
-            var reservePayerPositionInput = new ReservePositionCommand.Input(
-                walletOwnerId, Currency.valueOf(currency.toString()), transferAmount, transactionId,
-                transactionAt, description);
-
-            var reservePositionOutput = this.reservePositionCommand.execute(
+            final var reservePositionOutput = this.reservePositionCommand.execute(
                 reservePayerPositionInput);
 
-            var output = new ReservePayerPositionStep.Output(
+            final var output = new ReservePayerPositionStep.Output(
                 reservePositionOutput.positionUpdateId());
 
-            var endAt = System.nanoTime();
+            final var endAt = System.nanoTime();
             LOGGER.info(
                 "ReservePayerPositionStep : output : ({}) , took : {} ms",
                 ObjectLogger.log(output), (endAt - startAt) / 1_000_000);

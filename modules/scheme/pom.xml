@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave</groupId>
         <artifactId>mojave</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.scheme</groupId>
@@ -12,7 +12,8 @@
     <packaging>pom</packaging>
     <name>Mojave - Scheme</name>
     <modules>
-        <module>fspiop</module>
+        <module>rule</module>
+        <module>rule-jpa</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

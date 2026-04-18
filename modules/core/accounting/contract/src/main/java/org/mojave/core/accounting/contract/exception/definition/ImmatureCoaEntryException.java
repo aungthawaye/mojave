@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.contract.exception.definition;
 
 import lombok.Getter;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 

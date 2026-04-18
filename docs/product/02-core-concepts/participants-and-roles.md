@@ -89,7 +89,7 @@ The Hub is the central component that orchestrates all payment transactions betw
    - Prevent overdrafts
 
 4. **Accounting and Settlement**
-   - Maintain double-entry ledger
+   - Maintain double-entry ledgerOperation
    - Record all financial movements
    - Match settlement providers
    - Generate settlement instructions

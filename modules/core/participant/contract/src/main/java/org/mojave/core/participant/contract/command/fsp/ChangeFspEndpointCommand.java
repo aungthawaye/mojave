@@ -24,12 +24,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.identifier.participant.FspEndpointId;
-import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.identifier.participant.FspEndpointId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeFspEndpointCommand {
+
+    String SUBJECT_NAME = "sub-participant.change-fsp-endpoint-command";
+
+    String TOPIC_NAME = "tp-participant.change-fsp-endpoint-command";
 
     Output execute(Input input);
 

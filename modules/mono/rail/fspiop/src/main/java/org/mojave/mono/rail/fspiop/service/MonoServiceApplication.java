@@ -49,7 +49,7 @@ public class MonoServiceApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoServiceApplication.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         QuotingFlyway.migrate(
             System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),

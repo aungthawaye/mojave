@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.rail.fspiop</groupId>
         <artifactId>mojave-rail-fspiop</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-rail-fspiop-quoting</artifactId>
@@ -25,10 +25,6 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype-jpa</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
         </dependency>
@@ -38,19 +34,23 @@
         </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-intercom-client</artifactId>
+            <artifactId>mojave-component-nats</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.core.participant</groupId>
             <artifactId>mojave-core-participant-store</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.participant.intercom</groupId>
+            <artifactId>mojave-core-participant-intercom-requestor</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.rail.fspiop</groupId>
-            <artifactId>mojave-rail-fspiop-bootstrap</artifactId>
+            <artifactId>mojave-rail-fspiop-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -20,9 +20,9 @@
 
 package org.mojave.core.participant.contract.data;
 
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.identifier.participant.FspEndpointId;
-import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.identifier.participant.FspEndpointId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
 
 import java.time.Instant;
 import java.util.Objects;

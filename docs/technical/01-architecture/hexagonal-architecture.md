@@ -208,7 +208,7 @@ public interface ParticipantAdminClient {
     @PostMapping("/admin/fsps")
     FspResponse createFsp(@RequestBody CreateFspRequest request);
 
-    @GetMapping("/admin/fsps/{code}")
+    @GetMapping("/admin/fsp/{code}")
     FspResponse getFsp(@PathVariable String code);
 }
 ```

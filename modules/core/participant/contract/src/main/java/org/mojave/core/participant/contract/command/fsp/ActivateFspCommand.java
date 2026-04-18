@@ -22,9 +22,13 @@ package org.mojave.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.identifier.participant.FspId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
 
 public interface ActivateFspCommand {
+
+    String SUBJECT_NAME = "sub-participant.activate-fsp-command";
+
+    String TOPIC_NAME = "tp-participant.activate-fsp-command";
 
     Output execute(Input input);
 

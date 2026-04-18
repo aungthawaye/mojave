@@ -20,28 +20,29 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
+import org.mojave.scheme.rule.enums.Direction;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.transfer.AbortReason;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.Direction;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.enums.transfer.AbortReason;
-import org.mojave.common.datatype.type.participant.FspCode;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
+import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
+import org.mojave.rail.fspiop.component.handy.FspiopUrls;
+import org.mojave.rail.fspiop.component.type.Payer;
+import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersErrorCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.AbortTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.FetchTransferStep;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.AbortTransferStepPublisher;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.RollbackReservationStepPublisher;
-import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
-import org.mojave.rail.fspiop.component.handy.FspiopUrls;
-import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.AbortTransferStepProducer;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.RollbackReservationStepProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -53,12 +54,12 @@ public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand
     private final ParticipantStore participantStore;
 
     // Financial
-    private final RollbackReservationStepPublisher rollbackReservationStepPublisher;
+    private final RollbackReservationStepProducer rollbackReservationStepProducer;
 
     // Stateful steps
     private final FetchTransferStep fetchTransferStep;
 
-    private final AbortTransferStepPublisher abortTransferStepPublisher;
+    private final AbortTransferStepProducer abortTransferStepProducer;
 
     // FSPIOP steps
     private final ForwardToDestinationStep forwardToDestinationStep;
@@ -66,23 +67,23 @@ public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand
     private final RespondTransfers respondTransfers;
 
     public PutTransfersErrorCommandHandler(ParticipantStore participantStore,
-                                           RollbackReservationStepPublisher rollbackReservationStepPublisher,
+                                           RollbackReservationStepProducer rollbackReservationStepProducer,
                                            FetchTransferStep fetchTransferStep,
-                                           AbortTransferStepPublisher abortTransferStepPublisher,
+                                           AbortTransferStepProducer abortTransferStepProducer,
                                            ForwardToDestinationStep forwardToDestinationStep,
                                            RespondTransfers respondTransfers) {
 
         Objects.requireNonNull(participantStore);
-        Objects.requireNonNull(rollbackReservationStepPublisher);
+        Objects.requireNonNull(rollbackReservationStepProducer);
         Objects.requireNonNull(fetchTransferStep);
-        Objects.requireNonNull(abortTransferStepPublisher);
+        Objects.requireNonNull(abortTransferStepProducer);
         Objects.requireNonNull(forwardToDestinationStep);
         Objects.requireNonNull(respondTransfers);
 
         this.participantStore = participantStore;
-        this.rollbackReservationStepPublisher = rollbackReservationStepPublisher;
+        this.rollbackReservationStepProducer = rollbackReservationStepProducer;
         this.fetchTransferStep = fetchTransferStep;
-        this.abortTransferStepPublisher = abortTransferStepPublisher;
+        this.abortTransferStepProducer = abortTransferStepProducer;
         this.forwardToDestinationStep = forwardToDestinationStep;
         this.respondTransfers = respondTransfers;
     }
@@ -126,11 +127,11 @@ public class PutTransfersErrorCommandHandler implements PutTransfersErrorCommand
 
             }
 
-            this.rollbackReservationStepPublisher.publish(new RollbackReservationStep.Input(
+            this.rollbackReservationStepProducer.publish(new RollbackReservationStep.Input(
                 udfTransferId, transactionId, transferId, reservationId,
                 "Payee responded with error."));
 
-            this.abortTransferStepPublisher.publish(new AbortTransferStep.Input(
+            this.abortTransferStepProducer.publish(new AbortTransferStep.Input(
                 udfTransferId, transactionId, transferId, AbortReason.PAYEE_RESPONDED_WITH_ERROR,
                 Direction.FROM_PAYEE, input.error().getErrorInformation().getExtensionList()));
 

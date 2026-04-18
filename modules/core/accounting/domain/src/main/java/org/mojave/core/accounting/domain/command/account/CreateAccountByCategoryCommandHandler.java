@@ -20,8 +20,8 @@
 
 package org.mojave.core.accounting.domain.command.account;
 
-import org.mojave.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.rule.enums.accounting.OverdraftMode;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.accounting.contract.command.account.CreateAccountCommand;

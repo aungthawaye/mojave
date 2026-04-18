@@ -20,14 +20,14 @@
 
 package org.mojave.core.wallet.domain.command.position;
 
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
+import org.mojave.core.wallet.contract.engine.WalletEngine;
+import org.mojave.core.wallet.contract.exception.WalletNotFoundException;
 import org.mojave.core.wallet.contract.exception.position.FailedToFulfilPositionsException;
-import org.mojave.core.wallet.contract.exception.position.PositionNotExistException;
-import org.mojave.core.wallet.domain.cache.PositionCache;
-import org.mojave.core.wallet.domain.component.PositionUpdater;
+import org.mojave.core.wallet.domain.cache.WalletCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,39 +40,38 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(
         FulfilPositionsCommandHandler.class);
 
-    private final PositionUpdater positionUpdater;
+    private final WalletEngine walletEngine;
 
-    private final PositionCache positionCache;
+    private final WalletCache walletCache;
 
-    public FulfilPositionsCommandHandler(final PositionUpdater positionUpdater,
-                                         final PositionCache positionCache) {
+    public FulfilPositionsCommandHandler(final WalletEngine walletEngine,
+                                         final WalletCache walletCache) {
 
-        Objects.requireNonNull(positionUpdater);
-        Objects.requireNonNull(positionCache);
+        Objects.requireNonNull(walletEngine);
+        Objects.requireNonNull(walletCache);
 
-        this.positionUpdater = positionUpdater;
-        this.positionCache = positionCache;
+        this.walletEngine = walletEngine;
+        this.walletCache = walletCache;
     }
 
     @Override
-    public Output execute(Input input) throws FailedToFulfilPositionsException {
+    public Output execute(final Input input) throws FailedToFulfilPositionsException {
 
         LOGGER.info("FulfilPositionsCommand : input: ({})", ObjectLogger.log(input));
 
-        var payeePosition = this.positionCache.get(input.payeeWalletOwnerId(), input.currency());
+        final var payeeWallet = this.walletCache.get(input.payeeWalletId());
 
-        if (payeePosition == null) {
-
-            throw new PositionNotExistException(input.payeeWalletOwnerId(), input.currency());
+        if (payeeWallet == null) {
+            throw new WalletNotFoundException(input.payeeWalletId());
         }
 
+        final var payeeWalletId = input.payeeWalletId();
         final var reservationCommitId = new PositionUpdateId(Snowflake.get().nextId());
         final var payeePositionCommitId = new PositionUpdateId(Snowflake.get().nextId());
 
         try {
-            final var result = this.positionUpdater.fulfil(
-                input.reservationId(),
-                reservationCommitId, payeePositionCommitId, payeePosition.positionId(),
+            final var result = this.walletEngine.fulfilPositions(
+                input.reservationId(), reservationCommitId, payeePositionCommitId, payeeWalletId,
                 input.description());
 
             final var output = new FulfilPositionsCommand.Output(
@@ -82,7 +81,7 @@ public class FulfilPositionsCommandHandler implements FulfilPositionsCommand {
 
             return output;
 
-        } catch (final PositionUpdater.NoPositionFulfilmentException e) {
+        } catch (final WalletEngine.NoPositionFulfilmentException e) {
 
             LOGGER.error("Error:", e);
             throw new FailedToFulfilPositionsException(e.getReservationId());

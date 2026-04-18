@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.rail.fspiop</groupId>
         <artifactId>mojave-rail-fspiop</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-rail-fspiop-lookup</artifactId>
@@ -30,15 +30,15 @@
         </dependency>
         <dependency>
             <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-intercom-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.core.participant</groupId>
             <artifactId>mojave-core-participant-store</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.participant.intercom</groupId>
+            <artifactId>mojave-core-participant-intercom-requestor</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.rail.fspiop</groupId>
-            <artifactId>mojave-rail-fspiop-bootstrap</artifactId>
+            <artifactId>mojave-rail-fspiop-service</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

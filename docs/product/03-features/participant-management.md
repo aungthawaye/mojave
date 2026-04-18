@@ -267,7 +267,7 @@ public class Fsp extends JpaEntity<FspId> {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/participant/domain/src/main/java/org/mojave/core/participant/domain/model/fsp/Fsp.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/participant/domain/src/main/java/org/mojave/participant/domain/model/fsp/Fsp.java`
 
 ## Hub Management
 
@@ -547,5 +547,5 @@ configureEndpoints(fspId, Map<EndpointType, String> urls);
 ## See Also
 
 - [Participants and Roles](../02-core-concepts/participants-and-roles.md) - Participant concepts
-- [Participant Module](../../technical/02-core-modules/participant-module.md) - Technical implementation
+- [Participant Module](../../technical/02-core-modules/core/participant-module.md) - Technical implementation
 - [Architecture Overview](../01-overview/architecture-overview.md) - System components

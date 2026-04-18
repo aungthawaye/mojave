@@ -24,11 +24,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
-import org.mojave.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.rule.enums.participant.PartyIdType;
+import org.mojave.scheme.rule.identifier.participant.OracleId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateOracleCommand {
+
+    String SUBJECT_NAME = "sub-participant.create-oracle-command";
+
+    String TOPIC_NAME = "tp-participant.create-oracle-command";
 
     Output execute(Input input);
 

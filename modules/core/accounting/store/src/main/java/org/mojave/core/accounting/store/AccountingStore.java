@@ -20,25 +20,46 @@
 
 package org.mojave.core.accounting.store;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
+import org.mojave.core.accounting.contract.data.CoaData;
+import org.mojave.core.accounting.contract.data.CoaEntryData;
+import org.mojave.core.accounting.contract.data.FlowDefinitionData;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 
-import java.util.Set;
+import java.util.List;
 
 public interface AccountingStore {
 
-    AccountData get(AccountCode accountCode);
+    AccountData getAccountData(AccountId accountId);
 
-    Set<AccountData> get(AccountOwnerId ownerId);
+    AccountData getAccountData(AccountCode accountCode);
 
-    AccountData get(AccountId accountId);
+    List<AccountData> getAccountData(AccountOwnerId ownerId);
 
-    AccountData get(CoaEntryId coaEntryId, AccountOwnerId ownerId, Currency currency);
+    AccountData getAccountData(CoaEntryId coaEntryId, AccountOwnerId ownerId, Currency currency);
 
-    Set<AccountData> get(CoaEntryId coaEntryId);
+    List<AccountData> getAccountData(CoaEntryId coaEntryId);
+
+    CoaData getCoaData(CoaId coaId);
+
+    CoaEntryData getCoaEntryData(CoaEntryId coaEntryId);
+
+    CoaEntryData getCoaEntryData(CoaEntryCode coaEntryCode);
+
+    List<CoaEntryData> getCoaEntryData(CoaId coaId);
+
+    List<CoaEntryData> getCoaEntryData(String category);
+
+    FlowDefinitionData getFlowDefinitionData(FlowDefinitionId flowDefinitionId);
+
+    FlowDefinitionData getFlowDefinitionData(ScenarioType scenarioType, Currency currency);
 
 }

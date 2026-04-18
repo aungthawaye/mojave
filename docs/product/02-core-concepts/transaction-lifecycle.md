@@ -91,7 +91,7 @@ Initiated At: 2026-02-04T10:30:00Z
 **Activities:**
 1. Reserve payer position
 2. Check NDC limits
-3. Post preparatory ledger entries
+3. Post preparatory ledgerOperation entries
 4. Reserve payee position
 5. Forward to payee FSP
 6. Timestamp preparation
@@ -126,7 +126,7 @@ Expiration: 2026-02-04T10:30:30Z (30 seconds)
 2. Verify ILP fulfillment condition
 3. Commit payer position reservation
 4. Commit payee position reservation
-5. Post final ledger entries
+5. Post final ledgerOperation entries
 6. Send fulfillment to payer FSP
 7. Timestamp commitment
 
@@ -156,7 +156,7 @@ Committed At: 2026-02-04T10:30:05.678Z
 **Activities:**
 1. Rollback payer position reservation
 2. Rollback payee position reservation
-3. Reverse ledger entries if needed
+3. Reverse ledgerOperation entries if needed
 4. Record abort reason
 5. Send error response to payer FSP
 6. Timestamp abortion
@@ -327,7 +327,7 @@ sequenceDiagram
     Wallet-->>Hub: Position reserved
     Hub->>Hub: Record Step: RESERVE_PAYER_POSITION
 
-    Hub->>Accounting: Post ledger flow
+    Hub->>Accounting: Post ledgerOperation flow
     Accounting-->>Hub: Ledger posted
     Hub->>Hub: Record Step: POST_LEDGER_FLOW
 
@@ -348,7 +348,7 @@ sequenceDiagram
     Wallet-->>Hub: Position committed
     Hub->>Hub: Record Step: COMMIT_RESERVATION
 
-    Hub->>Accounting: Post final ledger
+    Hub->>Accounting: Post final ledgerOperation
     Accounting-->>Hub: Posted
     Hub->>Payer FSP: PUT /transfers (fulfillment)
 
@@ -382,7 +382,7 @@ For each transaction, the system maintains:
 - Position update IDs
 
 **Accounting Movements:**
-- All ledger entries
+- All ledgerOperation entries
 - Account IDs
 - Debit/credit amounts
 - Movement IDs
@@ -497,7 +497,7 @@ Count of transactions by FSP
 **2. Amount Validation:**
 ```
 Sum of committed transactions = Sum of position changes
-Sum of ledger movements = Sum of position changes
+Sum of ledgerOperation movements = Sum of position changes
 ```
 
 **3. Settlement Validation:**
@@ -552,5 +552,5 @@ Each type has its own flow definition for accounting.
 - [Wallet and Positions](wallet-and-positions.md) - How positions change
 - [Settlement Framework](settlement-framework.md) - How transactions settle
 - [Transaction Tracking](../03-features/transaction-tracking.md) - Query and monitoring features
-- [Transaction Module](../../technical/02-core-modules/transaction-module.md) - Technical implementation
+- [Transaction Module](../../technical/02-core-modules/core/transaction-module.md) - Technical implementation
 - [Transfer Flow](../../technical/03-flows/transfer-flow.md) - Detailed transfer processing

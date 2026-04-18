@@ -20,14 +20,14 @@
 
 package org.mojave.rail.fspiop.transfer.domain.command;
 
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.enums.transfer.DisputeReason;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.enums.transfer.DisputeReason;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
-import org.mojave.rail.fspiop.bootstrap.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
@@ -35,9 +35,9 @@ import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.transfer.contract.command.PatchTransfersErrorCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.DisputeTransferStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.stateful.FetchTransferStep;
-import org.mojave.rail.fspiop.transfer.domain.kafka.publisher.DisputeTransferStepPublisher;
-import org.mojave.scheme.fspiop.core.ErrorInformation;
-import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.ErrorInformation;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
+import org.mojave.rail.fspiop.transfer.domain.async.producer.DisputeTransferStepProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,24 +55,24 @@ public class PatchTransfersErrorCommandHandler implements PatchTransfersErrorCom
     // Stateful steps
     private final FetchTransferStep fetchTransferStep;
 
-    private final DisputeTransferStepPublisher disputeTransferStepPublisher;
+    private final DisputeTransferStepProducer disputeTransferStepProducer;
 
     // FSPIOP steps
     private final RespondTransfers respondTransfers;
 
     public PatchTransfersErrorCommandHandler(ParticipantStore participantStore,
                                              FetchTransferStep fetchTransferStep,
-                                             DisputeTransferStepPublisher disputeTransferStepPublisher,
+                                             DisputeTransferStepProducer disputeTransferStepProducer,
                                              RespondTransfers respondTransfers) {
 
         Objects.requireNonNull(participantStore);
         Objects.requireNonNull(fetchTransferStep);
-        Objects.requireNonNull(disputeTransferStepPublisher);
+        Objects.requireNonNull(disputeTransferStepProducer);
         Objects.requireNonNull(respondTransfers);
 
         this.participantStore = participantStore;
         this.fetchTransferStep = fetchTransferStep;
-        this.disputeTransferStepPublisher = disputeTransferStepPublisher;
+        this.disputeTransferStepProducer = disputeTransferStepProducer;
         this.respondTransfers = respondTransfers;
     }
 
@@ -114,7 +114,7 @@ public class PatchTransfersErrorCommandHandler implements PatchTransfersErrorCom
 
             }
 
-            this.disputeTransferStepPublisher.publish(
+            this.disputeTransferStepProducer.publish(
                 new DisputeTransferStep.Input(
                     udfTransferId, transactionId, transferId, DisputeReason.PATCHING_TO_PAYEE));
             LOGGER.info("DisputeTransferStep published for udfTransferId : ({})", udfTransferId);

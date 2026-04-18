@@ -58,7 +58,7 @@ Mojave provides a complete instant payment infrastructure:
 
 - **Multi-FSP Support**: Connect multiple Financial Service Providers
 - **Real-Time Processing**: Instant payment execution with immediate finality
-- **Double-Entry Accounting**: Complete ledger with audit trails
+- **Double-Entry Accounting**: Complete ledgerOperation with audit trails
 - **Position Management**: Liquidity management with Net Debit Cap enforcement
 - **Settlement Framework**: Flexible settlement definition and provider matching
 - **Protocol Compliance**: FSPIOP v2.0 implementation
@@ -103,7 +103,7 @@ To contribute to this documentation:
 
 - [Main Project README](../README.md)
 - [Architecture Assessment](../modules/Mojave_Architecture_Assessment.md)
-- [FSPIOP v2.0 Specification](../modules/scheme/fspiop/interface/fspiop_v2.0.yaml)
+- [FSPIOP v2.0 Specification](../modules/rail/fspiop/spec/interface/fspiop_v2.0.yaml)
 
 ## Support
 

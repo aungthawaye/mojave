@@ -4,21 +4,17 @@
     <parent>
         <groupId>org.mojave.core.accounting</groupId>
         <artifactId>mojave-core-accounting</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-accounting-domain</artifactId>
-    <name>Mojave - Core - Accounting - Domain</name>
+    <name>Mojave - Accounting - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.mojave.common</groupId>
-            <artifactId>mojave-common-datatype-jpa</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.mojave.component</groupId>
             <artifactId>mojave-component-flyway</artifactId>
@@ -28,20 +24,16 @@
             <artifactId>mojave-component-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-redis</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mojave.core.accounting</groupId>
             <artifactId>mojave-core-accounting-contract</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.provider.ledger</groupId>
-            <artifactId>mojave-provider-ledger-contract</artifactId>
+            <groupId>org.mojave.core.accounting.engine</groupId>
+            <artifactId>mojave-core-accounting-engine-mysql</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.scheme.fspiop</groupId>
-            <artifactId>mojave-scheme-fspiop</artifactId>
+            <groupId>org.mojave.scheme</groupId>
+            <artifactId>mojave-scheme-rule-jpa</artifactId>
         </dependency>
     </dependencies>
 </project>

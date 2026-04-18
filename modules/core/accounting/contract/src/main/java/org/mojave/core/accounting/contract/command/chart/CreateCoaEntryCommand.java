@@ -24,19 +24,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateCoaEntryCommand {
 
+    String SUBJECT_NAME = "sub-accounting.create-coa-entry-command";
+
+    String TOPIC_NAME = "tp-accounting.create-coa-entry-command";
+
     Output execute(Input input);
 
     record Input(@JsonProperty(required = true) @NotNull CoaId coaId,
-                 @JsonProperty(required = true) @NotNull ChartEntryCategory category,
+                 @JsonProperty(required = true) @NotNull String category,
                  @JsonProperty(required = true) @NotNull CoaEntryCode code,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_NAME_TITLE_LENGTH) String name,
                  @JsonProperty(required = true) @NotNull @NotBlank @Size(max = StringSizeConstraints.MAX_DESCRIPTION_LENGTH) String description,

@@ -20,14 +20,18 @@
 
 package org.mojave.rail.fspiop.quoting.contract.command.step;
 
-import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.ExtensionList;
+import org.mojave.rail.fspiop.spec.ExtensionList;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 public interface UpdateQuotesResponseStep {
+
+    String SUBJECT_NAME = "sub-fspiop-quoting.update-quotes-response-step";
+
+    String TOPIC_NAME = "tp-fspiop-quoting.update-quotes-response-step";
 
     void execute(Input input) throws FspiopException;
 

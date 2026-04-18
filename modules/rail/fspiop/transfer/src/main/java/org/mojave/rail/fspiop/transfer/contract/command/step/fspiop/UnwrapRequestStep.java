@@ -20,11 +20,11 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.fspiop;
 
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.rail.fspiop.component.data.Agreement;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.spec.TransfersPostRequest;
 
 import java.time.Instant;
 

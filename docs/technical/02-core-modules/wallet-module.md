@@ -8,7 +8,7 @@ The Wallet module manages FSP liquidity positions with Net Debit Cap (NDC) enfor
 
 ### ReservePositionCommand
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/core/wallet/contract/command/position/ReservePositionCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 ```java
 public interface ReservePositionCommand {
@@ -25,7 +25,7 @@ public interface ReservePositionCommand {
 
     record Output(
         PositionUpdateId positionUpdateId,
-        PositionId positionId,
+        WalletId positionId,
         PositionAction action,
         BigDecimal oldPosition,
         BigDecimal newPosition,

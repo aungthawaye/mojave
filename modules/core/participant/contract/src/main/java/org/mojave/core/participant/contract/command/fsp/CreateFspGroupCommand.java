@@ -24,10 +24,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.identifier.participant.FspGroupId;
+import org.mojave.scheme.rule.identifier.participant.FspGroupId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateFspGroupCommand {
+
+    String SUBJECT_NAME = "sub-participant.create-fsp-group-command";
+
+    String TOPIC_NAME = "tp-participant.create-fsp-group-command";
 
     Output execute(Input input);
 

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
  * limitations under the License.
  * ===
  */
+
 package org.mojave.connector.gateway.outbound;
 
 import org.mojave.component.misc.MiscConfiguration;
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tools.jackson.databind.ObjectMapper;
+
 import java.util.Objects;
 
 @EnableAutoConfiguration(exclude = {UserDetailsServiceAutoConfiguration.class})
@@ -51,7 +53,6 @@ import java.util.Objects;
         SpringSecurityConfiguration.class})
 @ComponentScan(basePackages = {"org.mojave.connector.gateway.outbound"})
 public class ConnectorOutboundConfiguration implements MiscConfiguration.RequiredDependencies,
-                                                       FspiopInvokerConfiguration.RequiredDependencies,
                                                        SpringSecurityConfiguration.RequiredDependencies,
                                                        OpenApiConfiguration.RequiredSettings,
                                                        SpringSecurityConfiguration.RequiredSettings {
@@ -118,7 +119,7 @@ public class ConnectorOutboundConfiguration implements MiscConfiguration.Require
         };
     }
 
-    public interface RequiredDependencies {
+    public interface RequiredDependencies extends FspiopInvokerConfiguration.RequiredDependencies {
 
         PubSubClient pubSubClient();
 

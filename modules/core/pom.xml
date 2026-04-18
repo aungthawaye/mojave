@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave</groupId>
         <artifactId>mojave</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.core</groupId>
@@ -12,11 +12,11 @@
     <packaging>pom</packaging>
     <name>Mojave - Core</name>
     <modules>
-        <module>transaction</module>
-        <module>participant</module>
         <module>accounting</module>
-        <module>wallet</module>
+        <module>transaction</module>
         <module>settlement</module>
+        <module>wallet</module>
+        <module>participant</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

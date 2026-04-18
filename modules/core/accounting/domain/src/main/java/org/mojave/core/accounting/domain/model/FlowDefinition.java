@@ -35,26 +35,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.accounting.FlowDefinitionIdJavaType;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.PostingChannel;
-import org.mojave.common.datatype.enums.accounting.Side;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
-import org.mojave.common.datatype.identifier.accounting.PostingDefinitionId;
+import org.mojave.core.accounting.contract.data.FlowDefinitionData;
+import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
+import org.mojave.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
+import org.mojave.core.accounting.contract.exception.definition.FlowDefinitionLineNotFoundException;
+import org.mojave.core.accounting.domain.cache.AccountCache;
+import org.mojave.core.accounting.domain.cache.CoaEntryCache;
+import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
+import org.mojave.scheme.rule.converter.identifier.accounting.FlowDefinitionIdJavaType;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.enums.accounting.Side;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionLineId;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 import org.mojave.component.misc.data.DataConversion;
 import org.mojave.component.misc.handy.Snowflake;
-import org.mojave.core.accounting.contract.data.FlowDefinitionData;
-import org.mojave.core.accounting.contract.exception.definition.DefinitionDescriptionTooLongException;
-import org.mojave.core.accounting.contract.exception.definition.DefinitionNameTooLongException;
-import org.mojave.core.accounting.contract.exception.definition.PostingDefinitionNotFoundException;
-import org.mojave.core.accounting.domain.cache.AccountCache;
-import org.mojave.core.accounting.domain.cache.CoaEntryCache;
-import org.mojave.core.accounting.domain.cache.updater.FlowDefinitionCacheUpdater;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +72,7 @@ import static java.sql.Types.BIGINT;
         @UniqueConstraint(
             name = "acc_flow_definition_01_UK",
             columnNames = {
-                "transaction_type",
+                "scenario",
                 "currency"}),
         @UniqueConstraint(
             name = "acc_flow_definition_02_UK",
@@ -92,11 +92,11 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
     protected FlowDefinitionId id;
 
     @Column(
-        name = "transaction_type",
+        name = "scenario",
         nullable = false,
         length = StringSizeConstraints.MAX_ENUM_LENGTH)
     @Enumerated(EnumType.STRING)
-    protected TransactionType transactionType;
+    protected ScenarioType scenario;
 
     @Column(
         name = "currency",
@@ -135,19 +135,19 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         orphanRemoval = true,
         cascade = {jakarta.persistence.CascadeType.ALL},
         fetch = FetchType.EAGER)
-    protected List<PostingDefinition> postings = new ArrayList<>();
+    protected List<FlowDefinitionLine> flowDefinitionLines = new ArrayList<>();
 
-    public FlowDefinition(TransactionType transactionType,
+    public FlowDefinition(ScenarioType scenario,
                           Currency currency,
                           String name,
                           String description) {
 
-        Objects.requireNonNull(transactionType);
+        Objects.requireNonNull(scenario);
         Objects.requireNonNull(currency);
         Objects.requireNonNull(name);
 
         this.id = new FlowDefinitionId(Snowflake.get().nextId());
-        this.transactionType = transactionType;
+        this.scenario = scenario;
         this.name(name).currency(currency).description(description);
     }
 
@@ -156,40 +156,39 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         this.activationStatus = ActivationStatus.ACTIVE;
     }
 
-    public PostingDefinition addPosting(Integer index,
-                                        PostingChannel postingChannel,
-                                        Long receiveInId,
-                                        String participant,
-                                        String amountName,
-                                        Side side,
-                                        String description,
-                                        AccountCache accountCache,
-                                        CoaEntryCache coaEntryCache) {
+    public FlowDefinitionLine addFlowDefinitionLine(Integer index,
+                                String participant,
+                                CoaEntryId coaEntryId,
+                                String amountName,
+                                Side side,
+                                String description,
+                                AccountCache accountCache,
+                                CoaEntryCache coaEntryCache) {
 
-        var posting = new PostingDefinition(
-            this, index, postingChannel, receiveInId, participant, amountName, side, description,
-            accountCache, coaEntryCache);
+        final var flowDefinitionLine = new FlowDefinitionLine(
+            this, index, participant, coaEntryId, amountName, side,
+            description, accountCache, coaEntryCache);
 
-        this.postings.add(posting);
+        this.flowDefinitionLines.add(flowDefinitionLine);
 
-        return posting;
+        return flowDefinitionLine;
 
     }
 
     @Override
     public FlowDefinitionData convert() {
 
-        var postingData = this.postings
-                              .stream()
-                              .map(p -> new FlowDefinitionData.PostingDefinitionData(
-                                  p.id, p.step, p.postingChannel, p.postingChannelId, p.participant,
-                                  p.amountName, p.side, p.description))
-                              .toList();
+        final var flowDefinitionLineData = this.flowDefinitionLines
+                                     .stream()
+                                     .map(line -> new FlowDefinitionData.FlowDefinitionLineData(
+                                         line.id, line.step, line.participant, line.coaEntryId,
+                                         line.amountName, line.side, line.description))
+                                     .toList();
 
         return new FlowDefinitionData(
-            this.getId(), this.getTransactionType(), this.getCurrency(), this.getName(),
+            this.getId(), this.getScenario(), this.getCurrency(), this.getName(),
             this.getDescription(), this.getActivationStatus(), this.getTerminationStatus(),
-            postingData);
+            flowDefinitionLineData);
     }
 
     public FlowDefinition currency(Currency currency) {
@@ -223,15 +222,15 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this;
     }
 
+    public List<FlowDefinitionLine> getFlowDefinitionLines() {
+
+        return Collections.unmodifiableList(this.flowDefinitionLines);
+    }
+
     @Override
     public FlowDefinitionId getId() {
 
         return this.id;
-    }
-
-    public List<PostingDefinition> getPostings() {
-
-        return Collections.unmodifiableList(this.postings);
     }
 
     public FlowDefinition name(String name) {
@@ -251,16 +250,16 @@ public class FlowDefinition extends JpaEntity<FlowDefinitionId>
         return this;
     }
 
-    public void removePosting(PostingDefinitionId postingDefinitionId) {
+    public void removeFlowDefinitionLine(FlowDefinitionLineId flowDefinitionLineId) {
 
-        Objects.requireNonNull(postingDefinitionId);
+        Objects.requireNonNull(flowDefinitionLineId);
 
-        if (this.postings.stream().noneMatch(p -> p.getId().equals(postingDefinitionId))) {
+        if (this.flowDefinitionLines.stream().noneMatch(flowDefinitionLine -> flowDefinitionLine.getId().equals(flowDefinitionLineId))) {
 
-            throw new PostingDefinitionNotFoundException(postingDefinitionId);
+            throw new FlowDefinitionLineNotFoundException(flowDefinitionLineId);
         }
 
-        this.postings.removeIf(p -> p.getId().equals(postingDefinitionId));
+        this.flowDefinitionLines.removeIf(flowDefinitionLine -> flowDefinitionLine.getId().equals(flowDefinitionLineId));
 
     }
 

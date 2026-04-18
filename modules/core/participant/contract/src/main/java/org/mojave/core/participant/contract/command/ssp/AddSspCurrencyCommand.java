@@ -22,11 +22,15 @@ package org.mojave.core.participant.contract.command.ssp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.participant.SspCurrencyId;
-import org.mojave.common.datatype.identifier.participant.SspId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.participant.SspCurrencyId;
+import org.mojave.scheme.rule.identifier.participant.SspId;
 
 public interface AddSspCurrencyCommand {
+
+    String SUBJECT_NAME = "sub-participant.add-ssp-currency-command";
+
+    String TOPIC_NAME = "tp-participant.add-ssp-currency-command";
 
     Output execute(Input input);
 

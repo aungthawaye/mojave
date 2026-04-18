@@ -115,7 +115,7 @@ Mojave provides a complete instant payment switch implementation:
    - Endpoint configuration and routing
 
 2. **Real-Time Accounting**
-   - Double-entry ledger for all transactions
+   - Double-entry ledgerOperation for all transactions
    - Configurable chart of accounts
    - Atomic posting with MySQL stored procedures
 
@@ -148,7 +148,7 @@ Mojave implements the **FSPIOP v2.0** (Financial Services Provider Interoperabil
 Alice (FSP A) sends money to Bob (FSP B):
 1. Alice initiates transfer via FSP A mobile app
 2. FSP A sends transfer request to hub
-3. Hub validates, reserves funds, posts to ledger
+3. Hub validates, reserves funds, posts to ledgerOperation
 4. Hub forwards to FSP B
 5. FSP B credits Bob's account
 6. Confirmation sent back through hub to Alice

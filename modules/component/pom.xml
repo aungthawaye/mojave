@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave</groupId>
         <artifactId>mojave</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>org.mojave.component</groupId>
@@ -17,6 +17,7 @@
         <module>web</module>
         <module>vault</module>
         <module>redis</module>
+        <module>nats</module>
         <module>retrofit</module>
         <module>jpa</module>
         <module>flyway</module>

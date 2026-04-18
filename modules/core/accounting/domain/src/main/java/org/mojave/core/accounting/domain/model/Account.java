@@ -36,19 +36,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.accounting.AccountIdJavaType;
-import org.mojave.common.datatype.converter.identifier.accounting.CoaEntryIdConverter;
-import org.mojave.common.datatype.converter.identifier.accounting.OwnerIdJavaType;
-import org.mojave.common.datatype.converter.type.accounting.AccountCodeConverter;
-import org.mojave.common.datatype.enums.ActivationStatus;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.TerminationStatus;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.OverdraftMode;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.rule.converter.identifier.accounting.AccountIdJavaType;
+import org.mojave.scheme.rule.converter.identifier.accounting.CoaEntryIdJavaType;
+import org.mojave.scheme.rule.converter.identifier.accounting.OwnerIdJavaType;
+import org.mojave.scheme.rule.converter.type.accounting.AccountCodeConverter;
+import org.mojave.scheme.rule.enums.ActivationStatus;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.TerminationStatus;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.enums.accounting.OverdraftMode;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
@@ -165,7 +165,8 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
     @Column(
         name = "coa_entry_id",
         nullable = false)
-    @Convert(converter = CoaEntryIdConverter.class)
+    @JavaType(CoaEntryIdJavaType.class)
+    @JdbcTypeCode(BIGINT)
     protected CoaEntryId coaEntryId;
 
     public Account(CoaEntry chartEntry,
@@ -198,6 +199,8 @@ public class Account extends JpaEntity<AccountId> implements DataConversion<Acco
         this.createdAt = Instant.now();
 
     }
+
+
 
     public void activate() {
 

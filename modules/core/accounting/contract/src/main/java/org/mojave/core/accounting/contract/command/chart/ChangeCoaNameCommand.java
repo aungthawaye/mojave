@@ -23,10 +23,14 @@ package org.mojave.core.accounting.contract.command.chart;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface ChangeCoaNameCommand {
+
+    String SUBJECT_NAME = "sub-accounting.change-coa-name-command";
+
+    String TOPIC_NAME = "tp-accounting.change-coa-name-command";
 
     Output execute(Input input);
 

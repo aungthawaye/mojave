@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mojave.mono.core</groupId>
         <artifactId>mojave-mono-core</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-mono-core-intercom</artifactId>
@@ -28,20 +28,16 @@
             <artifactId>mojave-component-flyway</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-openapi</artifactId>
+            <groupId>org.mojave.core.accounting.intercom</groupId>
+            <artifactId>mojave-core-accounting-intercom-replier</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.component</groupId>
-            <artifactId>mojave-component-web</artifactId>
+            <groupId>org.mojave.core.participant.intercom</groupId>
+            <artifactId>mojave-core-participant-intercom-replier</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mojave.core.participant</groupId>
-            <artifactId>mojave-core-participant-intercom</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-intercom</artifactId>
+            <groupId>org.mojave.core.wallet.intercom</groupId>
+            <artifactId>mojave-core-wallet-intercom-replier</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

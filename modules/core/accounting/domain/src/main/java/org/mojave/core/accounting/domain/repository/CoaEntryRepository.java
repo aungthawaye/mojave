@@ -20,14 +20,13 @@
 
 package org.mojave.core.accounting.domain.repository;
 
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
 import org.mojave.core.accounting.domain.model.CoaEntry;
 import org.mojave.core.accounting.domain.model.CoaEntry_;
 import org.mojave.core.accounting.domain.model.Coa_;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -44,7 +43,7 @@ public interface CoaEntryRepository
             return (root, query, cb) -> cb.equal(root.get(CoaEntry_.accountType), type);
         }
 
-        public static Specification<CoaEntry> withCategory(ChartEntryCategory category) {
+        public static Specification<CoaEntry> withCategory(String category) {
 
             return (root, query, cb) -> cb.equal(root.get(CoaEntry_.category), category);
         }

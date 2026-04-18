@@ -22,10 +22,14 @@ package org.mojave.core.accounting.contract.command.definition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
 
 public interface ChangeFlowDefinitionCurrencyCommand {
+
+    String SUBJECT_NAME = "sub-accounting.change-flow-definition-currency-command";
+
+    String TOPIC_NAME = "tp-accounting.change-flow-definition-currency-command";
 
     Output execute(Input input);
 

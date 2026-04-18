@@ -4,11 +4,11 @@
     <parent>
         <groupId>org.mojave.core.participant</groupId>
         <artifactId>mojave-core-participant</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-participant-store</artifactId>
-    <name>Mojave - Core - Participant - Store</name>
+    <name>Mojave - Participant - Store</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

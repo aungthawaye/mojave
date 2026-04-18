@@ -22,10 +22,14 @@ package org.mojave.core.participant.contract.command.oracle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.enums.participant.PartyIdType;
-import org.mojave.common.datatype.identifier.participant.OracleId;
+import org.mojave.scheme.rule.enums.participant.PartyIdType;
+import org.mojave.scheme.rule.identifier.participant.OracleId;
 
 public interface ChangeOracleTypeCommand {
+
+    String SUBJECT_NAME = "sub-participant.change-oracle-type-command";
+
+    String TOPIC_NAME = "tp-participant.change-oracle-type-command";
 
     Output execute(Input input);
 

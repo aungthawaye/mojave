@@ -22,9 +22,13 @@ package org.mojave.core.participant.contract.command.fsp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import org.mojave.common.datatype.identifier.participant.FspGroupId;
+import org.mojave.scheme.rule.identifier.participant.FspGroupId;
 
 public interface RemoveFspGroupCommand {
+
+    String SUBJECT_NAME = "sub-participant.remove-fsp-group-command";
+
+    String TOPIC_NAME = "tp-participant.remove-fsp-group-command";
 
     Output execute(Input input);
 

@@ -34,12 +34,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.mojave.common.datatype.converter.identifier.accounting.CoaIdJavaType;
-import org.mojave.common.datatype.enums.accounting.AccountType;
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.converter.identifier.accounting.CoaIdJavaType;
+import org.mojave.scheme.rule.enums.accounting.AccountType;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.jpa.JpaInstantConverter;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
@@ -103,7 +102,7 @@ public class Coa extends JpaEntity<CoaId> implements DataConversion<CoaData> {
         this.createdAt = Instant.now();
     }
 
-    public CoaEntry addEntry(ChartEntryCategory category,
+    public CoaEntry addEntry(String category,
                              CoaEntryCode code,
                              String name,
                              String description,

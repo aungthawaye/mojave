@@ -20,15 +20,14 @@
 
 package org.mojave.core.accounting.domain.query;
 
-import org.mojave.common.datatype.enums.accounting.ChartEntryCategory;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.core.accounting.contract.data.CoaEntryData;
 import org.mojave.core.accounting.contract.exception.chart.CoaEntryIdNotFoundException;
 import org.mojave.core.accounting.contract.query.CoaEntryQuery;
 import org.mojave.core.accounting.domain.model.CoaEntry;
 import org.mojave.core.accounting.domain.repository.CoaEntryRepository;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.component.jpa.routing.annotation.Read;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,8 +49,7 @@ public class CoaEntryQueryHandler implements CoaEntryQuery {
     @Transactional(readOnly = true)
     @Read
     @Override
-    public CoaEntryData get(final CoaEntryId coaEntryId)
-        throws CoaEntryIdNotFoundException {
+    public CoaEntryData get(final CoaEntryId coaEntryId) throws CoaEntryIdNotFoundException {
 
         return this.coaEntryRepository
                    .findById(coaEntryId)
@@ -72,22 +70,10 @@ public class CoaEntryQueryHandler implements CoaEntryQuery {
     }
 
     @Override
-    public List<CoaEntryData> get(ChartEntryCategory category) {
+    public List<CoaEntryData> get(String category) {
 
         return this.coaEntryRepository
                    .findAll(CoaEntryRepository.Filters.withCategory(category))
-                   .stream()
-                   .map(CoaEntry::convert)
-                   .toList();
-    }
-
-    @Transactional(readOnly = true)
-    @Read
-    @Override
-    public List<CoaEntryData> get(final String name) {
-
-        return this.coaEntryRepository
-                   .findAll(CoaEntryRepository.Filters.withNameContains(name))
                    .stream()
                    .map(CoaEntry::convert)
                    .toList();

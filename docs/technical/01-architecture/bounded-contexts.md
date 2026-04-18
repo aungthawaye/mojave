@@ -67,9 +67,9 @@ graph TB
 
 **Aggregates:**
 - Chart (Chart of accounts structure)
-- Account (Individual ledger account)
+- Account (Individual ledgerOperation account)
 - FlowDefinition (Transaction type → posting rules)
-- PostingDefinition (Debit/credit rules)
+- FlowLine (Debit/credit rules)
 
 **Key Operations:**
 - Chart of accounts management
@@ -161,10 +161,10 @@ graph TB
 
 ### Shared Kernel
 
-Common data types shared across contexts:
+Scheme rules shared across contexts:
 
 ```
-core/common/datatype/
+scheme/rule/
 ├── identifier/      Strongly-typed IDs
 ├── enums/          Domain enumerations
 └── type/           Value objects
@@ -258,7 +258,7 @@ public void handle(TransactionCommitted event) {
 - Track transaction phases (that's Transaction)
 
 **Wallet should NOT:**
-- Post to ledger (that's Accounting)
+- Post to ledgerOperation (that's Accounting)
 - Create transactions (that's Transaction)
 - Match settlement providers (that's Settlement)
 

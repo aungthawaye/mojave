@@ -133,7 +133,7 @@ For each transaction, the system maintains:
 - Position update IDs for traceability
 
 **Accounting Movements:**
-- All ledger entries
+- All ledgerOperation entries
 - Account IDs and owners
 - Debit/credit amounts
 - Movement IDs and timestamps
@@ -359,7 +359,7 @@ Transaction committed = Settlement record created
 
 Compare transactions against:
 - FSP records
-- Accounting ledger
+- Accounting ledgerOperation
 - Position updates
 - Settlement records
 
@@ -394,5 +394,5 @@ Identify and resolve discrepancies.
 ## See Also
 
 - [Transaction Lifecycle](../02-core-concepts/transaction-lifecycle.md) - Transaction concepts
-- [Transaction Module](../../technical/02-core-modules/transaction-module.md) - Technical implementation
+- [Transaction Module](../../technical/02-core-modules/core/transaction-module.md) - Technical implementation
 - [Transfer Flow](../../technical/03-flows/transfer-flow.md) - Complete transfer process

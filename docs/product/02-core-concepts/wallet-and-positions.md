@@ -27,7 +27,7 @@ Position = Initial Funding
 
 ### Balance
 
-A **balance** represents the accounting book balance in the ledger.
+A **balance** represents the accounting book balance in the ledgerOperation.
 
 **Characteristics:**
 - Double-entry accounting balance
@@ -40,7 +40,7 @@ A **balance** represents the accounting book balance in the ledger.
 
 ```
 Position = "How much can I spend right now?"
-Balance  = "What does the accounting ledger say?"
+Balance  = "What does the accounting ledgerOperation say?"
 ```
 
 **Example:**
@@ -187,7 +187,7 @@ public interface ReservePositionCommand {
 
     record Output(
         PositionUpdateId positionUpdateId,
-        PositionId positionId,
+        WalletId positionId,
         PositionAction action,          // RESERVE
         BigDecimal oldPosition,
         BigDecimal newPosition,
@@ -199,7 +199,7 @@ public interface ReservePositionCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/core/wallet/contract/command/position/ReservePositionCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 **Process:**
 1. Fetch current position for FSP and currency
@@ -289,7 +289,7 @@ Every position change is tracked:
 ```java
 record PositionUpdate(
     PositionUpdateId positionUpdateId,
-    PositionId positionId,
+    WalletId positionId,
     TransactionId transactionId,
     PositionAction action,         // RESERVE, COMMIT, ROLLBACK
     BigDecimal amount,
@@ -335,7 +335,7 @@ FSP A Positions:
 Position getPosition(WalletOwnerId ownerId, Currency currency);
 
 record Position(
-    PositionId positionId,
+    WalletId positionId,
     WalletOwnerId ownerId,
     Currency currency,
     BigDecimal amount,           // Current position
@@ -405,7 +405,7 @@ T9                           Update (v2→v3) ✓
 **1. Position vs Accounting:**
 ```
 Position.amount should equal:
-  Account Book Balance (from ledger)
+  Account Book Balance (from ledgerOperation)
 ```
 
 **2. Reserved vs In-Flight:**
@@ -472,7 +472,7 @@ DepositCommand.execute(
 **Effect:**
 - Increase position
 - Record movement
-- Update accounting ledger
+- Update accounting ledgerOperation
 
 ### Withdraw
 
@@ -490,7 +490,7 @@ WithdrawCommand.execute(
 **Effect:**
 - Decrease position
 - Record movement
-- Update accounting ledger
+- Update accounting ledgerOperation
 
 **Validation:**
 - Must have sufficient available balance
@@ -573,5 +573,5 @@ System: Balanced ($900 + $600 = $1,500, same as before)
 - [Accounting Model](accounting-model.md) - How positions relate to accounting
 - [Transaction Lifecycle](transaction-lifecycle.md) - How positions change during transfers
 - [Wallet Management](../03-features/wallet-management.md) - Detailed wallet features
-- [Wallet Module](../../technical/02-core-modules/wallet-module.md) - Technical implementation
+- [Wallet Module](../../technical/02-core-modules/core/wallet-module.md) - Technical implementation
 - [Position Management Flow](../../technical/03-flows/position-management-flow.md) - Technical flow details

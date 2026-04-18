@@ -38,7 +38,7 @@ public class MonoConsumerApplication {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MonoConsumerApplication.class);
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
 
         AccountingFlyway.migrate(
             System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),

@@ -21,8 +21,8 @@
 package org.mojave.core.wallet.contract.exception.balance;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.BalanceId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 
@@ -35,9 +35,9 @@ public class InsufficientBalanceException extends CheckedDomainException {
 
     public static final String CODE = "INSUFFICIENT_BALANCE";
 
-    private static final String TEMPLATE = "Insufficient Balance : balanceId ({0}) | amount({1}) | current balance: ({2}) | transaction id: ({3}).";
+    private static final String TEMPLATE = "Insufficient Balance : walletId ({0}) | amount({1}) | current balance: ({2}) | transaction id: ({3}).";
 
-    private final BalanceId balanceId;
+    private final WalletId walletId;
 
     private final BigDecimal amount;
 
@@ -45,19 +45,19 @@ public class InsufficientBalanceException extends CheckedDomainException {
 
     private final TransactionId transactionId;
 
-    public InsufficientBalanceException(final BalanceId balanceId,
+    public InsufficientBalanceException(final WalletId walletId,
                                         final BigDecimal amount,
                                         final BigDecimal oldBalance,
                                         final TransactionId transactionId) {
 
         super(new ErrorTemplate(
             CODE, TEMPLATE, new String[]{
-            balanceId.getId().toString(),
+            walletId.getId().toString(),
             amount.stripTrailingZeros().toPlainString(),
             oldBalance.stripTrailingZeros().toPlainString(),
             transactionId.getId().toString()}));
 
-        this.balanceId = balanceId;
+        this.walletId = walletId;
         this.amount = amount;
         this.oldBalance = oldBalance;
         this.transactionId = transactionId;
@@ -65,7 +65,7 @@ public class InsufficientBalanceException extends CheckedDomainException {
 
     public static InsufficientBalanceException from(final Map<String, String> extras) {
 
-        final var walletId = new BalanceId(Long.valueOf(extras.get(Keys.balance_id)));
+        final var walletId = new WalletId(Long.valueOf(extras.get(Keys.WALLET_ID)));
         final var amount = new BigDecimal(extras.get(Keys.AMOUNT));
         final var oldBalance = new BigDecimal(extras.get(Keys.OLD_BALANCE));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
@@ -78,7 +78,7 @@ public class InsufficientBalanceException extends CheckedDomainException {
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.balance_id, this.balanceId.getId().toString());
+        extras.put(Keys.WALLET_ID, this.walletId.getId().toString());
         extras.put(Keys.AMOUNT, this.amount.stripTrailingZeros().toPlainString());
         extras.put(Keys.OLD_BALANCE, this.oldBalance.stripTrailingZeros().toPlainString());
         extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
@@ -88,7 +88,7 @@ public class InsufficientBalanceException extends CheckedDomainException {
 
     public static class Keys {
 
-        public static final String balance_id = "balanceId";
+        public static final String WALLET_ID = "walletId";
 
         public static final String AMOUNT = "amount";
 

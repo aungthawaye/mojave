@@ -67,7 +67,7 @@ Mojave leverages cutting-edge Java ecosystem technologies:
 - Double-entry bookkeeping for all transactions
 - Configurable chart of accounts
 - Flow definitions for transaction types
-- Atomic ledger posting with MySQL stored procedures
+- Atomic ledgerOperation posting with MySQL stored procedures
 - Complete audit trail and movement tracking
 
 ### 3. Advanced Liquidity Management
@@ -120,7 +120,7 @@ graph TB
     end
 
     subgraph "Storage Layer"
-        PROVIDER[Provider<br/>ledger-mysql, forex,<br/>settlement]
+        PROVIDER[Provider<br/>ledgerOperation-mysql, forex,<br/>settlement]
     end
 
     subgraph "Application Layer"
@@ -161,14 +161,14 @@ Cross-cutting infrastructure concerns:
 ### 3. Core (Domain Bounded Contexts)
 Business logic and domain models:
 - **participant** - FSP, Hub, Oracle, SSP management
-- **accounting** - Chart of accounts, ledger, flow definitions
+- **accounting** - Chart of accounts, ledgerOperation, flow definitions
 - **wallet** - Position and balance management
 - **settlement** - Settlement definitions and records
 - **transaction** - Transaction lifecycle and audit trail
 - **common** - Shared datatypes (identifiers, enumerations)
 
 ### 4. Provider (Storage Implementations)
-- **ledger-mysql** - MySQL-based ledger with stored procedures
+- **ledgerOperation-mysql** - MySQL-based ledgerOperation with stored procedures
 - **forex** - Foreign exchange rate provider
 - **settlement** - Settlement provider implementation
 
@@ -314,7 +314,7 @@ Merchant-initiated payment requests.
 ### Current (v1.0)
 - FSPIOP v2.0 implementation
 - Core domain modules (participant, accounting, wallet, settlement, transaction)
-- MySQL ledger with stored procedures
+- MySQL ledgerOperation with stored procedures
 - Kafka event streaming
 - Redis caching
 - JWS authentication

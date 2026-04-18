@@ -24,10 +24,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
 
 public interface CreateCoaCommand {
+
+    String SUBJECT_NAME = "sub-accounting.create-coa-command";
+
+    String TOPIC_NAME = "tp-accounting.create-coa-command";
 
     Output execute(Input input);
 

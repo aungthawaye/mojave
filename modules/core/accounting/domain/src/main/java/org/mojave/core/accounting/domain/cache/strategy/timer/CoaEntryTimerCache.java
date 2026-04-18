@@ -21,9 +21,9 @@
 package org.mojave.core.accounting.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.identifier.accounting.CoaId;
-import org.mojave.common.datatype.type.accounting.CoaEntryCode;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.identifier.accounting.CoaId;
+import org.mojave.scheme.rule.type.accounting.CoaEntryCode;
 import org.mojave.core.accounting.contract.data.CoaEntryData;
 import org.mojave.core.accounting.domain.cache.CoaEntryCache;
 import org.mojave.core.accounting.domain.model.CoaEntry;
@@ -83,6 +83,13 @@ public class CoaEntryTimerCache implements CoaEntryCache {
             return null;
         }
 
+        final var coaEntryData = this.snapshotRef.get().withId.get(coaEntryId);
+
+        if (coaEntryData != null) {
+            return coaEntryData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withId.get(coaEntryId);
     }
 
@@ -93,6 +100,13 @@ public class CoaEntryTimerCache implements CoaEntryCache {
             return null;
         }
 
+        final var coaEntryData = this.snapshotRef.get().withCode.get(code);
+
+        if (coaEntryData != null) {
+            return coaEntryData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCode.get(code);
     }
 
@@ -103,6 +117,13 @@ public class CoaEntryTimerCache implements CoaEntryCache {
             return Set.of();
         }
 
+        final var coaEntries = this.snapshotRef.get().withCoaId.get(coaId);
+
+        if (coaEntries != null && !coaEntries.isEmpty()) {
+            return coaEntries;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCoaId.getOrDefault(coaId, Set.of());
     }
 

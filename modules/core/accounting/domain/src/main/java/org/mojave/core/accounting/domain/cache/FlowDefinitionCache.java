@@ -20,10 +20,10 @@
 
 package org.mojave.core.accounting.domain.cache;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.trasaction.TransactionType;
-import org.mojave.common.datatype.identifier.accounting.FlowDefinitionId;
 import org.mojave.core.accounting.contract.data.FlowDefinitionData;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.FlowDefinitionId;
+import org.mojave.scheme.rule.scenario.ScenarioType;
 
 public interface FlowDefinitionCache {
 
@@ -33,15 +33,15 @@ public interface FlowDefinitionCache {
 
     FlowDefinitionData get(FlowDefinitionId flowDefinitionId);
 
-    FlowDefinitionData get(TransactionType transactionType, Currency currency);
+    FlowDefinitionData get(ScenarioType scenario, Currency currency);
 
     void save(FlowDefinitionData flowDefinition);
 
     class Keys {
 
-        public static String forTransaction(TransactionType transactionType, Currency currency) {
+        public static String forTransaction(ScenarioType scenario, Currency currency) {
 
-            return transactionType.name() + "_" + currency.name();
+            return scenario.name() + "_" + currency.name();
         }
 
     }

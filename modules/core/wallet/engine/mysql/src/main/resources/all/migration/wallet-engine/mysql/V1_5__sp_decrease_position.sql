@@ -1,0 +1,138 @@
+DELIMITER
+$$
+DROP PROCEDURE IF EXISTS `sp_decrease_position` $$
+CREATE PROCEDURE sp_decrease_position(
+                                     IN p_transaction_id     BIGINT,
+                                     IN p_transaction_at     BIGINT,
+                                     IN p_position_update_id BIGINT,
+                                     IN p_wallet_id        BIGINT,
+                                     IN p_amount             DECIMAL(34, 4),
+                                     IN p_description        VARCHAR(256))
+proc_decrease:
+BEGIN
+    DECLARE v_old_position DECIMAL(34, 4);
+    DECLARE v_new_position DECIMAL(34, 4);
+    DECLARE v_old_reserved DECIMAL(34, 4);
+    DECLARE v_ndc DECIMAL(34, 4);
+    DECLARE v_currency VARCHAR(3);
+    DECLARE v_now BIGINT;
+    DECLARE v_not_found BOOLEAN DEFAULT FALSE;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+
+        SELECT 'ERROR'              AS status,
+               p_position_update_id AS position_update_id,
+               p_wallet_id        AS position_id,
+               'DECREASE'           AS action,
+               p_transaction_id     AS transaction_id,
+               NULL                 AS currency,
+               p_amount             AS amount,
+               0                    AS old_position,
+               0                    AS new_position,
+               0                    AS old_reserved,
+               0                    AS new_reserved,
+               0                    AS ndc,
+               p_transaction_at     AS transaction_at;
+    END;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_not_found = TRUE;
+
+    SET v_now = UNIX_TIMESTAMP();
+
+    START TRANSACTION;
+
+    SELECT position,
+           reserved,
+           ndc,
+           mw.currency
+    INTO v_old_position, v_old_reserved, v_ndc, v_currency
+    FROM mwe_wallet mw
+    WHERE mw.wallet_id = p_wallet_id FOR
+    UPDATE;
+
+    IF v_not_found THEN
+        ROLLBACK;
+
+        SELECT 'ERROR'              AS status,
+               p_position_update_id AS position_update_id,
+               p_wallet_id        AS position_id,
+               'DECREASE'           AS action,
+               p_transaction_id     AS transaction_id,
+               NULL                 AS currency,
+               p_amount             AS amount,
+               0                    AS old_position,
+               0                    AS new_position,
+               0                    AS old_reserved,
+               0                    AS new_reserved,
+               0                    AS ndc,
+               p_transaction_at     AS transaction_at;
+
+        LEAVE proc_decrease;
+    END IF;
+
+    SET v_new_position = v_old_position - p_amount;
+
+    UPDATE mwe_wallet
+    SET position = v_new_position
+    WHERE wallet_id = p_wallet_id;
+
+    INSERT INTO mwe_position_update (position_update_id,
+                                     position_id,
+                                     action,
+                                     transaction_id,
+                                     currency,
+                                     amount,
+                                     old_position,
+                                     new_position,
+                                     old_reserved,
+                                     new_reserved,
+                                     ndc,
+                                     description,
+                                     transaction_at,
+                                     created_at,
+                                     reservation_id,
+                                     rec_created_at,
+                                     rec_updated_at,
+                                     rec_version)
+    VALUES (p_position_update_id,
+            p_wallet_id,
+            'DECREASE',
+            p_transaction_id,
+            v_currency,
+            p_amount,
+            v_old_position,
+            v_new_position,
+            v_old_reserved,
+            v_old_reserved,
+            v_ndc,
+            p_description,
+            p_transaction_at,
+            v_now,
+            NULL,
+            v_now,
+            v_now,
+            0);
+
+    COMMIT;
+
+    SELECT 'SUCCESS' AS status,
+           pu.position_update_id,
+           pu.position_id,
+           pu.action,
+           pu.transaction_id,
+           pu.currency,
+           pu.amount,
+           pu.old_position,
+           pu.new_position,
+           pu.old_reserved,
+           pu.new_reserved,
+           pu.ndc,
+           pu.transaction_at
+    FROM mwe_position_update pu
+    WHERE pu.position_update_id = p_position_update_id;
+END $$
+
+
+DELIMITER ;

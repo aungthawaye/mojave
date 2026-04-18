@@ -20,18 +20,18 @@
 
 package org.mojave.core.wallet.contract.data;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.enums.wallet.PositionAction;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.enums.wallet.PositionAction;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
 public record PositionUpdateData(PositionUpdateId positionUpdateId,
-                                 PositionId positionId,
+                                 WalletId walletId,
                                  PositionAction action,
                                  TransactionId transactionId,
                                  Currency currency,

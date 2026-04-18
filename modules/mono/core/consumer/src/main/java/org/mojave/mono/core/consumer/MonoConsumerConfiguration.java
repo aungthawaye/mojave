@@ -20,21 +20,22 @@
 
 package org.mojave.mono.core.consumer;
 
-import org.mojave.core.accounting.consumer.AccountingConsumerConfiguration;
-import org.mojave.core.wallet.consumer.WalletConsumerConfiguration;
+import org.mojave.core.accounting.intercom.consumer.AccountingIntercomConsumerConfiguration;
+import org.mojave.core.wallet.intercom.consumer.WalletIntercomConsumerConfiguration;
 import org.springframework.context.annotation.Import;
 
 @Import(
     value = {
-        AccountingConsumerConfiguration.class,
-        WalletConsumerConfiguration.class})
+        AccountingIntercomConsumerConfiguration.class,
+        WalletIntercomConsumerConfiguration.class})
 public class MonoConsumerConfiguration {
 
     public interface RequiredDependencies
-        extends AccountingConsumerConfiguration.RequiredDependencies,
-                WalletConsumerConfiguration.RequiredDependencies { }
+        extends AccountingIntercomConsumerConfiguration.RequiredDependencies,
+                WalletIntercomConsumerConfiguration.RequiredDependencies { }
 
-    public interface RequiredSettings extends AccountingConsumerConfiguration.RequiredSettings,
-                                              WalletConsumerConfiguration.RequiredSettings { }
+    public interface RequiredSettings
+        extends AccountingIntercomConsumerConfiguration.RequiredSettings,
+                WalletIntercomConsumerConfiguration.RequiredSettings { }
 
 }

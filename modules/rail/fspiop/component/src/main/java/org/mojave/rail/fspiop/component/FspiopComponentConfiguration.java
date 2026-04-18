@@ -24,15 +24,9 @@ import org.mojave.component.misc.MiscConfiguration;
 import org.mojave.rail.fspiop.component.participant.ParticipantContext;
 import org.mojave.rail.fspiop.component.retrofit.FspiopErrorDecoder;
 import org.mojave.rail.fspiop.component.retrofit.FspiopSigningInterceptor;
-import org.mojave.scheme.fspiop.core.Currency;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import tools.jackson.databind.ObjectMapper;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.List;
-import java.util.Map;
 
 @Import(
     value = {
@@ -52,34 +46,14 @@ public class FspiopComponentConfiguration {
         return new FspiopErrorDecoder(objectMapper);
     }
 
-    @Bean
-    public ParticipantContext participantContext(ParticipantSettings participantSettings)
-        throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public interface RequiredDependencies {
 
-        return ParticipantContext.with(
-            participantSettings.hubCode(), participantSettings.fspCode(),
-            participantSettings.fspName(), participantSettings.currencies(),
-            participantSettings.ilpSecret(), participantSettings.signJws(),
-            participantSettings.verifyJws(), participantSettings.privateKeyPem(),
-            participantSettings.fspPublicKeyPem());
+        ParticipantContext participantContext();
+
     }
-
-    public interface RequiredDependencies { }
 
     public interface RequiredSettings extends MiscConfiguration.RequiredSettings {
 
-        ParticipantSettings participantSettings();
-
     }
-
-    public record ParticipantSettings(String hubCode,
-                                      String fspCode,
-                                      String fspName,
-                                      List<Currency> currencies,
-                                      String ilpSecret,
-                                      boolean signJws,
-                                      boolean verifyJws,
-                                      String privateKeyPem,
-                                      Map<String, String> fspPublicKeyPem) { }
 
 }

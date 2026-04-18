@@ -20,11 +20,13 @@
 
 package org.mojave.core.accounting.contract.query;
 
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.component.misc.query.PagedRequest;
 import org.mojave.component.misc.query.PagedResult;
 import org.mojave.component.misc.query.SortingMode;
@@ -35,6 +37,16 @@ import org.mojave.core.accounting.contract.exception.account.AccountIdNotFoundEx
 import java.util.List;
 
 public interface AccountQuery {
+
+    String FIND_SUBJECT_NAME = "sub-accounting.account-query.find";
+
+    String GET_BY_CODE_SUBJECT_NAME = "sub-accounting.account-query.get-by-code";
+
+    String GET_BY_OWNER_ID_SUBJECT_NAME = "sub-accounting.account-query.get-by-owner-id";
+
+    String GET_BY_ID_SUBJECT_NAME = "sub-accounting.account-query.get-by-id";
+
+    String GET_ALL_SUBJECT_NAME = "sub-accounting.account-query.get-all";
 
     PagedResult<AccountData> find(Criteria criteria);
 
@@ -71,5 +83,15 @@ public interface AccountQuery {
                              Currency currency) { }
 
     }
+
+    record FindInput(@JsonProperty(required = true) @NotNull Criteria criteria) { }
+
+    record GetByCodeInput(@JsonProperty(required = true) @NotNull AccountCode accountCode) { }
+
+    record GetByOwnerIdInput(@JsonProperty(required = true) @NotNull AccountOwnerId ownerId) { }
+
+    record GetByIdInput(@JsonProperty(required = true) @NotNull AccountId accountId) { }
+
+    record GetAllInput() { }
 
 }

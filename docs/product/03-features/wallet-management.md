@@ -77,7 +77,7 @@ public interface ReservePositionCommand {
 
     record Output(
         PositionUpdateId positionUpdateId,
-        PositionId positionId,
+        WalletId positionId,
         PositionAction action,         // RESERVE
         BigDecimal oldPosition,
         BigDecimal newPosition,
@@ -89,7 +89,7 @@ public interface ReservePositionCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/core/wallet/contract/command/position/ReservePositionCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/wallet/contract/src/main/java/org/mojave/wallet/contract/command/position/ReservePositionCommand.java`
 
 **Process:**
 1. Fetch current position
@@ -223,7 +223,7 @@ DepositCommand.execute(
 **Effect:**
 - Increase position
 - Create position update (action: DEPOSIT)
-- Record in accounting ledger
+- Record in accounting ledgerOperation
 - Update balance
 
 **Example:**
@@ -386,7 +386,7 @@ Every position change is tracked:
 ```java
 record PositionUpdate(
     PositionUpdateId positionUpdateId,
-    PositionId positionId,
+    WalletId positionId,
     TransactionId transactionId,
     PositionAction action,           // RESERVE, COMMIT, ROLLBACK, DEPOSIT, WITHDRAW
     BigDecimal amount,
@@ -419,13 +419,13 @@ List<PositionUpdate> getUpdates(TransactionId transactionId);
 
 **By Position:**
 ```java
-List<PositionUpdate> getUpdates(PositionId positionId,
+List<PositionUpdate> getUpdates(WalletId positionId,
                                 Instant from, Instant to);
 ```
 
 **By Action:**
 ```java
-List<PositionUpdate> getUpdatesByAction(PositionId positionId,
+List<PositionUpdate> getUpdatesByAction(WalletId positionId,
                                         PositionAction action);
 ```
 
@@ -472,7 +472,7 @@ Position updates have timeout protection:
 @QueryHints({
     @QueryHint(name = "javax.persistence.lock.timeout", value = "5000")
 })
-Position findAndLockPosition(PositionId positionId);
+Position findAndLockPosition(WalletId positionId);
 ```
 
 ## Position Reconciliation
@@ -664,5 +664,5 @@ FreezePositionCommand.execute(positionId, reason);
 
 - [Wallet and Positions](../02-core-concepts/wallet-and-positions.md) - Position concepts
 - [Transaction Lifecycle](../02-core-concepts/transaction-lifecycle.md) - How positions change
-- [Wallet Module](../../technical/02-core-modules/wallet-module.md) - Technical implementation
+- [Wallet Module](../../technical/02-core-modules/core/wallet-module.md) - Technical implementation
 - [Position Management Flow](../../technical/03-flows/position-management-flow.md) - Technical flows

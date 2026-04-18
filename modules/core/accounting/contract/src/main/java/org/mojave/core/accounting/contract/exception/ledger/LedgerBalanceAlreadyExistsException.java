@@ -21,7 +21,7 @@
 package org.mojave.core.accounting.contract.exception.ledger;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 
@@ -33,7 +33,7 @@ public class LedgerBalanceAlreadyExistsException extends UncheckedDomainExceptio
 
     public static final String CODE = "LEDGER_BALANCE_ALREADY_EXISTS";
 
-    private static final String TEMPLATE = "The Ledger Balance ({0}) already exists.";
+    private static final String TEMPLATE = "The LedgerOperation Balance ({0}) already exists.";
 
     private final AccountId accountId;
 

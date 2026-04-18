@@ -20,7 +20,7 @@
 
 package org.mojave.core.participant.domain.query;
 
-import org.mojave.common.datatype.identifier.participant.FspGroupId;
+import org.mojave.scheme.rule.identifier.participant.FspGroupId;
 import org.mojave.component.jpa.routing.annotation.Read;
 import org.mojave.core.participant.contract.data.FspGroupData;
 import org.mojave.core.participant.contract.exception.fsp.FspGroupIdNotFoundException;

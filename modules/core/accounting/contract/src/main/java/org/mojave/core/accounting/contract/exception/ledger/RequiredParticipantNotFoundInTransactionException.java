@@ -21,18 +21,22 @@
 package org.mojave.core.accounting.contract.exception.ledger;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.component.misc.exception.ErrorTemplate;
 import org.mojave.component.misc.exception.UncheckedDomainException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class RequiredParticipantNotFoundInTransactionException extends UncheckedDomainException {
 
     public static final String CODE = "REQUIRED_PARTICIPANT_NOT_FOUND_IN_TRANSACTION";
+
+    private static final String VALUES_DELIMITER = ",";
 
     private static final String TEMPLATE = "Required Participant ({0}) cannot be found in participants ({1}) of Transaction Id ({2}).";
 
@@ -60,7 +64,7 @@ public class RequiredParticipantNotFoundInTransactionException extends Unchecked
     public static RequiredParticipantNotFoundInTransactionException from(final Map<String, String> extras) {
 
         final var participant = extras.get(Keys.PARTICIPANT);
-        final var participants = Set.of(extras.get(Keys.PARTICIPANTS));
+        final var participants = deserializeValues(extras.get(Keys.PARTICIPANTS));
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
         return new RequiredParticipantNotFoundInTransactionException(
@@ -73,10 +77,27 @@ public class RequiredParticipantNotFoundInTransactionException extends Unchecked
         final var extras = new HashMap<String, String>();
 
         extras.put(Keys.PARTICIPANT, this.participant);
-        extras.put(Keys.PARTICIPANTS, this.participants.toString());
+        extras.put(Keys.PARTICIPANTS, serializeValues(this.participants));
         extras.put(Keys.TRANSACTION_ID, this.transactionId.getId().toString());
 
         return extras;
+    }
+
+    private static Set<String> deserializeValues(final String values) {
+
+        if (values == null || values.isBlank()) {
+            return Set.of();
+        }
+
+        return Arrays.stream(values.split(VALUES_DELIMITER))
+                     .map(String::trim)
+                     .filter(value -> !value.isBlank())
+                     .collect(Collectors.toUnmodifiableSet());
+    }
+
+    private static String serializeValues(final Set<String> values) {
+
+        return String.join(VALUES_DELIMITER, values);
     }
 
     public static class Keys {

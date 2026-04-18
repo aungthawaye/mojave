@@ -36,8 +36,8 @@ import org.hibernate.annotations.JavaType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.mojave.component.jpa.JpaEntity;
 import org.mojave.component.misc.constraint.StringSizeConstraints;
-import org.mojave.common.datatype.converter.identifier.transfer.TransferIdJavaType;
-import org.mojave.common.datatype.identifier.transfer.TransferId;
+import org.mojave.scheme.rule.converter.identifier.transfer.TransferIdJavaType;
+import org.mojave.scheme.rule.identifier.transfer.TransferId;
 import java.util.Objects;
 
 import static java.sql.Types.BIGINT;

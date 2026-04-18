@@ -21,7 +21,7 @@ package org.mojave.rail.fspiop.invoker.api.transfers;
 
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.type.Payee;
-import org.mojave.scheme.fspiop.core.TransfersPostRequest;
+import org.mojave.rail.fspiop.spec.TransfersPostRequest;
 
 public interface PostTransfers {
 

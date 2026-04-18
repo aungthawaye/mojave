@@ -21,11 +21,11 @@
 package org.mojave.core.accounting.domain.cache.strategy.timer;
 
 import jakarta.annotation.PostConstruct;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.accounting.AccountId;
-import org.mojave.common.datatype.identifier.accounting.AccountOwnerId;
-import org.mojave.common.datatype.identifier.accounting.CoaEntryId;
-import org.mojave.common.datatype.type.accounting.AccountCode;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.accounting.AccountId;
+import org.mojave.scheme.rule.identifier.accounting.AccountOwnerId;
+import org.mojave.scheme.rule.identifier.accounting.CoaEntryId;
+import org.mojave.scheme.rule.type.accounting.AccountCode;
 import org.mojave.core.accounting.contract.data.AccountData;
 import org.mojave.core.accounting.domain.cache.AccountCache;
 import org.mojave.core.accounting.domain.model.Account;
@@ -84,6 +84,13 @@ public class AccountTimerCache implements AccountCache {
             return null;
         }
 
+        final var accountData = this.snapshotRef.get().withCode.get(accountCode);
+
+        if (accountData != null) {
+            return accountData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCode.get(accountCode);
     }
 
@@ -94,6 +101,13 @@ public class AccountTimerCache implements AccountCache {
             return Set.of();
         }
 
+        final var accounts = this.snapshotRef.get().withOwnerId.get(ownerId);
+
+        if (accounts != null && !accounts.isEmpty()) {
+            return accounts;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withOwnerId.getOrDefault(ownerId, Set.of());
     }
 
@@ -104,6 +118,13 @@ public class AccountTimerCache implements AccountCache {
             return null;
         }
 
+        final var accountData = this.snapshotRef.get().withId.get(accountId);
+
+        if (accountData != null) {
+            return accountData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withId.get(accountId);
     }
 
@@ -117,6 +138,13 @@ public class AccountTimerCache implements AccountCache {
         }
 
         final var key = AccountCache.Keys.forCoaEntry(coaEntryId, ownerId, currency);
+        final var accountData = this.snapshotRef.get().withCoaEntryIdOwnerIdCurrency.get(key);
+
+        if (accountData != null) {
+            return accountData;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCoaEntryIdOwnerIdCurrency.get(key);
     }
 
@@ -127,6 +155,13 @@ public class AccountTimerCache implements AccountCache {
             return Set.of();
         }
 
+        final var accounts = this.snapshotRef.get().withCoaEntryId.get(coaEntryId);
+
+        if (accounts != null && !accounts.isEmpty()) {
+            return accounts;
+        }
+
+        this.refreshData();
         return this.snapshotRef.get().withCoaEntryId.getOrDefault(coaEntryId, Set.of());
     }
 

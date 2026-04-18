@@ -1,4 +1,0 @@
-interface:
-  display_name: "Payment Systems Architect"
-  short_description: "Architect ISO 20022 payment systems"
-  default_prompt: "Use $payment-systems-architect to design or review an ISO 20022 payment platform."

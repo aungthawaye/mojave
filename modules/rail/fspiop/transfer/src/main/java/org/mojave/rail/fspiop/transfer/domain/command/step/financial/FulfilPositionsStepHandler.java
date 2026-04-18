@@ -21,18 +21,20 @@
 package org.mojave.rail.fspiop.transfer.domain.command.step.financial;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.Currency;
-import org.mojave.common.datatype.identifier.wallet.WalletOwnerId;
 import org.mojave.core.wallet.contract.command.position.FulfilPositionsCommand;
 import org.mojave.core.wallet.contract.exception.position.FailedToCommitReservationException;
-import org.mojave.core.wallet.producer.publisher.FulfilPositionsPublisher;
+import org.mojave.core.wallet.intercom.producer.command.position.FulfilPositionsProducer;
+import org.mojave.core.wallet.store.WalletStore;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.FulfilPositionsStep;
+import org.mojave.scheme.rule.enums.Currency;
+import org.mojave.scheme.rule.identifier.wallet.WalletOwnerId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -40,40 +42,42 @@ public class FulfilPositionsStepHandler implements FulfilPositionsStep {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FulfilPositionsStepHandler.class);
 
-    private final FulfilPositionsPublisher fulfilPositionsPublisher;
+    private final WalletStore walletStore;
 
-    public FulfilPositionsStepHandler(FulfilPositionsPublisher fulfilPositionsPublisher) {
+    private final FulfilPositionsProducer fulfilPositionsPublisher;
 
+    public FulfilPositionsStepHandler(final WalletStore walletStore,
+                                      final FulfilPositionsProducer fulfilPositionsPublisher) {
+
+        Objects.requireNonNull(walletStore);
         Objects.requireNonNull(fulfilPositionsPublisher);
 
+        this.walletStore = walletStore;
         this.fulfilPositionsPublisher = fulfilPositionsPublisher;
     }
 
     @Override
-    public FulfilPositionsStep.Output execute(FulfilPositionsStep.Input input)
+    public void execute(final FulfilPositionsStep.Input input)
         throws FailedToCommitReservationException, FspiopException {
 
         MDC.put("REQ_ID", input.udfTransferId().getId());
-        var startAt = System.nanoTime();
+        final var startAt = System.nanoTime();
 
         LOGGER.info("FulfilPositionsStep : input : ({})", ObjectLogger.log(input));
 
         try {
 
-            var fulfilPositionsInput = new FulfilPositionsCommand.Input(
-                input.positionReservationId(), new WalletOwnerId(input.payeeFsp().fspId().getId()),
-                Currency.valueOf(input.currency().toString()), input.description());
+            final var payeeWallet = this.walletStore.getWalletData(
+                new WalletOwnerId(input.payeeFsp().fspId().getId()),
+                Currency.valueOf(input.currency().toString()),
+                "P2P_TRANSFER");
+            final var fulfilPositionsInput = new FulfilPositionsCommand.Input(
+                input.positionReservationId(), payeeWallet.walletId(), input.description());
 
             this.fulfilPositionsPublisher.publish(fulfilPositionsInput);
 
-            var output = new FulfilPositionsStepHandler.Output(null, null);
-
-            var endAt = System.nanoTime();
-            LOGGER.info(
-                "FulfilPositionsStep : output : ({}) , took : {} ms",
-                ObjectLogger.log(output), (endAt - startAt) / 1_000_000);
-
-            return output;
+            final var endAt = System.nanoTime();
+            LOGGER.info("FulfilPositionsStep : took : {} ms", (endAt - startAt) / 1_000_000);
 
         } catch (Exception e) {
 

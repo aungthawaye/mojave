@@ -181,7 +181,7 @@ Business logic organized by bounded context:
 | Module | Bounded Context | Key Aggregates |
 |--------|----------------|----------------|
 | **participant** | Participant management | Fsp, Hub, Oracle, Ssp, FspCurrency, FspEndpoint |
-| **accounting** | Double-entry ledger | Chart, Account, FlowDefinition, PostingDefinition |
+| **accounting** | Double-entry ledgerOperation | Chart, Account, FlowDefinition, FlowLine |
 | **wallet** | Position & balance | Position, Balance, PositionUpdate |
 | **settlement** | Settlement rules | SettlementDefinition, FilterGroup, SettlementRecord |
 | **transaction** | Transaction lifecycle | Transaction, TransactionStep |
@@ -202,7 +202,7 @@ Concrete implementations of storage interfaces:
 
 | Module | Purpose | Implementation |
 |--------|---------|----------------|
-| **ledger-mysql** | Ledger persistence | MySQL stored procedures for atomic posting |
+| **ledgerOperation-mysql** | Ledger persistence | MySQL stored procedures for atomic posting |
 | **forex** | Exchange rates | Foreign exchange rate provider |
 | **settlement** | Settlement storage | Settlement record persistence |
 
@@ -257,7 +257,7 @@ sequenceDiagram
     Rail->>Core: Reserve payer position
     Core->>Core: Check NDC limit
     Core->>Provider: Update position
-    Rail->>Core: Post ledger flow
+    Rail->>Core: Post ledgerOperation flow
     Core->>Provider: Execute stored procedure
     Provider-->>Core: Movements created
     Rail->>Kafka: Publish forward event
@@ -272,7 +272,7 @@ sequenceDiagram
     Payee FSP->>Rail: PUT /transfers (fulfillment)
     Rail->>Core: Commit position
     Core->>Provider: Update position
-    Rail->>Core: Post final ledger
+    Rail->>Core: Post final ledgerOperation
     Rail->>Payer FSP: PUT /transfers (fulfillment)
 ```
 
@@ -392,7 +392,7 @@ Options for deployment:
 - **Thread pools**: Kafka consumer threads
 
 ### Performance Optimizations
-- **Stored procedures**: Atomic ledger operations in database
+- **Stored procedures**: Atomic ledgerOperation operations in database
 - **Caching**: Reduce database load
 - **Read replicas**: Scale read operations
 - **Batch processing**: Settlement and reporting

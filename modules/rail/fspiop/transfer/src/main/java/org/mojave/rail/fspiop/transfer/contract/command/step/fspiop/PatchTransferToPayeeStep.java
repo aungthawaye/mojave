@@ -20,14 +20,18 @@
 
 package org.mojave.rail.fspiop.transfer.contract.command.step.fspiop;
 
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.transfer.UdfTransferId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.ExtensionList;
-import org.mojave.scheme.fspiop.core.TransferState;
+import org.mojave.rail.fspiop.spec.ExtensionList;
+import org.mojave.rail.fspiop.spec.TransferState;
 
 public interface PatchTransferToPayeeStep {
+
+    String SUBJECT_NAME = "sub-fspiop-transfer.patch-transfer-to-payee-step";
+
+    String TOPIC_NAME = "tp-fspiop-transfer.patch-transfer-to-payee-step";
 
     Output execute(Input input) throws FspiopException;
 

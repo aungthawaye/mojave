@@ -20,26 +20,16 @@
 
 package org.mojave.mono.core.intercom;
 
+import org.mojave.core.accounting.domain.AccountingFlyway;
 import org.mojave.core.participant.domain.ParticipantFlyway;
 import org.mojave.core.wallet.domain.WalletFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
-import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
-import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
-import org.springframework.boot.web.server.ConfigurableWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Import;
 
-@EnableAutoConfiguration(
-    exclude = {
-        SecurityAutoConfiguration.class,
-        JacksonAutoConfiguration.class,
-        UserDetailsServiceAutoConfiguration.class})
+import java.util.concurrent.CountDownLatch;
+
 @Import(
     value = {
         MonoIntercomConfiguration.class,
@@ -49,7 +39,11 @@ public class MonoIntercomApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoIntercomApplication.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) throws InterruptedException {
+
+        AccountingFlyway.migrate(
+            System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
+            System.getenv("FLYWAY_DB_PASSWORD"));
 
         ParticipantFlyway.migrate(
             System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
@@ -59,28 +53,30 @@ public class MonoIntercomApplication {
             System.getenv("FLYWAY_DB_URL"), System.getenv("FLYWAY_DB_USER"),
             System.getenv("FLYWAY_DB_PASSWORD"));
 
-        new SpringApplicationBuilder(MonoIntercomApplication.class)
-            .web(WebApplicationType.SERVLET)
-            .properties(
-                "spring.application.name=mono-intercom",
-                "management.endpoints.web.base-path=/actuator",
-                "management.endpoint.health.show-details=always",
-                "management.endpoint.health.group.readiness.include=db,diskSpace,process,throttling",
-                "management.endpoint.health.group.liveness.include=db,diskSpace,process,throttling",
-                "management.endpoint.health.group.throttling.include=throttling",
-                "management.endpoint.throttling.enabled=true",
-                "management.endpoint.health.validate-group-membership=false",
-                "management.endpoint.health.probes.enabled=true",
-                "management.endpoints.web.exposure.include=health,info,metrics,prometheus",
-                "management.endpoint.health.show-details=always")
-            .run(args);
-    }
+        final var context = new AnnotationConfigApplicationContext(MonoIntercomApplication.class);
 
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(
-        MonoIntercomConfiguration.TomcatSettings settings) {
+        final var latch = new CountDownLatch(1);
 
-        return factory -> factory.setPort(settings.portNo());
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+
+            try {
+
+                LOGGER.info("Shutdown signal received. Stopping repliers...");
+                context.close();
+                LOGGER.info("Spring context closed. Repliers stopped cleanly.");
+
+            } catch (final Exception exception) {
+
+                LOGGER.error("Error during shutdown", exception);
+
+            } finally {
+
+                latch.countDown();
+            }
+
+        }));
+
+        latch.await();
     }
 
 }

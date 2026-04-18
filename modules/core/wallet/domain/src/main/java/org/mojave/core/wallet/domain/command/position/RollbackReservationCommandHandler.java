@@ -20,12 +20,13 @@
 
 package org.mojave.core.wallet.domain.command.position;
 
-import org.mojave.common.datatype.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.PositionUpdateId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.core.wallet.contract.command.position.RollbackReservationCommand;
+import org.mojave.core.wallet.contract.engine.WalletEngine;
 import org.mojave.core.wallet.contract.exception.position.FailedToRollbackReservationException;
-import org.mojave.core.wallet.domain.component.PositionUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,12 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
     private static final Logger LOGGER = LoggerFactory.getLogger(
         RollbackReservationCommandHandler.class);
 
-    private final PositionUpdater positionUpdater;
+    private final WalletEngine walletEngine;
 
-    public RollbackReservationCommandHandler(final PositionUpdater positionUpdater) {
+    public RollbackReservationCommandHandler(final WalletEngine walletEngine) {
 
-        Objects.requireNonNull(positionUpdater);
-        this.positionUpdater = positionUpdater;
+        Objects.requireNonNull(walletEngine);
+        this.walletEngine = walletEngine;
     }
 
     @Override
@@ -53,11 +54,13 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
 
         try {
 
-            final var history = this.positionUpdater.rollback(
-                input.reservationId(), new PositionUpdateId(Snowflake.get().nextId()));
+            final var history = this.walletEngine.rollbackPositionReservation(
+                new PositionUpdateId(Snowflake.get().nextId()), input.reservationId());
+
+            final var walletId = new WalletId(history.walletId().getId());
 
             final var output = new Output(
-                history.positionUpdateId(), history.positionId(), history.action(),
+                history.positionUpdateId(), walletId, history.action(),
                 history.transactionId(), history.currency(), history.amount(),
                 history.oldPosition(), history.newPosition(), history.oldReserved(),
                 history.newReserved(), history.netDebitCap(), history.transactionAt());
@@ -66,7 +69,7 @@ public class RollbackReservationCommandHandler implements RollbackReservationCom
 
             return output;
 
-        } catch (final PositionUpdater.RollbackFailedException e) {
+        } catch (final WalletEngine.PositionReservationRollbackFailedException e) {
             throw new FailedToRollbackReservationException(e.getReservationId());
         }
     }

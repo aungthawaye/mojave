@@ -20,8 +20,8 @@
 package org.mojave.rail.fspiop.lookup.domain.command;
 
 import org.mojave.component.misc.logger.ObjectLogger;
-import org.mojave.common.datatype.enums.participant.EndpointType;
-import org.mojave.common.datatype.type.participant.FspCode;
+import org.mojave.scheme.rule.enums.participant.EndpointType;
+import org.mojave.scheme.rule.type.participant.FspCode;
 import org.mojave.rail.fspiop.lookup.contract.command.PutPartiesCommand;
 import org.mojave.core.participant.contract.data.FspData;
 import org.mojave.core.participant.store.ParticipantStore;
@@ -29,8 +29,8 @@ import org.mojave.rail.fspiop.component.exception.FspiopCommunicationException;
 import org.mojave.rail.fspiop.component.type.Payer;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
-import org.mojave.rail.fspiop.bootstrap.api.forwarder.ForwardRequest;
-import org.mojave.rail.fspiop.bootstrap.api.parties.RespondParties;
+import org.mojave.rail.fspiop.service.api.forwarder.ForwardRequest;
+import org.mojave.rail.fspiop.service.api.parties.RespondParties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

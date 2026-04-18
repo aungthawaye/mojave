@@ -21,8 +21,8 @@
 package org.mojave.core.wallet.contract.exception.position;
 
 import lombok.Getter;
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
-import org.mojave.common.datatype.identifier.wallet.PositionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.wallet.WalletId;
 import org.mojave.component.misc.exception.CheckedDomainException;
 import org.mojave.component.misc.exception.ErrorTemplate;
 
@@ -35,9 +35,9 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
     public static final String CODE = "POSITION_LIMIT_EXCEEDED";
 
-    private static final String TEMPLATE = "Position limit exceeded : positionId ({0}) | amount({1}) | position: ({2}) | reserved: ({3}) | netDebitCap: ({4}) | transaction id: ({5}).";
+    private static final String TEMPLATE = "Position limit exceeded : walletId ({0}) | amount({1}) | position: ({2}) | reserved: ({3}) | netDebitCap: ({4}) | transaction id: ({5}).";
 
-    private final PositionId positionId;
+    private final WalletId walletId;
 
     private final BigDecimal amount;
 
@@ -49,7 +49,7 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
     private final TransactionId transactionId;
 
-    public PositionLimitExceededException(final PositionId positionId,
+    public PositionLimitExceededException(final WalletId walletId,
                                           final BigDecimal amount,
                                           final BigDecimal position,
                                           final BigDecimal reserved,
@@ -58,14 +58,14 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
         super(new ErrorTemplate(
             CODE, TEMPLATE, new String[]{
-            positionId.getId().toString(),
+            walletId.getId().toString(),
             amount.stripTrailingZeros().toPlainString(),
             position.stripTrailingZeros().toPlainString(),
             reserved.stripTrailingZeros().toPlainString(),
             netDebitCap.stripTrailingZeros().toPlainString(),
             transactionId.getId().toString()}));
 
-        this.positionId = positionId;
+        this.walletId = walletId;
         this.amount = amount;
         this.position = position;
         this.reserved = reserved;
@@ -75,7 +75,7 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
     public static PositionLimitExceededException from(final Map<String, String> extras) {
 
-        final var positionId = new PositionId(Long.valueOf(extras.get(Keys.POSITION_ID)));
+        final var walletId = new WalletId(Long.valueOf(extras.get(Keys.WALLET_ID)));
         final var amount = new BigDecimal(extras.get(Keys.AMOUNT));
         final var position = new BigDecimal(extras.get(Keys.POSITION));
         final var reserved = new BigDecimal(extras.get(Keys.RESERVED));
@@ -83,7 +83,7 @@ public class PositionLimitExceededException extends CheckedDomainException {
         final var transactionId = new TransactionId(Long.valueOf(extras.get(Keys.TRANSACTION_ID)));
 
         return new PositionLimitExceededException(
-            positionId, amount, position, reserved, netDebitCap, transactionId);
+            walletId, amount, position, reserved, netDebitCap, transactionId);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
         final var extras = new HashMap<String, String>();
 
-        extras.put(Keys.POSITION_ID, this.positionId.getId().toString());
+        extras.put(Keys.WALLET_ID, this.walletId.getId().toString());
         extras.put(Keys.AMOUNT, this.amount.stripTrailingZeros().toPlainString());
         extras.put(Keys.POSITION, this.position.stripTrailingZeros().toPlainString());
         extras.put(Keys.RESERVED, this.reserved.stripTrailingZeros().toPlainString());
@@ -103,7 +103,7 @@ public class PositionLimitExceededException extends CheckedDomainException {
 
     public static class Keys {
 
-        public static final String POSITION_ID = "positionId";
+        public static final String WALLET_ID = "walletId";
 
         public static final String AMOUNT = "amount";
 

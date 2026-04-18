@@ -20,21 +20,25 @@
 
 package org.mojave.rail.fspiop.quoting.contract.command.step;
 
-import org.mojave.common.datatype.identifier.participant.FspId;
-import org.mojave.common.datatype.identifier.quoting.UdfQuoteId;
+import org.mojave.scheme.rule.identifier.participant.FspId;
+import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.scheme.fspiop.core.AmountType;
-import org.mojave.scheme.fspiop.core.Currency;
-import org.mojave.scheme.fspiop.core.ExtensionList;
-import org.mojave.scheme.fspiop.core.PartyIdType;
-import org.mojave.scheme.fspiop.core.TransactionInitiator;
-import org.mojave.scheme.fspiop.core.TransactionInitiatorType;
-import org.mojave.scheme.fspiop.core.TransactionScenario;
+import org.mojave.rail.fspiop.spec.AmountType;
+import org.mojave.rail.fspiop.spec.Currency;
+import org.mojave.rail.fspiop.spec.ExtensionList;
+import org.mojave.rail.fspiop.spec.PartyIdType;
+import org.mojave.rail.fspiop.spec.TransactionInitiator;
+import org.mojave.rail.fspiop.spec.TransactionInitiatorType;
+import org.mojave.rail.fspiop.spec.TransactionScenario;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 public interface CreateQuotesRequestStep {
+
+    String SUBJECT_NAME = "sub-fspiop-quoting.create-quotes-request-step";
+
+    String TOPIC_NAME = "tp-fspiop-quoting.create-quotes-request-step";
 
     void execute(Input input) throws FspiopException;
 

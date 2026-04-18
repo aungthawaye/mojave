@@ -20,7 +20,7 @@
 
 package org.mojave.core.transaction.domain.command;
 
-import org.mojave.common.datatype.identifier.transaction.TransactionId;
+import org.mojave.scheme.rule.identifier.transaction.TransactionId;
 import org.mojave.component.jpa.routing.annotation.Write;
 import org.mojave.component.misc.handy.Snowflake;
 import org.mojave.component.misc.logger.ObjectLogger;
@@ -56,7 +56,7 @@ public class OpenTransactionCommandHandler implements OpenTransactionCommand {
         LOGGER.info("OpenTransactionCommand : input: ({})", ObjectLogger.log(input));
 
         var transactionId = new TransactionId(Snowflake.get().nextId());
-        var transaction = new Transaction(transactionId, input.type());
+        var transaction = new Transaction(transactionId, input.scenario());
 
         transaction = this.transactionRepository.save(transaction);
 

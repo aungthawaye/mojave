@@ -2,7 +2,7 @@
 
 ## Overview
 
-Mojave implements a complete double-entry bookkeeping system to ensure accurate financial record-keeping for all payment transactions. The accounting model uses configurable flow definitions to map transaction types to ledger postings, providing flexibility while maintaining strict financial controls.
+Mojave implements a complete double-entry bookkeeping system to ensure accurate financial record-keeping for all payment transactions. The accounting model uses configurable flow definitions to map transaction types to ledgerOperation postings, providing flexibility while maintaining strict financial controls.
 
 ## Double-Entry Bookkeeping Principles
 
@@ -35,7 +35,7 @@ Credit: Payee FSP Receivable Account $100
 
 ## Chart of Accounts
 
-The Chart of Accounts defines the structure of the ledger.
+The Chart of Accounts defines the structure of the ledgerOperation.
 
 ### Account Hierarchy
 
@@ -75,7 +75,7 @@ graph TB
 - Groups related accounts
 
 **Account:**
-- Individual ledger account
+- Individual ledgerOperation account
 - Unique account code
 - Associated with specific owner (FSP, Hub, etc.)
 - Tracks debits and credits
@@ -94,7 +94,7 @@ graph TB
 
 ## Flow Definitions
 
-Flow definitions map transaction types to accounting entries, automating the ledger posting process.
+Flow definitions map transaction types to accounting entries, automating the ledgerOperation posting process.
 
 ### Flow Definition Components
 
@@ -159,7 +159,7 @@ FSP B (Payee):
 
 ### PostLedgerFlowCommand
 
-The core command for posting to the ledger:
+The core command for posting to the ledgerOperation:
 
 ```java
 public interface PostLedgerFlowCommand {
@@ -182,7 +182,7 @@ public interface PostLedgerFlowCommand {
 }
 ```
 
-**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/core/accounting/contract/command/ledger/PostLedgerFlowCommand.java`
+**Source:** `/Users/aungthawaye/Development/Jdev/mojave/modules/core/accounting/contract/src/main/java/org/mojave/accounting/contract/command/ledgerOperation/PostLedgerFlowCommand.java`
 
 ### Posting Flow
 
@@ -196,7 +196,7 @@ sequenceDiagram
 
     Rail->>Command: execute(Input)
     Command->>Cache: Get flow definition<br/>(transactionType, currency)
-    Cache-->>Command: FlowDefinition + PostingDefinitions
+    Cache-->>Command: FlowDefinition + FlowLines
     Command->>Command: Build posting batch JSON
     Command->>DB: Call stored procedure
     DB->>SP: sp_post_ledger_batch_with_movements
@@ -211,7 +211,7 @@ sequenceDiagram
 
 ### Movement Tracking
 
-Each ledger posting creates **movements** that track the change:
+Each ledgerOperation posting creates **movements** that track the change:
 
 ```java
 record Movement(
@@ -249,7 +249,7 @@ record DrCr(
 
 ## MySQL Stored Procedure
 
-The ledger uses a MySQL stored procedure for atomic execution:
+The ledgerOperation uses a MySQL stored procedure for atomic execution:
 
 ### sp_post_ledger_batch_with_movements
 
@@ -432,7 +432,7 @@ FlowDefinition {
     flowDefinitionId,
     transactionType,
     currency,
-    List<PostingDefinition> postings
+    List<FlowLine> flowLines
 }
 ```
 
@@ -488,4 +488,4 @@ System: Balanced (debits = credits)
 - [Wallet and Positions](wallet-and-positions.md) - Position management
 - [Transaction Lifecycle](transaction-lifecycle.md) - Transaction phases
 - [Accounting Capabilities](../03-features/accounting-capabilities.md) - Detailed accounting features
-- [Accounting Module](../../technical/02-core-modules/accounting-module.md) - Technical implementation
+- [Accounting Module](../../technical/02-core-modules/core/accounting-module.md) - Technical implementation

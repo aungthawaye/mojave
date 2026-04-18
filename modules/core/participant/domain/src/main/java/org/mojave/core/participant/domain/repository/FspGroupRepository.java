@@ -20,7 +20,7 @@
 
 package org.mojave.core.participant.domain.repository;
 
-import org.mojave.common.datatype.identifier.participant.FspGroupId;
+import org.mojave.scheme.rule.identifier.participant.FspGroupId;
 import org.mojave.core.participant.domain.model.fsp.FspGroup;
 import org.mojave.core.participant.domain.model.fsp.FspGroup_;
 import org.springframework.data.jpa.domain.Specification;

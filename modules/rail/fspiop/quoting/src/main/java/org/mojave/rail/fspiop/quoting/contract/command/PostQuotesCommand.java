@@ -19,8 +19,8 @@
  */
 package org.mojave.rail.fspiop.quoting.contract.command;
 
-import org.mojave.rail.fspiop.bootstrap.component.FspiopHttpRequest;
-import org.mojave.scheme.fspiop.core.QuotesPostRequest;
+import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.spec.QuotesPostRequest;
 
 public interface PostQuotesCommand {
 

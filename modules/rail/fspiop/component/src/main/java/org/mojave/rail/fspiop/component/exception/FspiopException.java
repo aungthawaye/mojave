@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.component.exception;
 
 import lombok.Getter;
 import org.mojave.rail.fspiop.component.error.ErrorDefinition;
-import org.mojave.scheme.fspiop.core.ErrorInformationObject;
+import org.mojave.rail.fspiop.spec.ErrorInformationObject;
 
 public class FspiopException extends Exception {
 
