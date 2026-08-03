@@ -16,19 +16,19 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
-          <stringProp name="LoopController.loops">1</stringProp>
+          <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
           <collectionProp name="Arguments.arguments">
             <elementProp name="tg1payerFsp" elementType="Argument">
               <stringProp name="Argument.name">tg1payerFsp</stringProp>
@@ -58,7 +58,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn">
           <stringProp name="CounterConfig.start">8200000001</stringProp>
           <stringProp name="CounterConfig.end">8299999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -76,7 +76,7 @@
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -131,7 +131,7 @@ String ulid = timePart + randPart
 vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </JSR223Sampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp1-fsp2">
             <stringProp name="HTTPSampler.domain">${tg1sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg1sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -670,7 +670,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp2 to fsp1)" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - Mojave (fsp2 to fsp1)">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
@@ -681,28 +681,28 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
           <collectionProp name="Arguments.arguments">
             <elementProp name="tg2payerFsp" elementType="Argument">
               <stringProp name="Argument.name">tg2payerFsp</stringProp>
-              <stringProp name="Argument.value">fsp2</stringProp>
+              <stringProp name="Argument.value">wallet2</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg2payeeFsp" elementType="Argument">
               <stringProp name="Argument.name">tg2payeeFsp</stringProp>
-              <stringProp name="Argument.value">fsp1</stringProp>
+              <stringProp name="Argument.value">wallet1</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg2currency" elementType="Argument">
               <stringProp name="Argument.name">tg2currency</stringProp>
-              <stringProp name="Argument.value">BYN</stringProp>
+              <stringProp name="Argument.value">USD</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="tg2sourceHost" elementType="Argument">
@@ -718,7 +718,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="source msisdn">
           <stringProp name="CounterConfig.start">8100000001</stringProp>
           <stringProp name="CounterConfig.end">8199999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -727,7 +727,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn" enabled="true">
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="destination msisdn">
           <stringProp name="CounterConfig.start">8200000001</stringProp>
           <stringProp name="CounterConfig.end">8299999999</stringProp>
           <stringProp name="CounterConfig.incr">2</stringProp>
@@ -736,7 +736,7 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           <boolProp name="CounterConfig.per_user">false</boolProp>
         </CounterConfig>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
@@ -745,9 +745,9 @@ vars.put(&apos;tg1quoteId&apos;, ulid)</stringProp>
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Mojave Flow" enabled="true"/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Mojave Flow"/>
         <hashTree>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator" enabled="true">
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="quoteId generator">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
@@ -791,7 +791,7 @@ String ulid = timePart + randPart
 vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
           </JSR223Sampler>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp2-fsp1" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="lookup fsp2-fsp1">
             <stringProp name="HTTPSampler.domain">${tg2sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg2sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -890,7 +890,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
             </ResultCollector>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="quote fsp2-fsp1" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="quote fsp2-fsp1">
             <stringProp name="HTTPSampler.domain">${tg2sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg2sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -905,11 +905,12 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.value">{&#xd;
     &quot;quoteId&quot;: &quot;${tg2quoteId}&quot;,&#xd;
+    &quot;scenario&quot;: &quot;P2P_TRANSFER&quot;,&#xd;
     &quot;payeeFsp&quot;: &quot;${tg2payeeFsp}&quot;,&#xd;
     &quot;amountType&quot;: &quot;RECEIVE&quot;,&#xd;
     &quot;amount&quot;: {&#xd;
         &quot;currency&quot;: &quot;${tg2currency}&quot;,&#xd;
-        &quot;amount&quot;: &quot;1.0000&quot;&#xd;
+        &quot;amount&quot;: &quot;1.00&quot;&#xd;
     },&#xd;
     &quot;payer&quot;: {&#xd;
         &quot;partyIdType&quot;: &quot;MSISDN&quot;,&#xd;
@@ -1064,7 +1065,7 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
             </ResultCollector>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="transfer fsp2-fsp1" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="transfer fsp2-fsp1">
             <stringProp name="HTTPSampler.domain">${tg2sourceHost}</stringProp>
             <stringProp name="HTTPSampler.port">${tg2sourcePort}</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
@@ -1217,8 +1218,8 @@ vars.put(&apos;tg2quoteId&apos;, ulid)</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
           <objProp>
             <name>saveConfig</name>
             <value class="SampleSaveConfiguration">

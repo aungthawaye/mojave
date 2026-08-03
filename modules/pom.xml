@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.6</version>
     </parent>
     <groupId>org.mojave</groupId>
     <artifactId>mojave</artifactId>
@@ -124,12 +124,12 @@
             <dependency>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-core</artifactId>
-                <version>11.18.0</version>
+                <version>12.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-mysql</artifactId>
-                <version>11.18.0</version>
+                <version>12.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.interledger</groupId>

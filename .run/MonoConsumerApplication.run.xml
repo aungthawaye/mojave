@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="MonoConsumerApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="MonoConsumerApplication" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/.env" />
     </option>
