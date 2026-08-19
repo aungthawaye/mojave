@@ -26,7 +26,7 @@ import org.mojave.component.nats.NatsConfiguration;
 import org.mojave.component.openapi.OpenApiConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
-import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.foundation.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.springframework.context.annotation.Bean;
 

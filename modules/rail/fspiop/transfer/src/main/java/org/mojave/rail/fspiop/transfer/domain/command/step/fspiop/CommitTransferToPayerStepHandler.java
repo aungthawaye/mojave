@@ -27,7 +27,7 @@ import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.foundation.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.spec.TransferState;
 import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 import org.slf4j.Logger;

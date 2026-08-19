@@ -20,7 +20,7 @@
 package org.mojave.rail.fspiop.transfer.contract.command;
 
 import org.mojave.scheme.rule.identifier.transfer.UdfTransferId;
-import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.foundation.component.FspiopHttpRequest;
 import org.mojave.rail.fspiop.spec.TransfersIDPatchResponse;
 
 public interface PatchTransfersCommand {

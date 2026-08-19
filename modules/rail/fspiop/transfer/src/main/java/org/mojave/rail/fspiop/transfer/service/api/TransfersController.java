@@ -28,7 +28,7 @@ import org.mojave.rail.fspiop.transfer.contract.command.PatchTransfersErrorComma
 import org.mojave.rail.fspiop.transfer.contract.command.PostTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.PutTransfersErrorCommand;
-import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.foundation.component.FspiopHttpRequest;
 import org.mojave.rail.fspiop.spec.ErrorInformationObject;
 import org.mojave.rail.fspiop.spec.TransfersIDPutResponse;
 import org.mojave.rail.fspiop.spec.TransfersPostRequest;

@@ -22,7 +22,7 @@ package org.mojave.rail.fspiop.lookup.service;
 
 import org.mojave.component.nats.NatsConfiguration;
 import org.mojave.component.web.spring.security.SpringSecurityConfigurer;
-import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.foundation.FspiopServiceConfiguration;
 import org.springframework.context.annotation.Bean;
 
 final class LookUpServiceSettings implements LookUpServiceConfiguration.RequiredSettings {

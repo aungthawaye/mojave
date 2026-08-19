@@ -28,7 +28,7 @@ import org.mojave.rail.fspiop.lookup.contract.command.PutPartiesErrorCommand;
 import org.mojave.rail.fspiop.lookup.service.event.GetPartiesEvent;
 import org.mojave.rail.fspiop.lookup.service.event.PutPartiesErrorEvent;
 import org.mojave.rail.fspiop.lookup.service.event.PutPartiesEvent;
-import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.foundation.component.FspiopHttpRequest;
 import org.mojave.rail.fspiop.spec.ErrorInformationObject;
 import org.mojave.rail.fspiop.spec.PartiesTypeIDPutResponse;
 import org.mojave.rail.fspiop.spec.PartyIdType;

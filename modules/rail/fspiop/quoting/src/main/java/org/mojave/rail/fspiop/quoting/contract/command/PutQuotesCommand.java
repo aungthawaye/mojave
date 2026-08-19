@@ -20,7 +20,7 @@
 package org.mojave.rail.fspiop.quoting.contract.command;
 
 import org.mojave.scheme.rule.identifier.quoting.UdfQuoteId;
-import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.foundation.component.FspiopHttpRequest;
 import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 
 public interface PutQuotesCommand {

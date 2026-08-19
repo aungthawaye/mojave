@@ -15,7 +15,7 @@
         <module>spec</module>
         <module>component</module>
         <module>invoker</module>
-        <module>service</module>
+        <module>foundation</module>
         <module>lookup</module>
         <module>quoting</module>
         <module>transfer</module>

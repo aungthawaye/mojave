@@ -384,7 +384,7 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.rail.fspiop</groupId>
-                <artifactId>mojave-rail-fspiop-service</artifactId>
+                <artifactId>mojave-rail-fspiop-foundation</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

@@ -28,7 +28,7 @@ import org.mojave.rail.fspiop.lookup.domain.LookUpDomainConfiguration;
 import org.mojave.rail.fspiop.lookup.service.LookUpServiceConfiguration;
 import org.mojave.rail.fspiop.quoting.domain.QuotingDomainConfiguration;
 import org.mojave.rail.fspiop.quoting.service.QuotingServiceConfiguration;
-import org.mojave.rail.fspiop.service.FspiopServiceConfiguration;
+import org.mojave.rail.fspiop.foundation.FspiopServiceConfiguration;
 import org.mojave.rail.fspiop.transfer.domain.TransferDomainConfiguration;
 import org.mojave.rail.fspiop.transfer.service.TransferServiceConfiguration;
 import org.mojave.scheme.rule.DatatypeConfiguration;

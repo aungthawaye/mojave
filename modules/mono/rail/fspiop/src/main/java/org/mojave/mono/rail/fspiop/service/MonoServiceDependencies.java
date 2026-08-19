@@ -31,7 +31,7 @@ import org.mojave.core.wallet.store.WalletStore;
 import org.mojave.core.wallet.store.strategy.timer.LocalWalletStore;
 import org.mojave.rail.fspiop.component.participant.ParticipantContext;
 import org.mojave.rail.fspiop.component.participant.loader.EnvBasedParticipantContextLoader;
-import org.mojave.rail.fspiop.service.component.ParticipantVerifier;
+import org.mojave.rail.fspiop.foundation.component.ParticipantVerifier;
 import org.mojave.rail.fspiop.transfer.contract.component.interledger.AgreementUnwrapper;
 import org.mojave.rail.fspiop.transfer.domain.component.interledger.unwrapper.MojaveAgreementUnwrapper;
 import org.mojave.scheme.rule.type.participant.FspCode;

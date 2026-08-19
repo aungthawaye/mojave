@@ -24,7 +24,7 @@ import org.mojave.component.misc.logger.ObjectLogger;
 import org.mojave.rail.fspiop.transfer.contract.command.step.fspiop.ForwardToDestinationStep;
 import org.mojave.rail.fspiop.component.error.FspiopErrors;
 import org.mojave.rail.fspiop.component.exception.FspiopException;
-import org.mojave.rail.fspiop.service.api.forwarder.ForwardRequest;
+import org.mojave.rail.fspiop.foundation.api.forwarder.ForwardRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

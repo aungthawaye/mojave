@@ -31,7 +31,7 @@ import org.mojave.rail.fspiop.quoting.service.event.GetQuotesEvent;
 import org.mojave.rail.fspiop.quoting.service.event.PostQuotesEvent;
 import org.mojave.rail.fspiop.quoting.service.event.PutQuotesErrorEvent;
 import org.mojave.rail.fspiop.quoting.service.event.PutQuotesEvent;
-import org.mojave.rail.fspiop.service.component.FspiopHttpRequest;
+import org.mojave.rail.fspiop.foundation.component.FspiopHttpRequest;
 import org.mojave.rail.fspiop.spec.ErrorInformationObject;
 import org.mojave.rail.fspiop.spec.QuotesIDPutResponse;
 import org.mojave.rail.fspiop.spec.QuotesPostRequest;

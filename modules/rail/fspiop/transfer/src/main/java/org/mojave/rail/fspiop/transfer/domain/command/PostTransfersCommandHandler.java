@@ -30,7 +30,7 @@ import org.mojave.rail.fspiop.component.exception.FspiopException;
 import org.mojave.rail.fspiop.component.handy.FspiopErrorResponder;
 import org.mojave.rail.fspiop.component.handy.FspiopUrls;
 import org.mojave.rail.fspiop.component.type.Payer;
-import org.mojave.rail.fspiop.service.api.transfers.RespondTransfers;
+import org.mojave.rail.fspiop.foundation.api.transfers.RespondTransfers;
 import org.mojave.rail.fspiop.transfer.contract.command.PostTransfersCommand;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.ReservePayerPositionStep;
 import org.mojave.rail.fspiop.transfer.contract.command.step.financial.RollbackReservationStep;

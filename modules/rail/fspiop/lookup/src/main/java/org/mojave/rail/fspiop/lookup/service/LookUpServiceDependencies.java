@@ -28,7 +28,7 @@ import org.mojave.core.participant.store.ParticipantStore;
 import org.mojave.core.participant.store.strategy.timer.LocalParticipantStore;
 import org.mojave.rail.fspiop.component.participant.ParticipantContext;
 import org.mojave.rail.fspiop.component.participant.loader.EnvBasedParticipantContextLoader;
-import org.mojave.rail.fspiop.service.component.ParticipantVerifier;
+import org.mojave.rail.fspiop.foundation.component.ParticipantVerifier;
 import org.mojave.scheme.rule.type.participant.FspCode;
 import org.springframework.context.annotation.Bean;
 
