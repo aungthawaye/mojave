@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.2</version>
     </parent>
     <groupId>org.mojave</groupId>
     <artifactId>mojave</artifactId>
@@ -80,6 +79,11 @@
                 <version>3.0.0</version>
             </dependency>
             <dependency>
+                <groupId>com.tigerbeetle</groupId>
+                <artifactId>tigerbeetle-java</artifactId>
+                <version>0.17.9</version>
+            </dependency>
+            <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
                 <version>6.3.0</version>
@@ -142,59 +146,8 @@
                 <version>1.3.1</version>
             </dependency>
             <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>3.50.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.vault</groupId>
-                <artifactId>spring-vault-core</artifactId>
-                <version>4.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>software.amazon.cryptools</groupId>
-                <artifactId>AmazonCorrettoCryptoProvider</artifactId>
-                <version>2.5.0</version>
-                <classifier>osx-aarch_64</classifier>
-            </dependency>
-            <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-misc</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-tomcat</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-web</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-vault</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-redis</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-nats</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-retrofit</artifactId>
+                <artifactId>mojave-component-flyway</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -204,12 +157,17 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-flyway</artifactId>
+                <artifactId>mojave-component-kafka</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.component</groupId>
-                <artifactId>mojave-component-kafka</artifactId>
+                <artifactId>mojave-component-misc</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-nats</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -218,13 +176,43 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.scheme</groupId>
-                <artifactId>mojave-scheme-rule</artifactId>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.scheme</groupId>
-                <artifactId>mojave-scheme-rule-jpa</artifactId>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-retrofit</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-tomcat</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-vault</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.component</groupId>
+                <artifactId>mojave-component-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.connector</groupId>
+                <artifactId>mojave-connector-adapter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.connector</groupId>
+                <artifactId>mojave-connector-gateway</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.connector</groupId>
+                <artifactId>mojave-connector-sample</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -233,25 +221,28 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting.engine</groupId>
-                <artifactId>mojave-core-accounting-engine-mysql</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.mojave.core.accounting</groupId>
                 <artifactId>mojave-core-accounting-domain</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting.intercom</groupId>
-                <artifactId>mojave-core-accounting-intercom-consumer
-                </artifactId>
+                <groupId>org.mojave.core.accounting</groupId>
+                <artifactId>mojave-core-accounting-store</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.accounting.engine</groupId>
+                <artifactId>mojave-core-accounting-engine-mysql</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.core.accounting.intercom</groupId>
-                <artifactId>mojave-core-accounting-intercom-producer
-                </artifactId>
+                <artifactId>mojave-core-accounting-intercom-consumer</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.accounting.intercom</groupId>
+                <artifactId>mojave-core-accounting-intercom-producer</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -261,33 +252,32 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.core.accounting.intercom</groupId>
-                <artifactId>mojave-core-accounting-intercom-requestor
-                </artifactId>
+                <artifactId>mojave-core-accounting-intercom-requestor</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.accounting</groupId>
-                <artifactId>mojave-core-accounting-store</artifactId>
+                <groupId>org.mojave.core.participant</groupId>
+                <artifactId>mojave-core-participant-contract</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-contract</artifactId>
+                <groupId>org.mojave.core.participant</groupId>
+                <artifactId>mojave-core-participant-domain</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction.engine</groupId>
-                <artifactId>mojave-core-transaction-engine-transfer</artifactId>
+                <groupId>org.mojave.core.participant</groupId>
+                <artifactId>mojave-core-participant-store</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction.engine</groupId>
-                <artifactId>mojave-core-transaction-engine-fund</artifactId>
+                <groupId>org.mojave.core.participant.intercom</groupId>
+                <artifactId>mojave-core-participant-intercom-replier</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.transaction</groupId>
-                <artifactId>mojave-core-transaction-domain</artifactId>
+                <groupId>org.mojave.core.participant.intercom</groupId>
+                <artifactId>mojave-core-participant-intercom-requestor</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -301,8 +291,38 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>org.mojave.core.transaction</groupId>
+                <artifactId>mojave-core-transaction-contract</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.transaction</groupId>
+                <artifactId>mojave-core-transaction-domain</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.transaction.engine</groupId>
+                <artifactId>mojave-core-transaction-engine-fund</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.transaction.engine</groupId>
+                <artifactId>mojave-core-transaction-engine-transfer</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mojave.core.wallet</groupId>
                 <artifactId>mojave-core-wallet-contract</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.wallet</groupId>
+                <artifactId>mojave-core-wallet-domain</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.core.wallet</groupId>
+                <artifactId>mojave-core-wallet-store</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -311,8 +331,8 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-domain</artifactId>
+                <groupId>org.mojave.core.wallet.engine</groupId>
+                <artifactId>mojave-core-wallet-engine-tigerbeetle</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -336,40 +356,23 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.wallet</groupId>
-                <artifactId>mojave-core-wallet-store</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-admin</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-contract</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-consumer</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-domain</artifactId>
+                <groupId>org.mojave.mono.core</groupId>
+                <artifactId>mojave-mono-core-intercom</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.core.participant.intercom</groupId>
-                <artifactId>mojave-core-participant-intercom-requestor
-                </artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.participant.intercom</groupId>
-                <artifactId>mojave-core-participant-intercom-replier
-                </artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.core.participant</groupId>
-                <artifactId>mojave-core-participant-store</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.rail.fspiop</groupId>
-                <artifactId>mojave-rail-fspiop-spec</artifactId>
+                <groupId>org.mojave.mono.rail</groupId>
+                <artifactId>mojave-mono-rail-fspiop</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -379,12 +382,12 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.rail.fspiop</groupId>
-                <artifactId>mojave-rail-fspiop-invoker</artifactId>
+                <artifactId>mojave-rail-fspiop-foundation</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>org.mojave.rail.fspiop</groupId>
-                <artifactId>mojave-rail-fspiop-foundation</artifactId>
+                <artifactId>mojave-rail-fspiop-invoker</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -399,43 +402,44 @@
             </dependency>
             <dependency>
                 <groupId>org.mojave.rail.fspiop</groupId>
+                <artifactId>mojave-rail-fspiop-spec</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mojave.rail.fspiop</groupId>
                 <artifactId>mojave-rail-fspiop-transfer</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.mono.core</groupId>
-                <artifactId>mojave-mono-core-admin</artifactId>
+                <groupId>org.mojave.scheme</groupId>
+                <artifactId>mojave-scheme-rule</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.mono.core</groupId>
-                <artifactId>mojave-mono-core-intercom</artifactId>
+                <groupId>org.mojave.scheme</groupId>
+                <artifactId>mojave-scheme-rule-jpa</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.mono.core</groupId>
-                <artifactId>mojave-mono-core-consumer</artifactId>
-                <version>${revision}</version>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>3.50.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.mono.rail</groupId>
-                <artifactId>mojave-mono-rail-fspiop</artifactId>
-                <version>${revision}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.connector</groupId>
-                <artifactId>mojave-connector-adapter</artifactId>
-                <version>${revision}</version>
+                <groupId>org.springframework.vault</groupId>
+                <artifactId>spring-vault-core</artifactId>
+                <version>4.0.0</version>
             </dependency>
             <dependency>
-                <groupId>org.mojave.connector</groupId>
-                <artifactId>mojave-connector-gateway</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mojave.connector</groupId>
-                <artifactId>mojave-connector-sample</artifactId>
-                <version>${revision}</version>
+                <groupId>software.amazon.cryptools</groupId>
+                <artifactId>AmazonCorrettoCryptoProvider</artifactId>
+                <version>2.5.0</version>
+                <classifier>osx-aarch_64</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -479,10 +483,8 @@
                 <artifactId>sortpom-maven-plugin</artifactId>
                 <version>4.0.0</version>
                 <configuration>
-                    <sortDependencies>groupId,artifactId,scope
-                    </sortDependencies>
-                    <sortDependencyManagement>groupId,artifactId,scope
-                    </sortDependencyManagement>
+                    <sortDependencies>groupId,artifactId,scope</sortDependencies>
+                    <sortDependencyManagement>groupId,artifactId,scope</sortDependencyManagement>
                     <sortPlugins>groupId,artifactId</sortPlugins>
                     <sortProperties>true</sortProperties>
                     <nrOfIndentSpace>4</nrOfIndentSpace>
@@ -524,8 +526,7 @@
                         </goals>
                         <phase>install</phase>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib
-                            </outputDirectory>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -545,8 +546,7 @@
                     <projectName>Mojave</projectName>
                     <inceptionYear>2025</inceptionYear>
                     <licenseName>apache_v2</licenseName>
-                    <addJavaLicenseAfterPackage>false
-                    </addJavaLicenseAfterPackage>
+                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
                     <processStartTag>===</processStartTag>
                     <sectionDelimiter>---</sectionDelimiter>
                     <processEndTag>===</processEndTag>

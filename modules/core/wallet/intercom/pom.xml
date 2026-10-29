@@ -10,7 +10,7 @@
     <groupId>org.mojave.core.wallet.intercom</groupId>
     <artifactId>mojave-core-wallet-intercom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Wallet - Intercom</name>
+    <name>Mojave - Core - Wallet - Intercom</name>
     <modules>
         <module>consumer</module>
         <module>producer</module>

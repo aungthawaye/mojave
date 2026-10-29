@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-accounting-intercom-requestor</artifactId>
-    <name>Mojave - Accounting - Intercom - Requestor</name>
+    <name>Mojave - Core - Accounting - Intercom - Requestor</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

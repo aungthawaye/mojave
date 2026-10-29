@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-wallet-intercom-producer</artifactId>
-    <name>Mojave - Wallet - Intercom - Producer</name>
+    <name>Mojave - Core - Wallet - Intercom - Producer</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

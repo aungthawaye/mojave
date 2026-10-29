@@ -10,7 +10,7 @@
     <groupId>org.mojave.core.participant.intercom</groupId>
     <artifactId>mojave-core-participant-intercom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Participant - Intercom</name>
+    <name>Mojave - Core - Participant - Intercom</name>
     <modules>
         <module>requestor</module>
         <module>replier</module>

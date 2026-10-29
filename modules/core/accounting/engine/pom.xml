@@ -10,7 +10,7 @@
     <groupId>org.mojave.core.accounting.engine</groupId>
     <artifactId>mojave-core-accounting-engine</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Accounting - Ledger</name>
+    <name>Mojave - Core - Accounting - Ledger</name>
     <modules>
         <module>mysql</module>
     </modules>

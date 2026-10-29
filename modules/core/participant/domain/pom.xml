@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-participant-domain</artifactId>
-    <name>Mojave - Participant - Domain</name>
+    <name>Mojave - Core - Participant - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-participant-intercom-replier</artifactId>
-    <name>Mojave - Participant - Intercom - Replier</name>
+    <name>Mojave - Core - Participant - Intercom - Replier</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

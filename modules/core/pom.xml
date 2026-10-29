@@ -12,11 +12,11 @@
     <packaging>pom</packaging>
     <name>Mojave - Core</name>
     <modules>
+        <module>participant</module>
         <module>accounting</module>
+        <module>wallet</module>
         <module>transaction</module>
         <module>settlement</module>
-        <module>wallet</module>
-        <module>participant</module>
     </modules>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>

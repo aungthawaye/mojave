@@ -49,16 +49,16 @@
             <artifactId>mojave-core-participant-intercom-requestor</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mojave.core.wallet</groupId>
+            <artifactId>mojave-core-wallet-store</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mojave.core.wallet.intercom</groupId>
             <artifactId>mojave-core-wallet-intercom-producer</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.core.wallet.intercom</groupId>
             <artifactId>mojave-core-wallet-intercom-requestor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.core.wallet</groupId>
-            <artifactId>mojave-core-wallet-store</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.rail.fspiop</groupId>

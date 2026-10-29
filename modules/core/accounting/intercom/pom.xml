@@ -10,7 +10,7 @@
     <groupId>org.mojave.core.accounting.intercom</groupId>
     <artifactId>mojave-core-accounting-intercom</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Accounting - Intercom</name>
+    <name>Mojave - Core - Accounting - Intercom</name>
     <modules>
         <module>consumer</module>
         <module>producer</module>

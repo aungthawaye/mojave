@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-settlement-contract</artifactId>
-    <name>Mojave - Settlement - Contract</name>
+    <name>Mojave - Core - Settlement - Contract</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

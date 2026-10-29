@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-transaction-engine-fund</artifactId>
-    <name>Mojave - Transaction - Engine - Fund</name>
+    <name>Mojave - Core - Transaction - Engine - Fund</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>

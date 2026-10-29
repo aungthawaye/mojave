@@ -10,7 +10,7 @@
     <groupId>org.mojave.core.transaction.engine</groupId>
     <artifactId>mojave-core-transaction-engine</artifactId>
     <packaging>pom</packaging>
-    <name>Mojave - Transaction - Engine</name>
+    <name>Mojave - Core - Transaction - Engine</name>
     <modules>
         <module>transfer</module>
         <module>fund</module>

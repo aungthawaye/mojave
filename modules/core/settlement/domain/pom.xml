@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-settlement-domain</artifactId>
-    <name>Mojave - Settlement - Domain</name>
+    <name>Mojave - Core - Settlement - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
@@ -34,10 +34,6 @@
         <dependency>
             <groupId>org.mojave.core.settlement</groupId>
             <artifactId>mojave-core-settlement-contract</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mojave.rail.fspiop</groupId>
-            <artifactId>mojave-rail-fspiop-spec</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mojave.scheme</groupId>

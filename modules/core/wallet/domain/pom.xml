@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mojave-core-wallet-domain</artifactId>
-    <name>Mojave - Wallet - Domain</name>
+    <name>Mojave - Core - Wallet - Domain</name>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
